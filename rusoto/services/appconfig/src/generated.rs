@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Application {
@@ -2136,181 +2137,356 @@ impl fmt::Display for ValidateConfigurationError {
 }
 impl Error for ValidateConfigurationError {}
 /// Trait representing the capabilities of the AppConfig API. AppConfig clients implement this trait.
-#[async_trait]
 pub trait AppConfig {
     /// <p>An application in AppConfig is a logical unit of code that provides capabilities for your customers. For example, an application can be a microservice that runs on Amazon EC2 instances, a mobile application installed by your users, a serverless application using Amazon API Gateway and AWS Lambda, or any system you run on behalf of others.</p>
-    async fn create_application(
+    fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> Result<Application, RusotoError<CreateApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Application, RusotoError<CreateApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents and SSM Parameter Store parameters. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul></p>
-    async fn create_configuration_profile(
+    fn create_configuration_profile(
         &self,
         input: CreateConfigurationProfileRequest,
-    ) -> Result<ConfigurationProfile, RusotoError<CreateConfigurationProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfile,
+                        RusotoError<CreateConfigurationProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
-    async fn create_deployment_strategy(
+    fn create_deployment_strategy(
         &self,
         input: CreateDeploymentStrategyRequest,
-    ) -> Result<DeploymentStrategy, RusotoError<CreateDeploymentStrategyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeploymentStrategy, RusotoError<CreateDeploymentStrategyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>For each application, you define one or more environments. An environment is a logical deployment group of AppConfig targets, such as applications in a <code>Beta</code> or <code>Production</code> environment. You can also define environments for application subcomponents such as the <code>Web</code>, <code>Mobile</code> and <code>Back-end</code> components for your application. You can configure Amazon CloudWatch alarms for each environment. The system monitors alarms during a configuration deployment. If an alarm is triggered, the system rolls back the configuration.</p>
-    async fn create_environment(
+    fn create_environment(
         &self,
         input: CreateEnvironmentRequest,
-    ) -> Result<Environment, RusotoError<CreateEnvironmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environment, RusotoError<CreateEnvironmentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
-    async fn delete_application(
+    fn delete_application(
         &self,
         input: DeleteApplicationRequest,
-    ) -> Result<(), RusotoError<DeleteApplicationError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteApplicationError>>> + Send + 'static>,
+    >;
 
     /// <p>Delete a configuration profile. Deleting a configuration profile does not delete a configuration from a host.</p>
-    async fn delete_configuration_profile(
+    fn delete_configuration_profile(
         &self,
         input: DeleteConfigurationProfileRequest,
-    ) -> Result<(), RusotoError<DeleteConfigurationProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteConfigurationProfileError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a deployment strategy. Deleting a deployment strategy does not delete a configuration from a host.</p>
-    async fn delete_deployment_strategy(
+    fn delete_deployment_strategy(
         &self,
         input: DeleteDeploymentStrategyRequest,
-    ) -> Result<(), RusotoError<DeleteDeploymentStrategyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteDeploymentStrategyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an environment. Deleting an environment does not delete a configuration from a host.</p>
-    async fn delete_environment(
+    fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
-    ) -> Result<(), RusotoError<DeleteEnvironmentError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteEnvironmentError>>> + Send + 'static>,
+    >;
 
     /// <p>Retrieve information about an application.</p>
-    async fn get_application(
+    fn get_application(
         &self,
         input: GetApplicationRequest,
-    ) -> Result<Application, RusotoError<GetApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Application, RusotoError<GetApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve information about a configuration.</p>
-    async fn get_configuration(
+    fn get_configuration(
         &self,
         input: GetConfigurationRequest,
-    ) -> Result<Configuration, RusotoError<GetConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Configuration, RusotoError<GetConfigurationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve information about a configuration profile.</p>
-    async fn get_configuration_profile(
+    fn get_configuration_profile(
         &self,
         input: GetConfigurationProfileRequest,
-    ) -> Result<ConfigurationProfile, RusotoError<GetConfigurationProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfile,
+                        RusotoError<GetConfigurationProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve information about a configuration deployment.</p>
-    async fn get_deployment(
+    fn get_deployment(
         &self,
         input: GetDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<GetDeploymentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<GetDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve information about a deployment strategy. A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
-    async fn get_deployment_strategy(
+    fn get_deployment_strategy(
         &self,
         input: GetDeploymentStrategyRequest,
-    ) -> Result<DeploymentStrategy, RusotoError<GetDeploymentStrategyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeploymentStrategy, RusotoError<GetDeploymentStrategyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve information about an environment. An environment is a logical deployment group of AppConfig applications, such as applications in a <code>Production</code> environment or in an <code>EU_Region</code> environment. Each configuration deployment targets an environment. You can enable one or more Amazon CloudWatch alarms for an environment. If an alarm is triggered during a deployment, AppConfig roles back the configuration.</p>
-    async fn get_environment(
+    fn get_environment(
         &self,
         input: GetEnvironmentRequest,
-    ) -> Result<Environment, RusotoError<GetEnvironmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environment, RusotoError<GetEnvironmentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all applications in your AWS account.</p>
-    async fn list_applications(
+    fn list_applications(
         &self,
         input: ListApplicationsRequest,
-    ) -> Result<Applications, RusotoError<ListApplicationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Applications, RusotoError<ListApplicationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the configuration profiles for an application.</p>
-    async fn list_configuration_profiles(
+    fn list_configuration_profiles(
         &self,
         input: ListConfigurationProfilesRequest,
-    ) -> Result<ConfigurationProfiles, RusotoError<ListConfigurationProfilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfiles,
+                        RusotoError<ListConfigurationProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List deployment strategies.</p>
-    async fn list_deployment_strategies(
+    fn list_deployment_strategies(
         &self,
         input: ListDeploymentStrategiesRequest,
-    ) -> Result<DeploymentStrategies, RusotoError<ListDeploymentStrategiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeploymentStrategies,
+                        RusotoError<ListDeploymentStrategiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the deployments for an environment.</p>
-    async fn list_deployments(
+    fn list_deployments(
         &self,
         input: ListDeploymentsRequest,
-    ) -> Result<Deployments, RusotoError<ListDeploymentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployments, RusotoError<ListDeploymentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the environments for an application.</p>
-    async fn list_environments(
+    fn list_environments(
         &self,
         input: ListEnvironmentsRequest,
-    ) -> Result<Environments, RusotoError<ListEnvironmentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environments, RusotoError<ListEnvironmentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the list of key-value tags assigned to the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ResourceTags, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ResourceTags, RusotoError<ListTagsForResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts a deployment.</p>
-    async fn start_deployment(
+    fn start_deployment(
         &self,
         input: StartDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<StartDeploymentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<StartDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a deployment. This API action works only on deployments that have a status of <code>DEPLOYING</code>. This action moves the deployment to a status of <code>ROLLED_BACK</code>.</p>
-    async fn stop_deployment(
+    fn stop_deployment(
         &self,
         input: StopDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<StopDeploymentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<StopDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Metadata to assign to an AppConfig resource. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define. You can specify a maximum of 50 tags for a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
     /// <p>Deletes a tag key and value from an AppConfig resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>Updates an application.</p>
-    async fn update_application(
+    fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> Result<Application, RusotoError<UpdateApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Application, RusotoError<UpdateApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a configuration profile.</p>
-    async fn update_configuration_profile(
+    fn update_configuration_profile(
         &self,
         input: UpdateConfigurationProfileRequest,
-    ) -> Result<ConfigurationProfile, RusotoError<UpdateConfigurationProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfile,
+                        RusotoError<UpdateConfigurationProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a deployment strategy.</p>
-    async fn update_deployment_strategy(
+    fn update_deployment_strategy(
         &self,
         input: UpdateDeploymentStrategyRequest,
-    ) -> Result<DeploymentStrategy, RusotoError<UpdateDeploymentStrategyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeploymentStrategy, RusotoError<UpdateDeploymentStrategyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an environment.</p>
-    async fn update_environment(
+    fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
-    ) -> Result<Environment, RusotoError<UpdateEnvironmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environment, RusotoError<UpdateEnvironmentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Uses the validators in a configuration profile to validate a configuration.</p>
-    async fn validate_configuration(
+    fn validate_configuration(
         &self,
         input: ValidateConfigurationRequest,
-    ) -> Result<(), RusotoError<ValidateConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ValidateConfigurationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AppConfig API.
 #[derive(Clone)]
@@ -2350,13 +2526,18 @@ impl AppConfigClient {
     }
 }
 
-#[async_trait]
 impl AppConfig for AppConfigClient {
     /// <p>An application in AppConfig is a logical unit of code that provides capabilities for your customers. For example, an application can be a microservice that runs on Amazon EC2 instances, a mobile application installed by your users, a serverless application using Amazon API Gateway and AWS Lambda, or any system you run on behalf of others.</p>
-    async fn create_application(
+    fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> Result<Application, RusotoError<CreateApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Application, RusotoError<CreateApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -2365,28 +2546,38 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents and SSM Parameter Store parameters. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul></p>
-    async fn create_configuration_profile(
+    fn create_configuration_profile(
         &self,
         input: CreateConfigurationProfileRequest,
-    ) -> Result<ConfigurationProfile, RusotoError<CreateConfigurationProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfile,
+                        RusotoError<CreateConfigurationProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles",
             application_id = input.application_id
@@ -2398,28 +2589,35 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigurationProfile, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigurationProfile, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConfigurationProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConfigurationProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
-    async fn create_deployment_strategy(
+    fn create_deployment_strategy(
         &self,
         input: CreateDeploymentStrategyRequest,
-    ) -> Result<DeploymentStrategy, RusotoError<CreateDeploymentStrategyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeploymentStrategy, RusotoError<CreateDeploymentStrategyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deploymentstrategies";
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -2428,28 +2626,34 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeploymentStrategy, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeploymentStrategy, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeploymentStrategyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDeploymentStrategyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>For each application, you define one or more environments. An environment is a logical deployment group of AppConfig targets, such as applications in a <code>Beta</code> or <code>Production</code> environment. You can also define environments for application subcomponents such as the <code>Web</code>, <code>Mobile</code> and <code>Back-end</code> components for your application. You can configure Amazon CloudWatch alarms for each environment. The system monitors alarms during a configuration deployment. If an alarm is triggered, the system rolls back the configuration.</p>
-    async fn create_environment(
+    fn create_environment(
         &self,
         input: CreateEnvironmentRequest,
-    ) -> Result<Environment, RusotoError<CreateEnvironmentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environment, RusotoError<CreateEnvironmentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments",
             application_id = input.application_id
@@ -2461,28 +2665,30 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEnvironmentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateEnvironmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
-    async fn delete_application(
+    fn delete_application(
         &self,
         input: DeleteApplicationRequest,
-    ) -> Result<(), RusotoError<DeleteApplicationError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteApplicationError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -2491,27 +2697,33 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a configuration profile. Deleting a configuration profile does not delete a configuration from a host.</p>
-    async fn delete_configuration_profile(
+    fn delete_configuration_profile(
         &self,
         input: DeleteConfigurationProfileRequest,
-    ) -> Result<(), RusotoError<DeleteConfigurationProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteConfigurationProfileError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles/{configuration_profile_id}",
             application_id = input.application_id,
@@ -2521,27 +2733,33 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConfigurationProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a deployment strategy. Deleting a deployment strategy does not delete a configuration from a host.</p>
-    async fn delete_deployment_strategy(
+    fn delete_deployment_strategy(
         &self,
         input: DeleteDeploymentStrategyRequest,
-    ) -> Result<(), RusotoError<DeleteDeploymentStrategyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteDeploymentStrategyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/deployementstrategies/{deployment_strategy_id}",
             deployment_strategy_id = input.deployment_strategy_id
@@ -2550,27 +2768,29 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeploymentStrategyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDeploymentStrategyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an environment. Deleting an environment does not delete a configuration from a host.</p>
-    async fn delete_environment(
+    fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
-    ) -> Result<(), RusotoError<DeleteEnvironmentError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteEnvironmentError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}",
             application_id = input.application_id,
@@ -2580,27 +2800,33 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEnvironmentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEnvironmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about an application.</p>
-    async fn get_application(
+    fn get_application(
         &self,
         input: GetApplicationRequest,
-    ) -> Result<Application, RusotoError<GetApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Application, RusotoError<GetApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -2609,28 +2835,34 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about a configuration.</p>
-    async fn get_configuration(
+    fn get_configuration(
         &self,
         input: GetConfigurationRequest,
-    ) -> Result<Configuration, RusotoError<GetConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Configuration, RusotoError<GetConfigurationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application}/environments/{environment}/configurations/{configuration}",
             application = input.application,
@@ -2648,38 +2880,48 @@ impl AppConfig for AppConfigClient {
         params.put("client_id", &input.client_id);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = Configuration::default();
-            result.content = Some(response.body);
+                let mut result = Configuration::default();
+                result.content = Some(response.body);
 
-            if let Some(configuration_version) = response.headers.get("Configuration-Version") {
-                let value = configuration_version.to_owned();
-                result.configuration_version = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+                if let Some(configuration_version) = response.headers.get("Configuration-Version") {
+                    let value = configuration_version.to_owned();
+                    result.configuration_version = Some(value)
+                };
+                if let Some(content_type) = response.headers.get("Content-Type") {
+                    let value = content_type.to_owned();
+                    result.content_type = Some(value)
+                };
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about a configuration profile.</p>
-    async fn get_configuration_profile(
+    fn get_configuration_profile(
         &self,
         input: GetConfigurationProfileRequest,
-    ) -> Result<ConfigurationProfile, RusotoError<GetConfigurationProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfile,
+                        RusotoError<GetConfigurationProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles/{configuration_profile_id}",
             application_id = input.application_id,
@@ -2689,55 +2931,67 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigurationProfile, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigurationProfile, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConfigurationProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConfigurationProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about a configuration deployment.</p>
-    async fn get_deployment(
+    fn get_deployment(
         &self,
         input: GetDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<GetDeploymentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<GetDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/applications/{application_id}/environments/{environment_id}/deployments/{deployment_number}", application_id = input.application_id, deployment_number = input.deployment_number, environment_id = input.environment_id);
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about a deployment strategy. A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
-    async fn get_deployment_strategy(
+    fn get_deployment_strategy(
         &self,
         input: GetDeploymentStrategyRequest,
-    ) -> Result<DeploymentStrategy, RusotoError<GetDeploymentStrategyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeploymentStrategy, RusotoError<GetDeploymentStrategyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/deploymentstrategies/{deployment_strategy_id}",
             deployment_strategy_id = input.deployment_strategy_id
@@ -2746,28 +3000,34 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeploymentStrategy, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeploymentStrategy, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentStrategyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeploymentStrategyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about an environment. An environment is a logical deployment group of AppConfig applications, such as applications in a <code>Production</code> environment or in an <code>EU_Region</code> environment. Each configuration deployment targets an environment. You can enable one or more Amazon CloudWatch alarms for an environment. If an alarm is triggered during a deployment, AppConfig roles back the configuration.</p>
-    async fn get_environment(
+    fn get_environment(
         &self,
         input: GetEnvironmentRequest,
-    ) -> Result<Environment, RusotoError<GetEnvironmentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environment, RusotoError<GetEnvironmentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}",
             application_id = input.application_id,
@@ -2777,28 +3037,34 @@ impl AppConfig for AppConfigClient {
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEnvironmentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEnvironmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all applications in your AWS account.</p>
-    async fn list_applications(
+    fn list_applications(
         &self,
         input: ListApplicationsRequest,
-    ) -> Result<Applications, RusotoError<ListApplicationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Applications, RusotoError<ListApplicationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -2813,28 +3079,38 @@ impl AppConfig for AppConfigClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Applications, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<Applications, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListApplicationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the configuration profiles for an application.</p>
-    async fn list_configuration_profiles(
+    fn list_configuration_profiles(
         &self,
         input: ListConfigurationProfilesRequest,
-    ) -> Result<ConfigurationProfiles, RusotoError<ListConfigurationProfilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfiles,
+                        RusotoError<ListConfigurationProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles",
             application_id = input.application_id
@@ -2852,28 +3128,38 @@ impl AppConfig for AppConfigClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigurationProfiles, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigurationProfiles, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConfigurationProfilesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListConfigurationProfilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List deployment strategies.</p>
-    async fn list_deployment_strategies(
+    fn list_deployment_strategies(
         &self,
         input: ListDeploymentStrategiesRequest,
-    ) -> Result<DeploymentStrategies, RusotoError<ListDeploymentStrategiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeploymentStrategies,
+                        RusotoError<ListDeploymentStrategiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deploymentstrategies";
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
@@ -2888,28 +3174,34 @@ impl AppConfig for AppConfigClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeploymentStrategies, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeploymentStrategies, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentStrategiesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDeploymentStrategiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the deployments for an environment.</p>
-    async fn list_deployments(
+    fn list_deployments(
         &self,
         input: ListDeploymentsRequest,
-    ) -> Result<Deployments, RusotoError<ListDeploymentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployments, RusotoError<ListDeploymentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}/deployments",
             application_id = input.application_id,
@@ -2928,28 +3220,34 @@ impl AppConfig for AppConfigClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDeploymentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the environments for an application.</p>
-    async fn list_environments(
+    fn list_environments(
         &self,
         input: ListEnvironmentsRequest,
-    ) -> Result<Environments, RusotoError<ListEnvironmentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environments, RusotoError<ListEnvironmentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments",
             application_id = input.application_id
@@ -2967,55 +3265,67 @@ impl AppConfig for AppConfigClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Environments, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<Environments, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEnvironmentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEnvironmentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the list of key-value tags assigned to the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ResourceTags, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ResourceTags, RusotoError<ListTagsForResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ResourceTags, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ResourceTags, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a deployment.</p>
-    async fn start_deployment(
+    fn start_deployment(
         &self,
         input: StartDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<StartDeploymentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<StartDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}/deployments",
             application_id = input.application_id,
@@ -3028,55 +3338,62 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a deployment. This API action works only on deployments that have a status of <code>DEPLOYING</code>. This action moves the deployment to a status of <code>ROLLED_BACK</code>.</p>
-    async fn stop_deployment(
+    fn stop_deployment(
         &self,
         input: StopDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<StopDeploymentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<StopDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/applications/{application_id}/environments/{environment_id}/deployments/{deployment_number}", application_id = input.application_id, deployment_number = input.deployment_number, environment_id = input.environment_id);
 
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Metadata to assign to an AppConfig resource. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define. You can specify a maximum of 50 tags for a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -3085,27 +3402,28 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a tag key and value from an AppConfig resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
@@ -3117,27 +3435,33 @@ impl AppConfig for AppConfigClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an application.</p>
-    async fn update_application(
+    fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> Result<Application, RusotoError<UpdateApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Application, RusotoError<UpdateApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}",
             application_id = input.application_id
@@ -3149,28 +3473,38 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a configuration profile.</p>
-    async fn update_configuration_profile(
+    fn update_configuration_profile(
         &self,
         input: UpdateConfigurationProfileRequest,
-    ) -> Result<ConfigurationProfile, RusotoError<UpdateConfigurationProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfigurationProfile,
+                        RusotoError<UpdateConfigurationProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/configurationprofiles/{configuration_profile_id}",
             application_id = input.application_id,
@@ -3183,28 +3517,35 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigurationProfile, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigurationProfile, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConfigurationProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateConfigurationProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a deployment strategy.</p>
-    async fn update_deployment_strategy(
+    fn update_deployment_strategy(
         &self,
         input: UpdateDeploymentStrategyRequest,
-    ) -> Result<DeploymentStrategy, RusotoError<UpdateDeploymentStrategyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeploymentStrategy, RusotoError<UpdateDeploymentStrategyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/deploymentstrategies/{deployment_strategy_id}",
             deployment_strategy_id = input.deployment_strategy_id
@@ -3216,28 +3557,34 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeploymentStrategy, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeploymentStrategy, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeploymentStrategyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDeploymentStrategyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an environment.</p>
-    async fn update_environment(
+    fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
-    ) -> Result<Environment, RusotoError<UpdateEnvironmentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Environment, RusotoError<UpdateEnvironmentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/applications/{application_id}/environments/{environment_id}",
             application_id = input.application_id,
@@ -3250,28 +3597,34 @@ impl AppConfig for AppConfigClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEnvironmentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateEnvironmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Uses the validators in a configuration profile to validate a configuration.</p>
-    async fn validate_configuration(
+    fn validate_configuration(
         &self,
         input: ValidateConfigurationRequest,
-    ) -> Result<(), RusotoError<ValidateConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ValidateConfigurationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/validators", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
 
         let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
@@ -3281,19 +3634,19 @@ impl AppConfig for AppConfigClient {
         params.put("configuration_version", &input.configuration_version);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ValidateConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ValidateConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

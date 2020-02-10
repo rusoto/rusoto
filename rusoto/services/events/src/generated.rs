@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateEventSourceRequest {
@@ -2509,196 +2510,375 @@ impl fmt::Display for UntagResourceError {
 }
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon EventBridge API. Amazon EventBridge clients implement this trait.
-#[async_trait]
 pub trait EventBridge {
     /// <p><p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn activate_event_source(
+    fn activate_event_source(
         &self,
         input: ActivateEventSourceRequest,
-    ) -> Result<(), RusotoError<ActivateEventSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ActivateEventSourceError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a new event bus within your account. This can be a custom event bus which you can use to receive events from your own custom applications and services, or it can be a partner event bus which can be matched to a partner event source.</p> <note> <p>This operation is used by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn create_event_bus(
+    fn create_event_bus(
         &self,
         input: CreateEventBusRequest,
-    ) -> Result<CreateEventBusResponse, RusotoError<CreateEventBusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateEventBusResponse, RusotoError<CreateEventBusError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Called by an SaaS partner to create a partner event source.</p> <note> <p>This operation is not used by AWS customers.</p> </note> <p>Each partner event source can be used by one AWS account to create a matching partner event bus in that AWS account. A SaaS partner must create one partner event source for each AWS account that wants to receive those event types. </p> <p>A partner event source creates events based on resources in the SaaS partner&#39;s service or application.</p> <p>An AWS account that creates a partner event bus that matches the partner event source can use that event bus to receive events from the partner, and then process them using AWS Events rules and targets.</p> <p>Partner event source names follow this format:</p> <p> <code>aws.partner/<i>partner<em>name</i>/<i>event</em>namespace</i>/<i>event<em>name</i> </code> </p> <ul> <li> <p> <i>partner</em>name</i> is determined during partner registration and identifies the partner to AWS customers.</p> </li> <li> <p>For <i>event<em>namespace</i>, we recommend that partners use a string that identifies the AWS customer within the partner&#39;s system. This should not be the customer&#39;s AWS account ID.</p> </li> <li> <p> <i>event</em>name</i> is determined by the partner, and should uniquely identify an event-generating resource within the partner system. This should help AWS customers decide whether to create an event bus to receive these events.</p> </li> </ul></p>
-    async fn create_partner_event_source(
+    fn create_partner_event_source(
         &self,
         input: CreatePartnerEventSourceRequest,
-    ) -> Result<CreatePartnerEventSourceResponse, RusotoError<CreatePartnerEventSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePartnerEventSourceResponse,
+                        RusotoError<CreatePartnerEventSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>An AWS customer uses this operation to temporarily stop receiving events from the specified partner event source. The matching event bus isn't deleted. </p> <p>When you deactivate a partner event source, the source goes into <code>PENDING</code> state. If it remains in <code>PENDING</code> state for more than two weeks, it's deleted.</p> <p>To activate a deactivated partner event source, use <a>ActivateEventSource</a>.</p>
-    async fn deactivate_event_source(
+    fn deactivate_event_source(
         &self,
         input: DeactivateEventSourceRequest,
-    ) -> Result<(), RusotoError<DeactivateEventSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeactivateEventSourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Deletes the specified custom event bus or partner event bus. All rules associated with this event bus are also deleted. You can&#39;t delete your account&#39;s default event bus.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn delete_event_bus(
+    fn delete_event_bus(
         &self,
         input: DeleteEventBusRequest,
-    ) -> Result<(), RusotoError<DeleteEventBusError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteEventBusError>>> + Send + 'static>>;
 
     /// <p>This operation is used by SaaS partners to delete a partner event source. AWS customers don't use this operation.</p> <p>When you delete an event source, the status of the corresponding partner event bus in the AWS customer account becomes <code>DELETED</code>.</p>
-    async fn delete_partner_event_source(
+    fn delete_partner_event_source(
         &self,
         input: DeletePartnerEventSourceRequest,
-    ) -> Result<(), RusotoError<DeletePartnerEventSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeletePartnerEventSourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you're sure that the other service isn't still using that rule.</p>
-    async fn delete_rule(
+    fn delete_rule(
         &self,
         input: DeleteRuleRequest,
-    ) -> Result<(), RusotoError<DeleteRuleError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRuleError>>> + Send + 'static>>;
 
     /// <p>Displays details about an event bus in your account. This can include the external AWS accounts that are permitted to write events to your default event bus, and the associated policy. For custom event buses and partner event buses, it displays the name, ARN, policy, state, and creation time.</p> <p> To enable your account to receive events from other accounts on its default event bus, use <a>PutPermission</a>.</p> <p>For more information about partner event buses, see <a>CreateEventBus</a>.</p>
-    async fn describe_event_bus(
+    fn describe_event_bus(
         &self,
         input: DescribeEventBusRequest,
-    ) -> Result<DescribeEventBusResponse, RusotoError<DescribeEventBusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEventBusResponse, RusotoError<DescribeEventBusError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>This operation lists details about a partner event source that is shared with your account.</p> <note> <p>This operation is run by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn describe_event_source(
+    fn describe_event_source(
         &self,
         input: DescribeEventSourceRequest,
-    ) -> Result<DescribeEventSourceResponse, RusotoError<DescribeEventSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEventSourceResponse,
+                        RusotoError<DescribeEventSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>An SaaS partner can use this operation to list details about a partner event source that they have created.</p> <note> <p>AWS customers do not use this operation. Instead, AWS customers can use <a>DescribeEventSource</a> to see details about a partner event source that is shared with them.</p> </note></p>
-    async fn describe_partner_event_source(
+    fn describe_partner_event_source(
         &self,
         input: DescribePartnerEventSourceRequest,
-    ) -> Result<DescribePartnerEventSourceResponse, RusotoError<DescribePartnerEventSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePartnerEventSourceResponse,
+                        RusotoError<DescribePartnerEventSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the specified rule.</p> <p> <code>DescribeRule</code> doesn't list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
-    async fn describe_rule(
+    fn describe_rule(
         &self,
         input: DescribeRuleRequest,
-    ) -> Result<DescribeRuleResponse, RusotoError<DescribeRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeRuleResponse, RusotoError<DescribeRuleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disables the specified rule. A disabled rule won't match any events and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Allow a short period of time for changes to take effect.</p>
-    async fn disable_rule(
+    fn disable_rule(
         &self,
         input: DisableRuleRequest,
-    ) -> Result<(), RusotoError<DisableRuleError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DisableRuleError>>> + Send + 'static>>;
 
     /// <p>Enables the specified rule. If the rule doesn't exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Allow a short period of time for changes to take effect.</p>
-    async fn enable_rule(
+    fn enable_rule(
         &self,
         input: EnableRuleRequest,
-    ) -> Result<(), RusotoError<EnableRuleError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<EnableRuleError>>> + Send + 'static>>;
 
     /// <p><p>Lists all the event buses in your account, including the default event bus, custom event buses, and partner event buses.</p> <note> <p>This operation is run by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn list_event_buses(
+    fn list_event_buses(
         &self,
         input: ListEventBusesRequest,
-    ) -> Result<ListEventBusesResponse, RusotoError<ListEventBusesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEventBusesResponse, RusotoError<ListEventBusesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>You can use this to see all the partner event sources that have been shared with your AWS account. For more information about partner event sources, see <a>CreateEventBus</a>.</p> <note> <p>This operation is run by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn list_event_sources(
+    fn list_event_sources(
         &self,
         input: ListEventSourcesRequest,
-    ) -> Result<ListEventSourcesResponse, RusotoError<ListEventSourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListEventSourcesResponse, RusotoError<ListEventSourcesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>An SaaS partner can use this operation to display the AWS account ID that a particular partner event source name is associated with.</p> <note> <p>This operation is used by SaaS partners, not by AWS customers.</p> </note></p>
-    async fn list_partner_event_source_accounts(
+    fn list_partner_event_source_accounts(
         &self,
         input: ListPartnerEventSourceAccountsRequest,
-    ) -> Result<
-        ListPartnerEventSourceAccountsResponse,
-        RusotoError<ListPartnerEventSourceAccountsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPartnerEventSourceAccountsResponse,
+                        RusotoError<ListPartnerEventSourceAccountsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>An SaaS partner can use this operation to list all the partner event source names that they have created.</p> <note> <p>This operation is not used by AWS customers.</p> </note></p>
-    async fn list_partner_event_sources(
+    fn list_partner_event_sources(
         &self,
         input: ListPartnerEventSourcesRequest,
-    ) -> Result<ListPartnerEventSourcesResponse, RusotoError<ListPartnerEventSourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPartnerEventSourcesResponse,
+                        RusotoError<ListPartnerEventSourcesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the rules for the specified target. You can see which rules can invoke a specific target in your account.</p>
-    async fn list_rule_names_by_target(
+    fn list_rule_names_by_target(
         &self,
         input: ListRuleNamesByTargetRequest,
-    ) -> Result<ListRuleNamesByTargetResponse, RusotoError<ListRuleNamesByTargetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRuleNamesByTargetResponse,
+                        RusotoError<ListRuleNamesByTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists your EventBridge rules. You can either list all the rules or provide a prefix to match to the rule names.</p> <p> <code>ListRules</code> doesn't list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
-    async fn list_rules(
+    fn list_rules(
         &self,
         input: ListRulesRequest,
-    ) -> Result<ListRulesResponse, RusotoError<ListRulesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRulesResponse, RusotoError<ListRulesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Displays the tags associated with an EventBridge resource. In EventBridge, rules can be tagged.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the targets assigned to the specified rule.</p>
-    async fn list_targets_by_rule(
+    fn list_targets_by_rule(
         &self,
         input: ListTargetsByRuleRequest,
-    ) -> Result<ListTargetsByRuleResponse, RusotoError<ListTargetsByRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListTargetsByRuleResponse, RusotoError<ListTargetsByRuleError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sends custom events to EventBridge so that they can be matched to rules. These events can be from your custom applications and services.</p>
-    async fn put_events(
+    fn put_events(
         &self,
         input: PutEventsRequest,
-    ) -> Result<PutEventsResponse, RusotoError<PutEventsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutEventsResponse, RusotoError<PutEventsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>This is used by SaaS partners to write events to a customer&#39;s partner event bus.</p> <note> <p>AWS customers do not use this operation. Instead, AWS customers can use <a>PutEvents</a> to write custom events from their own applications to an event bus.</p> </note></p>
-    async fn put_partner_events(
+    fn put_partner_events(
         &self,
         input: PutPartnerEventsRequest,
-    ) -> Result<PutPartnerEventsResponse, RusotoError<PutPartnerEventsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutPartnerEventsResponse, RusotoError<PutPartnerEventsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to the specified <i>event bus</i>. Rules in your account are triggered by these events arriving to an event bus in your account. </p> <p>For another account to send events to your account, that external account must have a rule with your account's event bus as a target.</p> <p>To enable multiple AWS accounts to put events to an event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>The permission policy on an event bus can't exceed 10 KB in size.</p>
-    async fn put_permission(
+    fn put_permission(
         &self,
         input: PutPermissionRequest,
-    ) -> Result<(), RusotoError<PutPermissionError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<PutPermissionError>>> + Send + 'static>>;
 
     /// <p>Creates or updates the specified rule. Rules are enabled by default or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>A single rule watches for events from a single event bus. Events generated by AWS services go to your account's default event bus. Events generated by SaaS partner services or applications go to the matching partner event bus. If you have custom applications or services, you can specify whether their events go to your default event bus or a custom event bus that you have created. For more information, see <a>CreateEventBus</a>.</p> <p>If you're updating an existing rule, the rule is replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments aren't kept. Instead, they're replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an <code>EventPattern</code> or <code>ScheduleExpression</code>. Rules with <code>EventPatterns</code> are triggered when a matching event is observed. Rules with <code>ScheduleExpressions</code> self-trigger based on the given schedule. A rule can have both an <code>EventPattern</code> and a <code>ScheduleExpression</code>, in which case the rule triggers on matching events as well as on a schedule.</p> <p>When you initially create a rule, you can optionally assign one or more tags to the rule. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only rules with certain tag values. To use the <code>PutRule</code> operation and assign tags, you must have both the <code>events:PutRule</code> and <code>events:TagResource</code> permissions.</p> <p>If you are updating an existing rule, any tags you specify in the <code>PutRule</code> operation are ignored. To update the tags of an existing rule, use <a>TagResource</a> and <a>UntagResource</a>.</p> <p>Most services in AWS treat <code>:</code> or <code>/</code> as the same character in Amazon Resource Names (ARNs). However, EventBridge uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event that you want to match.</p> <p>In EventBridge, you could create rules that lead to infinite loops, where a rule is fired repeatedly. For example, a rule might detect that ACLs have changed on an S3 bucket, and trigger software to change them to the desired state. If you don't write the rule carefully, the subsequent change to the ACLs fires the rule again, creating an infinite loop.</p> <p>To prevent this, write the rules so that the triggered actions don't refire the same rule. For example, your rule could fire only if ACLs are found to be in a bad state, instead of after any change. </p> <p>An infinite loop can quickly cause higher than expected charges. We recommend that you use budgeting, which alerts you when charges exceed your specified limit. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html">Managing Your Costs with Budgets</a>.</p>
-    async fn put_rule(
+    fn put_rule(
         &self,
         input: PutRuleRequest,
-    ) -> Result<PutRuleResponse, RusotoError<PutRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutRuleResponse, RusotoError<PutRuleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds the specified targets to the specified rule, or updates the targets if they're already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets in EventBridge:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Creating rules with built-in targets is supported only on the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, and AWS Step Functions state machines, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same Region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event isn't charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge Pricing</a>.</p> <p>If you're setting an event bus in another account as the target and that account granted permission to your account through an organization instead of directly by the account ID, you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <code>Input</code> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <code>InputPath</code> is specified in the form of JSONPath (for example, <code>$.detail</code>), only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <code>InputTransformer</code> is specified, one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is nonzero in the response, and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
-    async fn put_targets(
+    fn put_targets(
         &self,
         input: PutTargetsRequest,
-    ) -> Result<PutTargetsResponse, RusotoError<PutTargetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutTargetsResponse, RusotoError<PutTargetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Revokes the permission of another AWS account to be able to put events to the specified event bus. Specify the account to revoke by the <code>StatementId</code> value that you associated with the account when you granted it permission with <code>PutPermission</code>. You can find the <code>StatementId</code> by using <a>DescribeEventBus</a>.</p>
-    async fn remove_permission(
+    fn remove_permission(
         &self,
         input: RemovePermissionRequest,
-    ) -> Result<(), RusotoError<RemovePermissionError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<RemovePermissionError>>> + Send + 'static>,
+    >;
 
     /// <p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
-    async fn remove_targets(
+    fn remove_targets(
         &self,
         input: RemoveTargetsRequest,
-    ) -> Result<RemoveTargetsResponse, RusotoError<RemoveTargetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RemoveTargetsResponse, RusotoError<RemoveTargetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified EventBridge resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. In EventBridge, rules can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a rule that already has tags. If you specify a new tag key for the rule, this tag is appended to the list of tags associated with the rule. If you specify a tag key that is already associated with the rule, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Tests whether the specified event pattern matches the provided event.</p> <p>Most services in AWS treat <code>:</code> or <code>/</code> as the same character in Amazon Resource Names (ARNs). However, EventBridge uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event that you want to match.</p>
-    async fn test_event_pattern(
+    fn test_event_pattern(
         &self,
         input: TestEventPatternRequest,
-    ) -> Result<TestEventPatternResponse, RusotoError<TestEventPatternError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TestEventPatternResponse, RusotoError<TestEventPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes one or more tags from the specified EventBridge resource. In EventBridge, rules can be tagged.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon EventBridge API.
 #[derive(Clone)]
@@ -2738,13 +2918,16 @@ impl EventBridgeClient {
     }
 }
 
-#[async_trait]
 impl EventBridge for EventBridgeClient {
     /// <p><p>Activates a partner event source that has been deactivated. Once activated, your matching event bus will start receiving events from the event source.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn activate_event_source(
+    fn activate_event_source(
         &self,
         input: ActivateEventSourceRequest,
-    ) -> Result<(), RusotoError<ActivateEventSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ActivateEventSourceError>>> + Send + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2752,26 +2935,32 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ActivateEventSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ActivateEventSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a new event bus within your account. This can be a custom event bus which you can use to receive events from your own custom applications and services, or it can be a partner event bus which can be matched to a partner event source.</p> <note> <p>This operation is used by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn create_event_bus(
+    fn create_event_bus(
         &self,
         input: CreateEventBusRequest,
-    ) -> Result<CreateEventBusResponse, RusotoError<CreateEventBusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateEventBusResponse, RusotoError<CreateEventBusError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2779,26 +2968,37 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateEventBusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEventBusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateEventBusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateEventBusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Called by an SaaS partner to create a partner event source.</p> <note> <p>This operation is not used by AWS customers.</p> </note> <p>Each partner event source can be used by one AWS account to create a matching partner event bus in that AWS account. A SaaS partner must create one partner event source for each AWS account that wants to receive those event types. </p> <p>A partner event source creates events based on resources in the SaaS partner&#39;s service or application.</p> <p>An AWS account that creates a partner event bus that matches the partner event source can use that event bus to receive events from the partner, and then process them using AWS Events rules and targets.</p> <p>Partner event source names follow this format:</p> <p> <code>aws.partner/<i>partner<em>name</i>/<i>event</em>namespace</i>/<i>event<em>name</i> </code> </p> <ul> <li> <p> <i>partner</em>name</i> is determined during partner registration and identifies the partner to AWS customers.</p> </li> <li> <p>For <i>event<em>namespace</i>, we recommend that partners use a string that identifies the AWS customer within the partner&#39;s system. This should not be the customer&#39;s AWS account ID.</p> </li> <li> <p> <i>event</em>name</i> is determined by the partner, and should uniquely identify an event-generating resource within the partner system. This should help AWS customers decide whether to create an event bus to receive these events.</p> </li> </ul></p>
-    async fn create_partner_event_source(
+    fn create_partner_event_source(
         &self,
         input: CreatePartnerEventSourceRequest,
-    ) -> Result<CreatePartnerEventSourceResponse, RusotoError<CreatePartnerEventSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePartnerEventSourceResponse,
+                        RusotoError<CreatePartnerEventSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2806,27 +3006,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePartnerEventSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePartnerEventSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePartnerEventSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePartnerEventSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>An AWS customer uses this operation to temporarily stop receiving events from the specified partner event source. The matching event bus isn't deleted. </p> <p>When you deactivate a partner event source, the source goes into <code>PENDING</code> state. If it remains in <code>PENDING</code> state for more than two weeks, it's deleted.</p> <p>To activate a deactivated partner event source, use <a>ActivateEventSource</a>.</p>
-    async fn deactivate_event_source(
+    fn deactivate_event_source(
         &self,
         input: DeactivateEventSourceRequest,
-    ) -> Result<(), RusotoError<DeactivateEventSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeactivateEventSourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2834,26 +3040,27 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeactivateEventSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeactivateEventSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Deletes the specified custom event bus or partner event bus. All rules associated with this event bus are also deleted. You can&#39;t delete your account&#39;s default event bus.</p> <note> <p>This operation is performed by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn delete_event_bus(
+    fn delete_event_bus(
         &self,
         input: DeleteEventBusRequest,
-    ) -> Result<(), RusotoError<DeleteEventBusError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteEventBusError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2861,26 +3068,32 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEventBusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEventBusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation is used by SaaS partners to delete a partner event source. AWS customers don't use this operation.</p> <p>When you delete an event source, the status of the corresponding partner event bus in the AWS customer account becomes <code>DELETED</code>.</p>
-    async fn delete_partner_event_source(
+    fn delete_partner_event_source(
         &self,
         input: DeletePartnerEventSourceRequest,
-    ) -> Result<(), RusotoError<DeletePartnerEventSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeletePartnerEventSourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2888,26 +3101,27 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePartnerEventSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePartnerEventSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you're sure that the other service isn't still using that rule.</p>
-    async fn delete_rule(
+    fn delete_rule(
         &self,
         input: DeleteRuleRequest,
-    ) -> Result<(), RusotoError<DeleteRuleError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRuleError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2915,26 +3129,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Displays details about an event bus in your account. This can include the external AWS accounts that are permitted to write events to your default event bus, and the associated policy. For custom event buses and partner event buses, it displays the name, ARN, policy, state, and creation time.</p> <p> To enable your account to receive events from other accounts on its default event bus, use <a>PutPermission</a>.</p> <p>For more information about partner event buses, see <a>CreateEventBus</a>.</p>
-    async fn describe_event_bus(
+    fn describe_event_bus(
         &self,
         input: DescribeEventBusRequest,
-    ) -> Result<DescribeEventBusResponse, RusotoError<DescribeEventBusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEventBusResponse, RusotoError<DescribeEventBusError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2942,27 +3163,37 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEventBusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEventBusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEventBusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEventBusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>This operation lists details about a partner event source that is shared with your account.</p> <note> <p>This operation is run by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn describe_event_source(
+    fn describe_event_source(
         &self,
         input: DescribeEventSourceRequest,
-    ) -> Result<DescribeEventSourceResponse, RusotoError<DescribeEventSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEventSourceResponse,
+                        RusotoError<DescribeEventSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2970,28 +3201,37 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEventSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEventSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEventSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEventSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>An SaaS partner can use this operation to list details about a partner event source that they have created.</p> <note> <p>AWS customers do not use this operation. Instead, AWS customers can use <a>DescribeEventSource</a> to see details about a partner event source that is shared with them.</p> </note></p>
-    async fn describe_partner_event_source(
+    fn describe_partner_event_source(
         &self,
         input: DescribePartnerEventSourceRequest,
-    ) -> Result<DescribePartnerEventSourceResponse, RusotoError<DescribePartnerEventSourceError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePartnerEventSourceResponse,
+                        RusotoError<DescribePartnerEventSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2999,27 +3239,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePartnerEventSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePartnerEventSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePartnerEventSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePartnerEventSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified rule.</p> <p> <code>DescribeRule</code> doesn't list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
-    async fn describe_rule(
+    fn describe_rule(
         &self,
         input: DescribeRuleRequest,
-    ) -> Result<DescribeRuleResponse, RusotoError<DescribeRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeRuleResponse, RusotoError<DescribeRuleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3027,26 +3273,28 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disables the specified rule. A disabled rule won't match any events and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Allow a short period of time for changes to take effect.</p>
-    async fn disable_rule(
+    fn disable_rule(
         &self,
         input: DisableRuleRequest,
-    ) -> Result<(), RusotoError<DisableRuleError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DisableRuleError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3054,26 +3302,27 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisableRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DisableRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enables the specified rule. If the rule doesn't exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Allow a short period of time for changes to take effect.</p>
-    async fn enable_rule(
+    fn enable_rule(
         &self,
         input: EnableRuleRequest,
-    ) -> Result<(), RusotoError<EnableRuleError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<EnableRuleError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3081,26 +3330,32 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(EnableRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(EnableRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists all the event buses in your account, including the default event bus, custom event buses, and partner event buses.</p> <note> <p>This operation is run by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn list_event_buses(
+    fn list_event_buses(
         &self,
         input: ListEventBusesRequest,
-    ) -> Result<ListEventBusesResponse, RusotoError<ListEventBusesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEventBusesResponse, RusotoError<ListEventBusesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3108,26 +3363,34 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListEventBusesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEventBusesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEventBusesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEventBusesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>You can use this to see all the partner event sources that have been shared with your AWS account. For more information about partner event sources, see <a>CreateEventBus</a>.</p> <note> <p>This operation is run by AWS customers, not by SaaS partners.</p> </note></p>
-    async fn list_event_sources(
+    fn list_event_sources(
         &self,
         input: ListEventSourcesRequest,
-    ) -> Result<ListEventSourcesResponse, RusotoError<ListEventSourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListEventSourcesResponse, RusotoError<ListEventSourcesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3135,29 +3398,36 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEventSourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEventSourcesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEventSourcesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEventSourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>An SaaS partner can use this operation to display the AWS account ID that a particular partner event source name is associated with.</p> <note> <p>This operation is used by SaaS partners, not by AWS customers.</p> </note></p>
-    async fn list_partner_event_source_accounts(
+    fn list_partner_event_source_accounts(
         &self,
         input: ListPartnerEventSourceAccountsRequest,
-    ) -> Result<
-        ListPartnerEventSourceAccountsResponse,
-        RusotoError<ListPartnerEventSourceAccountsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPartnerEventSourceAccountsResponse,
+                        RusotoError<ListPartnerEventSourceAccountsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
@@ -3166,27 +3436,37 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPartnerEventSourceAccountsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPartnerEventSourceAccountsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPartnerEventSourceAccountsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPartnerEventSourceAccountsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>An SaaS partner can use this operation to list all the partner event source names that they have created.</p> <note> <p>This operation is not used by AWS customers.</p> </note></p>
-    async fn list_partner_event_sources(
+    fn list_partner_event_sources(
         &self,
         input: ListPartnerEventSourcesRequest,
-    ) -> Result<ListPartnerEventSourcesResponse, RusotoError<ListPartnerEventSourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPartnerEventSourcesResponse,
+                        RusotoError<ListPartnerEventSourcesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3194,27 +3474,37 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPartnerEventSourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPartnerEventSourcesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPartnerEventSourcesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPartnerEventSourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the rules for the specified target. You can see which rules can invoke a specific target in your account.</p>
-    async fn list_rule_names_by_target(
+    fn list_rule_names_by_target(
         &self,
         input: ListRuleNamesByTargetRequest,
-    ) -> Result<ListRuleNamesByTargetResponse, RusotoError<ListRuleNamesByTargetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRuleNamesByTargetResponse,
+                        RusotoError<ListRuleNamesByTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3222,27 +3512,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRuleNamesByTargetResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRuleNamesByTargetError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRuleNamesByTargetResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRuleNamesByTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists your EventBridge rules. You can either list all the rules or provide a prefix to match to the rule names.</p> <p> <code>ListRules</code> doesn't list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
-    async fn list_rules(
+    fn list_rules(
         &self,
         input: ListRulesRequest,
-    ) -> Result<ListRulesResponse, RusotoError<ListRulesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRulesResponse, RusotoError<ListRulesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3250,26 +3546,36 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRulesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListRulesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRulesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Displays the tags associated with an EventBridge resource. In EventBridge, rules can be tagged.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3277,27 +3583,34 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the targets assigned to the specified rule.</p>
-    async fn list_targets_by_rule(
+    fn list_targets_by_rule(
         &self,
         input: ListTargetsByRuleRequest,
-    ) -> Result<ListTargetsByRuleResponse, RusotoError<ListTargetsByRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListTargetsByRuleResponse, RusotoError<ListTargetsByRuleError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3305,27 +3618,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTargetsByRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTargetsByRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTargetsByRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTargetsByRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sends custom events to EventBridge so that they can be matched to rules. These events can be from your custom applications and services.</p>
-    async fn put_events(
+    fn put_events(
         &self,
         input: PutEventsRequest,
-    ) -> Result<PutEventsResponse, RusotoError<PutEventsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutEventsResponse, RusotoError<PutEventsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3333,26 +3652,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutEventsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEventsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutEventsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutEventsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>This is used by SaaS partners to write events to a customer&#39;s partner event bus.</p> <note> <p>AWS customers do not use this operation. Instead, AWS customers can use <a>PutEvents</a> to write custom events from their own applications to an event bus.</p> </note></p>
-    async fn put_partner_events(
+    fn put_partner_events(
         &self,
         input: PutPartnerEventsRequest,
-    ) -> Result<PutPartnerEventsResponse, RusotoError<PutPartnerEventsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutPartnerEventsResponse, RusotoError<PutPartnerEventsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3360,27 +3686,28 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutPartnerEventsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutPartnerEventsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutPartnerEventsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutPartnerEventsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to the specified <i>event bus</i>. Rules in your account are triggered by these events arriving to an event bus in your account. </p> <p>For another account to send events to your account, that external account must have a rule with your account's event bus as a target.</p> <p>To enable multiple AWS accounts to put events to an event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>The permission policy on an event bus can't exceed 10 KB in size.</p>
-    async fn put_permission(
+    fn put_permission(
         &self,
         input: PutPermissionRequest,
-    ) -> Result<(), RusotoError<PutPermissionError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<PutPermissionError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3388,26 +3715,32 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutPermissionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutPermissionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates the specified rule. Rules are enabled by default or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>A single rule watches for events from a single event bus. Events generated by AWS services go to your account's default event bus. Events generated by SaaS partner services or applications go to the matching partner event bus. If you have custom applications or services, you can specify whether their events go to your default event bus or a custom event bus that you have created. For more information, see <a>CreateEventBus</a>.</p> <p>If you're updating an existing rule, the rule is replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments aren't kept. Instead, they're replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an <code>EventPattern</code> or <code>ScheduleExpression</code>. Rules with <code>EventPatterns</code> are triggered when a matching event is observed. Rules with <code>ScheduleExpressions</code> self-trigger based on the given schedule. A rule can have both an <code>EventPattern</code> and a <code>ScheduleExpression</code>, in which case the rule triggers on matching events as well as on a schedule.</p> <p>When you initially create a rule, you can optionally assign one or more tags to the rule. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only rules with certain tag values. To use the <code>PutRule</code> operation and assign tags, you must have both the <code>events:PutRule</code> and <code>events:TagResource</code> permissions.</p> <p>If you are updating an existing rule, any tags you specify in the <code>PutRule</code> operation are ignored. To update the tags of an existing rule, use <a>TagResource</a> and <a>UntagResource</a>.</p> <p>Most services in AWS treat <code>:</code> or <code>/</code> as the same character in Amazon Resource Names (ARNs). However, EventBridge uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event that you want to match.</p> <p>In EventBridge, you could create rules that lead to infinite loops, where a rule is fired repeatedly. For example, a rule might detect that ACLs have changed on an S3 bucket, and trigger software to change them to the desired state. If you don't write the rule carefully, the subsequent change to the ACLs fires the rule again, creating an infinite loop.</p> <p>To prevent this, write the rules so that the triggered actions don't refire the same rule. For example, your rule could fire only if ACLs are found to be in a bad state, instead of after any change. </p> <p>An infinite loop can quickly cause higher than expected charges. We recommend that you use budgeting, which alerts you when charges exceed your specified limit. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html">Managing Your Costs with Budgets</a>.</p>
-    async fn put_rule(
+    fn put_rule(
         &self,
         input: PutRuleRequest,
-    ) -> Result<PutRuleResponse, RusotoError<PutRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutRuleResponse, RusotoError<PutRuleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3415,26 +3748,32 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds the specified targets to the specified rule, or updates the targets if they're already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets in EventBridge:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Creating rules with built-in targets is supported only on the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, and AWS Step Functions state machines, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same Region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event isn't charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge Pricing</a>.</p> <p>If you're setting an event bus in another account as the target and that account granted permission to your account through an organization instead of directly by the account ID, you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <code>Input</code> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <code>InputPath</code> is specified in the form of JSONPath (for example, <code>$.detail</code>), only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <code>InputTransformer</code> is specified, one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is nonzero in the response, and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
-    async fn put_targets(
+    fn put_targets(
         &self,
         input: PutTargetsRequest,
-    ) -> Result<PutTargetsResponse, RusotoError<PutTargetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutTargetsResponse, RusotoError<PutTargetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3442,26 +3781,28 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutTargetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutTargetsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutTargetsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutTargetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Revokes the permission of another AWS account to be able to put events to the specified event bus. Specify the account to revoke by the <code>StatementId</code> value that you associated with the account when you granted it permission with <code>PutPermission</code>. You can find the <code>StatementId</code> by using <a>DescribeEventBus</a>.</p>
-    async fn remove_permission(
+    fn remove_permission(
         &self,
         input: RemovePermissionRequest,
-    ) -> Result<(), RusotoError<RemovePermissionError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<RemovePermissionError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3469,26 +3810,32 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemovePermissionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RemovePermissionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
-    async fn remove_targets(
+    fn remove_targets(
         &self,
         input: RemoveTargetsRequest,
-    ) -> Result<RemoveTargetsResponse, RusotoError<RemoveTargetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RemoveTargetsResponse, RusotoError<RemoveTargetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3496,26 +3843,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RemoveTargetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTargetsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RemoveTargetsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveTargetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified EventBridge resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. In EventBridge, rules can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a rule that already has tags. If you specify a new tag key for the rule, this tag is appended to the list of tags associated with the rule. If you specify a tag key that is already associated with the rule, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3523,26 +3877,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Tests whether the specified event pattern matches the provided event.</p> <p>Most services in AWS treat <code>:</code> or <code>/</code> as the same character in Amazon Resource Names (ARNs). However, EventBridge uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event that you want to match.</p>
-    async fn test_event_pattern(
+    fn test_event_pattern(
         &self,
         input: TestEventPatternRequest,
-    ) -> Result<TestEventPatternResponse, RusotoError<TestEventPatternError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TestEventPatternResponse, RusotoError<TestEventPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3550,27 +3911,33 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestEventPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TestEventPatternError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TestEventPatternResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TestEventPatternError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes one or more tags from the specified EventBridge resource. In EventBridge, rules can be tagged.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3578,18 +3945,19 @@ impl EventBridge for EventBridgeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>An object that defines a message that contains text formatted using Amazon Pinpoint Voice Instructions markup.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -822,66 +823,130 @@ impl fmt::Display for UpdateConfigurationSetEventDestinationError {
 }
 impl Error for UpdateConfigurationSetEventDestinationError {}
 /// Trait representing the capabilities of the Pinpoint SMS Voice API. Pinpoint SMS Voice clients implement this trait.
-#[async_trait]
 pub trait SmsVoice {
     /// <p>Create a new configuration set. After you create the configuration set, you can add one or more event destinations to it.</p>
-    async fn create_configuration_set(
+    fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetResponse,
+                        RusotoError<CreateConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new event destination in a configuration set.</p>
-    async fn create_configuration_set_event_destination(
+    fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        CreateConfigurationSetEventDestinationResponse,
-        RusotoError<CreateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetEventDestinationResponse,
+                        RusotoError<CreateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Deletes an existing configuration set.</p>
-    async fn delete_configuration_set(
+    fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetResponse,
+                        RusotoError<DeleteConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an event destination in a configuration set.</p>
-    async fn delete_configuration_set_event_destination(
+    fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        DeleteConfigurationSetEventDestinationResponse,
-        RusotoError<DeleteConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetEventDestinationResponse,
+                        RusotoError<DeleteConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Obtain information about an event destination, including the types of events it reports, the Amazon Resource Name (ARN) of the destination, and the name of the event destination.</p>
-    async fn get_configuration_set_event_destinations(
+    fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
-    ) -> Result<
-        GetConfigurationSetEventDestinationsResponse,
-        RusotoError<GetConfigurationSetEventDestinationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConfigurationSetEventDestinationsResponse,
+                        RusotoError<GetConfigurationSetEventDestinationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>List all of the configuration sets associated with your Amazon Pinpoint account in the current region.</p>
-    async fn list_configuration_sets(
+    fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListConfigurationSetsResponse,
+                        RusotoError<ListConfigurationSetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new voice message and send it to a recipient&#39;s phone number.</p>
-    async fn send_voice_message(
+    fn send_voice_message(
         &self,
         input: SendVoiceMessageRequest,
-    ) -> Result<SendVoiceMessageResponse, RusotoError<SendVoiceMessageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SendVoiceMessageResponse, RusotoError<SendVoiceMessageError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update an event destination in a configuration set. An event destination is a location that you publish information about your voice calls to. For example, you can log an event to an Amazon CloudWatch destination when a call fails.</p>
-    async fn update_configuration_set_event_destination(
+    fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        UpdateConfigurationSetEventDestinationResponse,
-        RusotoError<UpdateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateConfigurationSetEventDestinationResponse,
+                        RusotoError<UpdateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 }
 /// A client for the Pinpoint SMS Voice API.
@@ -922,13 +987,22 @@ impl SmsVoiceClient {
     }
 }
 
-#[async_trait]
 impl SmsVoice for SmsVoiceClient {
     /// <p>Create a new configuration set. After you create the configuration set, you can add one or more event destinations to it.</p>
-    async fn create_configuration_set(
+    fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetResponse,
+                        RusotoError<CreateConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/sms-voice/configuration-sets";
 
         let mut request = SignedRequest::new("POST", "sms-voice", &self.region, &request_uri);
@@ -938,30 +1012,37 @@ impl SmsVoice for SmsVoiceClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConfigurationSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateConfigurationSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConfigurationSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConfigurationSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new event destination in a configuration set.</p>
-    async fn create_configuration_set_event_destination(
+    fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        CreateConfigurationSetEventDestinationResponse,
-        RusotoError<CreateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetEventDestinationResponse,
+                        RusotoError<CreateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations",
@@ -975,30 +1056,40 @@ impl SmsVoice for SmsVoiceClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConfigurationSetEventDestinationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConfigurationSetEventDestinationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing configuration set.</p>
-    async fn delete_configuration_set(
+    fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetResponse,
+                        RusotoError<DeleteConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/sms-voice/configuration-sets/{configuration_set_name}",
             configuration_set_name = input.configuration_set_name
@@ -1009,30 +1100,37 @@ impl SmsVoice for SmsVoiceClient {
 
         request.set_endpoint_prefix("sms-voice.pinpoint".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConfigurationSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteConfigurationSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConfigurationSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an event destination in a configuration set.</p>
-    async fn delete_configuration_set_event_destination(
+    fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        DeleteConfigurationSetEventDestinationResponse,
-        RusotoError<DeleteConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetEventDestinationResponse,
+                        RusotoError<DeleteConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
@@ -1041,32 +1139,39 @@ impl SmsVoice for SmsVoiceClient {
 
         request.set_endpoint_prefix("sms-voice.pinpoint".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationSetEventDestinationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConfigurationSetEventDestinationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Obtain information about an event destination, including the types of events it reports, the Amazon Resource Name (ARN) of the destination, and the name of the event destination.</p>
-    async fn get_configuration_set_event_destinations(
+    fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
-    ) -> Result<
-        GetConfigurationSetEventDestinationsResponse,
-        RusotoError<GetConfigurationSetEventDestinationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConfigurationSetEventDestinationsResponse,
+                        RusotoError<GetConfigurationSetEventDestinationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations",
@@ -1078,30 +1183,40 @@ impl SmsVoice for SmsVoiceClient {
 
         request.set_endpoint_prefix("sms-voice.pinpoint".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConfigurationSetEventDestinationsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConfigurationSetEventDestinationsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all of the configuration sets associated with your Amazon Pinpoint account in the current region.</p>
-    async fn list_configuration_sets(
+    fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListConfigurationSetsResponse,
+                        RusotoError<ListConfigurationSetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/sms-voice/configuration-sets";
 
         let mut request = SignedRequest::new("GET", "sms-voice", &self.region, &request_uri);
@@ -1118,28 +1233,35 @@ impl SmsVoice for SmsVoiceClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationSetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListConfigurationSetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConfigurationSetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListConfigurationSetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new voice message and send it to a recipient&#39;s phone number.</p>
-    async fn send_voice_message(
+    fn send_voice_message(
         &self,
         input: SendVoiceMessageRequest,
-    ) -> Result<SendVoiceMessageResponse, RusotoError<SendVoiceMessageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SendVoiceMessageResponse, RusotoError<SendVoiceMessageError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/sms-voice/voice/message";
 
         let mut request = SignedRequest::new("POST", "sms-voice", &self.region, &request_uri);
@@ -1149,30 +1271,37 @@ impl SmsVoice for SmsVoiceClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendVoiceMessageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendVoiceMessageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SendVoiceMessageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SendVoiceMessageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update an event destination in a configuration set. An event destination is a location that you publish information about your voice calls to. For example, you can log an event to an Amazon CloudWatch destination when a call fails.</p>
-    async fn update_configuration_set_event_destination(
+    fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        UpdateConfigurationSetEventDestinationResponse,
-        RusotoError<UpdateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateConfigurationSetEventDestinationResponse,
+                        RusotoError<UpdateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/v1/sms-voice/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
@@ -1183,22 +1312,22 @@ impl SmsVoice for SmsVoiceClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConfigurationSetEventDestinationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateConfigurationSetEventDestinationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 }

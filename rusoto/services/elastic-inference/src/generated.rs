@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
@@ -201,25 +202,46 @@ impl fmt::Display for UntagResourceError {
 }
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon Elastic Inference API. Amazon Elastic Inference clients implement this trait.
-#[async_trait]
 pub trait ElasticInference {
     /// <p>Returns all tags of an Elastic Inference Accelerator.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResult,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds the specified tag(s) to an Elastic Inference Accelerator.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResult, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResult, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the specified tag(s) from an Elastic Inference Accelerator.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResult, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Elastic Inference API.
 #[derive(Clone)]
@@ -259,13 +281,22 @@ impl ElasticInferenceClient {
     }
 }
 
-#[async_trait]
 impl ElasticInference for ElasticInferenceClient {
     /// <p>Returns all tags of an Elastic Inference Accelerator.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResult,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -274,28 +305,34 @@ impl ElasticInference for ElasticInferenceClient {
 
         request.set_endpoint_prefix("api.elastic-inference".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds the specified tag(s) to an Elastic Inference Accelerator.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResult, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResult, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -306,28 +343,34 @@ impl ElasticInference for ElasticInferenceClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified tag(s) from an Elastic Inference Accelerator.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResult, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -342,20 +385,20 @@ impl ElasticInference for ElasticInferenceClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

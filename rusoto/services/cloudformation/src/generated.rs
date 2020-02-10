@@ -13,12 +13,12 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -28,6 +28,7 @@ use rusoto_core::proto::xml::util::{
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
 use rusoto_core::signature::SignedRequest;
 use serde_urlencoded;
+use std::pin::Pin;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::EventReader;
@@ -11625,340 +11626,740 @@ impl fmt::Display for ValidateTemplateError {
 }
 impl Error for ValidateTemplateError {}
 /// Trait representing the capabilities of the AWS CloudFormation API. AWS CloudFormation clients implement this trait.
-#[async_trait]
 pub trait CloudFormation {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
-    async fn cancel_update_stack(
+    fn cancel_update_stack(
         &self,
         input: CancelUpdateStackInput,
-    ) -> Result<(), RusotoError<CancelUpdateStackError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<CancelUpdateStackError>>> + Send + 'static>,
+    >;
 
     /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
-    async fn continue_update_rollback(
+    fn continue_update_rollback(
         &self,
         input: ContinueUpdateRollbackInput,
-    ) -> Result<ContinueUpdateRollbackOutput, RusotoError<ContinueUpdateRollbackError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ContinueUpdateRollbackOutput,
+                        RusotoError<ContinueUpdateRollbackError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. To create a change set for an import operation, specify <code>IMPORT</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
-    async fn create_change_set(
+    fn create_change_set(
         &self,
         input: CreateChangeSetInput,
-    ) -> Result<CreateChangeSetOutput, RusotoError<CreateChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateChangeSetOutput, RusotoError<CreateChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
-    async fn create_stack(
+    fn create_stack(
         &self,
         input: CreateStackInput,
-    ) -> Result<CreateStackOutput, RusotoError<CreateStackError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateStackOutput, RusotoError<CreateStackError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
-    async fn create_stack_instances(
+    fn create_stack_instances(
         &self,
         input: CreateStackInstancesInput,
-    ) -> Result<CreateStackInstancesOutput, RusotoError<CreateStackInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateStackInstancesOutput,
+                        RusotoError<CreateStackInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a stack set.</p>
-    async fn create_stack_set(
+    fn create_stack_set(
         &self,
         input: CreateStackSetInput,
-    ) -> Result<CreateStackSetOutput, RusotoError<CreateStackSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateStackSetOutput, RusotoError<CreateStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
-    async fn delete_change_set(
+    fn delete_change_set(
         &self,
         input: DeleteChangeSetInput,
-    ) -> Result<DeleteChangeSetOutput, RusotoError<DeleteChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteChangeSetOutput, RusotoError<DeleteChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
-    async fn delete_stack(
+    fn delete_stack(
         &self,
         input: DeleteStackInput,
-    ) -> Result<(), RusotoError<DeleteStackError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteStackError>>> + Send + 'static>>;
 
     /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
-    async fn delete_stack_instances(
+    fn delete_stack_instances(
         &self,
         input: DeleteStackInstancesInput,
-    ) -> Result<DeleteStackInstancesOutput, RusotoError<DeleteStackInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteStackInstancesOutput,
+                        RusotoError<DeleteStackInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
-    async fn delete_stack_set(
+    fn delete_stack_set(
         &self,
         input: DeleteStackSetInput,
-    ) -> Result<DeleteStackSetOutput, RusotoError<DeleteStackSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteStackSetOutput, RusotoError<DeleteStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a type or type version from active use in the CloudFormation registry. If a type or type version is deregistered, it cannot be used in CloudFormation operations.</p> <p>To deregister a type, you must individually deregister all registered versions of that type. If a type has only a single registered version, deregistering that version results in the type itself being deregistered. </p> <p>You cannot deregister the default version of a type, unless it is the only registered version of that type, in which case the type itself is deregistered as well. </p>
-    async fn deregister_type(
+    fn deregister_type(
         &self,
         input: DeregisterTypeInput,
-    ) -> Result<DeregisterTypeOutput, RusotoError<DeregisterTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeregisterTypeOutput, RusotoError<DeregisterTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account. For more information about account limits, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">AWS CloudFormation Limits</a> in the <i>AWS CloudFormation User Guide</i>.</p>
-    async fn describe_account_limits(
+    fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
-    ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAccountLimitsOutput,
+                        RusotoError<DescribeAccountLimitsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
-    async fn describe_change_set(
+    fn describe_change_set(
         &self,
         input: DescribeChangeSetInput,
-    ) -> Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a stack drift detection operation. A stack drift detection operation detects whether a stack's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted. For more information on stack and resource drift, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <a>DetectStackDrift</a> to initiate a stack drift detection operation. <code>DetectStackDrift</code> returns a <code>StackDriftDetectionId</code> you can use to monitor the progress of the operation using <code>DescribeStackDriftDetectionStatus</code>. Once the drift detection operation has completed, use <a>DescribeStackResourceDrifts</a> to return drift information about the stack and its resources.</p>
-    async fn describe_stack_drift_detection_status(
+    fn describe_stack_drift_detection_status(
         &self,
         input: DescribeStackDriftDetectionStatusInput,
-    ) -> Result<
-        DescribeStackDriftDetectionStatusOutput,
-        RusotoError<DescribeStackDriftDetectionStatusError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackDriftDetectionStatusOutput,
+                        RusotoError<DescribeStackDriftDetectionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
-    async fn describe_stack_events(
+    fn describe_stack_events(
         &self,
         input: DescribeStackEventsInput,
-    ) -> Result<DescribeStackEventsOutput, RusotoError<DescribeStackEventsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackEventsOutput,
+                        RusotoError<DescribeStackEventsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
-    async fn describe_stack_instance(
+    fn describe_stack_instance(
         &self,
         input: DescribeStackInstanceInput,
-    ) -> Result<DescribeStackInstanceOutput, RusotoError<DescribeStackInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackInstanceOutput,
+                        RusotoError<DescribeStackInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
-    async fn describe_stack_resource(
+    fn describe_stack_resource(
         &self,
         input: DescribeStackResourceInput,
-    ) -> Result<DescribeStackResourceOutput, RusotoError<DescribeStackResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackResourceOutput,
+                        RusotoError<DescribeStackResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns drift information for the resources that have been checked for drift in the specified stack. This includes actual and expected configuration values for resources where AWS CloudFormation detects configuration drift.</p> <p>For a given stack, there will be one <code>StackResourceDrift</code> for each stack resource that has been checked for drift. Resources that have not yet been checked for drift are not included. Resources that do not currently support drift detection are not checked, and so not included. For a list of resources that support drift detection, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p> <p>Use <a>DetectStackResourceDrift</a> to detect drift on individual resources, or <a>DetectStackDrift</a> to detect drift on all supported resources for a given stack.</p>
-    async fn describe_stack_resource_drifts(
+    fn describe_stack_resource_drifts(
         &self,
         input: DescribeStackResourceDriftsInput,
-    ) -> Result<DescribeStackResourceDriftsOutput, RusotoError<DescribeStackResourceDriftsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackResourceDriftsOutput,
+                        RusotoError<DescribeStackResourceDriftsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
-    async fn describe_stack_resources(
+    fn describe_stack_resources(
         &self,
         input: DescribeStackResourcesInput,
-    ) -> Result<DescribeStackResourcesOutput, RusotoError<DescribeStackResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackResourcesOutput,
+                        RusotoError<DescribeStackResourcesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the description of the specified stack set. </p>
-    async fn describe_stack_set(
+    fn describe_stack_set(
         &self,
         input: DescribeStackSetInput,
-    ) -> Result<DescribeStackSetOutput, RusotoError<DescribeStackSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStackSetOutput, RusotoError<DescribeStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the description of the specified stack set operation. </p>
-    async fn describe_stack_set_operation(
+    fn describe_stack_set_operation(
         &self,
         input: DescribeStackSetOperationInput,
-    ) -> Result<DescribeStackSetOperationOutput, RusotoError<DescribeStackSetOperationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackSetOperationOutput,
+                        RusotoError<DescribeStackSetOperationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
-    async fn describe_stacks(
+    fn describe_stacks(
         &self,
         input: DescribeStacksInput,
-    ) -> Result<DescribeStacksOutput, RusotoError<DescribeStacksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStacksOutput, RusotoError<DescribeStacksError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed information about a type that has been registered.</p> <p>If you specify a <code>VersionId</code>, <code>DescribeType</code> returns information about that specific type version. Otherwise, it returns information about the default type version.</p>
-    async fn describe_type(
+    fn describe_type(
         &self,
         input: DescribeTypeInput,
-    ) -> Result<DescribeTypeOutput, RusotoError<DescribeTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeTypeOutput, RusotoError<DescribeTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a type's registration, including its current status and type and version identifiers.</p> <p>When you initiate a registration request using <code> <a>RegisterType</a> </code>, you can then use <code> <a>DescribeTypeRegistration</a> </code> to monitor the progress of that registration request.</p> <p>Once the registration request has completed, use <code> <a>DescribeType</a> </code> to return detailed informaiton about a type.</p>
-    async fn describe_type_registration(
+    fn describe_type_registration(
         &self,
         input: DescribeTypeRegistrationInput,
-    ) -> Result<DescribeTypeRegistrationOutput, RusotoError<DescribeTypeRegistrationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTypeRegistrationOutput,
+                        RusotoError<DescribeTypeRegistrationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Detects whether a stack's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. For each resource in the stack that supports drift detection, AWS CloudFormation compares the actual configuration of the resource with its expected template configuration. Only resource properties explicitly defined in the stack template are checked for drift. A stack is considered to have drifted if one or more of its resources differ from their expected template configurations. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <code>DetectStackDrift</code> to detect drift on all supported resources for a given stack, or <a>DetectStackResourceDrift</a> to detect drift on individual resources.</p> <p>For a list of stack resources that currently support drift detection, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p> <p> <code>DetectStackDrift</code> can take up to several minutes, depending on the number of resources contained within the stack. Use <a>DescribeStackDriftDetectionStatus</a> to monitor the progress of a detect stack drift operation. Once the drift detection operation has completed, use <a>DescribeStackResourceDrifts</a> to return drift information about the stack and its resources.</p> <p>When detecting drift on a stack, AWS CloudFormation does not detect drift on any nested stacks belonging to that stack. Perform <code>DetectStackDrift</code> directly on the nested stack itself.</p>
-    async fn detect_stack_drift(
+    fn detect_stack_drift(
         &self,
         input: DetectStackDriftInput,
-    ) -> Result<DetectStackDriftOutput, RusotoError<DetectStackDriftError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectStackDriftOutput, RusotoError<DetectStackDriftError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about whether a resource's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. This information includes actual and expected property values for resources in which AWS CloudFormation detects drift. Only resource properties explicitly defined in the stack template are checked for drift. For more information about stack and resource drift, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <code>DetectStackResourceDrift</code> to detect drift on individual resources, or <a>DetectStackDrift</a> to detect drift on all resources in a given stack that support drift detection.</p> <p>Resources that do not currently support drift detection cannot be checked. For a list of resources that support drift detection, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p>
-    async fn detect_stack_resource_drift(
+    fn detect_stack_resource_drift(
         &self,
         input: DetectStackResourceDriftInput,
-    ) -> Result<DetectStackResourceDriftOutput, RusotoError<DetectStackResourceDriftError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetectStackResourceDriftOutput,
+                        RusotoError<DetectStackResourceDriftError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Detect drift on a stack set. When CloudFormation performs drift detection on a stack set, it performs drift detection on the stack associated with each stack instance in the stack set. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html">How CloudFormation Performs Drift Detection on a Stack Set</a>.</p> <p> <code>DetectStackSetDrift</code> returns the <code>OperationId</code> of the stack set drift detection operation. Use this operation id with <code> <a>DescribeStackSetOperation</a> </code> to monitor the progress of the drift detection operation. The drift detection operation may take some time, depending on the number of stack instances included in the stack set, as well as the number of resources included in each stack.</p> <p>Once the operation has completed, use the following actions to return drift information:</p> <ul> <li> <p>Use <code> <a>DescribeStackSet</a> </code> to return detailed informaiton about the stack set, including detailed information about the last <i>completed</i> drift operation performed on the stack set. (Information about drift operations that are in progress is not included.)</p> </li> <li> <p>Use <code> <a>ListStackInstances</a> </code> to return a list of stack instances belonging to the stack set, including the drift status and last drift time checked of each instance.</p> </li> <li> <p>Use <code> <a>DescribeStackInstance</a> </code> to return detailed information about a specific stack instance, including its drift status and last drift time checked.</p> </li> </ul> <p>For more information on performing a drift detection operation on a stack set, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html">Detecting Unmanaged Changes in Stack Sets</a>. </p> <p>You can only run a single drift detection operation on a given stack set at one time. </p> <p>To stop a drift detection stack set operation, use <code> <a>StopStackSetOperation</a> </code>.</p>
-    async fn detect_stack_set_drift(
+    fn detect_stack_set_drift(
         &self,
         input: DetectStackSetDriftInput,
-    ) -> Result<DetectStackSetDriftOutput, RusotoError<DetectStackSetDriftError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetectStackSetDriftOutput,
+                        RusotoError<DetectStackSetDriftError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
-    async fn estimate_template_cost(
+    fn estimate_template_cost(
         &self,
         input: EstimateTemplateCostInput,
-    ) -> Result<EstimateTemplateCostOutput, RusotoError<EstimateTemplateCostError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        EstimateTemplateCostOutput,
+                        RusotoError<EstimateTemplateCostError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
-    async fn execute_change_set(
+    fn execute_change_set(
         &self,
         input: ExecuteChangeSetInput,
-    ) -> Result<ExecuteChangeSetOutput, RusotoError<ExecuteChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ExecuteChangeSetOutput, RusotoError<ExecuteChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
-    async fn get_stack_policy(
+    fn get_stack_policy(
         &self,
         input: GetStackPolicyInput,
-    ) -> Result<GetStackPolicyOutput, RusotoError<GetStackPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetStackPolicyOutput, RusotoError<GetStackPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
-    async fn get_template(
+    fn get_template(
         &self,
         input: GetTemplateInput,
-    ) -> Result<GetTemplateOutput, RusotoError<GetTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTemplateOutput, RusotoError<GetTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
-    async fn get_template_summary(
+    fn get_template_summary(
         &self,
         input: GetTemplateSummaryInput,
-    ) -> Result<GetTemplateSummaryOutput, RusotoError<GetTemplateSummaryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetTemplateSummaryOutput, RusotoError<GetTemplateSummaryError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
-    async fn list_change_sets(
+    fn list_change_sets(
         &self,
         input: ListChangeSetsInput,
-    ) -> Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
-    async fn list_exports(
+    fn list_exports(
         &self,
         input: ListExportsInput,
-    ) -> Result<ListExportsOutput, RusotoError<ListExportsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListExportsOutput, RusotoError<ListExportsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
-    async fn list_imports(
+    fn list_imports(
         &self,
         input: ListImportsInput,
-    ) -> Result<ListImportsOutput, RusotoError<ListImportsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListImportsOutput, RusotoError<ListImportsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
-    async fn list_stack_instances(
+    fn list_stack_instances(
         &self,
         input: ListStackInstancesInput,
-    ) -> Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
-    async fn list_stack_resources(
+    fn list_stack_resources(
         &self,
         input: ListStackResourcesInput,
-    ) -> Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns summary information about the results of a stack set operation. </p>
-    async fn list_stack_set_operation_results(
+    fn list_stack_set_operation_results(
         &self,
         input: ListStackSetOperationResultsInput,
-    ) -> Result<ListStackSetOperationResultsOutput, RusotoError<ListStackSetOperationResultsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListStackSetOperationResultsOutput,
+                        RusotoError<ListStackSetOperationResultsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns summary information about operations performed on a stack set. </p>
-    async fn list_stack_set_operations(
+    fn list_stack_set_operations(
         &self,
         input: ListStackSetOperationsInput,
-    ) -> Result<ListStackSetOperationsOutput, RusotoError<ListStackSetOperationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListStackSetOperationsOutput,
+                        RusotoError<ListStackSetOperationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
-    async fn list_stack_sets(
+    fn list_stack_sets(
         &self,
         input: ListStackSetsInput,
-    ) -> Result<ListStackSetsOutput, RusotoError<ListStackSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStackSetsOutput, RusotoError<ListStackSetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
-    async fn list_stacks(
+    fn list_stacks(
         &self,
         input: ListStacksInput,
-    ) -> Result<ListStacksOutput, RusotoError<ListStacksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStacksOutput, RusotoError<ListStacksError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of registration tokens for the specified type.</p>
-    async fn list_type_registrations(
+    fn list_type_registrations(
         &self,
         input: ListTypeRegistrationsInput,
-    ) -> Result<ListTypeRegistrationsOutput, RusotoError<ListTypeRegistrationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTypeRegistrationsOutput,
+                        RusotoError<ListTypeRegistrationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns summary information about the versions of a type.</p>
-    async fn list_type_versions(
+    fn list_type_versions(
         &self,
         input: ListTypeVersionsInput,
-    ) -> Result<ListTypeVersionsOutput, RusotoError<ListTypeVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTypeVersionsOutput, RusotoError<ListTypeVersionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns summary information about types that have been registered with CloudFormation.</p>
-    async fn list_types(
+    fn list_types(
         &self,
         input: ListTypesInput,
-    ) -> Result<ListTypesOutput, RusotoError<ListTypesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTypesOutput, RusotoError<ListTypesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Reports progress of a resource handler to CloudFormation.</p> <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>. Do not use this API in your code.</p>
-    async fn record_handler_progress(
+    fn record_handler_progress(
         &self,
         input: RecordHandlerProgressInput,
-    ) -> Result<RecordHandlerProgressOutput, RusotoError<RecordHandlerProgressError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RecordHandlerProgressOutput,
+                        RusotoError<RecordHandlerProgressError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a type with the CloudFormation service. Registering a type makes it available for use in CloudFormation templates in your AWS account, and includes:</p> <ul> <li> <p>Validating the resource schema</p> </li> <li> <p>Determining which handlers have been specified for the resource</p> </li> <li> <p>Making the resource type available for use in your account</p> </li> </ul> <p>For more information on how to develop types and ready them for registeration, see <a href="cloudformation-cli/latest/userguide/resource-types.html">Creating Resource Providers</a> in the <i>CloudFormation CLI User Guide</i>.</p> <p>Once you have initiated a registration request using <code> <a>RegisterType</a> </code>, you can use <code> <a>DescribeTypeRegistration</a> </code> to monitor the progress of the registration request.</p>
-    async fn register_type(
+    fn register_type(
         &self,
         input: RegisterTypeInput,
-    ) -> Result<RegisterTypeOutput, RusotoError<RegisterTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterTypeOutput, RusotoError<RegisterTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets a stack policy for a specified stack.</p>
-    async fn set_stack_policy(
+    fn set_stack_policy(
         &self,
         input: SetStackPolicyInput,
-    ) -> Result<(), RusotoError<SetStackPolicyError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<SetStackPolicyError>>> + Send + 'static>>;
 
     /// <p>Specify the default version of a type. The default version of a type will be used in CloudFormation operations.</p>
-    async fn set_type_default_version(
+    fn set_type_default_version(
         &self,
         input: SetTypeDefaultVersionInput,
-    ) -> Result<SetTypeDefaultVersionOutput, RusotoError<SetTypeDefaultVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SetTypeDefaultVersionOutput,
+                        RusotoError<SetTypeDefaultVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
-    async fn signal_resource(
+    fn signal_resource(
         &self,
         input: SignalResourceInput,
-    ) -> Result<(), RusotoError<SignalResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<SignalResourceError>>> + Send + 'static>>;
 
     /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
-    async fn stop_stack_set_operation(
+    fn stop_stack_set_operation(
         &self,
         input: StopStackSetOperationInput,
-    ) -> Result<StopStackSetOperationOutput, RusotoError<StopStackSetOperationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopStackSetOperationOutput,
+                        RusotoError<StopStackSetOperationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
-    async fn update_stack(
+    fn update_stack(
         &self,
         input: UpdateStackInput,
-    ) -> Result<UpdateStackOutput, RusotoError<UpdateStackError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateStackOutput, RusotoError<UpdateStackError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
-    async fn update_stack_instances(
+    fn update_stack_instances(
         &self,
         input: UpdateStackInstancesInput,
-    ) -> Result<UpdateStackInstancesOutput, RusotoError<UpdateStackInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateStackInstancesOutput,
+                        RusotoError<UpdateStackInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the stack set, and associated stack instances in the specified accounts and regions.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
-    async fn update_stack_set(
+    fn update_stack_set(
         &self,
         input: UpdateStackSetInput,
-    ) -> Result<UpdateStackSetOutput, RusotoError<UpdateStackSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateStackSetOutput, RusotoError<UpdateStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
-    async fn update_termination_protection(
+    fn update_termination_protection(
         &self,
         input: UpdateTerminationProtectionInput,
-    ) -> Result<UpdateTerminationProtectionOutput, RusotoError<UpdateTerminationProtectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTerminationProtectionOutput,
+                        RusotoError<UpdateTerminationProtectionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
-    async fn validate_template(
+    fn validate_template(
         &self,
         input: ValidateTemplateInput,
-    ) -> Result<ValidateTemplateOutput, RusotoError<ValidateTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ValidateTemplateOutput, RusotoError<ValidateTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS CloudFormation API.
 #[derive(Clone)]
@@ -11998,13 +12399,14 @@ impl CloudFormationClient {
     }
 }
 
-#[async_trait]
 impl CloudFormation for CloudFormationClient {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
-    async fn cancel_update_stack(
+    fn cancel_update_stack(
         &self,
         input: CancelUpdateStackInput,
-    ) -> Result<(), RusotoError<CancelUpdateStackError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<CancelUpdateStackError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12013,26 +12415,35 @@ impl CloudFormation for CloudFormationClient {
         CancelUpdateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(CancelUpdateStackError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CancelUpdateStackError::from_response(response));
+            std::mem::drop(response);
+            Ok(())
         }
-
-        std::mem::drop(response);
-        Ok(())
+        .boxed()
     }
 
     /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
-    async fn continue_update_rollback(
+    fn continue_update_rollback(
         &self,
         input: ContinueUpdateRollbackInput,
-    ) -> Result<ContinueUpdateRollbackOutput, RusotoError<ContinueUpdateRollbackError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ContinueUpdateRollbackOutput,
+                        RusotoError<ContinueUpdateRollbackError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12041,47 +12452,52 @@ impl CloudFormation for CloudFormationClient {
         ContinueUpdateRollbackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ContinueUpdateRollbackError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ContinueUpdateRollbackError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ContinueUpdateRollbackOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ContinueUpdateRollbackOutputDeserializer::deserialize(
+                    "ContinueUpdateRollbackResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ContinueUpdateRollbackOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ContinueUpdateRollbackOutputDeserializer::deserialize(
-                "ContinueUpdateRollbackResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. To create a change set for an import operation, specify <code>IMPORT</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
-    async fn create_change_set(
+    fn create_change_set(
         &self,
         input: CreateChangeSetInput,
-    ) -> Result<CreateChangeSetOutput, RusotoError<CreateChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateChangeSetOutput, RusotoError<CreateChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12090,47 +12506,52 @@ impl CloudFormation for CloudFormationClient {
         CreateChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(CreateChangeSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateChangeSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = CreateChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = CreateChangeSetOutputDeserializer::deserialize(
+                    "CreateChangeSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = CreateChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateChangeSetOutputDeserializer::deserialize(
-                "CreateChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
-    async fn create_stack(
+    fn create_stack(
         &self,
         input: CreateStackInput,
-    ) -> Result<CreateStackOutput, RusotoError<CreateStackError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateStackOutput, RusotoError<CreateStackError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12139,44 +12560,54 @@ impl CloudFormation for CloudFormationClient {
         CreateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(CreateStackError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStackError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = CreateStackOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    CreateStackOutputDeserializer::deserialize("CreateStackResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = CreateStackOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateStackOutputDeserializer::deserialize("CreateStackResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
-    async fn create_stack_instances(
+    fn create_stack_instances(
         &self,
         input: CreateStackInstancesInput,
-    ) -> Result<CreateStackInstancesOutput, RusotoError<CreateStackInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateStackInstancesOutput,
+                        RusotoError<CreateStackInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12185,47 +12616,52 @@ impl CloudFormation for CloudFormationClient {
         CreateStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(CreateStackInstancesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStackInstancesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = CreateStackInstancesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = CreateStackInstancesOutputDeserializer::deserialize(
+                    "CreateStackInstancesResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = CreateStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateStackInstancesOutputDeserializer::deserialize(
-                "CreateStackInstancesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Creates a stack set.</p>
-    async fn create_stack_set(
+    fn create_stack_set(
         &self,
         input: CreateStackSetInput,
-    ) -> Result<CreateStackSetOutput, RusotoError<CreateStackSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateStackSetOutput, RusotoError<CreateStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12234,45 +12670,52 @@ impl CloudFormation for CloudFormationClient {
         CreateStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(CreateStackSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStackSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = CreateStackSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = CreateStackSetOutputDeserializer::deserialize(
+                    "CreateStackSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = CreateStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                CreateStackSetOutputDeserializer::deserialize("CreateStackSetResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
-    async fn delete_change_set(
+    fn delete_change_set(
         &self,
         input: DeleteChangeSetInput,
-    ) -> Result<DeleteChangeSetOutput, RusotoError<DeleteChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteChangeSetOutput, RusotoError<DeleteChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12281,47 +12724,47 @@ impl CloudFormation for CloudFormationClient {
         DeleteChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DeleteChangeSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteChangeSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DeleteChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DeleteChangeSetOutputDeserializer::deserialize(
+                    "DeleteChangeSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DeleteChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteChangeSetOutputDeserializer::deserialize(
-                "DeleteChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
-    async fn delete_stack(
+    fn delete_stack(
         &self,
         input: DeleteStackInput,
-    ) -> Result<(), RusotoError<DeleteStackError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteStackError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12330,26 +12773,35 @@ impl CloudFormation for CloudFormationClient {
         DeleteStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DeleteStackError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStackError::from_response(response));
+            std::mem::drop(response);
+            Ok(())
         }
-
-        std::mem::drop(response);
-        Ok(())
+        .boxed()
     }
 
     /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
-    async fn delete_stack_instances(
+    fn delete_stack_instances(
         &self,
         input: DeleteStackInstancesInput,
-    ) -> Result<DeleteStackInstancesOutput, RusotoError<DeleteStackInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteStackInstancesOutput,
+                        RusotoError<DeleteStackInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12358,47 +12810,52 @@ impl CloudFormation for CloudFormationClient {
         DeleteStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DeleteStackInstancesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStackInstancesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DeleteStackInstancesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DeleteStackInstancesOutputDeserializer::deserialize(
+                    "DeleteStackInstancesResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DeleteStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteStackInstancesOutputDeserializer::deserialize(
-                "DeleteStackInstancesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
-    async fn delete_stack_set(
+    fn delete_stack_set(
         &self,
         input: DeleteStackSetInput,
-    ) -> Result<DeleteStackSetOutput, RusotoError<DeleteStackSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteStackSetOutput, RusotoError<DeleteStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12407,45 +12864,52 @@ impl CloudFormation for CloudFormationClient {
         DeleteStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DeleteStackSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStackSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DeleteStackSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DeleteStackSetOutputDeserializer::deserialize(
+                    "DeleteStackSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DeleteStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DeleteStackSetOutputDeserializer::deserialize("DeleteStackSetResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Removes a type or type version from active use in the CloudFormation registry. If a type or type version is deregistered, it cannot be used in CloudFormation operations.</p> <p>To deregister a type, you must individually deregister all registered versions of that type. If a type has only a single registered version, deregistering that version results in the type itself being deregistered. </p> <p>You cannot deregister the default version of a type, unless it is the only registered version of that type, in which case the type itself is deregistered as well. </p>
-    async fn deregister_type(
+    fn deregister_type(
         &self,
         input: DeregisterTypeInput,
-    ) -> Result<DeregisterTypeOutput, RusotoError<DeregisterTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeregisterTypeOutput, RusotoError<DeregisterTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12454,45 +12918,56 @@ impl CloudFormation for CloudFormationClient {
         DeregisterTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DeregisterTypeError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeregisterTypeError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DeregisterTypeOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DeregisterTypeOutputDeserializer::deserialize(
+                    "DeregisterTypeResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DeregisterTypeOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DeregisterTypeOutputDeserializer::deserialize("DeregisterTypeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account. For more information about account limits, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">AWS CloudFormation Limits</a> in the <i>AWS CloudFormation User Guide</i>.</p>
-    async fn describe_account_limits(
+    fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
-    ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAccountLimitsOutput,
+                        RusotoError<DescribeAccountLimitsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12501,47 +12976,53 @@ impl CloudFormation for CloudFormationClient {
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeAccountLimitsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAccountLimitsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeAccountLimitsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeAccountLimitsOutputDeserializer::deserialize(
+                    "DescribeAccountLimitsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeAccountLimitsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAccountLimitsOutputDeserializer::deserialize(
-                "DescribeAccountLimitsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
-    async fn describe_change_set(
+    fn describe_change_set(
         &self,
         input: DescribeChangeSetInput,
-    ) -> Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12550,49 +13031,55 @@ impl CloudFormation for CloudFormationClient {
         DescribeChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeChangeSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeChangeSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeChangeSetOutputDeserializer::deserialize(
+                    "DescribeChangeSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeChangeSetOutputDeserializer::deserialize(
-                "DescribeChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns information about a stack drift detection operation. A stack drift detection operation detects whether a stack's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted. For more information on stack and resource drift, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <a>DetectStackDrift</a> to initiate a stack drift detection operation. <code>DetectStackDrift</code> returns a <code>StackDriftDetectionId</code> you can use to monitor the progress of the operation using <code>DescribeStackDriftDetectionStatus</code>. Once the drift detection operation has completed, use <a>DescribeStackResourceDrifts</a> to return drift information about the stack and its resources.</p>
-    async fn describe_stack_drift_detection_status(
+    fn describe_stack_drift_detection_status(
         &self,
         input: DescribeStackDriftDetectionStatusInput,
-    ) -> Result<
-        DescribeStackDriftDetectionStatusOutput,
-        RusotoError<DescribeStackDriftDetectionStatusError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackDriftDetectionStatusOutput,
+                        RusotoError<DescribeStackDriftDetectionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12602,49 +13089,58 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackDriftDetectionStatusInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackDriftDetectionStatusError::from_response(
+                    response,
+                ));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackDriftDetectionStatusError::from_response(
-                response,
-            ));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackDriftDetectionStatusOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackDriftDetectionStatusOutputDeserializer::deserialize(
+                    "DescribeStackDriftDetectionStatusResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackDriftDetectionStatusOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackDriftDetectionStatusOutputDeserializer::deserialize(
-                "DescribeStackDriftDetectionStatusResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
-    async fn describe_stack_events(
+    fn describe_stack_events(
         &self,
         input: DescribeStackEventsInput,
-    ) -> Result<DescribeStackEventsOutput, RusotoError<DescribeStackEventsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackEventsOutput,
+                        RusotoError<DescribeStackEventsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12653,47 +13149,56 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackEventsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackEventsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackEventsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackEventsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackEventsOutputDeserializer::deserialize(
+                    "DescribeStackEventsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackEventsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackEventsOutputDeserializer::deserialize(
-                "DescribeStackEventsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
-    async fn describe_stack_instance(
+    fn describe_stack_instance(
         &self,
         input: DescribeStackInstanceInput,
-    ) -> Result<DescribeStackInstanceOutput, RusotoError<DescribeStackInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackInstanceOutput,
+                        RusotoError<DescribeStackInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12702,47 +13207,56 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackInstanceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackInstanceError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackInstanceError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackInstanceOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackInstanceOutputDeserializer::deserialize(
+                    "DescribeStackInstanceResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackInstanceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackInstanceOutputDeserializer::deserialize(
-                "DescribeStackInstanceResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
-    async fn describe_stack_resource(
+    fn describe_stack_resource(
         &self,
         input: DescribeStackResourceInput,
-    ) -> Result<DescribeStackResourceOutput, RusotoError<DescribeStackResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackResourceOutput,
+                        RusotoError<DescribeStackResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12751,48 +13265,56 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackResourceError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackResourceError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackResourceOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackResourceOutputDeserializer::deserialize(
+                    "DescribeStackResourceResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackResourceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackResourceOutputDeserializer::deserialize(
-                "DescribeStackResourceResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns drift information for the resources that have been checked for drift in the specified stack. This includes actual and expected configuration values for resources where AWS CloudFormation detects configuration drift.</p> <p>For a given stack, there will be one <code>StackResourceDrift</code> for each stack resource that has been checked for drift. Resources that have not yet been checked for drift are not included. Resources that do not currently support drift detection are not checked, and so not included. For a list of resources that support drift detection, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p> <p>Use <a>DetectStackResourceDrift</a> to detect drift on individual resources, or <a>DetectStackDrift</a> to detect drift on all supported resources for a given stack.</p>
-    async fn describe_stack_resource_drifts(
+    fn describe_stack_resource_drifts(
         &self,
         input: DescribeStackResourceDriftsInput,
-    ) -> Result<DescribeStackResourceDriftsOutput, RusotoError<DescribeStackResourceDriftsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackResourceDriftsOutput,
+                        RusotoError<DescribeStackResourceDriftsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12801,47 +13323,56 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackResourceDriftsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackResourceDriftsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackResourceDriftsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackResourceDriftsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackResourceDriftsOutputDeserializer::deserialize(
+                    "DescribeStackResourceDriftsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackResourceDriftsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackResourceDriftsOutputDeserializer::deserialize(
-                "DescribeStackResourceDriftsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
-    async fn describe_stack_resources(
+    fn describe_stack_resources(
         &self,
         input: DescribeStackResourcesInput,
-    ) -> Result<DescribeStackResourcesOutput, RusotoError<DescribeStackResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackResourcesOutput,
+                        RusotoError<DescribeStackResourcesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12850,47 +13381,52 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackResourcesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackResourcesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackResourcesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackResourcesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackResourcesOutputDeserializer::deserialize(
+                    "DescribeStackResourcesResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackResourcesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackResourcesOutputDeserializer::deserialize(
-                "DescribeStackResourcesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the description of the specified stack set. </p>
-    async fn describe_stack_set(
+    fn describe_stack_set(
         &self,
         input: DescribeStackSetInput,
-    ) -> Result<DescribeStackSetOutput, RusotoError<DescribeStackSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStackSetOutput, RusotoError<DescribeStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12899,47 +13435,56 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackSetOutputDeserializer::deserialize(
+                    "DescribeStackSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackSetOutputDeserializer::deserialize(
-                "DescribeStackSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the description of the specified stack set operation. </p>
-    async fn describe_stack_set_operation(
+    fn describe_stack_set_operation(
         &self,
         input: DescribeStackSetOperationInput,
-    ) -> Result<DescribeStackSetOperationOutput, RusotoError<DescribeStackSetOperationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStackSetOperationOutput,
+                        RusotoError<DescribeStackSetOperationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12948,47 +13493,52 @@ impl CloudFormation for CloudFormationClient {
         DescribeStackSetOperationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStackSetOperationError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackSetOperationError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStackSetOperationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStackSetOperationOutputDeserializer::deserialize(
+                    "DescribeStackSetOperationResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStackSetOperationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackSetOperationOutputDeserializer::deserialize(
-                "DescribeStackSetOperationResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
-    async fn describe_stacks(
+    fn describe_stacks(
         &self,
         input: DescribeStacksInput,
-    ) -> Result<DescribeStacksOutput, RusotoError<DescribeStacksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStacksOutput, RusotoError<DescribeStacksError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12997,45 +13547,52 @@ impl CloudFormation for CloudFormationClient {
         DescribeStacksInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeStacksError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStacksError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeStacksOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeStacksOutputDeserializer::deserialize(
+                    "DescribeStacksResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeStacksOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns detailed information about a type that has been registered.</p> <p>If you specify a <code>VersionId</code>, <code>DescribeType</code> returns information about that specific type version. Otherwise, it returns information about the default type version.</p>
-    async fn describe_type(
+    fn describe_type(
         &self,
         input: DescribeTypeInput,
-    ) -> Result<DescribeTypeOutput, RusotoError<DescribeTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeTypeOutput, RusotoError<DescribeTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13044,44 +13601,54 @@ impl CloudFormation for CloudFormationClient {
         DescribeTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeTypeError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTypeError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeTypeOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    DescribeTypeOutputDeserializer::deserialize("DescribeTypeResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeTypeOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeTypeOutputDeserializer::deserialize("DescribeTypeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns information about a type's registration, including its current status and type and version identifiers.</p> <p>When you initiate a registration request using <code> <a>RegisterType</a> </code>, you can then use <code> <a>DescribeTypeRegistration</a> </code> to monitor the progress of that registration request.</p> <p>Once the registration request has completed, use <code> <a>DescribeType</a> </code> to return detailed informaiton about a type.</p>
-    async fn describe_type_registration(
+    fn describe_type_registration(
         &self,
         input: DescribeTypeRegistrationInput,
-    ) -> Result<DescribeTypeRegistrationOutput, RusotoError<DescribeTypeRegistrationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTypeRegistrationOutput,
+                        RusotoError<DescribeTypeRegistrationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13090,47 +13657,52 @@ impl CloudFormation for CloudFormationClient {
         DescribeTypeRegistrationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DescribeTypeRegistrationError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTypeRegistrationError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DescribeTypeRegistrationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DescribeTypeRegistrationOutputDeserializer::deserialize(
+                    "DescribeTypeRegistrationResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DescribeTypeRegistrationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeTypeRegistrationOutputDeserializer::deserialize(
-                "DescribeTypeRegistrationResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Detects whether a stack's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. For each resource in the stack that supports drift detection, AWS CloudFormation compares the actual configuration of the resource with its expected template configuration. Only resource properties explicitly defined in the stack template are checked for drift. A stack is considered to have drifted if one or more of its resources differ from their expected template configurations. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <code>DetectStackDrift</code> to detect drift on all supported resources for a given stack, or <a>DetectStackResourceDrift</a> to detect drift on individual resources.</p> <p>For a list of stack resources that currently support drift detection, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p> <p> <code>DetectStackDrift</code> can take up to several minutes, depending on the number of resources contained within the stack. Use <a>DescribeStackDriftDetectionStatus</a> to monitor the progress of a detect stack drift operation. Once the drift detection operation has completed, use <a>DescribeStackResourceDrifts</a> to return drift information about the stack and its resources.</p> <p>When detecting drift on a stack, AWS CloudFormation does not detect drift on any nested stacks belonging to that stack. Perform <code>DetectStackDrift</code> directly on the nested stack itself.</p>
-    async fn detect_stack_drift(
+    fn detect_stack_drift(
         &self,
         input: DetectStackDriftInput,
-    ) -> Result<DetectStackDriftOutput, RusotoError<DetectStackDriftError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectStackDriftOutput, RusotoError<DetectStackDriftError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13139,47 +13711,56 @@ impl CloudFormation for CloudFormationClient {
         DetectStackDriftInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DetectStackDriftError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetectStackDriftError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DetectStackDriftOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DetectStackDriftOutputDeserializer::deserialize(
+                    "DetectStackDriftResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DetectStackDriftOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetectStackDriftOutputDeserializer::deserialize(
-                "DetectStackDriftResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns information about whether a resource's actual configuration differs, or has <i>drifted</i>, from it's expected configuration, as defined in the stack template and any values specified as template parameters. This information includes actual and expected property values for resources in which AWS CloudFormation detects drift. Only resource properties explicitly defined in the stack template are checked for drift. For more information about stack and resource drift, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p> <p>Use <code>DetectStackResourceDrift</code> to detect drift on individual resources, or <a>DetectStackDrift</a> to detect drift on all resources in a given stack that support drift detection.</p> <p>Resources that do not currently support drift detection cannot be checked. For a list of resources that support drift detection, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html">Resources that Support Drift Detection</a>.</p>
-    async fn detect_stack_resource_drift(
+    fn detect_stack_resource_drift(
         &self,
         input: DetectStackResourceDriftInput,
-    ) -> Result<DetectStackResourceDriftOutput, RusotoError<DetectStackResourceDriftError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetectStackResourceDriftOutput,
+                        RusotoError<DetectStackResourceDriftError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13188,47 +13769,56 @@ impl CloudFormation for CloudFormationClient {
         DetectStackResourceDriftInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DetectStackResourceDriftError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetectStackResourceDriftError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DetectStackResourceDriftOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DetectStackResourceDriftOutputDeserializer::deserialize(
+                    "DetectStackResourceDriftResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DetectStackResourceDriftOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetectStackResourceDriftOutputDeserializer::deserialize(
-                "DetectStackResourceDriftResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Detect drift on a stack set. When CloudFormation performs drift detection on a stack set, it performs drift detection on the stack associated with each stack instance in the stack set. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html">How CloudFormation Performs Drift Detection on a Stack Set</a>.</p> <p> <code>DetectStackSetDrift</code> returns the <code>OperationId</code> of the stack set drift detection operation. Use this operation id with <code> <a>DescribeStackSetOperation</a> </code> to monitor the progress of the drift detection operation. The drift detection operation may take some time, depending on the number of stack instances included in the stack set, as well as the number of resources included in each stack.</p> <p>Once the operation has completed, use the following actions to return drift information:</p> <ul> <li> <p>Use <code> <a>DescribeStackSet</a> </code> to return detailed informaiton about the stack set, including detailed information about the last <i>completed</i> drift operation performed on the stack set. (Information about drift operations that are in progress is not included.)</p> </li> <li> <p>Use <code> <a>ListStackInstances</a> </code> to return a list of stack instances belonging to the stack set, including the drift status and last drift time checked of each instance.</p> </li> <li> <p>Use <code> <a>DescribeStackInstance</a> </code> to return detailed information about a specific stack instance, including its drift status and last drift time checked.</p> </li> </ul> <p>For more information on performing a drift detection operation on a stack set, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html">Detecting Unmanaged Changes in Stack Sets</a>. </p> <p>You can only run a single drift detection operation on a given stack set at one time. </p> <p>To stop a drift detection stack set operation, use <code> <a>StopStackSetOperation</a> </code>.</p>
-    async fn detect_stack_set_drift(
+    fn detect_stack_set_drift(
         &self,
         input: DetectStackSetDriftInput,
-    ) -> Result<DetectStackSetDriftOutput, RusotoError<DetectStackSetDriftError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetectStackSetDriftOutput,
+                        RusotoError<DetectStackSetDriftError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13237,47 +13827,56 @@ impl CloudFormation for CloudFormationClient {
         DetectStackSetDriftInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(DetectStackSetDriftError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetectStackSetDriftError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = DetectStackSetDriftOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = DetectStackSetDriftOutputDeserializer::deserialize(
+                    "DetectStackSetDriftResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = DetectStackSetDriftOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetectStackSetDriftOutputDeserializer::deserialize(
-                "DetectStackSetDriftResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
-    async fn estimate_template_cost(
+    fn estimate_template_cost(
         &self,
         input: EstimateTemplateCostInput,
-    ) -> Result<EstimateTemplateCostOutput, RusotoError<EstimateTemplateCostError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        EstimateTemplateCostOutput,
+                        RusotoError<EstimateTemplateCostError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13286,47 +13885,52 @@ impl CloudFormation for CloudFormationClient {
         EstimateTemplateCostInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(EstimateTemplateCostError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EstimateTemplateCostError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = EstimateTemplateCostOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = EstimateTemplateCostOutputDeserializer::deserialize(
+                    "EstimateTemplateCostResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = EstimateTemplateCostOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EstimateTemplateCostOutputDeserializer::deserialize(
-                "EstimateTemplateCostResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
-    async fn execute_change_set(
+    fn execute_change_set(
         &self,
         input: ExecuteChangeSetInput,
-    ) -> Result<ExecuteChangeSetOutput, RusotoError<ExecuteChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ExecuteChangeSetOutput, RusotoError<ExecuteChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13335,47 +13939,52 @@ impl CloudFormation for CloudFormationClient {
         ExecuteChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ExecuteChangeSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ExecuteChangeSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ExecuteChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ExecuteChangeSetOutputDeserializer::deserialize(
+                    "ExecuteChangeSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ExecuteChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ExecuteChangeSetOutputDeserializer::deserialize(
-                "ExecuteChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
-    async fn get_stack_policy(
+    fn get_stack_policy(
         &self,
         input: GetStackPolicyInput,
-    ) -> Result<GetStackPolicyOutput, RusotoError<GetStackPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetStackPolicyOutput, RusotoError<GetStackPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13384,45 +13993,52 @@ impl CloudFormation for CloudFormationClient {
         GetStackPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(GetStackPolicyError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetStackPolicyError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = GetStackPolicyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = GetStackPolicyOutputDeserializer::deserialize(
+                    "GetStackPolicyResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = GetStackPolicyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
-    async fn get_template(
+    fn get_template(
         &self,
         input: GetTemplateInput,
-    ) -> Result<GetTemplateOutput, RusotoError<GetTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTemplateOutput, RusotoError<GetTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13431,44 +14047,51 @@ impl CloudFormation for CloudFormationClient {
         GetTemplateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(GetTemplateError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTemplateError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = GetTemplateOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    GetTemplateOutputDeserializer::deserialize("GetTemplateResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = GetTemplateOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetTemplateOutputDeserializer::deserialize("GetTemplateResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
-    async fn get_template_summary(
+    fn get_template_summary(
         &self,
         input: GetTemplateSummaryInput,
-    ) -> Result<GetTemplateSummaryOutput, RusotoError<GetTemplateSummaryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetTemplateSummaryOutput, RusotoError<GetTemplateSummaryError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13477,47 +14100,52 @@ impl CloudFormation for CloudFormationClient {
         GetTemplateSummaryInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(GetTemplateSummaryError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTemplateSummaryError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = GetTemplateSummaryOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = GetTemplateSummaryOutputDeserializer::deserialize(
+                    "GetTemplateSummaryResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = GetTemplateSummaryOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetTemplateSummaryOutputDeserializer::deserialize(
-                "GetTemplateSummaryResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
-    async fn list_change_sets(
+    fn list_change_sets(
         &self,
         input: ListChangeSetsInput,
-    ) -> Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13526,45 +14154,52 @@ impl CloudFormation for CloudFormationClient {
         ListChangeSetsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListChangeSetsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListChangeSetsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListChangeSetsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListChangeSetsOutputDeserializer::deserialize(
+                    "ListChangeSetsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListChangeSetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
-    async fn list_exports(
+    fn list_exports(
         &self,
         input: ListExportsInput,
-    ) -> Result<ListExportsOutput, RusotoError<ListExportsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListExportsOutput, RusotoError<ListExportsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13573,44 +14208,50 @@ impl CloudFormation for CloudFormationClient {
         ListExportsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListExportsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListExportsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListExportsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    ListExportsOutputDeserializer::deserialize("ListExportsResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListExportsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListExportsOutputDeserializer::deserialize("ListExportsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
-    async fn list_imports(
+    fn list_imports(
         &self,
         input: ListImportsInput,
-    ) -> Result<ListImportsOutput, RusotoError<ListImportsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListImportsOutput, RusotoError<ListImportsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13619,44 +14260,51 @@ impl CloudFormation for CloudFormationClient {
         ListImportsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListImportsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListImportsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListImportsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    ListImportsOutputDeserializer::deserialize("ListImportsResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListImportsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListImportsOutputDeserializer::deserialize("ListImportsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
-    async fn list_stack_instances(
+    fn list_stack_instances(
         &self,
         input: ListStackInstancesInput,
-    ) -> Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13665,47 +14313,53 @@ impl CloudFormation for CloudFormationClient {
         ListStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListStackInstancesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackInstancesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListStackInstancesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListStackInstancesOutputDeserializer::deserialize(
+                    "ListStackInstancesResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackInstancesOutputDeserializer::deserialize(
-                "ListStackInstancesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
-    async fn list_stack_resources(
+    fn list_stack_resources(
         &self,
         input: ListStackResourcesInput,
-    ) -> Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13714,48 +14368,56 @@ impl CloudFormation for CloudFormationClient {
         ListStackResourcesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListStackResourcesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackResourcesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListStackResourcesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListStackResourcesOutputDeserializer::deserialize(
+                    "ListStackResourcesResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListStackResourcesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackResourcesOutputDeserializer::deserialize(
-                "ListStackResourcesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns summary information about the results of a stack set operation. </p>
-    async fn list_stack_set_operation_results(
+    fn list_stack_set_operation_results(
         &self,
         input: ListStackSetOperationResultsInput,
-    ) -> Result<ListStackSetOperationResultsOutput, RusotoError<ListStackSetOperationResultsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListStackSetOperationResultsOutput,
+                        RusotoError<ListStackSetOperationResultsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13764,47 +14426,56 @@ impl CloudFormation for CloudFormationClient {
         ListStackSetOperationResultsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListStackSetOperationResultsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackSetOperationResultsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListStackSetOperationResultsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListStackSetOperationResultsOutputDeserializer::deserialize(
+                    "ListStackSetOperationResultsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListStackSetOperationResultsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackSetOperationResultsOutputDeserializer::deserialize(
-                "ListStackSetOperationResultsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns summary information about operations performed on a stack set. </p>
-    async fn list_stack_set_operations(
+    fn list_stack_set_operations(
         &self,
         input: ListStackSetOperationsInput,
-    ) -> Result<ListStackSetOperationsOutput, RusotoError<ListStackSetOperationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListStackSetOperationsOutput,
+                        RusotoError<ListStackSetOperationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13813,47 +14484,52 @@ impl CloudFormation for CloudFormationClient {
         ListStackSetOperationsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListStackSetOperationsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackSetOperationsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListStackSetOperationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListStackSetOperationsOutputDeserializer::deserialize(
+                    "ListStackSetOperationsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListStackSetOperationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackSetOperationsOutputDeserializer::deserialize(
-                "ListStackSetOperationsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
-    async fn list_stack_sets(
+    fn list_stack_sets(
         &self,
         input: ListStackSetsInput,
-    ) -> Result<ListStackSetsOutput, RusotoError<ListStackSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStackSetsOutput, RusotoError<ListStackSetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13862,45 +14538,52 @@ impl CloudFormation for CloudFormationClient {
         ListStackSetsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListStackSetsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackSetsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListStackSetsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListStackSetsOutputDeserializer::deserialize(
+                    "ListStackSetsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListStackSetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListStackSetsOutputDeserializer::deserialize("ListStackSetsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
-    async fn list_stacks(
+    fn list_stacks(
         &self,
         input: ListStacksInput,
-    ) -> Result<ListStacksOutput, RusotoError<ListStacksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStacksOutput, RusotoError<ListStacksError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13909,44 +14592,53 @@ impl CloudFormation for CloudFormationClient {
         ListStacksInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListStacksError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStacksError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListStacksOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListStacksOutputDeserializer::deserialize("ListStacksResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListStacksOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStacksOutputDeserializer::deserialize("ListStacksResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns a list of registration tokens for the specified type.</p>
-    async fn list_type_registrations(
+    fn list_type_registrations(
         &self,
         input: ListTypeRegistrationsInput,
-    ) -> Result<ListTypeRegistrationsOutput, RusotoError<ListTypeRegistrationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTypeRegistrationsOutput,
+                        RusotoError<ListTypeRegistrationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -13955,47 +14647,52 @@ impl CloudFormation for CloudFormationClient {
         ListTypeRegistrationsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListTypeRegistrationsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTypeRegistrationsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListTypeRegistrationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListTypeRegistrationsOutputDeserializer::deserialize(
+                    "ListTypeRegistrationsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListTypeRegistrationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTypeRegistrationsOutputDeserializer::deserialize(
-                "ListTypeRegistrationsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns summary information about the versions of a type.</p>
-    async fn list_type_versions(
+    fn list_type_versions(
         &self,
         input: ListTypeVersionsInput,
-    ) -> Result<ListTypeVersionsOutput, RusotoError<ListTypeVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTypeVersionsOutput, RusotoError<ListTypeVersionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14004,47 +14701,52 @@ impl CloudFormation for CloudFormationClient {
         ListTypeVersionsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListTypeVersionsError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTypeVersionsError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListTypeVersionsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListTypeVersionsOutputDeserializer::deserialize(
+                    "ListTypeVersionsResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListTypeVersionsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTypeVersionsOutputDeserializer::deserialize(
-                "ListTypeVersionsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Returns summary information about types that have been registered with CloudFormation.</p>
-    async fn list_types(
+    fn list_types(
         &self,
         input: ListTypesInput,
-    ) -> Result<ListTypesOutput, RusotoError<ListTypesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTypesOutput, RusotoError<ListTypesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14053,44 +14755,53 @@ impl CloudFormation for CloudFormationClient {
         ListTypesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ListTypesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTypesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ListTypesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ListTypesOutputDeserializer::deserialize("ListTypesResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ListTypesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTypesOutputDeserializer::deserialize("ListTypesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Reports progress of a resource handler to CloudFormation.</p> <p>Reserved for use by the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/what-is-cloudformation-cli.html">CloudFormation CLI</a>. Do not use this API in your code.</p>
-    async fn record_handler_progress(
+    fn record_handler_progress(
         &self,
         input: RecordHandlerProgressInput,
-    ) -> Result<RecordHandlerProgressOutput, RusotoError<RecordHandlerProgressError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RecordHandlerProgressOutput,
+                        RusotoError<RecordHandlerProgressError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14099,47 +14810,52 @@ impl CloudFormation for CloudFormationClient {
         RecordHandlerProgressInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(RecordHandlerProgressError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RecordHandlerProgressError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = RecordHandlerProgressOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = RecordHandlerProgressOutputDeserializer::deserialize(
+                    "RecordHandlerProgressResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = RecordHandlerProgressOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RecordHandlerProgressOutputDeserializer::deserialize(
-                "RecordHandlerProgressResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Registers a type with the CloudFormation service. Registering a type makes it available for use in CloudFormation templates in your AWS account, and includes:</p> <ul> <li> <p>Validating the resource schema</p> </li> <li> <p>Determining which handlers have been specified for the resource</p> </li> <li> <p>Making the resource type available for use in your account</p> </li> </ul> <p>For more information on how to develop types and ready them for registeration, see <a href="cloudformation-cli/latest/userguide/resource-types.html">Creating Resource Providers</a> in the <i>CloudFormation CLI User Guide</i>.</p> <p>Once you have initiated a registration request using <code> <a>RegisterType</a> </code>, you can use <code> <a>DescribeTypeRegistration</a> </code> to monitor the progress of the registration request.</p>
-    async fn register_type(
+    fn register_type(
         &self,
         input: RegisterTypeInput,
-    ) -> Result<RegisterTypeOutput, RusotoError<RegisterTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterTypeOutput, RusotoError<RegisterTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14148,44 +14864,45 @@ impl CloudFormation for CloudFormationClient {
         RegisterTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(RegisterTypeError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RegisterTypeError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = RegisterTypeOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    RegisterTypeOutputDeserializer::deserialize("RegisterTypeResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = RegisterTypeOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RegisterTypeOutputDeserializer::deserialize("RegisterTypeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Sets a stack policy for a specified stack.</p>
-    async fn set_stack_policy(
+    fn set_stack_policy(
         &self,
         input: SetStackPolicyInput,
-    ) -> Result<(), RusotoError<SetStackPolicyError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<SetStackPolicyError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14194,26 +14911,35 @@ impl CloudFormation for CloudFormationClient {
         SetStackPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(SetStackPolicyError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetStackPolicyError::from_response(response));
+            std::mem::drop(response);
+            Ok(())
         }
-
-        std::mem::drop(response);
-        Ok(())
+        .boxed()
     }
 
     /// <p>Specify the default version of a type. The default version of a type will be used in CloudFormation operations.</p>
-    async fn set_type_default_version(
+    fn set_type_default_version(
         &self,
         input: SetTypeDefaultVersionInput,
-    ) -> Result<SetTypeDefaultVersionOutput, RusotoError<SetTypeDefaultVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SetTypeDefaultVersionOutput,
+                        RusotoError<SetTypeDefaultVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14222,47 +14948,47 @@ impl CloudFormation for CloudFormationClient {
         SetTypeDefaultVersionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(SetTypeDefaultVersionError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetTypeDefaultVersionError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = SetTypeDefaultVersionOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = SetTypeDefaultVersionOutputDeserializer::deserialize(
+                    "SetTypeDefaultVersionResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = SetTypeDefaultVersionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SetTypeDefaultVersionOutputDeserializer::deserialize(
-                "SetTypeDefaultVersionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
-    async fn signal_resource(
+    fn signal_resource(
         &self,
         input: SignalResourceInput,
-    ) -> Result<(), RusotoError<SignalResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<SignalResourceError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14271,26 +14997,35 @@ impl CloudFormation for CloudFormationClient {
         SignalResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(SignalResourceError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SignalResourceError::from_response(response));
+            std::mem::drop(response);
+            Ok(())
         }
-
-        std::mem::drop(response);
-        Ok(())
+        .boxed()
     }
 
     /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
-    async fn stop_stack_set_operation(
+    fn stop_stack_set_operation(
         &self,
         input: StopStackSetOperationInput,
-    ) -> Result<StopStackSetOperationOutput, RusotoError<StopStackSetOperationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopStackSetOperationOutput,
+                        RusotoError<StopStackSetOperationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14299,47 +15034,52 @@ impl CloudFormation for CloudFormationClient {
         StopStackSetOperationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(StopStackSetOperationError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(StopStackSetOperationError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = StopStackSetOperationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = StopStackSetOperationOutputDeserializer::deserialize(
+                    "StopStackSetOperationResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = StopStackSetOperationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = StopStackSetOperationOutputDeserializer::deserialize(
-                "StopStackSetOperationResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
-    async fn update_stack(
+    fn update_stack(
         &self,
         input: UpdateStackInput,
-    ) -> Result<UpdateStackOutput, RusotoError<UpdateStackError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateStackOutput, RusotoError<UpdateStackError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14348,44 +15088,54 @@ impl CloudFormation for CloudFormationClient {
         UpdateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(UpdateStackError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStackError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = UpdateStackOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result =
+                    UpdateStackOutputDeserializer::deserialize("UpdateStackResult", &mut stack)?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = UpdateStackOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateStackOutputDeserializer::deserialize("UpdateStackResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
-    async fn update_stack_instances(
+    fn update_stack_instances(
         &self,
         input: UpdateStackInstancesInput,
-    ) -> Result<UpdateStackInstancesOutput, RusotoError<UpdateStackInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateStackInstancesOutput,
+                        RusotoError<UpdateStackInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14394,47 +15144,52 @@ impl CloudFormation for CloudFormationClient {
         UpdateStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(UpdateStackInstancesError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStackInstancesError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = UpdateStackInstancesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = UpdateStackInstancesOutputDeserializer::deserialize(
+                    "UpdateStackInstancesResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = UpdateStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateStackInstancesOutputDeserializer::deserialize(
-                "UpdateStackInstancesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Updates the stack set, and associated stack instances in the specified accounts and regions.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
-    async fn update_stack_set(
+    fn update_stack_set(
         &self,
         input: UpdateStackSetInput,
-    ) -> Result<UpdateStackSetOutput, RusotoError<UpdateStackSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateStackSetOutput, RusotoError<UpdateStackSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14443,46 +15198,56 @@ impl CloudFormation for CloudFormationClient {
         UpdateStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(UpdateStackSetError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStackSetError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = UpdateStackSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = UpdateStackSetOutputDeserializer::deserialize(
+                    "UpdateStackSetResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = UpdateStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                UpdateStackSetOutputDeserializer::deserialize("UpdateStackSetResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
-    async fn update_termination_protection(
+    fn update_termination_protection(
         &self,
         input: UpdateTerminationProtectionInput,
-    ) -> Result<UpdateTerminationProtectionOutput, RusotoError<UpdateTerminationProtectionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTerminationProtectionOutput,
+                        RusotoError<UpdateTerminationProtectionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14491,47 +15256,52 @@ impl CloudFormation for CloudFormationClient {
         UpdateTerminationProtectionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(UpdateTerminationProtectionError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateTerminationProtectionError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = UpdateTerminationProtectionOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = UpdateTerminationProtectionOutputDeserializer::deserialize(
+                    "UpdateTerminationProtectionResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = UpdateTerminationProtectionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateTerminationProtectionOutputDeserializer::deserialize(
-                "UpdateTerminationProtectionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 
     /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
-    async fn validate_template(
+    fn validate_template(
         &self,
         input: ValidateTemplateInput,
-    ) -> Result<ValidateTemplateOutput, RusotoError<ValidateTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ValidateTemplateOutput, RusotoError<ValidateTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14540,40 +15310,39 @@ impl CloudFormation for CloudFormationClient {
         ValidateTemplateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if !response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                return Err(ValidateTemplateError::from_response(response));
+            }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ValidateTemplateError::from_response(response));
+            let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result;
+
+            if xml_response.body.is_empty() {
+                result = ValidateTemplateOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(
+                    xml_response.body.as_ref(),
+                    ParserConfig::new().trim_whitespace(false),
+                );
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = peek_at_name(&mut stack)?;
+                start_element(&actual_tag_name, &mut stack)?;
+                result = ValidateTemplateOutputDeserializer::deserialize(
+                    "ValidateTemplateResult",
+                    &mut stack,
+                )?;
+                skip_tree(&mut stack);
+                end_element(&actual_tag_name, &mut stack)?;
+            }
+            // parse non-payload
+            Ok(result)
         }
-
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        let result;
-
-        if xml_response.body.is_empty() {
-            result = ValidateTemplateOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ValidateTemplateOutputDeserializer::deserialize(
-                "ValidateTemplateResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        .boxed()
     }
 }
 

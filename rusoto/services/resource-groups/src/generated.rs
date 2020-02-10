@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupInput {
@@ -1140,73 +1141,135 @@ impl fmt::Display for UpdateGroupQueryError {
 }
 impl Error for UpdateGroupQueryError {}
 /// Trait representing the capabilities of the Resource Groups API. Resource Groups clients implement this trait.
-#[async_trait]
 pub trait ResourceGroups {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
-    async fn create_group(
+    fn create_group(
         &self,
         input: CreateGroupInput,
-    ) -> Result<CreateGroupOutput, RusotoError<CreateGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateGroupOutput, RusotoError<CreateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
-    async fn delete_group(
+    fn delete_group(
         &self,
         input: DeleteGroupInput,
-    ) -> Result<DeleteGroupOutput, RusotoError<DeleteGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteGroupOutput, RusotoError<DeleteGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a specified resource group.</p>
-    async fn get_group(
+    fn get_group(
         &self,
         input: GetGroupInput,
-    ) -> Result<GetGroupOutput, RusotoError<GetGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetGroupOutput, RusotoError<GetGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the resource query associated with the specified resource group.</p>
-    async fn get_group_query(
+    fn get_group_query(
         &self,
         input: GetGroupQueryInput,
-    ) -> Result<GetGroupQueryOutput, RusotoError<GetGroupQueryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetGroupQueryOutput, RusotoError<GetGroupQueryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
-    async fn get_tags(
+    fn get_tags(
         &self,
         input: GetTagsInput,
-    ) -> Result<GetTagsOutput, RusotoError<GetTagsError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetTagsOutput, RusotoError<GetTagsError>>> + Send + 'static>,
+    >;
 
     /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
-    async fn list_group_resources(
+    fn list_group_resources(
         &self,
         input: ListGroupResourcesInput,
-    ) -> Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of existing resource groups in your account.</p>
-    async fn list_groups(
+    fn list_groups(
         &self,
         input: ListGroupsInput,
-    ) -> Result<ListGroupsOutput, RusotoError<ListGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGroupsOutput, RusotoError<ListGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
-    async fn search_resources(
+    fn search_resources(
         &self,
         input: SearchResourcesInput,
-    ) -> Result<SearchResourcesOutput, RusotoError<SearchResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchResourcesOutput, RusotoError<SearchResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
-    async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>>;
+    fn tag(
+        &self,
+        input: TagInput,
+    ) -> Pin<Box<dyn Future<Output = Result<TagOutput, RusotoError<TagError>>> + Send + 'static>>;
 
     /// <p>Deletes specified tags from a specified resource.</p>
-    async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>>;
+    fn untag(
+        &self,
+        input: UntagInput,
+    ) -> Pin<Box<dyn Future<Output = Result<UntagOutput, RusotoError<UntagError>>> + Send + 'static>>;
 
     /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
-    async fn update_group(
+    fn update_group(
         &self,
         input: UpdateGroupInput,
-    ) -> Result<UpdateGroupOutput, RusotoError<UpdateGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateGroupOutput, RusotoError<UpdateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the resource query of a group.</p>
-    async fn update_group_query(
+    fn update_group_query(
         &self,
         input: UpdateGroupQueryInput,
-    ) -> Result<UpdateGroupQueryOutput, RusotoError<UpdateGroupQueryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateGroupQueryOutput, RusotoError<UpdateGroupQueryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Resource Groups API.
 #[derive(Clone)]
@@ -1246,13 +1309,18 @@ impl ResourceGroupsClient {
     }
 }
 
-#[async_trait]
 impl ResourceGroups for ResourceGroupsClient {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
-    async fn create_group(
+    fn create_group(
         &self,
         input: CreateGroupInput,
-    ) -> Result<CreateGroupOutput, RusotoError<CreateGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateGroupOutput, RusotoError<CreateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/groups";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1261,137 +1329,164 @@ impl ResourceGroups for ResourceGroupsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGroupOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateGroupOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
-    async fn delete_group(
+    fn delete_group(
         &self,
         input: DeleteGroupInput,
-    ) -> Result<DeleteGroupOutput, RusotoError<DeleteGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteGroupOutput, RusotoError<DeleteGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/groups/{group_name}", group_name = input.group_name);
 
         let mut request =
             SignedRequest::new("DELETE", "resource-groups", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGroupOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteGroupOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a specified resource group.</p>
-    async fn get_group(
+    fn get_group(
         &self,
         input: GetGroupInput,
-    ) -> Result<GetGroupOutput, RusotoError<GetGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetGroupOutput, RusotoError<GetGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/groups/{group_name}", group_name = input.group_name);
 
         let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetGroupOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetGroupOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the resource query associated with the specified resource group.</p>
-    async fn get_group_query(
+    fn get_group_query(
         &self,
         input: GetGroupQueryInput,
-    ) -> Result<GetGroupQueryOutput, RusotoError<GetGroupQueryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetGroupQueryOutput, RusotoError<GetGroupQueryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/groups/{group_name}/query", group_name = input.group_name);
 
         let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGroupQueryOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetGroupQueryOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGroupQueryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetGroupQueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
-    async fn get_tags(
+    fn get_tags(
         &self,
         input: GetTagsInput,
-    ) -> Result<GetTagsOutput, RusotoError<GetTagsError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetTagsOutput, RusotoError<GetTagsError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetTagsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTagsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
-    async fn list_group_resources(
+    fn list_group_resources(
         &self,
         input: ListGroupResourcesInput,
-    ) -> Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/groups/{group_name}/resource-identifiers-list",
             group_name = input.group_name
@@ -1412,28 +1507,34 @@ impl ResourceGroups for ResourceGroupsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupResourcesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGroupResourcesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGroupResourcesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGroupResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of existing resource groups in your account.</p>
-    async fn list_groups(
+    fn list_groups(
         &self,
         input: ListGroupsInput,
-    ) -> Result<ListGroupsOutput, RusotoError<ListGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGroupsOutput, RusotoError<ListGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/groups-list";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1451,28 +1552,34 @@ impl ResourceGroups for ResourceGroupsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGroupsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
-    async fn search_resources(
+    fn search_resources(
         &self,
         input: SearchResourcesInput,
-    ) -> Result<SearchResourcesOutput, RusotoError<SearchResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchResourcesOutput, RusotoError<SearchResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/resources/search";
 
         let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
@@ -1481,25 +1588,29 @@ impl ResourceGroups for ResourceGroupsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchResourcesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchResourcesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchResourcesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
-    async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>> {
+    fn tag(
+        &self,
+        input: TagInput,
+    ) -> Pin<Box<dyn Future<Output = Result<TagOutput, RusotoError<TagError>>> + Send + 'static>>
+    {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
         let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
@@ -1508,25 +1619,29 @@ impl ResourceGroups for ResourceGroupsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<TagOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<TagOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes specified tags from a specified resource.</p>
-    async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>> {
+    fn untag(
+        &self,
+        input: UntagInput,
+    ) -> Pin<Box<dyn Future<Output = Result<UntagOutput, RusotoError<UntagError>>> + Send + 'static>>
+    {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
         let mut request =
@@ -1536,28 +1651,34 @@ impl ResourceGroups for ResourceGroupsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UntagOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<UntagOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
-    async fn update_group(
+    fn update_group(
         &self,
         input: UpdateGroupInput,
-    ) -> Result<UpdateGroupOutput, RusotoError<UpdateGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateGroupOutput, RusotoError<UpdateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/groups/{group_name}", group_name = input.group_name);
 
         let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
@@ -1566,28 +1687,34 @@ impl ResourceGroups for ResourceGroupsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGroupOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateGroupOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the resource query of a group.</p>
-    async fn update_group_query(
+    fn update_group_query(
         &self,
         input: UpdateGroupQueryInput,
-    ) -> Result<UpdateGroupQueryOutput, RusotoError<UpdateGroupQueryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateGroupQueryOutput, RusotoError<UpdateGroupQueryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/groups/{group_name}/query", group_name = input.group_name);
 
         let mut request = SignedRequest::new("PUT", "resource-groups", &self.region, &request_uri);
@@ -1596,20 +1723,20 @@ impl ResourceGroups for ResourceGroupsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGroupQueryOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateGroupQueryOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGroupQueryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateGroupQueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Specifies the tags to add to a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2353,115 +2354,232 @@ impl fmt::Display for UpdateTrailError {
 }
 impl Error for UpdateTrailError {}
 /// Trait representing the capabilities of the CloudTrail API. CloudTrail clients implement this trait.
-#[async_trait]
 pub trait CloudTrail {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique for a trail; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all AWS Regions only from the Region in which the trail was created (also known as its home region).</p>
-    async fn add_tags(
+    fn add_tags(
         &self,
         input: AddTagsRequest,
-    ) -> Result<AddTagsResponse, RusotoError<AddTagsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddTagsResponse, RusotoError<AddTagsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. </p>
-    async fn create_trail(
+    fn create_trail(
         &self,
         input: CreateTrailRequest,
-    ) -> Result<CreateTrailResponse, RusotoError<CreateTrailError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTrailResponse, RusotoError<CreateTrailError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    async fn delete_trail(
+    fn delete_trail(
         &self,
         input: DeleteTrailRequest,
-    ) -> Result<DeleteTrailResponse, RusotoError<DeleteTrailError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTrailResponse, RusotoError<DeleteTrailError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves settings for one or more trails associated with the current region for your account.</p>
-    async fn describe_trails(
+    fn describe_trails(
         &self,
         input: DescribeTrailsRequest,
-    ) -> Result<DescribeTrailsResponse, RusotoError<DescribeTrailsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeTrailsResponse, RusotoError<DescribeTrailsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    async fn get_event_selectors(
+    fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
-    ) -> Result<GetEventSelectorsResponse, RusotoError<GetEventSelectorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetEventSelectorsResponse, RusotoError<GetEventSelectorsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the settings for the Insights event selectors that you configured for your trail. <code>GetInsightSelectors</code> shows if CloudTrail Insights event logging is enabled on the trail, and if it is, which insight types are enabled. If you run <code>GetInsightSelectors</code> on a trail that does not have Insights events enabled, the operation throws the exception <code>InsightNotEnabledException</code> </p> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html">Logging CloudTrail Insights Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    async fn get_insight_selectors(
+    fn get_insight_selectors(
         &self,
         input: GetInsightSelectorsRequest,
-    ) -> Result<GetInsightSelectorsResponse, RusotoError<GetInsightSelectorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInsightSelectorsResponse,
+                        RusotoError<GetInsightSelectorsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns settings information for a specified trail.</p>
-    async fn get_trail(
+    fn get_trail(
         &self,
         input: GetTrailRequest,
-    ) -> Result<GetTrailResponse, RusotoError<GetTrailError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTrailResponse, RusotoError<GetTrailError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
-    async fn get_trail_status(
+    fn get_trail_status(
         &self,
         input: GetTrailStatusRequest,
-    ) -> Result<GetTrailStatusResponse, RusotoError<GetTrailStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTrailStatusResponse, RusotoError<GetTrailStatusError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
-    async fn list_public_keys(
+    fn list_public_keys(
         &self,
         input: ListPublicKeysRequest,
-    ) -> Result<ListPublicKeysResponse, RusotoError<ListPublicKeysError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPublicKeysResponse, RusotoError<ListPublicKeysError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags for the trail in the current region.</p>
-    async fn list_tags(
+    fn list_tags(
         &self,
         input: ListTagsRequest,
-    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTagsResponse, RusotoError<ListTagsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists trails that are in the current account.</p>
-    async fn list_trails(
+    fn list_trails(
         &self,
         input: ListTrailsRequest,
-    ) -> Result<ListTrailsResponse, RusotoError<ListTrailsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTrailsResponse, RusotoError<ListTrailsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> or <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events">CloudTrail Insights events</a> that are captured by CloudTrail. You can look up events that occurred in a region within the last 90 days. Lookup supports the following attributes for management events:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>Lookup supports the following attributes for Insights events:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to two per second per account. If this limit is exceeded, a throttling error occurs.</p> </important></p>
-    async fn lookup_events(
+    fn lookup_events(
         &self,
         input: LookupEventsRequest,
-    ) -> Result<LookupEventsResponse, RusotoError<LookupEventsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<LookupEventsResponse, RusotoError<LookupEventsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    async fn put_event_selectors(
+    fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,
-    ) -> Result<PutEventSelectorsResponse, RusotoError<PutEventSelectorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutEventSelectorsResponse, RusotoError<PutEventSelectorsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing trail. You also use <code>PutInsightSelectors</code> to turn off Insights event logging, by passing an empty list of insight types. In this release, only <code>ApiCallRateInsight</code> is supported as an Insights selector.</p>
-    async fn put_insight_selectors(
+    fn put_insight_selectors(
         &self,
         input: PutInsightSelectorsRequest,
-    ) -> Result<PutInsightSelectorsResponse, RusotoError<PutInsightSelectorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutInsightSelectorsResponse,
+                        RusotoError<PutInsightSelectorsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the specified tags from a trail.</p>
-    async fn remove_tags(
+    fn remove_tags(
         &self,
         input: RemoveTagsRequest,
-    ) -> Result<RemoveTagsResponse, RusotoError<RemoveTagsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RemoveTagsResponse, RusotoError<RemoveTagsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    async fn start_logging(
+    fn start_logging(
         &self,
         input: StartLoggingRequest,
-    ) -> Result<StartLoggingResponse, RusotoError<StartLoggingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartLoggingResponse, RusotoError<StartLoggingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
-    async fn stop_logging(
+    fn stop_logging(
         &self,
         input: StopLoggingRequest,
-    ) -> Result<StopLoggingResponse, RusotoError<StopLoggingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopLoggingResponse, RusotoError<StopLoggingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
-    async fn update_trail(
+    fn update_trail(
         &self,
         input: UpdateTrailRequest,
-    ) -> Result<UpdateTrailResponse, RusotoError<UpdateTrailError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTrailResponse, RusotoError<UpdateTrailError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the CloudTrail API.
 #[derive(Clone)]
@@ -2501,13 +2619,18 @@ impl CloudTrailClient {
     }
 }
 
-#[async_trait]
 impl CloudTrail for CloudTrailClient {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique for a trail; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all AWS Regions only from the Region in which the trail was created (also known as its home region).</p>
-    async fn add_tags(
+    fn add_tags(
         &self,
         input: AddTagsRequest,
-    ) -> Result<AddTagsResponse, RusotoError<AddTagsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddTagsResponse, RusotoError<AddTagsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2518,26 +2641,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<AddTagsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. </p>
-    async fn create_trail(
+    fn create_trail(
         &self,
         input: CreateTrailRequest,
-    ) -> Result<CreateTrailResponse, RusotoError<CreateTrailError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTrailResponse, RusotoError<CreateTrailError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2548,26 +2677,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTrailResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTrailError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateTrailResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTrailError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    async fn delete_trail(
+    fn delete_trail(
         &self,
         input: DeleteTrailRequest,
-    ) -> Result<DeleteTrailResponse, RusotoError<DeleteTrailError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTrailResponse, RusotoError<DeleteTrailError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2578,26 +2713,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTrailResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTrailError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteTrailResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTrailError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves settings for one or more trails associated with the current region for your account.</p>
-    async fn describe_trails(
+    fn describe_trails(
         &self,
         input: DescribeTrailsRequest,
-    ) -> Result<DescribeTrailsResponse, RusotoError<DescribeTrailsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeTrailsResponse, RusotoError<DescribeTrailsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2608,26 +2749,34 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrailsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTrailsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTrailsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTrailsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    async fn get_event_selectors(
+    fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
-    ) -> Result<GetEventSelectorsResponse, RusotoError<GetEventSelectorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetEventSelectorsResponse, RusotoError<GetEventSelectorsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2638,27 +2787,37 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEventSelectorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEventSelectorsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEventSelectorsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEventSelectorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the settings for the Insights event selectors that you configured for your trail. <code>GetInsightSelectors</code> shows if CloudTrail Insights event logging is enabled on the trail, and if it is, which insight types are enabled. If you run <code>GetInsightSelectors</code> on a trail that does not have Insights events enabled, the operation throws the exception <code>InsightNotEnabledException</code> </p> <p>For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html">Logging CloudTrail Insights Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    async fn get_insight_selectors(
+    fn get_insight_selectors(
         &self,
         input: GetInsightSelectorsRequest,
-    ) -> Result<GetInsightSelectorsResponse, RusotoError<GetInsightSelectorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInsightSelectorsResponse,
+                        RusotoError<GetInsightSelectorsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2669,27 +2828,33 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInsightSelectorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInsightSelectorsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInsightSelectorsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInsightSelectorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns settings information for a specified trail.</p>
-    async fn get_trail(
+    fn get_trail(
         &self,
         input: GetTrailRequest,
-    ) -> Result<GetTrailResponse, RusotoError<GetTrailError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTrailResponse, RusotoError<GetTrailError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2700,26 +2865,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTrailResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTrailError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetTrailResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTrailError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
-    async fn get_trail_status(
+    fn get_trail_status(
         &self,
         input: GetTrailStatusRequest,
-    ) -> Result<GetTrailStatusResponse, RusotoError<GetTrailStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTrailStatusResponse, RusotoError<GetTrailStatusError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2730,26 +2901,33 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTrailStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTrailStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTrailStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTrailStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
-    async fn list_public_keys(
+    fn list_public_keys(
         &self,
         input: ListPublicKeysRequest,
-    ) -> Result<ListPublicKeysResponse, RusotoError<ListPublicKeysError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPublicKeysResponse, RusotoError<ListPublicKeysError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2760,26 +2938,33 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPublicKeysResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPublicKeysError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPublicKeysResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPublicKeysError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags for the trail in the current region.</p>
-    async fn list_tags(
+    fn list_tags(
         &self,
         input: ListTagsRequest,
-    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTagsResponse, RusotoError<ListTagsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2790,26 +2975,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists trails that are in the current account.</p>
-    async fn list_trails(
+    fn list_trails(
         &self,
         input: ListTrailsRequest,
-    ) -> Result<ListTrailsResponse, RusotoError<ListTrailsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTrailsResponse, RusotoError<ListTrailsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2820,26 +3011,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTrailsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTrailsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListTrailsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTrailsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> or <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events">CloudTrail Insights events</a> that are captured by CloudTrail. You can look up events that occurred in a region within the last 90 days. Lookup supports the following attributes for management events:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>Lookup supports the following attributes for Insights events:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to two per second per account. If this limit is exceeded, a throttling error occurs.</p> </important></p>
-    async fn lookup_events(
+    fn lookup_events(
         &self,
         input: LookupEventsRequest,
-    ) -> Result<LookupEventsResponse, RusotoError<LookupEventsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<LookupEventsResponse, RusotoError<LookupEventsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2850,26 +3047,34 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<LookupEventsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(LookupEventsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<LookupEventsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(LookupEventsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
-    async fn put_event_selectors(
+    fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,
-    ) -> Result<PutEventSelectorsResponse, RusotoError<PutEventSelectorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutEventSelectorsResponse, RusotoError<PutEventSelectorsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2880,27 +3085,37 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutEventSelectorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEventSelectorsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutEventSelectorsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutEventSelectorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing trail. You also use <code>PutInsightSelectors</code> to turn off Insights event logging, by passing an empty list of insight types. In this release, only <code>ApiCallRateInsight</code> is supported as an Insights selector.</p>
-    async fn put_insight_selectors(
+    fn put_insight_selectors(
         &self,
         input: PutInsightSelectorsRequest,
-    ) -> Result<PutInsightSelectorsResponse, RusotoError<PutInsightSelectorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutInsightSelectorsResponse,
+                        RusotoError<PutInsightSelectorsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2911,27 +3126,33 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutInsightSelectorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutInsightSelectorsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutInsightSelectorsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutInsightSelectorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified tags from a trail.</p>
-    async fn remove_tags(
+    fn remove_tags(
         &self,
         input: RemoveTagsRequest,
-    ) -> Result<RemoveTagsResponse, RusotoError<RemoveTagsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RemoveTagsResponse, RusotoError<RemoveTagsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2942,26 +3163,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
-    async fn start_logging(
+    fn start_logging(
         &self,
         input: StartLoggingRequest,
-    ) -> Result<StartLoggingResponse, RusotoError<StartLoggingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartLoggingResponse, RusotoError<StartLoggingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2972,26 +3199,33 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartLoggingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartLoggingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartLoggingResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartLoggingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
-    async fn stop_logging(
+    fn stop_logging(
         &self,
         input: StopLoggingRequest,
-    ) -> Result<StopLoggingResponse, RusotoError<StopLoggingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopLoggingResponse, RusotoError<StopLoggingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3002,26 +3236,32 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopLoggingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopLoggingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<StopLoggingResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopLoggingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
-    async fn update_trail(
+    fn update_trail(
         &self,
         input: UpdateTrailRequest,
-    ) -> Result<UpdateTrailResponse, RusotoError<UpdateTrailError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTrailResponse, RusotoError<UpdateTrailError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3032,18 +3272,18 @@ impl CloudTrail for CloudTrailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTrailResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTrailError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateTrailResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTrailError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

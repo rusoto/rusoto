@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Information includes the AWS account ID where the current document is shared and the version shared with that account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -14555,811 +14556,1814 @@ impl fmt::Display for UpdateServiceSettingError {
 }
 impl Error for UpdateServiceSettingError {}
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
-#[async_trait]
 pub trait Ssm {
     /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
-    async fn add_tags_to_resource(
+    fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceRequest,
-    ) -> Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
-    async fn cancel_command(
+    fn cancel_command(
         &self,
         input: CancelCommandRequest,
-    ) -> Result<CancelCommandResult, RusotoError<CancelCommandError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelCommandResult, RusotoError<CancelCommandError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
-    async fn cancel_maintenance_window_execution(
+    fn cancel_maintenance_window_execution(
         &self,
         input: CancelMaintenanceWindowExecutionRequest,
-    ) -> Result<
-        CancelMaintenanceWindowExecutionResult,
-        RusotoError<CancelMaintenanceWindowExecutionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelMaintenanceWindowExecutionResult,
+                        RusotoError<CancelMaintenanceWindowExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Generates an activation code and activation ID you can use to register your on-premises server or virtual machine (VM) with Systems Manager. Registering these machines with Systems Manager makes it possible to manage them using Systems Manager capabilities. You use the activation code and ID when installing SSM Agent on machines in your hybrid environment. For more information about requirements for managing on-premises instances and VMs using Systems Manager, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a> in the <i>AWS Systems Manager User Guide</i>. </p> <note> <p>On-premises servers or VMs that are registered with Systems Manager and Amazon EC2 instances that you manage with Systems Manager are all called <i>managed instances</i>.</p> </note></p>
-    async fn create_activation(
+    fn create_activation(
         &self,
         input: CreateActivationRequest,
-    ) -> Result<CreateActivationResult, RusotoError<CreateActivationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateActivationResult, RusotoError<CreateActivationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
-    async fn create_association(
+    fn create_association(
         &self,
         input: CreateAssociationRequest,
-    ) -> Result<CreateAssociationResult, RusotoError<CreateAssociationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateAssociationResult, RusotoError<CreateAssociationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
-    async fn create_association_batch(
+    fn create_association_batch(
         &self,
         input: CreateAssociationBatchRequest,
-    ) -> Result<CreateAssociationBatchResult, RusotoError<CreateAssociationBatchError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateAssociationBatchResult,
+                        RusotoError<CreateAssociationBatchError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
-    async fn create_document(
+    fn create_document(
         &self,
         input: CreateDocumentRequest,
-    ) -> Result<CreateDocumentResult, RusotoError<CreateDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDocumentResult, RusotoError<CreateDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a new maintenance window.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
-    async fn create_maintenance_window(
+    fn create_maintenance_window(
         &self,
         input: CreateMaintenanceWindowRequest,
-    ) -> Result<CreateMaintenanceWindowResult, RusotoError<CreateMaintenanceWindowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateMaintenanceWindowResult,
+                        RusotoError<CreateMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn create_ops_item(
+    fn create_ops_item(
         &self,
         input: CreateOpsItemRequest,
-    ) -> Result<CreateOpsItemResponse, RusotoError<CreateOpsItemError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateOpsItemResponse, RusotoError<CreateOpsItemError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
-    async fn create_patch_baseline(
+    fn create_patch_baseline(
         &self,
         input: CreatePatchBaselineRequest,
-    ) -> Result<CreatePatchBaselineResult, RusotoError<CreatePatchBaselineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePatchBaselineResult,
+                        RusotoError<CreatePatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>A resource data sync helps you view data from multiple sources in a single location. Systems Manager offers two types of resource data sync: <code>SyncToDestination</code> and <code>SyncFromSource</code>.</p> <p>You can configure Systems Manager Inventory to use the <code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS Regions to a single Amazon S3 bucket. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can configure Systems Manager Explorer to use the <code>SyncToDestination</code> type to synchronize operational work items (OpsItems) and operational data (OpsData) from multiple AWS Regions to a single Amazon S3 bucket. You can also configure Explorer to use the <code>SyncFromSource</code> type. This type synchronizes OpsItems and OpsData from multiple AWS accounts and Regions by using AWS Organizations. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html">Setting Up Explorer to Display Data from Multiple Accounts and Regions</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>A resource data sync is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data. To check the status of a sync, use the <a>ListResourceDataSync</a>.</p> <note> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. </p> </note></p>
-    async fn create_resource_data_sync(
+    fn create_resource_data_sync(
         &self,
         input: CreateResourceDataSyncRequest,
-    ) -> Result<CreateResourceDataSyncResult, RusotoError<CreateResourceDataSyncError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateResourceDataSyncResult,
+                        RusotoError<CreateResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
-    async fn delete_activation(
+    fn delete_activation(
         &self,
         input: DeleteActivationRequest,
-    ) -> Result<DeleteActivationResult, RusotoError<DeleteActivationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteActivationResult, RusotoError<DeleteActivationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
-    async fn delete_association(
+    fn delete_association(
         &self,
         input: DeleteAssociationRequest,
-    ) -> Result<DeleteAssociationResult, RusotoError<DeleteAssociationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteAssociationResult, RusotoError<DeleteAssociationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
-    async fn delete_document(
+    fn delete_document(
         &self,
         input: DeleteDocumentRequest,
-    ) -> Result<DeleteDocumentResult, RusotoError<DeleteDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDocumentResult, RusotoError<DeleteDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
-    async fn delete_inventory(
+    fn delete_inventory(
         &self,
         input: DeleteInventoryRequest,
-    ) -> Result<DeleteInventoryResult, RusotoError<DeleteInventoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInventoryResult, RusotoError<DeleteInventoryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a maintenance window.</p>
-    async fn delete_maintenance_window(
+    fn delete_maintenance_window(
         &self,
         input: DeleteMaintenanceWindowRequest,
-    ) -> Result<DeleteMaintenanceWindowResult, RusotoError<DeleteMaintenanceWindowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteMaintenanceWindowResult,
+                        RusotoError<DeleteMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a parameter from the system.</p>
-    async fn delete_parameter(
+    fn delete_parameter(
         &self,
         input: DeleteParameterRequest,
-    ) -> Result<DeleteParameterResult, RusotoError<DeleteParameterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteParameterResult, RusotoError<DeleteParameterError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a list of parameters.</p>
-    async fn delete_parameters(
+    fn delete_parameters(
         &self,
         input: DeleteParametersRequest,
-    ) -> Result<DeleteParametersResult, RusotoError<DeleteParametersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteParametersResult, RusotoError<DeleteParametersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a patch baseline.</p>
-    async fn delete_patch_baseline(
+    fn delete_patch_baseline(
         &self,
         input: DeletePatchBaselineRequest,
-    ) -> Result<DeletePatchBaselineResult, RusotoError<DeletePatchBaselineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeletePatchBaselineResult,
+                        RusotoError<DeletePatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to data on managed instances are no longer synced to or from the target. Deleting a sync configuration does not delete data.</p>
-    async fn delete_resource_data_sync(
+    fn delete_resource_data_sync(
         &self,
         input: DeleteResourceDataSyncRequest,
-    ) -> Result<DeleteResourceDataSyncResult, RusotoError<DeleteResourceDataSyncError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResourceDataSyncResult,
+                        RusotoError<DeleteResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling SSM Agent first.</p>
-    async fn deregister_managed_instance(
+    fn deregister_managed_instance(
         &self,
         input: DeregisterManagedInstanceRequest,
-    ) -> Result<DeregisterManagedInstanceResult, RusotoError<DeregisterManagedInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterManagedInstanceResult,
+                        RusotoError<DeregisterManagedInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a patch group from a patch baseline.</p>
-    async fn deregister_patch_baseline_for_patch_group(
+    fn deregister_patch_baseline_for_patch_group(
         &self,
         input: DeregisterPatchBaselineForPatchGroupRequest,
-    ) -> Result<
-        DeregisterPatchBaselineForPatchGroupResult,
-        RusotoError<DeregisterPatchBaselineForPatchGroupError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterPatchBaselineForPatchGroupResult,
+                        RusotoError<DeregisterPatchBaselineForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes a target from a maintenance window.</p>
-    async fn deregister_target_from_maintenance_window(
+    fn deregister_target_from_maintenance_window(
         &self,
         input: DeregisterTargetFromMaintenanceWindowRequest,
-    ) -> Result<
-        DeregisterTargetFromMaintenanceWindowResult,
-        RusotoError<DeregisterTargetFromMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterTargetFromMaintenanceWindowResult,
+                        RusotoError<DeregisterTargetFromMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes a task from a maintenance window.</p>
-    async fn deregister_task_from_maintenance_window(
+    fn deregister_task_from_maintenance_window(
         &self,
         input: DeregisterTaskFromMaintenanceWindowRequest,
-    ) -> Result<
-        DeregisterTaskFromMaintenanceWindowResult,
-        RusotoError<DeregisterTaskFromMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterTaskFromMaintenanceWindowResult,
+                        RusotoError<DeregisterTaskFromMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
-    async fn describe_activations(
+    fn describe_activations(
         &self,
         input: DescribeActivationsRequest,
-    ) -> Result<DescribeActivationsResult, RusotoError<DescribeActivationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeActivationsResult,
+                        RusotoError<DescribeActivationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
-    async fn describe_association(
+    fn describe_association(
         &self,
         input: DescribeAssociationRequest,
-    ) -> Result<DescribeAssociationResult, RusotoError<DescribeAssociationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAssociationResult,
+                        RusotoError<DescribeAssociationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Use this API action to view information about a specific execution of a specific association.</p>
-    async fn describe_association_execution_targets(
+    fn describe_association_execution_targets(
         &self,
         input: DescribeAssociationExecutionTargetsRequest,
-    ) -> Result<
-        DescribeAssociationExecutionTargetsResult,
-        RusotoError<DescribeAssociationExecutionTargetsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAssociationExecutionTargetsResult,
+                        RusotoError<DescribeAssociationExecutionTargetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Use this API action to view all executions for a specific association ID. </p>
-    async fn describe_association_executions(
+    fn describe_association_executions(
         &self,
         input: DescribeAssociationExecutionsRequest,
-    ) -> Result<DescribeAssociationExecutionsResult, RusotoError<DescribeAssociationExecutionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAssociationExecutionsResult,
+                        RusotoError<DescribeAssociationExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides details about all active and terminated Automation executions.</p>
-    async fn describe_automation_executions(
+    fn describe_automation_executions(
         &self,
         input: DescribeAutomationExecutionsRequest,
-    ) -> Result<DescribeAutomationExecutionsResult, RusotoError<DescribeAutomationExecutionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAutomationExecutionsResult,
+                        RusotoError<DescribeAutomationExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
-    async fn describe_automation_step_executions(
+    fn describe_automation_step_executions(
         &self,
         input: DescribeAutomationStepExecutionsRequest,
-    ) -> Result<
-        DescribeAutomationStepExecutionsResult,
-        RusotoError<DescribeAutomationStepExecutionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAutomationStepExecutionsResult,
+                        RusotoError<DescribeAutomationStepExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists all patches eligible to be included in a patch baseline.</p>
-    async fn describe_available_patches(
+    fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
-    ) -> Result<DescribeAvailablePatchesResult, RusotoError<DescribeAvailablePatchesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAvailablePatchesResult,
+                        RusotoError<DescribeAvailablePatchesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the specified Systems Manager document.</p>
-    async fn describe_document(
+    fn describe_document(
         &self,
         input: DescribeDocumentRequest,
-    ) -> Result<DescribeDocumentResult, RusotoError<DescribeDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeDocumentResult, RusotoError<DescribeDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
-    async fn describe_document_permission(
+    fn describe_document_permission(
         &self,
         input: DescribeDocumentPermissionRequest,
-    ) -> Result<DescribeDocumentPermissionResponse, RusotoError<DescribeDocumentPermissionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentPermissionResponse,
+                        RusotoError<DescribeDocumentPermissionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>All associations for the instance(s).</p>
-    async fn describe_effective_instance_associations(
+    fn describe_effective_instance_associations(
         &self,
         input: DescribeEffectiveInstanceAssociationsRequest,
-    ) -> Result<
-        DescribeEffectiveInstanceAssociationsResult,
-        RusotoError<DescribeEffectiveInstanceAssociationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEffectiveInstanceAssociationsResult,
+                        RusotoError<DescribeEffectiveInstanceAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
-    async fn describe_effective_patches_for_patch_baseline(
+    fn describe_effective_patches_for_patch_baseline(
         &self,
         input: DescribeEffectivePatchesForPatchBaselineRequest,
-    ) -> Result<
-        DescribeEffectivePatchesForPatchBaselineResult,
-        RusotoError<DescribeEffectivePatchesForPatchBaselineError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEffectivePatchesForPatchBaselineResult,
+                        RusotoError<DescribeEffectivePatchesForPatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>The status of the associations for the instance(s).</p>
-    async fn describe_instance_associations_status(
+    fn describe_instance_associations_status(
         &self,
         input: DescribeInstanceAssociationsStatusRequest,
-    ) -> Result<
-        DescribeInstanceAssociationsStatusResult,
-        RusotoError<DescribeInstanceAssociationsStatusError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstanceAssociationsStatusResult,
+                        RusotoError<DescribeInstanceAssociationsStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for Amazon EC2 instances.</p> </note></p>
-    async fn describe_instance_information(
+    fn describe_instance_information(
         &self,
         input: DescribeInstanceInformationRequest,
-    ) -> Result<DescribeInstanceInformationResult, RusotoError<DescribeInstanceInformationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstanceInformationResult,
+                        RusotoError<DescribeInstanceInformationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the high-level patch state of one or more instances.</p>
-    async fn describe_instance_patch_states(
+    fn describe_instance_patch_states(
         &self,
         input: DescribeInstancePatchStatesRequest,
-    ) -> Result<DescribeInstancePatchStatesResult, RusotoError<DescribeInstancePatchStatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstancePatchStatesResult,
+                        RusotoError<DescribeInstancePatchStatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
-    async fn describe_instance_patch_states_for_patch_group(
+    fn describe_instance_patch_states_for_patch_group(
         &self,
         input: DescribeInstancePatchStatesForPatchGroupRequest,
-    ) -> Result<
-        DescribeInstancePatchStatesForPatchGroupResult,
-        RusotoError<DescribeInstancePatchStatesForPatchGroupError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstancePatchStatesForPatchGroupResult,
+                        RusotoError<DescribeInstancePatchStatesForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
-    async fn describe_instance_patches(
+    fn describe_instance_patches(
         &self,
         input: DescribeInstancePatchesRequest,
-    ) -> Result<DescribeInstancePatchesResult, RusotoError<DescribeInstancePatchesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstancePatchesResult,
+                        RusotoError<DescribeInstancePatchesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a specific delete inventory operation.</p>
-    async fn describe_inventory_deletions(
+    fn describe_inventory_deletions(
         &self,
         input: DescribeInventoryDeletionsRequest,
-    ) -> Result<DescribeInventoryDeletionsResult, RusotoError<DescribeInventoryDeletionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInventoryDeletionsResult,
+                        RusotoError<DescribeInventoryDeletionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.</p>
-    async fn describe_maintenance_window_execution_task_invocations(
+    fn describe_maintenance_window_execution_task_invocations(
         &self,
         input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
-        RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
+                        RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>For a given maintenance window execution, lists the tasks that were run.</p>
-    async fn describe_maintenance_window_execution_tasks(
+    fn describe_maintenance_window_execution_tasks(
         &self,
         input: DescribeMaintenanceWindowExecutionTasksRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowExecutionTasksResult,
-        RusotoError<DescribeMaintenanceWindowExecutionTasksError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowExecutionTasksResult,
+                        RusotoError<DescribeMaintenanceWindowExecutionTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.</p>
-    async fn describe_maintenance_window_executions(
+    fn describe_maintenance_window_executions(
         &self,
         input: DescribeMaintenanceWindowExecutionsRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowExecutionsResult,
-        RusotoError<DescribeMaintenanceWindowExecutionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowExecutionsResult,
+                        RusotoError<DescribeMaintenanceWindowExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves information about upcoming executions of a maintenance window.</p>
-    async fn describe_maintenance_window_schedule(
+    fn describe_maintenance_window_schedule(
         &self,
         input: DescribeMaintenanceWindowScheduleRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowScheduleResult,
-        RusotoError<DescribeMaintenanceWindowScheduleError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowScheduleResult,
+                        RusotoError<DescribeMaintenanceWindowScheduleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the targets registered with the maintenance window.</p>
-    async fn describe_maintenance_window_targets(
+    fn describe_maintenance_window_targets(
         &self,
         input: DescribeMaintenanceWindowTargetsRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowTargetsResult,
-        RusotoError<DescribeMaintenanceWindowTargetsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowTargetsResult,
+                        RusotoError<DescribeMaintenanceWindowTargetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the tasks in a maintenance window.</p>
-    async fn describe_maintenance_window_tasks(
+    fn describe_maintenance_window_tasks(
         &self,
         input: DescribeMaintenanceWindowTasksRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowTasksResult,
-        RusotoError<DescribeMaintenanceWindowTasksError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowTasksResult,
+                        RusotoError<DescribeMaintenanceWindowTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves the maintenance windows in an AWS account.</p>
-    async fn describe_maintenance_windows(
+    fn describe_maintenance_windows(
         &self,
         input: DescribeMaintenanceWindowsRequest,
-    ) -> Result<DescribeMaintenanceWindowsResult, RusotoError<DescribeMaintenanceWindowsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowsResult,
+                        RusotoError<DescribeMaintenanceWindowsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>
-    async fn describe_maintenance_windows_for_target(
+    fn describe_maintenance_windows_for_target(
         &self,
         input: DescribeMaintenanceWindowsForTargetRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowsForTargetResult,
-        RusotoError<DescribeMaintenanceWindowsForTargetError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowsForTargetResult,
+                        RusotoError<DescribeMaintenanceWindowsForTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn describe_ops_items(
+    fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
-    ) -> Result<DescribeOpsItemsResponse, RusotoError<DescribeOpsItemsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeOpsItemsResponse, RusotoError<DescribeOpsItemsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Get information about a parameter.</p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
-    async fn describe_parameters(
+    fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
-    ) -> Result<DescribeParametersResult, RusotoError<DescribeParametersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeParametersResult, RusotoError<DescribeParametersError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the patch baselines in your AWS account.</p>
-    async fn describe_patch_baselines(
+    fn describe_patch_baselines(
         &self,
         input: DescribePatchBaselinesRequest,
-    ) -> Result<DescribePatchBaselinesResult, RusotoError<DescribePatchBaselinesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchBaselinesResult,
+                        RusotoError<DescribePatchBaselinesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
-    async fn describe_patch_group_state(
+    fn describe_patch_group_state(
         &self,
         input: DescribePatchGroupStateRequest,
-    ) -> Result<DescribePatchGroupStateResult, RusotoError<DescribePatchGroupStateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchGroupStateResult,
+                        RusotoError<DescribePatchGroupStateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all patch groups that have been registered with patch baselines.</p>
-    async fn describe_patch_groups(
+    fn describe_patch_groups(
         &self,
         input: DescribePatchGroupsRequest,
-    ) -> Result<DescribePatchGroupsResult, RusotoError<DescribePatchGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchGroupsResult,
+                        RusotoError<DescribePatchGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU </dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>REDHAT</em>ENTERPRISE_LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> </dl></p>
-    async fn describe_patch_properties(
+    fn describe_patch_properties(
         &self,
         input: DescribePatchPropertiesRequest,
-    ) -> Result<DescribePatchPropertiesResult, RusotoError<DescribePatchPropertiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchPropertiesResult,
+                        RusotoError<DescribePatchPropertiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a list of all active sessions (both connected and disconnected) or terminated sessions from the past 30 days.</p>
-    async fn describe_sessions(
+    fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
-    ) -> Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get detailed information about a particular Automation execution.</p>
-    async fn get_automation_execution(
+    fn get_automation_execution(
         &self,
         input: GetAutomationExecutionRequest,
-    ) -> Result<GetAutomationExecutionResult, RusotoError<GetAutomationExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAutomationExecutionResult,
+                        RusotoError<GetAutomationExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>. For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
-    async fn get_calendar_state(
+    fn get_calendar_state(
         &self,
         input: GetCalendarStateRequest,
-    ) -> Result<GetCalendarStateResponse, RusotoError<GetCalendarStateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetCalendarStateResponse, RusotoError<GetCalendarStateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
-    async fn get_command_invocation(
+    fn get_command_invocation(
         &self,
         input: GetCommandInvocationRequest,
-    ) -> Result<GetCommandInvocationResult, RusotoError<GetCommandInvocationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCommandInvocationResult,
+                        RusotoError<GetCommandInvocationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the Session Manager connection status for an instance to determine whether it is connected and ready to receive Session Manager connections.</p>
-    async fn get_connection_status(
+    fn get_connection_status(
         &self,
         input: GetConnectionStatusRequest,
-    ) -> Result<GetConnectionStatusResponse, RusotoError<GetConnectionStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConnectionStatusResponse,
+                        RusotoError<GetConnectionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
-    async fn get_default_patch_baseline(
+    fn get_default_patch_baseline(
         &self,
         input: GetDefaultPatchBaselineRequest,
-    ) -> Result<GetDefaultPatchBaselineResult, RusotoError<GetDefaultPatchBaselineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDefaultPatchBaselineResult,
+                        RusotoError<GetDefaultPatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
-    async fn get_deployable_patch_snapshot_for_instance(
+    fn get_deployable_patch_snapshot_for_instance(
         &self,
         input: GetDeployablePatchSnapshotForInstanceRequest,
-    ) -> Result<
-        GetDeployablePatchSnapshotForInstanceResult,
-        RusotoError<GetDeployablePatchSnapshotForInstanceError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDeployablePatchSnapshotForInstanceResult,
+                        RusotoError<GetDeployablePatchSnapshotForInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets the contents of the specified Systems Manager document.</p>
-    async fn get_document(
+    fn get_document(
         &self,
         input: GetDocumentRequest,
-    ) -> Result<GetDocumentResult, RusotoError<GetDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDocumentResult, RusotoError<GetDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Query inventory information.</p>
-    async fn get_inventory(
+    fn get_inventory(
         &self,
         input: GetInventoryRequest,
-    ) -> Result<GetInventoryResult, RusotoError<GetInventoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetInventoryResult, RusotoError<GetInventoryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
-    async fn get_inventory_schema(
+    fn get_inventory_schema(
         &self,
         input: GetInventorySchemaRequest,
-    ) -> Result<GetInventorySchemaResult, RusotoError<GetInventorySchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetInventorySchemaResult, RusotoError<GetInventorySchemaError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a maintenance window.</p>
-    async fn get_maintenance_window(
+    fn get_maintenance_window(
         &self,
         input: GetMaintenanceWindowRequest,
-    ) -> Result<GetMaintenanceWindowResult, RusotoError<GetMaintenanceWindowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowResult,
+                        RusotoError<GetMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves details about a specific a maintenance window execution.</p>
-    async fn get_maintenance_window_execution(
+    fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
-    ) -> Result<GetMaintenanceWindowExecutionResult, RusotoError<GetMaintenanceWindowExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowExecutionResult,
+                        RusotoError<GetMaintenanceWindowExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the details about a specific task run as part of a maintenance window execution.</p>
-    async fn get_maintenance_window_execution_task(
+    fn get_maintenance_window_execution_task(
         &self,
         input: GetMaintenanceWindowExecutionTaskRequest,
-    ) -> Result<
-        GetMaintenanceWindowExecutionTaskResult,
-        RusotoError<GetMaintenanceWindowExecutionTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowExecutionTaskResult,
+                        RusotoError<GetMaintenanceWindowExecutionTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves information about a specific task running on a specific target.</p>
-    async fn get_maintenance_window_execution_task_invocation(
+    fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
-    ) -> Result<
-        GetMaintenanceWindowExecutionTaskInvocationResult,
-        RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowExecutionTaskInvocationResult,
+                        RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the tasks in a maintenance window.</p>
-    async fn get_maintenance_window_task(
+    fn get_maintenance_window_task(
         &self,
         input: GetMaintenanceWindowTaskRequest,
-    ) -> Result<GetMaintenanceWindowTaskResult, RusotoError<GetMaintenanceWindowTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowTaskResult,
+                        RusotoError<GetMaintenanceWindowTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn get_ops_item(
+    fn get_ops_item(
         &self,
         input: GetOpsItemRequest,
-    ) -> Result<GetOpsItemResponse, RusotoError<GetOpsItemError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOpsItemResponse, RusotoError<GetOpsItemError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
-    async fn get_ops_summary(
+    fn get_ops_summary(
         &self,
         input: GetOpsSummaryRequest,
-    ) -> Result<GetOpsSummaryResult, RusotoError<GetOpsSummaryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOpsSummaryResult, RusotoError<GetOpsSummaryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
-    async fn get_parameter(
+    fn get_parameter(
         &self,
         input: GetParameterRequest,
-    ) -> Result<GetParameterResult, RusotoError<GetParameterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetParameterResult, RusotoError<GetParameterError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Query a list of all parameters used by the AWS account.</p>
-    async fn get_parameter_history(
+    fn get_parameter_history(
         &self,
         input: GetParameterHistoryRequest,
-    ) -> Result<GetParameterHistoryResult, RusotoError<GetParameterHistoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetParameterHistoryResult,
+                        RusotoError<GetParameterHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
-    async fn get_parameters(
+    fn get_parameters(
         &self,
         input: GetParametersRequest,
-    ) -> Result<GetParametersResult, RusotoError<GetParametersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetParametersResult, RusotoError<GetParametersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Retrieve information about one or more parameters in a specific hierarchy. </p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
-    async fn get_parameters_by_path(
+    fn get_parameters_by_path(
         &self,
         input: GetParametersByPathRequest,
-    ) -> Result<GetParametersByPathResult, RusotoError<GetParametersByPathError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetParametersByPathResult,
+                        RusotoError<GetParametersByPathError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves information about a patch baseline.</p>
-    async fn get_patch_baseline(
+    fn get_patch_baseline(
         &self,
         input: GetPatchBaselineRequest,
-    ) -> Result<GetPatchBaselineResult, RusotoError<GetPatchBaselineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPatchBaselineResult, RusotoError<GetPatchBaselineError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
-    async fn get_patch_baseline_for_patch_group(
+    fn get_patch_baseline_for_patch_group(
         &self,
         input: GetPatchBaselineForPatchGroupRequest,
-    ) -> Result<GetPatchBaselineForPatchGroupResult, RusotoError<GetPatchBaselineForPatchGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetPatchBaselineForPatchGroupResult,
+                        RusotoError<GetPatchBaselineForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>UpdateServiceSetting</a> API action to change the default setting. Or use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Query the current service setting for the account. </p>
-    async fn get_service_setting(
+    fn get_service_setting(
         &self,
         input: GetServiceSettingRequest,
-    ) -> Result<GetServiceSettingResult, RusotoError<GetServiceSettingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetServiceSettingResult, RusotoError<GetServiceSettingError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
-    async fn label_parameter_version(
+    fn label_parameter_version(
         &self,
         input: LabelParameterVersionRequest,
-    ) -> Result<LabelParameterVersionResult, RusotoError<LabelParameterVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        LabelParameterVersionResult,
+                        RusotoError<LabelParameterVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves all versions of an association for a specific association ID.</p>
-    async fn list_association_versions(
+    fn list_association_versions(
         &self,
         input: ListAssociationVersionsRequest,
-    ) -> Result<ListAssociationVersionsResult, RusotoError<ListAssociationVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAssociationVersionsResult,
+                        RusotoError<ListAssociationVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns all State Manager associations in the current AWS account and Region. You can limit the results to a specific State Manager association document or instance by specifying a filter.</p>
-    async fn list_associations(
+    fn list_associations(
         &self,
         input: ListAssociationsRequest,
-    ) -> Result<ListAssociationsResult, RusotoError<ListAssociationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAssociationsResult, RusotoError<ListAssociationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user runs SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
-    async fn list_command_invocations(
+    fn list_command_invocations(
         &self,
         input: ListCommandInvocationsRequest,
-    ) -> Result<ListCommandInvocationsResult, RusotoError<ListCommandInvocationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCommandInvocationsResult,
+                        RusotoError<ListCommandInvocationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the commands requested by users of the AWS account.</p>
-    async fn list_commands(
+    fn list_commands(
         &self,
         input: ListCommandsRequest,
-    ) -> Result<ListCommandsResult, RusotoError<ListCommandsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListCommandsResult, RusotoError<ListCommandsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
-    async fn list_compliance_items(
+    fn list_compliance_items(
         &self,
         input: ListComplianceItemsRequest,
-    ) -> Result<ListComplianceItemsResult, RusotoError<ListComplianceItemsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListComplianceItemsResult,
+                        RusotoError<ListComplianceItemsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
-    async fn list_compliance_summaries(
+    fn list_compliance_summaries(
         &self,
         input: ListComplianceSummariesRequest,
-    ) -> Result<ListComplianceSummariesResult, RusotoError<ListComplianceSummariesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListComplianceSummariesResult,
+                        RusotoError<ListComplianceSummariesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all versions for a document.</p>
-    async fn list_document_versions(
+    fn list_document_versions(
         &self,
         input: ListDocumentVersionsRequest,
-    ) -> Result<ListDocumentVersionsResult, RusotoError<ListDocumentVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDocumentVersionsResult,
+                        RusotoError<ListDocumentVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns all Systems Manager (SSM) documents in the current AWS account and Region. You can limit the results of this request by using a filter.</p>
-    async fn list_documents(
+    fn list_documents(
         &self,
         input: ListDocumentsRequest,
-    ) -> Result<ListDocumentsResult, RusotoError<ListDocumentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDocumentsResult, RusotoError<ListDocumentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>A list of inventory items returned by the request.</p>
-    async fn list_inventory_entries(
+    fn list_inventory_entries(
         &self,
         input: ListInventoryEntriesRequest,
-    ) -> Result<ListInventoryEntriesResult, RusotoError<ListInventoryEntriesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInventoryEntriesResult,
+                        RusotoError<ListInventoryEntriesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
-    async fn list_resource_compliance_summaries(
+    fn list_resource_compliance_summaries(
         &self,
         input: ListResourceComplianceSummariesRequest,
-    ) -> Result<
-        ListResourceComplianceSummariesResult,
-        RusotoError<ListResourceComplianceSummariesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResourceComplianceSummariesResult,
+                        RusotoError<ListResourceComplianceSummariesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
-    async fn list_resource_data_sync(
+    fn list_resource_data_sync(
         &self,
         input: ListResourceDataSyncRequest,
-    ) -> Result<ListResourceDataSyncResult, RusotoError<ListResourceDataSyncError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResourceDataSyncResult,
+                        RusotoError<ListResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResult,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
-    async fn modify_document_permission(
+    fn modify_document_permission(
         &self,
         input: ModifyDocumentPermissionRequest,
-    ) -> Result<ModifyDocumentPermissionResponse, RusotoError<ModifyDocumentPermissionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ModifyDocumentPermissionResponse,
+                        RusotoError<ModifyDocumentPermissionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
-    async fn put_compliance_items(
+    fn put_compliance_items(
         &self,
         input: PutComplianceItemsRequest,
-    ) -> Result<PutComplianceItemsResult, RusotoError<PutComplianceItemsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutComplianceItemsResult, RusotoError<PutComplianceItemsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
-    async fn put_inventory(
+    fn put_inventory(
         &self,
         input: PutInventoryRequest,
-    ) -> Result<PutInventoryResult, RusotoError<PutInventoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutInventoryResult, RusotoError<PutInventoryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add a parameter to the system.</p>
-    async fn put_parameter(
+    fn put_parameter(
         &self,
         input: PutParameterRequest,
-    ) -> Result<PutParameterResult, RusotoError<PutParameterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutParameterResult, RusotoError<PutParameterError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
-    async fn register_default_patch_baseline(
+    fn register_default_patch_baseline(
         &self,
         input: RegisterDefaultPatchBaselineRequest,
-    ) -> Result<RegisterDefaultPatchBaselineResult, RusotoError<RegisterDefaultPatchBaselineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterDefaultPatchBaselineResult,
+                        RusotoError<RegisterDefaultPatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a patch baseline for a patch group.</p>
-    async fn register_patch_baseline_for_patch_group(
+    fn register_patch_baseline_for_patch_group(
         &self,
         input: RegisterPatchBaselineForPatchGroupRequest,
-    ) -> Result<
-        RegisterPatchBaselineForPatchGroupResult,
-        RusotoError<RegisterPatchBaselineForPatchGroupError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterPatchBaselineForPatchGroupResult,
+                        RusotoError<RegisterPatchBaselineForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Registers a target with a maintenance window.</p>
-    async fn register_target_with_maintenance_window(
+    fn register_target_with_maintenance_window(
         &self,
         input: RegisterTargetWithMaintenanceWindowRequest,
-    ) -> Result<
-        RegisterTargetWithMaintenanceWindowResult,
-        RusotoError<RegisterTargetWithMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterTargetWithMaintenanceWindowResult,
+                        RusotoError<RegisterTargetWithMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Adds a new task to a maintenance window.</p>
-    async fn register_task_with_maintenance_window(
+    fn register_task_with_maintenance_window(
         &self,
         input: RegisterTaskWithMaintenanceWindowRequest,
-    ) -> Result<
-        RegisterTaskWithMaintenanceWindowResult,
-        RusotoError<RegisterTaskWithMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterTaskWithMaintenanceWindowResult,
+                        RusotoError<RegisterTaskWithMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes tag keys from the specified resource.</p>
-    async fn remove_tags_from_resource(
+    fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
-    ) -> Result<RemoveTagsFromResourceResult, RusotoError<RemoveTagsFromResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveTagsFromResourceResult,
+                        RusotoError<RemoveTagsFromResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Use the <a>UpdateServiceSetting</a> API action to change the default setting. </p> <p>Reset the service setting for the account to the default value as provisioned by the AWS service team. </p>
-    async fn reset_service_setting(
+    fn reset_service_setting(
         &self,
         input: ResetServiceSettingRequest,
-    ) -> Result<ResetServiceSettingResult, RusotoError<ResetServiceSettingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ResetServiceSettingResult,
+                        RusotoError<ResetServiceSettingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Reconnects a session to an instance after it has been disconnected. Connections can be resumed for disconnected sessions, but not terminated sessions.</p> <note> <p>This command is primarily for use by client machines to automatically reconnect during intermittent network issues. It is not intended for any other use.</p> </note></p>
-    async fn resume_session(
+    fn resume_session(
         &self,
         input: ResumeSessionRequest,
-    ) -> Result<ResumeSessionResponse, RusotoError<ResumeSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ResumeSessionResponse, RusotoError<ResumeSessionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
-    async fn send_automation_signal(
+    fn send_automation_signal(
         &self,
         input: SendAutomationSignalRequest,
-    ) -> Result<SendAutomationSignalResult, RusotoError<SendAutomationSignalError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SendAutomationSignalResult,
+                        RusotoError<SendAutomationSignalError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Runs commands on one or more managed instances.</p>
-    async fn send_command(
+    fn send_command(
         &self,
         input: SendCommandRequest,
-    ) -> Result<SendCommandResult, RusotoError<SendCommandError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendCommandResult, RusotoError<SendCommandError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Use this API action to run an association immediately and only one time. This action can be helpful when troubleshooting associations.</p>
-    async fn start_associations_once(
+    fn start_associations_once(
         &self,
         input: StartAssociationsOnceRequest,
-    ) -> Result<StartAssociationsOnceResult, RusotoError<StartAssociationsOnceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartAssociationsOnceResult,
+                        RusotoError<StartAssociationsOnceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Initiates execution of an Automation document.</p>
-    async fn start_automation_execution(
+    fn start_automation_execution(
         &self,
         input: StartAutomationExecutionRequest,
-    ) -> Result<StartAutomationExecutionResult, RusotoError<StartAutomationExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartAutomationExecutionResult,
+                        RusotoError<StartAutomationExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
-    async fn start_session(
+    fn start_session(
         &self,
         input: StartSessionRequest,
-    ) -> Result<StartSessionResponse, RusotoError<StartSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartSessionResponse, RusotoError<StartSessionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stop an Automation that is currently running.</p>
-    async fn stop_automation_execution(
+    fn stop_automation_execution(
         &self,
         input: StopAutomationExecutionRequest,
-    ) -> Result<StopAutomationExecutionResult, RusotoError<StopAutomationExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopAutomationExecutionResult,
+                        RusotoError<StopAutomationExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently ends a session and closes the data connection between the Session Manager client and SSM Agent on the instance. A terminated session cannot be resumed.</p>
-    async fn terminate_session(
+    fn terminate_session(
         &self,
         input: TerminateSessionRequest,
-    ) -> Result<TerminateSessionResponse, RusotoError<TerminateSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TerminateSessionResponse, RusotoError<TerminateSessionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
-    async fn update_association(
+    fn update_association(
         &self,
         input: UpdateAssociationRequest,
-    ) -> Result<UpdateAssociationResult, RusotoError<UpdateAssociationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateAssociationResult, RusotoError<UpdateAssociationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
-    async fn update_association_status(
+    fn update_association_status(
         &self,
         input: UpdateAssociationStatusRequest,
-    ) -> Result<UpdateAssociationStatusResult, RusotoError<UpdateAssociationStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateAssociationStatusResult,
+                        RusotoError<UpdateAssociationStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates one or more values for an SSM document.</p>
-    async fn update_document(
+    fn update_document(
         &self,
         input: UpdateDocumentRequest,
-    ) -> Result<UpdateDocumentResult, RusotoError<UpdateDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDocumentResult, RusotoError<UpdateDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Set the default version of a document. </p>
-    async fn update_document_default_version(
+    fn update_document_default_version(
         &self,
         input: UpdateDocumentDefaultVersionRequest,
-    ) -> Result<UpdateDocumentDefaultVersionResult, RusotoError<UpdateDocumentDefaultVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDocumentDefaultVersionResult,
+                        RusotoError<UpdateDocumentDefaultVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
-    async fn update_maintenance_window(
+    fn update_maintenance_window(
         &self,
         input: UpdateMaintenanceWindowRequest,
-    ) -> Result<UpdateMaintenanceWindowResult, RusotoError<UpdateMaintenanceWindowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMaintenanceWindowResult,
+                        RusotoError<UpdateMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
-    async fn update_maintenance_window_target(
+    fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
-    ) -> Result<UpdateMaintenanceWindowTargetResult, RusotoError<UpdateMaintenanceWindowTargetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMaintenanceWindowTargetResult,
+                        RusotoError<UpdateMaintenanceWindowTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
-    async fn update_maintenance_window_task(
+    fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
-    ) -> Result<UpdateMaintenanceWindowTaskResult, RusotoError<UpdateMaintenanceWindowTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMaintenanceWindowTaskResult,
+                        RusotoError<UpdateMaintenanceWindowTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.</p>
-    async fn update_managed_instance_role(
+    fn update_managed_instance_role(
         &self,
         input: UpdateManagedInstanceRoleRequest,
-    ) -> Result<UpdateManagedInstanceRoleResult, RusotoError<UpdateManagedInstanceRoleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateManagedInstanceRoleResult,
+                        RusotoError<UpdateManagedInstanceRoleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn update_ops_item(
+    fn update_ops_item(
         &self,
         input: UpdateOpsItemRequest,
-    ) -> Result<UpdateOpsItemResponse, RusotoError<UpdateOpsItemError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateOpsItemResponse, RusotoError<UpdateOpsItemError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
-    async fn update_patch_baseline(
+    fn update_patch_baseline(
         &self,
         input: UpdatePatchBaselineRequest,
-    ) -> Result<UpdatePatchBaselineResult, RusotoError<UpdatePatchBaselineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdatePatchBaselineResult,
+                        RusotoError<UpdatePatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update a resource data sync. After you create a resource data sync for a Region, you can't change the account options for that sync. For example, if you create a sync in the us-east-2 (Ohio) Region and you choose the Include only the current account option, you can't edit that sync later and choose the Include all accounts from my AWS Organizations configuration option. Instead, you must delete the first resource data sync, and create a new one.</p>
-    async fn update_resource_data_sync(
+    fn update_resource_data_sync(
         &self,
         input: UpdateResourceDataSyncRequest,
-    ) -> Result<UpdateResourceDataSyncResult, RusotoError<UpdateResourceDataSyncError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateResourceDataSyncResult,
+                        RusotoError<UpdateResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Or, use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Update the service setting for the account. </p>
-    async fn update_service_setting(
+    fn update_service_setting(
         &self,
         input: UpdateServiceSettingRequest,
-    ) -> Result<UpdateServiceSettingResult, RusotoError<UpdateServiceSettingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateServiceSettingResult,
+                        RusotoError<UpdateServiceSettingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon SSM API.
 #[derive(Clone)]
@@ -15399,13 +16403,19 @@ impl SsmClient {
     }
 }
 
-#[async_trait]
 impl Ssm for SsmClient {
     /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
-    async fn add_tags_to_resource(
+    fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceRequest,
-    ) -> Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15413,26 +16423,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsToResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddTagsToResourceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddTagsToResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
-    async fn cancel_command(
+    fn cancel_command(
         &self,
         input: CancelCommandRequest,
-    ) -> Result<CancelCommandResult, RusotoError<CancelCommandError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelCommandResult, RusotoError<CancelCommandError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15440,28 +16457,35 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CancelCommandResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelCommandError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CancelCommandResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelCommandError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
-    async fn cancel_maintenance_window_execution(
+    fn cancel_maintenance_window_execution(
         &self,
         input: CancelMaintenanceWindowExecutionRequest,
-    ) -> Result<
-        CancelMaintenanceWindowExecutionResult,
-        RusotoError<CancelMaintenanceWindowExecutionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelMaintenanceWindowExecutionResult,
+                        RusotoError<CancelMaintenanceWindowExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -15470,29 +16494,35 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelMaintenanceWindowExecutionError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelMaintenanceWindowExecutionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Generates an activation code and activation ID you can use to register your on-premises server or virtual machine (VM) with Systems Manager. Registering these machines with Systems Manager makes it possible to manage them using Systems Manager capabilities. You use the activation code and ID when installing SSM Agent on machines in your hybrid environment. For more information about requirements for managing on-premises instances and VMs using Systems Manager, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up AWS Systems Manager for Hybrid Environments</a> in the <i>AWS Systems Manager User Guide</i>. </p> <note> <p>On-premises servers or VMs that are registered with Systems Manager and Amazon EC2 instances that you manage with Systems Manager are all called <i>managed instances</i>.</p> </note></p>
-    async fn create_activation(
+    fn create_activation(
         &self,
         input: CreateActivationRequest,
-    ) -> Result<CreateActivationResult, RusotoError<CreateActivationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateActivationResult, RusotoError<CreateActivationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15500,26 +16530,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateActivationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateActivationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateActivationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateActivationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
-    async fn create_association(
+    fn create_association(
         &self,
         input: CreateAssociationRequest,
-    ) -> Result<CreateAssociationResult, RusotoError<CreateAssociationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateAssociationResult, RusotoError<CreateAssociationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15527,26 +16565,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssociationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateAssociationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAssociationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
-    async fn create_association_batch(
+    fn create_association_batch(
         &self,
         input: CreateAssociationBatchRequest,
-    ) -> Result<CreateAssociationBatchResult, RusotoError<CreateAssociationBatchError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateAssociationBatchResult,
+                        RusotoError<CreateAssociationBatchError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15554,27 +16603,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAssociationBatchResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssociationBatchError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateAssociationBatchResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAssociationBatchError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
-    async fn create_document(
+    fn create_document(
         &self,
         input: CreateDocumentRequest,
-    ) -> Result<CreateDocumentResult, RusotoError<CreateDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDocumentResult, RusotoError<CreateDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15582,26 +16637,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDocumentResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a new maintenance window.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
-    async fn create_maintenance_window(
+    fn create_maintenance_window(
         &self,
         input: CreateMaintenanceWindowRequest,
-    ) -> Result<CreateMaintenanceWindowResult, RusotoError<CreateMaintenanceWindowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateMaintenanceWindowResult,
+                        RusotoError<CreateMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15609,27 +16675,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMaintenanceWindowError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMaintenanceWindowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn create_ops_item(
+    fn create_ops_item(
         &self,
         input: CreateOpsItemRequest,
-    ) -> Result<CreateOpsItemResponse, RusotoError<CreateOpsItemError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateOpsItemResponse, RusotoError<CreateOpsItemError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15637,26 +16709,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateOpsItemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateOpsItemError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateOpsItemResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateOpsItemError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
-    async fn create_patch_baseline(
+    fn create_patch_baseline(
         &self,
         input: CreatePatchBaselineRequest,
-    ) -> Result<CreatePatchBaselineResult, RusotoError<CreatePatchBaselineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePatchBaselineResult,
+                        RusotoError<CreatePatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15664,27 +16747,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>A resource data sync helps you view data from multiple sources in a single location. Systems Manager offers two types of resource data sync: <code>SyncToDestination</code> and <code>SyncFromSource</code>.</p> <p>You can configure Systems Manager Inventory to use the <code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS Regions to a single Amazon S3 bucket. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can configure Systems Manager Explorer to use the <code>SyncToDestination</code> type to synchronize operational work items (OpsItems) and operational data (OpsData) from multiple AWS Regions to a single Amazon S3 bucket. You can also configure Explorer to use the <code>SyncFromSource</code> type. This type synchronizes OpsItems and OpsData from multiple AWS accounts and Regions by using AWS Organizations. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html">Setting Up Explorer to Display Data from Multiple Accounts and Regions</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>A resource data sync is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data. To check the status of a sync, use the <a>ListResourceDataSync</a>.</p> <note> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. </p> </note></p>
-    async fn create_resource_data_sync(
+    fn create_resource_data_sync(
         &self,
         input: CreateResourceDataSyncRequest,
-    ) -> Result<CreateResourceDataSyncResult, RusotoError<CreateResourceDataSyncError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateResourceDataSyncResult,
+                        RusotoError<CreateResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15692,27 +16785,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResourceDataSyncError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateResourceDataSyncResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateResourceDataSyncError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
-    async fn delete_activation(
+    fn delete_activation(
         &self,
         input: DeleteActivationRequest,
-    ) -> Result<DeleteActivationResult, RusotoError<DeleteActivationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteActivationResult, RusotoError<DeleteActivationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15720,26 +16819,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteActivationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteActivationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteActivationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteActivationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
-    async fn delete_association(
+    fn delete_association(
         &self,
         input: DeleteAssociationRequest,
-    ) -> Result<DeleteAssociationResult, RusotoError<DeleteAssociationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteAssociationResult, RusotoError<DeleteAssociationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15747,26 +16854,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssociationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteAssociationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAssociationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
-    async fn delete_document(
+    fn delete_document(
         &self,
         input: DeleteDocumentRequest,
-    ) -> Result<DeleteDocumentResult, RusotoError<DeleteDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDocumentResult, RusotoError<DeleteDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15774,26 +16888,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDocumentResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
-    async fn delete_inventory(
+    fn delete_inventory(
         &self,
         input: DeleteInventoryRequest,
-    ) -> Result<DeleteInventoryResult, RusotoError<DeleteInventoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInventoryResult, RusotoError<DeleteInventoryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15801,26 +16922,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteInventoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInventoryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInventoryResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInventoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a maintenance window.</p>
-    async fn delete_maintenance_window(
+    fn delete_maintenance_window(
         &self,
         input: DeleteMaintenanceWindowRequest,
-    ) -> Result<DeleteMaintenanceWindowResult, RusotoError<DeleteMaintenanceWindowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteMaintenanceWindowResult,
+                        RusotoError<DeleteMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15828,27 +16960,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMaintenanceWindowError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMaintenanceWindowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a parameter from the system.</p>
-    async fn delete_parameter(
+    fn delete_parameter(
         &self,
         input: DeleteParameterRequest,
-    ) -> Result<DeleteParameterResult, RusotoError<DeleteParameterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteParameterResult, RusotoError<DeleteParameterError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15856,26 +16994,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteParameterResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteParameterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteParameterResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteParameterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a list of parameters.</p>
-    async fn delete_parameters(
+    fn delete_parameters(
         &self,
         input: DeleteParametersRequest,
-    ) -> Result<DeleteParametersResult, RusotoError<DeleteParametersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteParametersResult, RusotoError<DeleteParametersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15883,26 +17028,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteParametersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteParametersResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteParametersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a patch baseline.</p>
-    async fn delete_patch_baseline(
+    fn delete_patch_baseline(
         &self,
         input: DeletePatchBaselineRequest,
-    ) -> Result<DeletePatchBaselineResult, RusotoError<DeletePatchBaselineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeletePatchBaselineResult,
+                        RusotoError<DeletePatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15910,27 +17066,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeletePatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to data on managed instances are no longer synced to or from the target. Deleting a sync configuration does not delete data.</p>
-    async fn delete_resource_data_sync(
+    fn delete_resource_data_sync(
         &self,
         input: DeleteResourceDataSyncRequest,
-    ) -> Result<DeleteResourceDataSyncResult, RusotoError<DeleteResourceDataSyncError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResourceDataSyncResult,
+                        RusotoError<DeleteResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15938,27 +17104,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourceDataSyncError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteResourceDataSyncResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteResourceDataSyncError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling SSM Agent first.</p>
-    async fn deregister_managed_instance(
+    fn deregister_managed_instance(
         &self,
         input: DeregisterManagedInstanceRequest,
-    ) -> Result<DeregisterManagedInstanceResult, RusotoError<DeregisterManagedInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterManagedInstanceResult,
+                        RusotoError<DeregisterManagedInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15966,29 +17142,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterManagedInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterManagedInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterManagedInstanceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterManagedInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a patch group from a patch baseline.</p>
-    async fn deregister_patch_baseline_for_patch_group(
+    fn deregister_patch_baseline_for_patch_group(
         &self,
         input: DeregisterPatchBaselineForPatchGroupRequest,
-    ) -> Result<
-        DeregisterPatchBaselineForPatchGroupResult,
-        RusotoError<DeregisterPatchBaselineForPatchGroupError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterPatchBaselineForPatchGroupResult,
+                        RusotoError<DeregisterPatchBaselineForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16000,31 +17183,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterPatchBaselineForPatchGroupError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterPatchBaselineForPatchGroupError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a target from a maintenance window.</p>
-    async fn deregister_target_from_maintenance_window(
+    fn deregister_target_from_maintenance_window(
         &self,
         input: DeregisterTargetFromMaintenanceWindowRequest,
-    ) -> Result<
-        DeregisterTargetFromMaintenanceWindowResult,
-        RusotoError<DeregisterTargetFromMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterTargetFromMaintenanceWindowResult,
+                        RusotoError<DeregisterTargetFromMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16036,31 +17226,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterTargetFromMaintenanceWindowError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterTargetFromMaintenanceWindowError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a task from a maintenance window.</p>
-    async fn deregister_task_from_maintenance_window(
+    fn deregister_task_from_maintenance_window(
         &self,
         input: DeregisterTaskFromMaintenanceWindowRequest,
-    ) -> Result<
-        DeregisterTaskFromMaintenanceWindowResult,
-        RusotoError<DeregisterTaskFromMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterTaskFromMaintenanceWindowResult,
+                        RusotoError<DeregisterTaskFromMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16072,29 +17269,39 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterTaskFromMaintenanceWindowError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterTaskFromMaintenanceWindowError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
-    async fn describe_activations(
+    fn describe_activations(
         &self,
         input: DescribeActivationsRequest,
-    ) -> Result<DescribeActivationsResult, RusotoError<DescribeActivationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeActivationsResult,
+                        RusotoError<DescribeActivationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16102,27 +17309,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeActivationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeActivationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeActivationsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeActivationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
-    async fn describe_association(
+    fn describe_association(
         &self,
         input: DescribeAssociationRequest,
-    ) -> Result<DescribeAssociationResult, RusotoError<DescribeAssociationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAssociationResult,
+                        RusotoError<DescribeAssociationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16130,29 +17347,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssociationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAssociationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAssociationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Use this API action to view information about a specific execution of a specific association.</p>
-    async fn describe_association_execution_targets(
+    fn describe_association_execution_targets(
         &self,
         input: DescribeAssociationExecutionTargetsRequest,
-    ) -> Result<
-        DescribeAssociationExecutionTargetsResult,
-        RusotoError<DescribeAssociationExecutionTargetsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAssociationExecutionTargetsResult,
+                        RusotoError<DescribeAssociationExecutionTargetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16164,30 +17388,39 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssociationExecutionTargetsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAssociationExecutionTargetsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Use this API action to view all executions for a specific association ID. </p>
-    async fn describe_association_executions(
+    fn describe_association_executions(
         &self,
         input: DescribeAssociationExecutionsRequest,
-    ) -> Result<DescribeAssociationExecutionsResult, RusotoError<DescribeAssociationExecutionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAssociationExecutionsResult,
+                        RusotoError<DescribeAssociationExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16195,28 +17428,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssociationExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssociationExecutionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAssociationExecutionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAssociationExecutionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides details about all active and terminated Automation executions.</p>
-    async fn describe_automation_executions(
+    fn describe_automation_executions(
         &self,
         input: DescribeAutomationExecutionsRequest,
-    ) -> Result<DescribeAutomationExecutionsResult, RusotoError<DescribeAutomationExecutionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAutomationExecutionsResult,
+                        RusotoError<DescribeAutomationExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16224,29 +17466,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAutomationExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAutomationExecutionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAutomationExecutionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAutomationExecutionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
-    async fn describe_automation_step_executions(
+    fn describe_automation_step_executions(
         &self,
         input: DescribeAutomationStepExecutionsRequest,
-    ) -> Result<
-        DescribeAutomationStepExecutionsResult,
-        RusotoError<DescribeAutomationStepExecutionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAutomationStepExecutionsResult,
+                        RusotoError<DescribeAutomationStepExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16255,29 +17504,39 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAutomationStepExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAutomationStepExecutionsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAutomationStepExecutionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAutomationStepExecutionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all patches eligible to be included in a patch baseline.</p>
-    async fn describe_available_patches(
+    fn describe_available_patches(
         &self,
         input: DescribeAvailablePatchesRequest,
-    ) -> Result<DescribeAvailablePatchesResult, RusotoError<DescribeAvailablePatchesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAvailablePatchesResult,
+                        RusotoError<DescribeAvailablePatchesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16285,27 +17544,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAvailablePatchesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAvailablePatchesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAvailablePatchesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAvailablePatchesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified Systems Manager document.</p>
-    async fn describe_document(
+    fn describe_document(
         &self,
         input: DescribeDocumentRequest,
-    ) -> Result<DescribeDocumentResult, RusotoError<DescribeDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeDocumentResult, RusotoError<DescribeDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16313,27 +17578,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDocumentResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
-    async fn describe_document_permission(
+    fn describe_document_permission(
         &self,
         input: DescribeDocumentPermissionRequest,
-    ) -> Result<DescribeDocumentPermissionResponse, RusotoError<DescribeDocumentPermissionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentPermissionResponse,
+                        RusotoError<DescribeDocumentPermissionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16341,29 +17616,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentPermissionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentPermissionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDocumentPermissionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDocumentPermissionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>All associations for the instance(s).</p>
-    async fn describe_effective_instance_associations(
+    fn describe_effective_instance_associations(
         &self,
         input: DescribeEffectiveInstanceAssociationsRequest,
-    ) -> Result<
-        DescribeEffectiveInstanceAssociationsResult,
-        RusotoError<DescribeEffectiveInstanceAssociationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEffectiveInstanceAssociationsResult,
+                        RusotoError<DescribeEffectiveInstanceAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16375,31 +17657,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEffectiveInstanceAssociationsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEffectiveInstanceAssociationsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
-    async fn describe_effective_patches_for_patch_baseline(
+    fn describe_effective_patches_for_patch_baseline(
         &self,
         input: DescribeEffectivePatchesForPatchBaselineRequest,
-    ) -> Result<
-        DescribeEffectivePatchesForPatchBaselineResult,
-        RusotoError<DescribeEffectivePatchesForPatchBaselineError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEffectivePatchesForPatchBaselineResult,
+                        RusotoError<DescribeEffectivePatchesForPatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16411,29 +17700,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEffectivePatchesForPatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEffectivePatchesForPatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The status of the associations for the instance(s).</p>
-    async fn describe_instance_associations_status(
+    fn describe_instance_associations_status(
         &self,
         input: DescribeInstanceAssociationsStatusRequest,
-    ) -> Result<
-        DescribeInstanceAssociationsStatusResult,
-        RusotoError<DescribeInstanceAssociationsStatusError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstanceAssociationsStatusResult,
+                        RusotoError<DescribeInstanceAssociationsStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16445,30 +17741,39 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstanceAssociationsStatusError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInstanceAssociationsStatusError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for Amazon EC2 instances.</p> </note></p>
-    async fn describe_instance_information(
+    fn describe_instance_information(
         &self,
         input: DescribeInstanceInformationRequest,
-    ) -> Result<DescribeInstanceInformationResult, RusotoError<DescribeInstanceInformationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstanceInformationResult,
+                        RusotoError<DescribeInstanceInformationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16476,28 +17781,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstanceInformationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstanceInformationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInstanceInformationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInstanceInformationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the high-level patch state of one or more instances.</p>
-    async fn describe_instance_patch_states(
+    fn describe_instance_patch_states(
         &self,
         input: DescribeInstancePatchStatesRequest,
-    ) -> Result<DescribeInstancePatchStatesResult, RusotoError<DescribeInstancePatchStatesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstancePatchStatesResult,
+                        RusotoError<DescribeInstancePatchStatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16505,29 +17819,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstancePatchStatesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstancePatchStatesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInstancePatchStatesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInstancePatchStatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
-    async fn describe_instance_patch_states_for_patch_group(
+    fn describe_instance_patch_states_for_patch_group(
         &self,
         input: DescribeInstancePatchStatesForPatchGroupRequest,
-    ) -> Result<
-        DescribeInstancePatchStatesForPatchGroupResult,
-        RusotoError<DescribeInstancePatchStatesForPatchGroupError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstancePatchStatesForPatchGroupResult,
+                        RusotoError<DescribeInstancePatchStatesForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16539,27 +17860,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstancePatchStatesForPatchGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInstancePatchStatesForPatchGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
-    async fn describe_instance_patches(
+    fn describe_instance_patches(
         &self,
         input: DescribeInstancePatchesRequest,
-    ) -> Result<DescribeInstancePatchesResult, RusotoError<DescribeInstancePatchesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInstancePatchesResult,
+                        RusotoError<DescribeInstancePatchesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16567,28 +17898,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstancePatchesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstancePatchesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInstancePatchesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInstancePatchesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a specific delete inventory operation.</p>
-    async fn describe_inventory_deletions(
+    fn describe_inventory_deletions(
         &self,
         input: DescribeInventoryDeletionsRequest,
-    ) -> Result<DescribeInventoryDeletionsResult, RusotoError<DescribeInventoryDeletionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInventoryDeletionsResult,
+                        RusotoError<DescribeInventoryDeletionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16596,29 +17936,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInventoryDeletionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInventoryDeletionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInventoryDeletionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInventoryDeletionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.</p>
-    async fn describe_maintenance_window_execution_task_invocations(
+    fn describe_maintenance_window_execution_task_invocations(
         &self,
         input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
-        RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
+                        RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16630,29 +17977,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>For a given maintenance window execution, lists the tasks that were run.</p>
-    async fn describe_maintenance_window_execution_tasks(
+    fn describe_maintenance_window_execution_tasks(
         &self,
         input: DescribeMaintenanceWindowExecutionTasksRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowExecutionTasksResult,
-        RusotoError<DescribeMaintenanceWindowExecutionTasksError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowExecutionTasksResult,
+                        RusotoError<DescribeMaintenanceWindowExecutionTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16664,31 +18018,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowExecutionTasksError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowExecutionTasksError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.</p>
-    async fn describe_maintenance_window_executions(
+    fn describe_maintenance_window_executions(
         &self,
         input: DescribeMaintenanceWindowExecutionsRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowExecutionsResult,
-        RusotoError<DescribeMaintenanceWindowExecutionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowExecutionsResult,
+                        RusotoError<DescribeMaintenanceWindowExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16700,31 +18061,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowExecutionsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowExecutionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves information about upcoming executions of a maintenance window.</p>
-    async fn describe_maintenance_window_schedule(
+    fn describe_maintenance_window_schedule(
         &self,
         input: DescribeMaintenanceWindowScheduleRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowScheduleResult,
-        RusotoError<DescribeMaintenanceWindowScheduleError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowScheduleResult,
+                        RusotoError<DescribeMaintenanceWindowScheduleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16736,31 +18104,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowScheduleError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowScheduleError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the targets registered with the maintenance window.</p>
-    async fn describe_maintenance_window_targets(
+    fn describe_maintenance_window_targets(
         &self,
         input: DescribeMaintenanceWindowTargetsRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowTargetsResult,
-        RusotoError<DescribeMaintenanceWindowTargetsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowTargetsResult,
+                        RusotoError<DescribeMaintenanceWindowTargetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16769,31 +18144,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowTargetsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowTargetsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tasks in a maintenance window.</p>
-    async fn describe_maintenance_window_tasks(
+    fn describe_maintenance_window_tasks(
         &self,
         input: DescribeMaintenanceWindowTasksRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowTasksResult,
-        RusotoError<DescribeMaintenanceWindowTasksError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowTasksResult,
+                        RusotoError<DescribeMaintenanceWindowTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16802,28 +18184,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowTasksError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowTasksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the maintenance windows in an AWS account.</p>
-    async fn describe_maintenance_windows(
+    fn describe_maintenance_windows(
         &self,
         input: DescribeMaintenanceWindowsRequest,
-    ) -> Result<DescribeMaintenanceWindowsResult, RusotoError<DescribeMaintenanceWindowsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowsResult,
+                        RusotoError<DescribeMaintenanceWindowsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16831,29 +18222,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>
-    async fn describe_maintenance_windows_for_target(
+    fn describe_maintenance_windows_for_target(
         &self,
         input: DescribeMaintenanceWindowsForTargetRequest,
-    ) -> Result<
-        DescribeMaintenanceWindowsForTargetResult,
-        RusotoError<DescribeMaintenanceWindowsForTargetError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMaintenanceWindowsForTargetResult,
+                        RusotoError<DescribeMaintenanceWindowsForTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -16865,29 +18263,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowsForTargetError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMaintenanceWindowsForTargetError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn describe_ops_items(
+    fn describe_ops_items(
         &self,
         input: DescribeOpsItemsRequest,
-    ) -> Result<DescribeOpsItemsResponse, RusotoError<DescribeOpsItemsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeOpsItemsResponse, RusotoError<DescribeOpsItemsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16895,27 +18300,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOpsItemsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOpsItemsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeOpsItemsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeOpsItemsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Get information about a parameter.</p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
-    async fn describe_parameters(
+    fn describe_parameters(
         &self,
         input: DescribeParametersRequest,
-    ) -> Result<DescribeParametersResult, RusotoError<DescribeParametersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeParametersResult, RusotoError<DescribeParametersError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16923,27 +18335,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeParametersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeParametersResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeParametersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the patch baselines in your AWS account.</p>
-    async fn describe_patch_baselines(
+    fn describe_patch_baselines(
         &self,
         input: DescribePatchBaselinesRequest,
-    ) -> Result<DescribePatchBaselinesResult, RusotoError<DescribePatchBaselinesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchBaselinesResult,
+                        RusotoError<DescribePatchBaselinesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16951,27 +18373,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchBaselinesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchBaselinesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePatchBaselinesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePatchBaselinesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
-    async fn describe_patch_group_state(
+    fn describe_patch_group_state(
         &self,
         input: DescribePatchGroupStateRequest,
-    ) -> Result<DescribePatchGroupStateResult, RusotoError<DescribePatchGroupStateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchGroupStateResult,
+                        RusotoError<DescribePatchGroupStateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16979,27 +18411,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchGroupStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchGroupStateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePatchGroupStateResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePatchGroupStateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all patch groups that have been registered with patch baselines.</p>
-    async fn describe_patch_groups(
+    fn describe_patch_groups(
         &self,
         input: DescribePatchGroupsRequest,
-    ) -> Result<DescribePatchGroupsResult, RusotoError<DescribePatchGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchGroupsResult,
+                        RusotoError<DescribePatchGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17007,27 +18449,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchGroupsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePatchGroupsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePatchGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU </dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>REDHAT</em>ENTERPRISE_LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> </dl></p>
-    async fn describe_patch_properties(
+    fn describe_patch_properties(
         &self,
         input: DescribePatchPropertiesRequest,
-    ) -> Result<DescribePatchPropertiesResult, RusotoError<DescribePatchPropertiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePatchPropertiesResult,
+                        RusotoError<DescribePatchPropertiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17035,27 +18487,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchPropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchPropertiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePatchPropertiesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePatchPropertiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a list of all active sessions (both connected and disconnected) or terminated sessions from the past 30 days.</p>
-    async fn describe_sessions(
+    fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
-    ) -> Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17063,27 +18522,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSessionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSessionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSessionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSessionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get detailed information about a particular Automation execution.</p>
-    async fn get_automation_execution(
+    fn get_automation_execution(
         &self,
         input: GetAutomationExecutionRequest,
-    ) -> Result<GetAutomationExecutionResult, RusotoError<GetAutomationExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAutomationExecutionResult,
+                        RusotoError<GetAutomationExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17091,27 +18560,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAutomationExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAutomationExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAutomationExecutionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAutomationExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>. For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
-    async fn get_calendar_state(
+    fn get_calendar_state(
         &self,
         input: GetCalendarStateRequest,
-    ) -> Result<GetCalendarStateResponse, RusotoError<GetCalendarStateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetCalendarStateResponse, RusotoError<GetCalendarStateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17119,27 +18595,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCalendarStateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCalendarStateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetCalendarStateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCalendarStateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
-    async fn get_command_invocation(
+    fn get_command_invocation(
         &self,
         input: GetCommandInvocationRequest,
-    ) -> Result<GetCommandInvocationResult, RusotoError<GetCommandInvocationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCommandInvocationResult,
+                        RusotoError<GetCommandInvocationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17147,27 +18633,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCommandInvocationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommandInvocationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetCommandInvocationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCommandInvocationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the Session Manager connection status for an instance to determine whether it is connected and ready to receive Session Manager connections.</p>
-    async fn get_connection_status(
+    fn get_connection_status(
         &self,
         input: GetConnectionStatusRequest,
-    ) -> Result<GetConnectionStatusResponse, RusotoError<GetConnectionStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConnectionStatusResponse,
+                        RusotoError<GetConnectionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17175,27 +18671,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConnectionStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetConnectionStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConnectionStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
-    async fn get_default_patch_baseline(
+    fn get_default_patch_baseline(
         &self,
         input: GetDefaultPatchBaselineRequest,
-    ) -> Result<GetDefaultPatchBaselineResult, RusotoError<GetDefaultPatchBaselineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDefaultPatchBaselineResult,
+                        RusotoError<GetDefaultPatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17203,29 +18709,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDefaultPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDefaultPatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDefaultPatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDefaultPatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
-    async fn get_deployable_patch_snapshot_for_instance(
+    fn get_deployable_patch_snapshot_for_instance(
         &self,
         input: GetDeployablePatchSnapshotForInstanceRequest,
-    ) -> Result<
-        GetDeployablePatchSnapshotForInstanceResult,
-        RusotoError<GetDeployablePatchSnapshotForInstanceError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDeployablePatchSnapshotForInstanceResult,
+                        RusotoError<GetDeployablePatchSnapshotForInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -17237,29 +18750,35 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeployablePatchSnapshotForInstanceError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeployablePatchSnapshotForInstanceError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the contents of the specified Systems Manager document.</p>
-    async fn get_document(
+    fn get_document(
         &self,
         input: GetDocumentRequest,
-    ) -> Result<GetDocumentResult, RusotoError<GetDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDocumentResult, RusotoError<GetDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17267,26 +18786,32 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetDocumentResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Query inventory information.</p>
-    async fn get_inventory(
+    fn get_inventory(
         &self,
         input: GetInventoryRequest,
-    ) -> Result<GetInventoryResult, RusotoError<GetInventoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetInventoryResult, RusotoError<GetInventoryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17294,26 +18819,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInventoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInventoryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetInventoryResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInventoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
-    async fn get_inventory_schema(
+    fn get_inventory_schema(
         &self,
         input: GetInventorySchemaRequest,
-    ) -> Result<GetInventorySchemaResult, RusotoError<GetInventorySchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetInventorySchemaResult, RusotoError<GetInventorySchemaError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17321,27 +18853,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInventorySchemaResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInventorySchemaError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInventorySchemaResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInventorySchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a maintenance window.</p>
-    async fn get_maintenance_window(
+    fn get_maintenance_window(
         &self,
         input: GetMaintenanceWindowRequest,
-    ) -> Result<GetMaintenanceWindowResult, RusotoError<GetMaintenanceWindowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowResult,
+                        RusotoError<GetMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17349,28 +18891,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMaintenanceWindowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves details about a specific a maintenance window execution.</p>
-    async fn get_maintenance_window_execution(
+    fn get_maintenance_window_execution(
         &self,
         input: GetMaintenanceWindowExecutionRequest,
-    ) -> Result<GetMaintenanceWindowExecutionResult, RusotoError<GetMaintenanceWindowExecutionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowExecutionResult,
+                        RusotoError<GetMaintenanceWindowExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17378,29 +18929,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMaintenanceWindowExecutionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMaintenanceWindowExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the details about a specific task run as part of a maintenance window execution.</p>
-    async fn get_maintenance_window_execution_task(
+    fn get_maintenance_window_execution_task(
         &self,
         input: GetMaintenanceWindowExecutionTaskRequest,
-    ) -> Result<
-        GetMaintenanceWindowExecutionTaskResult,
-        RusotoError<GetMaintenanceWindowExecutionTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowExecutionTaskResult,
+                        RusotoError<GetMaintenanceWindowExecutionTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -17412,31 +18970,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowExecutionTaskError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMaintenanceWindowExecutionTaskError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves information about a specific task running on a specific target.</p>
-    async fn get_maintenance_window_execution_task_invocation(
+    fn get_maintenance_window_execution_task_invocation(
         &self,
         input: GetMaintenanceWindowExecutionTaskInvocationRequest,
-    ) -> Result<
-        GetMaintenanceWindowExecutionTaskInvocationResult,
-        RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowExecutionTaskInvocationResult,
+                        RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -17448,27 +19013,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowExecutionTaskInvocationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMaintenanceWindowExecutionTaskInvocationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tasks in a maintenance window.</p>
-    async fn get_maintenance_window_task(
+    fn get_maintenance_window_task(
         &self,
         input: GetMaintenanceWindowTaskRequest,
-    ) -> Result<GetMaintenanceWindowTaskResult, RusotoError<GetMaintenanceWindowTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetMaintenanceWindowTaskResult,
+                        RusotoError<GetMaintenanceWindowTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17476,27 +19051,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMaintenanceWindowTaskResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMaintenanceWindowTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn get_ops_item(
+    fn get_ops_item(
         &self,
         input: GetOpsItemRequest,
-    ) -> Result<GetOpsItemResponse, RusotoError<GetOpsItemError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOpsItemResponse, RusotoError<GetOpsItemError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17504,26 +19085,32 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOpsItemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOpsItemError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetOpsItemResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOpsItemError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
-    async fn get_ops_summary(
+    fn get_ops_summary(
         &self,
         input: GetOpsSummaryRequest,
-    ) -> Result<GetOpsSummaryResult, RusotoError<GetOpsSummaryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOpsSummaryResult, RusotoError<GetOpsSummaryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17531,26 +19118,32 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOpsSummaryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOpsSummaryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetOpsSummaryResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOpsSummaryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
-    async fn get_parameter(
+    fn get_parameter(
         &self,
         input: GetParameterRequest,
-    ) -> Result<GetParameterResult, RusotoError<GetParameterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetParameterResult, RusotoError<GetParameterError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17558,26 +19151,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetParameterResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParameterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetParameterResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetParameterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Query a list of all parameters used by the AWS account.</p>
-    async fn get_parameter_history(
+    fn get_parameter_history(
         &self,
         input: GetParameterHistoryRequest,
-    ) -> Result<GetParameterHistoryResult, RusotoError<GetParameterHistoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetParameterHistoryResult,
+                        RusotoError<GetParameterHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17585,27 +19188,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetParameterHistoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParameterHistoryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetParameterHistoryResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetParameterHistoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
-    async fn get_parameters(
+    fn get_parameters(
         &self,
         input: GetParametersRequest,
-    ) -> Result<GetParametersResult, RusotoError<GetParametersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetParametersResult, RusotoError<GetParametersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17613,26 +19222,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParametersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetParametersResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetParametersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Retrieve information about one or more parameters in a specific hierarchy. </p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
-    async fn get_parameters_by_path(
+    fn get_parameters_by_path(
         &self,
         input: GetParametersByPathRequest,
-    ) -> Result<GetParametersByPathResult, RusotoError<GetParametersByPathError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetParametersByPathResult,
+                        RusotoError<GetParametersByPathError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17640,27 +19259,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetParametersByPathResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParametersByPathError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetParametersByPathResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetParametersByPathError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves information about a patch baseline.</p>
-    async fn get_patch_baseline(
+    fn get_patch_baseline(
         &self,
         input: GetPatchBaselineRequest,
-    ) -> Result<GetPatchBaselineResult, RusotoError<GetPatchBaselineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPatchBaselineResult, RusotoError<GetPatchBaselineError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17668,27 +19293,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
-    async fn get_patch_baseline_for_patch_group(
+    fn get_patch_baseline_for_patch_group(
         &self,
         input: GetPatchBaselineForPatchGroupRequest,
-    ) -> Result<GetPatchBaselineForPatchGroupResult, RusotoError<GetPatchBaselineForPatchGroupError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetPatchBaselineForPatchGroupResult,
+                        RusotoError<GetPatchBaselineForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17696,27 +19331,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPatchBaselineForPatchGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPatchBaselineForPatchGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>UpdateServiceSetting</a> API action to change the default setting. Or use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Query the current service setting for the account. </p>
-    async fn get_service_setting(
+    fn get_service_setting(
         &self,
         input: GetServiceSettingRequest,
-    ) -> Result<GetServiceSettingResult, RusotoError<GetServiceSettingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetServiceSettingResult, RusotoError<GetServiceSettingError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17724,26 +19366,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServiceSettingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceSettingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetServiceSettingResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetServiceSettingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
-    async fn label_parameter_version(
+    fn label_parameter_version(
         &self,
         input: LabelParameterVersionRequest,
-    ) -> Result<LabelParameterVersionResult, RusotoError<LabelParameterVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        LabelParameterVersionResult,
+                        RusotoError<LabelParameterVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17751,27 +19404,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<LabelParameterVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(LabelParameterVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<LabelParameterVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(LabelParameterVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves all versions of an association for a specific association ID.</p>
-    async fn list_association_versions(
+    fn list_association_versions(
         &self,
         input: ListAssociationVersionsRequest,
-    ) -> Result<ListAssociationVersionsResult, RusotoError<ListAssociationVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAssociationVersionsResult,
+                        RusotoError<ListAssociationVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17779,27 +19442,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssociationVersionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssociationVersionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAssociationVersionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAssociationVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns all State Manager associations in the current AWS account and Region. You can limit the results to a specific State Manager association document or instance by specifying a filter.</p>
-    async fn list_associations(
+    fn list_associations(
         &self,
         input: ListAssociationsRequest,
-    ) -> Result<ListAssociationsResult, RusotoError<ListAssociationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAssociationsResult, RusotoError<ListAssociationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17807,26 +19476,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssociationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAssociationsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAssociationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user runs SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
-    async fn list_command_invocations(
+    fn list_command_invocations(
         &self,
         input: ListCommandInvocationsRequest,
-    ) -> Result<ListCommandInvocationsResult, RusotoError<ListCommandInvocationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCommandInvocationsResult,
+                        RusotoError<ListCommandInvocationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17834,27 +19514,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCommandInvocationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCommandInvocationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListCommandInvocationsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCommandInvocationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the commands requested by users of the AWS account.</p>
-    async fn list_commands(
+    fn list_commands(
         &self,
         input: ListCommandsRequest,
-    ) -> Result<ListCommandsResult, RusotoError<ListCommandsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListCommandsResult, RusotoError<ListCommandsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17862,26 +19548,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListCommandsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCommandsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListCommandsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCommandsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
-    async fn list_compliance_items(
+    fn list_compliance_items(
         &self,
         input: ListComplianceItemsRequest,
-    ) -> Result<ListComplianceItemsResult, RusotoError<ListComplianceItemsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListComplianceItemsResult,
+                        RusotoError<ListComplianceItemsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17889,27 +19585,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListComplianceItemsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComplianceItemsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListComplianceItemsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListComplianceItemsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
-    async fn list_compliance_summaries(
+    fn list_compliance_summaries(
         &self,
         input: ListComplianceSummariesRequest,
-    ) -> Result<ListComplianceSummariesResult, RusotoError<ListComplianceSummariesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListComplianceSummariesResult,
+                        RusotoError<ListComplianceSummariesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17917,27 +19623,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListComplianceSummariesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComplianceSummariesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListComplianceSummariesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListComplianceSummariesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all versions for a document.</p>
-    async fn list_document_versions(
+    fn list_document_versions(
         &self,
         input: ListDocumentVersionsRequest,
-    ) -> Result<ListDocumentVersionsResult, RusotoError<ListDocumentVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDocumentVersionsResult,
+                        RusotoError<ListDocumentVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17945,27 +19661,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDocumentVersionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentVersionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDocumentVersionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDocumentVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns all Systems Manager (SSM) documents in the current AWS account and Region. You can limit the results of this request by using a filter.</p>
-    async fn list_documents(
+    fn list_documents(
         &self,
         input: ListDocumentsRequest,
-    ) -> Result<ListDocumentsResult, RusotoError<ListDocumentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDocumentsResult, RusotoError<ListDocumentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17973,26 +19695,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDocumentsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListDocumentsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDocumentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>A list of inventory items returned by the request.</p>
-    async fn list_inventory_entries(
+    fn list_inventory_entries(
         &self,
         input: ListInventoryEntriesRequest,
-    ) -> Result<ListInventoryEntriesResult, RusotoError<ListInventoryEntriesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInventoryEntriesResult,
+                        RusotoError<ListInventoryEntriesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18000,29 +19732,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInventoryEntriesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInventoryEntriesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInventoryEntriesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInventoryEntriesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
-    async fn list_resource_compliance_summaries(
+    fn list_resource_compliance_summaries(
         &self,
         input: ListResourceComplianceSummariesRequest,
-    ) -> Result<
-        ListResourceComplianceSummariesResult,
-        RusotoError<ListResourceComplianceSummariesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResourceComplianceSummariesResult,
+                        RusotoError<ListResourceComplianceSummariesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -18031,29 +19770,39 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourceComplianceSummariesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourceComplianceSummariesError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResourceComplianceSummariesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResourceComplianceSummariesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
-    async fn list_resource_data_sync(
+    fn list_resource_data_sync(
         &self,
         input: ListResourceDataSyncRequest,
-    ) -> Result<ListResourceDataSyncResult, RusotoError<ListResourceDataSyncError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResourceDataSyncResult,
+                        RusotoError<ListResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18061,27 +19810,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourceDataSyncError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResourceDataSyncResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResourceDataSyncError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResult,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18089,27 +19848,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
-    async fn modify_document_permission(
+    fn modify_document_permission(
         &self,
         input: ModifyDocumentPermissionRequest,
-    ) -> Result<ModifyDocumentPermissionResponse, RusotoError<ModifyDocumentPermissionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ModifyDocumentPermissionResponse,
+                        RusotoError<ModifyDocumentPermissionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18117,27 +19886,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyDocumentPermissionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyDocumentPermissionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ModifyDocumentPermissionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ModifyDocumentPermissionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
-    async fn put_compliance_items(
+    fn put_compliance_items(
         &self,
         input: PutComplianceItemsRequest,
-    ) -> Result<PutComplianceItemsResult, RusotoError<PutComplianceItemsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutComplianceItemsResult, RusotoError<PutComplianceItemsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18145,27 +19921,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutComplianceItemsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutComplianceItemsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutComplianceItemsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutComplianceItemsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
-    async fn put_inventory(
+    fn put_inventory(
         &self,
         input: PutInventoryRequest,
-    ) -> Result<PutInventoryResult, RusotoError<PutInventoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutInventoryResult, RusotoError<PutInventoryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18173,26 +19955,32 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutInventoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutInventoryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutInventoryResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutInventoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add a parameter to the system.</p>
-    async fn put_parameter(
+    fn put_parameter(
         &self,
         input: PutParameterRequest,
-    ) -> Result<PutParameterResult, RusotoError<PutParameterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutParameterResult, RusotoError<PutParameterError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18200,27 +19988,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutParameterResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutParameterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutParameterResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutParameterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
-    async fn register_default_patch_baseline(
+    fn register_default_patch_baseline(
         &self,
         input: RegisterDefaultPatchBaselineRequest,
-    ) -> Result<RegisterDefaultPatchBaselineResult, RusotoError<RegisterDefaultPatchBaselineError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterDefaultPatchBaselineResult,
+                        RusotoError<RegisterDefaultPatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18228,29 +20025,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterDefaultPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterDefaultPatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterDefaultPatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterDefaultPatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a patch baseline for a patch group.</p>
-    async fn register_patch_baseline_for_patch_group(
+    fn register_patch_baseline_for_patch_group(
         &self,
         input: RegisterPatchBaselineForPatchGroupRequest,
-    ) -> Result<
-        RegisterPatchBaselineForPatchGroupResult,
-        RusotoError<RegisterPatchBaselineForPatchGroupError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterPatchBaselineForPatchGroupResult,
+                        RusotoError<RegisterPatchBaselineForPatchGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -18262,31 +20066,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterPatchBaselineForPatchGroupError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterPatchBaselineForPatchGroupError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a target with a maintenance window.</p>
-    async fn register_target_with_maintenance_window(
+    fn register_target_with_maintenance_window(
         &self,
         input: RegisterTargetWithMaintenanceWindowRequest,
-    ) -> Result<
-        RegisterTargetWithMaintenanceWindowResult,
-        RusotoError<RegisterTargetWithMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterTargetWithMaintenanceWindowResult,
+                        RusotoError<RegisterTargetWithMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -18298,31 +20109,38 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterTargetWithMaintenanceWindowError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterTargetWithMaintenanceWindowError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a new task to a maintenance window.</p>
-    async fn register_task_with_maintenance_window(
+    fn register_task_with_maintenance_window(
         &self,
         input: RegisterTaskWithMaintenanceWindowRequest,
-    ) -> Result<
-        RegisterTaskWithMaintenanceWindowResult,
-        RusotoError<RegisterTaskWithMaintenanceWindowError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterTaskWithMaintenanceWindowResult,
+                        RusotoError<RegisterTaskWithMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
@@ -18334,29 +20152,39 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterTaskWithMaintenanceWindowError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterTaskWithMaintenanceWindowError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes tag keys from the specified resource.</p>
-    async fn remove_tags_from_resource(
+    fn remove_tags_from_resource(
         &self,
         input: RemoveTagsFromResourceRequest,
-    ) -> Result<RemoveTagsFromResourceResult, RusotoError<RemoveTagsFromResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveTagsFromResourceResult,
+                        RusotoError<RemoveTagsFromResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18364,27 +20192,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveTagsFromResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsFromResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RemoveTagsFromResourceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveTagsFromResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Use the <a>UpdateServiceSetting</a> API action to change the default setting. </p> <p>Reset the service setting for the account to the default value as provisioned by the AWS service team. </p>
-    async fn reset_service_setting(
+    fn reset_service_setting(
         &self,
         input: ResetServiceSettingRequest,
-    ) -> Result<ResetServiceSettingResult, RusotoError<ResetServiceSettingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ResetServiceSettingResult,
+                        RusotoError<ResetServiceSettingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18392,27 +20230,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ResetServiceSettingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ResetServiceSettingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ResetServiceSettingResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ResetServiceSettingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Reconnects a session to an instance after it has been disconnected. Connections can be resumed for disconnected sessions, but not terminated sessions.</p> <note> <p>This command is primarily for use by client machines to automatically reconnect during intermittent network issues. It is not intended for any other use.</p> </note></p>
-    async fn resume_session(
+    fn resume_session(
         &self,
         input: ResumeSessionRequest,
-    ) -> Result<ResumeSessionResponse, RusotoError<ResumeSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ResumeSessionResponse, RusotoError<ResumeSessionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18420,26 +20264,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ResumeSessionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ResumeSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ResumeSessionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ResumeSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
-    async fn send_automation_signal(
+    fn send_automation_signal(
         &self,
         input: SendAutomationSignalRequest,
-    ) -> Result<SendAutomationSignalResult, RusotoError<SendAutomationSignalError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SendAutomationSignalResult,
+                        RusotoError<SendAutomationSignalError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18447,27 +20302,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendAutomationSignalResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendAutomationSignalError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendAutomationSignalResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SendAutomationSignalError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Runs commands on one or more managed instances.</p>
-    async fn send_command(
+    fn send_command(
         &self,
         input: SendCommandRequest,
-    ) -> Result<SendCommandResult, RusotoError<SendCommandError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendCommandResult, RusotoError<SendCommandError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18475,26 +20336,36 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendCommandResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendCommandError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<SendCommandResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SendCommandError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Use this API action to run an association immediately and only one time. This action can be helpful when troubleshooting associations.</p>
-    async fn start_associations_once(
+    fn start_associations_once(
         &self,
         input: StartAssociationsOnceRequest,
-    ) -> Result<StartAssociationsOnceResult, RusotoError<StartAssociationsOnceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartAssociationsOnceResult,
+                        RusotoError<StartAssociationsOnceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18502,27 +20373,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAssociationsOnceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAssociationsOnceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartAssociationsOnceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartAssociationsOnceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Initiates execution of an Automation document.</p>
-    async fn start_automation_execution(
+    fn start_automation_execution(
         &self,
         input: StartAutomationExecutionRequest,
-    ) -> Result<StartAutomationExecutionResult, RusotoError<StartAutomationExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartAutomationExecutionResult,
+                        RusotoError<StartAutomationExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18530,27 +20411,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAutomationExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAutomationExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartAutomationExecutionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartAutomationExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
-    async fn start_session(
+    fn start_session(
         &self,
         input: StartSessionRequest,
-    ) -> Result<StartSessionResponse, RusotoError<StartSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartSessionResponse, RusotoError<StartSessionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18558,26 +20445,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartSessionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartSessionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stop an Automation that is currently running.</p>
-    async fn stop_automation_execution(
+    fn stop_automation_execution(
         &self,
         input: StopAutomationExecutionRequest,
-    ) -> Result<StopAutomationExecutionResult, RusotoError<StopAutomationExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopAutomationExecutionResult,
+                        RusotoError<StopAutomationExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18585,27 +20483,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopAutomationExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopAutomationExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopAutomationExecutionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopAutomationExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently ends a session and closes the data connection between the Session Manager client and SSM Agent on the instance. A terminated session cannot be resumed.</p>
-    async fn terminate_session(
+    fn terminate_session(
         &self,
         input: TerminateSessionRequest,
-    ) -> Result<TerminateSessionResponse, RusotoError<TerminateSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TerminateSessionResponse, RusotoError<TerminateSessionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18613,27 +20518,34 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TerminateSessionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TerminateSessionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TerminateSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
-    async fn update_association(
+    fn update_association(
         &self,
         input: UpdateAssociationRequest,
-    ) -> Result<UpdateAssociationResult, RusotoError<UpdateAssociationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateAssociationResult, RusotoError<UpdateAssociationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18641,26 +20553,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAssociationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAssociationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAssociationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
-    async fn update_association_status(
+    fn update_association_status(
         &self,
         input: UpdateAssociationStatusRequest,
-    ) -> Result<UpdateAssociationStatusResult, RusotoError<UpdateAssociationStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateAssociationStatusResult,
+                        RusotoError<UpdateAssociationStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18668,27 +20591,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAssociationStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAssociationStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAssociationStatusResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAssociationStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates one or more values for an SSM document.</p>
-    async fn update_document(
+    fn update_document(
         &self,
         input: UpdateDocumentRequest,
-    ) -> Result<UpdateDocumentResult, RusotoError<UpdateDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDocumentResult, RusotoError<UpdateDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18696,27 +20625,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDocumentResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Set the default version of a document. </p>
-    async fn update_document_default_version(
+    fn update_document_default_version(
         &self,
         input: UpdateDocumentDefaultVersionRequest,
-    ) -> Result<UpdateDocumentDefaultVersionResult, RusotoError<UpdateDocumentDefaultVersionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDocumentDefaultVersionResult,
+                        RusotoError<UpdateDocumentDefaultVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18724,27 +20663,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDocumentDefaultVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentDefaultVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDocumentDefaultVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDocumentDefaultVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
-    async fn update_maintenance_window(
+    fn update_maintenance_window(
         &self,
         input: UpdateMaintenanceWindowRequest,
-    ) -> Result<UpdateMaintenanceWindowResult, RusotoError<UpdateMaintenanceWindowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMaintenanceWindowResult,
+                        RusotoError<UpdateMaintenanceWindowError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18752,28 +20701,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMaintenanceWindowError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMaintenanceWindowResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMaintenanceWindowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
-    async fn update_maintenance_window_target(
+    fn update_maintenance_window_target(
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
-    ) -> Result<UpdateMaintenanceWindowTargetResult, RusotoError<UpdateMaintenanceWindowTargetError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMaintenanceWindowTargetResult,
+                        RusotoError<UpdateMaintenanceWindowTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18781,28 +20739,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMaintenanceWindowTargetError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMaintenanceWindowTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
-    async fn update_maintenance_window_task(
+    fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
-    ) -> Result<UpdateMaintenanceWindowTaskResult, RusotoError<UpdateMaintenanceWindowTaskError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMaintenanceWindowTaskResult,
+                        RusotoError<UpdateMaintenanceWindowTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18810,27 +20777,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMaintenanceWindowTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMaintenanceWindowTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.</p>
-    async fn update_managed_instance_role(
+    fn update_managed_instance_role(
         &self,
         input: UpdateManagedInstanceRoleRequest,
-    ) -> Result<UpdateManagedInstanceRoleResult, RusotoError<UpdateManagedInstanceRoleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateManagedInstanceRoleResult,
+                        RusotoError<UpdateManagedInstanceRoleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18838,27 +20815,33 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateManagedInstanceRoleResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateManagedInstanceRoleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateManagedInstanceRoleResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateManagedInstanceRoleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
-    async fn update_ops_item(
+    fn update_ops_item(
         &self,
         input: UpdateOpsItemRequest,
-    ) -> Result<UpdateOpsItemResponse, RusotoError<UpdateOpsItemError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateOpsItemResponse, RusotoError<UpdateOpsItemError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18866,26 +20849,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateOpsItemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateOpsItemError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateOpsItemResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateOpsItemError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
-    async fn update_patch_baseline(
+    fn update_patch_baseline(
         &self,
         input: UpdatePatchBaselineRequest,
-    ) -> Result<UpdatePatchBaselineResult, RusotoError<UpdatePatchBaselineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdatePatchBaselineResult,
+                        RusotoError<UpdatePatchBaselineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18893,27 +20887,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePatchBaselineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdatePatchBaselineResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdatePatchBaselineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update a resource data sync. After you create a resource data sync for a Region, you can't change the account options for that sync. For example, if you create a sync in the us-east-2 (Ohio) Region and you choose the Include only the current account option, you can't edit that sync later and choose the Include all accounts from my AWS Organizations configuration option. Instead, you must delete the first resource data sync, and create a new one.</p>
-    async fn update_resource_data_sync(
+    fn update_resource_data_sync(
         &self,
         input: UpdateResourceDataSyncRequest,
-    ) -> Result<UpdateResourceDataSyncResult, RusotoError<UpdateResourceDataSyncError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateResourceDataSyncResult,
+                        RusotoError<UpdateResourceDataSyncError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18921,27 +20925,37 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResourceDataSyncError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateResourceDataSyncResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateResourceDataSyncError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Or, use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Update the service setting for the account. </p>
-    async fn update_service_setting(
+    fn update_service_setting(
         &self,
         input: UpdateServiceSettingRequest,
-    ) -> Result<UpdateServiceSettingResult, RusotoError<UpdateServiceSettingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateServiceSettingResult,
+                        RusotoError<UpdateServiceSettingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -18949,19 +20963,19 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateServiceSettingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateServiceSettingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateServiceSettingResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateServiceSettingError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

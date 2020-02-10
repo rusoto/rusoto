@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>A policy type that defines the voting rules for the network. The rules decide if a proposal is approved. Approval may be based on criteria such as the percentage of <code>YES</code> votes and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ApprovalThresholdPolicy {
@@ -2069,115 +2070,219 @@ impl fmt::Display for VoteOnProposalError {
 }
 impl Error for VoteOnProposalError {}
 /// Trait representing the capabilities of the ManagedBlockchain API. ManagedBlockchain clients implement this trait.
-#[async_trait]
 pub trait ManagedBlockchain {
     /// <p>Creates a member within a Managed Blockchain network.</p>
-    async fn create_member(
+    fn create_member(
         &self,
         input: CreateMemberInput,
-    ) -> Result<CreateMemberOutput, RusotoError<CreateMemberError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMemberOutput, RusotoError<CreateMemberError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p>
-    async fn create_network(
+    fn create_network(
         &self,
         input: CreateNetworkInput,
-    ) -> Result<CreateNetworkOutput, RusotoError<CreateNetworkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateNetworkOutput, RusotoError<CreateNetworkError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a peer node in a member.</p>
-    async fn create_node(
+    fn create_node(
         &self,
         input: CreateNodeInput,
-    ) -> Result<CreateNodeOutput, RusotoError<CreateNodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateNodeOutput, RusotoError<CreateNodeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p>
-    async fn create_proposal(
+    fn create_proposal(
         &self,
         input: CreateProposalInput,
-    ) -> Result<CreateProposalOutput, RusotoError<CreateProposalError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProposalOutput, RusotoError<CreateProposalError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p>
-    async fn delete_member(
+    fn delete_member(
         &self,
         input: DeleteMemberInput,
-    ) -> Result<DeleteMemberOutput, RusotoError<DeleteMemberError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMemberOutput, RusotoError<DeleteMemberError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a peer node from a member that your AWS account owns. All data on the node is lost and cannot be recovered.</p>
-    async fn delete_node(
+    fn delete_node(
         &self,
         input: DeleteNodeInput,
-    ) -> Result<DeleteNodeOutput, RusotoError<DeleteNodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNodeOutput, RusotoError<DeleteNodeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed information about a member.</p>
-    async fn get_member(
+    fn get_member(
         &self,
         input: GetMemberInput,
-    ) -> Result<GetMemberOutput, RusotoError<GetMemberError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMemberOutput, RusotoError<GetMemberError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed information about a network.</p>
-    async fn get_network(
+    fn get_network(
         &self,
         input: GetNetworkInput,
-    ) -> Result<GetNetworkOutput, RusotoError<GetNetworkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetNetworkOutput, RusotoError<GetNetworkError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed information about a peer node.</p>
-    async fn get_node(
+    fn get_node(
         &self,
         input: GetNodeInput,
-    ) -> Result<GetNodeOutput, RusotoError<GetNodeError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetNodeOutput, RusotoError<GetNodeError>>> + Send + 'static>,
+    >;
 
     /// <p>Returns detailed information about a proposal.</p>
-    async fn get_proposal(
+    fn get_proposal(
         &self,
         input: GetProposalInput,
-    ) -> Result<GetProposalOutput, RusotoError<GetProposalError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetProposalOutput, RusotoError<GetProposalError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a listing of all invitations made on the specified network.</p>
-    async fn list_invitations(
+    fn list_invitations(
         &self,
         input: ListInvitationsInput,
-    ) -> Result<ListInvitationsOutput, RusotoError<ListInvitationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInvitationsOutput, RusotoError<ListInvitationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a listing of the members in a network and properties of their configurations.</p>
-    async fn list_members(
+    fn list_members(
         &self,
         input: ListMembersInput,
-    ) -> Result<ListMembersOutput, RusotoError<ListMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMembersOutput, RusotoError<ListMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the networks in which the current AWS account has members.</p>
-    async fn list_networks(
+    fn list_networks(
         &self,
         input: ListNetworksInput,
-    ) -> Result<ListNetworksOutput, RusotoError<ListNetworksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNetworksOutput, RusotoError<ListNetworksError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the nodes within a network.</p>
-    async fn list_nodes(
+    fn list_nodes(
         &self,
         input: ListNodesInput,
-    ) -> Result<ListNodesOutput, RusotoError<ListNodesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNodesOutput, RusotoError<ListNodesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the listing of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p>
-    async fn list_proposal_votes(
+    fn list_proposal_votes(
         &self,
         input: ListProposalVotesInput,
-    ) -> Result<ListProposalVotesOutput, RusotoError<ListProposalVotesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListProposalVotesOutput, RusotoError<ListProposalVotesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a listing of proposals for the network.</p>
-    async fn list_proposals(
+    fn list_proposals(
         &self,
         input: ListProposalsInput,
-    ) -> Result<ListProposalsOutput, RusotoError<ListProposalsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProposalsOutput, RusotoError<ListProposalsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p>
-    async fn reject_invitation(
+    fn reject_invitation(
         &self,
         input: RejectInvitationInput,
-    ) -> Result<RejectInvitationOutput, RusotoError<RejectInvitationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RejectInvitationOutput, RusotoError<RejectInvitationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
-    async fn vote_on_proposal(
+    fn vote_on_proposal(
         &self,
         input: VoteOnProposalInput,
-    ) -> Result<VoteOnProposalOutput, RusotoError<VoteOnProposalError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<VoteOnProposalOutput, RusotoError<VoteOnProposalError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the ManagedBlockchain API.
 #[derive(Clone)]
@@ -2217,13 +2322,18 @@ impl ManagedBlockchainClient {
     }
 }
 
-#[async_trait]
 impl ManagedBlockchain for ManagedBlockchainClient {
     /// <p>Creates a member within a Managed Blockchain network.</p>
-    async fn create_member(
+    fn create_member(
         &self,
         input: CreateMemberInput,
-    ) -> Result<CreateMemberOutput, RusotoError<CreateMemberError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMemberOutput, RusotoError<CreateMemberError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members",
             network_id = input.network_id
@@ -2236,28 +2346,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMemberOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMemberOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMemberError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMemberError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p>
-    async fn create_network(
+    fn create_network(
         &self,
         input: CreateNetworkInput,
-    ) -> Result<CreateNetworkOutput, RusotoError<CreateNetworkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateNetworkOutput, RusotoError<CreateNetworkError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/networks";
 
         let mut request =
@@ -2267,28 +2383,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNetworkOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateNetworkOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNetworkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateNetworkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a peer node in a member.</p>
-    async fn create_node(
+    fn create_node(
         &self,
         input: CreateNodeInput,
-    ) -> Result<CreateNodeOutput, RusotoError<CreateNodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateNodeOutput, RusotoError<CreateNodeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}/nodes",
             member_id = input.member_id,
@@ -2302,28 +2424,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p>
-    async fn create_proposal(
+    fn create_proposal(
         &self,
         input: CreateProposalInput,
-    ) -> Result<CreateProposalOutput, RusotoError<CreateProposalError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProposalOutput, RusotoError<CreateProposalError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/proposals",
             network_id = input.network_id
@@ -2336,28 +2464,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProposalOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateProposalOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProposalError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProposalError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p>
-    async fn delete_member(
+    fn delete_member(
         &self,
         input: DeleteMemberInput,
-    ) -> Result<DeleteMemberOutput, RusotoError<DeleteMemberError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMemberOutput, RusotoError<DeleteMemberError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}",
             member_id = input.member_id,
@@ -2368,28 +2502,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             SignedRequest::new("DELETE", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMemberOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMemberOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMemberError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMemberError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a peer node from a member that your AWS account owns. All data on the node is lost and cannot be recovered.</p>
-    async fn delete_node(
+    fn delete_node(
         &self,
         input: DeleteNodeInput,
-    ) -> Result<DeleteNodeOutput, RusotoError<DeleteNodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNodeOutput, RusotoError<DeleteNodeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}/nodes/{node_id}",
             member_id = input.member_id,
@@ -2401,28 +2541,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             SignedRequest::new("DELETE", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about a member.</p>
-    async fn get_member(
+    fn get_member(
         &self,
         input: GetMemberInput,
-    ) -> Result<GetMemberOutput, RusotoError<GetMemberError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMemberOutput, RusotoError<GetMemberError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}",
             member_id = input.member_id,
@@ -2433,56 +2579,64 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             SignedRequest::new("GET", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetMemberOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMemberOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMemberError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMemberError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about a network.</p>
-    async fn get_network(
+    fn get_network(
         &self,
         input: GetNetworkInput,
-    ) -> Result<GetNetworkOutput, RusotoError<GetNetworkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetNetworkOutput, RusotoError<GetNetworkError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/networks/{network_id}", network_id = input.network_id);
 
         let mut request =
             SignedRequest::new("GET", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetNetworkOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetNetworkOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNetworkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetNetworkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about a peer node.</p>
-    async fn get_node(
+    fn get_node(
         &self,
         input: GetNodeInput,
-    ) -> Result<GetNodeOutput, RusotoError<GetNodeError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetNodeOutput, RusotoError<GetNodeError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}/nodes/{node_id}",
             member_id = input.member_id,
@@ -2494,28 +2648,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             SignedRequest::new("GET", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about a proposal.</p>
-    async fn get_proposal(
+    fn get_proposal(
         &self,
         input: GetProposalInput,
-    ) -> Result<GetProposalOutput, RusotoError<GetProposalError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetProposalOutput, RusotoError<GetProposalError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/proposals/{proposal_id}",
             network_id = input.network_id,
@@ -2526,28 +2686,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             SignedRequest::new("GET", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetProposalOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetProposalOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetProposalError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetProposalError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a listing of all invitations made on the specified network.</p>
-    async fn list_invitations(
+    fn list_invitations(
         &self,
         input: ListInvitationsInput,
-    ) -> Result<ListInvitationsOutput, RusotoError<ListInvitationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInvitationsOutput, RusotoError<ListInvitationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/invitations";
 
         let mut request =
@@ -2563,28 +2729,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInvitationsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInvitationsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInvitationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInvitationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a listing of the members in a network and properties of their configurations.</p>
-    async fn list_members(
+    fn list_members(
         &self,
         input: ListMembersInput,
-    ) -> Result<ListMembersOutput, RusotoError<ListMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMembersOutput, RusotoError<ListMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members",
             network_id = input.network_id
@@ -2612,28 +2784,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMembersOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMembersOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the networks in which the current AWS account has members.</p>
-    async fn list_networks(
+    fn list_networks(
         &self,
         input: ListNetworksInput,
-    ) -> Result<ListNetworksOutput, RusotoError<ListNetworksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNetworksOutput, RusotoError<ListNetworksError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/networks";
 
         let mut request =
@@ -2658,28 +2836,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListNetworksOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListNetworksOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNetworksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListNetworksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the nodes within a network.</p>
-    async fn list_nodes(
+    fn list_nodes(
         &self,
         input: ListNodesInput,
-    ) -> Result<ListNodesOutput, RusotoError<ListNodesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNodesOutput, RusotoError<ListNodesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/members/{member_id}/nodes",
             member_id = input.member_id,
@@ -2702,28 +2886,35 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListNodesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListNodesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNodesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListNodesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the listing of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p>
-    async fn list_proposal_votes(
+    fn list_proposal_votes(
         &self,
         input: ListProposalVotesInput,
-    ) -> Result<ListProposalVotesOutput, RusotoError<ListProposalVotesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListProposalVotesOutput, RusotoError<ListProposalVotesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/proposals/{proposal_id}/votes",
             network_id = input.network_id,
@@ -2743,28 +2934,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProposalVotesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProposalVotesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProposalVotesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProposalVotesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a listing of proposals for the network.</p>
-    async fn list_proposals(
+    fn list_proposals(
         &self,
         input: ListProposalsInput,
-    ) -> Result<ListProposalsOutput, RusotoError<ListProposalsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProposalsOutput, RusotoError<ListProposalsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/proposals",
             network_id = input.network_id
@@ -2783,28 +2980,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProposalsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProposalsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProposalsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProposalsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p>
-    async fn reject_invitation(
+    fn reject_invitation(
         &self,
         input: RejectInvitationInput,
-    ) -> Result<RejectInvitationOutput, RusotoError<RejectInvitationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RejectInvitationOutput, RusotoError<RejectInvitationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/invitations/{invitation_id}",
             invitation_id = input.invitation_id
@@ -2814,28 +3017,34 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             SignedRequest::new("DELETE", "managedblockchain", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RejectInvitationOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RejectInvitationOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectInvitationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RejectInvitationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
-    async fn vote_on_proposal(
+    fn vote_on_proposal(
         &self,
         input: VoteOnProposalInput,
-    ) -> Result<VoteOnProposalOutput, RusotoError<VoteOnProposalError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<VoteOnProposalOutput, RusotoError<VoteOnProposalError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/networks/{network_id}/proposals/{proposal_id}/votes",
             network_id = input.network_id,
@@ -2849,20 +3058,20 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<VoteOnProposalOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<VoteOnProposalOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(VoteOnProposalError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(VoteOnProposalError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

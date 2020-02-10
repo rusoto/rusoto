@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteBuildsInput {
@@ -3140,209 +3141,460 @@ impl fmt::Display for UpdateWebhookError {
 }
 impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
-#[async_trait]
 pub trait CodeBuild {
     /// <p>Deletes one or more builds.</p>
-    async fn batch_delete_builds(
+    fn batch_delete_builds(
         &self,
         input: BatchDeleteBuildsInput,
-    ) -> Result<BatchDeleteBuildsOutput, RusotoError<BatchDeleteBuildsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchDeleteBuildsOutput, RusotoError<BatchDeleteBuildsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about one or more builds.</p>
-    async fn batch_get_builds(
+    fn batch_get_builds(
         &self,
         input: BatchGetBuildsInput,
-    ) -> Result<BatchGetBuildsOutput, RusotoError<BatchGetBuildsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetBuildsOutput, RusotoError<BatchGetBuildsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about one or more build projects.</p>
-    async fn batch_get_projects(
+    fn batch_get_projects(
         &self,
         input: BatchGetProjectsInput,
-    ) -> Result<BatchGetProjectsOutput, RusotoError<BatchGetProjectsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetProjectsOutput, RusotoError<BatchGetProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns an array of report groups. </p>
-    async fn batch_get_report_groups(
+    fn batch_get_report_groups(
         &self,
         input: BatchGetReportGroupsInput,
-    ) -> Result<BatchGetReportGroupsOutput, RusotoError<BatchGetReportGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchGetReportGroupsOutput,
+                        RusotoError<BatchGetReportGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns an array of reports. </p>
-    async fn batch_get_reports(
+    fn batch_get_reports(
         &self,
         input: BatchGetReportsInput,
-    ) -> Result<BatchGetReportsOutput, RusotoError<BatchGetReportsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetReportsOutput, RusotoError<BatchGetReportsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a build project.</p>
-    async fn create_project(
+    fn create_project(
         &self,
         input: CreateProjectInput,
-    ) -> Result<CreateProjectOutput, RusotoError<CreateProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProjectOutput, RusotoError<CreateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Creates a report group. A report group contains a collection of reports. </p>
-    async fn create_report_group(
+    fn create_report_group(
         &self,
         input: CreateReportGroupInput,
-    ) -> Result<CreateReportGroupOutput, RusotoError<CreateReportGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateReportGroupOutput, RusotoError<CreateReportGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, enables AWS CodeBuild to start rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds are created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you are billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in AWS CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 5 in <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
-    async fn create_webhook(
+    fn create_webhook(
         &self,
         input: CreateWebhookInput,
-    ) -> Result<CreateWebhookOutput, RusotoError<CreateWebhookError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateWebhookOutput, RusotoError<CreateWebhookError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes a build project. When you delete a project, its builds are not deleted. </p>
-    async fn delete_project(
+    fn delete_project(
         &self,
         input: DeleteProjectInput,
-    ) -> Result<DeleteProjectOutput, RusotoError<DeleteProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteProjectOutput, RusotoError<DeleteProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes a report. </p>
-    async fn delete_report(
+    fn delete_report(
         &self,
         input: DeleteReportInput,
-    ) -> Result<DeleteReportOutput, RusotoError<DeleteReportError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteReportOutput, RusotoError<DeleteReportError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> <code>DeleteReportGroup</code>: Deletes a report group. Before you delete a report group, you must delete its reports. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ListReportsForReportGroup.html">ListReportsForReportGroup</a> to get the reports in a report group. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DeleteReport.html">DeleteReport</a> to delete the reports. If you call <code>DeleteReportGroup</code> for a report group that contains one or more reports, an exception is thrown. </p>
-    async fn delete_report_group(
+    fn delete_report_group(
         &self,
         input: DeleteReportGroupInput,
-    ) -> Result<DeleteReportGroupOutput, RusotoError<DeleteReportGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteReportGroupOutput, RusotoError<DeleteReportGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes a resource policy that is identified by its resource ARN. </p>
-    async fn delete_resource_policy(
+    fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyInput,
-    ) -> Result<DeleteResourcePolicyOutput, RusotoError<DeleteResourcePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResourcePolicyOutput,
+                        RusotoError<DeleteResourcePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes a set of GitHub, GitHub Enterprise, or Bitbucket source credentials. </p>
-    async fn delete_source_credentials(
+    fn delete_source_credentials(
         &self,
         input: DeleteSourceCredentialsInput,
-    ) -> Result<DeleteSourceCredentialsOutput, RusotoError<DeleteSourceCredentialsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSourceCredentialsOutput,
+                        RusotoError<DeleteSourceCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, stops AWS CodeBuild from rebuilding the source code every time a code change is pushed to the repository.</p>
-    async fn delete_webhook(
+    fn delete_webhook(
         &self,
         input: DeleteWebhookInput,
-    ) -> Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of details about test cases for a report. </p>
-    async fn describe_test_cases(
+    fn describe_test_cases(
         &self,
         input: DescribeTestCasesInput,
-    ) -> Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a resource policy that is identified by its resource ARN. </p>
-    async fn get_resource_policy(
+    fn get_resource_policy(
         &self,
         input: GetResourcePolicyInput,
-    ) -> Result<GetResourcePolicyOutput, RusotoError<GetResourcePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetResourcePolicyOutput, RusotoError<GetResourcePolicyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Imports the source repository credentials for an AWS CodeBuild project that has its source code stored in a GitHub, GitHub Enterprise, or Bitbucket repository. </p>
-    async fn import_source_credentials(
+    fn import_source_credentials(
         &self,
         input: ImportSourceCredentialsInput,
-    ) -> Result<ImportSourceCredentialsOutput, RusotoError<ImportSourceCredentialsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ImportSourceCredentialsOutput,
+                        RusotoError<ImportSourceCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Resets the cache for a project.</p>
-    async fn invalidate_project_cache(
+    fn invalidate_project_cache(
         &self,
         input: InvalidateProjectCacheInput,
-    ) -> Result<InvalidateProjectCacheOutput, RusotoError<InvalidateProjectCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        InvalidateProjectCacheOutput,
+                        RusotoError<InvalidateProjectCacheError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
-    async fn list_builds(
+    fn list_builds(
         &self,
         input: ListBuildsInput,
-    ) -> Result<ListBuildsOutput, RusotoError<ListBuildsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBuildsOutput, RusotoError<ListBuildsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
-    async fn list_builds_for_project(
+    fn list_builds_for_project(
         &self,
         input: ListBuildsForProjectInput,
-    ) -> Result<ListBuildsForProjectOutput, RusotoError<ListBuildsForProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBuildsForProjectOutput,
+                        RusotoError<ListBuildsForProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
-    async fn list_curated_environment_images(
+    fn list_curated_environment_images(
         &self,
-    ) -> Result<ListCuratedEnvironmentImagesOutput, RusotoError<ListCuratedEnvironmentImagesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCuratedEnvironmentImagesOutput,
+                        RusotoError<ListCuratedEnvironmentImagesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
-    async fn list_projects(
+    fn list_projects(
         &self,
         input: ListProjectsInput,
-    ) -> Result<ListProjectsOutput, RusotoError<ListProjectsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProjectsOutput, RusotoError<ListProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a list ARNs for the report groups in the current AWS account. </p>
-    async fn list_report_groups(
+    fn list_report_groups(
         &self,
         input: ListReportGroupsInput,
-    ) -> Result<ListReportGroupsOutput, RusotoError<ListReportGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListReportGroupsOutput, RusotoError<ListReportGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of ARNs for the reports in the current AWS account. </p>
-    async fn list_reports(
+    fn list_reports(
         &self,
         input: ListReportsInput,
-    ) -> Result<ListReportsOutput, RusotoError<ListReportsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListReportsOutput, RusotoError<ListReportsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of ARNs for the reports that belong to a <code>ReportGroup</code>. </p>
-    async fn list_reports_for_report_group(
+    fn list_reports_for_report_group(
         &self,
         input: ListReportsForReportGroupInput,
-    ) -> Result<ListReportsForReportGroupOutput, RusotoError<ListReportsForReportGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListReportsForReportGroupOutput,
+                        RusotoError<ListReportsForReportGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a list of projects that are shared with other AWS accounts or users. </p>
-    async fn list_shared_projects(
+    fn list_shared_projects(
         &self,
         input: ListSharedProjectsInput,
-    ) -> Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a list of report groups that are shared with other AWS accounts or users. </p>
-    async fn list_shared_report_groups(
+    fn list_shared_report_groups(
         &self,
         input: ListSharedReportGroupsInput,
-    ) -> Result<ListSharedReportGroupsOutput, RusotoError<ListSharedReportGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSharedReportGroupsOutput,
+                        RusotoError<ListSharedReportGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>
-    async fn list_source_credentials(
+    fn list_source_credentials(
         &self,
-    ) -> Result<ListSourceCredentialsOutput, RusotoError<ListSourceCredentialsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSourceCredentialsOutput,
+                        RusotoError<ListSourceCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Stores a resource policy for the ARN of a <code>Project</code> or <code>ReportGroup</code> object. </p>
-    async fn put_resource_policy(
+    fn put_resource_policy(
         &self,
         input: PutResourcePolicyInput,
-    ) -> Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts running a build.</p>
-    async fn start_build(
+    fn start_build(
         &self,
         input: StartBuildInput,
-    ) -> Result<StartBuildOutput, RusotoError<StartBuildError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartBuildOutput, RusotoError<StartBuildError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Attempts to stop running a build.</p>
-    async fn stop_build(
+    fn stop_build(
         &self,
         input: StopBuildInput,
-    ) -> Result<StopBuildOutput, RusotoError<StopBuildError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopBuildOutput, RusotoError<StopBuildError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes the settings of a build project.</p>
-    async fn update_project(
+    fn update_project(
         &self,
         input: UpdateProjectInput,
-    ) -> Result<UpdateProjectOutput, RusotoError<UpdateProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateProjectOutput, RusotoError<UpdateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Updates a report group. </p>
-    async fn update_report_group(
+    fn update_report_group(
         &self,
         input: UpdateReportGroupInput,
-    ) -> Result<UpdateReportGroupOutput, RusotoError<UpdateReportGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateReportGroupOutput, RusotoError<UpdateReportGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p> Updates the webhook associated with an AWS CodeBuild build project. </p> <note> <p> If you use Bitbucket for your repository, <code>rotateSecret</code> is ignored. </p> </note></p>
-    async fn update_webhook(
+    fn update_webhook(
         &self,
         input: UpdateWebhookInput,
-    ) -> Result<UpdateWebhookOutput, RusotoError<UpdateWebhookError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateWebhookOutput, RusotoError<UpdateWebhookError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS CodeBuild API.
 #[derive(Clone)]
@@ -3382,13 +3634,19 @@ impl CodeBuildClient {
     }
 }
 
-#[async_trait]
 impl CodeBuild for CodeBuildClient {
     /// <p>Deletes one or more builds.</p>
-    async fn batch_delete_builds(
+    fn batch_delete_builds(
         &self,
         input: BatchDeleteBuildsInput,
-    ) -> Result<BatchDeleteBuildsOutput, RusotoError<BatchDeleteBuildsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchDeleteBuildsOutput, RusotoError<BatchDeleteBuildsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3396,26 +3654,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteBuildsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteBuildsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDeleteBuildsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDeleteBuildsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about one or more builds.</p>
-    async fn batch_get_builds(
+    fn batch_get_builds(
         &self,
         input: BatchGetBuildsInput,
-    ) -> Result<BatchGetBuildsOutput, RusotoError<BatchGetBuildsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetBuildsOutput, RusotoError<BatchGetBuildsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3423,26 +3688,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetBuildsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetBuildsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetBuildsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetBuildsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about one or more build projects.</p>
-    async fn batch_get_projects(
+    fn batch_get_projects(
         &self,
         input: BatchGetProjectsInput,
-    ) -> Result<BatchGetProjectsOutput, RusotoError<BatchGetProjectsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetProjectsOutput, RusotoError<BatchGetProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3450,26 +3722,37 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetProjectsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetProjectsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetProjectsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetProjectsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns an array of report groups. </p>
-    async fn batch_get_report_groups(
+    fn batch_get_report_groups(
         &self,
         input: BatchGetReportGroupsInput,
-    ) -> Result<BatchGetReportGroupsOutput, RusotoError<BatchGetReportGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchGetReportGroupsOutput,
+                        RusotoError<BatchGetReportGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3477,27 +3760,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetReportGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetReportGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetReportGroupsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetReportGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns an array of reports. </p>
-    async fn batch_get_reports(
+    fn batch_get_reports(
         &self,
         input: BatchGetReportsInput,
-    ) -> Result<BatchGetReportsOutput, RusotoError<BatchGetReportsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetReportsOutput, RusotoError<BatchGetReportsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3505,26 +3794,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetReportsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetReportsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetReportsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetReportsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a build project.</p>
-    async fn create_project(
+    fn create_project(
         &self,
         input: CreateProjectInput,
-    ) -> Result<CreateProjectOutput, RusotoError<CreateProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProjectOutput, RusotoError<CreateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3532,26 +3828,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Creates a report group. A report group contains a collection of reports. </p>
-    async fn create_report_group(
+    fn create_report_group(
         &self,
         input: CreateReportGroupInput,
-    ) -> Result<CreateReportGroupOutput, RusotoError<CreateReportGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateReportGroupOutput, RusotoError<CreateReportGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3559,26 +3862,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateReportGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateReportGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateReportGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateReportGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, enables AWS CodeBuild to start rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds are created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you are billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in AWS CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 5 in <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
-    async fn create_webhook(
+    fn create_webhook(
         &self,
         input: CreateWebhookInput,
-    ) -> Result<CreateWebhookOutput, RusotoError<CreateWebhookError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateWebhookOutput, RusotoError<CreateWebhookError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3586,26 +3896,32 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateWebhookOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateWebhookError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateWebhookOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateWebhookError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes a build project. When you delete a project, its builds are not deleted. </p>
-    async fn delete_project(
+    fn delete_project(
         &self,
         input: DeleteProjectInput,
-    ) -> Result<DeleteProjectOutput, RusotoError<DeleteProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteProjectOutput, RusotoError<DeleteProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3613,26 +3929,32 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes a report. </p>
-    async fn delete_report(
+    fn delete_report(
         &self,
         input: DeleteReportInput,
-    ) -> Result<DeleteReportOutput, RusotoError<DeleteReportError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteReportOutput, RusotoError<DeleteReportError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3640,26 +3962,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteReportOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteReportError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteReportOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteReportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> <code>DeleteReportGroup</code>: Deletes a report group. Before you delete a report group, you must delete its reports. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_ListReportsForReportGroup.html">ListReportsForReportGroup</a> to get the reports in a report group. Use <a href="https://docs.aws.amazon.com/codebuild/latest/APIReference/API_DeleteReport.html">DeleteReport</a> to delete the reports. If you call <code>DeleteReportGroup</code> for a report group that contains one or more reports, an exception is thrown. </p>
-    async fn delete_report_group(
+    fn delete_report_group(
         &self,
         input: DeleteReportGroupInput,
-    ) -> Result<DeleteReportGroupOutput, RusotoError<DeleteReportGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteReportGroupOutput, RusotoError<DeleteReportGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3667,26 +3996,37 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteReportGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteReportGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteReportGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteReportGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes a resource policy that is identified by its resource ARN. </p>
-    async fn delete_resource_policy(
+    fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyInput,
-    ) -> Result<DeleteResourcePolicyOutput, RusotoError<DeleteResourcePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResourcePolicyOutput,
+                        RusotoError<DeleteResourcePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3694,27 +4034,37 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourcePolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourcePolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteResourcePolicyOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteResourcePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes a set of GitHub, GitHub Enterprise, or Bitbucket source credentials. </p>
-    async fn delete_source_credentials(
+    fn delete_source_credentials(
         &self,
         input: DeleteSourceCredentialsInput,
-    ) -> Result<DeleteSourceCredentialsOutput, RusotoError<DeleteSourceCredentialsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSourceCredentialsOutput,
+                        RusotoError<DeleteSourceCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3722,27 +4072,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSourceCredentialsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSourceCredentialsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSourceCredentialsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSourceCredentialsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub or Bitbucket repository, stops AWS CodeBuild from rebuilding the source code every time a code change is pushed to the repository.</p>
-    async fn delete_webhook(
+    fn delete_webhook(
         &self,
         input: DeleteWebhookInput,
-    ) -> Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteWebhookOutput, RusotoError<DeleteWebhookError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3750,26 +4106,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteWebhookOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteWebhookError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteWebhookOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteWebhookError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of details about test cases for a report. </p>
-    async fn describe_test_cases(
+    fn describe_test_cases(
         &self,
         input: DescribeTestCasesInput,
-    ) -> Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeTestCasesOutput, RusotoError<DescribeTestCasesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3777,26 +4140,34 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTestCasesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTestCasesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTestCasesOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTestCasesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a resource policy that is identified by its resource ARN. </p>
-    async fn get_resource_policy(
+    fn get_resource_policy(
         &self,
         input: GetResourcePolicyInput,
-    ) -> Result<GetResourcePolicyOutput, RusotoError<GetResourcePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetResourcePolicyOutput, RusotoError<GetResourcePolicyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3804,26 +4175,37 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetResourcePolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourcePolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResourcePolicyOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResourcePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Imports the source repository credentials for an AWS CodeBuild project that has its source code stored in a GitHub, GitHub Enterprise, or Bitbucket repository. </p>
-    async fn import_source_credentials(
+    fn import_source_credentials(
         &self,
         input: ImportSourceCredentialsInput,
-    ) -> Result<ImportSourceCredentialsOutput, RusotoError<ImportSourceCredentialsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ImportSourceCredentialsOutput,
+                        RusotoError<ImportSourceCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3831,27 +4213,37 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportSourceCredentialsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportSourceCredentialsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ImportSourceCredentialsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ImportSourceCredentialsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Resets the cache for a project.</p>
-    async fn invalidate_project_cache(
+    fn invalidate_project_cache(
         &self,
         input: InvalidateProjectCacheInput,
-    ) -> Result<InvalidateProjectCacheOutput, RusotoError<InvalidateProjectCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        InvalidateProjectCacheOutput,
+                        RusotoError<InvalidateProjectCacheError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3859,27 +4251,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<InvalidateProjectCacheOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InvalidateProjectCacheError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<InvalidateProjectCacheOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(InvalidateProjectCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
-    async fn list_builds(
+    fn list_builds(
         &self,
         input: ListBuildsInput,
-    ) -> Result<ListBuildsOutput, RusotoError<ListBuildsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBuildsOutput, RusotoError<ListBuildsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3887,26 +4285,36 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListBuildsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBuildsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListBuildsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBuildsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
-    async fn list_builds_for_project(
+    fn list_builds_for_project(
         &self,
         input: ListBuildsForProjectInput,
-    ) -> Result<ListBuildsForProjectOutput, RusotoError<ListBuildsForProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBuildsForProjectOutput,
+                        RusotoError<ListBuildsForProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3914,27 +4322,36 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBuildsForProjectOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBuildsForProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBuildsForProjectOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBuildsForProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
-    async fn list_curated_environment_images(
+    fn list_curated_environment_images(
         &self,
-    ) -> Result<ListCuratedEnvironmentImagesOutput, RusotoError<ListCuratedEnvironmentImagesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCuratedEnvironmentImagesOutput,
+                        RusotoError<ListCuratedEnvironmentImagesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3944,27 +4361,33 @@ impl CodeBuild for CodeBuildClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCuratedEnvironmentImagesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCuratedEnvironmentImagesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListCuratedEnvironmentImagesOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCuratedEnvironmentImagesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
-    async fn list_projects(
+    fn list_projects(
         &self,
         input: ListProjectsInput,
-    ) -> Result<ListProjectsOutput, RusotoError<ListProjectsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProjectsOutput, RusotoError<ListProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3972,26 +4395,32 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProjectsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProjectsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a list ARNs for the report groups in the current AWS account. </p>
-    async fn list_report_groups(
+    fn list_report_groups(
         &self,
         input: ListReportGroupsInput,
-    ) -> Result<ListReportGroupsOutput, RusotoError<ListReportGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListReportGroupsOutput, RusotoError<ListReportGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3999,26 +4428,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListReportGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListReportGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListReportGroupsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListReportGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of ARNs for the reports in the current AWS account. </p>
-    async fn list_reports(
+    fn list_reports(
         &self,
         input: ListReportsInput,
-    ) -> Result<ListReportsOutput, RusotoError<ListReportsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListReportsOutput, RusotoError<ListReportsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4026,26 +4462,36 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListReportsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListReportsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListReportsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListReportsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of ARNs for the reports that belong to a <code>ReportGroup</code>. </p>
-    async fn list_reports_for_report_group(
+    fn list_reports_for_report_group(
         &self,
         input: ListReportsForReportGroupInput,
-    ) -> Result<ListReportsForReportGroupOutput, RusotoError<ListReportsForReportGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListReportsForReportGroupOutput,
+                        RusotoError<ListReportsForReportGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4056,27 +4502,34 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListReportsForReportGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListReportsForReportGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListReportsForReportGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListReportsForReportGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a list of projects that are shared with other AWS accounts or users. </p>
-    async fn list_shared_projects(
+    fn list_shared_projects(
         &self,
         input: ListSharedProjectsInput,
-    ) -> Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListSharedProjectsOutput, RusotoError<ListSharedProjectsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4084,27 +4537,37 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSharedProjectsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSharedProjectsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSharedProjectsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSharedProjectsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a list of report groups that are shared with other AWS accounts or users. </p>
-    async fn list_shared_report_groups(
+    fn list_shared_report_groups(
         &self,
         input: ListSharedReportGroupsInput,
-    ) -> Result<ListSharedReportGroupsOutput, RusotoError<ListSharedReportGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSharedReportGroupsOutput,
+                        RusotoError<ListSharedReportGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4112,53 +4575,70 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSharedReportGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSharedReportGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSharedReportGroupsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSharedReportGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of <code>SourceCredentialsInfo</code> objects. </p>
-    async fn list_source_credentials(
+    fn list_source_credentials(
         &self,
-    ) -> Result<ListSourceCredentialsOutput, RusotoError<ListSourceCredentialsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSourceCredentialsOutput,
+                        RusotoError<ListSourceCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListSourceCredentials");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSourceCredentialsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSourceCredentialsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSourceCredentialsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSourceCredentialsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Stores a resource policy for the ARN of a <code>Project</code> or <code>ReportGroup</code> object. </p>
-    async fn put_resource_policy(
+    fn put_resource_policy(
         &self,
         input: PutResourcePolicyInput,
-    ) -> Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PutResourcePolicyOutput, RusotoError<PutResourcePolicyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4166,26 +4646,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutResourcePolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutResourcePolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutResourcePolicyOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutResourcePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts running a build.</p>
-    async fn start_build(
+    fn start_build(
         &self,
         input: StartBuildInput,
-    ) -> Result<StartBuildOutput, RusotoError<StartBuildError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartBuildOutput, RusotoError<StartBuildError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4193,26 +4680,32 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartBuildOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartBuildError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<StartBuildOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartBuildError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Attempts to stop running a build.</p>
-    async fn stop_build(
+    fn stop_build(
         &self,
         input: StopBuildInput,
-    ) -> Result<StopBuildOutput, RusotoError<StopBuildError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopBuildOutput, RusotoError<StopBuildError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4220,26 +4713,32 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopBuildOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopBuildError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<StopBuildOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopBuildError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes the settings of a build project.</p>
-    async fn update_project(
+    fn update_project(
         &self,
         input: UpdateProjectInput,
-    ) -> Result<UpdateProjectOutput, RusotoError<UpdateProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateProjectOutput, RusotoError<UpdateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4247,26 +4746,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Updates a report group. </p>
-    async fn update_report_group(
+    fn update_report_group(
         &self,
         input: UpdateReportGroupInput,
-    ) -> Result<UpdateReportGroupOutput, RusotoError<UpdateReportGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateReportGroupOutput, RusotoError<UpdateReportGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4274,26 +4780,33 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateReportGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateReportGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateReportGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateReportGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p> Updates the webhook associated with an AWS CodeBuild build project. </p> <note> <p> If you use Bitbucket for your repository, <code>rotateSecret</code> is ignored. </p> </note></p>
-    async fn update_webhook(
+    fn update_webhook(
         &self,
         input: UpdateWebhookInput,
-    ) -> Result<UpdateWebhookOutput, RusotoError<UpdateWebhookError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateWebhookOutput, RusotoError<UpdateWebhookError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4301,18 +4814,18 @@ impl CodeBuild for CodeBuildClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateWebhookOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateWebhookError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateWebhookOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateWebhookError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

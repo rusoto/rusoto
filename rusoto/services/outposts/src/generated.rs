@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOutpostInput {
@@ -410,37 +411,70 @@ impl fmt::Display for ListSitesError {
 }
 impl Error for ListSitesError {}
 /// Trait representing the capabilities of the Outposts API. Outposts clients implement this trait.
-#[async_trait]
 pub trait Outposts {
     /// <p>Creates an Outpost.</p>
-    async fn create_outpost(
+    fn create_outpost(
         &self,
         input: CreateOutpostInput,
-    ) -> Result<CreateOutpostOutput, RusotoError<CreateOutpostError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateOutpostOutput, RusotoError<CreateOutpostError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the specified Outpost.</p>
-    async fn get_outpost(
+    fn get_outpost(
         &self,
         input: GetOutpostInput,
-    ) -> Result<GetOutpostOutput, RusotoError<GetOutpostError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOutpostOutput, RusotoError<GetOutpostError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the instance types for the specified Outpost.</p>
-    async fn get_outpost_instance_types(
+    fn get_outpost_instance_types(
         &self,
         input: GetOutpostInstanceTypesInput,
-    ) -> Result<GetOutpostInstanceTypesOutput, RusotoError<GetOutpostInstanceTypesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetOutpostInstanceTypesOutput,
+                        RusotoError<GetOutpostInstanceTypesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the Outposts for your AWS account.</p>
-    async fn list_outposts(
+    fn list_outposts(
         &self,
         input: ListOutpostsInput,
-    ) -> Result<ListOutpostsOutput, RusotoError<ListOutpostsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOutpostsOutput, RusotoError<ListOutpostsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the sites for the specified AWS account.</p>
-    async fn list_sites(
+    fn list_sites(
         &self,
         input: ListSitesInput,
-    ) -> Result<ListSitesOutput, RusotoError<ListSitesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSitesOutput, RusotoError<ListSitesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Outposts API.
 #[derive(Clone)]
@@ -480,13 +514,18 @@ impl OutpostsClient {
     }
 }
 
-#[async_trait]
 impl Outposts for OutpostsClient {
     /// <p>Creates an Outpost.</p>
-    async fn create_outpost(
+    fn create_outpost(
         &self,
         input: CreateOutpostInput,
-    ) -> Result<CreateOutpostOutput, RusotoError<CreateOutpostError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateOutpostOutput, RusotoError<CreateOutpostError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/outposts";
 
         let mut request = SignedRequest::new("POST", "outposts", &self.region, &request_uri);
@@ -495,55 +534,71 @@ impl Outposts for OutpostsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateOutpostOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateOutpostOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateOutpostError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateOutpostError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the specified Outpost.</p>
-    async fn get_outpost(
+    fn get_outpost(
         &self,
         input: GetOutpostInput,
-    ) -> Result<GetOutpostOutput, RusotoError<GetOutpostError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOutpostOutput, RusotoError<GetOutpostError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/outposts/{outpost_id}", outpost_id = input.outpost_id);
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOutpostOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetOutpostOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOutpostError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOutpostError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the instance types for the specified Outpost.</p>
-    async fn get_outpost_instance_types(
+    fn get_outpost_instance_types(
         &self,
         input: GetOutpostInstanceTypesInput,
-    ) -> Result<GetOutpostInstanceTypesOutput, RusotoError<GetOutpostInstanceTypesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetOutpostInstanceTypesOutput,
+                        RusotoError<GetOutpostInstanceTypesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/outposts/{outpost_id}/instanceTypes",
             outpost_id = input.outpost_id
@@ -561,28 +616,34 @@ impl Outposts for OutpostsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOutpostInstanceTypesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetOutpostInstanceTypesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOutpostInstanceTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOutpostInstanceTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the Outposts for your AWS account.</p>
-    async fn list_outposts(
+    fn list_outposts(
         &self,
         input: ListOutpostsInput,
-    ) -> Result<ListOutpostsOutput, RusotoError<ListOutpostsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOutpostsOutput, RusotoError<ListOutpostsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/outposts";
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
@@ -597,28 +658,34 @@ impl Outposts for OutpostsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOutpostsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOutpostsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOutpostsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOutpostsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the sites for the specified AWS account.</p>
-    async fn list_sites(
+    fn list_sites(
         &self,
         input: ListSitesInput,
-    ) -> Result<ListSitesOutput, RusotoError<ListSitesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSitesOutput, RusotoError<ListSitesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/sites";
 
         let mut request = SignedRequest::new("GET", "outposts", &self.region, &request_uri);
@@ -633,20 +700,20 @@ impl Outposts for OutpostsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListSitesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSitesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSitesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSitesError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

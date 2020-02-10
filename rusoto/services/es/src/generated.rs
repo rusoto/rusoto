@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2604,170 +2605,334 @@ impl fmt::Display for UpgradeElasticsearchDomainError {
 }
 impl Error for UpgradeElasticsearchDomainError {}
 /// Trait representing the capabilities of the Amazon Elasticsearch Service API. Amazon Elasticsearch Service clients implement this trait.
-#[async_trait]
 pub trait Es {
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
-    async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>>;
+    fn add_tags(
+        &self,
+        input: AddTagsRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<AddTagsError>>> + Send + 'static>>;
 
     /// <p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>
-    async fn cancel_elasticsearch_service_software_update(
+    fn cancel_elasticsearch_service_software_update(
         &self,
         input: CancelElasticsearchServiceSoftwareUpdateRequest,
-    ) -> Result<
-        CancelElasticsearchServiceSoftwareUpdateResponse,
-        RusotoError<CancelElasticsearchServiceSoftwareUpdateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelElasticsearchServiceSoftwareUpdateResponse,
+                        RusotoError<CancelElasticsearchServiceSoftwareUpdateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Creates a new Elasticsearch domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains" target="_blank">Creating Elasticsearch Domains</a> in the <i>Amazon Elasticsearch Service Developer Guide</i>.</p>
-    async fn create_elasticsearch_domain(
+    fn create_elasticsearch_domain(
         &self,
         input: CreateElasticsearchDomainRequest,
-    ) -> Result<CreateElasticsearchDomainResponse, RusotoError<CreateElasticsearchDomainError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateElasticsearchDomainResponse,
+                        RusotoError<CreateElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>
-    async fn delete_elasticsearch_domain(
+    fn delete_elasticsearch_domain(
         &self,
         input: DeleteElasticsearchDomainRequest,
-    ) -> Result<DeleteElasticsearchDomainResponse, RusotoError<DeleteElasticsearchDomainError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteElasticsearchDomainResponse,
+                        RusotoError<DeleteElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the service-linked role that Elasticsearch Service uses to manage and maintain VPC domains. Role deletion will fail if any existing VPC domains use the role. You must delete any such Elasticsearch domains before deleting the role. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-enabling-slr" target="_blank">Deleting Elasticsearch Service Role</a> in <i>VPC Endpoints for Amazon Elasticsearch Service Domains</i>.</p>
-    async fn delete_elasticsearch_service_role(
+    fn delete_elasticsearch_service_role(
         &self,
-    ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteElasticsearchServiceRoleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>
-    async fn describe_elasticsearch_domain(
+    fn describe_elasticsearch_domain(
         &self,
         input: DescribeElasticsearchDomainRequest,
-    ) -> Result<DescribeElasticsearchDomainResponse, RusotoError<DescribeElasticsearchDomainError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchDomainResponse,
+                        RusotoError<DescribeElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides cluster configuration information about the specified Elasticsearch domain, such as the state, creation date, update version, and update date for cluster options.</p>
-    async fn describe_elasticsearch_domain_config(
+    fn describe_elasticsearch_domain_config(
         &self,
         input: DescribeElasticsearchDomainConfigRequest,
-    ) -> Result<
-        DescribeElasticsearchDomainConfigResponse,
-        RusotoError<DescribeElasticsearchDomainConfigError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchDomainConfigResponse,
+                        RusotoError<DescribeElasticsearchDomainConfigError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domains, including the domain ID, domain endpoint, and domain ARN.</p>
-    async fn describe_elasticsearch_domains(
+    fn describe_elasticsearch_domains(
         &self,
         input: DescribeElasticsearchDomainsRequest,
-    ) -> Result<DescribeElasticsearchDomainsResponse, RusotoError<DescribeElasticsearchDomainsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchDomainsResponse,
+                        RusotoError<DescribeElasticsearchDomainsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Describe Elasticsearch Limits for a given InstanceType and ElasticsearchVersion. When modifying existing Domain, specify the <code> <a>DomainName</a> </code> to know what Limits are supported for modifying. </p>
-    async fn describe_elasticsearch_instance_type_limits(
+    fn describe_elasticsearch_instance_type_limits(
         &self,
         input: DescribeElasticsearchInstanceTypeLimitsRequest,
-    ) -> Result<
-        DescribeElasticsearchInstanceTypeLimitsResponse,
-        RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchInstanceTypeLimitsResponse,
+                        RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists available reserved Elasticsearch instance offerings.</p>
-    async fn describe_reserved_elasticsearch_instance_offerings(
+    fn describe_reserved_elasticsearch_instance_offerings(
         &self,
         input: DescribeReservedElasticsearchInstanceOfferingsRequest,
-    ) -> Result<
-        DescribeReservedElasticsearchInstanceOfferingsResponse,
-        RusotoError<DescribeReservedElasticsearchInstanceOfferingsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeReservedElasticsearchInstanceOfferingsResponse,
+                        RusotoError<DescribeReservedElasticsearchInstanceOfferingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns information about reserved Elasticsearch instances for this account.</p>
-    async fn describe_reserved_elasticsearch_instances(
+    fn describe_reserved_elasticsearch_instances(
         &self,
         input: DescribeReservedElasticsearchInstancesRequest,
-    ) -> Result<
-        DescribeReservedElasticsearchInstancesResponse,
-        RusotoError<DescribeReservedElasticsearchInstancesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeReservedElasticsearchInstancesResponse,
+                        RusotoError<DescribeReservedElasticsearchInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Returns a list of upgrade compatible Elastisearch versions. You can optionally pass a <code> <a>DomainName</a> </code> to get all upgrade compatible Elasticsearch versions for that specific domain. </p>
-    async fn get_compatible_elasticsearch_versions(
+    fn get_compatible_elasticsearch_versions(
         &self,
         input: GetCompatibleElasticsearchVersionsRequest,
-    ) -> Result<
-        GetCompatibleElasticsearchVersionsResponse,
-        RusotoError<GetCompatibleElasticsearchVersionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCompatibleElasticsearchVersionsResponse,
+                        RusotoError<GetCompatibleElasticsearchVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves the complete history of the last 10 upgrades that were performed on the domain.</p>
-    async fn get_upgrade_history(
+    fn get_upgrade_history(
         &self,
         input: GetUpgradeHistoryRequest,
-    ) -> Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the latest status of the last upgrade or upgrade eligibility check that was performed on the domain.</p>
-    async fn get_upgrade_status(
+    fn get_upgrade_status(
         &self,
         input: GetUpgradeStatusRequest,
-    ) -> Result<GetUpgradeStatusResponse, RusotoError<GetUpgradeStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetUpgradeStatusResponse, RusotoError<GetUpgradeStatusError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the name of all Elasticsearch domains owned by the current user's account. </p>
-    async fn list_domain_names(
+    fn list_domain_names(
         &self,
-    ) -> Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>
-    async fn list_elasticsearch_instance_types(
+    fn list_elasticsearch_instance_types(
         &self,
         input: ListElasticsearchInstanceTypesRequest,
-    ) -> Result<
-        ListElasticsearchInstanceTypesResponse,
-        RusotoError<ListElasticsearchInstanceTypesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListElasticsearchInstanceTypesResponse,
+                        RusotoError<ListElasticsearchInstanceTypesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>List all supported Elasticsearch versions</p>
-    async fn list_elasticsearch_versions(
+    fn list_elasticsearch_versions(
         &self,
         input: ListElasticsearchVersionsRequest,
-    ) -> Result<ListElasticsearchVersionsResponse, RusotoError<ListElasticsearchVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListElasticsearchVersionsResponse,
+                        RusotoError<ListElasticsearchVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns all tags for the given Elasticsearch domain.</p>
-    async fn list_tags(
+    fn list_tags(
         &self,
         input: ListTagsRequest,
-    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTagsResponse, RusotoError<ListTagsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Allows you to purchase reserved Elasticsearch instances.</p>
-    async fn purchase_reserved_elasticsearch_instance_offering(
+    fn purchase_reserved_elasticsearch_instance_offering(
         &self,
         input: PurchaseReservedElasticsearchInstanceOfferingRequest,
-    ) -> Result<
-        PurchaseReservedElasticsearchInstanceOfferingResponse,
-        RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PurchaseReservedElasticsearchInstanceOfferingResponse,
+                        RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes the specified set of tags from the specified Elasticsearch domain.</p>
-    async fn remove_tags(
+    fn remove_tags(
         &self,
         input: RemoveTagsRequest,
-    ) -> Result<(), RusotoError<RemoveTagsError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<RemoveTagsError>>> + Send + 'static>>;
 
     /// <p>Schedules a service software update for an Amazon ES domain.</p>
-    async fn start_elasticsearch_service_software_update(
+    fn start_elasticsearch_service_software_update(
         &self,
         input: StartElasticsearchServiceSoftwareUpdateRequest,
-    ) -> Result<
-        StartElasticsearchServiceSoftwareUpdateResponse,
-        RusotoError<StartElasticsearchServiceSoftwareUpdateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartElasticsearchServiceSoftwareUpdateResponse,
+                        RusotoError<StartElasticsearchServiceSoftwareUpdateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Modifies the cluster configuration of the specified Elasticsearch domain, setting as setting the instance type and the number of instances. </p>
-    async fn update_elasticsearch_domain_config(
+    fn update_elasticsearch_domain_config(
         &self,
         input: UpdateElasticsearchDomainConfigRequest,
-    ) -> Result<
-        UpdateElasticsearchDomainConfigResponse,
-        RusotoError<UpdateElasticsearchDomainConfigError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateElasticsearchDomainConfigResponse,
+                        RusotoError<UpdateElasticsearchDomainConfigError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Allows you to either upgrade your domain or perform an Upgrade eligibility check to a compatible Elasticsearch version.</p>
-    async fn upgrade_elasticsearch_domain(
+    fn upgrade_elasticsearch_domain(
         &self,
         input: UpgradeElasticsearchDomainRequest,
-    ) -> Result<UpgradeElasticsearchDomainResponse, RusotoError<UpgradeElasticsearchDomainError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpgradeElasticsearchDomainResponse,
+                        RusotoError<UpgradeElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Elasticsearch Service API.
 #[derive(Clone)]
@@ -2807,10 +2972,12 @@ impl EsClient {
     }
 }
 
-#[async_trait]
 impl Es for EsClient {
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
-    async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>> {
+    fn add_tags(
+        &self,
+        input: AddTagsRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<AddTagsError>>> + Send + 'static>> {
         let request_uri = "/2015-01-01/tags";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -2819,29 +2986,36 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AddTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>
-    async fn cancel_elasticsearch_service_software_update(
+    fn cancel_elasticsearch_service_software_update(
         &self,
         input: CancelElasticsearchServiceSoftwareUpdateRequest,
-    ) -> Result<
-        CancelElasticsearchServiceSoftwareUpdateResponse,
-        RusotoError<CancelElasticsearchServiceSoftwareUpdateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelElasticsearchServiceSoftwareUpdateResponse,
+                        RusotoError<CancelElasticsearchServiceSoftwareUpdateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/2015-01-01/es/serviceSoftwareUpdate/cancel";
 
@@ -2851,29 +3025,39 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelElasticsearchServiceSoftwareUpdateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelElasticsearchServiceSoftwareUpdateResponse, _>(
+                )?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelElasticsearchServiceSoftwareUpdateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelElasticsearchServiceSoftwareUpdateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new Elasticsearch domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains" target="_blank">Creating Elasticsearch Domains</a> in the <i>Amazon Elasticsearch Service Developer Guide</i>.</p>
-    async fn create_elasticsearch_domain(
+    fn create_elasticsearch_domain(
         &self,
         input: CreateElasticsearchDomainRequest,
-    ) -> Result<CreateElasticsearchDomainResponse, RusotoError<CreateElasticsearchDomainError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateElasticsearchDomainResponse,
+                        RusotoError<CreateElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/es/domain";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -2882,29 +3066,38 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateElasticsearchDomainResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateElasticsearchDomainResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateElasticsearchDomainError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateElasticsearchDomainError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>
-    async fn delete_elasticsearch_domain(
+    fn delete_elasticsearch_domain(
         &self,
         input: DeleteElasticsearchDomainRequest,
-    ) -> Result<DeleteElasticsearchDomainResponse, RusotoError<DeleteElasticsearchDomainError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteElasticsearchDomainResponse,
+                        RusotoError<DeleteElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}",
             domain_name = input.domain_name
@@ -2913,54 +3106,69 @@ impl Es for EsClient {
         let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteElasticsearchDomainResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteElasticsearchDomainResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteElasticsearchDomainError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteElasticsearchDomainError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the service-linked role that Elasticsearch Service uses to manage and maintain VPC domains. Role deletion will fail if any existing VPC domains use the role. You must delete any such Elasticsearch domains before deleting the role. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-enabling-slr" target="_blank">Deleting Elasticsearch Service Role</a> in <i>VPC Endpoints for Amazon Elasticsearch Service Domains</i>.</p>
-    async fn delete_elasticsearch_service_role(
+    fn delete_elasticsearch_service_role(
         &self,
-    ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteElasticsearchServiceRoleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/es/role";
 
         let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteElasticsearchServiceRoleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteElasticsearchServiceRoleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>
-    async fn describe_elasticsearch_domain(
+    fn describe_elasticsearch_domain(
         &self,
         input: DescribeElasticsearchDomainRequest,
-    ) -> Result<DescribeElasticsearchDomainResponse, RusotoError<DescribeElasticsearchDomainError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchDomainResponse,
+                        RusotoError<DescribeElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}",
             domain_name = input.domain_name
@@ -2969,30 +3177,37 @@ impl Es for EsClient {
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeElasticsearchDomainResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeElasticsearchDomainResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeElasticsearchDomainError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeElasticsearchDomainError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides cluster configuration information about the specified Elasticsearch domain, such as the state, creation date, update version, and update date for cluster options.</p>
-    async fn describe_elasticsearch_domain_config(
+    fn describe_elasticsearch_domain_config(
         &self,
         input: DescribeElasticsearchDomainConfigRequest,
-    ) -> Result<
-        DescribeElasticsearchDomainConfigResponse,
-        RusotoError<DescribeElasticsearchDomainConfigError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchDomainConfigResponse,
+                        RusotoError<DescribeElasticsearchDomainConfigError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}/config",
@@ -3002,31 +3217,40 @@ impl Es for EsClient {
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeElasticsearchDomainConfigResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeElasticsearchDomainConfigResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeElasticsearchDomainConfigError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeElasticsearchDomainConfigError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domains, including the domain ID, domain endpoint, and domain ARN.</p>
-    async fn describe_elasticsearch_domains(
+    fn describe_elasticsearch_domains(
         &self,
         input: DescribeElasticsearchDomainsRequest,
-    ) -> Result<DescribeElasticsearchDomainsResponse, RusotoError<DescribeElasticsearchDomainsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchDomainsResponse,
+                        RusotoError<DescribeElasticsearchDomainsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/es/domain-info";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -3035,30 +3259,37 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeElasticsearchDomainsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeElasticsearchDomainsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeElasticsearchDomainsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeElasticsearchDomainsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Describe Elasticsearch Limits for a given InstanceType and ElasticsearchVersion. When modifying existing Domain, specify the <code> <a>DomainName</a> </code> to know what Limits are supported for modifying. </p>
-    async fn describe_elasticsearch_instance_type_limits(
+    fn describe_elasticsearch_instance_type_limits(
         &self,
         input: DescribeElasticsearchInstanceTypeLimitsRequest,
-    ) -> Result<
-        DescribeElasticsearchInstanceTypeLimitsResponse,
-        RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeElasticsearchInstanceTypeLimitsResponse,
+                        RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/2015-01-01/es/instanceTypeLimits/{elasticsearch_version}/{instance_type}",
@@ -3075,32 +3306,39 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeElasticsearchInstanceTypeLimitsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeElasticsearchInstanceTypeLimitsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeElasticsearchInstanceTypeLimitsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeElasticsearchInstanceTypeLimitsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists available reserved Elasticsearch instance offerings.</p>
-    async fn describe_reserved_elasticsearch_instance_offerings(
+    fn describe_reserved_elasticsearch_instance_offerings(
         &self,
         input: DescribeReservedElasticsearchInstanceOfferingsRequest,
-    ) -> Result<
-        DescribeReservedElasticsearchInstanceOfferingsResponse,
-        RusotoError<DescribeReservedElasticsearchInstanceOfferingsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeReservedElasticsearchInstanceOfferingsResponse,
+                        RusotoError<DescribeReservedElasticsearchInstanceOfferingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/2015-01-01/es/reservedInstanceOfferings";
 
@@ -3119,31 +3357,38 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeReservedElasticsearchInstanceOfferingsResponse, _>(
-            )?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeReservedElasticsearchInstanceOfferingsResponse, _>(
+                )?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeReservedElasticsearchInstanceOfferingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeReservedElasticsearchInstanceOfferingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about reserved Elasticsearch instances for this account.</p>
-    async fn describe_reserved_elasticsearch_instances(
+    fn describe_reserved_elasticsearch_instances(
         &self,
         input: DescribeReservedElasticsearchInstancesRequest,
-    ) -> Result<
-        DescribeReservedElasticsearchInstancesResponse,
-        RusotoError<DescribeReservedElasticsearchInstancesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeReservedElasticsearchInstancesResponse,
+                        RusotoError<DescribeReservedElasticsearchInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/2015-01-01/es/reservedInstances";
 
@@ -3162,32 +3407,39 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeReservedElasticsearchInstancesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeReservedElasticsearchInstancesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeReservedElasticsearchInstancesError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeReservedElasticsearchInstancesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of upgrade compatible Elastisearch versions. You can optionally pass a <code> <a>DomainName</a> </code> to get all upgrade compatible Elasticsearch versions for that specific domain. </p>
-    async fn get_compatible_elasticsearch_versions(
+    fn get_compatible_elasticsearch_versions(
         &self,
         input: GetCompatibleElasticsearchVersionsRequest,
-    ) -> Result<
-        GetCompatibleElasticsearchVersionsResponse,
-        RusotoError<GetCompatibleElasticsearchVersionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCompatibleElasticsearchVersionsResponse,
+                        RusotoError<GetCompatibleElasticsearchVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/2015-01-01/es/compatibleVersions";
 
@@ -3200,30 +3452,37 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCompatibleElasticsearchVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetCompatibleElasticsearchVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCompatibleElasticsearchVersionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCompatibleElasticsearchVersionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the complete history of the last 10 upgrades that were performed on the domain.</p>
-    async fn get_upgrade_history(
+    fn get_upgrade_history(
         &self,
         input: GetUpgradeHistoryRequest,
-    ) -> Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetUpgradeHistoryResponse, RusotoError<GetUpgradeHistoryError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/2015-01-01/es/upgradeDomain/{domain_name}/history",
             domain_name = input.domain_name
@@ -3241,28 +3500,35 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUpgradeHistoryResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetUpgradeHistoryResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUpgradeHistoryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUpgradeHistoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the latest status of the last upgrade or upgrade eligibility check that was performed on the domain.</p>
-    async fn get_upgrade_status(
+    fn get_upgrade_status(
         &self,
         input: GetUpgradeStatusRequest,
-    ) -> Result<GetUpgradeStatusResponse, RusotoError<GetUpgradeStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetUpgradeStatusResponse, RusotoError<GetUpgradeStatusError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/2015-01-01/es/upgradeDomain/{domain_name}/status",
             domain_name = input.domain_name
@@ -3271,56 +3537,69 @@ impl Es for EsClient {
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUpgradeStatusResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetUpgradeStatusResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUpgradeStatusError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUpgradeStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the name of all Elasticsearch domains owned by the current user's account. </p>
-    async fn list_domain_names(
+    fn list_domain_names(
         &self,
-    ) -> Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/domain";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDomainNamesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDomainNamesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDomainNamesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDomainNamesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>
-    async fn list_elasticsearch_instance_types(
+    fn list_elasticsearch_instance_types(
         &self,
         input: ListElasticsearchInstanceTypesRequest,
-    ) -> Result<
-        ListElasticsearchInstanceTypesResponse,
-        RusotoError<ListElasticsearchInstanceTypesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListElasticsearchInstanceTypesResponse,
+                        RusotoError<ListElasticsearchInstanceTypesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/2015-01-01/es/instanceTypes/{elasticsearch_version}",
@@ -3342,29 +3621,38 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListElasticsearchInstanceTypesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListElasticsearchInstanceTypesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListElasticsearchInstanceTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListElasticsearchInstanceTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all supported Elasticsearch versions</p>
-    async fn list_elasticsearch_versions(
+    fn list_elasticsearch_versions(
         &self,
         input: ListElasticsearchVersionsRequest,
-    ) -> Result<ListElasticsearchVersionsResponse, RusotoError<ListElasticsearchVersionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListElasticsearchVersionsResponse,
+                        RusotoError<ListElasticsearchVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/es/versions";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -3379,28 +3667,34 @@ impl Es for EsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListElasticsearchVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListElasticsearchVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListElasticsearchVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListElasticsearchVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns all tags for the given Elasticsearch domain.</p>
-    async fn list_tags(
+    fn list_tags(
         &self,
         input: ListTagsRequest,
-    ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTagsResponse, RusotoError<ListTagsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/tags/";
 
         let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
@@ -3410,30 +3704,37 @@ impl Es for EsClient {
         params.put("arn", &input.arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Allows you to purchase reserved Elasticsearch instances.</p>
-    async fn purchase_reserved_elasticsearch_instance_offering(
+    fn purchase_reserved_elasticsearch_instance_offering(
         &self,
         input: PurchaseReservedElasticsearchInstanceOfferingRequest,
-    ) -> Result<
-        PurchaseReservedElasticsearchInstanceOfferingResponse,
-        RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PurchaseReservedElasticsearchInstanceOfferingResponse,
+                        RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/2015-01-01/es/purchaseReservedInstanceOffering";
 
@@ -3443,29 +3744,30 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PurchaseReservedElasticsearchInstanceOfferingResponse, _>(
-            )?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PurchaseReservedElasticsearchInstanceOfferingResponse, _>(
+                )?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PurchaseReservedElasticsearchInstanceOfferingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PurchaseReservedElasticsearchInstanceOfferingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified set of tags from the specified Elasticsearch domain.</p>
-    async fn remove_tags(
+    fn remove_tags(
         &self,
         input: RemoveTagsRequest,
-    ) -> Result<(), RusotoError<RemoveTagsError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<RemoveTagsError>>> + Send + 'static>>
+    {
         let request_uri = "/2015-01-01/tags-removal";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -3474,29 +3776,36 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Schedules a service software update for an Amazon ES domain.</p>
-    async fn start_elasticsearch_service_software_update(
+    fn start_elasticsearch_service_software_update(
         &self,
         input: StartElasticsearchServiceSoftwareUpdateRequest,
-    ) -> Result<
-        StartElasticsearchServiceSoftwareUpdateResponse,
-        RusotoError<StartElasticsearchServiceSoftwareUpdateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartElasticsearchServiceSoftwareUpdateResponse,
+                        RusotoError<StartElasticsearchServiceSoftwareUpdateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/2015-01-01/es/serviceSoftwareUpdate/start";
 
@@ -3506,32 +3815,39 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartElasticsearchServiceSoftwareUpdateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartElasticsearchServiceSoftwareUpdateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartElasticsearchServiceSoftwareUpdateError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartElasticsearchServiceSoftwareUpdateError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modifies the cluster configuration of the specified Elasticsearch domain, setting as setting the instance type and the number of instances. </p>
-    async fn update_elasticsearch_domain_config(
+    fn update_elasticsearch_domain_config(
         &self,
         input: UpdateElasticsearchDomainConfigRequest,
-    ) -> Result<
-        UpdateElasticsearchDomainConfigResponse,
-        RusotoError<UpdateElasticsearchDomainConfigError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateElasticsearchDomainConfigResponse,
+                        RusotoError<UpdateElasticsearchDomainConfigError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/2015-01-01/es/domain/{domain_name}/config",
@@ -3544,31 +3860,40 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateElasticsearchDomainConfigResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateElasticsearchDomainConfigResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateElasticsearchDomainConfigError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateElasticsearchDomainConfigError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Allows you to either upgrade your domain or perform an Upgrade eligibility check to a compatible Elasticsearch version.</p>
-    async fn upgrade_elasticsearch_domain(
+    fn upgrade_elasticsearch_domain(
         &self,
         input: UpgradeElasticsearchDomainRequest,
-    ) -> Result<UpgradeElasticsearchDomainResponse, RusotoError<UpgradeElasticsearchDomainError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpgradeElasticsearchDomainResponse,
+                        RusotoError<UpgradeElasticsearchDomainError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2015-01-01/es/upgradeDomain";
 
         let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
@@ -3577,20 +3902,20 @@ impl Es for EsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpgradeElasticsearchDomainResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpgradeElasticsearchDomainResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpgradeElasticsearchDomainError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpgradeElasticsearchDomainError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

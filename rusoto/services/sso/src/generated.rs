@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Provides information about your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -358,28 +359,53 @@ impl fmt::Display for LogoutError {
 }
 impl Error for LogoutError {}
 /// Trait representing the capabilities of the SSO API. SSO clients implement this trait.
-#[async_trait]
 pub trait Sso {
     /// <p>Returns the STS short-term credentials for a given role name that is assigned to the user.</p>
-    async fn get_role_credentials(
+    fn get_role_credentials(
         &self,
         input: GetRoleCredentialsRequest,
-    ) -> Result<GetRoleCredentialsResponse, RusotoError<GetRoleCredentialsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRoleCredentialsResponse,
+                        RusotoError<GetRoleCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all roles that are assigned to the user for a given AWS account.</p>
-    async fn list_account_roles(
+    fn list_account_roles(
         &self,
         input: ListAccountRolesRequest,
-    ) -> Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all AWS accounts assigned to the user. These AWS accounts are assigned by the administrator of the account. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/useraccess.html#assignusers">Assign User Access</a> in the <i>AWS SSO User Guide</i>. This operation returns a paginated response.</p>
-    async fn list_accounts(
+    fn list_accounts(
         &self,
         input: ListAccountsRequest,
-    ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAccountsResponse, RusotoError<ListAccountsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the client- and server-side session that is associated with the user.</p>
-    async fn logout(&self, input: LogoutRequest) -> Result<(), RusotoError<LogoutError>>;
+    fn logout(
+        &self,
+        input: LogoutRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<LogoutError>>> + Send + 'static>>;
 }
 /// A client for the SSO API.
 #[derive(Clone)]
@@ -419,13 +445,22 @@ impl SsoClient {
     }
 }
 
-#[async_trait]
 impl Sso for SsoClient {
     /// <p>Returns the STS short-term credentials for a given role name that is assigned to the user.</p>
-    async fn get_role_credentials(
+    fn get_role_credentials(
         &self,
         input: GetRoleCredentialsRequest,
-    ) -> Result<GetRoleCredentialsResponse, RusotoError<GetRoleCredentialsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRoleCredentialsResponse,
+                        RusotoError<GetRoleCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/federation/credentials";
 
         let mut request = SignedRequest::new("GET", "awsssoportal", &self.region, &request_uri);
@@ -439,28 +474,35 @@ impl Sso for SsoClient {
         params.put("role_name", &input.role_name);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRoleCredentialsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRoleCredentialsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRoleCredentialsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRoleCredentialsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all roles that are assigned to the user for a given AWS account.</p>
-    async fn list_account_roles(
+    fn list_account_roles(
         &self,
         input: ListAccountRolesRequest,
-    ) -> Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListAccountRolesResponse, RusotoError<ListAccountRolesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/assignment/roles";
 
         let mut request = SignedRequest::new("GET", "awsssoportal", &self.region, &request_uri);
@@ -479,28 +521,34 @@ impl Sso for SsoClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAccountRolesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAccountRolesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAccountRolesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAccountRolesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all AWS accounts assigned to the user. These AWS accounts are assigned by the administrator of the account. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/useraccess.html#assignusers">Assign User Access</a> in the <i>AWS SSO User Guide</i>. This operation returns a paginated response.</p>
-    async fn list_accounts(
+    fn list_accounts(
         &self,
         input: ListAccountsRequest,
-    ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAccountsResponse, RusotoError<ListAccountsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/assignment/accounts";
 
         let mut request = SignedRequest::new("GET", "awsssoportal", &self.region, &request_uri);
@@ -518,25 +566,28 @@ impl Sso for SsoClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAccountsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAccountsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAccountsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAccountsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the client- and server-side session that is associated with the user.</p>
-    async fn logout(&self, input: LogoutRequest) -> Result<(), RusotoError<LogoutError>> {
+    fn logout(
+        &self,
+        input: LogoutRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<LogoutError>>> + Send + 'static>> {
         let request_uri = "/logout";
 
         let mut request = SignedRequest::new("POST", "awsssoportal", &self.region, &request_uri);
@@ -546,19 +597,19 @@ impl Sso for SsoClient {
 
         request.add_header("x-amz-sso_bearer_token", &input.access_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(LogoutError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(LogoutError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

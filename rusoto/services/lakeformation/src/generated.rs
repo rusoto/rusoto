@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGrantPermissionsRequest {
@@ -1139,88 +1140,190 @@ impl fmt::Display for UpdateResourceError {
 }
 impl Error for UpdateResourceError {}
 /// Trait representing the capabilities of the AWS Lake Formation API. AWS Lake Formation clients implement this trait.
-#[async_trait]
 pub trait LakeFormation {
     /// <p>Batch operation to grant permissions to the principal.</p>
-    async fn batch_grant_permissions(
+    fn batch_grant_permissions(
         &self,
         input: BatchGrantPermissionsRequest,
-    ) -> Result<BatchGrantPermissionsResponse, RusotoError<BatchGrantPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchGrantPermissionsResponse,
+                        RusotoError<BatchGrantPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Batch operation to revoke permissions from the principal.</p>
-    async fn batch_revoke_permissions(
+    fn batch_revoke_permissions(
         &self,
         input: BatchRevokePermissionsRequest,
-    ) -> Result<BatchRevokePermissionsResponse, RusotoError<BatchRevokePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchRevokePermissionsResponse,
+                        RusotoError<BatchRevokePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deregisters the resource as managed by the Data Catalog.</p> <p>When you deregister a path, Lake Formation removes the path from the inline policy attached to your service-linked role.</p>
-    async fn deregister_resource(
+    fn deregister_resource(
         &self,
         input: DeregisterResourceRequest,
-    ) -> Result<DeregisterResourceResponse, RusotoError<DeregisterResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterResourceResponse,
+                        RusotoError<DeregisterResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the current data access role for the given resource registered in AWS Lake Formation.</p>
-    async fn describe_resource(
+    fn describe_resource(
         &self,
         input: DescribeResourceRequest,
-    ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeResourceResponse, RusotoError<DescribeResourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The AWS Lake Formation principal.</p>
-    async fn get_data_lake_settings(
+    fn get_data_lake_settings(
         &self,
         input: GetDataLakeSettingsRequest,
-    ) -> Result<GetDataLakeSettingsResponse, RusotoError<GetDataLakeSettingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDataLakeSettingsResponse,
+                        RusotoError<GetDataLakeSettingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the permissions for a specified table or database resource located at a path in Amazon S3.</p>
-    async fn get_effective_permissions_for_path(
+    fn get_effective_permissions_for_path(
         &self,
         input: GetEffectivePermissionsForPathRequest,
-    ) -> Result<
-        GetEffectivePermissionsForPathResponse,
-        RusotoError<GetEffectivePermissionsForPathError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEffectivePermissionsForPathResponse,
+                        RusotoError<GetEffectivePermissionsForPathError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
-    async fn grant_permissions(
+    fn grant_permissions(
         &self,
         input: GrantPermissionsRequest,
-    ) -> Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
-    async fn list_permissions(
+    fn list_permissions(
         &self,
         input: ListPermissionsRequest,
-    ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPermissionsResponse, RusotoError<ListPermissionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the resources registered to be managed by the Data Catalog.</p>
-    async fn list_resources(
+    fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListResourcesResponse, RusotoError<ListResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The AWS Lake Formation principal.</p>
-    async fn put_data_lake_settings(
+    fn put_data_lake_settings(
         &self,
         input: PutDataLakeSettingsRequest,
-    ) -> Result<PutDataLakeSettingsResponse, RusotoError<PutDataLakeSettingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDataLakeSettingsResponse,
+                        RusotoError<PutDataLakeSettingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p>
-    async fn register_resource(
+    fn register_resource(
         &self,
         input: RegisterResourceRequest,
-    ) -> Result<RegisterResourceResponse, RusotoError<RegisterResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RegisterResourceResponse, RusotoError<RegisterResourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Revokes permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p>
-    async fn revoke_permissions(
+    fn revoke_permissions(
         &self,
         input: RevokePermissionsRequest,
-    ) -> Result<RevokePermissionsResponse, RusotoError<RevokePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RevokePermissionsResponse, RusotoError<RevokePermissionsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the data access role used for vending access to the given (registered) resource in AWS Lake Formation. </p>
-    async fn update_resource(
+    fn update_resource(
         &self,
         input: UpdateResourceRequest,
-    ) -> Result<UpdateResourceResponse, RusotoError<UpdateResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateResourceResponse, RusotoError<UpdateResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Lake Formation API.
 #[derive(Clone)]
@@ -1260,13 +1363,22 @@ impl LakeFormationClient {
     }
 }
 
-#[async_trait]
 impl LakeFormation for LakeFormationClient {
     /// <p>Batch operation to grant permissions to the principal.</p>
-    async fn batch_grant_permissions(
+    fn batch_grant_permissions(
         &self,
         input: BatchGrantPermissionsRequest,
-    ) -> Result<BatchGrantPermissionsResponse, RusotoError<BatchGrantPermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchGrantPermissionsResponse,
+                        RusotoError<BatchGrantPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1274,27 +1386,37 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGrantPermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGrantPermissionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGrantPermissionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGrantPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Batch operation to revoke permissions from the principal.</p>
-    async fn batch_revoke_permissions(
+    fn batch_revoke_permissions(
         &self,
         input: BatchRevokePermissionsRequest,
-    ) -> Result<BatchRevokePermissionsResponse, RusotoError<BatchRevokePermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchRevokePermissionsResponse,
+                        RusotoError<BatchRevokePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1302,27 +1424,37 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchRevokePermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchRevokePermissionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchRevokePermissionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchRevokePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deregisters the resource as managed by the Data Catalog.</p> <p>When you deregister a path, Lake Formation removes the path from the inline policy attached to your service-linked role.</p>
-    async fn deregister_resource(
+    fn deregister_resource(
         &self,
         input: DeregisterResourceRequest,
-    ) -> Result<DeregisterResourceResponse, RusotoError<DeregisterResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterResourceResponse,
+                        RusotoError<DeregisterResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1330,27 +1462,34 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the current data access role for the given resource registered in AWS Lake Formation.</p>
-    async fn describe_resource(
+    fn describe_resource(
         &self,
         input: DescribeResourceRequest,
-    ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeResourceResponse, RusotoError<DescribeResourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1358,27 +1497,37 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The AWS Lake Formation principal.</p>
-    async fn get_data_lake_settings(
+    fn get_data_lake_settings(
         &self,
         input: GetDataLakeSettingsRequest,
-    ) -> Result<GetDataLakeSettingsResponse, RusotoError<GetDataLakeSettingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDataLakeSettingsResponse,
+                        RusotoError<GetDataLakeSettingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1386,29 +1535,36 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataLakeSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataLakeSettingsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDataLakeSettingsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDataLakeSettingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the permissions for a specified table or database resource located at a path in Amazon S3.</p>
-    async fn get_effective_permissions_for_path(
+    fn get_effective_permissions_for_path(
         &self,
         input: GetEffectivePermissionsForPathRequest,
-    ) -> Result<
-        GetEffectivePermissionsForPathResponse,
-        RusotoError<GetEffectivePermissionsForPathError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEffectivePermissionsForPathResponse,
+                        RusotoError<GetEffectivePermissionsForPathError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
@@ -1420,27 +1576,34 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEffectivePermissionsForPathResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEffectivePermissionsForPathError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEffectivePermissionsForPathResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEffectivePermissionsForPathError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
-    async fn grant_permissions(
+    fn grant_permissions(
         &self,
         input: GrantPermissionsRequest,
-    ) -> Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1448,27 +1611,33 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GrantPermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GrantPermissionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GrantPermissionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GrantPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
-    async fn list_permissions(
+    fn list_permissions(
         &self,
         input: ListPermissionsRequest,
-    ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPermissionsResponse, RusotoError<ListPermissionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1476,26 +1645,33 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPermissionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPermissionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the resources registered to be managed by the Data Catalog.</p>
-    async fn list_resources(
+    fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListResourcesResponse, RusotoError<ListResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1503,26 +1679,37 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourcesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResourcesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The AWS Lake Formation principal.</p>
-    async fn put_data_lake_settings(
+    fn put_data_lake_settings(
         &self,
         input: PutDataLakeSettingsRequest,
-    ) -> Result<PutDataLakeSettingsResponse, RusotoError<PutDataLakeSettingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDataLakeSettingsResponse,
+                        RusotoError<PutDataLakeSettingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1530,27 +1717,34 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutDataLakeSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDataLakeSettingsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutDataLakeSettingsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutDataLakeSettingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p>
-    async fn register_resource(
+    fn register_resource(
         &self,
         input: RegisterResourceRequest,
-    ) -> Result<RegisterResourceResponse, RusotoError<RegisterResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RegisterResourceResponse, RusotoError<RegisterResourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1558,27 +1752,34 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Revokes permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p>
-    async fn revoke_permissions(
+    fn revoke_permissions(
         &self,
         input: RevokePermissionsRequest,
-    ) -> Result<RevokePermissionsResponse, RusotoError<RevokePermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RevokePermissionsResponse, RusotoError<RevokePermissionsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1586,27 +1787,33 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RevokePermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RevokePermissionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RevokePermissionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RevokePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the data access role used for vending access to the given (registered) resource in AWS Lake Formation. </p>
-    async fn update_resource(
+    fn update_resource(
         &self,
         input: UpdateResourceRequest,
-    ) -> Result<UpdateResourceResponse, RusotoError<UpdateResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateResourceResponse, RusotoError<UpdateResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1614,18 +1821,19 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

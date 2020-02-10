@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelChangeSetRequest {
@@ -700,43 +701,79 @@ impl fmt::Display for StartChangeSetError {
 }
 impl Error for StartChangeSetError {}
 /// Trait representing the capabilities of the AWS Marketplace Catalog API. AWS Marketplace Catalog clients implement this trait.
-#[async_trait]
 pub trait MarketplaceCatalog {
     /// <p>Used to cancel an open change request. Must be sent before the status of the request changes to <code>APPLYING</code>, the final stage of completing your change request. You can describe a change during the 60-day request history retention period for API calls.</p>
-    async fn cancel_change_set(
+    fn cancel_change_set(
         &self,
         input: CancelChangeSetRequest,
-    ) -> Result<CancelChangeSetResponse, RusotoError<CancelChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelChangeSetResponse, RusotoError<CancelChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides information about a given change set.</p>
-    async fn describe_change_set(
+    fn describe_change_set(
         &self,
         input: DescribeChangeSetRequest,
-    ) -> Result<DescribeChangeSetResponse, RusotoError<DescribeChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeChangeSetResponse, RusotoError<DescribeChangeSetError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the metadata and content of the entity.</p>
-    async fn describe_entity(
+    fn describe_entity(
         &self,
         input: DescribeEntityRequest,
-    ) -> Result<DescribeEntityResponse, RusotoError<DescribeEntityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeEntityResponse, RusotoError<DescribeEntityError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the list of change sets owned by the account being used to make the call. You can filter this list by providing any combination of <code>entityId</code>, <code>ChangeSetName</code>, and status. If you provide more than one filter, the API operation applies a logical AND between the filters.</p> <p>You can describe a change during the 60-day request history retention period for API calls.</p>
-    async fn list_change_sets(
+    fn list_change_sets(
         &self,
         input: ListChangeSetsRequest,
-    ) -> Result<ListChangeSetsResponse, RusotoError<ListChangeSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChangeSetsResponse, RusotoError<ListChangeSetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides the list of entities of a given type.</p>
-    async fn list_entities(
+    fn list_entities(
         &self,
         input: ListEntitiesRequest,
-    ) -> Result<ListEntitiesResponse, RusotoError<ListEntitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEntitiesResponse, RusotoError<ListEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation allows you to request changes in your entities.</p>
-    async fn start_change_set(
+    fn start_change_set(
         &self,
         input: StartChangeSetRequest,
-    ) -> Result<StartChangeSetResponse, RusotoError<StartChangeSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartChangeSetResponse, RusotoError<StartChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Marketplace Catalog API.
 #[derive(Clone)]
@@ -776,13 +813,18 @@ impl MarketplaceCatalogClient {
     }
 }
 
-#[async_trait]
 impl MarketplaceCatalog for MarketplaceCatalogClient {
     /// <p>Used to cancel an open change request. Must be sent before the status of the request changes to <code>APPLYING</code>, the final stage of completing your change request. You can describe a change during the 60-day request history retention period for API calls.</p>
-    async fn cancel_change_set(
+    fn cancel_change_set(
         &self,
         input: CancelChangeSetRequest,
-    ) -> Result<CancelChangeSetResponse, RusotoError<CancelChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelChangeSetResponse, RusotoError<CancelChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CancelChangeSet";
 
         let mut request =
@@ -796,28 +838,35 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         params.put("changeSetId", &input.change_set_id);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelChangeSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelChangeSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelChangeSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelChangeSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides information about a given change set.</p>
-    async fn describe_change_set(
+    fn describe_change_set(
         &self,
         input: DescribeChangeSetRequest,
-    ) -> Result<DescribeChangeSetResponse, RusotoError<DescribeChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeChangeSetResponse, RusotoError<DescribeChangeSetError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DescribeChangeSet";
 
         let mut request = SignedRequest::new("GET", "aws-marketplace", &self.region, &request_uri);
@@ -830,28 +879,34 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         params.put("changeSetId", &input.change_set_id);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeChangeSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeChangeSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeChangeSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeChangeSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the metadata and content of the entity.</p>
-    async fn describe_entity(
+    fn describe_entity(
         &self,
         input: DescribeEntityRequest,
-    ) -> Result<DescribeEntityResponse, RusotoError<DescribeEntityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeEntityResponse, RusotoError<DescribeEntityError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DescribeEntity";
 
         let mut request = SignedRequest::new("GET", "aws-marketplace", &self.region, &request_uri);
@@ -864,28 +919,34 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         params.put("entityId", &input.entity_id);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntityResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEntityResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntityError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEntityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the list of change sets owned by the account being used to make the call. You can filter this list by providing any combination of <code>entityId</code>, <code>ChangeSetName</code>, and status. If you provide more than one filter, the API operation applies a logical AND between the filters.</p> <p>You can describe a change during the 60-day request history retention period for API calls.</p>
-    async fn list_change_sets(
+    fn list_change_sets(
         &self,
         input: ListChangeSetsRequest,
-    ) -> Result<ListChangeSetsResponse, RusotoError<ListChangeSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChangeSetsResponse, RusotoError<ListChangeSetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListChangeSets";
 
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, &request_uri);
@@ -895,28 +956,34 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChangeSetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListChangeSetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListChangeSetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListChangeSetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides the list of entities of a given type.</p>
-    async fn list_entities(
+    fn list_entities(
         &self,
         input: ListEntitiesRequest,
-    ) -> Result<ListEntitiesResponse, RusotoError<ListEntitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEntitiesResponse, RusotoError<ListEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListEntities";
 
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, &request_uri);
@@ -926,28 +993,34 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntitiesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEntitiesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntitiesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEntitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation allows you to request changes in your entities.</p>
-    async fn start_change_set(
+    fn start_change_set(
         &self,
         input: StartChangeSetRequest,
-    ) -> Result<StartChangeSetResponse, RusotoError<StartChangeSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartChangeSetResponse, RusotoError<StartChangeSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/StartChangeSet";
 
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, &request_uri);
@@ -957,20 +1030,20 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartChangeSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartChangeSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartChangeSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartChangeSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

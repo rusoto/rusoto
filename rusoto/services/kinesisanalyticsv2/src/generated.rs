@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
@@ -3862,187 +3863,395 @@ impl fmt::Display for UpdateApplicationError {
 }
 impl Error for UpdateApplicationError {}
 /// Trait representing the capabilities of the Kinesis Analytics V2 API. Kinesis Analytics V2 clients implement this trait.
-#[async_trait]
 pub trait KinesisAnalyticsV2 {
     /// <p>Adds an Amazon CloudWatch log stream to monitor application configuration errors.</p>
-    async fn add_application_cloud_watch_logging_option(
+    fn add_application_cloud_watch_logging_option(
         &self,
         input: AddApplicationCloudWatchLoggingOptionRequest,
-    ) -> Result<
-        AddApplicationCloudWatchLoggingOptionResponse,
-        RusotoError<AddApplicationCloudWatchLoggingOptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationCloudWatchLoggingOptionResponse,
+                        RusotoError<AddApplicationCloudWatchLoggingOptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Adds a streaming source to your SQL-based Amazon Kinesis Data Analytics application. </p> <p>You can add a streaming source when you create an application, or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p>
-    async fn add_application_input(
+    fn add_application_input(
         &self,
         input: AddApplicationInputRequest,
-    ) -> Result<AddApplicationInputResponse, RusotoError<AddApplicationInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationInputResponse,
+                        RusotoError<AddApplicationInputError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds an <a>InputProcessingConfiguration</a> to an SQL-based Kinesis Data Analytics application. An input processor pre-processes records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
-    async fn add_application_input_processing_configuration(
+    fn add_application_input_processing_configuration(
         &self,
         input: AddApplicationInputProcessingConfigurationRequest,
-    ) -> Result<
-        AddApplicationInputProcessingConfigurationResponse,
-        RusotoError<AddApplicationInputProcessingConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationInputProcessingConfigurationResponse,
+                        RusotoError<AddApplicationInputProcessingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Adds an external destination to your SQL-based Amazon Kinesis Data Analytics application.</p> <p>If you want Kinesis Data Analytics to deliver data from an in-application stream within your application to an external destination (such as an Kinesis data stream, a Kinesis Data Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
-    async fn add_application_output(
+    fn add_application_output(
         &self,
         input: AddApplicationOutputRequest,
-    ) -> Result<AddApplicationOutputResponse, RusotoError<AddApplicationOutputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationOutputResponse,
+                        RusotoError<AddApplicationOutputError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a reference data source to an existing SQL-based Amazon Kinesis Data Analytics application.</p> <p>Kinesis Data Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in an Amazon S3 object maps to columns in the resulting in-application table.</p>
-    async fn add_application_reference_data_source(
+    fn add_application_reference_data_source(
         &self,
         input: AddApplicationReferenceDataSourceRequest,
-    ) -> Result<
-        AddApplicationReferenceDataSourceResponse,
-        RusotoError<AddApplicationReferenceDataSourceError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationReferenceDataSourceResponse,
+                        RusotoError<AddApplicationReferenceDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Adds a Virtual Private Cloud (VPC) configuration to the application. Applications can use VPCs to store and access resources securely.</p> <p>Note the following about VPC configurations for Kinesis Data Analytics applications:</p> <ul> <li> <p>VPC configurations are not supported for SQL applications.</p> </li> <li> <p>When a VPC is added to a Kinesis Data Analytics application, the application can no longer be accessed from the Internet directly. To enable Internet access to the application, add an Internet gateway to your VPC.</p> </li> </ul></p>
-    async fn add_application_vpc_configuration(
+    fn add_application_vpc_configuration(
         &self,
         input: AddApplicationVpcConfigurationRequest,
-    ) -> Result<
-        AddApplicationVpcConfigurationResponse,
-        RusotoError<AddApplicationVpcConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationVpcConfigurationResponse,
+                        RusotoError<AddApplicationVpcConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Creates an Amazon Kinesis Data Analytics application. For information about creating a Kinesis Data Analytics application, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html">Creating an Application</a>. </p>
-    async fn create_application(
+    fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a snapshot of the application's state data.</p>
-    async fn create_application_snapshot(
+    fn create_application_snapshot(
         &self,
         input: CreateApplicationSnapshotRequest,
-    ) -> Result<CreateApplicationSnapshotResponse, RusotoError<CreateApplicationSnapshotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateApplicationSnapshotResponse,
+                        RusotoError<CreateApplicationSnapshotError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified application. Kinesis Data Analytics halts application execution and deletes the application.</p>
-    async fn delete_application(
+    fn delete_application(
         &self,
         input: DeleteApplicationRequest,
-    ) -> Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an Amazon CloudWatch log stream from an Amazon Kinesis Data Analytics application. </p>
-    async fn delete_application_cloud_watch_logging_option(
+    fn delete_application_cloud_watch_logging_option(
         &self,
         input: DeleteApplicationCloudWatchLoggingOptionRequest,
-    ) -> Result<
-        DeleteApplicationCloudWatchLoggingOptionResponse,
-        RusotoError<DeleteApplicationCloudWatchLoggingOptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationCloudWatchLoggingOptionResponse,
+                        RusotoError<DeleteApplicationCloudWatchLoggingOptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Deletes an <a>InputProcessingConfiguration</a> from an input.</p>
-    async fn delete_application_input_processing_configuration(
+    fn delete_application_input_processing_configuration(
         &self,
         input: DeleteApplicationInputProcessingConfigurationRequest,
-    ) -> Result<
-        DeleteApplicationInputProcessingConfigurationResponse,
-        RusotoError<DeleteApplicationInputProcessingConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationInputProcessingConfigurationResponse,
+                        RusotoError<DeleteApplicationInputProcessingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Deletes the output destination configuration from your SQL-based Amazon Kinesis Data Analytics application's configuration. Kinesis Data Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p>
-    async fn delete_application_output(
+    fn delete_application_output(
         &self,
         input: DeleteApplicationOutputRequest,
-    ) -> Result<DeleteApplicationOutputResponse, RusotoError<DeleteApplicationOutputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationOutputResponse,
+                        RusotoError<DeleteApplicationOutputError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a reference data source configuration from the specified SQL-based Amazon Kinesis Data Analytics application's configuration.</p> <p>If the application is running, Kinesis Data Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p>
-    async fn delete_application_reference_data_source(
+    fn delete_application_reference_data_source(
         &self,
         input: DeleteApplicationReferenceDataSourceRequest,
-    ) -> Result<
-        DeleteApplicationReferenceDataSourceResponse,
-        RusotoError<DeleteApplicationReferenceDataSourceError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationReferenceDataSourceResponse,
+                        RusotoError<DeleteApplicationReferenceDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Deletes a snapshot of application state.</p>
-    async fn delete_application_snapshot(
+    fn delete_application_snapshot(
         &self,
         input: DeleteApplicationSnapshotRequest,
-    ) -> Result<DeleteApplicationSnapshotResponse, RusotoError<DeleteApplicationSnapshotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationSnapshotResponse,
+                        RusotoError<DeleteApplicationSnapshotError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a VPC configuration from a Kinesis Data Analytics application.</p>
-    async fn delete_application_vpc_configuration(
+    fn delete_application_vpc_configuration(
         &self,
         input: DeleteApplicationVpcConfigurationRequest,
-    ) -> Result<
-        DeleteApplicationVpcConfigurationResponse,
-        RusotoError<DeleteApplicationVpcConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationVpcConfigurationResponse,
+                        RusotoError<DeleteApplicationVpcConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns information about a specific Amazon Kinesis Data Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p>
-    async fn describe_application(
+    fn describe_application(
         &self,
         input: DescribeApplicationRequest,
-    ) -> Result<DescribeApplicationResponse, RusotoError<DescribeApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeApplicationResponse,
+                        RusotoError<DescribeApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a snapshot of application state data.</p>
-    async fn describe_application_snapshot(
+    fn describe_application_snapshot(
         &self,
         input: DescribeApplicationSnapshotRequest,
-    ) -> Result<DescribeApplicationSnapshotResponse, RusotoError<DescribeApplicationSnapshotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeApplicationSnapshotResponse,
+                        RusotoError<DescribeApplicationSnapshotError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Infers a schema for an SQL-based Amazon Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
-    async fn discover_input_schema(
+    fn discover_input_schema(
         &self,
         input: DiscoverInputSchemaRequest,
-    ) -> Result<DiscoverInputSchemaResponse, RusotoError<DiscoverInputSchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DiscoverInputSchemaResponse,
+                        RusotoError<DiscoverInputSchemaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists information about the current application snapshots.</p>
-    async fn list_application_snapshots(
+    fn list_application_snapshots(
         &self,
         input: ListApplicationSnapshotsRequest,
-    ) -> Result<ListApplicationSnapshotsResponse, RusotoError<ListApplicationSnapshotsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListApplicationSnapshotsResponse,
+                        RusotoError<ListApplicationSnapshotsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of Amazon Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
-    async fn list_applications(
+    fn list_applications(
         &self,
         input: ListApplicationsRequest,
-    ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the list of key-value tags assigned to the application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts the specified Amazon Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
-    async fn start_application(
+    fn start_application(
         &self,
         input: StartApplicationRequest,
-    ) -> Result<StartApplicationResponse, RusotoError<StartApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<StartApplicationResponse, RusotoError<StartApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops the application from processing data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. </p>
-    async fn stop_application(
+    fn stop_application(
         &self,
         input: StopApplicationRequest,
-    ) -> Result<StopApplicationResponse, RusotoError<StopApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopApplicationResponse, RusotoError<StopApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes one or more tags from a Kinesis Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing Amazon Kinesis Data Analytics application. Using this operation, you can update application code, input configuration, and output configuration. </p> <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update your application. </p>
-    async fn update_application(
+    fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Kinesis Analytics V2 API.
 #[derive(Clone)]
@@ -4082,15 +4291,21 @@ impl KinesisAnalyticsV2Client {
     }
 }
 
-#[async_trait]
 impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
     /// <p>Adds an Amazon CloudWatch log stream to monitor application configuration errors.</p>
-    async fn add_application_cloud_watch_logging_option(
+    fn add_application_cloud_watch_logging_option(
         &self,
         input: AddApplicationCloudWatchLoggingOptionRequest,
-    ) -> Result<
-        AddApplicationCloudWatchLoggingOptionResponse,
-        RusotoError<AddApplicationCloudWatchLoggingOptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationCloudWatchLoggingOptionResponse,
+                        RusotoError<AddApplicationCloudWatchLoggingOptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4102,29 +4317,39 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddApplicationCloudWatchLoggingOptionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddApplicationCloudWatchLoggingOptionError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddApplicationCloudWatchLoggingOptionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddApplicationCloudWatchLoggingOptionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Adds a streaming source to your SQL-based Amazon Kinesis Data Analytics application. </p> <p>You can add a streaming source when you create an application, or you can use this operation to add a streaming source after you create an application. For more information, see <a>CreateApplication</a>.</p> <p>Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version. </p>
-    async fn add_application_input(
+    fn add_application_input(
         &self,
         input: AddApplicationInputRequest,
-    ) -> Result<AddApplicationInputResponse, RusotoError<AddApplicationInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationInputResponse,
+                        RusotoError<AddApplicationInputError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4135,29 +4360,36 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddApplicationInputResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddApplicationInputError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddApplicationInputResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddApplicationInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds an <a>InputProcessingConfiguration</a> to an SQL-based Kinesis Data Analytics application. An input processor pre-processes records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
-    async fn add_application_input_processing_configuration(
+    fn add_application_input_processing_configuration(
         &self,
         input: AddApplicationInputProcessingConfigurationRequest,
-    ) -> Result<
-        AddApplicationInputProcessingConfigurationResponse,
-        RusotoError<AddApplicationInputProcessingConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationInputProcessingConfigurationResponse,
+                        RusotoError<AddApplicationInputProcessingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4169,27 +4401,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddApplicationInputProcessingConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddApplicationInputProcessingConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddApplicationInputProcessingConfigurationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddApplicationInputProcessingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds an external destination to your SQL-based Amazon Kinesis Data Analytics application.</p> <p>If you want Kinesis Data Analytics to deliver data from an in-application stream within your application to an external destination (such as an Kinesis data stream, a Kinesis Data Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
-    async fn add_application_output(
+    fn add_application_output(
         &self,
         input: AddApplicationOutputRequest,
-    ) -> Result<AddApplicationOutputResponse, RusotoError<AddApplicationOutputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationOutputResponse,
+                        RusotoError<AddApplicationOutputError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4200,29 +4442,36 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddApplicationOutputResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddApplicationOutputError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddApplicationOutputResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddApplicationOutputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a reference data source to an existing SQL-based Amazon Kinesis Data Analytics application.</p> <p>Kinesis Data Analytics reads reference data (that is, an Amazon S3 object) and creates an in-application table within your application. In the request, you provide the source (S3 bucket name and object key name), name of the in-application table to create, and the necessary mapping information that describes how data in an Amazon S3 object maps to columns in the resulting in-application table.</p>
-    async fn add_application_reference_data_source(
+    fn add_application_reference_data_source(
         &self,
         input: AddApplicationReferenceDataSourceRequest,
-    ) -> Result<
-        AddApplicationReferenceDataSourceResponse,
-        RusotoError<AddApplicationReferenceDataSourceError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationReferenceDataSourceResponse,
+                        RusotoError<AddApplicationReferenceDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4234,31 +4483,38 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddApplicationReferenceDataSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddApplicationReferenceDataSourceError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddApplicationReferenceDataSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddApplicationReferenceDataSourceError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Adds a Virtual Private Cloud (VPC) configuration to the application. Applications can use VPCs to store and access resources securely.</p> <p>Note the following about VPC configurations for Kinesis Data Analytics applications:</p> <ul> <li> <p>VPC configurations are not supported for SQL applications.</p> </li> <li> <p>When a VPC is added to a Kinesis Data Analytics application, the application can no longer be accessed from the Internet directly. To enable Internet access to the application, add an Internet gateway to your VPC.</p> </li> </ul></p>
-    async fn add_application_vpc_configuration(
+    fn add_application_vpc_configuration(
         &self,
         input: AddApplicationVpcConfigurationRequest,
-    ) -> Result<
-        AddApplicationVpcConfigurationResponse,
-        RusotoError<AddApplicationVpcConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddApplicationVpcConfigurationResponse,
+                        RusotoError<AddApplicationVpcConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4270,27 +4526,34 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddApplicationVpcConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddApplicationVpcConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddApplicationVpcConfigurationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddApplicationVpcConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an Amazon Kinesis Data Analytics application. For information about creating a Kinesis Data Analytics application, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html">Creating an Application</a>. </p>
-    async fn create_application(
+    fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4301,28 +4564,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a snapshot of the application's state data.</p>
-    async fn create_application_snapshot(
+    fn create_application_snapshot(
         &self,
         input: CreateApplicationSnapshotRequest,
-    ) -> Result<CreateApplicationSnapshotResponse, RusotoError<CreateApplicationSnapshotError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateApplicationSnapshotResponse,
+                        RusotoError<CreateApplicationSnapshotError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4333,27 +4605,34 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApplicationSnapshotResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApplicationSnapshotError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateApplicationSnapshotResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApplicationSnapshotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified application. Kinesis Data Analytics halts application execution and deletes the application.</p>
-    async fn delete_application(
+    fn delete_application(
         &self,
         input: DeleteApplicationRequest,
-    ) -> Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4364,29 +4643,36 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an Amazon CloudWatch log stream from an Amazon Kinesis Data Analytics application. </p>
-    async fn delete_application_cloud_watch_logging_option(
+    fn delete_application_cloud_watch_logging_option(
         &self,
         input: DeleteApplicationCloudWatchLoggingOptionRequest,
-    ) -> Result<
-        DeleteApplicationCloudWatchLoggingOptionResponse,
-        RusotoError<DeleteApplicationCloudWatchLoggingOptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationCloudWatchLoggingOptionResponse,
+                        RusotoError<DeleteApplicationCloudWatchLoggingOptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4398,29 +4684,36 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationCloudWatchLoggingOptionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationCloudWatchLoggingOptionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationCloudWatchLoggingOptionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationCloudWatchLoggingOptionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an <a>InputProcessingConfiguration</a> from an input.</p>
-    async fn delete_application_input_processing_configuration(
+    fn delete_application_input_processing_configuration(
         &self,
         input: DeleteApplicationInputProcessingConfigurationRequest,
-    ) -> Result<
-        DeleteApplicationInputProcessingConfigurationResponse,
-        RusotoError<DeleteApplicationInputProcessingConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationInputProcessingConfigurationResponse,
+                        RusotoError<DeleteApplicationInputProcessingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4432,27 +4725,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationInputProcessingConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationInputProcessingConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationInputProcessingConfigurationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationInputProcessingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the output destination configuration from your SQL-based Amazon Kinesis Data Analytics application's configuration. Kinesis Data Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p>
-    async fn delete_application_output(
+    fn delete_application_output(
         &self,
         input: DeleteApplicationOutputRequest,
-    ) -> Result<DeleteApplicationOutputResponse, RusotoError<DeleteApplicationOutputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationOutputResponse,
+                        RusotoError<DeleteApplicationOutputError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4463,29 +4766,36 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationOutputResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationOutputError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationOutputResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationOutputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a reference data source configuration from the specified SQL-based Amazon Kinesis Data Analytics application's configuration.</p> <p>If the application is running, Kinesis Data Analytics immediately removes the in-application table that you created using the <a>AddApplicationReferenceDataSource</a> operation. </p>
-    async fn delete_application_reference_data_source(
+    fn delete_application_reference_data_source(
         &self,
         input: DeleteApplicationReferenceDataSourceRequest,
-    ) -> Result<
-        DeleteApplicationReferenceDataSourceResponse,
-        RusotoError<DeleteApplicationReferenceDataSourceError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationReferenceDataSourceResponse,
+                        RusotoError<DeleteApplicationReferenceDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4497,30 +4807,39 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationReferenceDataSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationReferenceDataSourceError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationReferenceDataSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationReferenceDataSourceError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a snapshot of application state.</p>
-    async fn delete_application_snapshot(
+    fn delete_application_snapshot(
         &self,
         input: DeleteApplicationSnapshotRequest,
-    ) -> Result<DeleteApplicationSnapshotResponse, RusotoError<DeleteApplicationSnapshotError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationSnapshotResponse,
+                        RusotoError<DeleteApplicationSnapshotError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4531,29 +4850,36 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationSnapshotResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationSnapshotError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationSnapshotResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationSnapshotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a VPC configuration from a Kinesis Data Analytics application.</p>
-    async fn delete_application_vpc_configuration(
+    fn delete_application_vpc_configuration(
         &self,
         input: DeleteApplicationVpcConfigurationRequest,
-    ) -> Result<
-        DeleteApplicationVpcConfigurationResponse,
-        RusotoError<DeleteApplicationVpcConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteApplicationVpcConfigurationResponse,
+                        RusotoError<DeleteApplicationVpcConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
@@ -4565,29 +4891,39 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationVpcConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationVpcConfigurationError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationVpcConfigurationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationVpcConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a specific Amazon Kinesis Data Analytics application.</p> <p>If you want to retrieve a list of all applications in your account, use the <a>ListApplications</a> operation.</p>
-    async fn describe_application(
+    fn describe_application(
         &self,
         input: DescribeApplicationRequest,
-    ) -> Result<DescribeApplicationResponse, RusotoError<DescribeApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeApplicationResponse,
+                        RusotoError<DescribeApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4598,28 +4934,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a snapshot of application state data.</p>
-    async fn describe_application_snapshot(
+    fn describe_application_snapshot(
         &self,
         input: DescribeApplicationSnapshotRequest,
-    ) -> Result<DescribeApplicationSnapshotResponse, RusotoError<DescribeApplicationSnapshotError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeApplicationSnapshotResponse,
+                        RusotoError<DescribeApplicationSnapshotError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4630,27 +4975,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeApplicationSnapshotResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeApplicationSnapshotError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeApplicationSnapshotResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeApplicationSnapshotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Infers a schema for an SQL-based Amazon Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
-    async fn discover_input_schema(
+    fn discover_input_schema(
         &self,
         input: DiscoverInputSchemaRequest,
-    ) -> Result<DiscoverInputSchemaResponse, RusotoError<DiscoverInputSchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DiscoverInputSchemaResponse,
+                        RusotoError<DiscoverInputSchemaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4661,27 +5016,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DiscoverInputSchemaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DiscoverInputSchemaError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DiscoverInputSchemaResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DiscoverInputSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists information about the current application snapshots.</p>
-    async fn list_application_snapshots(
+    fn list_application_snapshots(
         &self,
         input: ListApplicationSnapshotsRequest,
-    ) -> Result<ListApplicationSnapshotsResponse, RusotoError<ListApplicationSnapshotsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListApplicationSnapshotsResponse,
+                        RusotoError<ListApplicationSnapshotsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4692,27 +5057,34 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationSnapshotsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationSnapshotsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListApplicationSnapshotsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListApplicationSnapshotsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of Amazon Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
-    async fn list_applications(
+    fn list_applications(
         &self,
         input: ListApplicationsRequest,
-    ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4720,27 +5092,37 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListApplicationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListApplicationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the list of key-value tags assigned to the application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4751,27 +5133,34 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts the specified Amazon Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
-    async fn start_application(
+    fn start_application(
         &self,
         input: StartApplicationRequest,
-    ) -> Result<StartApplicationResponse, RusotoError<StartApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<StartApplicationResponse, RusotoError<StartApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4779,27 +5168,33 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops the application from processing data. You can stop an application only if it is in the running state. You can use the <a>DescribeApplication</a> operation to find the application state. </p>
-    async fn stop_application(
+    fn stop_application(
         &self,
         input: StopApplicationRequest,
-    ) -> Result<StopApplicationResponse, RusotoError<StopApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopApplicationResponse, RusotoError<StopApplicationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4807,26 +5202,33 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more key-value tags to a Kinesis Analytics application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4834,26 +5236,32 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes one or more tags from a Kinesis Analytics application. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4861,26 +5269,34 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing Amazon Kinesis Data Analytics application. Using this operation, you can update application code, input configuration, and output configuration. </p> <p>Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update your application. </p>
-    async fn update_application(
+    fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4891,19 +5307,19 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

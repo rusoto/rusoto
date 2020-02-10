@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The active AWS Identity and Access Management (IAM) policy assignment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -8666,406 +8667,908 @@ impl fmt::Display for UpdateUserError {
 }
 impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the Amazon QuickSight API. Amazon QuickSight clients implement this trait.
-#[async_trait]
 pub trait Quicksight {
     /// <p>Cancels an ongoing ingestion of data into SPICE.</p>
-    async fn cancel_ingestion(
+    fn cancel_ingestion(
         &self,
         input: CancelIngestionRequest,
-    ) -> Result<CancelIngestionResponse, RusotoError<CancelIngestionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelIngestionResponse, RusotoError<CancelIngestionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a dashboard from a template. To first create a template, see the CreateTemplate API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
-    async fn create_dashboard(
+    fn create_dashboard(
         &self,
         input: CreateDashboardRequest,
-    ) -> Result<CreateDashboardResponse, RusotoError<CreateDashboardError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDashboardResponse, RusotoError<CreateDashboardError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a dataset.</p>
-    async fn create_data_set(
+    fn create_data_set(
         &self,
         input: CreateDataSetRequest,
-    ) -> Result<CreateDataSetResponse, RusotoError<CreateDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDataSetResponse, RusotoError<CreateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a data source.</p>
-    async fn create_data_source(
+    fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an Amazon QuickSight group.</p> <p>The permissions resource is <code>arn:aws:quicksight:us-east-1:<i>&lt;relevant-aws-account-id&gt;</i>:group/default/<i>&lt;group-name&gt;</i> </code>.</p> <p>The response is a group object.</p>
-    async fn create_group(
+    fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateGroupResponse, RusotoError<CreateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds an Amazon QuickSight user to an Amazon QuickSight group. </p>
-    async fn create_group_membership(
+    fn create_group_membership(
         &self,
         input: CreateGroupMembershipRequest,
-    ) -> Result<CreateGroupMembershipResponse, RusotoError<CreateGroupMembershipError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateGroupMembershipResponse,
+                        RusotoError<CreateGroupMembershipError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an assignment with one specified IAM policy, identified by its Amazon Resource Name (ARN). This policy will be assigned to specified groups or users of Amazon QuickSight. The users and groups need to be in the same namespace. </p>
-    async fn create_iam_policy_assignment(
+    fn create_iam_policy_assignment(
         &self,
         input: CreateIAMPolicyAssignmentRequest,
-    ) -> Result<CreateIAMPolicyAssignmentResponse, RusotoError<CreateIAMPolicyAssignmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateIAMPolicyAssignmentResponse,
+                        RusotoError<CreateIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.example.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
-    async fn create_ingestion(
+    fn create_ingestion(
         &self,
         input: CreateIngestionRequest,
-    ) -> Result<CreateIngestionResponse, RusotoError<CreateIngestionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateIngestionResponse, RusotoError<CreateIngestionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a template from an existing QuickSight analysis or template. You can use the resulting template to create a dashboard.</p> <p>A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create s dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p>
-    async fn create_template(
+    fn create_template(
         &self,
         input: CreateTemplateRequest,
-    ) -> Result<CreateTemplateResponse, RusotoError<CreateTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTemplateResponse, RusotoError<CreateTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a template alias for a template.</p>
-    async fn create_template_alias(
+    fn create_template_alias(
         &self,
         input: CreateTemplateAliasRequest,
-    ) -> Result<CreateTemplateAliasResponse, RusotoError<CreateTemplateAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateTemplateAliasResponse,
+                        RusotoError<CreateTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a dashboard.</p>
-    async fn delete_dashboard(
+    fn delete_dashboard(
         &self,
         input: DeleteDashboardRequest,
-    ) -> Result<DeleteDashboardResponse, RusotoError<DeleteDashboardError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDashboardResponse, RusotoError<DeleteDashboardError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a dataset.</p>
-    async fn delete_data_set(
+    fn delete_data_set(
         &self,
         input: DeleteDataSetRequest,
-    ) -> Result<DeleteDataSetResponse, RusotoError<DeleteDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDataSetResponse, RusotoError<DeleteDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the data source permanently. This action breaks all the datasets that reference the deleted data source.</p>
-    async fn delete_data_source(
+    fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
-    ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a user group from Amazon QuickSight. </p>
-    async fn delete_group(
+    fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteGroupResponse, RusotoError<DeleteGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a user from a group so that the user is no longer a member of the group.</p>
-    async fn delete_group_membership(
+    fn delete_group_membership(
         &self,
         input: DeleteGroupMembershipRequest,
-    ) -> Result<DeleteGroupMembershipResponse, RusotoError<DeleteGroupMembershipError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteGroupMembershipResponse,
+                        RusotoError<DeleteGroupMembershipError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing IAM policy assignment.</p>
-    async fn delete_iam_policy_assignment(
+    fn delete_iam_policy_assignment(
         &self,
         input: DeleteIAMPolicyAssignmentRequest,
-    ) -> Result<DeleteIAMPolicyAssignmentResponse, RusotoError<DeleteIAMPolicyAssignmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteIAMPolicyAssignmentResponse,
+                        RusotoError<DeleteIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a template.</p>
-    async fn delete_template(
+    fn delete_template(
         &self,
         input: DeleteTemplateRequest,
-    ) -> Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the item that the specified template alias points to. If you provide a specific alias, you delete the version of the template that the alias points to.</p>
-    async fn delete_template_alias(
+    fn delete_template_alias(
         &self,
         input: DeleteTemplateAliasRequest,
-    ) -> Result<DeleteTemplateAliasResponse, RusotoError<DeleteTemplateAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteTemplateAliasResponse,
+                        RusotoError<DeleteTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the Amazon QuickSight user that is associated with the identity of the AWS Identity and Access Management (IAM) user or role that's making the call. The IAM user isn't deleted as a result of this call. </p>
-    async fn delete_user(
+    fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteUserResponse, RusotoError<DeleteUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a user identified by its principal ID. </p>
-    async fn delete_user_by_principal_id(
+    fn delete_user_by_principal_id(
         &self,
         input: DeleteUserByPrincipalIdRequest,
-    ) -> Result<DeleteUserByPrincipalIdResponse, RusotoError<DeleteUserByPrincipalIdError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteUserByPrincipalIdResponse,
+                        RusotoError<DeleteUserByPrincipalIdError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides a summary for a dashboard.</p>
-    async fn describe_dashboard(
+    fn describe_dashboard(
         &self,
         input: DescribeDashboardRequest,
-    ) -> Result<DescribeDashboardResponse, RusotoError<DescribeDashboardError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeDashboardResponse, RusotoError<DescribeDashboardError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes read and write permissions for a dashboard.</p>
-    async fn describe_dashboard_permissions(
+    fn describe_dashboard_permissions(
         &self,
         input: DescribeDashboardPermissionsRequest,
-    ) -> Result<DescribeDashboardPermissionsResponse, RusotoError<DescribeDashboardPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDashboardPermissionsResponse,
+                        RusotoError<DescribeDashboardPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a dataset. </p>
-    async fn describe_data_set(
+    fn describe_data_set(
         &self,
         input: DescribeDataSetRequest,
-    ) -> Result<DescribeDataSetResponse, RusotoError<DescribeDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeDataSetResponse, RusotoError<DescribeDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the permissions on a dataset.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/data-set-id</code>.</p>
-    async fn describe_data_set_permissions(
+    fn describe_data_set_permissions(
         &self,
         input: DescribeDataSetPermissionsRequest,
-    ) -> Result<DescribeDataSetPermissionsResponse, RusotoError<DescribeDataSetPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSetPermissionsResponse,
+                        RusotoError<DescribeDataSetPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a data source.</p>
-    async fn describe_data_source(
+    fn describe_data_source(
         &self,
         input: DescribeDataSourceRequest,
-    ) -> Result<DescribeDataSourceResponse, RusotoError<DescribeDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSourceResponse,
+                        RusotoError<DescribeDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the resource permissions for a data source.</p>
-    async fn describe_data_source_permissions(
+    fn describe_data_source_permissions(
         &self,
         input: DescribeDataSourcePermissionsRequest,
-    ) -> Result<
-        DescribeDataSourcePermissionsResponse,
-        RusotoError<DescribeDataSourcePermissionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSourcePermissionsResponse,
+                        RusotoError<DescribeDataSourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns an Amazon QuickSight group's description and Amazon Resource Name (ARN). </p>
-    async fn describe_group(
+    fn describe_group(
         &self,
         input: DescribeGroupRequest,
-    ) -> Result<DescribeGroupResponse, RusotoError<DescribeGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeGroupResponse, RusotoError<DescribeGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing IAM policy assignment, as specified by the assignment name.</p>
-    async fn describe_iam_policy_assignment(
+    fn describe_iam_policy_assignment(
         &self,
         input: DescribeIAMPolicyAssignmentRequest,
-    ) -> Result<DescribeIAMPolicyAssignmentResponse, RusotoError<DescribeIAMPolicyAssignmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeIAMPolicyAssignmentResponse,
+                        RusotoError<DescribeIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a SPICE ingestion.</p>
-    async fn describe_ingestion(
+    fn describe_ingestion(
         &self,
         input: DescribeIngestionRequest,
-    ) -> Result<DescribeIngestionResponse, RusotoError<DescribeIngestionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeIngestionResponse, RusotoError<DescribeIngestionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a template's metadata.</p>
-    async fn describe_template(
+    fn describe_template(
         &self,
         input: DescribeTemplateRequest,
-    ) -> Result<DescribeTemplateResponse, RusotoError<DescribeTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeTemplateResponse, RusotoError<DescribeTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the template alias for a template.</p>
-    async fn describe_template_alias(
+    fn describe_template_alias(
         &self,
         input: DescribeTemplateAliasRequest,
-    ) -> Result<DescribeTemplateAliasResponse, RusotoError<DescribeTemplateAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTemplateAliasResponse,
+                        RusotoError<DescribeTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes read and write permissions on a template.</p>
-    async fn describe_template_permissions(
+    fn describe_template_permissions(
         &self,
         input: DescribeTemplatePermissionsRequest,
-    ) -> Result<DescribeTemplatePermissionsResponse, RusotoError<DescribeTemplatePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTemplatePermissionsResponse,
+                        RusotoError<DescribeTemplatePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a user, given the user name. </p>
-    async fn describe_user(
+    fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeUserResponse, RusotoError<DescribeUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Generates a server-side embeddable URL and authorization code. For this process to work properly, first configure the dashboards and user permissions. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user’s browser.</p>
-    async fn get_dashboard_embed_url(
+    fn get_dashboard_embed_url(
         &self,
         input: GetDashboardEmbedUrlRequest,
-    ) -> Result<GetDashboardEmbedUrlResponse, RusotoError<GetDashboardEmbedUrlError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDashboardEmbedUrlResponse,
+                        RusotoError<GetDashboardEmbedUrlError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the versions of the dashboards in the QuickSight subscription.</p>
-    async fn list_dashboard_versions(
+    fn list_dashboard_versions(
         &self,
         input: ListDashboardVersionsRequest,
-    ) -> Result<ListDashboardVersionsResponse, RusotoError<ListDashboardVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDashboardVersionsResponse,
+                        RusotoError<ListDashboardVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists dashboards in an AWS account.</p>
-    async fn list_dashboards(
+    fn list_dashboards(
         &self,
         input: ListDashboardsRequest,
-    ) -> Result<ListDashboardsResponse, RusotoError<ListDashboardsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDashboardsResponse, RusotoError<ListDashboardsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all of the datasets belonging to the current AWS account in an AWS Region.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/*</code>.</p>
-    async fn list_data_sets(
+    fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
-    ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists data sources in current AWS Region that belong to this AWS account.</p>
-    async fn list_data_sources(
+    fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
-    ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists member users in a group.</p>
-    async fn list_group_memberships(
+    fn list_group_memberships(
         &self,
         input: ListGroupMembershipsRequest,
-    ) -> Result<ListGroupMembershipsResponse, RusotoError<ListGroupMembershipsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListGroupMembershipsResponse,
+                        RusotoError<ListGroupMembershipsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all user groups in Amazon QuickSight. </p>
-    async fn list_groups(
+    fn list_groups(
         &self,
         input: ListGroupsRequest,
-    ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGroupsResponse, RusotoError<ListGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists IAM policy assignments in the current Amazon QuickSight account.</p>
-    async fn list_iam_policy_assignments(
+    fn list_iam_policy_assignments(
         &self,
         input: ListIAMPolicyAssignmentsRequest,
-    ) -> Result<ListIAMPolicyAssignmentsResponse, RusotoError<ListIAMPolicyAssignmentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListIAMPolicyAssignmentsResponse,
+                        RusotoError<ListIAMPolicyAssignmentsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the IAM policy assignments, including the Amazon Resource Names (ARNs) for the IAM policies assigned to the specified user and group or groups that the user belongs to.</p>
-    async fn list_iam_policy_assignments_for_user(
+    fn list_iam_policy_assignments_for_user(
         &self,
         input: ListIAMPolicyAssignmentsForUserRequest,
-    ) -> Result<
-        ListIAMPolicyAssignmentsForUserResponse,
-        RusotoError<ListIAMPolicyAssignmentsForUserError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListIAMPolicyAssignmentsForUserResponse,
+                        RusotoError<ListIAMPolicyAssignmentsForUserError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the history of SPICE ingestions for a dataset.</p>
-    async fn list_ingestions(
+    fn list_ingestions(
         &self,
         input: ListIngestionsRequest,
-    ) -> Result<ListIngestionsResponse, RusotoError<ListIngestionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListIngestionsResponse, RusotoError<ListIngestionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags assigned to a resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the aliases of a template.</p>
-    async fn list_template_aliases(
+    fn list_template_aliases(
         &self,
         input: ListTemplateAliasesRequest,
-    ) -> Result<ListTemplateAliasesResponse, RusotoError<ListTemplateAliasesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTemplateAliasesResponse,
+                        RusotoError<ListTemplateAliasesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the versions of the templates in the current Amazon QuickSight account.</p>
-    async fn list_template_versions(
+    fn list_template_versions(
         &self,
         input: ListTemplateVersionsRequest,
-    ) -> Result<ListTemplateVersionsResponse, RusotoError<ListTemplateVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTemplateVersionsResponse,
+                        RusotoError<ListTemplateVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the templates in the current Amazon QuickSight account.</p>
-    async fn list_templates(
+    fn list_templates(
         &self,
         input: ListTemplatesRequest,
-    ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the Amazon QuickSight groups that an Amazon QuickSight user is a member of.</p>
-    async fn list_user_groups(
+    fn list_user_groups(
         &self,
         input: ListUserGroupsRequest,
-    ) -> Result<ListUserGroupsResponse, RusotoError<ListUserGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUserGroupsResponse, RusotoError<ListUserGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of all of the Amazon QuickSight users belonging to this account. </p>
-    async fn list_users(
+    fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUsersResponse, RusotoError<ListUsersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an Amazon QuickSight user, whose identity is associated with the AWS Identity and Access Management (IAM) identity or role specified in the request. </p>
-    async fn register_user(
+    fn register_user(
         &self,
         input: RegisterUserRequest,
-    ) -> Result<RegisterUserResponse, RusotoError<RegisterUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterUserResponse, RusotoError<RegisterUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Assigns one or more tags (key-value pairs) to the specified QuickSight resource. </p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. You can use the <code>TagResource</code> operation with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource. QuickSight supports tagging on data set, data source, dashboard, and template. </p> <p>Tagging for QuickSight works in a similar way to tagging for other AWS services, except for the following:</p> <ul> <li> <p>You can&#39;t use tags to track AWS costs for QuickSight. This restriction is because QuickSight costs are based on users and SPICE capacity, which aren&#39;t taggable resources.</p> </li> <li> <p>QuickSight doesn&#39;t currently support the Tag Editor for AWS Resource Groups.</p> </li> </ul></p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a tag or tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a dashboard in an AWS account.</p>
-    async fn update_dashboard(
+    fn update_dashboard(
         &self,
         input: UpdateDashboardRequest,
-    ) -> Result<UpdateDashboardResponse, RusotoError<UpdateDashboardError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDashboardResponse, RusotoError<UpdateDashboardError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates read and write permissions on a dashboard.</p>
-    async fn update_dashboard_permissions(
+    fn update_dashboard_permissions(
         &self,
         input: UpdateDashboardPermissionsRequest,
-    ) -> Result<UpdateDashboardPermissionsResponse, RusotoError<UpdateDashboardPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDashboardPermissionsResponse,
+                        RusotoError<UpdateDashboardPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the published version of a dashboard.</p>
-    async fn update_dashboard_published_version(
+    fn update_dashboard_published_version(
         &self,
         input: UpdateDashboardPublishedVersionRequest,
-    ) -> Result<
-        UpdateDashboardPublishedVersionResponse,
-        RusotoError<UpdateDashboardPublishedVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDashboardPublishedVersionResponse,
+                        RusotoError<UpdateDashboardPublishedVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Updates a dataset.</p>
-    async fn update_data_set(
+    fn update_data_set(
         &self,
         input: UpdateDataSetRequest,
-    ) -> Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the permissions on a dataset.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/data-set-id</code>.</p>
-    async fn update_data_set_permissions(
+    fn update_data_set_permissions(
         &self,
         input: UpdateDataSetPermissionsRequest,
-    ) -> Result<UpdateDataSetPermissionsResponse, RusotoError<UpdateDataSetPermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDataSetPermissionsResponse,
+                        RusotoError<UpdateDataSetPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a data source.</p>
-    async fn update_data_source(
+    fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the permissions to a data source.</p>
-    async fn update_data_source_permissions(
+    fn update_data_source_permissions(
         &self,
         input: UpdateDataSourcePermissionsRequest,
-    ) -> Result<UpdateDataSourcePermissionsResponse, RusotoError<UpdateDataSourcePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDataSourcePermissionsResponse,
+                        RusotoError<UpdateDataSourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes a group description. </p>
-    async fn update_group(
+    fn update_group(
         &self,
         input: UpdateGroupRequest,
-    ) -> Result<UpdateGroupResponse, RusotoError<UpdateGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateGroupResponse, RusotoError<UpdateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing IAM policy assignment. This operation updates only the optional parameter or parameters that are specified in the request.</p>
-    async fn update_iam_policy_assignment(
+    fn update_iam_policy_assignment(
         &self,
         input: UpdateIAMPolicyAssignmentRequest,
-    ) -> Result<UpdateIAMPolicyAssignmentResponse, RusotoError<UpdateIAMPolicyAssignmentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateIAMPolicyAssignmentResponse,
+                        RusotoError<UpdateIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a template from an existing Amazon QuickSight analysis or another template.</p>
-    async fn update_template(
+    fn update_template(
         &self,
         input: UpdateTemplateRequest,
-    ) -> Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the template alias of a template.</p>
-    async fn update_template_alias(
+    fn update_template_alias(
         &self,
         input: UpdateTemplateAliasRequest,
-    ) -> Result<UpdateTemplateAliasResponse, RusotoError<UpdateTemplateAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTemplateAliasResponse,
+                        RusotoError<UpdateTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the resource permissions for a template.</p>
-    async fn update_template_permissions(
+    fn update_template_permissions(
         &self,
         input: UpdateTemplatePermissionsRequest,
-    ) -> Result<UpdateTemplatePermissionsResponse, RusotoError<UpdateTemplatePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTemplatePermissionsResponse,
+                        RusotoError<UpdateTemplatePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an Amazon QuickSight user.</p>
-    async fn update_user(
+    fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateUserResponse, RusotoError<UpdateUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon QuickSight API.
 #[derive(Clone)]
@@ -9105,13 +9608,18 @@ impl QuicksightClient {
     }
 }
 
-#[async_trait]
 impl Quicksight for QuicksightClient {
     /// <p>Cancels an ongoing ingestion of data into SPICE.</p>
-    async fn cancel_ingestion(
+    fn cancel_ingestion(
         &self,
         input: CancelIngestionRequest,
-    ) -> Result<CancelIngestionResponse, RusotoError<CancelIngestionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelIngestionResponse, RusotoError<CancelIngestionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions/{ingestion_id}",
             aws_account_id = input.aws_account_id,
@@ -9122,29 +9630,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelIngestionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelIngestionResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelIngestionError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelIngestionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a dashboard from a template. To first create a template, see the CreateTemplate API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
-    async fn create_dashboard(
+    fn create_dashboard(
         &self,
         input: CreateDashboardRequest,
-    ) -> Result<CreateDashboardResponse, RusotoError<CreateDashboardError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDashboardResponse, RusotoError<CreateDashboardError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -9157,29 +9671,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDashboardResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDashboardResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDashboardError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDashboardError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a dataset.</p>
-    async fn create_data_set(
+    fn create_data_set(
         &self,
         input: CreateDataSetRequest,
-    ) -> Result<CreateDataSetResponse, RusotoError<CreateDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDataSetResponse, RusotoError<CreateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets",
             aws_account_id = input.aws_account_id
@@ -9191,29 +9711,36 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDataSetResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataSetError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a data source.</p>
-    async fn create_data_source(
+    fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources",
             aws_account_id = input.aws_account_id
@@ -9225,29 +9752,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDataSourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataSourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an Amazon QuickSight group.</p> <p>The permissions resource is <code>arn:aws:quicksight:us-east-1:<i>&lt;relevant-aws-account-id&gt;</i>:group/default/<i>&lt;group-name&gt;</i> </code>.</p> <p>The response is a group object.</p>
-    async fn create_group(
+    fn create_group(
         &self,
         input: CreateGroupRequest,
-    ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateGroupResponse, RusotoError<CreateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups",
             aws_account_id = input.aws_account_id,
@@ -9260,58 +9793,77 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateGroupResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGroupError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds an Amazon QuickSight user to an Amazon QuickSight group. </p>
-    async fn create_group_membership(
+    fn create_group_membership(
         &self,
         input: CreateGroupMembershipRequest,
-    ) -> Result<CreateGroupMembershipResponse, RusotoError<CreateGroupMembershipError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateGroupMembershipResponse,
+                        RusotoError<CreateGroupMembershipError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}/members/{member_name}", aws_account_id = input.aws_account_id, group_name = input.group_name, member_name = input.member_name, namespace = input.namespace);
 
         let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGroupMembershipResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateGroupMembershipResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGroupMembershipError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateGroupMembershipError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an assignment with one specified IAM policy, identified by its Amazon Resource Name (ARN). This policy will be assigned to specified groups or users of Amazon QuickSight. The users and groups need to be in the same namespace. </p>
-    async fn create_iam_policy_assignment(
+    fn create_iam_policy_assignment(
         &self,
         input: CreateIAMPolicyAssignmentRequest,
-    ) -> Result<CreateIAMPolicyAssignmentResponse, RusotoError<CreateIAMPolicyAssignmentError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateIAMPolicyAssignmentResponse,
+                        RusotoError<CreateIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments/",
             aws_account_id = input.aws_account_id,
@@ -9324,29 +9876,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIAMPolicyAssignmentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateIAMPolicyAssignmentResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateIAMPolicyAssignmentError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateIAMPolicyAssignmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.example.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
-    async fn create_ingestion(
+    fn create_ingestion(
         &self,
         input: CreateIngestionRequest,
-    ) -> Result<CreateIngestionResponse, RusotoError<CreateIngestionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateIngestionResponse, RusotoError<CreateIngestionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions/{ingestion_id}",
             aws_account_id = input.aws_account_id,
@@ -9357,29 +9915,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateIngestionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateIngestionResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateIngestionError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateIngestionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a template from an existing QuickSight analysis or template. You can use the resulting template to create a dashboard.</p> <p>A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create s dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p>
-    async fn create_template(
+    fn create_template(
         &self,
         input: CreateTemplateRequest,
-    ) -> Result<CreateTemplateResponse, RusotoError<CreateTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTemplateResponse, RusotoError<CreateTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -9392,29 +9956,39 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTemplateResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTemplateError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a template alias for a template.</p>
-    async fn create_template_alias(
+    fn create_template_alias(
         &self,
         input: CreateTemplateAliasRequest,
-    ) -> Result<CreateTemplateAliasResponse, RusotoError<CreateTemplateAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateTemplateAliasResponse,
+                        RusotoError<CreateTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -9428,29 +10002,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTemplateAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTemplateAliasResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTemplateAliasError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTemplateAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a dashboard.</p>
-    async fn delete_dashboard(
+    fn delete_dashboard(
         &self,
         input: DeleteDashboardRequest,
-    ) -> Result<DeleteDashboardResponse, RusotoError<DeleteDashboardError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDashboardResponse, RusotoError<DeleteDashboardError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -9466,29 +10046,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDashboardResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDashboardResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDashboardError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDashboardError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a dataset.</p>
-    async fn delete_data_set(
+    fn delete_data_set(
         &self,
         input: DeleteDataSetRequest,
-    ) -> Result<DeleteDataSetResponse, RusotoError<DeleteDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDataSetResponse, RusotoError<DeleteDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}",
             aws_account_id = input.aws_account_id,
@@ -9498,29 +10084,36 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDataSetResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDataSetError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the data source permanently. This action breaks all the datasets that reference the deleted data source.</p>
-    async fn delete_data_source(
+    fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
-    ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}",
             aws_account_id = input.aws_account_id,
@@ -9530,29 +10123,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDataSourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDataSourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a user group from Amazon QuickSight. </p>
-    async fn delete_group(
+    fn delete_group(
         &self,
         input: DeleteGroupRequest,
-    ) -> Result<DeleteGroupResponse, RusotoError<DeleteGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteGroupResponse, RusotoError<DeleteGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}",
             aws_account_id = input.aws_account_id,
@@ -9563,86 +10162,111 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteGroupResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGroupError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a user from a group so that the user is no longer a member of the group.</p>
-    async fn delete_group_membership(
+    fn delete_group_membership(
         &self,
         input: DeleteGroupMembershipRequest,
-    ) -> Result<DeleteGroupMembershipResponse, RusotoError<DeleteGroupMembershipError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteGroupMembershipResponse,
+                        RusotoError<DeleteGroupMembershipError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}/members/{member_name}", aws_account_id = input.aws_account_id, group_name = input.group_name, member_name = input.member_name, namespace = input.namespace);
 
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGroupMembershipResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteGroupMembershipResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGroupMembershipError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGroupMembershipError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing IAM policy assignment.</p>
-    async fn delete_iam_policy_assignment(
+    fn delete_iam_policy_assignment(
         &self,
         input: DeleteIAMPolicyAssignmentRequest,
-    ) -> Result<DeleteIAMPolicyAssignmentResponse, RusotoError<DeleteIAMPolicyAssignmentError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteIAMPolicyAssignmentResponse,
+                        RusotoError<DeleteIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/accounts/{aws_account_id}/namespace/{namespace}/iam-policy-assignments/{assignment_name}", assignment_name = input.assignment_name, aws_account_id = input.aws_account_id, namespace = input.namespace);
 
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteIAMPolicyAssignmentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteIAMPolicyAssignmentResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteIAMPolicyAssignmentError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteIAMPolicyAssignmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a template.</p>
-    async fn delete_template(
+    fn delete_template(
         &self,
         input: DeleteTemplateRequest,
-    ) -> Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -9658,29 +10282,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteTemplateResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTemplateError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the item that the specified template alias points to. If you provide a specific alias, you delete the version of the template that the alias points to.</p>
-    async fn delete_template_alias(
+    fn delete_template_alias(
         &self,
         input: DeleteTemplateAliasRequest,
-    ) -> Result<DeleteTemplateAliasResponse, RusotoError<DeleteTemplateAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteTemplateAliasResponse,
+                        RusotoError<DeleteTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -9691,29 +10325,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTemplateAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteTemplateAliasResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTemplateAliasError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTemplateAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the Amazon QuickSight user that is associated with the identity of the AWS Identity and Access Management (IAM) user or role that's making the call. The IAM user isn't deleted as a result of this call. </p>
-    async fn delete_user(
+    fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteUserResponse, RusotoError<DeleteUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}",
             aws_account_id = input.aws_account_id,
@@ -9724,29 +10364,39 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteUserResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a user identified by its principal ID. </p>
-    async fn delete_user_by_principal_id(
+    fn delete_user_by_principal_id(
         &self,
         input: DeleteUserByPrincipalIdRequest,
-    ) -> Result<DeleteUserByPrincipalIdResponse, RusotoError<DeleteUserByPrincipalIdError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteUserByPrincipalIdResponse,
+                        RusotoError<DeleteUserByPrincipalIdError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/user-principals/{principal_id}",
             aws_account_id = input.aws_account_id,
@@ -9757,29 +10407,36 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteUserByPrincipalIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteUserByPrincipalIdResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserByPrincipalIdError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUserByPrincipalIdError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides a summary for a dashboard.</p>
-    async fn describe_dashboard(
+    fn describe_dashboard(
         &self,
         input: DescribeDashboardRequest,
-    ) -> Result<DescribeDashboardResponse, RusotoError<DescribeDashboardError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeDashboardResponse, RusotoError<DescribeDashboardError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -9798,30 +10455,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDashboardResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDashboardResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDashboardError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDashboardError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes read and write permissions for a dashboard.</p>
-    async fn describe_dashboard_permissions(
+    fn describe_dashboard_permissions(
         &self,
         input: DescribeDashboardPermissionsRequest,
-    ) -> Result<DescribeDashboardPermissionsResponse, RusotoError<DescribeDashboardPermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDashboardPermissionsResponse,
+                        RusotoError<DescribeDashboardPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -9831,29 +10497,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDashboardPermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDashboardPermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDashboardPermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDashboardPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a dataset. </p>
-    async fn describe_data_set(
+    fn describe_data_set(
         &self,
         input: DescribeDataSetRequest,
-    ) -> Result<DescribeDataSetResponse, RusotoError<DescribeDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeDataSetResponse, RusotoError<DescribeDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}",
             aws_account_id = input.aws_account_id,
@@ -9863,30 +10535,39 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDataSetResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDataSetError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the permissions on a dataset.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/data-set-id</code>.</p>
-    async fn describe_data_set_permissions(
+    fn describe_data_set_permissions(
         &self,
         input: DescribeDataSetPermissionsRequest,
-    ) -> Result<DescribeDataSetPermissionsResponse, RusotoError<DescribeDataSetPermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSetPermissionsResponse,
+                        RusotoError<DescribeDataSetPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -9896,29 +10577,39 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDataSetPermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDataSetPermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDataSetPermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDataSetPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a data source.</p>
-    async fn describe_data_source(
+    fn describe_data_source(
         &self,
         input: DescribeDataSourceRequest,
-    ) -> Result<DescribeDataSourceResponse, RusotoError<DescribeDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSourceResponse,
+                        RusotoError<DescribeDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}",
             aws_account_id = input.aws_account_id,
@@ -9928,31 +10619,38 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDataSourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDataSourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the resource permissions for a data source.</p>
-    async fn describe_data_source_permissions(
+    fn describe_data_source_permissions(
         &self,
         input: DescribeDataSourcePermissionsRequest,
-    ) -> Result<
-        DescribeDataSourcePermissionsResponse,
-        RusotoError<DescribeDataSourcePermissionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSourcePermissionsResponse,
+                        RusotoError<DescribeDataSourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}/permissions",
@@ -9963,29 +10661,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDataSourcePermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDataSourcePermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDataSourcePermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDataSourcePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns an Amazon QuickSight group's description and Amazon Resource Name (ARN). </p>
-    async fn describe_group(
+    fn describe_group(
         &self,
         input: DescribeGroupRequest,
-    ) -> Result<DescribeGroupResponse, RusotoError<DescribeGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeGroupResponse, RusotoError<DescribeGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}",
             aws_account_id = input.aws_account_id,
@@ -9996,58 +10700,74 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeGroupResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeGroupError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing IAM policy assignment, as specified by the assignment name.</p>
-    async fn describe_iam_policy_assignment(
+    fn describe_iam_policy_assignment(
         &self,
         input: DescribeIAMPolicyAssignmentRequest,
-    ) -> Result<DescribeIAMPolicyAssignmentResponse, RusotoError<DescribeIAMPolicyAssignmentError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeIAMPolicyAssignmentResponse,
+                        RusotoError<DescribeIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments/{assignment_name}", assignment_name = input.assignment_name, aws_account_id = input.aws_account_id, namespace = input.namespace);
 
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIAMPolicyAssignmentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeIAMPolicyAssignmentResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeIAMPolicyAssignmentError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeIAMPolicyAssignmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a SPICE ingestion.</p>
-    async fn describe_ingestion(
+    fn describe_ingestion(
         &self,
         input: DescribeIngestionRequest,
-    ) -> Result<DescribeIngestionResponse, RusotoError<DescribeIngestionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeIngestionResponse, RusotoError<DescribeIngestionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions/{ingestion_id}",
             aws_account_id = input.aws_account_id,
@@ -10058,29 +10778,36 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIngestionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeIngestionResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeIngestionError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeIngestionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a template's metadata.</p>
-    async fn describe_template(
+    fn describe_template(
         &self,
         input: DescribeTemplateRequest,
-    ) -> Result<DescribeTemplateResponse, RusotoError<DescribeTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeTemplateResponse, RusotoError<DescribeTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -10099,29 +10826,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTemplateResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTemplateError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the template alias for a template.</p>
-    async fn describe_template_alias(
+    fn describe_template_alias(
         &self,
         input: DescribeTemplateAliasRequest,
-    ) -> Result<DescribeTemplateAliasResponse, RusotoError<DescribeTemplateAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTemplateAliasResponse,
+                        RusotoError<DescribeTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -10132,30 +10869,39 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTemplateAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTemplateAliasResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTemplateAliasError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTemplateAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes read and write permissions on a template.</p>
-    async fn describe_template_permissions(
+    fn describe_template_permissions(
         &self,
         input: DescribeTemplatePermissionsRequest,
-    ) -> Result<DescribeTemplatePermissionsResponse, RusotoError<DescribeTemplatePermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTemplatePermissionsResponse,
+                        RusotoError<DescribeTemplatePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -10165,29 +10911,35 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTemplatePermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTemplatePermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTemplatePermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTemplatePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a user, given the user name. </p>
-    async fn describe_user(
+    fn describe_user(
         &self,
         input: DescribeUserRequest,
-    ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeUserResponse, RusotoError<DescribeUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}",
             aws_account_id = input.aws_account_id,
@@ -10198,29 +10950,39 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeUserResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeUserError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Generates a server-side embeddable URL and authorization code. For this process to work properly, first configure the dashboards and user permissions. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user’s browser.</p>
-    async fn get_dashboard_embed_url(
+    fn get_dashboard_embed_url(
         &self,
         input: GetDashboardEmbedUrlRequest,
-    ) -> Result<GetDashboardEmbedUrlResponse, RusotoError<GetDashboardEmbedUrlError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDashboardEmbedUrlResponse,
+                        RusotoError<GetDashboardEmbedUrlError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/embed-url",
             aws_account_id = input.aws_account_id,
@@ -10246,29 +11008,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDashboardEmbedUrlResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDashboardEmbedUrlResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDashboardEmbedUrlError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDashboardEmbedUrlError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the versions of the dashboards in the QuickSight subscription.</p>
-    async fn list_dashboard_versions(
+    fn list_dashboard_versions(
         &self,
         input: ListDashboardVersionsRequest,
-    ) -> Result<ListDashboardVersionsResponse, RusotoError<ListDashboardVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDashboardVersionsResponse,
+                        RusotoError<ListDashboardVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/versions",
             aws_account_id = input.aws_account_id,
@@ -10287,29 +11059,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDashboardVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDashboardVersionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDashboardVersionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDashboardVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists dashboards in an AWS account.</p>
-    async fn list_dashboards(
+    fn list_dashboards(
         &self,
         input: ListDashboardsRequest,
-    ) -> Result<ListDashboardsResponse, RusotoError<ListDashboardsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDashboardsResponse, RusotoError<ListDashboardsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards",
             aws_account_id = input.aws_account_id
@@ -10327,29 +11105,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDashboardsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDashboardsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDashboardsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDashboardsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all of the datasets belonging to the current AWS account in an AWS Region.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/*</code>.</p>
-    async fn list_data_sets(
+    fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
-    ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets",
             aws_account_id = input.aws_account_id
@@ -10367,29 +11151,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSetsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSetsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists data sources in current AWS Region that belong to this AWS account.</p>
-    async fn list_data_sources(
+    fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
-    ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources",
             aws_account_id = input.aws_account_id
@@ -10407,29 +11197,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSourcesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSourcesResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSourcesError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists member users in a group.</p>
-    async fn list_group_memberships(
+    fn list_group_memberships(
         &self,
         input: ListGroupMembershipsRequest,
-    ) -> Result<ListGroupMembershipsResponse, RusotoError<ListGroupMembershipsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListGroupMembershipsResponse,
+                        RusotoError<ListGroupMembershipsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}/members",
             aws_account_id = input.aws_account_id,
@@ -10449,29 +11249,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupMembershipsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGroupMembershipsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGroupMembershipsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGroupMembershipsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all user groups in Amazon QuickSight. </p>
-    async fn list_groups(
+    fn list_groups(
         &self,
         input: ListGroupsRequest,
-    ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGroupsResponse, RusotoError<ListGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups",
             aws_account_id = input.aws_account_id,
@@ -10490,29 +11296,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGroupsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGroupsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists IAM policy assignments in the current Amazon QuickSight account.</p>
-    async fn list_iam_policy_assignments(
+    fn list_iam_policy_assignments(
         &self,
         input: ListIAMPolicyAssignmentsRequest,
-    ) -> Result<ListIAMPolicyAssignmentsResponse, RusotoError<ListIAMPolicyAssignmentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListIAMPolicyAssignmentsResponse,
+                        RusotoError<ListIAMPolicyAssignmentsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments",
             aws_account_id = input.aws_account_id,
@@ -10534,31 +11350,38 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIAMPolicyAssignmentsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListIAMPolicyAssignmentsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListIAMPolicyAssignmentsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListIAMPolicyAssignmentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the IAM policy assignments, including the Amazon Resource Names (ARNs) for the IAM policies assigned to the specified user and group or groups that the user belongs to.</p>
-    async fn list_iam_policy_assignments_for_user(
+    fn list_iam_policy_assignments_for_user(
         &self,
         input: ListIAMPolicyAssignmentsForUserRequest,
-    ) -> Result<
-        ListIAMPolicyAssignmentsForUserResponse,
-        RusotoError<ListIAMPolicyAssignmentsForUserError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListIAMPolicyAssignmentsForUserResponse,
+                        RusotoError<ListIAMPolicyAssignmentsForUserError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}/iam-policy-assignments", aws_account_id = input.aws_account_id, namespace = input.namespace, user_name = input.user_name);
 
@@ -10574,31 +11397,37 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIAMPolicyAssignmentsForUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListIAMPolicyAssignmentsForUserResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListIAMPolicyAssignmentsForUserError::from_response(
-                response,
-            ))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListIAMPolicyAssignmentsForUserError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the history of SPICE ingestions for a dataset.</p>
-    async fn list_ingestions(
+    fn list_ingestions(
         &self,
         input: ListIngestionsRequest,
-    ) -> Result<ListIngestionsResponse, RusotoError<ListIngestionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListIngestionsResponse, RusotoError<ListIngestionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/ingestions",
             aws_account_id = input.aws_account_id,
@@ -10617,29 +11446,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIngestionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListIngestionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListIngestionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListIngestionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags assigned to a resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/resources/{resource_arn}/tags",
             resource_arn = input.resource_arn
@@ -10648,29 +11487,39 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the aliases of a template.</p>
-    async fn list_template_aliases(
+    fn list_template_aliases(
         &self,
         input: ListTemplateAliasesRequest,
-    ) -> Result<ListTemplateAliasesResponse, RusotoError<ListTemplateAliasesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTemplateAliasesResponse,
+                        RusotoError<ListTemplateAliasesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases",
             aws_account_id = input.aws_account_id,
@@ -10689,29 +11538,39 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTemplateAliasesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTemplateAliasesResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTemplateAliasesError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTemplateAliasesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the versions of the templates in the current Amazon QuickSight account.</p>
-    async fn list_template_versions(
+    fn list_template_versions(
         &self,
         input: ListTemplateVersionsRequest,
-    ) -> Result<ListTemplateVersionsResponse, RusotoError<ListTemplateVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTemplateVersionsResponse,
+                        RusotoError<ListTemplateVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/versions",
             aws_account_id = input.aws_account_id,
@@ -10730,29 +11589,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTemplateVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTemplateVersionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTemplateVersionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTemplateVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the templates in the current Amazon QuickSight account.</p>
-    async fn list_templates(
+    fn list_templates(
         &self,
         input: ListTemplatesRequest,
-    ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates",
             aws_account_id = input.aws_account_id
@@ -10770,29 +11635,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTemplatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTemplatesResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTemplatesError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTemplatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the Amazon QuickSight groups that an Amazon QuickSight user is a member of.</p>
-    async fn list_user_groups(
+    fn list_user_groups(
         &self,
         input: ListUserGroupsRequest,
-    ) -> Result<ListUserGroupsResponse, RusotoError<ListUserGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUserGroupsResponse, RusotoError<ListUserGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}/groups",
             aws_account_id = input.aws_account_id,
@@ -10812,29 +11683,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListUserGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListUserGroupsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUserGroupsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListUserGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of all of the Amazon QuickSight users belonging to this account. </p>
-    async fn list_users(
+    fn list_users(
         &self,
         input: ListUsersRequest,
-    ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUsersResponse, RusotoError<ListUsersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users",
             aws_account_id = input.aws_account_id,
@@ -10853,29 +11730,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListUsersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListUsersResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUsersError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListUsersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an Amazon QuickSight user, whose identity is associated with the AWS Identity and Access Management (IAM) identity or role specified in the request. </p>
-    async fn register_user(
+    fn register_user(
         &self,
         input: RegisterUserRequest,
-    ) -> Result<RegisterUserResponse, RusotoError<RegisterUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterUserResponse, RusotoError<RegisterUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users",
             aws_account_id = input.aws_account_id,
@@ -10888,29 +11771,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterUserResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterUserError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Assigns one or more tags (key-value pairs) to the specified QuickSight resource. </p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. You can use the <code>TagResource</code> operation with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource. QuickSight supports tagging on data set, data source, dashboard, and template. </p> <p>Tagging for QuickSight works in a similar way to tagging for other AWS services, except for the following:</p> <ul> <li> <p>You can&#39;t use tags to track AWS costs for QuickSight. This restriction is because QuickSight costs are based on users and SPICE capacity, which aren&#39;t taggable resources.</p> </li> <li> <p>QuickSight doesn&#39;t currently support the Tag Editor for AWS Resource Groups.</p> </li> </ul></p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/resources/{resource_arn}/tags",
             resource_arn = input.resource_arn
@@ -10922,29 +11811,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a tag or tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/resources/{resource_arn}/tags",
             resource_arn = input.resource_arn
@@ -10959,29 +11854,35 @@ impl Quicksight for QuicksightClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a dashboard in an AWS account.</p>
-    async fn update_dashboard(
+    fn update_dashboard(
         &self,
         input: UpdateDashboardRequest,
-    ) -> Result<UpdateDashboardResponse, RusotoError<UpdateDashboardError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDashboardResponse, RusotoError<UpdateDashboardError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}",
             aws_account_id = input.aws_account_id,
@@ -10994,29 +11895,38 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDashboardResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDashboardResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDashboardError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDashboardError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates read and write permissions on a dashboard.</p>
-    async fn update_dashboard_permissions(
+    fn update_dashboard_permissions(
         &self,
         input: UpdateDashboardPermissionsRequest,
-    ) -> Result<UpdateDashboardPermissionsResponse, RusotoError<UpdateDashboardPermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDashboardPermissionsResponse,
+                        RusotoError<UpdateDashboardPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -11029,31 +11939,38 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDashboardPermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDashboardPermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDashboardPermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDashboardPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the published version of a dashboard.</p>
-    async fn update_dashboard_published_version(
+    fn update_dashboard_published_version(
         &self,
         input: UpdateDashboardPublishedVersionRequest,
-    ) -> Result<
-        UpdateDashboardPublishedVersionResponse,
-        RusotoError<UpdateDashboardPublishedVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDashboardPublishedVersionResponse,
+                        RusotoError<UpdateDashboardPublishedVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/dashboards/{dashboard_id}/versions/{version_number}",
@@ -11065,31 +11982,37 @@ impl Quicksight for QuicksightClient {
         let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDashboardPublishedVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDashboardPublishedVersionResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDashboardPublishedVersionError::from_response(
-                response,
-            ))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDashboardPublishedVersionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a dataset.</p>
-    async fn update_data_set(
+    fn update_data_set(
         &self,
         input: UpdateDataSetRequest,
-    ) -> Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}",
             aws_account_id = input.aws_account_id,
@@ -11102,29 +12025,39 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDataSetResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSetError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the permissions on a dataset.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/data-set-id</code>.</p>
-    async fn update_data_set_permissions(
+    fn update_data_set_permissions(
         &self,
         input: UpdateDataSetPermissionsRequest,
-    ) -> Result<UpdateDataSetPermissionsResponse, RusotoError<UpdateDataSetPermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDataSetPermissionsResponse,
+                        RusotoError<UpdateDataSetPermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sets/{data_set_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -11137,29 +12070,36 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSetPermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDataSetPermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSetPermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSetPermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a data source.</p>
-    async fn update_data_source(
+    fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}",
             aws_account_id = input.aws_account_id,
@@ -11172,30 +12112,39 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDataSourceResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSourceError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the permissions to a data source.</p>
-    async fn update_data_source_permissions(
+    fn update_data_source_permissions(
         &self,
         input: UpdateDataSourcePermissionsRequest,
-    ) -> Result<UpdateDataSourcePermissionsResponse, RusotoError<UpdateDataSourcePermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDataSourcePermissionsResponse,
+                        RusotoError<UpdateDataSourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/data-sources/{data_source_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -11208,29 +12157,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSourcePermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDataSourcePermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSourcePermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSourcePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes a group description. </p>
-    async fn update_group(
+    fn update_group(
         &self,
         input: UpdateGroupRequest,
-    ) -> Result<UpdateGroupResponse, RusotoError<UpdateGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateGroupResponse, RusotoError<UpdateGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/groups/{group_name}",
             aws_account_id = input.aws_account_id,
@@ -11244,30 +12199,39 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateGroupResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGroupError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing IAM policy assignment. This operation updates only the optional parameter or parameters that are specified in the request.</p>
-    async fn update_iam_policy_assignment(
+    fn update_iam_policy_assignment(
         &self,
         input: UpdateIAMPolicyAssignmentRequest,
-    ) -> Result<UpdateIAMPolicyAssignmentResponse, RusotoError<UpdateIAMPolicyAssignmentError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateIAMPolicyAssignmentResponse,
+                        RusotoError<UpdateIAMPolicyAssignmentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/accounts/{aws_account_id}/namespaces/{namespace}/iam-policy-assignments/{assignment_name}", assignment_name = input.assignment_name, aws_account_id = input.aws_account_id, namespace = input.namespace);
 
         let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
@@ -11276,29 +12240,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIAMPolicyAssignmentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateIAMPolicyAssignmentResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateIAMPolicyAssignmentError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateIAMPolicyAssignmentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a template from an existing Amazon QuickSight analysis or another template.</p>
-    async fn update_template(
+    fn update_template(
         &self,
         input: UpdateTemplateRequest,
-    ) -> Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}",
             aws_account_id = input.aws_account_id,
@@ -11311,29 +12281,39 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTemplateResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTemplateError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the template alias of a template.</p>
-    async fn update_template_alias(
+    fn update_template_alias(
         &self,
         input: UpdateTemplateAliasRequest,
-    ) -> Result<UpdateTemplateAliasResponse, RusotoError<UpdateTemplateAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTemplateAliasResponse,
+                        RusotoError<UpdateTemplateAliasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/aliases/{alias_name}",
             alias_name = input.alias_name,
@@ -11347,30 +12327,39 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTemplateAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTemplateAliasResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTemplateAliasError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTemplateAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the resource permissions for a template.</p>
-    async fn update_template_permissions(
+    fn update_template_permissions(
         &self,
         input: UpdateTemplatePermissionsRequest,
-    ) -> Result<UpdateTemplatePermissionsResponse, RusotoError<UpdateTemplatePermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTemplatePermissionsResponse,
+                        RusotoError<UpdateTemplatePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/templates/{template_id}/permissions",
             aws_account_id = input.aws_account_id,
@@ -11383,29 +12372,35 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTemplatePermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTemplatePermissionsResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTemplatePermissionsError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTemplatePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an Amazon QuickSight user.</p>
-    async fn update_user(
+    fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateUserResponse, RusotoError<UpdateUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accounts/{aws_account_id}/namespaces/{namespace}/users/{user_name}",
             aws_account_id = input.aws_account_id,
@@ -11419,21 +12414,21 @@ impl Quicksight for QuicksightClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let mut result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateUserResponse, _>()?;
 
-            result.status = Some(response.status.as_u16() as i64);
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUserError::from_response(response))
+                result.status = Some(response.status.as_u16() as i64);
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

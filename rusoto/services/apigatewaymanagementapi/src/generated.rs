@@ -13,16 +13,17 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
@@ -211,25 +212,34 @@ impl fmt::Display for PostToConnectionError {
 }
 impl Error for PostToConnectionError {}
 /// Trait representing the capabilities of the AmazonApiGatewayManagementApi API. AmazonApiGatewayManagementApi clients implement this trait.
-#[async_trait]
 pub trait ApiGatewayManagementApi {
     /// <p>Delete the connection with the provided id.</p>
-    async fn delete_connection(
+    fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
-    ) -> Result<(), RusotoError<DeleteConnectionError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteConnectionError>>> + Send + 'static>,
+    >;
 
     /// <p>Get information about the connection with the provided id.</p>
-    async fn get_connection(
+    fn get_connection(
         &self,
         input: GetConnectionRequest,
-    ) -> Result<GetConnectionResponse, RusotoError<GetConnectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetConnectionResponse, RusotoError<GetConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sends the provided data to the specified connection.</p>
-    async fn post_to_connection(
+    fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
-    ) -> Result<(), RusotoError<PostToConnectionError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<PostToConnectionError>>> + Send + 'static>,
+    >;
 }
 /// A client for the AmazonApiGatewayManagementApi API.
 #[derive(Clone)]
@@ -272,13 +282,14 @@ impl ApiGatewayManagementApiClient {
     }
 }
 
-#[async_trait]
 impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     /// <p>Delete the connection with the provided id.</p>
-    async fn delete_connection(
+    fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
-    ) -> Result<(), RusotoError<DeleteConnectionError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteConnectionError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -287,27 +298,33 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConnectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get information about the connection with the provided id.</p>
-    async fn get_connection(
+    fn get_connection(
         &self,
         input: GetConnectionRequest,
-    ) -> Result<GetConnectionResponse, RusotoError<GetConnectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetConnectionResponse, RusotoError<GetConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -316,28 +333,30 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConnectionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetConnectionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sends the provided data to the specified connection.</p>
-    async fn post_to_connection(
+    fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
-    ) -> Result<(), RusotoError<PostToConnectionError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<PostToConnectionError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/@connections/{connection_id}",
             connection_id = input.connection_id
@@ -349,19 +368,19 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         let encoded = Some(input.data.to_owned());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PostToConnectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PostToConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

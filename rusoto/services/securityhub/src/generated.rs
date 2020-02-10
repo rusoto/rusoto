@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -4539,252 +4540,564 @@ impl fmt::Display for UpdateStandardsControlError {
 }
 impl Error for UpdateStandardsControlError {}
 /// Trait representing the capabilities of the AWS SecurityHub API. AWS SecurityHub clients implement this trait.
-#[async_trait]
 pub trait SecurityHub {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
-    async fn accept_invitation(
+    fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
-    ) -> Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
-    async fn batch_disable_standards(
+    fn batch_disable_standards(
         &self,
         input: BatchDisableStandardsRequest,
-    ) -> Result<BatchDisableStandardsResponse, RusotoError<BatchDisableStandardsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDisableStandardsResponse,
+                        RusotoError<BatchDisableStandardsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Enables the standards specified by the provided <code>standardsArn</code>. In this release, only CIS AWS Foundations standards are supported. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
-    async fn batch_enable_standards(
+    fn batch_enable_standards(
         &self,
         input: BatchEnableStandardsRequest,
-    ) -> Result<BatchEnableStandardsResponse, RusotoError<BatchEnableStandardsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchEnableStandardsResponse,
+                        RusotoError<BatchEnableStandardsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub. The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p>
-    async fn batch_import_findings(
+    fn batch_import_findings(
         &self,
         input: BatchImportFindingsRequest,
-    ) -> Result<BatchImportFindingsResponse, RusotoError<BatchImportFindingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchImportFindingsResponse,
+                        RusotoError<BatchImportFindingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a custom action target in Security Hub. You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
-    async fn create_action_target(
+    fn create_action_target(
         &self,
         input: CreateActionTargetRequest,
-    ) -> Result<CreateActionTargetResponse, RusotoError<CreateActionTargetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateActionTargetResponse,
+                        RusotoError<CreateActionTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation. Use the <code>GroupByAttribute</code> to group the related findings in the insight.</p>
-    async fn create_insight(
+    fn create_insight(
         &self,
         input: CreateInsightRequest,
-    ) -> Result<CreateInsightResponse, RusotoError<CreateInsightError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateInsightResponse, RusotoError<CreateInsightError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. You can use the <a>EnableSecurityHub</a> to enable Security Hub.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you need to use the <a>InviteMembers</a> action, which invites the accounts to enable Security Hub and become member accounts in Security Hub. If the invitation is accepted by the account owner, the account becomes a member account in Security Hub, and a permission policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start being sent to both the member and master accounts.</p> <p>You can remove the association between the master and member accounts by using the <a>DisassociateFromMasterAccount</a> or <a>DisassociateMembers</a> operation.</p>
-    async fn create_members(
+    fn create_members(
         &self,
         input: CreateMembersRequest,
-    ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMembersResponse, RusotoError<CreateMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Declines invitations to become a member account.</p>
-    async fn decline_invitations(
+    fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
-    ) -> Result<DeclineInvitationsResponse, RusotoError<DeclineInvitationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeclineInvitationsResponse,
+                        RusotoError<DeclineInvitationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a custom action target from Security Hub. Deleting a custom action target doesn't affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
-    async fn delete_action_target(
+    fn delete_action_target(
         &self,
         input: DeleteActionTargetRequest,
-    ) -> Result<DeleteActionTargetResponse, RusotoError<DeleteActionTargetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteActionTargetResponse,
+                        RusotoError<DeleteActionTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the insight specified by the <code>InsightArn</code>.</p>
-    async fn delete_insight(
+    fn delete_insight(
         &self,
         input: DeleteInsightRequest,
-    ) -> Result<DeleteInsightResponse, RusotoError<DeleteInsightError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInsightResponse, RusotoError<DeleteInsightError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes invitations received by the AWS account to become a member account.</p>
-    async fn delete_invitations(
+    fn delete_invitations(
         &self,
         input: DeleteInvitationsRequest,
-    ) -> Result<DeleteInvitationsResponse, RusotoError<DeleteInvitationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteInvitationsResponse, RusotoError<DeleteInvitationsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified member accounts from Security Hub.</p>
-    async fn delete_members(
+    fn delete_members(
         &self,
         input: DeleteMembersRequest,
-    ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the custom action targets in Security Hub in your account.</p>
-    async fn describe_action_targets(
+    fn describe_action_targets(
         &self,
         input: DescribeActionTargetsRequest,
-    ) -> Result<DescribeActionTargetsResponse, RusotoError<DescribeActionTargetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeActionTargetsResponse,
+                        RusotoError<DescribeActionTargetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns details about the Hub resource in your account, including the <code>HubArn</code> and the time when you enabled Security Hub.</p>
-    async fn describe_hub(
+    fn describe_hub(
         &self,
         input: DescribeHubRequest,
-    ) -> Result<DescribeHubResponse, RusotoError<DescribeHubError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeHubResponse, RusotoError<DescribeHubError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the products available that you can subscribe to and integrate with Security Hub to consolidate findings.</p>
-    async fn describe_products(
+    fn describe_products(
         &self,
         input: DescribeProductsRequest,
-    ) -> Result<DescribeProductsResponse, RusotoError<DescribeProductsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeProductsResponse, RusotoError<DescribeProductsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of compliance standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
-    async fn describe_standards_controls(
+    fn describe_standards_controls(
         &self,
         input: DescribeStandardsControlsRequest,
-    ) -> Result<DescribeStandardsControlsResponse, RusotoError<DescribeStandardsControlsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStandardsControlsResponse,
+                        RusotoError<DescribeStandardsControlsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disables the integration of the specified product with Security Hub. Findings from that product are no longer sent to Security Hub after the integration is disabled.</p>
-    async fn disable_import_findings_for_product(
+    fn disable_import_findings_for_product(
         &self,
         input: DisableImportFindingsForProductRequest,
-    ) -> Result<
-        DisableImportFindingsForProductResponse,
-        RusotoError<DisableImportFindingsForProductError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisableImportFindingsForProductResponse,
+                        RusotoError<DisableImportFindingsForProductError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub. When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and can't be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed. If you want to save your existing findings, you must export them before you disable Security Hub.</p>
-    async fn disable_security_hub(
+    fn disable_security_hub(
         &self,
-    ) -> Result<DisableSecurityHubResponse, RusotoError<DisableSecurityHubError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisableSecurityHubResponse,
+                        RusotoError<DisableSecurityHubError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disassociates the current Security Hub member account from the associated master account.</p>
-    async fn disassociate_from_master_account(
+    fn disassociate_from_master_account(
         &self,
-    ) -> Result<
-        DisassociateFromMasterAccountResponse,
-        RusotoError<DisassociateFromMasterAccountError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateFromMasterAccountResponse,
+                        RusotoError<DisassociateFromMasterAccountError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Disassociates the specified member accounts from the associated master account.</p>
-    async fn disassociate_members(
+    fn disassociate_members(
         &self,
         input: DisassociateMembersRequest,
-    ) -> Result<DisassociateMembersResponse, RusotoError<DisassociateMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateMembersResponse,
+                        RusotoError<DisassociateMembersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub. When you enable a product integration, a permission policy that grants permission for the product to send findings to Security Hub is applied.</p>
-    async fn enable_import_findings_for_product(
+    fn enable_import_findings_for_product(
         &self,
         input: EnableImportFindingsForProductRequest,
-    ) -> Result<
-        EnableImportFindingsForProductResponse,
-        RusotoError<EnableImportFindingsForProductError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        EnableImportFindingsForProductResponse,
+                        RusotoError<EnableImportFindingsForProductError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. Enabling Security Hub also enables the CIS AWS Foundations standard. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
-    async fn enable_security_hub(
+    fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,
-    ) -> Result<EnableSecurityHubResponse, RusotoError<EnableSecurityHubError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<EnableSecurityHubResponse, RusotoError<EnableSecurityHubError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the standards that are currently enabled.</p>
-    async fn get_enabled_standards(
+    fn get_enabled_standards(
         &self,
         input: GetEnabledStandardsRequest,
-    ) -> Result<GetEnabledStandardsResponse, RusotoError<GetEnabledStandardsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEnabledStandardsResponse,
+                        RusotoError<GetEnabledStandardsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of findings that match the specified criteria.</p>
-    async fn get_findings(
+    fn get_findings(
         &self,
         input: GetFindingsRequest,
-    ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFindingsResponse, RusotoError<GetFindingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the results of the Security Hub insight that the insight ARN specifies.</p>
-    async fn get_insight_results(
+    fn get_insight_results(
         &self,
         input: GetInsightResultsRequest,
-    ) -> Result<GetInsightResultsResponse, RusotoError<GetInsightResultsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetInsightResultsResponse, RusotoError<GetInsightResultsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists and describes insights that insight ARNs specify.</p>
-    async fn get_insights(
+    fn get_insights(
         &self,
         input: GetInsightsRequest,
-    ) -> Result<GetInsightsResponse, RusotoError<GetInsightsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetInsightsResponse, RusotoError<GetInsightsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the count of all Security Hub membership invitations that were sent to the current member account, not including the currently accepted invitation. </p>
-    async fn get_invitations_count(
+    fn get_invitations_count(
         &self,
-    ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInvitationsCountResponse,
+                        RusotoError<GetInvitationsCountError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides the details for the Security Hub master account to the current member account. </p>
-    async fn get_master_account(
+    fn get_master_account(
         &self,
-    ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the details on the Security Hub member accounts that the account IDs specify.</p>
-    async fn get_members(
+    fn get_members(
         &self,
         input: GetMembersRequest,
-    ) -> Result<GetMembersResponse, RusotoError<GetMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMembersResponse, RusotoError<GetMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from. Before you can use this action to invite a member, you must first create the member account in Security Hub by using the <a>CreateMembers</a> action. When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from member account.</p>
-    async fn invite_members(
+    fn invite_members(
         &self,
         input: InviteMembersRequest,
-    ) -> Result<InviteMembersResponse, RusotoError<InviteMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<InviteMembersResponse, RusotoError<InviteMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all findings-generating solutions (products) whose findings you have subscribed to receive in Security Hub.</p>
-    async fn list_enabled_products_for_import(
+    fn list_enabled_products_for_import(
         &self,
         input: ListEnabledProductsForImportRequest,
-    ) -> Result<ListEnabledProductsForImportResponse, RusotoError<ListEnabledProductsForImportError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEnabledProductsForImportResponse,
+                        RusotoError<ListEnabledProductsForImportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all Security Hub membership invitations that were sent to the current AWS account. </p>
-    async fn list_invitations(
+    fn list_invitations(
         &self,
         input: ListInvitationsRequest,
-    ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists details about all member accounts for the current Security Hub master account.</p>
-    async fn list_members(
+    fn list_members(
         &self,
         input: ListMembersRequest,
-    ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMembersResponse, RusotoError<ListMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of tags associated with a resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more tags to a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes one or more tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the name and description of a custom action target in Security Hub.</p>
-    async fn update_action_target(
+    fn update_action_target(
         &self,
         input: UpdateActionTargetRequest,
-    ) -> Result<UpdateActionTargetResponse, RusotoError<UpdateActionTargetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateActionTargetResponse,
+                        RusotoError<UpdateActionTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
-    async fn update_findings(
+    fn update_findings(
         &self,
         input: UpdateFindingsRequest,
-    ) -> Result<UpdateFindingsResponse, RusotoError<UpdateFindingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateFindingsResponse, RusotoError<UpdateFindingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the Security Hub insight that the insight ARN specifies.</p>
-    async fn update_insight(
+    fn update_insight(
         &self,
         input: UpdateInsightRequest,
-    ) -> Result<UpdateInsightResponse, RusotoError<UpdateInsightError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateInsightResponse, RusotoError<UpdateInsightError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Used to control whether an individual compliance standard control is enabled or disabled.</p>
-    async fn update_standards_control(
+    fn update_standards_control(
         &self,
         input: UpdateStandardsControlRequest,
-    ) -> Result<UpdateStandardsControlResponse, RusotoError<UpdateStandardsControlError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateStandardsControlResponse,
+                        RusotoError<UpdateStandardsControlError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS SecurityHub API.
 #[derive(Clone)]
@@ -4824,13 +5137,19 @@ impl SecurityHubClient {
     }
 }
 
-#[async_trait]
 impl SecurityHub for SecurityHubClient {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
-    async fn accept_invitation(
+    fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
-    ) -> Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/master";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -4839,28 +5158,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AcceptInvitationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AcceptInvitationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AcceptInvitationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AcceptInvitationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
-    async fn batch_disable_standards(
+    fn batch_disable_standards(
         &self,
         input: BatchDisableStandardsRequest,
-    ) -> Result<BatchDisableStandardsResponse, RusotoError<BatchDisableStandardsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDisableStandardsResponse,
+                        RusotoError<BatchDisableStandardsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/standards/deregister";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -4869,28 +5198,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDisableStandardsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDisableStandardsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDisableStandardsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDisableStandardsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enables the standards specified by the provided <code>standardsArn</code>. In this release, only CIS AWS Foundations standards are supported. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
-    async fn batch_enable_standards(
+    fn batch_enable_standards(
         &self,
         input: BatchEnableStandardsRequest,
-    ) -> Result<BatchEnableStandardsResponse, RusotoError<BatchEnableStandardsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchEnableStandardsResponse,
+                        RusotoError<BatchEnableStandardsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/standards/register";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -4899,28 +5238,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchEnableStandardsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchEnableStandardsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchEnableStandardsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchEnableStandardsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub. The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p>
-    async fn batch_import_findings(
+    fn batch_import_findings(
         &self,
         input: BatchImportFindingsRequest,
-    ) -> Result<BatchImportFindingsResponse, RusotoError<BatchImportFindingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchImportFindingsResponse,
+                        RusotoError<BatchImportFindingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/findings/import";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -4929,28 +5278,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchImportFindingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchImportFindingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchImportFindingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchImportFindingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a custom action target in Security Hub. You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
-    async fn create_action_target(
+    fn create_action_target(
         &self,
         input: CreateActionTargetRequest,
-    ) -> Result<CreateActionTargetResponse, RusotoError<CreateActionTargetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateActionTargetResponse,
+                        RusotoError<CreateActionTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/actionTargets";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -4959,28 +5318,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateActionTargetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateActionTargetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateActionTargetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateActionTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation. Use the <code>GroupByAttribute</code> to group the related findings in the insight.</p>
-    async fn create_insight(
+    fn create_insight(
         &self,
         input: CreateInsightRequest,
-    ) -> Result<CreateInsightResponse, RusotoError<CreateInsightError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateInsightResponse, RusotoError<CreateInsightError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/insights";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -4989,28 +5354,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInsightResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateInsightResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInsightError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateInsightError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. You can use the <a>EnableSecurityHub</a> to enable Security Hub.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you need to use the <a>InviteMembers</a> action, which invites the accounts to enable Security Hub and become member accounts in Security Hub. If the invitation is accepted by the account owner, the account becomes a member account in Security Hub, and a permission policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start being sent to both the member and master accounts.</p> <p>You can remove the association between the master and member accounts by using the <a>DisassociateFromMasterAccount</a> or <a>DisassociateMembers</a> operation.</p>
-    async fn create_members(
+    fn create_members(
         &self,
         input: CreateMembersRequest,
-    ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMembersResponse, RusotoError<CreateMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/members";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5019,28 +5390,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Declines invitations to become a member account.</p>
-    async fn decline_invitations(
+    fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
-    ) -> Result<DeclineInvitationsResponse, RusotoError<DeclineInvitationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeclineInvitationsResponse,
+                        RusotoError<DeclineInvitationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/invitations/decline";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5049,28 +5430,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeclineInvitationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeclineInvitationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeclineInvitationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeclineInvitationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a custom action target from Security Hub. Deleting a custom action target doesn't affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
-    async fn delete_action_target(
+    fn delete_action_target(
         &self,
         input: DeleteActionTargetRequest,
-    ) -> Result<DeleteActionTargetResponse, RusotoError<DeleteActionTargetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteActionTargetResponse,
+                        RusotoError<DeleteActionTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/actionTargets/{action_target_arn}",
             action_target_arn = input.action_target_arn
@@ -5079,55 +5470,68 @@ impl SecurityHub for SecurityHubClient {
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteActionTargetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteActionTargetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteActionTargetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteActionTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the insight specified by the <code>InsightArn</code>.</p>
-    async fn delete_insight(
+    fn delete_insight(
         &self,
         input: DeleteInsightRequest,
-    ) -> Result<DeleteInsightResponse, RusotoError<DeleteInsightError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInsightResponse, RusotoError<DeleteInsightError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/insights/{insight_arn}", insight_arn = input.insight_arn);
 
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInsightResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInsightResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInsightError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInsightError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes invitations received by the AWS account to become a member account.</p>
-    async fn delete_invitations(
+    fn delete_invitations(
         &self,
         input: DeleteInvitationsRequest,
-    ) -> Result<DeleteInvitationsResponse, RusotoError<DeleteInvitationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteInvitationsResponse, RusotoError<DeleteInvitationsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/invitations/delete";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5136,28 +5540,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInvitationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInvitationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInvitationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInvitationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified member accounts from Security Hub.</p>
-    async fn delete_members(
+    fn delete_members(
         &self,
         input: DeleteMembersRequest,
-    ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/members/delete";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5166,28 +5576,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the custom action targets in Security Hub in your account.</p>
-    async fn describe_action_targets(
+    fn describe_action_targets(
         &self,
         input: DescribeActionTargetsRequest,
-    ) -> Result<DescribeActionTargetsResponse, RusotoError<DescribeActionTargetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeActionTargetsResponse,
+                        RusotoError<DescribeActionTargetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/actionTargets/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5196,28 +5616,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeActionTargetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeActionTargetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeActionTargetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeActionTargetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns details about the Hub resource in your account, including the <code>HubArn</code> and the time when you enabled Security Hub.</p>
-    async fn describe_hub(
+    fn describe_hub(
         &self,
         input: DescribeHubRequest,
-    ) -> Result<DescribeHubResponse, RusotoError<DescribeHubError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeHubResponse, RusotoError<DescribeHubError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -5229,28 +5655,35 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeHubResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeHubResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeHubError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeHubError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the products available that you can subscribe to and integrate with Security Hub to consolidate findings.</p>
-    async fn describe_products(
+    fn describe_products(
         &self,
         input: DescribeProductsRequest,
-    ) -> Result<DescribeProductsResponse, RusotoError<DescribeProductsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeProductsResponse, RusotoError<DescribeProductsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/products";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -5265,29 +5698,38 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProductsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProductsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProductsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProductsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of compliance standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
-    async fn describe_standards_controls(
+    fn describe_standards_controls(
         &self,
         input: DescribeStandardsControlsRequest,
-    ) -> Result<DescribeStandardsControlsResponse, RusotoError<DescribeStandardsControlsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStandardsControlsResponse,
+                        RusotoError<DescribeStandardsControlsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/standards/controls/{standards_subscription_arn}",
             standards_subscription_arn = input.standards_subscription_arn
@@ -5305,30 +5747,37 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeStandardsControlsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeStandardsControlsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStandardsControlsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeStandardsControlsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disables the integration of the specified product with Security Hub. Findings from that product are no longer sent to Security Hub after the integration is disabled.</p>
-    async fn disable_import_findings_for_product(
+    fn disable_import_findings_for_product(
         &self,
         input: DisableImportFindingsForProductRequest,
-    ) -> Result<
-        DisableImportFindingsForProductResponse,
-        RusotoError<DisableImportFindingsForProductError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisableImportFindingsForProductResponse,
+                        RusotoError<DisableImportFindingsForProductError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/productSubscriptions/{product_subscription_arn}",
@@ -5338,85 +5787,112 @@ impl SecurityHub for SecurityHubClient {
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisableImportFindingsForProductResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisableImportFindingsForProductResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisableImportFindingsForProductError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisableImportFindingsForProductError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub. When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and can't be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed. If you want to save your existing findings, you must export them before you disable Security Hub.</p>
-    async fn disable_security_hub(
+    fn disable_security_hub(
         &self,
-    ) -> Result<DisableSecurityHubResponse, RusotoError<DisableSecurityHubError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisableSecurityHubResponse,
+                        RusotoError<DisableSecurityHubError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisableSecurityHubResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisableSecurityHubResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisableSecurityHubError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisableSecurityHubError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disassociates the current Security Hub member account from the associated master account.</p>
-    async fn disassociate_from_master_account(
+    fn disassociate_from_master_account(
         &self,
-    ) -> Result<
-        DisassociateFromMasterAccountResponse,
-        RusotoError<DisassociateFromMasterAccountError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateFromMasterAccountResponse,
+                        RusotoError<DisassociateFromMasterAccountError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/master/disassociate";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateFromMasterAccountResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateFromMasterAccountResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateFromMasterAccountError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateFromMasterAccountError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disassociates the specified member accounts from the associated master account.</p>
-    async fn disassociate_members(
+    fn disassociate_members(
         &self,
         input: DisassociateMembersRequest,
-    ) -> Result<DisassociateMembersResponse, RusotoError<DisassociateMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateMembersResponse,
+                        RusotoError<DisassociateMembersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/members/disassociate";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5425,30 +5901,37 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub. When you enable a product integration, a permission policy that grants permission for the product to send findings to Security Hub is applied.</p>
-    async fn enable_import_findings_for_product(
+    fn enable_import_findings_for_product(
         &self,
         input: EnableImportFindingsForProductRequest,
-    ) -> Result<
-        EnableImportFindingsForProductResponse,
-        RusotoError<EnableImportFindingsForProductError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        EnableImportFindingsForProductResponse,
+                        RusotoError<EnableImportFindingsForProductError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/productSubscriptions";
 
@@ -5458,28 +5941,35 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EnableImportFindingsForProductResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<EnableImportFindingsForProductResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(EnableImportFindingsForProductError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(EnableImportFindingsForProductError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. Enabling Security Hub also enables the CIS AWS Foundations standard. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
-    async fn enable_security_hub(
+    fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,
-    ) -> Result<EnableSecurityHubResponse, RusotoError<EnableSecurityHubError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<EnableSecurityHubResponse, RusotoError<EnableSecurityHubError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/accounts";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5488,28 +5978,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<EnableSecurityHubResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<EnableSecurityHubResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(EnableSecurityHubError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(EnableSecurityHubError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the standards that are currently enabled.</p>
-    async fn get_enabled_standards(
+    fn get_enabled_standards(
         &self,
         input: GetEnabledStandardsRequest,
-    ) -> Result<GetEnabledStandardsResponse, RusotoError<GetEnabledStandardsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEnabledStandardsResponse,
+                        RusotoError<GetEnabledStandardsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/standards/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5518,28 +6018,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEnabledStandardsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEnabledStandardsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEnabledStandardsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEnabledStandardsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of findings that match the specified criteria.</p>
-    async fn get_findings(
+    fn get_findings(
         &self,
         input: GetFindingsRequest,
-    ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFindingsResponse, RusotoError<GetFindingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/findings";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5548,28 +6054,35 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFindingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetFindingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFindingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetFindingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the results of the Security Hub insight that the insight ARN specifies.</p>
-    async fn get_insight_results(
+    fn get_insight_results(
         &self,
         input: GetInsightResultsRequest,
-    ) -> Result<GetInsightResultsResponse, RusotoError<GetInsightResultsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetInsightResultsResponse, RusotoError<GetInsightResultsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/insights/results/{insight_arn}",
             insight_arn = input.insight_arn
@@ -5578,28 +6091,34 @@ impl SecurityHub for SecurityHubClient {
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInsightResultsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInsightResultsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInsightResultsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInsightResultsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists and describes insights that insight ARNs specify.</p>
-    async fn get_insights(
+    fn get_insights(
         &self,
         input: GetInsightsRequest,
-    ) -> Result<GetInsightsResponse, RusotoError<GetInsightsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetInsightsResponse, RusotoError<GetInsightsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/insights/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5608,80 +6127,103 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInsightsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInsightsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInsightsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInsightsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the count of all Security Hub membership invitations that were sent to the current member account, not including the currently accepted invitation. </p>
-    async fn get_invitations_count(
+    fn get_invitations_count(
         &self,
-    ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInvitationsCountResponse,
+                        RusotoError<GetInvitationsCountError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/invitations/count";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInvitationsCountResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInvitationsCountResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInvitationsCountError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInvitationsCountError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides the details for the Security Hub master account to the current member account. </p>
-    async fn get_master_account(
+    fn get_master_account(
         &self,
-    ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/master";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMasterAccountResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMasterAccountResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMasterAccountError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMasterAccountError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the details on the Security Hub member accounts that the account IDs specify.</p>
-    async fn get_members(
+    fn get_members(
         &self,
         input: GetMembersRequest,
-    ) -> Result<GetMembersResponse, RusotoError<GetMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMembersResponse, RusotoError<GetMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/members/get";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5690,28 +6232,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from. Before you can use this action to invite a member, you must first create the member account in Security Hub by using the <a>CreateMembers</a> action. When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from member account.</p>
-    async fn invite_members(
+    fn invite_members(
         &self,
         input: InviteMembersRequest,
-    ) -> Result<InviteMembersResponse, RusotoError<InviteMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<InviteMembersResponse, RusotoError<InviteMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/members/invite";
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5720,29 +6268,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InviteMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<InviteMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(InviteMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(InviteMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all findings-generating solutions (products) whose findings you have subscribed to receive in Security Hub.</p>
-    async fn list_enabled_products_for_import(
+    fn list_enabled_products_for_import(
         &self,
         input: ListEnabledProductsForImportRequest,
-    ) -> Result<ListEnabledProductsForImportResponse, RusotoError<ListEnabledProductsForImportError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEnabledProductsForImportResponse,
+                        RusotoError<ListEnabledProductsForImportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/productSubscriptions";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -5757,28 +6314,34 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEnabledProductsForImportResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEnabledProductsForImportResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEnabledProductsForImportError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEnabledProductsForImportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all Security Hub membership invitations that were sent to the current AWS account. </p>
-    async fn list_invitations(
+    fn list_invitations(
         &self,
         input: ListInvitationsRequest,
-    ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/invitations";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -5793,28 +6356,34 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInvitationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInvitationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInvitationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInvitationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists details about all member accounts for the current Security Hub master account.</p>
-    async fn list_members(
+    fn list_members(
         &self,
         input: ListMembersRequest,
-    ) -> Result<ListMembersResponse, RusotoError<ListMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMembersResponse, RusotoError<ListMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/members";
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
@@ -5832,55 +6401,71 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of tags associated with a resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more tags to a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "securityhub", &self.region, &request_uri);
@@ -5889,28 +6474,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes one or more tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "securityhub", &self.region, &request_uri);
@@ -5922,28 +6513,38 @@ impl SecurityHub for SecurityHubClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the name and description of a custom action target in Security Hub.</p>
-    async fn update_action_target(
+    fn update_action_target(
         &self,
         input: UpdateActionTargetRequest,
-    ) -> Result<UpdateActionTargetResponse, RusotoError<UpdateActionTargetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateActionTargetResponse,
+                        RusotoError<UpdateActionTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/actionTargets/{action_target_arn}",
             action_target_arn = input.action_target_arn
@@ -5955,28 +6556,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateActionTargetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateActionTargetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateActionTargetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateActionTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
-    async fn update_findings(
+    fn update_findings(
         &self,
         input: UpdateFindingsRequest,
-    ) -> Result<UpdateFindingsResponse, RusotoError<UpdateFindingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateFindingsResponse, RusotoError<UpdateFindingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/findings";
 
         let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
@@ -5985,28 +6592,34 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFindingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateFindingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFindingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFindingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the Security Hub insight that the insight ARN specifies.</p>
-    async fn update_insight(
+    fn update_insight(
         &self,
         input: UpdateInsightRequest,
-    ) -> Result<UpdateInsightResponse, RusotoError<UpdateInsightError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateInsightResponse, RusotoError<UpdateInsightError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/insights/{insight_arn}", insight_arn = input.insight_arn);
 
         let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
@@ -6015,28 +6628,38 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInsightResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateInsightResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInsightError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInsightError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Used to control whether an individual compliance standard control is enabled or disabled.</p>
-    async fn update_standards_control(
+    fn update_standards_control(
         &self,
         input: UpdateStandardsControlRequest,
-    ) -> Result<UpdateStandardsControlResponse, RusotoError<UpdateStandardsControlError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateStandardsControlResponse,
+                        RusotoError<UpdateStandardsControlError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/standards/control/{standards_control_arn}",
             standards_control_arn = input.standards_control_arn
@@ -6048,20 +6671,20 @@ impl SecurityHub for SecurityHubClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateStandardsControlResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateStandardsControlResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateStandardsControlError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateStandardsControlError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

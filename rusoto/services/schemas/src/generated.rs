@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiscovererRequest {
@@ -2584,179 +2585,357 @@ impl fmt::Display for UpdateSchemaError {
 }
 impl Error for UpdateSchemaError {}
 /// Trait representing the capabilities of the Schemas API. Schemas clients implement this trait.
-#[async_trait]
 pub trait Schemas {
     /// <p>Creates a discoverer.</p>
-    async fn create_discoverer(
+    fn create_discoverer(
         &self,
         input: CreateDiscovererRequest,
-    ) -> Result<CreateDiscovererResponse, RusotoError<CreateDiscovererError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDiscovererResponse, RusotoError<CreateDiscovererError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a registry.</p>
-    async fn create_registry(
+    fn create_registry(
         &self,
         input: CreateRegistryRequest,
-    ) -> Result<CreateRegistryResponse, RusotoError<CreateRegistryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRegistryResponse, RusotoError<CreateRegistryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a schema definition.</p>
-    async fn create_schema(
+    fn create_schema(
         &self,
         input: CreateSchemaRequest,
-    ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a discoverer.</p>
-    async fn delete_discoverer(
+    fn delete_discoverer(
         &self,
         input: DeleteDiscovererRequest,
-    ) -> Result<(), RusotoError<DeleteDiscovererError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteDiscovererError>>> + Send + 'static>,
+    >;
 
     /// <p>Deletes a Registry.</p>
-    async fn delete_registry(
+    fn delete_registry(
         &self,
         input: DeleteRegistryRequest,
-    ) -> Result<(), RusotoError<DeleteRegistryError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRegistryError>>> + Send + 'static>>;
 
     /// <p>Delete a schema definition.</p>
-    async fn delete_schema(
+    fn delete_schema(
         &self,
         input: DeleteSchemaRequest,
-    ) -> Result<(), RusotoError<DeleteSchemaError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteSchemaError>>> + Send + 'static>>;
 
     /// <p>Delete the schema version definition</p>
-    async fn delete_schema_version(
+    fn delete_schema_version(
         &self,
         input: DeleteSchemaVersionRequest,
-    ) -> Result<(), RusotoError<DeleteSchemaVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteSchemaVersionError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Describe the code binding URI.</p>
-    async fn describe_code_binding(
+    fn describe_code_binding(
         &self,
         input: DescribeCodeBindingRequest,
-    ) -> Result<DescribeCodeBindingResponse, RusotoError<DescribeCodeBindingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeCodeBindingResponse,
+                        RusotoError<DescribeCodeBindingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the discoverer.</p>
-    async fn describe_discoverer(
+    fn describe_discoverer(
         &self,
         input: DescribeDiscovererRequest,
-    ) -> Result<DescribeDiscovererResponse, RusotoError<DescribeDiscovererError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDiscovererResponse,
+                        RusotoError<DescribeDiscovererError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the registry.</p>
-    async fn describe_registry(
+    fn describe_registry(
         &self,
         input: DescribeRegistryRequest,
-    ) -> Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve the schema definition.</p>
-    async fn describe_schema(
+    fn describe_schema(
         &self,
         input: DescribeSchemaRequest,
-    ) -> Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get the code binding source URI.</p>
-    async fn get_code_binding_source(
+    fn get_code_binding_source(
         &self,
         input: GetCodeBindingSourceRequest,
-    ) -> Result<GetCodeBindingSourceResponse, RusotoError<GetCodeBindingSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCodeBindingSourceResponse,
+                        RusotoError<GetCodeBindingSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get the discovered schema that was generated based on sampled events.</p>
-    async fn get_discovered_schema(
+    fn get_discovered_schema(
         &self,
         input: GetDiscoveredSchemaRequest,
-    ) -> Result<GetDiscoveredSchemaResponse, RusotoError<GetDiscoveredSchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDiscoveredSchemaResponse,
+                        RusotoError<GetDiscoveredSchemaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the discoverers.</p>
-    async fn list_discoverers(
+    fn list_discoverers(
         &self,
         input: ListDiscoverersRequest,
-    ) -> Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the registries.</p>
-    async fn list_registries(
+    fn list_registries(
         &self,
         input: ListRegistriesRequest,
-    ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides a list of the schema versions and related information.</p>
-    async fn list_schema_versions(
+    fn list_schema_versions(
         &self,
         input: ListSchemaVersionsRequest,
-    ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSchemaVersionsResponse,
+                        RusotoError<ListSchemaVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the schemas.</p>
-    async fn list_schemas(
+    fn list_schemas(
         &self,
         input: ListSchemasRequest,
-    ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSchemasResponse, RusotoError<ListSchemasError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get tags for resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
-    async fn lock_service_linked_role(
+    fn lock_service_linked_role(
         &self,
         input: LockServiceLinkedRoleRequest,
-    ) -> Result<LockServiceLinkedRoleResponse, RusotoError<LockServiceLinkedRoleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        LockServiceLinkedRoleResponse,
+                        RusotoError<LockServiceLinkedRoleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Put code binding URI</p>
-    async fn put_code_binding(
+    fn put_code_binding(
         &self,
         input: PutCodeBindingRequest,
-    ) -> Result<PutCodeBindingResponse, RusotoError<PutCodeBindingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutCodeBindingResponse, RusotoError<PutCodeBindingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Search the schemas</p>
-    async fn search_schemas(
+    fn search_schemas(
         &self,
         input: SearchSchemasRequest,
-    ) -> Result<SearchSchemasResponse, RusotoError<SearchSchemasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchSchemasResponse, RusotoError<SearchSchemasError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts the discoverer</p>
-    async fn start_discoverer(
+    fn start_discoverer(
         &self,
         input: StartDiscovererRequest,
-    ) -> Result<StartDiscovererResponse, RusotoError<StartDiscovererError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartDiscovererResponse, RusotoError<StartDiscovererError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops the discoverer</p>
-    async fn stop_discoverer(
+    fn stop_discoverer(
         &self,
         input: StopDiscovererRequest,
-    ) -> Result<StopDiscovererResponse, RusotoError<StopDiscovererError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopDiscovererResponse, RusotoError<StopDiscovererError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add tags to a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
-    async fn unlock_service_linked_role(
+    fn unlock_service_linked_role(
         &self,
         input: UnlockServiceLinkedRoleRequest,
-    ) -> Result<UnlockServiceLinkedRoleResponse, RusotoError<UnlockServiceLinkedRoleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UnlockServiceLinkedRoleResponse,
+                        RusotoError<UnlockServiceLinkedRoleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>Updates the discoverer</p>
-    async fn update_discoverer(
+    fn update_discoverer(
         &self,
         input: UpdateDiscovererRequest,
-    ) -> Result<UpdateDiscovererResponse, RusotoError<UpdateDiscovererError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateDiscovererResponse, RusotoError<UpdateDiscovererError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a registry.</p>
-    async fn update_registry(
+    fn update_registry(
         &self,
         input: UpdateRegistryRequest,
-    ) -> Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the schema definition</p>
-    async fn update_schema(
+    fn update_schema(
         &self,
         input: UpdateSchemaRequest,
-    ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Schemas API.
 #[derive(Clone)]
@@ -2796,13 +2975,19 @@ impl SchemasClient {
     }
 }
 
-#[async_trait]
 impl Schemas for SchemasClient {
     /// <p>Creates a discoverer.</p>
-    async fn create_discoverer(
+    fn create_discoverer(
         &self,
         input: CreateDiscovererRequest,
-    ) -> Result<CreateDiscovererResponse, RusotoError<CreateDiscovererError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDiscovererResponse, RusotoError<CreateDiscovererError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/discoverers";
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -2811,28 +2996,34 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDiscovererResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDiscovererResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDiscovererError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDiscovererError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a registry.</p>
-    async fn create_registry(
+    fn create_registry(
         &self,
         input: CreateRegistryRequest,
-    ) -> Result<CreateRegistryResponse, RusotoError<CreateRegistryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRegistryResponse, RusotoError<CreateRegistryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -2844,28 +3035,34 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRegistryResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRegistryResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRegistryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRegistryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a schema definition.</p>
-    async fn create_schema(
+    fn create_schema(
         &self,
         input: CreateSchemaRequest,
-    ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -2878,28 +3075,30 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSchemaResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSchemaResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSchemaError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a discoverer.</p>
-    async fn delete_discoverer(
+    fn delete_discoverer(
         &self,
         input: DeleteDiscovererRequest,
-    ) -> Result<(), RusotoError<DeleteDiscovererError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteDiscovererError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}",
             discoverer_id = input.discoverer_id
@@ -2908,27 +3107,28 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDiscovererError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDiscovererError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a Registry.</p>
-    async fn delete_registry(
+    fn delete_registry(
         &self,
         input: DeleteRegistryRequest,
-    ) -> Result<(), RusotoError<DeleteRegistryError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRegistryError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -2937,27 +3137,28 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRegistryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRegistryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a schema definition.</p>
-    async fn delete_schema(
+    fn delete_schema(
         &self,
         input: DeleteSchemaRequest,
-    ) -> Result<(), RusotoError<DeleteSchemaError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteSchemaError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -2967,53 +3168,67 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSchemaError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete the schema version definition</p>
-    async fn delete_schema_version(
+    fn delete_schema_version(
         &self,
         input: DeleteSchemaVersionRequest,
-    ) -> Result<(), RusotoError<DeleteSchemaVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteSchemaVersionError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/registries/name/{registry_name}/schemas/name/{schema_name}/version/{schema_version}", registry_name = input.registry_name, schema_name = input.schema_name, schema_version = input.schema_version);
 
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSchemaVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSchemaVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe the code binding URI.</p>
-    async fn describe_code_binding(
+    fn describe_code_binding(
         &self,
         input: DescribeCodeBindingRequest,
-    ) -> Result<DescribeCodeBindingResponse, RusotoError<DescribeCodeBindingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeCodeBindingResponse,
+                        RusotoError<DescribeCodeBindingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/language/{language}",
             language = input.language,
@@ -3030,28 +3245,38 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCodeBindingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeCodeBindingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCodeBindingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeCodeBindingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the discoverer.</p>
-    async fn describe_discoverer(
+    fn describe_discoverer(
         &self,
         input: DescribeDiscovererRequest,
-    ) -> Result<DescribeDiscovererResponse, RusotoError<DescribeDiscovererError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDiscovererResponse,
+                        RusotoError<DescribeDiscovererError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}",
             discoverer_id = input.discoverer_id
@@ -3060,28 +3285,35 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDiscovererResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDiscovererResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDiscovererError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDiscovererError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the registry.</p>
-    async fn describe_registry(
+    fn describe_registry(
         &self,
         input: DescribeRegistryRequest,
-    ) -> Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeRegistryResponse, RusotoError<DescribeRegistryError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -3090,28 +3322,34 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRegistryResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRegistryResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRegistryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRegistryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the schema definition.</p>
-    async fn describe_schema(
+    fn describe_schema(
         &self,
         input: DescribeSchemaRequest,
-    ) -> Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -3127,28 +3365,38 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSchemaResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSchemaResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSchemaError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get the code binding source URI.</p>
-    async fn get_code_binding_source(
+    fn get_code_binding_source(
         &self,
         input: GetCodeBindingSourceRequest,
-    ) -> Result<GetCodeBindingSourceResponse, RusotoError<GetCodeBindingSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCodeBindingSourceResponse,
+                        RusotoError<GetCodeBindingSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/registries/name/{registry_name}/schemas/name/{schema_name}/language/{language}/source", language = input.language, registry_name = input.registry_name, schema_name = input.schema_name);
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3160,29 +3408,39 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetCodeBindingSourceResponse::default();
-            result.body = Some(response.body);
+                let mut result = GetCodeBindingSourceResponse::default();
+                result.body = Some(response.body);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCodeBindingSourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCodeBindingSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get the discovered schema that was generated based on sampled events.</p>
-    async fn get_discovered_schema(
+    fn get_discovered_schema(
         &self,
         input: GetDiscoveredSchemaRequest,
-    ) -> Result<GetDiscoveredSchemaResponse, RusotoError<GetDiscoveredSchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDiscoveredSchemaResponse,
+                        RusotoError<GetDiscoveredSchemaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/discover";
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -3191,28 +3449,34 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDiscoveredSchemaResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDiscoveredSchemaResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDiscoveredSchemaError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDiscoveredSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the discoverers.</p>
-    async fn list_discoverers(
+    fn list_discoverers(
         &self,
         input: ListDiscoverersRequest,
-    ) -> Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDiscoverersResponse, RusotoError<ListDiscoverersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/discoverers";
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3233,28 +3497,34 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDiscoverersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDiscoverersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDiscoverersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDiscoverersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the registries.</p>
-    async fn list_registries(
+    fn list_registries(
         &self,
         input: ListRegistriesRequest,
-    ) -> Result<ListRegistriesResponse, RusotoError<ListRegistriesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRegistriesResponse, RusotoError<ListRegistriesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/registries";
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
@@ -3275,28 +3545,38 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRegistriesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRegistriesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRegistriesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRegistriesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides a list of the schema versions and related information.</p>
-    async fn list_schema_versions(
+    fn list_schema_versions(
         &self,
         input: ListSchemaVersionsRequest,
-    ) -> Result<ListSchemaVersionsResponse, RusotoError<ListSchemaVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSchemaVersionsResponse,
+                        RusotoError<ListSchemaVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/versions",
             registry_name = input.registry_name,
@@ -3315,28 +3595,34 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSchemaVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSchemaVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSchemaVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSchemaVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the schemas.</p>
-    async fn list_schemas(
+    fn list_schemas(
         &self,
         input: ListSchemasRequest,
-    ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSchemasResponse, RusotoError<ListSchemasError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas",
             registry_name = input.registry_name
@@ -3357,54 +3643,74 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSchemasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSchemasResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSchemasError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSchemasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get tags for resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn lock_service_linked_role(
+    fn lock_service_linked_role(
         &self,
         input: LockServiceLinkedRoleRequest,
-    ) -> Result<LockServiceLinkedRoleResponse, RusotoError<LockServiceLinkedRoleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        LockServiceLinkedRoleResponse,
+                        RusotoError<LockServiceLinkedRoleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/slr-deletion/lock";
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -3413,28 +3719,34 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<LockServiceLinkedRoleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<LockServiceLinkedRoleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(LockServiceLinkedRoleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(LockServiceLinkedRoleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Put code binding URI</p>
-    async fn put_code_binding(
+    fn put_code_binding(
         &self,
         input: PutCodeBindingRequest,
-    ) -> Result<PutCodeBindingResponse, RusotoError<PutCodeBindingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutCodeBindingResponse, RusotoError<PutCodeBindingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/language/{language}",
             language = input.language,
@@ -3451,28 +3763,34 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutCodeBindingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutCodeBindingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutCodeBindingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutCodeBindingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Search the schemas</p>
-    async fn search_schemas(
+    fn search_schemas(
         &self,
         input: SearchSchemasRequest,
-    ) -> Result<SearchSchemasResponse, RusotoError<SearchSchemasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchSchemasResponse, RusotoError<SearchSchemasError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/search",
             registry_name = input.registry_name
@@ -3491,28 +3809,34 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchSchemasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchSchemasResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchSchemasError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchSchemasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts the discoverer</p>
-    async fn start_discoverer(
+    fn start_discoverer(
         &self,
         input: StartDiscovererRequest,
-    ) -> Result<StartDiscovererResponse, RusotoError<StartDiscovererError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartDiscovererResponse, RusotoError<StartDiscovererError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}/start",
             discoverer_id = input.discoverer_id
@@ -3521,28 +3845,34 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDiscovererResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartDiscovererResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDiscovererError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartDiscovererError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops the discoverer</p>
-    async fn stop_discoverer(
+    fn stop_discoverer(
         &self,
         input: StopDiscovererRequest,
-    ) -> Result<StopDiscovererResponse, RusotoError<StopDiscovererError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopDiscovererResponse, RusotoError<StopDiscovererError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}/stop",
             discoverer_id = input.discoverer_id
@@ -3551,28 +3881,29 @@ impl Schemas for SchemasClient {
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopDiscovererResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopDiscovererResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDiscovererError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopDiscovererError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add tags to a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -3581,26 +3912,36 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn unlock_service_linked_role(
+    fn unlock_service_linked_role(
         &self,
         input: UnlockServiceLinkedRoleRequest,
-    ) -> Result<UnlockServiceLinkedRoleResponse, RusotoError<UnlockServiceLinkedRoleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UnlockServiceLinkedRoleResponse,
+                        RusotoError<UnlockServiceLinkedRoleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/slr-deletion/unlock";
 
         let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
@@ -3609,28 +3950,29 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UnlockServiceLinkedRoleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UnlockServiceLinkedRoleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UnlockServiceLinkedRoleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UnlockServiceLinkedRoleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
@@ -3642,27 +3984,34 @@ impl Schemas for SchemasClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the discoverer</p>
-    async fn update_discoverer(
+    fn update_discoverer(
         &self,
         input: UpdateDiscovererRequest,
-    ) -> Result<UpdateDiscovererResponse, RusotoError<UpdateDiscovererError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateDiscovererResponse, RusotoError<UpdateDiscovererError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/discoverers/id/{discoverer_id}",
             discoverer_id = input.discoverer_id
@@ -3674,28 +4023,34 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDiscovererResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDiscovererResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDiscovererError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDiscovererError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a registry.</p>
-    async fn update_registry(
+    fn update_registry(
         &self,
         input: UpdateRegistryRequest,
-    ) -> Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}",
             registry_name = input.registry_name
@@ -3707,28 +4062,34 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRegistryResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRegistryResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRegistryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRegistryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the schema definition</p>
-    async fn update_schema(
+    fn update_schema(
         &self,
         input: UpdateSchemaRequest,
-    ) -> Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateSchemaResponse, RusotoError<UpdateSchemaError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/registries/name/{registry_name}/schemas/name/{schema_name}",
             registry_name = input.registry_name,
@@ -3741,20 +4102,20 @@ impl Schemas for SchemasClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSchemaResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateSchemaResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSchemaError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

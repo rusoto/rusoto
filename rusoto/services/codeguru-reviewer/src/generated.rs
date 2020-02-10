@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRepositoryRequest {
@@ -422,34 +423,70 @@ impl fmt::Display for ListRepositoryAssociationsError {
 }
 impl Error for ListRepositoryAssociationsError {}
 /// Trait representing the capabilities of the CodeGuruReviewer API. CodeGuruReviewer clients implement this trait.
-#[async_trait]
 pub trait CodeGuruReviewer {
     /// <p>Associates an AWS CodeCommit repository with Amazon CodeGuru Reviewer. When you associate an AWS CodeCommit repository with Amazon CodeGuru Reviewer, Amazon CodeGuru Reviewer will provide recommendations for each pull request. You can view recommendations in the AWS CodeCommit repository.</p> <p>You can associate a GitHub repository using the Amazon CodeGuru Reviewer console.</p>
-    async fn associate_repository(
+    fn associate_repository(
         &self,
         input: AssociateRepositoryRequest,
-    ) -> Result<AssociateRepositoryResponse, RusotoError<AssociateRepositoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateRepositoryResponse,
+                        RusotoError<AssociateRepositoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a repository association.</p>
-    async fn describe_repository_association(
+    fn describe_repository_association(
         &self,
         input: DescribeRepositoryAssociationRequest,
-    ) -> Result<
-        DescribeRepositoryAssociationResponse,
-        RusotoError<DescribeRepositoryAssociationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRepositoryAssociationResponse,
+                        RusotoError<DescribeRepositoryAssociationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes the association between Amazon CodeGuru Reviewer and a repository.</p>
-    async fn disassociate_repository(
+    fn disassociate_repository(
         &self,
         input: DisassociateRepositoryRequest,
-    ) -> Result<DisassociateRepositoryResponse, RusotoError<DisassociateRepositoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateRepositoryResponse,
+                        RusotoError<DisassociateRepositoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists repository associations. You can optionally filter on one or more of the following recommendation properties: provider types, states, names, and owners.</p>
-    async fn list_repository_associations(
+    fn list_repository_associations(
         &self,
         input: ListRepositoryAssociationsRequest,
-    ) -> Result<ListRepositoryAssociationsResponse, RusotoError<ListRepositoryAssociationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRepositoryAssociationsResponse,
+                        RusotoError<ListRepositoryAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the CodeGuruReviewer API.
 #[derive(Clone)]
@@ -489,13 +526,22 @@ impl CodeGuruReviewerClient {
     }
 }
 
-#[async_trait]
 impl CodeGuruReviewer for CodeGuruReviewerClient {
     /// <p>Associates an AWS CodeCommit repository with Amazon CodeGuru Reviewer. When you associate an AWS CodeCommit repository with Amazon CodeGuru Reviewer, Amazon CodeGuru Reviewer will provide recommendations for each pull request. You can view recommendations in the AWS CodeCommit repository.</p> <p>You can associate a GitHub repository using the Amazon CodeGuru Reviewer console.</p>
-    async fn associate_repository(
+    fn associate_repository(
         &self,
         input: AssociateRepositoryRequest,
-    ) -> Result<AssociateRepositoryResponse, RusotoError<AssociateRepositoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateRepositoryResponse,
+                        RusotoError<AssociateRepositoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/associations";
 
         let mut request =
@@ -505,30 +551,37 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateRepositoryResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateRepositoryResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateRepositoryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateRepositoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a repository association.</p>
-    async fn describe_repository_association(
+    fn describe_repository_association(
         &self,
         input: DescribeRepositoryAssociationRequest,
-    ) -> Result<
-        DescribeRepositoryAssociationResponse,
-        RusotoError<DescribeRepositoryAssociationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRepositoryAssociationResponse,
+                        RusotoError<DescribeRepositoryAssociationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/associations/{association_arn}",
@@ -539,28 +592,38 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             SignedRequest::new("GET", "codeguru-reviewer", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRepositoryAssociationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRepositoryAssociationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRepositoryAssociationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRepositoryAssociationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the association between Amazon CodeGuru Reviewer and a repository.</p>
-    async fn disassociate_repository(
+    fn disassociate_repository(
         &self,
         input: DisassociateRepositoryRequest,
-    ) -> Result<DisassociateRepositoryResponse, RusotoError<DisassociateRepositoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateRepositoryResponse,
+                        RusotoError<DisassociateRepositoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/associations/{association_arn}",
             association_arn = input.association_arn
@@ -570,29 +633,38 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             SignedRequest::new("DELETE", "codeguru-reviewer", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateRepositoryResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateRepositoryResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateRepositoryError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateRepositoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists repository associations. You can optionally filter on one or more of the following recommendation properties: provider types, states, names, and owners.</p>
-    async fn list_repository_associations(
+    fn list_repository_associations(
         &self,
         input: ListRepositoryAssociationsRequest,
-    ) -> Result<ListRepositoryAssociationsResponse, RusotoError<ListRepositoryAssociationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRepositoryAssociationsResponse,
+                        RusotoError<ListRepositoryAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/associations";
 
         let mut request =
@@ -628,20 +700,20 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRepositoryAssociationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRepositoryAssociationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRepositoryAssociationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRepositoryAssociationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

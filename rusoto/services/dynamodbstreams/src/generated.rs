@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -552,31 +553,54 @@ impl fmt::Display for ListStreamsError {
 }
 impl Error for ListStreamsError {}
 /// Trait representing the capabilities of the Amazon DynamoDB Streams API. Amazon DynamoDB Streams clients implement this trait.
-#[async_trait]
 pub trait DynamoDbStreams {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
-    async fn describe_stream(
+    fn describe_stream(
         &self,
         input: DescribeStreamInput,
-    ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
-    async fn get_records(
+    fn get_records(
         &self,
         input: GetRecordsInput,
-    ) -> Result<GetRecordsOutput, RusotoError<GetRecordsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRecordsOutput, RusotoError<GetRecordsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
-    async fn get_shard_iterator(
+    fn get_shard_iterator(
         &self,
         input: GetShardIteratorInput,
-    ) -> Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
-    async fn list_streams(
+    fn list_streams(
         &self,
         input: ListStreamsInput,
-    ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStreamsOutput, RusotoError<ListStreamsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon DynamoDB Streams API.
 #[derive(Clone)]
@@ -616,13 +640,18 @@ impl DynamoDbStreamsClient {
     }
 }
 
-#[async_trait]
 impl DynamoDbStreams for DynamoDbStreamsClient {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
-    async fn describe_stream(
+    fn describe_stream(
         &self,
         input: DescribeStreamInput,
-    ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStreamOutput, RusotoError<DescribeStreamError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -630,26 +659,33 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeStreamOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStreamError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeStreamOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeStreamError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
-    async fn get_records(
+    fn get_records(
         &self,
         input: GetRecordsInput,
-    ) -> Result<GetRecordsOutput, RusotoError<GetRecordsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRecordsOutput, RusotoError<GetRecordsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -657,26 +693,32 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRecordsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRecordsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetRecordsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRecordsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
-    async fn get_shard_iterator(
+    fn get_shard_iterator(
         &self,
         input: GetShardIteratorInput,
-    ) -> Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -684,26 +726,33 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetShardIteratorOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetShardIteratorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetShardIteratorOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetShardIteratorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
-    async fn list_streams(
+    fn list_streams(
         &self,
         input: ListStreamsInput,
-    ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStreamsOutput, RusotoError<ListStreamsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -711,18 +760,18 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStreamsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListStreamsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

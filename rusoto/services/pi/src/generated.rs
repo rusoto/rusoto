@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>A timestamp, and a single numerical value, which together represent a measurement at a particular point in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -340,19 +341,38 @@ impl fmt::Display for GetResourceMetricsError {
 }
 impl Error for GetResourceMetricsError {}
 /// Trait representing the capabilities of the AWS PI API. AWS PI clients implement this trait.
-#[async_trait]
 pub trait PerformanceInsights {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
-    async fn describe_dimension_keys(
+    fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
-    ) -> Result<DescribeDimensionKeysResponse, RusotoError<DescribeDimensionKeysError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDimensionKeysResponse,
+                        RusotoError<DescribeDimensionKeysError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
-    async fn get_resource_metrics(
+    fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
-    ) -> Result<GetResourceMetricsResponse, RusotoError<GetResourceMetricsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResourceMetricsResponse,
+                        RusotoError<GetResourceMetricsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS PI API.
 #[derive(Clone)]
@@ -392,13 +412,22 @@ impl PerformanceInsightsClient {
     }
 }
 
-#[async_trait]
 impl PerformanceInsights for PerformanceInsightsClient {
     /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
-    async fn describe_dimension_keys(
+    fn describe_dimension_keys(
         &self,
         input: DescribeDimensionKeysRequest,
-    ) -> Result<DescribeDimensionKeysResponse, RusotoError<DescribeDimensionKeysError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDimensionKeysResponse,
+                        RusotoError<DescribeDimensionKeysError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -409,27 +438,37 @@ impl PerformanceInsights for PerformanceInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDimensionKeysResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDimensionKeysError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDimensionKeysResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDimensionKeysError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
-    async fn get_resource_metrics(
+    fn get_resource_metrics(
         &self,
         input: GetResourceMetricsRequest,
-    ) -> Result<GetResourceMetricsResponse, RusotoError<GetResourceMetricsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResourceMetricsResponse,
+                        RusotoError<GetResourceMetricsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -440,19 +479,19 @@ impl PerformanceInsights for PerformanceInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceMetricsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourceMetricsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResourceMetricsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResourceMetricsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

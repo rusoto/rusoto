@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCustomerGatewayRequest {
@@ -2698,181 +2699,391 @@ impl fmt::Display for UpdateSiteError {
 }
 impl Error for UpdateSiteError {}
 /// Trait representing the capabilities of the NetworkManager API. NetworkManager clients implement this trait.
-#[async_trait]
 pub trait NetworkManager {
     /// <p>Associates a customer gateway with a device and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate customer gateways that are connected to a VPN attachment on a transit gateway. The transit gateway must be registered in your global network. When you register a transit gateway, customer gateways that are connected to the transit gateway are automatically included in the global network. To list customer gateways that are connected to a transit gateway, use the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnConnections.html">DescribeVpnConnections</a> EC2 API and filter by <code>transit-gateway-id</code>.</p> <p>You cannot associate a customer gateway with more than one device and link. </p>
-    async fn associate_customer_gateway(
+    fn associate_customer_gateway(
         &self,
         input: AssociateCustomerGatewayRequest,
-    ) -> Result<AssociateCustomerGatewayResponse, RusotoError<AssociateCustomerGatewayError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateCustomerGatewayResponse,
+                        RusotoError<AssociateCustomerGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates a link to a device. A device can be associated to multiple links and a link can be associated to multiple devices. The device and link must be in the same global network and the same site.</p>
-    async fn associate_link(
+    fn associate_link(
         &self,
         input: AssociateLinkRequest,
-    ) -> Result<AssociateLinkResponse, RusotoError<AssociateLinkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AssociateLinkResponse, RusotoError<AssociateLinkError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new device in a global network. If you specify both a site ID and a location, the location of the site is used for visualization in the Network Manager console.</p>
-    async fn create_device(
+    fn create_device(
         &self,
         input: CreateDeviceRequest,
-    ) -> Result<CreateDeviceResponse, RusotoError<CreateDeviceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDeviceResponse, RusotoError<CreateDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new, empty global network.</p>
-    async fn create_global_network(
+    fn create_global_network(
         &self,
         input: CreateGlobalNetworkRequest,
-    ) -> Result<CreateGlobalNetworkResponse, RusotoError<CreateGlobalNetworkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateGlobalNetworkResponse,
+                        RusotoError<CreateGlobalNetworkError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new link for a specified site.</p>
-    async fn create_link(
+    fn create_link(
         &self,
         input: CreateLinkRequest,
-    ) -> Result<CreateLinkResponse, RusotoError<CreateLinkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateLinkResponse, RusotoError<CreateLinkError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new site in a global network.</p>
-    async fn create_site(
+    fn create_site(
         &self,
         input: CreateSiteRequest,
-    ) -> Result<CreateSiteResponse, RusotoError<CreateSiteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateSiteResponse, RusotoError<CreateSiteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing device. You must first disassociate the device from any links and customer gateways.</p>
-    async fn delete_device(
+    fn delete_device(
         &self,
         input: DeleteDeviceRequest,
-    ) -> Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing global network. You must first delete all global network objects (devices, links, and sites) and deregister all transit gateways.</p>
-    async fn delete_global_network(
+    fn delete_global_network(
         &self,
         input: DeleteGlobalNetworkRequest,
-    ) -> Result<DeleteGlobalNetworkResponse, RusotoError<DeleteGlobalNetworkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteGlobalNetworkResponse,
+                        RusotoError<DeleteGlobalNetworkError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing link. You must first disassociate the link from any devices and customer gateways.</p>
-    async fn delete_link(
+    fn delete_link(
         &self,
         input: DeleteLinkRequest,
-    ) -> Result<DeleteLinkResponse, RusotoError<DeleteLinkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteLinkResponse, RusotoError<DeleteLinkError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing site. The site cannot be associated with any device or link.</p>
-    async fn delete_site(
+    fn delete_site(
         &self,
         input: DeleteSiteRequest,
-    ) -> Result<DeleteSiteResponse, RusotoError<DeleteSiteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteSiteResponse, RusotoError<DeleteSiteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deregisters a transit gateway from your global network. This action does not delete your transit gateway, or modify any of its attachments. This action removes any customer gateway associations.</p>
-    async fn deregister_transit_gateway(
+    fn deregister_transit_gateway(
         &self,
         input: DeregisterTransitGatewayRequest,
-    ) -> Result<DeregisterTransitGatewayResponse, RusotoError<DeregisterTransitGatewayError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterTransitGatewayResponse,
+                        RusotoError<DeregisterTransitGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes one or more global networks. By default, all global networks are described. To describe the objects in your global network, you must use the appropriate <code>Get*</code> action. For example, to list the transit gateways in your global network, use <a>GetTransitGatewayRegistrations</a>.</p>
-    async fn describe_global_networks(
+    fn describe_global_networks(
         &self,
         input: DescribeGlobalNetworksRequest,
-    ) -> Result<DescribeGlobalNetworksResponse, RusotoError<DescribeGlobalNetworksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeGlobalNetworksResponse,
+                        RusotoError<DescribeGlobalNetworksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disassociates a customer gateway from a device and a link.</p>
-    async fn disassociate_customer_gateway(
+    fn disassociate_customer_gateway(
         &self,
         input: DisassociateCustomerGatewayRequest,
-    ) -> Result<DisassociateCustomerGatewayResponse, RusotoError<DisassociateCustomerGatewayError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateCustomerGatewayResponse,
+                        RusotoError<DisassociateCustomerGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disassociates an existing device from a link. You must first disassociate any customer gateways that are associated with the link.</p>
-    async fn disassociate_link(
+    fn disassociate_link(
         &self,
         input: DisassociateLinkRequest,
-    ) -> Result<DisassociateLinkResponse, RusotoError<DisassociateLinkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DisassociateLinkResponse, RusotoError<DisassociateLinkError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
-    async fn get_customer_gateway_associations(
+    fn get_customer_gateway_associations(
         &self,
         input: GetCustomerGatewayAssociationsRequest,
-    ) -> Result<
-        GetCustomerGatewayAssociationsResponse,
-        RusotoError<GetCustomerGatewayAssociationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCustomerGatewayAssociationsResponse,
+                        RusotoError<GetCustomerGatewayAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets information about one or more of your devices in a global network.</p>
-    async fn get_devices(
+    fn get_devices(
         &self,
         input: GetDevicesRequest,
-    ) -> Result<GetDevicesResponse, RusotoError<GetDevicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDevicesResponse, RusotoError<GetDevicesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the link associations for a device or a link. Either the device ID or the link ID must be specified.</p>
-    async fn get_link_associations(
+    fn get_link_associations(
         &self,
         input: GetLinkAssociationsRequest,
-    ) -> Result<GetLinkAssociationsResponse, RusotoError<GetLinkAssociationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetLinkAssociationsResponse,
+                        RusotoError<GetLinkAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about one or more links in a specified global network.</p> <p>If you specify the site ID, you cannot specify the type or provider in the same request. You can specify the type and provider in the same request.</p>
-    async fn get_links(
+    fn get_links(
         &self,
         input: GetLinksRequest,
-    ) -> Result<GetLinksResponse, RusotoError<GetLinksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetLinksResponse, RusotoError<GetLinksError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about one or more of your sites in a global network.</p>
-    async fn get_sites(
+    fn get_sites(
         &self,
         input: GetSitesRequest,
-    ) -> Result<GetSitesResponse, RusotoError<GetSitesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetSitesResponse, RusotoError<GetSitesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
-    async fn get_transit_gateway_registrations(
+    fn get_transit_gateway_registrations(
         &self,
         input: GetTransitGatewayRegistrationsRequest,
-    ) -> Result<
-        GetTransitGatewayRegistrationsResponse,
-        RusotoError<GetTransitGatewayRegistrationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetTransitGatewayRegistrationsResponse,
+                        RusotoError<GetTransitGatewayRegistrationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the tags for a specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a transit gateway in your global network. The transit gateway can be in any AWS Region, but it must be owned by the same AWS account that owns the global network. You cannot register a transit gateway in more than one global network.</p>
-    async fn register_transit_gateway(
+    fn register_transit_gateway(
         &self,
         input: RegisterTransitGatewayRequest,
-    ) -> Result<RegisterTransitGatewayResponse, RusotoError<RegisterTransitGatewayError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterTransitGatewayResponse,
+                        RusotoError<RegisterTransitGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Tags a specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes tags from a specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the details for an existing device. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_device(
+    fn update_device(
         &self,
         input: UpdateDeviceRequest,
-    ) -> Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing global network. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_global_network(
+    fn update_global_network(
         &self,
         input: UpdateGlobalNetworkRequest,
-    ) -> Result<UpdateGlobalNetworkResponse, RusotoError<UpdateGlobalNetworkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateGlobalNetworkResponse,
+                        RusotoError<UpdateGlobalNetworkError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the details for an existing link. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_link(
+    fn update_link(
         &self,
         input: UpdateLinkRequest,
-    ) -> Result<UpdateLinkResponse, RusotoError<UpdateLinkError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateLinkResponse, RusotoError<UpdateLinkError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the information for an existing site. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_site(
+    fn update_site(
         &self,
         input: UpdateSiteRequest,
-    ) -> Result<UpdateSiteResponse, RusotoError<UpdateSiteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateSiteResponse, RusotoError<UpdateSiteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the NetworkManager API.
 #[derive(Clone)]
@@ -2912,13 +3123,22 @@ impl NetworkManagerClient {
     }
 }
 
-#[async_trait]
 impl NetworkManager for NetworkManagerClient {
     /// <p>Associates a customer gateway with a device and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate customer gateways that are connected to a VPN attachment on a transit gateway. The transit gateway must be registered in your global network. When you register a transit gateway, customer gateways that are connected to the transit gateway are automatically included in the global network. To list customer gateways that are connected to a transit gateway, use the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnConnections.html">DescribeVpnConnections</a> EC2 API and filter by <code>transit-gateway-id</code>.</p> <p>You cannot associate a customer gateway with more than one device and link. </p>
-    async fn associate_customer_gateway(
+    fn associate_customer_gateway(
         &self,
         input: AssociateCustomerGatewayRequest,
-    ) -> Result<AssociateCustomerGatewayResponse, RusotoError<AssociateCustomerGatewayError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateCustomerGatewayResponse,
+                        RusotoError<AssociateCustomerGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/customer-gateway-associations",
             global_network_id = input.global_network_id
@@ -2930,28 +3150,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateCustomerGatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateCustomerGatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateCustomerGatewayError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateCustomerGatewayError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates a link to a device. A device can be associated to multiple links and a link can be associated to multiple devices. The device and link must be in the same global network and the same site.</p>
-    async fn associate_link(
+    fn associate_link(
         &self,
         input: AssociateLinkRequest,
-    ) -> Result<AssociateLinkResponse, RusotoError<AssociateLinkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AssociateLinkResponse, RusotoError<AssociateLinkError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/link-associations",
             global_network_id = input.global_network_id
@@ -2963,28 +3189,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateLinkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateLinkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new device in a global network. If you specify both a site ID and a location, the location of the site is used for visualization in the Network Manager console.</p>
-    async fn create_device(
+    fn create_device(
         &self,
         input: CreateDeviceRequest,
-    ) -> Result<CreateDeviceResponse, RusotoError<CreateDeviceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDeviceResponse, RusotoError<CreateDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices",
             global_network_id = input.global_network_id
@@ -2996,28 +3228,38 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeviceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDeviceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeviceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDeviceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new, empty global network.</p>
-    async fn create_global_network(
+    fn create_global_network(
         &self,
         input: CreateGlobalNetworkRequest,
-    ) -> Result<CreateGlobalNetworkResponse, RusotoError<CreateGlobalNetworkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateGlobalNetworkResponse,
+                        RusotoError<CreateGlobalNetworkError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/global-networks";
 
         let mut request = SignedRequest::new("POST", "networkmanager", &self.region, &request_uri);
@@ -3026,28 +3268,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGlobalNetworkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateGlobalNetworkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGlobalNetworkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateGlobalNetworkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new link for a specified site.</p>
-    async fn create_link(
+    fn create_link(
         &self,
         input: CreateLinkRequest,
-    ) -> Result<CreateLinkResponse, RusotoError<CreateLinkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateLinkResponse, RusotoError<CreateLinkError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/links",
             global_network_id = input.global_network_id
@@ -3059,28 +3307,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLinkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLinkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new site in a global network.</p>
-    async fn create_site(
+    fn create_site(
         &self,
         input: CreateSiteRequest,
-    ) -> Result<CreateSiteResponse, RusotoError<CreateSiteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateSiteResponse, RusotoError<CreateSiteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites",
             global_network_id = input.global_network_id
@@ -3092,28 +3346,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSiteResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSiteResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSiteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSiteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing device. You must first disassociate the device from any links and customer gateways.</p>
-    async fn delete_device(
+    fn delete_device(
         &self,
         input: DeleteDeviceRequest,
-    ) -> Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices/{device_id}",
             device_id = input.device_id,
@@ -3124,28 +3384,38 @@ impl NetworkManager for NetworkManagerClient {
             SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDeviceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDeviceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeviceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDeviceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing global network. You must first delete all global network objects (devices, links, and sites) and deregister all transit gateways.</p>
-    async fn delete_global_network(
+    fn delete_global_network(
         &self,
         input: DeleteGlobalNetworkRequest,
-    ) -> Result<DeleteGlobalNetworkResponse, RusotoError<DeleteGlobalNetworkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteGlobalNetworkResponse,
+                        RusotoError<DeleteGlobalNetworkError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}",
             global_network_id = input.global_network_id
@@ -3155,28 +3425,34 @@ impl NetworkManager for NetworkManagerClient {
             SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGlobalNetworkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteGlobalNetworkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGlobalNetworkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGlobalNetworkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing link. You must first disassociate the link from any devices and customer gateways.</p>
-    async fn delete_link(
+    fn delete_link(
         &self,
         input: DeleteLinkRequest,
-    ) -> Result<DeleteLinkResponse, RusotoError<DeleteLinkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteLinkResponse, RusotoError<DeleteLinkError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/links/{link_id}",
             global_network_id = input.global_network_id,
@@ -3187,28 +3463,34 @@ impl NetworkManager for NetworkManagerClient {
             SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLinkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteLinkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing site. The site cannot be associated with any device or link.</p>
-    async fn delete_site(
+    fn delete_site(
         &self,
         input: DeleteSiteRequest,
-    ) -> Result<DeleteSiteResponse, RusotoError<DeleteSiteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteSiteResponse, RusotoError<DeleteSiteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites/{site_id}",
             global_network_id = input.global_network_id,
@@ -3219,56 +3501,76 @@ impl NetworkManager for NetworkManagerClient {
             SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSiteResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSiteResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSiteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSiteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deregisters a transit gateway from your global network. This action does not delete your transit gateway, or modify any of its attachments. This action removes any customer gateway associations.</p>
-    async fn deregister_transit_gateway(
+    fn deregister_transit_gateway(
         &self,
         input: DeregisterTransitGatewayRequest,
-    ) -> Result<DeregisterTransitGatewayResponse, RusotoError<DeregisterTransitGatewayError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterTransitGatewayResponse,
+                        RusotoError<DeregisterTransitGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/global-networks/{global_network_id}/transit-gateway-registrations/{transit_gateway_arn}", global_network_id = input.global_network_id, transit_gateway_arn = input.transit_gateway_arn);
 
         let mut request =
             SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterTransitGatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterTransitGatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterTransitGatewayError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterTransitGatewayError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes one or more global networks. By default, all global networks are described. To describe the objects in your global network, you must use the appropriate <code>Get*</code> action. For example, to list the transit gateways in your global network, use <a>GetTransitGatewayRegistrations</a>.</p>
-    async fn describe_global_networks(
+    fn describe_global_networks(
         &self,
         input: DescribeGlobalNetworksRequest,
-    ) -> Result<DescribeGlobalNetworksResponse, RusotoError<DescribeGlobalNetworksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeGlobalNetworksResponse,
+                        RusotoError<DescribeGlobalNetworksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/global-networks";
 
         let mut request = SignedRequest::new("GET", "networkmanager", &self.region, &request_uri);
@@ -3288,57 +3590,73 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeGlobalNetworksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeGlobalNetworksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeGlobalNetworksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeGlobalNetworksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disassociates a customer gateway from a device and a link.</p>
-    async fn disassociate_customer_gateway(
+    fn disassociate_customer_gateway(
         &self,
         input: DisassociateCustomerGatewayRequest,
-    ) -> Result<DisassociateCustomerGatewayResponse, RusotoError<DisassociateCustomerGatewayError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateCustomerGatewayResponse,
+                        RusotoError<DisassociateCustomerGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/global-networks/{global_network_id}/customer-gateway-associations/{customer_gateway_arn}", customer_gateway_arn = input.customer_gateway_arn, global_network_id = input.global_network_id);
 
         let mut request =
             SignedRequest::new("DELETE", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateCustomerGatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateCustomerGatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateCustomerGatewayError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateCustomerGatewayError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disassociates an existing device from a link. You must first disassociate any customer gateways that are associated with the link.</p>
-    async fn disassociate_link(
+    fn disassociate_link(
         &self,
         input: DisassociateLinkRequest,
-    ) -> Result<DisassociateLinkResponse, RusotoError<DisassociateLinkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DisassociateLinkResponse, RusotoError<DisassociateLinkError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/link-associations",
             global_network_id = input.global_network_id
@@ -3353,30 +3671,37 @@ impl NetworkManager for NetworkManagerClient {
         params.put("linkId", &input.link_id);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateLinkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateLinkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
-    async fn get_customer_gateway_associations(
+    fn get_customer_gateway_associations(
         &self,
         input: GetCustomerGatewayAssociationsRequest,
-    ) -> Result<
-        GetCustomerGatewayAssociationsResponse,
-        RusotoError<GetCustomerGatewayAssociationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetCustomerGatewayAssociationsResponse,
+                        RusotoError<GetCustomerGatewayAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/customer-gateway-associations",
@@ -3400,28 +3725,34 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCustomerGatewayAssociationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetCustomerGatewayAssociationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCustomerGatewayAssociationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCustomerGatewayAssociationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about one or more of your devices in a global network.</p>
-    async fn get_devices(
+    fn get_devices(
         &self,
         input: GetDevicesRequest,
-    ) -> Result<GetDevicesResponse, RusotoError<GetDevicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDevicesResponse, RusotoError<GetDevicesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices",
             global_network_id = input.global_network_id
@@ -3447,28 +3778,38 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDevicesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDevicesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevicesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDevicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the link associations for a device or a link. Either the device ID or the link ID must be specified.</p>
-    async fn get_link_associations(
+    fn get_link_associations(
         &self,
         input: GetLinkAssociationsRequest,
-    ) -> Result<GetLinkAssociationsResponse, RusotoError<GetLinkAssociationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetLinkAssociationsResponse,
+                        RusotoError<GetLinkAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/link-associations",
             global_network_id = input.global_network_id
@@ -3492,28 +3833,34 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLinkAssociationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetLinkAssociationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLinkAssociationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetLinkAssociationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about one or more links in a specified global network.</p> <p>If you specify the site ID, you cannot specify the type or provider in the same request. You can specify the type and provider in the same request.</p>
-    async fn get_links(
+    fn get_links(
         &self,
         input: GetLinksRequest,
-    ) -> Result<GetLinksResponse, RusotoError<GetLinksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetLinksResponse, RusotoError<GetLinksError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/links",
             global_network_id = input.global_network_id
@@ -3545,28 +3892,34 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLinksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetLinksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLinksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetLinksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about one or more of your sites in a global network.</p>
-    async fn get_sites(
+    fn get_sites(
         &self,
         input: GetSitesRequest,
-    ) -> Result<GetSitesResponse, RusotoError<GetSitesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetSitesResponse, RusotoError<GetSitesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites",
             global_network_id = input.global_network_id
@@ -3589,30 +3942,37 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSitesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSitesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSitesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSitesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
-    async fn get_transit_gateway_registrations(
+    fn get_transit_gateway_registrations(
         &self,
         input: GetTransitGatewayRegistrationsRequest,
-    ) -> Result<
-        GetTransitGatewayRegistrationsResponse,
-        RusotoError<GetTransitGatewayRegistrationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetTransitGatewayRegistrationsResponse,
+                        RusotoError<GetTransitGatewayRegistrationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/transit-gateway-registrations",
@@ -3636,55 +3996,75 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTransitGatewayRegistrationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTransitGatewayRegistrationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTransitGatewayRegistrationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTransitGatewayRegistrationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags for a specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "networkmanager", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a transit gateway in your global network. The transit gateway can be in any AWS Region, but it must be owned by the same AWS account that owns the global network. You cannot register a transit gateway in more than one global network.</p>
-    async fn register_transit_gateway(
+    fn register_transit_gateway(
         &self,
         input: RegisterTransitGatewayRequest,
-    ) -> Result<RegisterTransitGatewayResponse, RusotoError<RegisterTransitGatewayError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterTransitGatewayResponse,
+                        RusotoError<RegisterTransitGatewayError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/transit-gateway-registrations",
             global_network_id = input.global_network_id
@@ -3696,28 +4076,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterTransitGatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterTransitGatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterTransitGatewayError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterTransitGatewayError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Tags a specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "networkmanager", &self.region, &request_uri);
@@ -3726,28 +4112,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes tags from a specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request =
@@ -3760,28 +4152,34 @@ impl NetworkManager for NetworkManagerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the details for an existing device. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_device(
+    fn update_device(
         &self,
         input: UpdateDeviceRequest,
-    ) -> Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/devices/{device_id}",
             device_id = input.device_id,
@@ -3794,28 +4192,38 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeviceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDeviceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeviceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDeviceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing global network. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_global_network(
+    fn update_global_network(
         &self,
         input: UpdateGlobalNetworkRequest,
-    ) -> Result<UpdateGlobalNetworkResponse, RusotoError<UpdateGlobalNetworkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateGlobalNetworkResponse,
+                        RusotoError<UpdateGlobalNetworkError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}",
             global_network_id = input.global_network_id
@@ -3827,28 +4235,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGlobalNetworkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateGlobalNetworkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGlobalNetworkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateGlobalNetworkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the details for an existing link. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_link(
+    fn update_link(
         &self,
         input: UpdateLinkRequest,
-    ) -> Result<UpdateLinkResponse, RusotoError<UpdateLinkError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateLinkResponse, RusotoError<UpdateLinkError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/links/{link_id}",
             global_network_id = input.global_network_id,
@@ -3861,28 +4275,34 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLinkResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateLinkResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the information for an existing site. To remove information for any of the parameters, specify an empty string.</p>
-    async fn update_site(
+    fn update_site(
         &self,
         input: UpdateSiteRequest,
-    ) -> Result<UpdateSiteResponse, RusotoError<UpdateSiteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateSiteResponse, RusotoError<UpdateSiteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/global-networks/{global_network_id}/sites/{site_id}",
             global_network_id = input.global_network_id,
@@ -3895,20 +4315,20 @@ impl NetworkManager for NetworkManagerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSiteResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateSiteResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSiteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateSiteError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

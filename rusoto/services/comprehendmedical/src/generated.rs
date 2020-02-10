@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p> An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the dosage of a medication taken. It contains information about the attribute such as id, begin and end offset within the input text, and the segment of the input text. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1528,88 +1529,195 @@ impl fmt::Display for StopPHIDetectionJobError {
 }
 impl Error for StopPHIDetectionJobError {}
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
-#[async_trait]
 pub trait ComprehendMedical {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_entities_detection_v2_job(
+    fn describe_entities_detection_v2_job(
         &self,
         input: DescribeEntitiesDetectionV2JobRequest,
-    ) -> Result<
-        DescribeEntitiesDetectionV2JobResponse,
-        RusotoError<DescribeEntitiesDetectionV2JobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEntitiesDetectionV2JobResponse,
+                        RusotoError<DescribeEntitiesDetectionV2JobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_phi_detection_job(
+    fn describe_phi_detection_job(
         &self,
         input: DescribePHIDetectionJobRequest,
-    ) -> Result<DescribePHIDetectionJobResponse, RusotoError<DescribePHIDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePHIDetectionJobResponse,
+                        RusotoError<DescribePHIDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    async fn detect_entities(
+    fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
-    async fn detect_entities_v2(
+    fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
-    ) -> Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Inspects the clinical text for protected health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    async fn detect_phi(
+    fn detect_phi(
         &self,
         input: DetectPHIRequest,
-    ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectPHIResponse, RusotoError<DetectPHIError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
-    async fn infer_icd10cm(
+    fn infer_icd10cm(
         &self,
         input: InferICD10CMRequest,
-    ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
-    async fn infer_rx_norm(
+    fn infer_rx_norm(
         &self,
         input: InferRxNormRequest,
-    ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<InferRxNormResponse, RusotoError<InferRxNormError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of medical entity detection jobs that you have submitted.</p>
-    async fn list_entities_detection_v2_jobs(
+    fn list_entities_detection_v2_jobs(
         &self,
         input: ListEntitiesDetectionV2JobsRequest,
-    ) -> Result<ListEntitiesDetectionV2JobsResponse, RusotoError<ListEntitiesDetectionV2JobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEntitiesDetectionV2JobsResponse,
+                        RusotoError<ListEntitiesDetectionV2JobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
-    async fn list_phi_detection_jobs(
+    fn list_phi_detection_jobs(
         &self,
         input: ListPHIDetectionJobsRequest,
-    ) -> Result<ListPHIDetectionJobsResponse, RusotoError<ListPHIDetectionJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPHIDetectionJobsResponse,
+                        RusotoError<ListPHIDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous medical entity detection job for a collection of documents. Use the <code>DescribeEntitiesDetectionV2Job</code> operation to track the status of a job.</p>
-    async fn start_entities_detection_v2_job(
+    fn start_entities_detection_v2_job(
         &self,
         input: StartEntitiesDetectionV2JobRequest,
-    ) -> Result<StartEntitiesDetectionV2JobResponse, RusotoError<StartEntitiesDetectionV2JobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartEntitiesDetectionV2JobResponse,
+                        RusotoError<StartEntitiesDetectionV2JobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
-    async fn start_phi_detection_job(
+    fn start_phi_detection_job(
         &self,
         input: StartPHIDetectionJobRequest,
-    ) -> Result<StartPHIDetectionJobResponse, RusotoError<StartPHIDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartPHIDetectionJobResponse,
+                        RusotoError<StartPHIDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a medical entities detection job in progress.</p>
-    async fn stop_entities_detection_v2_job(
+    fn stop_entities_detection_v2_job(
         &self,
         input: StopEntitiesDetectionV2JobRequest,
-    ) -> Result<StopEntitiesDetectionV2JobResponse, RusotoError<StopEntitiesDetectionV2JobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopEntitiesDetectionV2JobResponse,
+                        RusotoError<StopEntitiesDetectionV2JobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
-    async fn stop_phi_detection_job(
+    fn stop_phi_detection_job(
         &self,
         input: StopPHIDetectionJobRequest,
-    ) -> Result<StopPHIDetectionJobResponse, RusotoError<StopPHIDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopPHIDetectionJobResponse,
+                        RusotoError<StopPHIDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the ComprehendMedical API.
 #[derive(Clone)]
@@ -1649,15 +1757,21 @@ impl ComprehendMedicalClient {
     }
 }
 
-#[async_trait]
 impl ComprehendMedical for ComprehendMedicalClient {
     /// <p>Gets the properties associated with a medical entities detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_entities_detection_v2_job(
+    fn describe_entities_detection_v2_job(
         &self,
         input: DescribeEntitiesDetectionV2JobRequest,
-    ) -> Result<
-        DescribeEntitiesDetectionV2JobResponse,
-        RusotoError<DescribeEntitiesDetectionV2JobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEntitiesDetectionV2JobResponse,
+                        RusotoError<DescribeEntitiesDetectionV2JobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
@@ -1669,27 +1783,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntitiesDetectionV2JobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntitiesDetectionV2JobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEntitiesDetectionV2JobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEntitiesDetectionV2JobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_phi_detection_job(
+    fn describe_phi_detection_job(
         &self,
         input: DescribePHIDetectionJobRequest,
-    ) -> Result<DescribePHIDetectionJobResponse, RusotoError<DescribePHIDetectionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePHIDetectionJobResponse,
+                        RusotoError<DescribePHIDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1700,27 +1824,33 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePHIDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePHIDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePHIDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePHIDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
-    async fn detect_entities(
+    fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1728,26 +1858,34 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectEntitiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectEntitiesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectEntitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
-    async fn detect_entities_v2(
+    fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
-    ) -> Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1758,27 +1896,33 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetectEntitiesV2Response, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectEntitiesV2Error::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectEntitiesV2Response, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectEntitiesV2Error::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Inspects the clinical text for protected health information (PHI) entities and entity category, location, and confidence score on that information.</p>
-    async fn detect_phi(
+    fn detect_phi(
         &self,
         input: DetectPHIRequest,
-    ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectPHIResponse, RusotoError<DetectPHIError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1786,26 +1930,32 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectPHIError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectPHIError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
-    async fn infer_icd10cm(
+    fn infer_icd10cm(
         &self,
         input: InferICD10CMRequest,
-    ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1813,26 +1963,33 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<InferICD10CMResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InferICD10CMError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<InferICD10CMResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(InferICD10CMError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
-    async fn infer_rx_norm(
+    fn infer_rx_norm(
         &self,
         input: InferRxNormRequest,
-    ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<InferRxNormResponse, RusotoError<InferRxNormError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1840,27 +1997,36 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<InferRxNormResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InferRxNormError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<InferRxNormResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(InferRxNormError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of medical entity detection jobs that you have submitted.</p>
-    async fn list_entities_detection_v2_jobs(
+    fn list_entities_detection_v2_jobs(
         &self,
         input: ListEntitiesDetectionV2JobsRequest,
-    ) -> Result<ListEntitiesDetectionV2JobsResponse, RusotoError<ListEntitiesDetectionV2JobsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEntitiesDetectionV2JobsResponse,
+                        RusotoError<ListEntitiesDetectionV2JobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1871,27 +2037,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntitiesDetectionV2JobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntitiesDetectionV2JobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEntitiesDetectionV2JobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEntitiesDetectionV2JobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
-    async fn list_phi_detection_jobs(
+    fn list_phi_detection_jobs(
         &self,
         input: ListPHIDetectionJobsRequest,
-    ) -> Result<ListPHIDetectionJobsResponse, RusotoError<ListPHIDetectionJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPHIDetectionJobsResponse,
+                        RusotoError<ListPHIDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1902,28 +2078,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPHIDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPHIDetectionJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPHIDetectionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPHIDetectionJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous medical entity detection job for a collection of documents. Use the <code>DescribeEntitiesDetectionV2Job</code> operation to track the status of a job.</p>
-    async fn start_entities_detection_v2_job(
+    fn start_entities_detection_v2_job(
         &self,
         input: StartEntitiesDetectionV2JobRequest,
-    ) -> Result<StartEntitiesDetectionV2JobResponse, RusotoError<StartEntitiesDetectionV2JobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartEntitiesDetectionV2JobResponse,
+                        RusotoError<StartEntitiesDetectionV2JobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1934,27 +2119,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartEntitiesDetectionV2JobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartEntitiesDetectionV2JobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartEntitiesDetectionV2JobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartEntitiesDetectionV2JobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
-    async fn start_phi_detection_job(
+    fn start_phi_detection_job(
         &self,
         input: StartPHIDetectionJobRequest,
-    ) -> Result<StartPHIDetectionJobResponse, RusotoError<StartPHIDetectionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartPHIDetectionJobResponse,
+                        RusotoError<StartPHIDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1965,28 +2160,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartPHIDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartPHIDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartPHIDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartPHIDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a medical entities detection job in progress.</p>
-    async fn stop_entities_detection_v2_job(
+    fn stop_entities_detection_v2_job(
         &self,
         input: StopEntitiesDetectionV2JobRequest,
-    ) -> Result<StopEntitiesDetectionV2JobResponse, RusotoError<StopEntitiesDetectionV2JobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopEntitiesDetectionV2JobResponse,
+                        RusotoError<StopEntitiesDetectionV2JobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1997,27 +2201,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopEntitiesDetectionV2JobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopEntitiesDetectionV2JobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopEntitiesDetectionV2JobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopEntitiesDetectionV2JobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
-    async fn stop_phi_detection_job(
+    fn stop_phi_detection_job(
         &self,
         input: StopPHIDetectionJobRequest,
-    ) -> Result<StopPHIDetectionJobResponse, RusotoError<StopPHIDetectionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopPHIDetectionJobResponse,
+                        RusotoError<StopPHIDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2028,19 +2242,19 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopPHIDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopPHIDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopPHIDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopPHIDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

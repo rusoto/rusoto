@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The destination for the asset.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AssetDestinationEntry {
@@ -2208,136 +2209,242 @@ impl fmt::Display for UpdateRevisionError {
 }
 impl Error for UpdateRevisionError {}
 /// Trait representing the capabilities of the AWS Data Exchange API. AWS Data Exchange clients implement this trait.
-#[async_trait]
 pub trait DataExchange {
     /// <p>This operation cancels a job. Jobs can be cancelled only when they are in the WAITING state.</p>
-    async fn cancel_job(&self, input: CancelJobRequest) -> Result<(), RusotoError<CancelJobError>>;
+    fn cancel_job(
+        &self,
+        input: CancelJobRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<CancelJobError>>> + Send + 'static>>;
 
     /// <p>This operation creates a data set.</p>
-    async fn create_data_set(
+    fn create_data_set(
         &self,
         input: CreateDataSetRequest,
-    ) -> Result<CreateDataSetResponse, RusotoError<CreateDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDataSetResponse, RusotoError<CreateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation creates a job.</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation creates a revision for a data set.</p>
-    async fn create_revision(
+    fn create_revision(
         &self,
         input: CreateRevisionRequest,
-    ) -> Result<CreateRevisionResponse, RusotoError<CreateRevisionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRevisionResponse, RusotoError<CreateRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation deletes an asset.</p>
-    async fn delete_asset(
+    fn delete_asset(
         &self,
         input: DeleteAssetRequest,
-    ) -> Result<(), RusotoError<DeleteAssetError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteAssetError>>> + Send + 'static>>;
 
     /// <p>This operation deletes a data set.</p>
-    async fn delete_data_set(
+    fn delete_data_set(
         &self,
         input: DeleteDataSetRequest,
-    ) -> Result<(), RusotoError<DeleteDataSetError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteDataSetError>>> + Send + 'static>>;
 
     /// <p>This operation deletes a revision.</p>
-    async fn delete_revision(
+    fn delete_revision(
         &self,
         input: DeleteRevisionRequest,
-    ) -> Result<(), RusotoError<DeleteRevisionError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRevisionError>>> + Send + 'static>>;
 
     /// <p>This operation returns information about an asset.</p>
-    async fn get_asset(
+    fn get_asset(
         &self,
         input: GetAssetRequest,
-    ) -> Result<GetAssetResponse, RusotoError<GetAssetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetAssetResponse, RusotoError<GetAssetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation returns information about a data set.</p>
-    async fn get_data_set(
+    fn get_data_set(
         &self,
         input: GetDataSetRequest,
-    ) -> Result<GetDataSetResponse, RusotoError<GetDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDataSetResponse, RusotoError<GetDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation returns information about a job.</p>
-    async fn get_job(
+    fn get_job(
         &self,
         input: GetJobRequest,
-    ) -> Result<GetJobResponse, RusotoError<GetJobError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetJobResponse, RusotoError<GetJobError>>> + Send + 'static>,
+    >;
 
     /// <p>This operation returns information about a revision.</p>
-    async fn get_revision(
+    fn get_revision(
         &self,
         input: GetRevisionRequest,
-    ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRevisionResponse, RusotoError<GetRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation lists a data set's revisions sorted by CreatedAt in descending order.</p>
-    async fn list_data_set_revisions(
+    fn list_data_set_revisions(
         &self,
         input: ListDataSetRevisionsRequest,
-    ) -> Result<ListDataSetRevisionsResponse, RusotoError<ListDataSetRevisionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDataSetRevisionsResponse,
+                        RusotoError<ListDataSetRevisionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation lists your data sets. When listing by origin OWNED, results are sorted by CreatedAt in descending order. When listing by origin ENTITLED, there is no order and the maxResults parameter is ignored.</p>
-    async fn list_data_sets(
+    fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
-    ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation lists your jobs sorted by CreatedAt in descending order.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResponse, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation lists a revision's assets sorted alphabetically in descending order.</p>
-    async fn list_revision_assets(
+    fn list_revision_assets(
         &self,
         input: ListRevisionAssetsRequest,
-    ) -> Result<ListRevisionAssetsResponse, RusotoError<ListRevisionAssetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRevisionAssetsResponse,
+                        RusotoError<ListRevisionAssetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation lists the tags on the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation starts a job.</p>
-    async fn start_job(
+    fn start_job(
         &self,
         input: StartJobRequest,
-    ) -> Result<StartJobResponse, RusotoError<StartJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartJobResponse, RusotoError<StartJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation tags a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
     /// <p>This operation removes one or more tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>This operation updates an asset.</p>
-    async fn update_asset(
+    fn update_asset(
         &self,
         input: UpdateAssetRequest,
-    ) -> Result<UpdateAssetResponse, RusotoError<UpdateAssetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateAssetResponse, RusotoError<UpdateAssetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation updates a data set.</p>
-    async fn update_data_set(
+    fn update_data_set(
         &self,
         input: UpdateDataSetRequest,
-    ) -> Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This operation updates a revision.</p>
-    async fn update_revision(
+    fn update_revision(
         &self,
         input: UpdateRevisionRequest,
-    ) -> Result<UpdateRevisionResponse, RusotoError<UpdateRevisionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRevisionResponse, RusotoError<UpdateRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Data Exchange API.
 #[derive(Clone)]
@@ -2377,36 +2484,45 @@ impl DataExchangeClient {
     }
 }
 
-#[async_trait]
 impl DataExchange for DataExchangeClient {
     /// <p>This operation cancels a job. Jobs can be cancelled only when they are in the WAITING state.</p>
-    async fn cancel_job(&self, input: CancelJobRequest) -> Result<(), RusotoError<CancelJobError>> {
+    fn cancel_job(
+        &self,
+        input: CancelJobRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<CancelJobError>>> + Send + 'static>>
+    {
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation creates a data set.</p>
-    async fn create_data_set(
+    fn create_data_set(
         &self,
         input: CreateDataSetRequest,
-    ) -> Result<CreateDataSetResponse, RusotoError<CreateDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDataSetResponse, RusotoError<CreateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/data-sets";
 
         let mut request = SignedRequest::new("POST", "dataexchange", &self.region, &request_uri);
@@ -2415,28 +2531,34 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDataSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation creates a job.</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/jobs";
 
         let mut request = SignedRequest::new("POST", "dataexchange", &self.region, &request_uri);
@@ -2445,28 +2567,34 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation creates a revision for a data set.</p>
-    async fn create_revision(
+    fn create_revision(
         &self,
         input: CreateRevisionRequest,
-    ) -> Result<CreateRevisionResponse, RusotoError<CreateRevisionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRevisionResponse, RusotoError<CreateRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions",
             data_set_id = input.data_set_id
@@ -2478,28 +2606,29 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRevisionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRevisionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRevisionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRevisionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation deletes an asset.</p>
-    async fn delete_asset(
+    fn delete_asset(
         &self,
         input: DeleteAssetRequest,
-    ) -> Result<(), RusotoError<DeleteAssetError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteAssetError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets/{asset_id}",
             asset_id = input.asset_id,
@@ -2510,27 +2639,28 @@ impl DataExchange for DataExchangeClient {
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAssetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation deletes a data set.</p>
-    async fn delete_data_set(
+    fn delete_data_set(
         &self,
         input: DeleteDataSetRequest,
-    ) -> Result<(), RusotoError<DeleteDataSetError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteDataSetError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}",
             data_set_id = input.data_set_id
@@ -2539,27 +2669,28 @@ impl DataExchange for DataExchangeClient {
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDataSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation deletes a revision.</p>
-    async fn delete_revision(
+    fn delete_revision(
         &self,
         input: DeleteRevisionRequest,
-    ) -> Result<(), RusotoError<DeleteRevisionError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRevisionError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}",
             data_set_id = input.data_set_id,
@@ -2569,27 +2700,33 @@ impl DataExchange for DataExchangeClient {
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRevisionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRevisionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation returns information about an asset.</p>
-    async fn get_asset(
+    fn get_asset(
         &self,
         input: GetAssetRequest,
-    ) -> Result<GetAssetResponse, RusotoError<GetAssetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetAssetResponse, RusotoError<GetAssetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets/{asset_id}",
             asset_id = input.asset_id,
@@ -2600,28 +2737,34 @@ impl DataExchange for DataExchangeClient {
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAssetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAssetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAssetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAssetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation returns information about a data set.</p>
-    async fn get_data_set(
+    fn get_data_set(
         &self,
         input: GetDataSetRequest,
-    ) -> Result<GetDataSetResponse, RusotoError<GetDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDataSetResponse, RusotoError<GetDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}",
             data_set_id = input.data_set_id
@@ -2630,55 +2773,63 @@ impl DataExchange for DataExchangeClient {
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDataSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation returns information about a job.</p>
-    async fn get_job(
+    fn get_job(
         &self,
         input: GetJobRequest,
-    ) -> Result<GetJobResponse, RusotoError<GetJobError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetJobResponse, RusotoError<GetJobError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation returns information about a revision.</p>
-    async fn get_revision(
+    fn get_revision(
         &self,
         input: GetRevisionRequest,
-    ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRevisionResponse, RusotoError<GetRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}",
             data_set_id = input.data_set_id,
@@ -2688,28 +2839,38 @@ impl DataExchange for DataExchangeClient {
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRevisionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRevisionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRevisionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRevisionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation lists a data set's revisions sorted by CreatedAt in descending order.</p>
-    async fn list_data_set_revisions(
+    fn list_data_set_revisions(
         &self,
         input: ListDataSetRevisionsRequest,
-    ) -> Result<ListDataSetRevisionsResponse, RusotoError<ListDataSetRevisionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDataSetRevisionsResponse,
+                        RusotoError<ListDataSetRevisionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions",
             data_set_id = input.data_set_id
@@ -2727,28 +2888,34 @@ impl DataExchange for DataExchangeClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSetRevisionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSetRevisionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSetRevisionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSetRevisionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation lists your data sets. When listing by origin OWNED, results are sorted by CreatedAt in descending order. When listing by origin ENTITLED, there is no order and the maxResults parameter is ignored.</p>
-    async fn list_data_sets(
+    fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
-    ) -> Result<ListDataSetsResponse, RusotoError<ListDataSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSetsResponse, RusotoError<ListDataSetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/data-sets";
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
@@ -2766,28 +2933,34 @@ impl DataExchange for DataExchangeClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation lists your jobs sorted by CreatedAt in descending order.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResponse, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/jobs";
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
@@ -2808,28 +2981,38 @@ impl DataExchange for DataExchangeClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation lists a revision's assets sorted alphabetically in descending order.</p>
-    async fn list_revision_assets(
+    fn list_revision_assets(
         &self,
         input: ListRevisionAssetsRequest,
-    ) -> Result<ListRevisionAssetsResponse, RusotoError<ListRevisionAssetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRevisionAssetsResponse,
+                        RusotoError<ListRevisionAssetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets",
             data_set_id = input.data_set_id,
@@ -2848,82 +3031,99 @@ impl DataExchange for DataExchangeClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRevisionAssetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRevisionAssetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRevisionAssetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRevisionAssetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation lists the tags on the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation starts a job.</p>
-    async fn start_job(
+    fn start_job(
         &self,
         input: StartJobRequest,
-    ) -> Result<StartJobResponse, RusotoError<StartJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartJobResponse, RusotoError<StartJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PATCH", "dataexchange", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation tags a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "dataexchange", &self.region, &request_uri);
@@ -2932,27 +3132,28 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation removes one or more tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "dataexchange", &self.region, &request_uri);
@@ -2964,27 +3165,33 @@ impl DataExchange for DataExchangeClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation updates an asset.</p>
-    async fn update_asset(
+    fn update_asset(
         &self,
         input: UpdateAssetRequest,
-    ) -> Result<UpdateAssetResponse, RusotoError<UpdateAssetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateAssetResponse, RusotoError<UpdateAssetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}/assets/{asset_id}",
             asset_id = input.asset_id,
@@ -2998,28 +3205,34 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAssetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAssetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAssetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAssetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation updates a data set.</p>
-    async fn update_data_set(
+    fn update_data_set(
         &self,
         input: UpdateDataSetRequest,
-    ) -> Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDataSetResponse, RusotoError<UpdateDataSetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}",
             data_set_id = input.data_set_id
@@ -3031,28 +3244,34 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDataSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This operation updates a revision.</p>
-    async fn update_revision(
+    fn update_revision(
         &self,
         input: UpdateRevisionRequest,
-    ) -> Result<UpdateRevisionResponse, RusotoError<UpdateRevisionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRevisionResponse, RusotoError<UpdateRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/data-sets/{data_set_id}/revisions/{revision_id}",
             data_set_id = input.data_set_id,
@@ -3065,20 +3284,20 @@ impl DataExchange for DataExchangeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRevisionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRevisionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRevisionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRevisionError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

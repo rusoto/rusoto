@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Describes an additional authentication provider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AdditionalAuthenticationProvider {
@@ -3830,253 +3831,524 @@ impl fmt::Display for UpdateTypeError {
 }
 impl Error for UpdateTypeError {}
 /// Trait representing the capabilities of the AWSAppSync API. AWSAppSync clients implement this trait.
-#[async_trait]
 pub trait AppSync {
     /// <p>Creates a cache for the GraphQL API.</p>
-    async fn create_api_cache(
+    fn create_api_cache(
         &self,
         input: CreateApiCacheRequest,
-    ) -> Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
-    async fn create_api_key(
+    fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
-    ) -> Result<CreateApiKeyResponse, RusotoError<CreateApiKeyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateApiKeyResponse, RusotoError<CreateApiKeyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>DataSource</code> object.</p>
-    async fn create_data_source(
+    fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
-    async fn create_function(
+    fn create_function(
         &self,
         input: CreateFunctionRequest,
-    ) -> Result<CreateFunctionResponse, RusotoError<CreateFunctionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFunctionResponse, RusotoError<CreateFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>GraphqlApi</code> object.</p>
-    async fn create_graphql_api(
+    fn create_graphql_api(
         &self,
         input: CreateGraphqlApiRequest,
-    ) -> Result<CreateGraphqlApiResponse, RusotoError<CreateGraphqlApiError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateGraphqlApiResponse, RusotoError<CreateGraphqlApiError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
-    async fn create_resolver(
+    fn create_resolver(
         &self,
         input: CreateResolverRequest,
-    ) -> Result<CreateResolverResponse, RusotoError<CreateResolverError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateResolverResponse, RusotoError<CreateResolverError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>Type</code> object.</p>
-    async fn create_type(
+    fn create_type(
         &self,
         input: CreateTypeRequest,
-    ) -> Result<CreateTypeResponse, RusotoError<CreateTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTypeResponse, RusotoError<CreateTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an <code>ApiCache</code> object.</p>
-    async fn delete_api_cache(
+    fn delete_api_cache(
         &self,
         input: DeleteApiCacheRequest,
-    ) -> Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an API key.</p>
-    async fn delete_api_key(
+    fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
-    ) -> Result<DeleteApiKeyResponse, RusotoError<DeleteApiKeyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteApiKeyResponse, RusotoError<DeleteApiKeyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <code>DataSource</code> object.</p>
-    async fn delete_data_source(
+    fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
-    ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <code>Function</code>.</p>
-    async fn delete_function(
+    fn delete_function(
         &self,
         input: DeleteFunctionRequest,
-    ) -> Result<DeleteFunctionResponse, RusotoError<DeleteFunctionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteFunctionResponse, RusotoError<DeleteFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <code>GraphqlApi</code> object.</p>
-    async fn delete_graphql_api(
+    fn delete_graphql_api(
         &self,
         input: DeleteGraphqlApiRequest,
-    ) -> Result<DeleteGraphqlApiResponse, RusotoError<DeleteGraphqlApiError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteGraphqlApiResponse, RusotoError<DeleteGraphqlApiError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <code>Resolver</code> object.</p>
-    async fn delete_resolver(
+    fn delete_resolver(
         &self,
         input: DeleteResolverRequest,
-    ) -> Result<DeleteResolverResponse, RusotoError<DeleteResolverError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteResolverResponse, RusotoError<DeleteResolverError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <code>Type</code> object.</p>
-    async fn delete_type(
+    fn delete_type(
         &self,
         input: DeleteTypeRequest,
-    ) -> Result<DeleteTypeResponse, RusotoError<DeleteTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTypeResponse, RusotoError<DeleteTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Flushes an <code>ApiCache</code> object.</p>
-    async fn flush_api_cache(
+    fn flush_api_cache(
         &self,
         input: FlushApiCacheRequest,
-    ) -> Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves an <code>ApiCache</code> object.</p>
-    async fn get_api_cache(
+    fn get_api_cache(
         &self,
         input: GetApiCacheRequest,
-    ) -> Result<GetApiCacheResponse, RusotoError<GetApiCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetApiCacheResponse, RusotoError<GetApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a <code>DataSource</code> object.</p>
-    async fn get_data_source(
+    fn get_data_source(
         &self,
         input: GetDataSourceRequest,
-    ) -> Result<GetDataSourceResponse, RusotoError<GetDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDataSourceResponse, RusotoError<GetDataSourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get a <code>Function</code>.</p>
-    async fn get_function(
+    fn get_function(
         &self,
         input: GetFunctionRequest,
-    ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFunctionResponse, RusotoError<GetFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
-    async fn get_graphql_api(
+    fn get_graphql_api(
         &self,
         input: GetGraphqlApiRequest,
-    ) -> Result<GetGraphqlApiResponse, RusotoError<GetGraphqlApiError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetGraphqlApiResponse, RusotoError<GetGraphqlApiError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the introspection schema for a GraphQL API.</p>
-    async fn get_introspection_schema(
+    fn get_introspection_schema(
         &self,
         input: GetIntrospectionSchemaRequest,
-    ) -> Result<GetIntrospectionSchemaResponse, RusotoError<GetIntrospectionSchemaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetIntrospectionSchemaResponse,
+                        RusotoError<GetIntrospectionSchemaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a <code>Resolver</code> object.</p>
-    async fn get_resolver(
+    fn get_resolver(
         &self,
         input: GetResolverRequest,
-    ) -> Result<GetResolverResponse, RusotoError<GetResolverError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetResolverResponse, RusotoError<GetResolverError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the current status of a schema creation operation.</p>
-    async fn get_schema_creation_status(
+    fn get_schema_creation_status(
         &self,
         input: GetSchemaCreationStatusRequest,
-    ) -> Result<GetSchemaCreationStatusResponse, RusotoError<GetSchemaCreationStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetSchemaCreationStatusResponse,
+                        RusotoError<GetSchemaCreationStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a <code>Type</code> object.</p>
-    async fn get_type(
+    fn get_type(
         &self,
         input: GetTypeRequest,
-    ) -> Result<GetTypeResponse, RusotoError<GetTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTypeResponse, RusotoError<GetTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
-    async fn list_api_keys(
+    fn list_api_keys(
         &self,
         input: ListApiKeysRequest,
-    ) -> Result<ListApiKeysResponse, RusotoError<ListApiKeysError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListApiKeysResponse, RusotoError<ListApiKeysError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the data sources for a given API.</p>
-    async fn list_data_sources(
+    fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
-    ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List multiple functions.</p>
-    async fn list_functions(
+    fn list_functions(
         &self,
         input: ListFunctionsRequest,
-    ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists your GraphQL APIs.</p>
-    async fn list_graphql_apis(
+    fn list_graphql_apis(
         &self,
         input: ListGraphqlApisRequest,
-    ) -> Result<ListGraphqlApisResponse, RusotoError<ListGraphqlApisError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGraphqlApisResponse, RusotoError<ListGraphqlApisError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the resolvers for a given API and type.</p>
-    async fn list_resolvers(
+    fn list_resolvers(
         &self,
         input: ListResolversRequest,
-    ) -> Result<ListResolversResponse, RusotoError<ListResolversError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListResolversResponse, RusotoError<ListResolversError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the resolvers that are associated with a specific function.</p>
-    async fn list_resolvers_by_function(
+    fn list_resolvers_by_function(
         &self,
         input: ListResolversByFunctionRequest,
-    ) -> Result<ListResolversByFunctionResponse, RusotoError<ListResolversByFunctionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolversByFunctionResponse,
+                        RusotoError<ListResolversByFunctionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags for a resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the types for a given API.</p>
-    async fn list_types(
+    fn list_types(
         &self,
         input: ListTypesRequest,
-    ) -> Result<ListTypesResponse, RusotoError<ListTypesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTypesResponse, RusotoError<ListTypesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
-    async fn start_schema_creation(
+    fn start_schema_creation(
         &self,
         input: StartSchemaCreationRequest,
-    ) -> Result<StartSchemaCreationResponse, RusotoError<StartSchemaCreationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartSchemaCreationResponse,
+                        RusotoError<StartSchemaCreationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Tags a resource with user-supplied tags.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Untags a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the cache for the GraphQL API.</p>
-    async fn update_api_cache(
+    fn update_api_cache(
         &self,
         input: UpdateApiCacheRequest,
-    ) -> Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an API key.</p>
-    async fn update_api_key(
+    fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
-    ) -> Result<UpdateApiKeyResponse, RusotoError<UpdateApiKeyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateApiKeyResponse, RusotoError<UpdateApiKeyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a <code>DataSource</code> object.</p>
-    async fn update_data_source(
+    fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a <code>Function</code> object.</p>
-    async fn update_function(
+    fn update_function(
         &self,
         input: UpdateFunctionRequest,
-    ) -> Result<UpdateFunctionResponse, RusotoError<UpdateFunctionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateFunctionResponse, RusotoError<UpdateFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a <code>GraphqlApi</code> object.</p>
-    async fn update_graphql_api(
+    fn update_graphql_api(
         &self,
         input: UpdateGraphqlApiRequest,
-    ) -> Result<UpdateGraphqlApiResponse, RusotoError<UpdateGraphqlApiError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateGraphqlApiResponse, RusotoError<UpdateGraphqlApiError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a <code>Resolver</code> object.</p>
-    async fn update_resolver(
+    fn update_resolver(
         &self,
         input: UpdateResolverRequest,
-    ) -> Result<UpdateResolverResponse, RusotoError<UpdateResolverError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateResolverResponse, RusotoError<UpdateResolverError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a <code>Type</code> object.</p>
-    async fn update_type(
+    fn update_type(
         &self,
         input: UpdateTypeRequest,
-    ) -> Result<UpdateTypeResponse, RusotoError<UpdateTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTypeResponse, RusotoError<UpdateTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWSAppSync API.
 #[derive(Clone)]
@@ -4116,13 +4388,18 @@ impl AppSyncClient {
     }
 }
 
-#[async_trait]
 impl AppSync for AppSyncClient {
     /// <p>Creates a cache for the GraphQL API.</p>
-    async fn create_api_cache(
+    fn create_api_cache(
         &self,
         input: CreateApiCacheRequest,
-    ) -> Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateApiCacheResponse, RusotoError<CreateApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4131,28 +4408,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApiCacheResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateApiCacheResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApiCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApiCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
-    async fn create_api_key(
+    fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
-    ) -> Result<CreateApiKeyResponse, RusotoError<CreateApiKeyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateApiKeyResponse, RusotoError<CreateApiKeyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4161,28 +4444,35 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApiKeyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateApiKeyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>DataSource</code> object.</p>
-    async fn create_data_source(
+    fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4191,28 +4481,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDataSourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataSourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
-    async fn create_function(
+    fn create_function(
         &self,
         input: CreateFunctionRequest,
-    ) -> Result<CreateFunctionResponse, RusotoError<CreateFunctionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFunctionResponse, RusotoError<CreateFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4221,28 +4517,35 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFunctionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateFunctionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFunctionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateFunctionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>GraphqlApi</code> object.</p>
-    async fn create_graphql_api(
+    fn create_graphql_api(
         &self,
         input: CreateGraphqlApiRequest,
-    ) -> Result<CreateGraphqlApiResponse, RusotoError<CreateGraphqlApiError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateGraphqlApiResponse, RusotoError<CreateGraphqlApiError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/apis";
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4251,28 +4554,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGraphqlApiResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateGraphqlApiResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGraphqlApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateGraphqlApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
-    async fn create_resolver(
+    fn create_resolver(
         &self,
         input: CreateResolverRequest,
-    ) -> Result<CreateResolverResponse, RusotoError<CreateResolverError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateResolverResponse, RusotoError<CreateResolverError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers",
             api_id = input.api_id,
@@ -4285,28 +4594,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResolverResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateResolverResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResolverError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateResolverError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>Type</code> object.</p>
-    async fn create_type(
+    fn create_type(
         &self,
         input: CreateTypeRequest,
-    ) -> Result<CreateTypeResponse, RusotoError<CreateTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTypeResponse, RusotoError<CreateTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/types", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -4315,55 +4630,67 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an <code>ApiCache</code> object.</p>
-    async fn delete_api_cache(
+    fn delete_api_cache(
         &self,
         input: DeleteApiCacheRequest,
-    ) -> Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteApiCacheResponse, RusotoError<DeleteApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApiCacheResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApiCacheResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApiCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApiCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an API key.</p>
-    async fn delete_api_key(
+    fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
-    ) -> Result<DeleteApiKeyResponse, RusotoError<DeleteApiKeyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteApiKeyResponse, RusotoError<DeleteApiKeyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/apikeys/{id}",
             api_id = input.api_id,
@@ -4373,28 +4700,35 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApiKeyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApiKeyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <code>DataSource</code> object.</p>
-    async fn delete_data_source(
+    fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
-    ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
             api_id = input.api_id,
@@ -4404,28 +4738,34 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDataSourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDataSourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <code>Function</code>.</p>
-    async fn delete_function(
+    fn delete_function(
         &self,
         input: DeleteFunctionRequest,
-    ) -> Result<DeleteFunctionResponse, RusotoError<DeleteFunctionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteFunctionResponse, RusotoError<DeleteFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
             api_id = input.api_id,
@@ -4435,55 +4775,68 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFunctionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteFunctionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFunctionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFunctionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <code>GraphqlApi</code> object.</p>
-    async fn delete_graphql_api(
+    fn delete_graphql_api(
         &self,
         input: DeleteGraphqlApiRequest,
-    ) -> Result<DeleteGraphqlApiResponse, RusotoError<DeleteGraphqlApiError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteGraphqlApiResponse, RusotoError<DeleteGraphqlApiError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGraphqlApiResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteGraphqlApiResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGraphqlApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGraphqlApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <code>Resolver</code> object.</p>
-    async fn delete_resolver(
+    fn delete_resolver(
         &self,
         input: DeleteResolverRequest,
-    ) -> Result<DeleteResolverResponse, RusotoError<DeleteResolverError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteResolverResponse, RusotoError<DeleteResolverError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
             api_id = input.api_id,
@@ -4494,28 +4847,34 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResolverResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteResolverResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResolverError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteResolverError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <code>Type</code> object.</p>
-    async fn delete_type(
+    fn delete_type(
         &self,
         input: DeleteTypeRequest,
-    ) -> Result<DeleteTypeResponse, RusotoError<DeleteTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTypeResponse, RusotoError<DeleteTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
             api_id = input.api_id,
@@ -4525,82 +4884,100 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Flushes an <code>ApiCache</code> object.</p>
-    async fn flush_api_cache(
+    fn flush_api_cache(
         &self,
         input: FlushApiCacheRequest,
-    ) -> Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<FlushApiCacheResponse, RusotoError<FlushApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/FlushCache", api_id = input.api_id);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<FlushApiCacheResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<FlushApiCacheResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(FlushApiCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(FlushApiCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves an <code>ApiCache</code> object.</p>
-    async fn get_api_cache(
+    fn get_api_cache(
         &self,
         input: GetApiCacheRequest,
-    ) -> Result<GetApiCacheResponse, RusotoError<GetApiCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetApiCacheResponse, RusotoError<GetApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApiCacheResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetApiCacheResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApiCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetApiCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a <code>DataSource</code> object.</p>
-    async fn get_data_source(
+    fn get_data_source(
         &self,
         input: GetDataSourceRequest,
-    ) -> Result<GetDataSourceResponse, RusotoError<GetDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDataSourceResponse, RusotoError<GetDataSourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
             api_id = input.api_id,
@@ -4610,28 +4987,34 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDataSourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataSourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get a <code>Function</code>.</p>
-    async fn get_function(
+    fn get_function(
         &self,
         input: GetFunctionRequest,
-    ) -> Result<GetFunctionResponse, RusotoError<GetFunctionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFunctionResponse, RusotoError<GetFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
             api_id = input.api_id,
@@ -4641,55 +5024,71 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFunctionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetFunctionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFunctionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetFunctionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
-    async fn get_graphql_api(
+    fn get_graphql_api(
         &self,
         input: GetGraphqlApiRequest,
-    ) -> Result<GetGraphqlApiResponse, RusotoError<GetGraphqlApiError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetGraphqlApiResponse, RusotoError<GetGraphqlApiError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetGraphqlApiResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetGraphqlApiResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGraphqlApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetGraphqlApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the introspection schema for a GraphQL API.</p>
-    async fn get_introspection_schema(
+    fn get_introspection_schema(
         &self,
         input: GetIntrospectionSchemaRequest,
-    ) -> Result<GetIntrospectionSchemaResponse, RusotoError<GetIntrospectionSchemaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetIntrospectionSchemaResponse,
+                        RusotoError<GetIntrospectionSchemaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/schema", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4702,29 +5101,35 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetIntrospectionSchemaResponse::default();
-            result.schema = Some(response.body);
+                let mut result = GetIntrospectionSchemaResponse::default();
+                result.schema = Some(response.body);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetIntrospectionSchemaError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetIntrospectionSchemaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a <code>Resolver</code> object.</p>
-    async fn get_resolver(
+    fn get_resolver(
         &self,
         input: GetResolverRequest,
-    ) -> Result<GetResolverResponse, RusotoError<GetResolverError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetResolverResponse, RusotoError<GetResolverError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
             api_id = input.api_id,
@@ -4735,55 +5140,71 @@ impl AppSync for AppSyncClient {
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResolverResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResolverResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResolverError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResolverError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the current status of a schema creation operation.</p>
-    async fn get_schema_creation_status(
+    fn get_schema_creation_status(
         &self,
         input: GetSchemaCreationStatusRequest,
-    ) -> Result<GetSchemaCreationStatusResponse, RusotoError<GetSchemaCreationStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetSchemaCreationStatusResponse,
+                        RusotoError<GetSchemaCreationStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSchemaCreationStatusResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSchemaCreationStatusResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSchemaCreationStatusError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSchemaCreationStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a <code>Type</code> object.</p>
-    async fn get_type(
+    fn get_type(
         &self,
         input: GetTypeRequest,
-    ) -> Result<GetTypeResponse, RusotoError<GetTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTypeResponse, RusotoError<GetTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
             api_id = input.api_id,
@@ -4797,28 +5218,34 @@ impl AppSync for AppSyncClient {
         params.put("format", &input.format);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
-    async fn list_api_keys(
+    fn list_api_keys(
         &self,
         input: ListApiKeysRequest,
-    ) -> Result<ListApiKeysResponse, RusotoError<ListApiKeysError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListApiKeysResponse, RusotoError<ListApiKeysError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/apikeys", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4833,28 +5260,34 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApiKeysResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListApiKeysResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApiKeysError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListApiKeysError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the data sources for a given API.</p>
-    async fn list_data_sources(
+    fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
-    ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/datasources", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4869,28 +5302,34 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSourcesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSourcesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSourcesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List multiple functions.</p>
-    async fn list_functions(
+    fn list_functions(
         &self,
         input: ListFunctionsRequest,
-    ) -> Result<ListFunctionsResponse, RusotoError<ListFunctionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFunctionsResponse, RusotoError<ListFunctionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4905,28 +5344,34 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFunctionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListFunctionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFunctionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListFunctionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists your GraphQL APIs.</p>
-    async fn list_graphql_apis(
+    fn list_graphql_apis(
         &self,
         input: ListGraphqlApisRequest,
-    ) -> Result<ListGraphqlApisResponse, RusotoError<ListGraphqlApisError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGraphqlApisResponse, RusotoError<ListGraphqlApisError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/apis";
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -4941,28 +5386,34 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGraphqlApisResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGraphqlApisResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGraphqlApisError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGraphqlApisError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the resolvers for a given API and type.</p>
-    async fn list_resolvers(
+    fn list_resolvers(
         &self,
         input: ListResolversRequest,
-    ) -> Result<ListResolversResponse, RusotoError<ListResolversError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListResolversResponse, RusotoError<ListResolversError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers",
             api_id = input.api_id,
@@ -4981,28 +5432,38 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolversResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResolversResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResolversError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResolversError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the resolvers that are associated with a specific function.</p>
-    async fn list_resolvers_by_function(
+    fn list_resolvers_by_function(
         &self,
         input: ListResolversByFunctionRequest,
-    ) -> Result<ListResolversByFunctionResponse, RusotoError<ListResolversByFunctionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolversByFunctionResponse,
+                        RusotoError<ListResolversByFunctionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}/resolvers",
             api_id = input.api_id,
@@ -5021,55 +5482,71 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolversByFunctionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResolversByFunctionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResolversByFunctionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResolversByFunctionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags for a resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the types for a given API.</p>
-    async fn list_types(
+    fn list_types(
         &self,
         input: ListTypesRequest,
-    ) -> Result<ListTypesResponse, RusotoError<ListTypesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTypesResponse, RusotoError<ListTypesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/types", api_id = input.api_id);
 
         let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
@@ -5085,28 +5562,38 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTypesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTypesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
-    async fn start_schema_creation(
+    fn start_schema_creation(
         &self,
         input: StartSchemaCreationRequest,
-    ) -> Result<StartSchemaCreationResponse, RusotoError<StartSchemaCreationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartSchemaCreationResponse,
+                        RusotoError<StartSchemaCreationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/schemacreation", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5115,28 +5602,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSchemaCreationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartSchemaCreationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSchemaCreationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartSchemaCreationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Tags a resource with user-supplied tags.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5145,28 +5638,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Untags a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
@@ -5178,28 +5677,34 @@ impl AppSync for AppSyncClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the cache for the GraphQL API.</p>
-    async fn update_api_cache(
+    fn update_api_cache(
         &self,
         input: UpdateApiCacheRequest,
-    ) -> Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateApiCacheResponse, RusotoError<UpdateApiCacheError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}/ApiCaches/update", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5208,28 +5713,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApiCacheResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateApiCacheResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApiCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateApiCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an API key.</p>
-    async fn update_api_key(
+    fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
-    ) -> Result<UpdateApiKeyResponse, RusotoError<UpdateApiKeyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateApiKeyResponse, RusotoError<UpdateApiKeyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/apikeys/{id}",
             api_id = input.api_id,
@@ -5242,28 +5753,35 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApiKeyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateApiKeyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <code>DataSource</code> object.</p>
-    async fn update_data_source(
+    fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateDataSourceResponse, RusotoError<UpdateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/datasources/{name}",
             api_id = input.api_id,
@@ -5276,28 +5794,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDataSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDataSourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <code>Function</code> object.</p>
-    async fn update_function(
+    fn update_function(
         &self,
         input: UpdateFunctionRequest,
-    ) -> Result<UpdateFunctionResponse, RusotoError<UpdateFunctionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateFunctionResponse, RusotoError<UpdateFunctionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/functions/{function_id}",
             api_id = input.api_id,
@@ -5310,28 +5834,35 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFunctionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateFunctionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFunctionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFunctionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <code>GraphqlApi</code> object.</p>
-    async fn update_graphql_api(
+    fn update_graphql_api(
         &self,
         input: UpdateGraphqlApiRequest,
-    ) -> Result<UpdateGraphqlApiResponse, RusotoError<UpdateGraphqlApiError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateGraphqlApiResponse, RusotoError<UpdateGraphqlApiError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/apis/{api_id}", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
@@ -5340,28 +5871,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGraphqlApiResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateGraphqlApiResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGraphqlApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateGraphqlApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <code>Resolver</code> object.</p>
-    async fn update_resolver(
+    fn update_resolver(
         &self,
         input: UpdateResolverRequest,
-    ) -> Result<UpdateResolverResponse, RusotoError<UpdateResolverError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateResolverResponse, RusotoError<UpdateResolverError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}/resolvers/{field_name}",
             api_id = input.api_id,
@@ -5375,28 +5912,34 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResolverResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateResolverResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResolverError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateResolverError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <code>Type</code> object.</p>
-    async fn update_type(
+    fn update_type(
         &self,
         input: UpdateTypeRequest,
-    ) -> Result<UpdateTypeResponse, RusotoError<UpdateTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTypeResponse, RusotoError<UpdateTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/apis/{api_id}/types/{type_name}",
             api_id = input.api_id,
@@ -5409,20 +5952,20 @@ impl AppSync for AppSyncClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

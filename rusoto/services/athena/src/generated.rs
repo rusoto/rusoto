@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetNamedQueryInput {
@@ -1582,121 +1583,253 @@ impl fmt::Display for UpdateWorkGroupError {
 }
 impl Error for UpdateWorkGroupError {}
 /// Trait representing the capabilities of the Amazon Athena API. Amazon Athena clients implement this trait.
-#[async_trait]
 pub trait Athena {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
-    async fn batch_get_named_query(
+    fn batch_get_named_query(
         &self,
         input: BatchGetNamedQueryInput,
-    ) -> Result<BatchGetNamedQueryOutput, RusotoError<BatchGetNamedQueryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchGetNamedQueryOutput, RusotoError<BatchGetNamedQueryError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
-    async fn batch_get_query_execution(
+    fn batch_get_query_execution(
         &self,
         input: BatchGetQueryExecutionInput,
-    ) -> Result<BatchGetQueryExecutionOutput, RusotoError<BatchGetQueryExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchGetQueryExecutionOutput,
+                        RusotoError<BatchGetQueryExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn create_named_query(
+    fn create_named_query(
         &self,
         input: CreateNamedQueryInput,
-    ) -> Result<CreateNamedQueryOutput, RusotoError<CreateNamedQueryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateNamedQueryOutput, RusotoError<CreateNamedQueryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a workgroup with the specified name.</p>
-    async fn create_work_group(
+    fn create_work_group(
         &self,
         input: CreateWorkGroupInput,
-    ) -> Result<CreateWorkGroupOutput, RusotoError<CreateWorkGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateWorkGroupOutput, RusotoError<CreateWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn delete_named_query(
+    fn delete_named_query(
         &self,
         input: DeleteNamedQueryInput,
-    ) -> Result<DeleteNamedQueryOutput, RusotoError<DeleteNamedQueryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNamedQueryOutput, RusotoError<DeleteNamedQueryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
-    async fn delete_work_group(
+    fn delete_work_group(
         &self,
         input: DeleteWorkGroupInput,
-    ) -> Result<DeleteWorkGroupOutput, RusotoError<DeleteWorkGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteWorkGroupOutput, RusotoError<DeleteWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
-    async fn get_named_query(
+    fn get_named_query(
         &self,
         input: GetNamedQueryInput,
-    ) -> Result<GetNamedQueryOutput, RusotoError<GetNamedQueryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetNamedQueryOutput, RusotoError<GetNamedQueryError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
-    async fn get_query_execution(
+    fn get_query_execution(
         &self,
         input: GetQueryExecutionInput,
-    ) -> Result<GetQueryExecutionOutput, RusotoError<GetQueryExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetQueryExecutionOutput, RusotoError<GetQueryExecutionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Streams the results of a single query execution specified by <code>QueryExecutionId</code> from the Athena query results location in Amazon S3. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/querying.html">Query Results</a> in the <i>Amazon Athena User Guide</i>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p> <p>To stream query results successfully, the IAM principal with permission to call <code>GetQueryResults</code> also must have permissions to the Amazon S3 <code>GetObject</code> action for the Athena query results location.</p> <important> <p>IAM principals with permission to the Amazon S3 <code>GetObject</code> action for the query results location are able to retrieve query results from Amazon S3 even if permission to the <code>GetQueryResults</code> action is denied. To restrict user or role access, ensure that Amazon S3 permissions to the Athena query location are denied.</p> </important></p>
-    async fn get_query_results(
+    fn get_query_results(
         &self,
         input: GetQueryResultsInput,
-    ) -> Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the workgroup with the specified name.</p>
-    async fn get_work_group(
+    fn get_work_group(
         &self,
         input: GetWorkGroupInput,
-    ) -> Result<GetWorkGroupOutput, RusotoError<GetWorkGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetWorkGroupOutput, RusotoError<GetWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn list_named_queries(
+    fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
-    ) -> Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn list_query_executions(
+    fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,
-    ) -> Result<ListQueryExecutionsOutput, RusotoError<ListQueryExecutionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListQueryExecutionsOutput,
+                        RusotoError<ListQueryExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags associated with this workgroup.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceOutput,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists available workgroups for the account.</p>
-    async fn list_work_groups(
+    fn list_work_groups(
         &self,
         input: ListWorkGroupsInput,
-    ) -> Result<ListWorkGroupsOutput, RusotoError<ListWorkGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListWorkGroupsOutput, RusotoError<ListWorkGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn start_query_execution(
+    fn start_query_execution(
         &self,
         input: StartQueryExecutionInput,
-    ) -> Result<StartQueryExecutionOutput, RusotoError<StartQueryExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartQueryExecutionOutput,
+                        RusotoError<StartQueryExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn stop_query_execution(
+    fn stop_query_execution(
         &self,
         input: StopQueryExecutionInput,
-    ) -> Result<StopQueryExecutionOutput, RusotoError<StopQueryExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<StopQueryExecutionOutput, RusotoError<StopQueryExecutionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceOutput, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceOutput, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
-    async fn update_work_group(
+    fn update_work_group(
         &self,
         input: UpdateWorkGroupInput,
-    ) -> Result<UpdateWorkGroupOutput, RusotoError<UpdateWorkGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateWorkGroupOutput, RusotoError<UpdateWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Athena API.
 #[derive(Clone)]
@@ -1736,13 +1869,19 @@ impl AthenaClient {
     }
 }
 
-#[async_trait]
 impl Athena for AthenaClient {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
-    async fn batch_get_named_query(
+    fn batch_get_named_query(
         &self,
         input: BatchGetNamedQueryInput,
-    ) -> Result<BatchGetNamedQueryOutput, RusotoError<BatchGetNamedQueryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchGetNamedQueryOutput, RusotoError<BatchGetNamedQueryError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1750,27 +1889,37 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetNamedQueryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetNamedQueryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetNamedQueryOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetNamedQueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
-    async fn batch_get_query_execution(
+    fn batch_get_query_execution(
         &self,
         input: BatchGetQueryExecutionInput,
-    ) -> Result<BatchGetQueryExecutionOutput, RusotoError<BatchGetQueryExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchGetQueryExecutionOutput,
+                        RusotoError<BatchGetQueryExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1778,27 +1927,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetQueryExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetQueryExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetQueryExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetQueryExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn create_named_query(
+    fn create_named_query(
         &self,
         input: CreateNamedQueryInput,
-    ) -> Result<CreateNamedQueryOutput, RusotoError<CreateNamedQueryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateNamedQueryOutput, RusotoError<CreateNamedQueryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1806,26 +1961,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateNamedQueryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNamedQueryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateNamedQueryOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateNamedQueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a workgroup with the specified name.</p>
-    async fn create_work_group(
+    fn create_work_group(
         &self,
         input: CreateWorkGroupInput,
-    ) -> Result<CreateWorkGroupOutput, RusotoError<CreateWorkGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateWorkGroupOutput, RusotoError<CreateWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1833,26 +1995,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateWorkGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateWorkGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateWorkGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn delete_named_query(
+    fn delete_named_query(
         &self,
         input: DeleteNamedQueryInput,
-    ) -> Result<DeleteNamedQueryOutput, RusotoError<DeleteNamedQueryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNamedQueryOutput, RusotoError<DeleteNamedQueryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1860,26 +2029,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamedQueryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNamedQueryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteNamedQueryOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNamedQueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
-    async fn delete_work_group(
+    fn delete_work_group(
         &self,
         input: DeleteWorkGroupInput,
-    ) -> Result<DeleteWorkGroupOutput, RusotoError<DeleteWorkGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteWorkGroupOutput, RusotoError<DeleteWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1887,26 +2063,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteWorkGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteWorkGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteWorkGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
-    async fn get_named_query(
+    fn get_named_query(
         &self,
         input: GetNamedQueryInput,
-    ) -> Result<GetNamedQueryOutput, RusotoError<GetNamedQueryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetNamedQueryOutput, RusotoError<GetNamedQueryError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1914,26 +2097,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetNamedQueryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNamedQueryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetNamedQueryOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetNamedQueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
-    async fn get_query_execution(
+    fn get_query_execution(
         &self,
         input: GetQueryExecutionInput,
-    ) -> Result<GetQueryExecutionOutput, RusotoError<GetQueryExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetQueryExecutionOutput, RusotoError<GetQueryExecutionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1941,26 +2131,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetQueryExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetQueryExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetQueryExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetQueryExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Streams the results of a single query execution specified by <code>QueryExecutionId</code> from the Athena query results location in Amazon S3. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/querying.html">Query Results</a> in the <i>Amazon Athena User Guide</i>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p> <p>To stream query results successfully, the IAM principal with permission to call <code>GetQueryResults</code> also must have permissions to the Amazon S3 <code>GetObject</code> action for the Athena query results location.</p> <important> <p>IAM principals with permission to the Amazon S3 <code>GetObject</code> action for the query results location are able to retrieve query results from Amazon S3 even if permission to the <code>GetQueryResults</code> action is denied. To restrict user or role access, ensure that Amazon S3 permissions to the Athena query location are denied.</p> </important></p>
-    async fn get_query_results(
+    fn get_query_results(
         &self,
         input: GetQueryResultsInput,
-    ) -> Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1968,26 +2165,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetQueryResultsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetQueryResultsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetQueryResultsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetQueryResultsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the workgroup with the specified name.</p>
-    async fn get_work_group(
+    fn get_work_group(
         &self,
         input: GetWorkGroupInput,
-    ) -> Result<GetWorkGroupOutput, RusotoError<GetWorkGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetWorkGroupOutput, RusotoError<GetWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1995,26 +2199,32 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetWorkGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetWorkGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetWorkGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetWorkGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn list_named_queries(
+    fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
-    ) -> Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2022,26 +2232,37 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListNamedQueriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNamedQueriesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListNamedQueriesOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListNamedQueriesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn list_query_executions(
+    fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,
-    ) -> Result<ListQueryExecutionsOutput, RusotoError<ListQueryExecutionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListQueryExecutionsOutput,
+                        RusotoError<ListQueryExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2049,27 +2270,37 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListQueryExecutionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListQueryExecutionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListQueryExecutionsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListQueryExecutionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags associated with this workgroup.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceOutput,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2077,27 +2308,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists available workgroups for the account.</p>
-    async fn list_work_groups(
+    fn list_work_groups(
         &self,
         input: ListWorkGroupsInput,
-    ) -> Result<ListWorkGroupsOutput, RusotoError<ListWorkGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListWorkGroupsOutput, RusotoError<ListWorkGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2105,26 +2342,37 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListWorkGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListWorkGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListWorkGroupsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListWorkGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn start_query_execution(
+    fn start_query_execution(
         &self,
         input: StartQueryExecutionInput,
-    ) -> Result<StartQueryExecutionOutput, RusotoError<StartQueryExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartQueryExecutionOutput,
+                        RusotoError<StartQueryExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2132,27 +2380,34 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartQueryExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartQueryExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartQueryExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartQueryExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
-    async fn stop_query_execution(
+    fn stop_query_execution(
         &self,
         input: StopQueryExecutionInput,
-    ) -> Result<StopQueryExecutionOutput, RusotoError<StopQueryExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<StopQueryExecutionOutput, RusotoError<StopQueryExecutionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2160,27 +2415,33 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopQueryExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopQueryExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopQueryExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopQueryExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceOutput, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2188,26 +2449,32 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceOutput, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2215,26 +2482,32 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
-    async fn update_work_group(
+    fn update_work_group(
         &self,
         input: UpdateWorkGroupInput,
-    ) -> Result<UpdateWorkGroupOutput, RusotoError<UpdateWorkGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateWorkGroupOutput, RusotoError<UpdateWorkGroupError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2242,18 +2515,19 @@ impl Athena for AthenaClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateWorkGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateWorkGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateWorkGroupOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateWorkGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

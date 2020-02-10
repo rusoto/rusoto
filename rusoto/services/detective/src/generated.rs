@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
@@ -715,70 +716,123 @@ impl fmt::Display for RejectInvitationError {
 }
 impl Error for RejectInvitationError {}
 /// Trait representing the capabilities of the Amazon Detective API. Amazon Detective clients implement this trait.
-#[async_trait]
 pub trait Detective {
     /// <p>Amazon Detective is currently in preview.</p> <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
-    async fn accept_invitation(
+    fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
-    ) -> Result<(), RusotoError<AcceptInvitationError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<AcceptInvitationError>>> + Send + 'static>,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
-    async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>>;
+    fn create_graph(
+        &self,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateGraphResponse, RusotoError<CreateGraphError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Amazon Detective is currently in preview.</p> <p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
-    async fn create_members(
+    fn create_members(
         &self,
         input: CreateMembersRequest,
-    ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMembersResponse, RusotoError<CreateMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
-    async fn delete_graph(
+    fn delete_graph(
         &self,
         input: DeleteGraphRequest,
-    ) -> Result<(), RusotoError<DeleteGraphError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteGraphError>>> + Send + 'static>>;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
-    async fn delete_members(
+    fn delete_members(
         &self,
         input: DeleteMembersRequest,
-    ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
-    async fn disassociate_membership(
+    fn disassociate_membership(
         &self,
         input: DisassociateMembershipRequest,
-    ) -> Result<(), RusotoError<DisassociateMembershipError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DisassociateMembershipError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Returns the membership details for specified member accounts for a behavior graph.</p>
-    async fn get_members(
+    fn get_members(
         &self,
         input: GetMembersRequest,
-    ) -> Result<GetMembersResponse, RusotoError<GetMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMembersResponse, RusotoError<GetMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
-    async fn list_graphs(
+    fn list_graphs(
         &self,
         input: ListGraphsRequest,
-    ) -> Result<ListGraphsResponse, RusotoError<ListGraphsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGraphsResponse, RusotoError<ListGraphsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
-    async fn list_invitations(
+    fn list_invitations(
         &self,
         input: ListInvitationsRequest,
-    ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
-    async fn list_members(
+    fn list_members(
         &self,
         input: ListMembersRequest,
-    ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMembersResponse, RusotoError<ListMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
-    async fn reject_invitation(
+    fn reject_invitation(
         &self,
         input: RejectInvitationRequest,
-    ) -> Result<(), RusotoError<RejectInvitationError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<RejectInvitationError>>> + Send + 'static>,
+    >;
 }
 /// A client for the Amazon Detective API.
 #[derive(Clone)]
@@ -818,13 +872,14 @@ impl DetectiveClient {
     }
 }
 
-#[async_trait]
 impl Detective for DetectiveClient {
     /// <p>Amazon Detective is currently in preview.</p> <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
-    async fn accept_invitation(
+    fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
-    ) -> Result<(), RusotoError<AcceptInvitationError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<AcceptInvitationError>>> + Send + 'static>,
+    > {
         let request_uri = "/invitation";
 
         let mut request = SignedRequest::new("PUT", "detective", &self.region, &request_uri);
@@ -834,24 +889,32 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AcceptInvitationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AcceptInvitationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
-    async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>> {
+    fn create_graph(
+        &self,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateGraphResponse, RusotoError<CreateGraphError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/graph";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -859,28 +922,34 @@ impl Detective for DetectiveClient {
 
         request.set_endpoint_prefix("api.detective".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGraphResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateGraphResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGraphError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateGraphError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Amazon Detective is currently in preview.</p> <p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
-    async fn create_members(
+    fn create_members(
         &self,
         input: CreateMembersRequest,
-    ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMembersResponse, RusotoError<CreateMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/graph/members";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -890,28 +959,29 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
-    async fn delete_graph(
+    fn delete_graph(
         &self,
         input: DeleteGraphRequest,
-    ) -> Result<(), RusotoError<DeleteGraphError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteGraphError>>> + Send + 'static>>
+    {
         let request_uri = "/graph/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -921,27 +991,33 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGraphError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGraphError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
-    async fn delete_members(
+    fn delete_members(
         &self,
         input: DeleteMembersRequest,
-    ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/graph/members/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -951,28 +1027,34 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
-    async fn disassociate_membership(
+    fn disassociate_membership(
         &self,
         input: DisassociateMembershipRequest,
-    ) -> Result<(), RusotoError<DisassociateMembershipError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DisassociateMembershipError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/membership/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -982,27 +1064,33 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateMembershipError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateMembershipError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Returns the membership details for specified member accounts for a behavior graph.</p>
-    async fn get_members(
+    fn get_members(
         &self,
         input: GetMembersRequest,
-    ) -> Result<GetMembersResponse, RusotoError<GetMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMembersResponse, RusotoError<GetMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/graph/members/get";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1012,28 +1100,34 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
-    async fn list_graphs(
+    fn list_graphs(
         &self,
         input: ListGraphsRequest,
-    ) -> Result<ListGraphsResponse, RusotoError<ListGraphsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListGraphsResponse, RusotoError<ListGraphsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/graphs/list";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1043,28 +1137,34 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGraphsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGraphsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGraphsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGraphsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
-    async fn list_invitations(
+    fn list_invitations(
         &self,
         input: ListInvitationsRequest,
-    ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/invitations/list";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1074,28 +1174,34 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInvitationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInvitationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInvitationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInvitationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
-    async fn list_members(
+    fn list_members(
         &self,
         input: ListMembersRequest,
-    ) -> Result<ListMembersResponse, RusotoError<ListMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMembersResponse, RusotoError<ListMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/graph/members/list";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1105,28 +1211,30 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMembersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMembersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMembersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Amazon Detective is currently in preview.</p> <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
-    async fn reject_invitation(
+    fn reject_invitation(
         &self,
         input: RejectInvitationRequest,
-    ) -> Result<(), RusotoError<RejectInvitationError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<RejectInvitationError>>> + Send + 'static>,
+    > {
         let request_uri = "/invitation/removal";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
@@ -1136,19 +1244,19 @@ impl Detective for DetectiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectInvitationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RejectInvitationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

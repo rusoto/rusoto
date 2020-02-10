@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateEntityToThingRequest {
@@ -2966,215 +2967,523 @@ impl fmt::Display for UploadEntityDefinitionsError {
 }
 impl Error for UploadEntityDefinitionsError {}
 /// Trait representing the capabilities of the AWS IoT Things Graph API. AWS IoT Things Graph clients implement this trait.
-#[async_trait]
 pub trait IotThingsGraph {
     /// <p>Associates a device with a concrete thing that is in the user's registry.</p> <p>A thing can be associated with only one device at a time. If you associate a thing with a new device id, its previous association will be removed.</p>
-    async fn associate_entity_to_thing(
+    fn associate_entity_to_thing(
         &self,
         input: AssociateEntityToThingRequest,
-    ) -> Result<AssociateEntityToThingResponse, RusotoError<AssociateEntityToThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateEntityToThingResponse,
+                        RusotoError<AssociateEntityToThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a workflow template. Workflows can be created only in the user's namespace. (The public namespace contains only entities.) The workflow can contain only entities in the specified namespace. The workflow is validated against the entities in the latest version of the user's namespace unless another namespace version is specified in the request.</p>
-    async fn create_flow_template(
+    fn create_flow_template(
         &self,
         input: CreateFlowTemplateRequest,
-    ) -> Result<CreateFlowTemplateResponse, RusotoError<CreateFlowTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateFlowTemplateResponse,
+                        RusotoError<CreateFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a system instance. </p> <p>This action validates the system instance, prepares the deployment-related resources. For Greengrass deployments, it updates the Greengrass group that is specified by the <code>greengrassGroupName</code> parameter. It also adds a file to the S3 bucket specified by the <code>s3BucketName</code> parameter. You need to call <code>DeploySystemInstance</code> after running this action.</p> <p>For Greengrass deployments, since this action modifies and adds resources to a Greengrass group and an S3 bucket on the caller's behalf, the calling identity must have write permissions to both the specified Greengrass group and S3 bucket. Otherwise, the call will fail with an authorization error.</p> <p>For cloud deployments, this action requires a <code>flowActionsRoleArn</code> value. This is an IAM role that has permissions to access AWS services, such as AWS Lambda and AWS IoT, that the flow uses when it executes.</p> <p>If the definition document doesn't specify a version of the user's namespace, the latest version will be used by default.</p>
-    async fn create_system_instance(
+    fn create_system_instance(
         &self,
         input: CreateSystemInstanceRequest,
-    ) -> Result<CreateSystemInstanceResponse, RusotoError<CreateSystemInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSystemInstanceResponse,
+                        RusotoError<CreateSystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a system. The system is validated against the entities in the latest version of the user's namespace unless another namespace version is specified in the request.</p>
-    async fn create_system_template(
+    fn create_system_template(
         &self,
         input: CreateSystemTemplateRequest,
-    ) -> Result<CreateSystemTemplateResponse, RusotoError<CreateSystemTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSystemTemplateResponse,
+                        RusotoError<CreateSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a workflow. Any new system or deployment that contains this workflow will fail to update or deploy. Existing deployments that contain the workflow will continue to run (since they use a snapshot of the workflow taken at the time of deployment).</p>
-    async fn delete_flow_template(
+    fn delete_flow_template(
         &self,
         input: DeleteFlowTemplateRequest,
-    ) -> Result<DeleteFlowTemplateResponse, RusotoError<DeleteFlowTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteFlowTemplateResponse,
+                        RusotoError<DeleteFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified namespace. This action deletes all of the entities in the namespace. Delete the systems and flows that use entities in the namespace before performing this action.</p>
-    async fn delete_namespace(
+    fn delete_namespace(
         &self,
-    ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a system instance. Only system instances that have never been deployed, or that have been undeployed can be deleted.</p> <p>Users can create a new system instance that has the same ID as a deleted system instance.</p>
-    async fn delete_system_instance(
+    fn delete_system_instance(
         &self,
         input: DeleteSystemInstanceRequest,
-    ) -> Result<DeleteSystemInstanceResponse, RusotoError<DeleteSystemInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSystemInstanceResponse,
+                        RusotoError<DeleteSystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a system. New deployments can't contain the system after its deletion. Existing deployments that contain the system will continue to work because they use a snapshot of the system that is taken when it is deployed.</p>
-    async fn delete_system_template(
+    fn delete_system_template(
         &self,
         input: DeleteSystemTemplateRequest,
-    ) -> Result<DeleteSystemTemplateResponse, RusotoError<DeleteSystemTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSystemTemplateResponse,
+                        RusotoError<DeleteSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> <b>Greengrass and Cloud Deployments</b> </p> <p>Deploys the system instance to the target specified in <code>CreateSystemInstance</code>. </p> <p> <b>Greengrass Deployments</b> </p> <p>If the system or any workflows and entities have been updated before this action is called, then the deployment will create a new Amazon Simple Storage Service resource file and then deploy it.</p> <p>Since this action creates a Greengrass deployment on the caller's behalf, the calling identity must have write permissions to the specified Greengrass group. Otherwise, the call will fail with an authorization error.</p> <p>For information about the artifacts that get added to your Greengrass core device when you use this API, see <a href="https://docs.aws.amazon.com/thingsgraph/latest/ug/iot-tg-greengrass.html">AWS IoT Things Graph and AWS IoT Greengrass</a>.</p>
-    async fn deploy_system_instance(
+    fn deploy_system_instance(
         &self,
         input: DeploySystemInstanceRequest,
-    ) -> Result<DeploySystemInstanceResponse, RusotoError<DeploySystemInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeploySystemInstanceResponse,
+                        RusotoError<DeploySystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deprecates the specified workflow. This action marks the workflow for deletion. Deprecated flows can't be deployed, but existing deployments will continue to run.</p>
-    async fn deprecate_flow_template(
+    fn deprecate_flow_template(
         &self,
         input: DeprecateFlowTemplateRequest,
-    ) -> Result<DeprecateFlowTemplateResponse, RusotoError<DeprecateFlowTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeprecateFlowTemplateResponse,
+                        RusotoError<DeprecateFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deprecates the specified system.</p>
-    async fn deprecate_system_template(
+    fn deprecate_system_template(
         &self,
         input: DeprecateSystemTemplateRequest,
-    ) -> Result<DeprecateSystemTemplateResponse, RusotoError<DeprecateSystemTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeprecateSystemTemplateResponse,
+                        RusotoError<DeprecateSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the latest version of the user's namespace and the public version that it is tracking.</p>
-    async fn describe_namespace(
+    fn describe_namespace(
         &self,
         input: DescribeNamespaceRequest,
-    ) -> Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Dissociates a device entity from a concrete thing. The action takes only the type of the entity that you need to dissociate because only one entity of a particular type can be associated with a thing.</p>
-    async fn dissociate_entity_from_thing(
+    fn dissociate_entity_from_thing(
         &self,
         input: DissociateEntityFromThingRequest,
-    ) -> Result<DissociateEntityFromThingResponse, RusotoError<DissociateEntityFromThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DissociateEntityFromThingResponse,
+                        RusotoError<DissociateEntityFromThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets definitions of the specified entities. Uses the latest version of the user's namespace by default. This API returns the following TDM entities.</p> <ul> <li> <p>Properties</p> </li> <li> <p>States</p> </li> <li> <p>Events</p> </li> <li> <p>Actions</p> </li> <li> <p>Capabilities</p> </li> <li> <p>Mappings</p> </li> <li> <p>Devices</p> </li> <li> <p>Device Models</p> </li> <li> <p>Services</p> </li> </ul> <p>This action doesn't return definitions for systems, flows, and deployments.</p>
-    async fn get_entities(
+    fn get_entities(
         &self,
         input: GetEntitiesRequest,
-    ) -> Result<GetEntitiesResponse, RusotoError<GetEntitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetEntitiesResponse, RusotoError<GetEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the latest version of the <code>DefinitionDocument</code> and <code>FlowTemplateSummary</code> for the specified workflow.</p>
-    async fn get_flow_template(
+    fn get_flow_template(
         &self,
         input: GetFlowTemplateRequest,
-    ) -> Result<GetFlowTemplateResponse, RusotoError<GetFlowTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFlowTemplateResponse, RusotoError<GetFlowTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets revisions of the specified workflow. Only the last 100 revisions are stored. If the workflow has been deprecated, this action will return revisions that occurred before the deprecation. This action won't work for workflows that have been deleted.</p>
-    async fn get_flow_template_revisions(
+    fn get_flow_template_revisions(
         &self,
         input: GetFlowTemplateRevisionsRequest,
-    ) -> Result<GetFlowTemplateRevisionsResponse, RusotoError<GetFlowTemplateRevisionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetFlowTemplateRevisionsResponse,
+                        RusotoError<GetFlowTemplateRevisionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the status of a namespace deletion task.</p>
-    async fn get_namespace_deletion_status(
+    fn get_namespace_deletion_status(
         &self,
-    ) -> Result<GetNamespaceDeletionStatusResponse, RusotoError<GetNamespaceDeletionStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetNamespaceDeletionStatusResponse,
+                        RusotoError<GetNamespaceDeletionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a system instance.</p>
-    async fn get_system_instance(
+    fn get_system_instance(
         &self,
         input: GetSystemInstanceRequest,
-    ) -> Result<GetSystemInstanceResponse, RusotoError<GetSystemInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetSystemInstanceResponse, RusotoError<GetSystemInstanceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a system.</p>
-    async fn get_system_template(
+    fn get_system_template(
         &self,
         input: GetSystemTemplateRequest,
-    ) -> Result<GetSystemTemplateResponse, RusotoError<GetSystemTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetSystemTemplateResponse, RusotoError<GetSystemTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets revisions made to the specified system template. Only the previous 100 revisions are stored. If the system has been deprecated, this action will return the revisions that occurred before its deprecation. This action won't work with systems that have been deleted.</p>
-    async fn get_system_template_revisions(
+    fn get_system_template_revisions(
         &self,
         input: GetSystemTemplateRevisionsRequest,
-    ) -> Result<GetSystemTemplateRevisionsResponse, RusotoError<GetSystemTemplateRevisionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetSystemTemplateRevisionsResponse,
+                        RusotoError<GetSystemTemplateRevisionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the status of the specified upload.</p>
-    async fn get_upload_status(
+    fn get_upload_status(
         &self,
         input: GetUploadStatusRequest,
-    ) -> Result<GetUploadStatusResponse, RusotoError<GetUploadStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetUploadStatusResponse, RusotoError<GetUploadStatusError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of objects that contain information about events in a flow execution.</p>
-    async fn list_flow_execution_messages(
+    fn list_flow_execution_messages(
         &self,
         input: ListFlowExecutionMessagesRequest,
-    ) -> Result<ListFlowExecutionMessagesResponse, RusotoError<ListFlowExecutionMessagesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListFlowExecutionMessagesResponse,
+                        RusotoError<ListFlowExecutionMessagesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all tags on an AWS IoT Things Graph resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches for entities of the specified type. You can search for entities in your namespace and the public namespace that you're tracking.</p>
-    async fn search_entities(
+    fn search_entities(
         &self,
         input: SearchEntitiesRequest,
-    ) -> Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches for AWS IoT Things Graph workflow execution instances.</p>
-    async fn search_flow_executions(
+    fn search_flow_executions(
         &self,
         input: SearchFlowExecutionsRequest,
-    ) -> Result<SearchFlowExecutionsResponse, RusotoError<SearchFlowExecutionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchFlowExecutionsResponse,
+                        RusotoError<SearchFlowExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches for summary information about workflows.</p>
-    async fn search_flow_templates(
+    fn search_flow_templates(
         &self,
         input: SearchFlowTemplatesRequest,
-    ) -> Result<SearchFlowTemplatesResponse, RusotoError<SearchFlowTemplatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchFlowTemplatesResponse,
+                        RusotoError<SearchFlowTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches for system instances in the user's account.</p>
-    async fn search_system_instances(
+    fn search_system_instances(
         &self,
         input: SearchSystemInstancesRequest,
-    ) -> Result<SearchSystemInstancesResponse, RusotoError<SearchSystemInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchSystemInstancesResponse,
+                        RusotoError<SearchSystemInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches for summary information about systems in the user's account. You can filter by the ID of a workflow to return only systems that use the specified workflow.</p>
-    async fn search_system_templates(
+    fn search_system_templates(
         &self,
         input: SearchSystemTemplatesRequest,
-    ) -> Result<SearchSystemTemplatesResponse, RusotoError<SearchSystemTemplatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchSystemTemplatesResponse,
+                        RusotoError<SearchSystemTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches for things associated with the specified entity. You can search by both device and device model.</p> <p>For example, if two different devices, camera1 and camera2, implement the camera device model, the user can associate thing1 to camera1 and thing2 to camera2. <code>SearchThings(camera2)</code> will return only thing2, but <code>SearchThings(camera)</code> will return both thing1 and thing2.</p> <p>This action searches for exact matches and doesn't perform partial text matching.</p>
-    async fn search_things(
+    fn search_things(
         &self,
         input: SearchThingsRequest,
-    ) -> Result<SearchThingsResponse, RusotoError<SearchThingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchThingsResponse, RusotoError<SearchThingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a tag for the specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a system instance from its target (Cloud or Greengrass).</p>
-    async fn undeploy_system_instance(
+    fn undeploy_system_instance(
         &self,
         input: UndeploySystemInstanceRequest,
-    ) -> Result<UndeploySystemInstanceResponse, RusotoError<UndeploySystemInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UndeploySystemInstanceResponse,
+                        RusotoError<UndeploySystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a tag from the specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the specified workflow. All deployed systems and system instances that use the workflow will see the changes in the flow when it is redeployed. If you don't want this behavior, copy the workflow (creating a new workflow with a different ID), and update the copy. The workflow can contain only entities in the specified namespace. </p>
-    async fn update_flow_template(
+    fn update_flow_template(
         &self,
         input: UpdateFlowTemplateRequest,
-    ) -> Result<UpdateFlowTemplateResponse, RusotoError<UpdateFlowTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateFlowTemplateResponse,
+                        RusotoError<UpdateFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the specified system. You don't need to run this action after updating a workflow. Any deployment that uses the system will see the changes in the system when it is redeployed.</p>
-    async fn update_system_template(
+    fn update_system_template(
         &self,
         input: UpdateSystemTemplateRequest,
-    ) -> Result<UpdateSystemTemplateResponse, RusotoError<UpdateSystemTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateSystemTemplateResponse,
+                        RusotoError<UpdateSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Asynchronously uploads one or more entity definitions to the user's namespace. The <code>document</code> parameter is required if <code>syncWithPublicNamespace</code> and <code>deleteExistingEntites</code> are false. If the <code>syncWithPublicNamespace</code> parameter is set to <code>true</code>, the user's namespace will synchronize with the latest version of the public namespace. If <code>deprecateExistingEntities</code> is set to true, all entities in the latest version will be deleted before the new <code>DefinitionDocument</code> is uploaded.</p> <p>When a user uploads entity definitions for the first time, the service creates a new namespace for the user. The new namespace tracks the public namespace. Currently users can have only one namespace. The namespace version increments whenever a user uploads entity definitions that are backwards-incompatible and whenever a user sets the <code>syncWithPublicNamespace</code> parameter or the <code>deprecateExistingEntities</code> parameter to <code>true</code>.</p> <p>The IDs for all of the entities should be in URN format. Each entity must be in the user's namespace. Users can't create entities in the public namespace, but entity definitions can refer to entities in the public namespace.</p> <p>Valid entities are <code>Device</code>, <code>DeviceModel</code>, <code>Service</code>, <code>Capability</code>, <code>State</code>, <code>Action</code>, <code>Event</code>, <code>Property</code>, <code>Mapping</code>, <code>Enum</code>. </p>
-    async fn upload_entity_definitions(
+    fn upload_entity_definitions(
         &self,
         input: UploadEntityDefinitionsRequest,
-    ) -> Result<UploadEntityDefinitionsResponse, RusotoError<UploadEntityDefinitionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UploadEntityDefinitionsResponse,
+                        RusotoError<UploadEntityDefinitionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS IoT Things Graph API.
 #[derive(Clone)]
@@ -3214,13 +3523,22 @@ impl IotThingsGraphClient {
     }
 }
 
-#[async_trait]
 impl IotThingsGraph for IotThingsGraphClient {
     /// <p>Associates a device with a concrete thing that is in the user's registry.</p> <p>A thing can be associated with only one device at a time. If you associate a thing with a new device id, its previous association will be removed.</p>
-    async fn associate_entity_to_thing(
+    fn associate_entity_to_thing(
         &self,
         input: AssociateEntityToThingRequest,
-    ) -> Result<AssociateEntityToThingResponse, RusotoError<AssociateEntityToThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateEntityToThingResponse,
+                        RusotoError<AssociateEntityToThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3231,27 +3549,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateEntityToThingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateEntityToThingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateEntityToThingResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateEntityToThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a workflow template. Workflows can be created only in the user's namespace. (The public namespace contains only entities.) The workflow can contain only entities in the specified namespace. The workflow is validated against the entities in the latest version of the user's namespace unless another namespace version is specified in the request.</p>
-    async fn create_flow_template(
+    fn create_flow_template(
         &self,
         input: CreateFlowTemplateRequest,
-    ) -> Result<CreateFlowTemplateResponse, RusotoError<CreateFlowTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateFlowTemplateResponse,
+                        RusotoError<CreateFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3262,27 +3590,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFlowTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateFlowTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateFlowTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a system instance. </p> <p>This action validates the system instance, prepares the deployment-related resources. For Greengrass deployments, it updates the Greengrass group that is specified by the <code>greengrassGroupName</code> parameter. It also adds a file to the S3 bucket specified by the <code>s3BucketName</code> parameter. You need to call <code>DeploySystemInstance</code> after running this action.</p> <p>For Greengrass deployments, since this action modifies and adds resources to a Greengrass group and an S3 bucket on the caller's behalf, the calling identity must have write permissions to both the specified Greengrass group and S3 bucket. Otherwise, the call will fail with an authorization error.</p> <p>For cloud deployments, this action requires a <code>flowActionsRoleArn</code> value. This is an IAM role that has permissions to access AWS services, such as AWS Lambda and AWS IoT, that the flow uses when it executes.</p> <p>If the definition document doesn't specify a version of the user's namespace, the latest version will be used by default.</p>
-    async fn create_system_instance(
+    fn create_system_instance(
         &self,
         input: CreateSystemInstanceRequest,
-    ) -> Result<CreateSystemInstanceResponse, RusotoError<CreateSystemInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSystemInstanceResponse,
+                        RusotoError<CreateSystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3293,27 +3631,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSystemInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSystemInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSystemInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a system. The system is validated against the entities in the latest version of the user's namespace unless another namespace version is specified in the request.</p>
-    async fn create_system_template(
+    fn create_system_template(
         &self,
         input: CreateSystemTemplateRequest,
-    ) -> Result<CreateSystemTemplateResponse, RusotoError<CreateSystemTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSystemTemplateResponse,
+                        RusotoError<CreateSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3324,27 +3672,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSystemTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSystemTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSystemTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a workflow. Any new system or deployment that contains this workflow will fail to update or deploy. Existing deployments that contain the workflow will continue to run (since they use a snapshot of the workflow taken at the time of deployment).</p>
-    async fn delete_flow_template(
+    fn delete_flow_template(
         &self,
         input: DeleteFlowTemplateRequest,
-    ) -> Result<DeleteFlowTemplateResponse, RusotoError<DeleteFlowTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteFlowTemplateResponse,
+                        RusotoError<DeleteFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3355,26 +3713,32 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFlowTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteFlowTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFlowTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified namespace. This action deletes all of the entities in the namespace. Delete the systems and flows that use entities in the namespace before performing this action.</p>
-    async fn delete_namespace(
+    fn delete_namespace(
         &self,
-    ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3384,26 +3748,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a system instance. Only system instances that have never been deployed, or that have been undeployed can be deleted.</p> <p>Users can create a new system instance that has the same ID as a deleted system instance.</p>
-    async fn delete_system_instance(
+    fn delete_system_instance(
         &self,
         input: DeleteSystemInstanceRequest,
-    ) -> Result<DeleteSystemInstanceResponse, RusotoError<DeleteSystemInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSystemInstanceResponse,
+                        RusotoError<DeleteSystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3414,27 +3789,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSystemInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSystemInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSystemInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a system. New deployments can't contain the system after its deletion. Existing deployments that contain the system will continue to work because they use a snapshot of the system that is taken when it is deployed.</p>
-    async fn delete_system_template(
+    fn delete_system_template(
         &self,
         input: DeleteSystemTemplateRequest,
-    ) -> Result<DeleteSystemTemplateResponse, RusotoError<DeleteSystemTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSystemTemplateResponse,
+                        RusotoError<DeleteSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3445,27 +3830,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSystemTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSystemTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSystemTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> <b>Greengrass and Cloud Deployments</b> </p> <p>Deploys the system instance to the target specified in <code>CreateSystemInstance</code>. </p> <p> <b>Greengrass Deployments</b> </p> <p>If the system or any workflows and entities have been updated before this action is called, then the deployment will create a new Amazon Simple Storage Service resource file and then deploy it.</p> <p>Since this action creates a Greengrass deployment on the caller's behalf, the calling identity must have write permissions to the specified Greengrass group. Otherwise, the call will fail with an authorization error.</p> <p>For information about the artifacts that get added to your Greengrass core device when you use this API, see <a href="https://docs.aws.amazon.com/thingsgraph/latest/ug/iot-tg-greengrass.html">AWS IoT Things Graph and AWS IoT Greengrass</a>.</p>
-    async fn deploy_system_instance(
+    fn deploy_system_instance(
         &self,
         input: DeploySystemInstanceRequest,
-    ) -> Result<DeploySystemInstanceResponse, RusotoError<DeploySystemInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeploySystemInstanceResponse,
+                        RusotoError<DeploySystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3476,27 +3871,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeploySystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeploySystemInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeploySystemInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeploySystemInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deprecates the specified workflow. This action marks the workflow for deletion. Deprecated flows can't be deployed, but existing deployments will continue to run.</p>
-    async fn deprecate_flow_template(
+    fn deprecate_flow_template(
         &self,
         input: DeprecateFlowTemplateRequest,
-    ) -> Result<DeprecateFlowTemplateResponse, RusotoError<DeprecateFlowTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeprecateFlowTemplateResponse,
+                        RusotoError<DeprecateFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3507,27 +3912,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprecateFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeprecateFlowTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeprecateFlowTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeprecateFlowTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deprecates the specified system.</p>
-    async fn deprecate_system_template(
+    fn deprecate_system_template(
         &self,
         input: DeprecateSystemTemplateRequest,
-    ) -> Result<DeprecateSystemTemplateResponse, RusotoError<DeprecateSystemTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeprecateSystemTemplateResponse,
+                        RusotoError<DeprecateSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3538,27 +3953,34 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprecateSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeprecateSystemTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeprecateSystemTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeprecateSystemTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the latest version of the user's namespace and the public version that it is tracking.</p>
-    async fn describe_namespace(
+    fn describe_namespace(
         &self,
         input: DescribeNamespaceRequest,
-    ) -> Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3569,28 +3991,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Dissociates a device entity from a concrete thing. The action takes only the type of the entity that you need to dissociate because only one entity of a particular type can be associated with a thing.</p>
-    async fn dissociate_entity_from_thing(
+    fn dissociate_entity_from_thing(
         &self,
         input: DissociateEntityFromThingRequest,
-    ) -> Result<DissociateEntityFromThingResponse, RusotoError<DissociateEntityFromThingError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DissociateEntityFromThingResponse,
+                        RusotoError<DissociateEntityFromThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3601,27 +4032,33 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DissociateEntityFromThingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DissociateEntityFromThingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DissociateEntityFromThingResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DissociateEntityFromThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets definitions of the specified entities. Uses the latest version of the user's namespace by default. This API returns the following TDM entities.</p> <ul> <li> <p>Properties</p> </li> <li> <p>States</p> </li> <li> <p>Events</p> </li> <li> <p>Actions</p> </li> <li> <p>Capabilities</p> </li> <li> <p>Mappings</p> </li> <li> <p>Devices</p> </li> <li> <p>Device Models</p> </li> <li> <p>Services</p> </li> </ul> <p>This action doesn't return definitions for systems, flows, and deployments.</p>
-    async fn get_entities(
+    fn get_entities(
         &self,
         input: GetEntitiesRequest,
-    ) -> Result<GetEntitiesResponse, RusotoError<GetEntitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetEntitiesResponse, RusotoError<GetEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3629,26 +4066,32 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEntitiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetEntitiesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEntitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the latest version of the <code>DefinitionDocument</code> and <code>FlowTemplateSummary</code> for the specified workflow.</p>
-    async fn get_flow_template(
+    fn get_flow_template(
         &self,
         input: GetFlowTemplateRequest,
-    ) -> Result<GetFlowTemplateResponse, RusotoError<GetFlowTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFlowTemplateResponse, RusotoError<GetFlowTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3659,26 +4102,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFlowTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetFlowTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetFlowTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets revisions of the specified workflow. Only the last 100 revisions are stored. If the workflow has been deprecated, this action will return revisions that occurred before the deprecation. This action won't work for workflows that have been deleted.</p>
-    async fn get_flow_template_revisions(
+    fn get_flow_template_revisions(
         &self,
         input: GetFlowTemplateRevisionsRequest,
-    ) -> Result<GetFlowTemplateRevisionsResponse, RusotoError<GetFlowTemplateRevisionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetFlowTemplateRevisionsResponse,
+                        RusotoError<GetFlowTemplateRevisionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3689,27 +4143,36 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFlowTemplateRevisionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFlowTemplateRevisionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetFlowTemplateRevisionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetFlowTemplateRevisionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the status of a namespace deletion task.</p>
-    async fn get_namespace_deletion_status(
+    fn get_namespace_deletion_status(
         &self,
-    ) -> Result<GetNamespaceDeletionStatusResponse, RusotoError<GetNamespaceDeletionStatusError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetNamespaceDeletionStatusResponse,
+                        RusotoError<GetNamespaceDeletionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3719,27 +4182,34 @@ impl IotThingsGraph for IotThingsGraphClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetNamespaceDeletionStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNamespaceDeletionStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetNamespaceDeletionStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetNamespaceDeletionStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a system instance.</p>
-    async fn get_system_instance(
+    fn get_system_instance(
         &self,
         input: GetSystemInstanceRequest,
-    ) -> Result<GetSystemInstanceResponse, RusotoError<GetSystemInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetSystemInstanceResponse, RusotoError<GetSystemInstanceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3750,27 +4220,34 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSystemInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSystemInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSystemInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a system.</p>
-    async fn get_system_template(
+    fn get_system_template(
         &self,
         input: GetSystemTemplateRequest,
-    ) -> Result<GetSystemTemplateResponse, RusotoError<GetSystemTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetSystemTemplateResponse, RusotoError<GetSystemTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3781,28 +4258,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSystemTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSystemTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSystemTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets revisions made to the specified system template. Only the previous 100 revisions are stored. If the system has been deprecated, this action will return the revisions that occurred before its deprecation. This action won't work with systems that have been deleted.</p>
-    async fn get_system_template_revisions(
+    fn get_system_template_revisions(
         &self,
         input: GetSystemTemplateRevisionsRequest,
-    ) -> Result<GetSystemTemplateRevisionsResponse, RusotoError<GetSystemTemplateRevisionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetSystemTemplateRevisionsResponse,
+                        RusotoError<GetSystemTemplateRevisionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3813,27 +4299,33 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSystemTemplateRevisionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSystemTemplateRevisionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSystemTemplateRevisionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSystemTemplateRevisionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the status of the specified upload.</p>
-    async fn get_upload_status(
+    fn get_upload_status(
         &self,
         input: GetUploadStatusRequest,
-    ) -> Result<GetUploadStatusResponse, RusotoError<GetUploadStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetUploadStatusResponse, RusotoError<GetUploadStatusError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3844,27 +4336,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetUploadStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUploadStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetUploadStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUploadStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of objects that contain information about events in a flow execution.</p>
-    async fn list_flow_execution_messages(
+    fn list_flow_execution_messages(
         &self,
         input: ListFlowExecutionMessagesRequest,
-    ) -> Result<ListFlowExecutionMessagesResponse, RusotoError<ListFlowExecutionMessagesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListFlowExecutionMessagesResponse,
+                        RusotoError<ListFlowExecutionMessagesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3875,27 +4377,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFlowExecutionMessagesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFlowExecutionMessagesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListFlowExecutionMessagesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListFlowExecutionMessagesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all tags on an AWS IoT Things Graph resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3906,27 +4418,33 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches for entities of the specified type. You can search for entities in your namespace and the public namespace that you're tracking.</p>
-    async fn search_entities(
+    fn search_entities(
         &self,
         input: SearchEntitiesRequest,
-    ) -> Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3937,26 +4455,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchEntitiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchEntitiesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchEntitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches for AWS IoT Things Graph workflow execution instances.</p>
-    async fn search_flow_executions(
+    fn search_flow_executions(
         &self,
         input: SearchFlowExecutionsRequest,
-    ) -> Result<SearchFlowExecutionsResponse, RusotoError<SearchFlowExecutionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchFlowExecutionsResponse,
+                        RusotoError<SearchFlowExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3967,27 +4496,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchFlowExecutionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchFlowExecutionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchFlowExecutionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchFlowExecutionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches for summary information about workflows.</p>
-    async fn search_flow_templates(
+    fn search_flow_templates(
         &self,
         input: SearchFlowTemplatesRequest,
-    ) -> Result<SearchFlowTemplatesResponse, RusotoError<SearchFlowTemplatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchFlowTemplatesResponse,
+                        RusotoError<SearchFlowTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3998,27 +4537,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchFlowTemplatesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchFlowTemplatesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchFlowTemplatesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchFlowTemplatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches for system instances in the user's account.</p>
-    async fn search_system_instances(
+    fn search_system_instances(
         &self,
         input: SearchSystemInstancesRequest,
-    ) -> Result<SearchSystemInstancesResponse, RusotoError<SearchSystemInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchSystemInstancesResponse,
+                        RusotoError<SearchSystemInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4029,27 +4578,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchSystemInstancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchSystemInstancesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchSystemInstancesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchSystemInstancesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches for summary information about systems in the user's account. You can filter by the ID of a workflow to return only systems that use the specified workflow.</p>
-    async fn search_system_templates(
+    fn search_system_templates(
         &self,
         input: SearchSystemTemplatesRequest,
-    ) -> Result<SearchSystemTemplatesResponse, RusotoError<SearchSystemTemplatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SearchSystemTemplatesResponse,
+                        RusotoError<SearchSystemTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4060,27 +4619,33 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchSystemTemplatesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchSystemTemplatesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchSystemTemplatesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchSystemTemplatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches for things associated with the specified entity. You can search by both device and device model.</p> <p>For example, if two different devices, camera1 and camera2, implement the camera device model, the user can associate thing1 to camera1 and thing2 to camera2. <code>SearchThings(camera2)</code> will return only thing2, but <code>SearchThings(camera)</code> will return both thing1 and thing2.</p> <p>This action searches for exact matches and doesn't perform partial text matching.</p>
-    async fn search_things(
+    fn search_things(
         &self,
         input: SearchThingsRequest,
-    ) -> Result<SearchThingsResponse, RusotoError<SearchThingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchThingsResponse, RusotoError<SearchThingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4088,26 +4653,33 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchThingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchThingsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchThingsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchThingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a tag for the specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4115,26 +4687,36 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a system instance from its target (Cloud or Greengrass).</p>
-    async fn undeploy_system_instance(
+    fn undeploy_system_instance(
         &self,
         input: UndeploySystemInstanceRequest,
-    ) -> Result<UndeploySystemInstanceResponse, RusotoError<UndeploySystemInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UndeploySystemInstanceResponse,
+                        RusotoError<UndeploySystemInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4145,27 +4727,33 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UndeploySystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UndeploySystemInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UndeploySystemInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UndeploySystemInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a tag from the specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4176,26 +4764,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the specified workflow. All deployed systems and system instances that use the workflow will see the changes in the flow when it is redeployed. If you don't want this behavior, copy the workflow (creating a new workflow with a different ID), and update the copy. The workflow can contain only entities in the specified namespace. </p>
-    async fn update_flow_template(
+    fn update_flow_template(
         &self,
         input: UpdateFlowTemplateRequest,
-    ) -> Result<UpdateFlowTemplateResponse, RusotoError<UpdateFlowTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateFlowTemplateResponse,
+                        RusotoError<UpdateFlowTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4206,27 +4805,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFlowTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateFlowTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFlowTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the specified system. You don't need to run this action after updating a workflow. Any deployment that uses the system will see the changes in the system when it is redeployed.</p>
-    async fn update_system_template(
+    fn update_system_template(
         &self,
         input: UpdateSystemTemplateRequest,
-    ) -> Result<UpdateSystemTemplateResponse, RusotoError<UpdateSystemTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateSystemTemplateResponse,
+                        RusotoError<UpdateSystemTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4237,27 +4846,37 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSystemTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateSystemTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateSystemTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Asynchronously uploads one or more entity definitions to the user's namespace. The <code>document</code> parameter is required if <code>syncWithPublicNamespace</code> and <code>deleteExistingEntites</code> are false. If the <code>syncWithPublicNamespace</code> parameter is set to <code>true</code>, the user's namespace will synchronize with the latest version of the public namespace. If <code>deprecateExistingEntities</code> is set to true, all entities in the latest version will be deleted before the new <code>DefinitionDocument</code> is uploaded.</p> <p>When a user uploads entity definitions for the first time, the service creates a new namespace for the user. The new namespace tracks the public namespace. Currently users can have only one namespace. The namespace version increments whenever a user uploads entity definitions that are backwards-incompatible and whenever a user sets the <code>syncWithPublicNamespace</code> parameter or the <code>deprecateExistingEntities</code> parameter to <code>true</code>.</p> <p>The IDs for all of the entities should be in URN format. Each entity must be in the user's namespace. Users can't create entities in the public namespace, but entity definitions can refer to entities in the public namespace.</p> <p>Valid entities are <code>Device</code>, <code>DeviceModel</code>, <code>Service</code>, <code>Capability</code>, <code>State</code>, <code>Action</code>, <code>Event</code>, <code>Property</code>, <code>Mapping</code>, <code>Enum</code>. </p>
-    async fn upload_entity_definitions(
+    fn upload_entity_definitions(
         &self,
         input: UploadEntityDefinitionsRequest,
-    ) -> Result<UploadEntityDefinitionsResponse, RusotoError<UploadEntityDefinitionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UploadEntityDefinitionsResponse,
+                        RusotoError<UploadEntityDefinitionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4268,19 +4887,19 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UploadEntityDefinitionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UploadEntityDefinitionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UploadEntityDefinitionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UploadEntityDefinitionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

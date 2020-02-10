@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Access Control List files for the documents in a data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccessControlListConfiguration {
@@ -2467,121 +2468,230 @@ impl fmt::Display for UpdateIndexError {
 }
 impl Error for UpdateIndexError {}
 /// Trait representing the capabilities of the kendra API. kendra clients implement this trait.
-#[async_trait]
 pub trait Kendra {
     /// <p>Removes one or more documents from an index. The documents must have been added with the <a>BatchPutDocument</a> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages releated to the processing of the batch are sent to you CloudWatch log.</p>
-    async fn batch_delete_document(
+    fn batch_delete_document(
         &self,
         input: BatchDeleteDocumentRequest,
-    ) -> Result<BatchDeleteDocumentResponse, RusotoError<BatchDeleteDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDeleteDocumentResponse,
+                        RusotoError<BatchDeleteDocumentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more documents to an index.</p> <p>The <code>BatchPutDocument</code> operation enables you to ingest inline documents or a set of documents stored in an Amazon S3 bucket. Use this operation to ingest your text and unstructured text into an index, add custom attributes to the documents, and to attach an access control list to the documents added to the index.</p> <p>The documents are indexed asynchronously. You can see the progress of the batch using AWS CloudWatch. Any error messages related to processing the batch are sent to your AWS CloudWatch log.</p>
-    async fn batch_put_document(
+    fn batch_put_document(
         &self,
         input: BatchPutDocumentRequest,
-    ) -> Result<BatchPutDocumentResponse, RusotoError<BatchPutDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchPutDocumentResponse, RusotoError<BatchPutDocumentError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a data source that you use to with an Amazon Kendra index. </p> <p>You specify a name, connector type and description for your data source. You can choose between an S3 connector, a SharePoint Online connector, and a database connector.</p> <p>You also specify configuration information such as document metadata (author, source URI, and so on) and user context information.</p> <p> <code>CreateDataSource</code> is a synchronous operation. The operation returns 200 if the data source was successfully created. Otherwise, an exception is raised.</p>
-    async fn create_data_source(
+    fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an new set of frequently asked question (FAQ) questions and answers.</p>
-    async fn create_faq(
+    fn create_faq(
         &self,
         input: CreateFaqRequest,
-    ) -> Result<CreateFaqResponse, RusotoError<CreateFaqError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFaqResponse, RusotoError<CreateFaqError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to . The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the operation or using one of the supported data sources. </p>
-    async fn create_index(
+    fn create_index(
         &self,
         input: CreateIndexRequest,
-    ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateIndexResponse, RusotoError<CreateIndexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes an FAQ from an index.</p>
-    async fn delete_faq(&self, input: DeleteFaqRequest) -> Result<(), RusotoError<DeleteFaqError>>;
+    fn delete_faq(
+        &self,
+        input: DeleteFaqRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteFaqError>>> + Send + 'static>>;
 
     /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <a>DescribeIndex</a> operation is set to <code>DELETING</code>.</p>
-    async fn delete_index(
+    fn delete_index(
         &self,
         input: DeleteIndexRequest,
-    ) -> Result<(), RusotoError<DeleteIndexError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteIndexError>>> + Send + 'static>>;
 
     /// <p>Gets information about a Amazon Kendra data source.</p>
-    async fn describe_data_source(
+    fn describe_data_source(
         &self,
         input: DescribeDataSourceRequest,
-    ) -> Result<DescribeDataSourceResponse, RusotoError<DescribeDataSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSourceResponse,
+                        RusotoError<DescribeDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about an FAQ list.</p>
-    async fn describe_faq(
+    fn describe_faq(
         &self,
         input: DescribeFaqRequest,
-    ) -> Result<DescribeFaqResponse, RusotoError<DescribeFaqError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeFaqResponse, RusotoError<DescribeFaqError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing Amazon Kendra index</p>
-    async fn describe_index(
+    fn describe_index(
         &self,
         input: DescribeIndexRequest,
-    ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets statistics about synchronizing Amazon Kendra with a data source.</p>
-    async fn list_data_source_sync_jobs(
+    fn list_data_source_sync_jobs(
         &self,
         input: ListDataSourceSyncJobsRequest,
-    ) -> Result<ListDataSourceSyncJobsResponse, RusotoError<ListDataSourceSyncJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDataSourceSyncJobsResponse,
+                        RusotoError<ListDataSourceSyncJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the data sources that you have created.</p>
-    async fn list_data_sources(
+    fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
-    ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of FAQ lists associated with an index.</p>
-    async fn list_faqs(
+    fn list_faqs(
         &self,
         input: ListFaqsRequest,
-    ) -> Result<ListFaqsResponse, RusotoError<ListFaqsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFaqsResponse, RusotoError<ListFaqsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the Amazon Kendra indexes that you have created.</p>
-    async fn list_indices(
+    fn list_indices(
         &self,
         input: ListIndicesRequest,
-    ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListIndicesResponse, RusotoError<ListIndicesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Searches an active index. Use this API to search your documents using query. The <code>Query</code> operation enables to do faceted search and to filter results based on document attributes.</p> <p>It also enables you to provide user context that Amazon Kendra uses to enforce document access control in the search results. </p> <p>Amazon Kendra searches your index for text content and question and answer (FAQ) content. By default the response contains three types of results.</p> <ul> <li> <p>Relevant passages</p> </li> <li> <p>Matching FAQs</p> </li> <li> <p>Relevant documents</p> </li> </ul> <p>You can specify that the query return only one type of result using the <code>QueryResultTypeConfig</code> parameter.</p>
-    async fn query(&self, input: QueryRequest) -> Result<QueryResult, RusotoError<QueryError>>;
+    fn query(
+        &self,
+        input: QueryRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<QueryResult, RusotoError<QueryError>>> + Send + 'static>>;
 
     /// <p>Starts a synchronization job for a data source. If a synchronization job is already in progress, Amazon Kendra returns a <code>ResourceInUseException</code> exception.</p>
-    async fn start_data_source_sync_job(
+    fn start_data_source_sync_job(
         &self,
         input: StartDataSourceSyncJobRequest,
-    ) -> Result<StartDataSourceSyncJobResponse, RusotoError<StartDataSourceSyncJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDataSourceSyncJobResponse,
+                        RusotoError<StartDataSourceSyncJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a running synchronization job. You can't stop a scheduled synchronization job.</p>
-    async fn stop_data_source_sync_job(
+    fn stop_data_source_sync_job(
         &self,
         input: StopDataSourceSyncJobRequest,
-    ) -> Result<(), RusotoError<StopDataSourceSyncJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<StopDataSourceSyncJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Enables you to provide feedback to Amazon Kendra to improve the performance of the service. </p>
-    async fn submit_feedback(
+    fn submit_feedback(
         &self,
         input: SubmitFeedbackRequest,
-    ) -> Result<(), RusotoError<SubmitFeedbackError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<SubmitFeedbackError>>> + Send + 'static>>;
 
     /// <p>Updates an existing Amazon Kendra data source.</p>
-    async fn update_data_source(
+    fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> Result<(), RusotoError<UpdateDataSourceError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<UpdateDataSourceError>>> + Send + 'static>,
+    >;
 
     /// <p>Updates an existing Amazon Kendra index.</p>
-    async fn update_index(
+    fn update_index(
         &self,
         input: UpdateIndexRequest,
-    ) -> Result<(), RusotoError<UpdateIndexError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateIndexError>>> + Send + 'static>>;
 }
 /// A client for the kendra API.
 #[derive(Clone)]
@@ -2621,13 +2731,22 @@ impl KendraClient {
     }
 }
 
-#[async_trait]
 impl Kendra for KendraClient {
     /// <p>Removes one or more documents from an index. The documents must have been added with the <a>BatchPutDocument</a> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages releated to the processing of the batch are sent to you CloudWatch log.</p>
-    async fn batch_delete_document(
+    fn batch_delete_document(
         &self,
         input: BatchDeleteDocumentRequest,
-    ) -> Result<BatchDeleteDocumentResponse, RusotoError<BatchDeleteDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDeleteDocumentResponse,
+                        RusotoError<BatchDeleteDocumentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2638,27 +2757,34 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeleteDocumentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDeleteDocumentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDeleteDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more documents to an index.</p> <p>The <code>BatchPutDocument</code> operation enables you to ingest inline documents or a set of documents stored in an Amazon S3 bucket. Use this operation to ingest your text and unstructured text into an index, add custom attributes to the documents, and to attach an access control list to the documents added to the index.</p> <p>The documents are indexed asynchronously. You can see the progress of the batch using AWS CloudWatch. Any error messages related to processing the batch are sent to your AWS CloudWatch log.</p>
-    async fn batch_put_document(
+    fn batch_put_document(
         &self,
         input: BatchPutDocumentRequest,
-    ) -> Result<BatchPutDocumentResponse, RusotoError<BatchPutDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchPutDocumentResponse, RusotoError<BatchPutDocumentError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2666,27 +2792,34 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchPutDocumentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchPutDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchPutDocumentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchPutDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a data source that you use to with an Amazon Kendra index. </p> <p>You specify a name, connector type and description for your data source. You can choose between an S3 connector, a SharePoint Online connector, and a database connector.</p> <p>You also specify configuration information such as document metadata (author, source URI, and so on) and user context information.</p> <p> <code>CreateDataSource</code> is a synchronous operation. The operation returns 200 if the data source was successfully created. Otherwise, an exception is raised.</p>
-    async fn create_data_source(
+    fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
-    ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2694,27 +2827,33 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDataSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an new set of frequently asked question (FAQ) questions and answers.</p>
-    async fn create_faq(
+    fn create_faq(
         &self,
         input: CreateFaqRequest,
-    ) -> Result<CreateFaqResponse, RusotoError<CreateFaqError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFaqResponse, RusotoError<CreateFaqError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2722,26 +2861,32 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateFaqResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFaqError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateFaqResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateFaqError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to . The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the operation or using one of the supported data sources. </p>
-    async fn create_index(
+    fn create_index(
         &self,
         input: CreateIndexRequest,
-    ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateIndexResponse, RusotoError<CreateIndexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2749,23 +2894,27 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateIndexResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateIndexError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateIndexResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateIndexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes an FAQ from an index.</p>
-    async fn delete_faq(&self, input: DeleteFaqRequest) -> Result<(), RusotoError<DeleteFaqError>> {
+    fn delete_faq(
+        &self,
+        input: DeleteFaqRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteFaqError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2773,26 +2922,27 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFaqError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFaqError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <a>DescribeIndex</a> operation is set to <code>DELETING</code>.</p>
-    async fn delete_index(
+    fn delete_index(
         &self,
         input: DeleteIndexRequest,
-    ) -> Result<(), RusotoError<DeleteIndexError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteIndexError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2800,26 +2950,36 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteIndexError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteIndexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a Amazon Kendra data source.</p>
-    async fn describe_data_source(
+    fn describe_data_source(
         &self,
         input: DescribeDataSourceRequest,
-    ) -> Result<DescribeDataSourceResponse, RusotoError<DescribeDataSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDataSourceResponse,
+                        RusotoError<DescribeDataSourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2830,27 +2990,33 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDataSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDataSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDataSourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about an FAQ list.</p>
-    async fn describe_faq(
+    fn describe_faq(
         &self,
         input: DescribeFaqRequest,
-    ) -> Result<DescribeFaqResponse, RusotoError<DescribeFaqError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeFaqResponse, RusotoError<DescribeFaqError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2858,26 +3024,32 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeFaqResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFaqError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DescribeFaqResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeFaqError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing Amazon Kendra index</p>
-    async fn describe_index(
+    fn describe_index(
         &self,
         input: DescribeIndexRequest,
-    ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2885,26 +3057,37 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeIndexResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeIndexError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeIndexResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeIndexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets statistics about synchronizing Amazon Kendra with a data source.</p>
-    async fn list_data_source_sync_jobs(
+    fn list_data_source_sync_jobs(
         &self,
         input: ListDataSourceSyncJobsRequest,
-    ) -> Result<ListDataSourceSyncJobsResponse, RusotoError<ListDataSourceSyncJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDataSourceSyncJobsResponse,
+                        RusotoError<ListDataSourceSyncJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2915,27 +3098,33 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSourceSyncJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSourceSyncJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSourceSyncJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSourceSyncJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the data sources that you have created.</p>
-    async fn list_data_sources(
+    fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
-    ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2943,26 +3132,33 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDataSourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSourcesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataSourcesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataSourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of FAQ lists associated with an index.</p>
-    async fn list_faqs(
+    fn list_faqs(
         &self,
         input: ListFaqsRequest,
-    ) -> Result<ListFaqsResponse, RusotoError<ListFaqsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFaqsResponse, RusotoError<ListFaqsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2970,26 +3166,32 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListFaqsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFaqsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListFaqsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListFaqsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the Amazon Kendra indexes that you have created.</p>
-    async fn list_indices(
+    fn list_indices(
         &self,
         input: ListIndicesRequest,
-    ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListIndicesResponse, RusotoError<ListIndicesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2997,23 +3199,27 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListIndicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListIndicesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListIndicesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListIndicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Searches an active index. Use this API to search your documents using query. The <code>Query</code> operation enables to do faceted search and to filter results based on document attributes.</p> <p>It also enables you to provide user context that Amazon Kendra uses to enforce document access control in the search results. </p> <p>Amazon Kendra searches your index for text content and question and answer (FAQ) content. By default the response contains three types of results.</p> <ul> <li> <p>Relevant passages</p> </li> <li> <p>Matching FAQs</p> </li> <li> <p>Relevant documents</p> </li> </ul> <p>You can specify that the query return only one type of result using the <code>QueryResultTypeConfig</code> parameter.</p>
-    async fn query(&self, input: QueryRequest) -> Result<QueryResult, RusotoError<QueryError>> {
+    fn query(
+        &self,
+        input: QueryRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<QueryResult, RusotoError<QueryError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3021,26 +3227,36 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<QueryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(QueryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<QueryResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(QueryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a synchronization job for a data source. If a synchronization job is already in progress, Amazon Kendra returns a <code>ResourceInUseException</code> exception.</p>
-    async fn start_data_source_sync_job(
+    fn start_data_source_sync_job(
         &self,
         input: StartDataSourceSyncJobRequest,
-    ) -> Result<StartDataSourceSyncJobResponse, RusotoError<StartDataSourceSyncJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDataSourceSyncJobResponse,
+                        RusotoError<StartDataSourceSyncJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3051,27 +3267,33 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDataSourceSyncJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDataSourceSyncJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartDataSourceSyncJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartDataSourceSyncJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a running synchronization job. You can't stop a scheduled synchronization job.</p>
-    async fn stop_data_source_sync_job(
+    fn stop_data_source_sync_job(
         &self,
         input: StopDataSourceSyncJobRequest,
-    ) -> Result<(), RusotoError<StopDataSourceSyncJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<StopDataSourceSyncJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3082,26 +3304,27 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDataSourceSyncJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopDataSourceSyncJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enables you to provide feedback to Amazon Kendra to improve the performance of the service. </p>
-    async fn submit_feedback(
+    fn submit_feedback(
         &self,
         input: SubmitFeedbackRequest,
-    ) -> Result<(), RusotoError<SubmitFeedbackError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<SubmitFeedbackError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3109,26 +3332,28 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SubmitFeedbackError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SubmitFeedbackError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing Amazon Kendra data source.</p>
-    async fn update_data_source(
+    fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
-    ) -> Result<(), RusotoError<UpdateDataSourceError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<UpdateDataSourceError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3136,26 +3361,27 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDataSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing Amazon Kendra index.</p>
-    async fn update_index(
+    fn update_index(
         &self,
         input: UpdateIndexRequest,
-    ) -> Result<(), RusotoError<UpdateIndexError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateIndexError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3163,18 +3389,18 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateIndexError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateIndexError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

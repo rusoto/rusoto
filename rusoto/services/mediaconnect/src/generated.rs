@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>A request to add outputs to the specified flow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1908,109 +1909,218 @@ impl fmt::Display for UpdateFlowSourceError {
 }
 impl Error for UpdateFlowSourceError {}
 /// Trait representing the capabilities of the AWS MediaConnect API. AWS MediaConnect clients implement this trait.
-#[async_trait]
 pub trait MediaConnect {
     /// <p>Adds outputs to an existing flow. You can create up to 20 outputs per flow.</p>
-    async fn add_flow_outputs(
+    fn add_flow_outputs(
         &self,
         input: AddFlowOutputsRequest,
-    ) -> Result<AddFlowOutputsResponse, RusotoError<AddFlowOutputsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddFlowOutputsResponse, RusotoError<AddFlowOutputsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50).</p>
-    async fn create_flow(
+    fn create_flow(
         &self,
         input: CreateFlowRequest,
-    ) -> Result<CreateFlowResponse, RusotoError<CreateFlowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFlowResponse, RusotoError<CreateFlowError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a flow. Before you can delete a flow, you must stop the flow.</p>
-    async fn delete_flow(
+    fn delete_flow(
         &self,
         input: DeleteFlowRequest,
-    ) -> Result<DeleteFlowResponse, RusotoError<DeleteFlowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteFlowResponse, RusotoError<DeleteFlowError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Displays the details of a flow. The response includes the flow ARN, name, and Availability Zone, as well as details about the source, outputs, and entitlements.</p>
-    async fn describe_flow(
+    fn describe_flow(
         &self,
         input: DescribeFlowRequest,
-    ) -> Result<DescribeFlowResponse, RusotoError<DescribeFlowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeFlowResponse, RusotoError<DescribeFlowError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Grants entitlements to an existing flow.</p>
-    async fn grant_flow_entitlements(
+    fn grant_flow_entitlements(
         &self,
         input: GrantFlowEntitlementsRequest,
-    ) -> Result<GrantFlowEntitlementsResponse, RusotoError<GrantFlowEntitlementsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GrantFlowEntitlementsResponse,
+                        RusotoError<GrantFlowEntitlementsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Displays a list of all entitlements that have been granted to this account. This request returns 20 results per page.</p>
-    async fn list_entitlements(
+    fn list_entitlements(
         &self,
         input: ListEntitlementsRequest,
-    ) -> Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Displays a list of flows that are associated with this account. This request returns a paginated result.</p>
-    async fn list_flows(
+    fn list_flows(
         &self,
         input: ListFlowsRequest,
-    ) -> Result<ListFlowsResponse, RusotoError<ListFlowsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFlowsResponse, RusotoError<ListFlowsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output.</p>
-    async fn remove_flow_output(
+    fn remove_flow_output(
         &self,
         input: RemoveFlowOutputRequest,
-    ) -> Result<RemoveFlowOutputResponse, RusotoError<RemoveFlowOutputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RemoveFlowOutputResponse, RusotoError<RemoveFlowOutputError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Revokes an entitlement from a flow. Once an entitlement is revoked, the content becomes unavailable to the subscriber and the associated output is removed.</p>
-    async fn revoke_flow_entitlement(
+    fn revoke_flow_entitlement(
         &self,
         input: RevokeFlowEntitlementRequest,
-    ) -> Result<RevokeFlowEntitlementResponse, RusotoError<RevokeFlowEntitlementError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RevokeFlowEntitlementResponse,
+                        RusotoError<RevokeFlowEntitlementError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts a flow.</p>
-    async fn start_flow(
+    fn start_flow(
         &self,
         input: StartFlowRequest,
-    ) -> Result<StartFlowResponse, RusotoError<StartFlowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartFlowResponse, RusotoError<StartFlowError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a flow.</p>
-    async fn stop_flow(
+    fn stop_flow(
         &self,
         input: StopFlowRequest,
-    ) -> Result<StopFlowResponse, RusotoError<StopFlowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopFlowResponse, RusotoError<StopFlowError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
     /// <p>Deletes specified tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>You can change an entitlement&#39;s description, subscribers, and encryption. If you change the subscribers, the service will remove the outputs that are are used by the subscribers that are removed.</p>
-    async fn update_flow_entitlement(
+    fn update_flow_entitlement(
         &self,
         input: UpdateFlowEntitlementRequest,
-    ) -> Result<UpdateFlowEntitlementResponse, RusotoError<UpdateFlowEntitlementError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateFlowEntitlementResponse,
+                        RusotoError<UpdateFlowEntitlementError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing flow output.</p>
-    async fn update_flow_output(
+    fn update_flow_output(
         &self,
         input: UpdateFlowOutputRequest,
-    ) -> Result<UpdateFlowOutputResponse, RusotoError<UpdateFlowOutputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateFlowOutputResponse, RusotoError<UpdateFlowOutputError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the source of a flow.</p>
-    async fn update_flow_source(
+    fn update_flow_source(
         &self,
         input: UpdateFlowSourceRequest,
-    ) -> Result<UpdateFlowSourceResponse, RusotoError<UpdateFlowSourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateFlowSourceResponse, RusotoError<UpdateFlowSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS MediaConnect API.
 #[derive(Clone)]
@@ -2050,13 +2160,18 @@ impl MediaConnectClient {
     }
 }
 
-#[async_trait]
 impl MediaConnect for MediaConnectClient {
     /// <p>Adds outputs to an existing flow. You can create up to 20 outputs per flow.</p>
-    async fn add_flow_outputs(
+    fn add_flow_outputs(
         &self,
         input: AddFlowOutputsRequest,
-    ) -> Result<AddFlowOutputsResponse, RusotoError<AddFlowOutputsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddFlowOutputsResponse, RusotoError<AddFlowOutputsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/flows/{flow_arn}/outputs", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -2065,28 +2180,34 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddFlowOutputsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddFlowOutputsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AddFlowOutputsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AddFlowOutputsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50).</p>
-    async fn create_flow(
+    fn create_flow(
         &self,
         input: CreateFlowRequest,
-    ) -> Result<CreateFlowResponse, RusotoError<CreateFlowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFlowResponse, RusotoError<CreateFlowError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/flows";
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -2095,82 +2216,104 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFlowResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateFlowResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFlowError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateFlowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a flow. Before you can delete a flow, you must stop the flow.</p>
-    async fn delete_flow(
+    fn delete_flow(
         &self,
         input: DeleteFlowRequest,
-    ) -> Result<DeleteFlowResponse, RusotoError<DeleteFlowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteFlowResponse, RusotoError<DeleteFlowError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/flows/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFlowResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteFlowResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFlowError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFlowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Displays the details of a flow. The response includes the flow ARN, name, and Availability Zone, as well as details about the source, outputs, and entitlements.</p>
-    async fn describe_flow(
+    fn describe_flow(
         &self,
         input: DescribeFlowRequest,
-    ) -> Result<DescribeFlowResponse, RusotoError<DescribeFlowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeFlowResponse, RusotoError<DescribeFlowError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/flows/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFlowResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeFlowResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFlowError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeFlowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Grants entitlements to an existing flow.</p>
-    async fn grant_flow_entitlements(
+    fn grant_flow_entitlements(
         &self,
         input: GrantFlowEntitlementsRequest,
-    ) -> Result<GrantFlowEntitlementsResponse, RusotoError<GrantFlowEntitlementsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GrantFlowEntitlementsResponse,
+                        RusotoError<GrantFlowEntitlementsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/flows/{flow_arn}/entitlements",
             flow_arn = input.flow_arn
@@ -2182,28 +2325,35 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GrantFlowEntitlementsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GrantFlowEntitlementsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GrantFlowEntitlementsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GrantFlowEntitlementsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Displays a list of all entitlements that have been granted to this account. This request returns 20 results per page.</p>
-    async fn list_entitlements(
+    fn list_entitlements(
         &self,
         input: ListEntitlementsRequest,
-    ) -> Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListEntitlementsResponse, RusotoError<ListEntitlementsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/entitlements";
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -2218,28 +2368,34 @@ impl MediaConnect for MediaConnectClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntitlementsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEntitlementsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntitlementsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEntitlementsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Displays a list of flows that are associated with this account. This request returns a paginated result.</p>
-    async fn list_flows(
+    fn list_flows(
         &self,
         input: ListFlowsRequest,
-    ) -> Result<ListFlowsResponse, RusotoError<ListFlowsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFlowsResponse, RusotoError<ListFlowsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/flows";
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
@@ -2254,55 +2410,72 @@ impl MediaConnect for MediaConnectClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFlowsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListFlowsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFlowsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListFlowsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output.</p>
-    async fn remove_flow_output(
+    fn remove_flow_output(
         &self,
         input: RemoveFlowOutputRequest,
-    ) -> Result<RemoveFlowOutputResponse, RusotoError<RemoveFlowOutputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RemoveFlowOutputResponse, RusotoError<RemoveFlowOutputError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/flows/{flow_arn}/outputs/{output_arn}",
             flow_arn = input.flow_arn,
@@ -2312,28 +2485,38 @@ impl MediaConnect for MediaConnectClient {
         let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveFlowOutputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RemoveFlowOutputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveFlowOutputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveFlowOutputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Revokes an entitlement from a flow. Once an entitlement is revoked, the content becomes unavailable to the subscriber and the associated output is removed.</p>
-    async fn revoke_flow_entitlement(
+    fn revoke_flow_entitlement(
         &self,
         input: RevokeFlowEntitlementRequest,
-    ) -> Result<RevokeFlowEntitlementResponse, RusotoError<RevokeFlowEntitlementError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RevokeFlowEntitlementResponse,
+                        RusotoError<RevokeFlowEntitlementError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/flows/{flow_arn}/entitlements/{entitlement_arn}",
             entitlement_arn = input.entitlement_arn,
@@ -2343,82 +2526,95 @@ impl MediaConnect for MediaConnectClient {
         let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RevokeFlowEntitlementResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RevokeFlowEntitlementResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RevokeFlowEntitlementError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RevokeFlowEntitlementError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a flow.</p>
-    async fn start_flow(
+    fn start_flow(
         &self,
         input: StartFlowRequest,
-    ) -> Result<StartFlowResponse, RusotoError<StartFlowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartFlowResponse, RusotoError<StartFlowError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/flows/start/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartFlowResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartFlowResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartFlowError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartFlowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a flow.</p>
-    async fn stop_flow(
+    fn stop_flow(
         &self,
         input: StopFlowRequest,
-    ) -> Result<StopFlowResponse, RusotoError<StopFlowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopFlowResponse, RusotoError<StopFlowError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/flows/stop/{flow_arn}", flow_arn = input.flow_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopFlowResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopFlowResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopFlowError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopFlowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
@@ -2427,27 +2623,28 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes specified tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
@@ -2459,27 +2656,37 @@ impl MediaConnect for MediaConnectClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>You can change an entitlement&#39;s description, subscribers, and encryption. If you change the subscribers, the service will remove the outputs that are are used by the subscribers that are removed.</p>
-    async fn update_flow_entitlement(
+    fn update_flow_entitlement(
         &self,
         input: UpdateFlowEntitlementRequest,
-    ) -> Result<UpdateFlowEntitlementResponse, RusotoError<UpdateFlowEntitlementError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateFlowEntitlementResponse,
+                        RusotoError<UpdateFlowEntitlementError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/flows/{flow_arn}/entitlements/{entitlement_arn}",
             entitlement_arn = input.entitlement_arn,
@@ -2492,28 +2699,35 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFlowEntitlementResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateFlowEntitlementResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFlowEntitlementError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFlowEntitlementError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing flow output.</p>
-    async fn update_flow_output(
+    fn update_flow_output(
         &self,
         input: UpdateFlowOutputRequest,
-    ) -> Result<UpdateFlowOutputResponse, RusotoError<UpdateFlowOutputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateFlowOutputResponse, RusotoError<UpdateFlowOutputError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/flows/{flow_arn}/outputs/{output_arn}",
             flow_arn = input.flow_arn,
@@ -2526,28 +2740,35 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFlowOutputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateFlowOutputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFlowOutputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFlowOutputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the source of a flow.</p>
-    async fn update_flow_source(
+    fn update_flow_source(
         &self,
         input: UpdateFlowSourceRequest,
-    ) -> Result<UpdateFlowSourceResponse, RusotoError<UpdateFlowSourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateFlowSourceResponse, RusotoError<UpdateFlowSourceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/flows/{flow_arn}/source/{source_arn}",
             flow_arn = input.flow_arn,
@@ -2560,20 +2781,20 @@ impl MediaConnect for MediaConnectClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFlowSourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateFlowSourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFlowSourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFlowSourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

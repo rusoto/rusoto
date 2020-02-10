@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The configuration for the agent to use.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -730,61 +731,136 @@ impl fmt::Display for UpdateProfilingGroupError {
 }
 impl Error for UpdateProfilingGroupError {}
 /// Trait representing the capabilities of the Amazon CodeGuru Profiler API. Amazon CodeGuru Profiler clients implement this trait.
-#[async_trait]
 pub trait CodeGuruProfiler {
     /// <p>Provides the configuration to use for an agent of the profiling group.</p>
-    async fn configure_agent(
+    fn configure_agent(
         &self,
         input: ConfigureAgentRequest,
-    ) -> Result<ConfigureAgentResponse, RusotoError<ConfigureAgentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigureAgentResponse, RusotoError<ConfigureAgentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a profiling group.</p>
-    async fn create_profiling_group(
+    fn create_profiling_group(
         &self,
         input: CreateProfilingGroupRequest,
-    ) -> Result<CreateProfilingGroupResponse, RusotoError<CreateProfilingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProfilingGroupResponse,
+                        RusotoError<CreateProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a profiling group.</p>
-    async fn delete_profiling_group(
+    fn delete_profiling_group(
         &self,
         input: DeleteProfilingGroupRequest,
-    ) -> Result<DeleteProfilingGroupResponse, RusotoError<DeleteProfilingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteProfilingGroupResponse,
+                        RusotoError<DeleteProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describe a profiling group.</p>
-    async fn describe_profiling_group(
+    fn describe_profiling_group(
         &self,
         input: DescribeProfilingGroupRequest,
-    ) -> Result<DescribeProfilingGroupResponse, RusotoError<DescribeProfilingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProfilingGroupResponse,
+                        RusotoError<DescribeProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it will be expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. For instance, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, then the returned profile will be from 00:15 to 00:20.</p>
-    async fn get_profile(
+    fn get_profile(
         &self,
         input: GetProfileRequest,
-    ) -> Result<GetProfileResponse, RusotoError<GetProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetProfileResponse, RusotoError<GetProfileError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the start times of the available aggregated profiles of a profiling group for an aggregation period within the specified time range.</p>
-    async fn list_profile_times(
+    fn list_profile_times(
         &self,
         input: ListProfileTimesRequest,
-    ) -> Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List profiling groups in the account.</p>
-    async fn list_profiling_groups(
+    fn list_profiling_groups(
         &self,
         input: ListProfilingGroupsRequest,
-    ) -> Result<ListProfilingGroupsResponse, RusotoError<ListProfilingGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProfilingGroupsResponse,
+                        RusotoError<ListProfilingGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Submit profile collected by an agent belonging to a profiling group for aggregation.</p>
-    async fn post_agent_profile(
+    fn post_agent_profile(
         &self,
         input: PostAgentProfileRequest,
-    ) -> Result<PostAgentProfileResponse, RusotoError<PostAgentProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PostAgentProfileResponse, RusotoError<PostAgentProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update a profiling group.</p>
-    async fn update_profiling_group(
+    fn update_profiling_group(
         &self,
         input: UpdateProfilingGroupRequest,
-    ) -> Result<UpdateProfilingGroupResponse, RusotoError<UpdateProfilingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateProfilingGroupResponse,
+                        RusotoError<UpdateProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon CodeGuru Profiler API.
 #[derive(Clone)]
@@ -824,13 +900,18 @@ impl CodeGuruProfilerClient {
     }
 }
 
-#[async_trait]
 impl CodeGuruProfiler for CodeGuruProfilerClient {
     /// <p>Provides the configuration to use for an agent of the profiling group.</p>
-    async fn configure_agent(
+    fn configure_agent(
         &self,
         input: ConfigureAgentRequest,
-    ) -> Result<ConfigureAgentResponse, RusotoError<ConfigureAgentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigureAgentResponse, RusotoError<ConfigureAgentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/configureAgent",
             profiling_group_name = input.profiling_group_name
@@ -843,28 +924,38 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigureAgentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigureAgentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ConfigureAgentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ConfigureAgentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a profiling group.</p>
-    async fn create_profiling_group(
+    fn create_profiling_group(
         &self,
         input: CreateProfilingGroupRequest,
-    ) -> Result<CreateProfilingGroupResponse, RusotoError<CreateProfilingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProfilingGroupResponse,
+                        RusotoError<CreateProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/profilingGroups";
 
         let mut request =
@@ -878,28 +969,38 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         params.put("clientToken", &input.client_token);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProfilingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateProfilingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProfilingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProfilingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a profiling group.</p>
-    async fn delete_profiling_group(
+    fn delete_profiling_group(
         &self,
         input: DeleteProfilingGroupRequest,
-    ) -> Result<DeleteProfilingGroupResponse, RusotoError<DeleteProfilingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteProfilingGroupResponse,
+                        RusotoError<DeleteProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}",
             profiling_group_name = input.profiling_group_name
@@ -909,28 +1010,38 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             SignedRequest::new("DELETE", "codeguru-profiler", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProfilingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteProfilingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProfilingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteProfilingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe a profiling group.</p>
-    async fn describe_profiling_group(
+    fn describe_profiling_group(
         &self,
         input: DescribeProfilingGroupRequest,
-    ) -> Result<DescribeProfilingGroupResponse, RusotoError<DescribeProfilingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProfilingGroupResponse,
+                        RusotoError<DescribeProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}",
             profiling_group_name = input.profiling_group_name
@@ -940,28 +1051,34 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             SignedRequest::new("GET", "codeguru-profiler", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProfilingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProfilingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProfilingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProfilingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it will be expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. For instance, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, then the returned profile will be from 00:15 to 00:20.</p>
-    async fn get_profile(
+    fn get_profile(
         &self,
         input: GetProfileRequest,
-    ) -> Result<GetProfileResponse, RusotoError<GetProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetProfileResponse, RusotoError<GetProfileError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/profile",
             profiling_group_name = input.profiling_group_name
@@ -989,36 +1106,43 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetProfileResponse::default();
-            result.profile = response.body;
+                let mut result = GetProfileResponse::default();
+                result.profile = response.body;
 
-            if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                let value = content_encoding.to_owned();
-                result.content_encoding = Some(value)
-            };
-            let value = response.headers.get("Content-Type").unwrap().to_owned();
-            result.content_type = value;
+                if let Some(content_encoding) = response.headers.get("Content-Encoding") {
+                    let value = content_encoding.to_owned();
+                    result.content_encoding = Some(value)
+                };
+                let value = response.headers.get("Content-Type").unwrap().to_owned();
+                result.content_type = value;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the start times of the available aggregated profiles of a profiling group for an aggregation period within the specified time range.</p>
-    async fn list_profile_times(
+    fn list_profile_times(
         &self,
         input: ListProfileTimesRequest,
-    ) -> Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/profileTimes",
             profiling_group_name = input.profiling_group_name
@@ -1043,28 +1167,38 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         params.put("startTime", &input.start_time);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProfileTimesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProfileTimesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProfileTimesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProfileTimesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List profiling groups in the account.</p>
-    async fn list_profiling_groups(
+    fn list_profiling_groups(
         &self,
         input: ListProfilingGroupsRequest,
-    ) -> Result<ListProfilingGroupsResponse, RusotoError<ListProfilingGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProfilingGroupsResponse,
+                        RusotoError<ListProfilingGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/profilingGroups";
 
         let mut request =
@@ -1083,28 +1217,35 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProfilingGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProfilingGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProfilingGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProfilingGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Submit profile collected by an agent belonging to a profiling group for aggregation.</p>
-    async fn post_agent_profile(
+    fn post_agent_profile(
         &self,
         input: PostAgentProfileRequest,
-    ) -> Result<PostAgentProfileResponse, RusotoError<PostAgentProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PostAgentProfileResponse, RusotoError<PostAgentProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}/agentProfile",
             profiling_group_name = input.profiling_group_name
@@ -1123,28 +1264,38 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PostAgentProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PostAgentProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PostAgentProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PostAgentProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update a profiling group.</p>
-    async fn update_profiling_group(
+    fn update_profiling_group(
         &self,
         input: UpdateProfilingGroupRequest,
-    ) -> Result<UpdateProfilingGroupResponse, RusotoError<UpdateProfilingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateProfilingGroupResponse,
+                        RusotoError<UpdateProfilingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/profilingGroups/{profiling_group_name}",
             profiling_group_name = input.profiling_group_name
@@ -1157,20 +1308,20 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProfilingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateProfilingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProfilingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateProfilingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

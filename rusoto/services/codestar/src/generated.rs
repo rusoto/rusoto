@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTeamMemberRequest {
@@ -1492,115 +1493,238 @@ impl fmt::Display for UpdateUserProfileError {
 }
 impl Error for UpdateUserProfileError {}
 /// Trait representing the capabilities of the CodeStar API. CodeStar clients implement this trait.
-#[async_trait]
 pub trait CodeStar {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
-    async fn associate_team_member(
+    fn associate_team_member(
         &self,
         input: AssociateTeamMemberRequest,
-    ) -> Result<AssociateTeamMemberResult, RusotoError<AssociateTeamMemberError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateTeamMemberResult,
+                        RusotoError<AssociateTeamMemberError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a project, including project resources. This action creates a project based on a submitted project request. A set of source code files and a toolchain template file can be included with the project request. If these are not provided, an empty project is created.</p>
-    async fn create_project(
+    fn create_project(
         &self,
         input: CreateProjectRequest,
-    ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProjectResult, RusotoError<CreateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
-    async fn create_user_profile(
+    fn create_user_profile(
         &self,
         input: CreateUserProfileRequest,
-    ) -> Result<CreateUserProfileResult, RusotoError<CreateUserProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateUserProfileResult, RusotoError<CreateUserProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
-    async fn delete_project(
+    fn delete_project(
         &self,
         input: DeleteProjectRequest,
-    ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteProjectResult, RusotoError<DeleteProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
-    async fn delete_user_profile(
+    fn delete_user_profile(
         &self,
         input: DeleteUserProfileRequest,
-    ) -> Result<DeleteUserProfileResult, RusotoError<DeleteUserProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteUserProfileResult, RusotoError<DeleteUserProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a project and its resources.</p>
-    async fn describe_project(
+    fn describe_project(
         &self,
         input: DescribeProjectRequest,
-    ) -> Result<DescribeProjectResult, RusotoError<DescribeProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeProjectResult, RusotoError<DescribeProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
-    async fn describe_user_profile(
+    fn describe_user_profile(
         &self,
         input: DescribeUserProfileRequest,
-    ) -> Result<DescribeUserProfileResult, RusotoError<DescribeUserProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeUserProfileResult,
+                        RusotoError<DescribeUserProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
-    async fn disassociate_team_member(
+    fn disassociate_team_member(
         &self,
         input: DisassociateTeamMemberRequest,
-    ) -> Result<DisassociateTeamMemberResult, RusotoError<DisassociateTeamMemberError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateTeamMemberResult,
+                        RusotoError<DisassociateTeamMemberError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
-    async fn list_projects(
+    fn list_projects(
         &self,
         input: ListProjectsRequest,
-    ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProjectsResult, RusotoError<ListProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
-    async fn list_resources(
+    fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> Result<ListResourcesResult, RusotoError<ListResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListResourcesResult, RusotoError<ListResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the tags for a project.</p>
-    async fn list_tags_for_project(
+    fn list_tags_for_project(
         &self,
         input: ListTagsForProjectRequest,
-    ) -> Result<ListTagsForProjectResult, RusotoError<ListTagsForProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListTagsForProjectResult, RusotoError<ListTagsForProjectError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all team members associated with a project.</p>
-    async fn list_team_members(
+    fn list_team_members(
         &self,
         input: ListTeamMembersRequest,
-    ) -> Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
-    async fn list_user_profiles(
+    fn list_user_profiles(
         &self,
         input: ListUserProfilesRequest,
-    ) -> Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds tags to a project.</p>
-    async fn tag_project(
+    fn tag_project(
         &self,
         input: TagProjectRequest,
-    ) -> Result<TagProjectResult, RusotoError<TagProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagProjectResult, RusotoError<TagProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes tags from a project.</p>
-    async fn untag_project(
+    fn untag_project(
         &self,
         input: UntagProjectRequest,
-    ) -> Result<UntagProjectResult, RusotoError<UntagProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagProjectResult, RusotoError<UntagProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a project in AWS CodeStar.</p>
-    async fn update_project(
+    fn update_project(
         &self,
         input: UpdateProjectRequest,
-    ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateProjectResult, RusotoError<UpdateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
-    async fn update_team_member(
+    fn update_team_member(
         &self,
         input: UpdateTeamMemberRequest,
-    ) -> Result<UpdateTeamMemberResult, RusotoError<UpdateTeamMemberError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTeamMemberResult, RusotoError<UpdateTeamMemberError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
-    async fn update_user_profile(
+    fn update_user_profile(
         &self,
         input: UpdateUserProfileRequest,
-    ) -> Result<UpdateUserProfileResult, RusotoError<UpdateUserProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateUserProfileResult, RusotoError<UpdateUserProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the CodeStar API.
 #[derive(Clone)]
@@ -1640,13 +1764,22 @@ impl CodeStarClient {
     }
 }
 
-#[async_trait]
 impl CodeStar for CodeStarClient {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
-    async fn associate_team_member(
+    fn associate_team_member(
         &self,
         input: AssociateTeamMemberRequest,
-    ) -> Result<AssociateTeamMemberResult, RusotoError<AssociateTeamMemberError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateTeamMemberResult,
+                        RusotoError<AssociateTeamMemberError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1654,27 +1787,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateTeamMemberResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateTeamMemberError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateTeamMemberResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateTeamMemberError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a project, including project resources. This action creates a project based on a submitted project request. A set of source code files and a toolchain template file can be included with the project request. If these are not provided, an empty project is created.</p>
-    async fn create_project(
+    fn create_project(
         &self,
         input: CreateProjectRequest,
-    ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProjectResult, RusotoError<CreateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1682,26 +1821,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
-    async fn create_user_profile(
+    fn create_user_profile(
         &self,
         input: CreateUserProfileRequest,
-    ) -> Result<CreateUserProfileResult, RusotoError<CreateUserProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateUserProfileResult, RusotoError<CreateUserProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1709,26 +1855,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUserProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateUserProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateUserProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
-    async fn delete_project(
+    fn delete_project(
         &self,
         input: DeleteProjectRequest,
-    ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteProjectResult, RusotoError<DeleteProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1736,26 +1889,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
-    async fn delete_user_profile(
+    fn delete_user_profile(
         &self,
         input: DeleteUserProfileRequest,
-    ) -> Result<DeleteUserProfileResult, RusotoError<DeleteUserProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteUserProfileResult, RusotoError<DeleteUserProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1763,26 +1923,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteUserProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUserProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a project and its resources.</p>
-    async fn describe_project(
+    fn describe_project(
         &self,
         input: DescribeProjectRequest,
-    ) -> Result<DescribeProjectResult, RusotoError<DescribeProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeProjectResult, RusotoError<DescribeProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1790,26 +1957,37 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
-    async fn describe_user_profile(
+    fn describe_user_profile(
         &self,
         input: DescribeUserProfileRequest,
-    ) -> Result<DescribeUserProfileResult, RusotoError<DescribeUserProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeUserProfileResult,
+                        RusotoError<DescribeUserProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1817,27 +1995,37 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeUserProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeUserProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeUserProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
-    async fn disassociate_team_member(
+    fn disassociate_team_member(
         &self,
         input: DisassociateTeamMemberRequest,
-    ) -> Result<DisassociateTeamMemberResult, RusotoError<DisassociateTeamMemberError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateTeamMemberResult,
+                        RusotoError<DisassociateTeamMemberError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1845,27 +2033,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateTeamMemberResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateTeamMemberError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateTeamMemberResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateTeamMemberError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
-    async fn list_projects(
+    fn list_projects(
         &self,
         input: ListProjectsRequest,
-    ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProjectsResult, RusotoError<ListProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1873,26 +2067,32 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProjectsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProjectsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
-    async fn list_resources(
+    fn list_resources(
         &self,
         input: ListResourcesRequest,
-    ) -> Result<ListResourcesResult, RusotoError<ListResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListResourcesResult, RusotoError<ListResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1900,26 +2100,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourcesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the tags for a project.</p>
-    async fn list_tags_for_project(
+    fn list_tags_for_project(
         &self,
         input: ListTagsForProjectRequest,
-    ) -> Result<ListTagsForProjectResult, RusotoError<ListTagsForProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListTagsForProjectResult, RusotoError<ListTagsForProjectError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1927,27 +2134,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all team members associated with a project.</p>
-    async fn list_team_members(
+    fn list_team_members(
         &self,
         input: ListTeamMembersRequest,
-    ) -> Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1955,26 +2168,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTeamMembersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTeamMembersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTeamMembersResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTeamMembersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
-    async fn list_user_profiles(
+    fn list_user_profiles(
         &self,
         input: ListUserProfilesRequest,
-    ) -> Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1982,26 +2202,33 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListUserProfilesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUserProfilesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListUserProfilesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListUserProfilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds tags to a project.</p>
-    async fn tag_project(
+    fn tag_project(
         &self,
         input: TagProjectRequest,
-    ) -> Result<TagProjectResult, RusotoError<TagProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagProjectResult, RusotoError<TagProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2009,26 +2236,32 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes tags from a project.</p>
-    async fn untag_project(
+    fn untag_project(
         &self,
         input: UntagProjectRequest,
-    ) -> Result<UntagProjectResult, RusotoError<UntagProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagProjectResult, RusotoError<UntagProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2036,26 +2269,32 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UntagProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a project in AWS CodeStar.</p>
-    async fn update_project(
+    fn update_project(
         &self,
         input: UpdateProjectRequest,
-    ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateProjectResult, RusotoError<UpdateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2063,26 +2302,32 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
-    async fn update_team_member(
+    fn update_team_member(
         &self,
         input: UpdateTeamMemberRequest,
-    ) -> Result<UpdateTeamMemberResult, RusotoError<UpdateTeamMemberError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTeamMemberResult, RusotoError<UpdateTeamMemberError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2090,26 +2335,34 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTeamMemberResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTeamMemberError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTeamMemberResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTeamMemberError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
-    async fn update_user_profile(
+    fn update_user_profile(
         &self,
         input: UpdateUserProfileRequest,
-    ) -> Result<UpdateUserProfileResult, RusotoError<UpdateUserProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateUserProfileResult, RusotoError<UpdateUserProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2117,18 +2370,19 @@ impl CodeStar for CodeStarClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUserProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateUserProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateUserProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendSSHPublicKeyRequest {
@@ -111,13 +112,19 @@ impl fmt::Display for SendSSHPublicKeyError {
 }
 impl Error for SendSSHPublicKeyError {}
 /// Trait representing the capabilities of the EC2 Instance Connect API. EC2 Instance Connect clients implement this trait.
-#[async_trait]
 pub trait Ec2InstanceConnect {
     /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
-    async fn send_ssh_public_key(
+    fn send_ssh_public_key(
         &self,
         input: SendSSHPublicKeyRequest,
-    ) -> Result<SendSSHPublicKeyResponse, RusotoError<SendSSHPublicKeyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SendSSHPublicKeyResponse, RusotoError<SendSSHPublicKeyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the EC2 Instance Connect API.
 #[derive(Clone)]
@@ -157,13 +164,19 @@ impl Ec2InstanceConnectClient {
     }
 }
 
-#[async_trait]
 impl Ec2InstanceConnect for Ec2InstanceConnectClient {
     /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
-    async fn send_ssh_public_key(
+    fn send_ssh_public_key(
         &self,
         input: SendSSHPublicKeyRequest,
-    ) -> Result<SendSSHPublicKeyResponse, RusotoError<SendSSHPublicKeyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SendSSHPublicKeyResponse, RusotoError<SendSSHPublicKeyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "ec2-instance-connect", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -174,19 +187,19 @@ impl Ec2InstanceConnect for Ec2InstanceConnectClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendSSHPublicKeyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendSSHPublicKeyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendSSHPublicKeyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SendSSHPublicKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

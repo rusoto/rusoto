@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The file to be used as album art. There can be multiple artworks associated with an audio file, to a maximum of 20.</p> <p>To remove artwork or leave the artwork empty, you can either set <code>Artwork</code> to null, or set the <code>Merge Policy</code> to "Replace" and use an empty <code>Artwork</code> array.</p> <p>To pass through existing artwork unchanged, set the <code>Merge Policy</code> to "Prepend", "Append", or "Fallback", and use an empty <code>Artwork</code> array.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Artwork {
@@ -2300,109 +2301,223 @@ impl fmt::Display for UpdatePipelineStatusError {
 }
 impl Error for UpdatePipelineStatusError {}
 /// Trait representing the capabilities of the Amazon Elastic Transcoder API. Amazon Elastic Transcoder clients implement this trait.
-#[async_trait]
 pub trait Ets {
     /// <p><p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you&#39;re getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note></p>
-    async fn cancel_job(
+    fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelJobResponse, RusotoError<CancelJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The CreatePipeline operation creates a pipeline with settings that you specify.</p>
-    async fn create_pipeline(
+    fn create_pipeline(
         &self,
         input: CreatePipelineRequest,
-    ) -> Result<CreatePipelineResponse, RusotoError<CreatePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePipelineResponse, RusotoError<CreatePipelineError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The CreatePreset operation creates a preset with settings that you specify.</p> <important> <p>Elastic Transcoder checks the CreatePreset settings to ensure that they meet Elastic Transcoder requirements and to determine whether they comply with H.264 standards. If your settings are not valid for Elastic Transcoder, Elastic Transcoder returns an HTTP 400 response (<code>ValidationException</code>) and does not create the preset. If the settings are valid for Elastic Transcoder but aren't strictly compliant with the H.264 standard, Elastic Transcoder creates the preset and returns a warning message in the response. This helps you determine whether your settings comply with the H.264 standard while giving you greater flexibility with respect to the video that Elastic Transcoder produces.</p> </important> <p>Elastic Transcoder uses the H.264 video-compression format. For more information, see the International Telecommunication Union publication <i>Recommendation ITU-T H.264: Advanced video coding for generic audiovisual services</i>.</p>
-    async fn create_preset(
+    fn create_preset(
         &self,
         input: CreatePresetRequest,
-    ) -> Result<CreatePresetResponse, RusotoError<CreatePresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePresetResponse, RusotoError<CreatePresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The DeletePipeline operation removes a pipeline.</p> <p> You can only delete a pipeline that has never been used or that is not currently in use (doesn't contain any active jobs). If the pipeline is currently in use, <code>DeletePipeline</code> returns an error. </p>
-    async fn delete_pipeline(
+    fn delete_pipeline(
         &self,
         input: DeletePipelineRequest,
-    ) -> Result<DeletePipelineResponse, RusotoError<DeletePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeletePipelineResponse, RusotoError<DeletePipelineError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>The DeletePreset operation removes a preset that you&#39;ve added in an AWS region.</p> <note> <p>You can&#39;t delete the default presets that are included with Elastic Transcoder.</p> </note></p>
-    async fn delete_preset(
+    fn delete_preset(
         &self,
         input: DeletePresetRequest,
-    ) -> Result<DeletePresetResponse, RusotoError<DeletePresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeletePresetResponse, RusotoError<DeletePresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ListJobsByPipeline operation gets a list of the jobs currently in a pipeline.</p> <p>Elastic Transcoder returns all of the jobs currently in the specified pipeline. The response body contains one element for each job that satisfies the search criteria.</p>
-    async fn list_jobs_by_pipeline(
+    fn list_jobs_by_pipeline(
         &self,
         input: ListJobsByPipelineRequest,
-    ) -> Result<ListJobsByPipelineResponse, RusotoError<ListJobsByPipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJobsByPipelineResponse,
+                        RusotoError<ListJobsByPipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>
-    async fn list_jobs_by_status(
+    fn list_jobs_by_status(
         &self,
         input: ListJobsByStatusRequest,
-    ) -> Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>
-    async fn list_pipelines(
+    fn list_pipelines(
         &self,
         input: ListPipelinesRequest,
-    ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>
-    async fn list_presets(
+    fn list_presets(
         &self,
         input: ListPresetsRequest,
-    ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPresetsResponse, RusotoError<ListPresetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ReadJob operation returns detailed information about a job.</p>
-    async fn read_job(
+    fn read_job(
         &self,
         input: ReadJobRequest,
-    ) -> Result<ReadJobResponse, RusotoError<ReadJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ReadJobResponse, RusotoError<ReadJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ReadPipeline operation gets detailed information about a pipeline.</p>
-    async fn read_pipeline(
+    fn read_pipeline(
         &self,
         input: ReadPipelineRequest,
-    ) -> Result<ReadPipelineResponse, RusotoError<ReadPipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ReadPipelineResponse, RusotoError<ReadPipelineError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The ReadPreset operation gets detailed information about a preset.</p>
-    async fn read_preset(
+    fn read_preset(
         &self,
         input: ReadPresetRequest,
-    ) -> Result<ReadPresetResponse, RusotoError<ReadPresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ReadPresetResponse, RusotoError<ReadPresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>
-    async fn test_role(
+    fn test_role(
         &self,
         input: TestRoleRequest,
-    ) -> Result<TestRoleResponse, RusotoError<TestRoleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TestRoleResponse, RusotoError<TestRoleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p> Use the <code>UpdatePipeline</code> operation to update settings for a pipeline.</p> <important> <p>When you change pipeline settings, your changes take effect immediately. Jobs that you have already submitted and that Elastic Transcoder has not started to process are affected in addition to jobs that you submit after you change settings. </p> </important></p>
-    async fn update_pipeline(
+    fn update_pipeline(
         &self,
         input: UpdatePipelineRequest,
-    ) -> Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>With the UpdatePipelineNotifications operation, you can update Amazon Simple Notification Service (Amazon SNS) notifications for a pipeline.</p> <p>When you update notifications for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
-    async fn update_pipeline_notifications(
+    fn update_pipeline_notifications(
         &self,
         input: UpdatePipelineNotificationsRequest,
-    ) -> Result<UpdatePipelineNotificationsResponse, RusotoError<UpdatePipelineNotificationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdatePipelineNotificationsResponse,
+                        RusotoError<UpdatePipelineNotificationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The UpdatePipelineStatus operation pauses or reactivates a pipeline, so that the pipeline stops or restarts the processing of jobs.</p> <p>Changing the pipeline status is useful if you want to cancel one or more jobs. You can't cancel jobs after Elastic Transcoder has started processing them; if you pause the pipeline to which you submitted the jobs, you have more time to get the job IDs for the jobs that you want to cancel, and to send a <a>CancelJob</a> request. </p>
-    async fn update_pipeline_status(
+    fn update_pipeline_status(
         &self,
         input: UpdatePipelineStatusRequest,
-    ) -> Result<UpdatePipelineStatusResponse, RusotoError<UpdatePipelineStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdatePipelineStatusResponse,
+                        RusotoError<UpdatePipelineStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Elastic Transcoder API.
 #[derive(Clone)]
@@ -2442,41 +2557,52 @@ impl EtsClient {
     }
 }
 
-#[async_trait]
 impl Ets for EtsClient {
     /// <p><p>The CancelJob operation cancels an unfinished job.</p> <note> <p>You can only cancel a job that has a status of <code>Submitted</code>. To prevent a pipeline from starting to process a job while you&#39;re getting the job identifier, use <a>UpdatePipelineStatus</a> to temporarily pause the pipeline.</p> </note></p>
-    async fn cancel_job(
+    fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelJobResponse, RusotoError<CancelJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>When you create a job, Elastic Transcoder returns JSON data that includes the values that you specified plus information about the job that is created.</p> <p>If you have specified more than one output for your jobs (for example, one output for the Kindle Fire and another output for the Apple iPhone 4s), you currently must use the Elastic Transcoder API to list the jobs (as opposed to the AWS Console).</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2012-09-25/jobs";
 
         let mut request =
@@ -2486,28 +2612,34 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The CreatePipeline operation creates a pipeline with settings that you specify.</p>
-    async fn create_pipeline(
+    fn create_pipeline(
         &self,
         input: CreatePipelineRequest,
-    ) -> Result<CreatePipelineResponse, RusotoError<CreatePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePipelineResponse, RusotoError<CreatePipelineError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -2517,28 +2649,34 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The CreatePreset operation creates a preset with settings that you specify.</p> <important> <p>Elastic Transcoder checks the CreatePreset settings to ensure that they meet Elastic Transcoder requirements and to determine whether they comply with H.264 standards. If your settings are not valid for Elastic Transcoder, Elastic Transcoder returns an HTTP 400 response (<code>ValidationException</code>) and does not create the preset. If the settings are valid for Elastic Transcoder but aren't strictly compliant with the H.264 standard, Elastic Transcoder creates the preset and returns a warning message in the response. This helps you determine whether your settings comply with the H.264 standard while giving you greater flexibility with respect to the video that Elastic Transcoder produces.</p> </important> <p>Elastic Transcoder uses the H.264 video-compression format. For more information, see the International Telecommunication Union publication <i>Recommendation ITU-T H.264: Advanced video coding for generic audiovisual services</i>.</p>
-    async fn create_preset(
+    fn create_preset(
         &self,
         input: CreatePresetRequest,
-    ) -> Result<CreatePresetResponse, RusotoError<CreatePresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePresetResponse, RusotoError<CreatePresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -2548,84 +2686,106 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The DeletePipeline operation removes a pipeline.</p> <p> You can only delete a pipeline that has never been used or that is not currently in use (doesn't contain any active jobs). If the pipeline is currently in use, <code>DeletePipeline</code> returns an error. </p>
-    async fn delete_pipeline(
+    fn delete_pipeline(
         &self,
         input: DeletePipelineRequest,
-    ) -> Result<DeletePipelineResponse, RusotoError<DeletePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeletePipelineResponse, RusotoError<DeletePipelineError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeletePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>The DeletePreset operation removes a preset that you&#39;ve added in an AWS region.</p> <note> <p>You can&#39;t delete the default presets that are included with Elastic Transcoder.</p> </note></p>
-    async fn delete_preset(
+    fn delete_preset(
         &self,
         input: DeletePresetRequest,
-    ) -> Result<DeletePresetResponse, RusotoError<DeletePresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeletePresetResponse, RusotoError<DeletePresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeletePresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ListJobsByPipeline operation gets a list of the jobs currently in a pipeline.</p> <p>Elastic Transcoder returns all of the jobs currently in the specified pipeline. The response body contains one element for each job that satisfies the search criteria.</p>
-    async fn list_jobs_by_pipeline(
+    fn list_jobs_by_pipeline(
         &self,
         input: ListJobsByPipelineRequest,
-    ) -> Result<ListJobsByPipelineResponse, RusotoError<ListJobsByPipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJobsByPipelineResponse,
+                        RusotoError<ListJobsByPipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/2012-09-25/jobsByPipeline/{pipeline_id}",
             pipeline_id = input.pipeline_id
@@ -2644,28 +2804,35 @@ impl Ets for EtsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsByPipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobsByPipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsByPipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobsByPipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ListJobsByStatus operation gets a list of jobs that have a specified status. The response body contains one element for each job that satisfies the search criteria.</p>
-    async fn list_jobs_by_status(
+    fn list_jobs_by_status(
         &self,
         input: ListJobsByStatusRequest,
-    ) -> Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListJobsByStatusResponse, RusotoError<ListJobsByStatusError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/jobsByStatus/{status}", status = input.status);
 
         let mut request =
@@ -2681,28 +2848,34 @@ impl Ets for EtsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsByStatusResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobsByStatusResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsByStatusError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobsByStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ListPipelines operation gets a list of the pipelines associated with the current AWS account.</p>
-    async fn list_pipelines(
+    fn list_pipelines(
         &self,
         input: ListPipelinesRequest,
-    ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2012-09-25/pipelines";
 
         let mut request =
@@ -2718,28 +2891,34 @@ impl Ets for EtsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPipelinesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPipelinesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPipelinesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPipelinesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ListPresets operation gets a list of the default presets included with Elastic Transcoder and the presets that you've added in an AWS region.</p>
-    async fn list_presets(
+    fn list_presets(
         &self,
         input: ListPresetsRequest,
-    ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPresetsResponse, RusotoError<ListPresetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2012-09-25/presets";
 
         let mut request =
@@ -2755,112 +2934,136 @@ impl Ets for EtsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPresetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPresetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPresetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPresetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ReadJob operation returns detailed information about a job.</p>
-    async fn read_job(
+    fn read_job(
         &self,
         input: ReadJobRequest,
-    ) -> Result<ReadJobResponse, RusotoError<ReadJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ReadJobResponse, RusotoError<ReadJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/jobs/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("GET", "elastictranscoder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ReadJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ReadJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ReadJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ReadJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ReadPipeline operation gets detailed information about a pipeline.</p>
-    async fn read_pipeline(
+    fn read_pipeline(
         &self,
         input: ReadPipelineRequest,
-    ) -> Result<ReadPipelineResponse, RusotoError<ReadPipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ReadPipelineResponse, RusotoError<ReadPipelineError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("GET", "elastictranscoder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ReadPipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ReadPipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ReadPipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ReadPipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The ReadPreset operation gets detailed information about a preset.</p>
-    async fn read_preset(
+    fn read_preset(
         &self,
         input: ReadPresetRequest,
-    ) -> Result<ReadPresetResponse, RusotoError<ReadPresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ReadPresetResponse, RusotoError<ReadPresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/presets/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("GET", "elastictranscoder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ReadPresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ReadPresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ReadPresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ReadPresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The TestRole operation tests the IAM role used to create the pipeline.</p> <p>The <code>TestRole</code> action lets you determine whether the IAM role you are using has sufficient permissions to let Elastic Transcoder perform tasks associated with the transcoding process. The action attempts to assume the specified IAM role, checks read access to the input and output buckets, and tries to send a test notification to Amazon SNS topics that you specify.</p>
-    async fn test_role(
+    fn test_role(
         &self,
         input: TestRoleRequest,
-    ) -> Result<TestRoleResponse, RusotoError<TestRoleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TestRoleResponse, RusotoError<TestRoleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2012-09-25/roleTests";
 
         let mut request =
@@ -2870,28 +3073,34 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestRoleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TestRoleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TestRoleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TestRoleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p> Use the <code>UpdatePipeline</code> operation to update settings for a pipeline.</p> <important> <p>When you change pipeline settings, your changes take effect immediately. Jobs that you have already submitted and that Elastic Transcoder has not started to process are affected in addition to jobs that you submit after you change settings. </p> </important></p>
-    async fn update_pipeline(
+    fn update_pipeline(
         &self,
         input: UpdatePipelineRequest,
-    ) -> Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdatePipelineResponse, RusotoError<UpdatePipelineError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/pipelines/{id}", id = input.id);
 
         let mut request =
@@ -2901,29 +3110,38 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdatePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdatePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>With the UpdatePipelineNotifications operation, you can update Amazon Simple Notification Service (Amazon SNS) notifications for a pipeline.</p> <p>When you update notifications for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
-    async fn update_pipeline_notifications(
+    fn update_pipeline_notifications(
         &self,
         input: UpdatePipelineNotificationsRequest,
-    ) -> Result<UpdatePipelineNotificationsResponse, RusotoError<UpdatePipelineNotificationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdatePipelineNotificationsResponse,
+                        RusotoError<UpdatePipelineNotificationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/pipelines/{id}/notifications", id = input.id);
 
         let mut request =
@@ -2933,28 +3151,38 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePipelineNotificationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdatePipelineNotificationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePipelineNotificationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdatePipelineNotificationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The UpdatePipelineStatus operation pauses or reactivates a pipeline, so that the pipeline stops or restarts the processing of jobs.</p> <p>Changing the pipeline status is useful if you want to cancel one or more jobs. You can't cancel jobs after Elastic Transcoder has started processing them; if you pause the pipeline to which you submitted the jobs, you have more time to get the job IDs for the jobs that you want to cancel, and to send a <a>CancelJob</a> request. </p>
-    async fn update_pipeline_status(
+    fn update_pipeline_status(
         &self,
         input: UpdatePipelineStatusRequest,
-    ) -> Result<UpdatePipelineStatusResponse, RusotoError<UpdatePipelineStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdatePipelineStatusResponse,
+                        RusotoError<UpdatePipelineStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2012-09-25/pipelines/{id}/status", id = input.id);
 
         let mut request =
@@ -2964,20 +3192,20 @@ impl Ets for EtsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePipelineStatusResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdatePipelineStatusResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePipelineStatusError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdatePipelineStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

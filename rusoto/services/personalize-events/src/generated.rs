@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Represents user interaction event information sent using the <code>PutEvents</code> API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -92,10 +93,12 @@ impl fmt::Display for PutEventsError {
 }
 impl Error for PutEventsError {}
 /// Trait representing the capabilities of the Amazon Personalize Events API. Amazon Personalize Events clients implement this trait.
-#[async_trait]
 pub trait PersonalizeEvents {
     /// <p>Records user interaction event data.</p>
-    async fn put_events(&self, input: PutEventsRequest) -> Result<(), RusotoError<PutEventsError>>;
+    fn put_events(
+        &self,
+        input: PutEventsRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<PutEventsError>>> + Send + 'static>>;
 }
 /// A client for the Amazon Personalize Events API.
 #[derive(Clone)]
@@ -135,10 +138,13 @@ impl PersonalizeEventsClient {
     }
 }
 
-#[async_trait]
 impl PersonalizeEvents for PersonalizeEventsClient {
     /// <p>Records user interaction event data.</p>
-    async fn put_events(&self, input: PutEventsRequest) -> Result<(), RusotoError<PutEventsError>> {
+    fn put_events(
+        &self,
+        input: PutEventsRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<PutEventsError>>> + Send + 'static>>
+    {
         let request_uri = "/events";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -148,19 +154,19 @@ impl PersonalizeEvents for PersonalizeEventsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEventsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutEventsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

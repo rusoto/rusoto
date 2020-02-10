@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Connection credentials. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -481,37 +482,74 @@ impl fmt::Display for SendMessageError {
 }
 impl Error for SendMessageError {}
 /// Trait representing the capabilities of the Amazon Connect Participant API. Amazon Connect Participant clients implement this trait.
-#[async_trait]
 pub trait ConnectParticipant {
     /// <p>Creates the participant's connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until the they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{"topic":"aws/subscribe","content":{"topics":["aws/chat"]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p>
-    async fn create_participant_connection(
+    fn create_participant_connection(
         &self,
         input: CreateParticipantConnectionRequest,
-    ) -> Result<CreateParticipantConnectionResponse, RusotoError<CreateParticipantConnectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateParticipantConnectionResponse,
+                        RusotoError<CreateParticipantConnectionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn disconnect_participant(
+    fn disconnect_participant(
         &self,
         input: DisconnectParticipantRequest,
-    ) -> Result<DisconnectParticipantResponse, RusotoError<DisconnectParticipantError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisconnectParticipantResponse,
+                        RusotoError<DisconnectParticipantError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a transcript of the session. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn get_transcript(
+    fn get_transcript(
         &self,
         input: GetTranscriptRequest,
-    ) -> Result<GetTranscriptResponse, RusotoError<GetTranscriptError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTranscriptResponse, RusotoError<GetTranscriptError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn send_event(
+    fn send_event(
         &self,
         input: SendEventRequest,
-    ) -> Result<SendEventResponse, RusotoError<SendEventError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendEventResponse, RusotoError<SendEventError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn send_message(
+    fn send_message(
         &self,
         input: SendMessageRequest,
-    ) -> Result<SendMessageResponse, RusotoError<SendMessageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendMessageResponse, RusotoError<SendMessageError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Connect Participant API.
 #[derive(Clone)]
@@ -551,14 +589,22 @@ impl ConnectParticipantClient {
     }
 }
 
-#[async_trait]
 impl ConnectParticipant for ConnectParticipantClient {
     /// <p>Creates the participant's connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until the they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{"topic":"aws/subscribe","content":{"topics":["aws/chat"]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p>
-    async fn create_participant_connection(
+    fn create_participant_connection(
         &self,
         input: CreateParticipantConnectionRequest,
-    ) -> Result<CreateParticipantConnectionResponse, RusotoError<CreateParticipantConnectionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateParticipantConnectionResponse,
+                        RusotoError<CreateParticipantConnectionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/participant/connection";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -569,28 +615,38 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_payload(encoded);
         request.add_header("X-Amz-Bearer", &input.participant_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateParticipantConnectionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateParticipantConnectionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateParticipantConnectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateParticipantConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn disconnect_participant(
+    fn disconnect_participant(
         &self,
         input: DisconnectParticipantRequest,
-    ) -> Result<DisconnectParticipantResponse, RusotoError<DisconnectParticipantError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisconnectParticipantResponse,
+                        RusotoError<DisconnectParticipantError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/participant/disconnect";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -601,28 +657,34 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_payload(encoded);
         request.add_header("X-Amz-Bearer", &input.connection_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisconnectParticipantResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisconnectParticipantResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisconnectParticipantError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisconnectParticipantError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a transcript of the session. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn get_transcript(
+    fn get_transcript(
         &self,
         input: GetTranscriptRequest,
-    ) -> Result<GetTranscriptResponse, RusotoError<GetTranscriptError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTranscriptResponse, RusotoError<GetTranscriptError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/participant/transcript";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -633,28 +695,34 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_payload(encoded);
         request.add_header("X-Amz-Bearer", &input.connection_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTranscriptResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTranscriptResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTranscriptError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTranscriptError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn send_event(
+    fn send_event(
         &self,
         input: SendEventRequest,
-    ) -> Result<SendEventResponse, RusotoError<SendEventError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendEventResponse, RusotoError<SendEventError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/participant/event";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -665,28 +733,34 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_payload(encoded);
         request.add_header("X-Amz-Bearer", &input.connection_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendEventResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendEventResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SendEventError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SendEventError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
-    async fn send_message(
+    fn send_message(
         &self,
         input: SendMessageRequest,
-    ) -> Result<SendMessageResponse, RusotoError<SendMessageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendMessageResponse, RusotoError<SendMessageError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/participant/message";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -697,20 +771,20 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_payload(encoded);
         request.add_header("X-Amz-Bearer", &input.connection_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendMessageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendMessageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SendMessageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SendMessageError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

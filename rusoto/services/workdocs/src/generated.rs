@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortDocumentVersionUploadRequest {
@@ -4645,262 +4646,505 @@ impl fmt::Display for UpdateUserError {
 }
 impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the Amazon WorkDocs API. Amazon WorkDocs clients implement this trait.
-#[async_trait]
 pub trait Workdocs {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
-    async fn abort_document_version_upload(
+    fn abort_document_version_upload(
         &self,
         input: AbortDocumentVersionUploadRequest,
-    ) -> Result<(), RusotoError<AbortDocumentVersionUploadError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<AbortDocumentVersionUploadError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
-    async fn activate_user(
+    fn activate_user(
         &self,
         input: ActivateUserRequest,
-    ) -> Result<ActivateUserResponse, RusotoError<ActivateUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ActivateUserResponse, RusotoError<ActivateUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
-    async fn add_resource_permissions(
+    fn add_resource_permissions(
         &self,
         input: AddResourcePermissionsRequest,
-    ) -> Result<AddResourcePermissionsResponse, RusotoError<AddResourcePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddResourcePermissionsResponse,
+                        RusotoError<AddResourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a new comment to the specified document version.</p>
-    async fn create_comment(
+    fn create_comment(
         &self,
         input: CreateCommentRequest,
-    ) -> Result<CreateCommentResponse, RusotoError<CreateCommentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateCommentResponse, RusotoError<CreateCommentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
-    async fn create_custom_metadata(
+    fn create_custom_metadata(
         &self,
         input: CreateCustomMetadataRequest,
-    ) -> Result<CreateCustomMetadataResponse, RusotoError<CreateCustomMetadataError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateCustomMetadataResponse,
+                        RusotoError<CreateCustomMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a folder with the specified name and parent folder.</p>
-    async fn create_folder(
+    fn create_folder(
         &self,
         input: CreateFolderRequest,
-    ) -> Result<CreateFolderResponse, RusotoError<CreateFolderError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFolderResponse, RusotoError<CreateFolderError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
-    async fn create_labels(
+    fn create_labels(
         &self,
         input: CreateLabelsRequest,
-    ) -> Result<CreateLabelsResponse, RusotoError<CreateLabelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateLabelsResponse, RusotoError<CreateLabelsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
-    async fn create_notification_subscription(
+    fn create_notification_subscription(
         &self,
         input: CreateNotificationSubscriptionRequest,
-    ) -> Result<
-        CreateNotificationSubscriptionResponse,
-        RusotoError<CreateNotificationSubscriptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateNotificationSubscriptionResponse,
+                        RusotoError<CreateNotificationSubscriptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
-    async fn create_user(
+    fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateUserResponse, RusotoError<CreateUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
-    async fn deactivate_user(
+    fn deactivate_user(
         &self,
         input: DeactivateUserRequest,
-    ) -> Result<(), RusotoError<DeactivateUserError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeactivateUserError>>> + Send + 'static>>;
 
     /// <p>Deletes the specified comment from the document version.</p>
-    async fn delete_comment(
+    fn delete_comment(
         &self,
         input: DeleteCommentRequest,
-    ) -> Result<(), RusotoError<DeleteCommentError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteCommentError>>> + Send + 'static>>;
 
     /// <p>Deletes custom metadata from the specified resource.</p>
-    async fn delete_custom_metadata(
+    fn delete_custom_metadata(
         &self,
         input: DeleteCustomMetadataRequest,
-    ) -> Result<DeleteCustomMetadataResponse, RusotoError<DeleteCustomMetadataError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteCustomMetadataResponse,
+                        RusotoError<DeleteCustomMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently deletes the specified document and its associated metadata.</p>
-    async fn delete_document(
+    fn delete_document(
         &self,
         input: DeleteDocumentRequest,
-    ) -> Result<(), RusotoError<DeleteDocumentError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteDocumentError>>> + Send + 'static>>;
 
     /// <p>Permanently deletes the specified folder and its contents.</p>
-    async fn delete_folder(
+    fn delete_folder(
         &self,
         input: DeleteFolderRequest,
-    ) -> Result<(), RusotoError<DeleteFolderError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteFolderError>>> + Send + 'static>>;
 
     /// <p>Deletes the contents of the specified folder.</p>
-    async fn delete_folder_contents(
+    fn delete_folder_contents(
         &self,
         input: DeleteFolderContentsRequest,
-    ) -> Result<(), RusotoError<DeleteFolderContentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteFolderContentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified list of labels from a resource.</p>
-    async fn delete_labels(
+    fn delete_labels(
         &self,
         input: DeleteLabelsRequest,
-    ) -> Result<DeleteLabelsResponse, RusotoError<DeleteLabelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteLabelsResponse, RusotoError<DeleteLabelsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified subscription from the specified organization.</p>
-    async fn delete_notification_subscription(
+    fn delete_notification_subscription(
         &self,
         input: DeleteNotificationSubscriptionRequest,
-    ) -> Result<(), RusotoError<DeleteNotificationSubscriptionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteNotificationSubscriptionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
-    async fn delete_user(
+    fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> Result<(), RusotoError<DeleteUserError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteUserError>>> + Send + 'static>>;
 
     /// <p>Describes the user activities in a specified time period.</p>
-    async fn describe_activities(
+    fn describe_activities(
         &self,
         input: DescribeActivitiesRequest,
-    ) -> Result<DescribeActivitiesResponse, RusotoError<DescribeActivitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeActivitiesResponse,
+                        RusotoError<DescribeActivitiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all the comments for the specified document version.</p>
-    async fn describe_comments(
+    fn describe_comments(
         &self,
         input: DescribeCommentsRequest,
-    ) -> Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
-    async fn describe_document_versions(
+    fn describe_document_versions(
         &self,
         input: DescribeDocumentVersionsRequest,
-    ) -> Result<DescribeDocumentVersionsResponse, RusotoError<DescribeDocumentVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentVersionsResponse,
+                        RusotoError<DescribeDocumentVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
-    async fn describe_folder_contents(
+    fn describe_folder_contents(
         &self,
         input: DescribeFolderContentsRequest,
-    ) -> Result<DescribeFolderContentsResponse, RusotoError<DescribeFolderContentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeFolderContentsResponse,
+                        RusotoError<DescribeFolderContentsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
-    async fn describe_groups(
+    fn describe_groups(
         &self,
         input: DescribeGroupsRequest,
-    ) -> Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the specified notification subscriptions.</p>
-    async fn describe_notification_subscriptions(
+    fn describe_notification_subscriptions(
         &self,
         input: DescribeNotificationSubscriptionsRequest,
-    ) -> Result<
-        DescribeNotificationSubscriptionsResponse,
-        RusotoError<DescribeNotificationSubscriptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeNotificationSubscriptionsResponse,
+                        RusotoError<DescribeNotificationSubscriptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describes the permissions of a specified resource.</p>
-    async fn describe_resource_permissions(
+    fn describe_resource_permissions(
         &self,
         input: DescribeResourcePermissionsRequest,
-    ) -> Result<DescribeResourcePermissionsResponse, RusotoError<DescribeResourcePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeResourcePermissionsResponse,
+                        RusotoError<DescribeResourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
-    async fn describe_root_folders(
+    fn describe_root_folders(
         &self,
         input: DescribeRootFoldersRequest,
-    ) -> Result<DescribeRootFoldersResponse, RusotoError<DescribeRootFoldersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRootFoldersResponse,
+                        RusotoError<DescribeRootFoldersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
-    async fn describe_users(
+    fn describe_users(
         &self,
         input: DescribeUsersRequest,
-    ) -> Result<DescribeUsersResponse, RusotoError<DescribeUsersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeUsersResponse, RusotoError<DescribeUsersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
-    async fn get_current_user(
+    fn get_current_user(
         &self,
         input: GetCurrentUserRequest,
-    ) -> Result<GetCurrentUserResponse, RusotoError<GetCurrentUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetCurrentUserResponse, RusotoError<GetCurrentUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves details of a document.</p>
-    async fn get_document(
+    fn get_document(
         &self,
         input: GetDocumentRequest,
-    ) -> Result<GetDocumentResponse, RusotoError<GetDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDocumentResponse, RusotoError<GetDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
-    async fn get_document_path(
+    fn get_document_path(
         &self,
         input: GetDocumentPathRequest,
-    ) -> Result<GetDocumentPathResponse, RusotoError<GetDocumentPathError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDocumentPathResponse, RusotoError<GetDocumentPathError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves version metadata for the specified document.</p>
-    async fn get_document_version(
+    fn get_document_version(
         &self,
         input: GetDocumentVersionRequest,
-    ) -> Result<GetDocumentVersionResponse, RusotoError<GetDocumentVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDocumentVersionResponse,
+                        RusotoError<GetDocumentVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the metadata of the specified folder.</p>
-    async fn get_folder(
+    fn get_folder(
         &self,
         input: GetFolderRequest,
-    ) -> Result<GetFolderResponse, RusotoError<GetFolderError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFolderResponse, RusotoError<GetFolderError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
-    async fn get_folder_path(
+    fn get_folder_path(
         &self,
         input: GetFolderPathRequest,
-    ) -> Result<GetFolderPathResponse, RusotoError<GetFolderPathError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFolderPathResponse, RusotoError<GetFolderPathError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
-    async fn get_resources(
+    fn get_resources(
         &self,
         input: GetResourcesRequest,
-    ) -> Result<GetResourcesResponse, RusotoError<GetResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetResourcesResponse, RusotoError<GetResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
-    async fn initiate_document_version_upload(
+    fn initiate_document_version_upload(
         &self,
         input: InitiateDocumentVersionUploadRequest,
-    ) -> Result<
-        InitiateDocumentVersionUploadResponse,
-        RusotoError<InitiateDocumentVersionUploadError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        InitiateDocumentVersionUploadResponse,
+                        RusotoError<InitiateDocumentVersionUploadError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes all the permissions from the specified resource.</p>
-    async fn remove_all_resource_permissions(
+    fn remove_all_resource_permissions(
         &self,
         input: RemoveAllResourcePermissionsRequest,
-    ) -> Result<(), RusotoError<RemoveAllResourcePermissionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<RemoveAllResourcePermissionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the permission for the specified principal from the specified resource.</p>
-    async fn remove_resource_permission(
+    fn remove_resource_permission(
         &self,
         input: RemoveResourcePermissionRequest,
-    ) -> Result<(), RusotoError<RemoveResourcePermissionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<RemoveResourcePermissionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
-    async fn update_document(
+    fn update_document(
         &self,
         input: UpdateDocumentRequest,
-    ) -> Result<(), RusotoError<UpdateDocumentError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateDocumentError>>> + Send + 'static>>;
 
     /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
-    async fn update_document_version(
+    fn update_document_version(
         &self,
         input: UpdateDocumentVersionRequest,
-    ) -> Result<(), RusotoError<UpdateDocumentVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<UpdateDocumentVersionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
-    async fn update_folder(
+    fn update_folder(
         &self,
         input: UpdateFolderRequest,
-    ) -> Result<(), RusotoError<UpdateFolderError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateFolderError>>> + Send + 'static>>;
 
     /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
-    async fn update_user(
+    fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateUserResponse, RusotoError<UpdateUserError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon WorkDocs API.
 #[derive(Clone)]
@@ -4940,13 +5184,18 @@ impl WorkdocsClient {
     }
 }
 
-#[async_trait]
 impl Workdocs for WorkdocsClient {
     /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
-    async fn abort_document_version_upload(
+    fn abort_document_version_upload(
         &self,
         input: AbortDocumentVersionUploadRequest,
-    ) -> Result<(), RusotoError<AbortDocumentVersionUploadError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<AbortDocumentVersionUploadError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
             document_id = input.document_id,
@@ -4960,27 +5209,33 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AbortDocumentVersionUploadError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AbortDocumentVersionUploadError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
-    async fn activate_user(
+    fn activate_user(
         &self,
         input: ActivateUserRequest,
-    ) -> Result<ActivateUserResponse, RusotoError<ActivateUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ActivateUserResponse, RusotoError<ActivateUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/users/{user_id}/activation",
             user_id = input.user_id
@@ -4993,28 +5248,38 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ActivateUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ActivateUserResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ActivateUserError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ActivateUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
-    async fn add_resource_permissions(
+    fn add_resource_permissions(
         &self,
         input: AddResourcePermissionsRequest,
-    ) -> Result<AddResourcePermissionsResponse, RusotoError<AddResourcePermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddResourcePermissionsResponse,
+                        RusotoError<AddResourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
             resource_id = input.resource_id
@@ -5030,28 +5295,34 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddResourcePermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddResourcePermissionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AddResourcePermissionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AddResourcePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a new comment to the specified document version.</p>
-    async fn create_comment(
+    fn create_comment(
         &self,
         input: CreateCommentRequest,
-    ) -> Result<CreateCommentResponse, RusotoError<CreateCommentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateCommentResponse, RusotoError<CreateCommentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment",
             document_id = input.document_id,
@@ -5068,28 +5339,38 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCommentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateCommentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCommentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateCommentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
-    async fn create_custom_metadata(
+    fn create_custom_metadata(
         &self,
         input: CreateCustomMetadataRequest,
-    ) -> Result<CreateCustomMetadataResponse, RusotoError<CreateCustomMetadataError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateCustomMetadataResponse,
+                        RusotoError<CreateCustomMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/customMetadata",
             resource_id = input.resource_id
@@ -5110,28 +5391,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCustomMetadataResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateCustomMetadataResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCustomMetadataError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateCustomMetadataError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a folder with the specified name and parent folder.</p>
-    async fn create_folder(
+    fn create_folder(
         &self,
         input: CreateFolderRequest,
-    ) -> Result<CreateFolderResponse, RusotoError<CreateFolderError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFolderResponse, RusotoError<CreateFolderError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/folders";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -5144,28 +5431,34 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFolderResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateFolderResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFolderError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateFolderError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
-    async fn create_labels(
+    fn create_labels(
         &self,
         input: CreateLabelsRequest,
-    ) -> Result<CreateLabelsResponse, RusotoError<CreateLabelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateLabelsResponse, RusotoError<CreateLabelsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/labels",
             resource_id = input.resource_id
@@ -5181,30 +5474,37 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLabelsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLabelsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLabelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLabelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
-    async fn create_notification_subscription(
+    fn create_notification_subscription(
         &self,
         input: CreateNotificationSubscriptionRequest,
-    ) -> Result<
-        CreateNotificationSubscriptionResponse,
-        RusotoError<CreateNotificationSubscriptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateNotificationSubscriptionResponse,
+                        RusotoError<CreateNotificationSubscriptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions",
@@ -5217,28 +5517,34 @@ impl Workdocs for WorkdocsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNotificationSubscriptionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateNotificationSubscriptionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNotificationSubscriptionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateNotificationSubscriptionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
-    async fn create_user(
+    fn create_user(
         &self,
         input: CreateUserRequest,
-    ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateUserResponse, RusotoError<CreateUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
@@ -5251,28 +5557,29 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateUserResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUserError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
-    async fn deactivate_user(
+    fn deactivate_user(
         &self,
         input: DeactivateUserRequest,
-    ) -> Result<(), RusotoError<DeactivateUserError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeactivateUserError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/api/v1/users/{user_id}/activation",
             user_id = input.user_id
@@ -5285,27 +5592,28 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeactivateUserError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeactivateUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified comment from the document version.</p>
-    async fn delete_comment(
+    fn delete_comment(
         &self,
         input: DeleteCommentRequest,
-    ) -> Result<(), RusotoError<DeleteCommentError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteCommentError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
             comment_id = input.comment_id,
@@ -5320,27 +5628,37 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCommentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteCommentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes custom metadata from the specified resource.</p>
-    async fn delete_custom_metadata(
+    fn delete_custom_metadata(
         &self,
         input: DeleteCustomMetadataRequest,
-    ) -> Result<DeleteCustomMetadataResponse, RusotoError<DeleteCustomMetadataError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteCustomMetadataResponse,
+                        RusotoError<DeleteCustomMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/customMetadata",
             resource_id = input.resource_id
@@ -5366,28 +5684,29 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCustomMetadataResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteCustomMetadataResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCustomMetadataError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteCustomMetadataError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently deletes the specified document and its associated metadata.</p>
-    async fn delete_document(
+    fn delete_document(
         &self,
         input: DeleteDocumentRequest,
-    ) -> Result<(), RusotoError<DeleteDocumentError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteDocumentError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
             document_id = input.document_id
@@ -5400,27 +5719,28 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently deletes the specified folder and its contents.</p>
-    async fn delete_folder(
+    fn delete_folder(
         &self,
         input: DeleteFolderRequest,
-    ) -> Result<(), RusotoError<DeleteFolderError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteFolderError>>> + Send + 'static>>
+    {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
@@ -5430,27 +5750,33 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFolderError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFolderError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the contents of the specified folder.</p>
-    async fn delete_folder_contents(
+    fn delete_folder_contents(
         &self,
         input: DeleteFolderContentsRequest,
-    ) -> Result<(), RusotoError<DeleteFolderContentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteFolderContentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/contents",
             folder_id = input.folder_id
@@ -5463,27 +5789,33 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFolderContentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFolderContentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified list of labels from a resource.</p>
-    async fn delete_labels(
+    fn delete_labels(
         &self,
         input: DeleteLabelsRequest,
-    ) -> Result<DeleteLabelsResponse, RusotoError<DeleteLabelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteLabelsResponse, RusotoError<DeleteLabelsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/labels",
             resource_id = input.resource_id
@@ -5506,28 +5838,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLabelsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteLabelsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLabelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteLabelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified subscription from the specified organization.</p>
-    async fn delete_notification_subscription(
+    fn delete_notification_subscription(
         &self,
         input: DeleteNotificationSubscriptionRequest,
-    ) -> Result<(), RusotoError<DeleteNotificationSubscriptionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteNotificationSubscriptionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions/{subscription_id}",
             organization_id = input.organization_id,
@@ -5537,27 +5875,28 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNotificationSubscriptionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNotificationSubscriptionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
-    async fn delete_user(
+    fn delete_user(
         &self,
         input: DeleteUserRequest,
-    ) -> Result<(), RusotoError<DeleteUserError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteUserError>>> + Send + 'static>>
+    {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
@@ -5567,27 +5906,37 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the user activities in a specified time period.</p>
-    async fn describe_activities(
+    fn describe_activities(
         &self,
         input: DescribeActivitiesRequest,
-    ) -> Result<DescribeActivitiesResponse, RusotoError<DescribeActivitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeActivitiesResponse,
+                        RusotoError<DescribeActivitiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/activities";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5626,28 +5975,35 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeActivitiesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeActivitiesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeActivitiesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeActivitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all the comments for the specified document version.</p>
-    async fn describe_comments(
+    fn describe_comments(
         &self,
         input: DescribeCommentsRequest,
-    ) -> Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeCommentsResponse, RusotoError<DescribeCommentsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comments",
             document_id = input.document_id,
@@ -5669,28 +6025,38 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCommentsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeCommentsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCommentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeCommentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
-    async fn describe_document_versions(
+    fn describe_document_versions(
         &self,
         input: DescribeDocumentVersionsRequest,
-    ) -> Result<DescribeDocumentVersionsResponse, RusotoError<DescribeDocumentVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentVersionsResponse,
+                        RusotoError<DescribeDocumentVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions",
             document_id = input.document_id
@@ -5717,28 +6083,38 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDocumentVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDocumentVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
-    async fn describe_folder_contents(
+    fn describe_folder_contents(
         &self,
         input: DescribeFolderContentsRequest,
-    ) -> Result<DescribeFolderContentsResponse, RusotoError<DescribeFolderContentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeFolderContentsResponse,
+                        RusotoError<DescribeFolderContentsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/contents",
             folder_id = input.folder_id
@@ -5771,28 +6147,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFolderContentsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeFolderContentsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFolderContentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeFolderContentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
-    async fn describe_groups(
+    fn describe_groups(
         &self,
         input: DescribeGroupsRequest,
-    ) -> Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeGroupsResponse, RusotoError<DescribeGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/groups";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5814,30 +6196,37 @@ impl Workdocs for WorkdocsClient {
         params.put("searchQuery", &input.search_query);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the specified notification subscriptions.</p>
-    async fn describe_notification_subscriptions(
+    fn describe_notification_subscriptions(
         &self,
         input: DescribeNotificationSubscriptionsRequest,
-    ) -> Result<
-        DescribeNotificationSubscriptionsResponse,
-        RusotoError<DescribeNotificationSubscriptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeNotificationSubscriptionsResponse,
+                        RusotoError<DescribeNotificationSubscriptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions",
@@ -5856,31 +6245,40 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeNotificationSubscriptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeNotificationSubscriptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeNotificationSubscriptionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeNotificationSubscriptionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the permissions of a specified resource.</p>
-    async fn describe_resource_permissions(
+    fn describe_resource_permissions(
         &self,
         input: DescribeResourcePermissionsRequest,
-    ) -> Result<DescribeResourcePermissionsResponse, RusotoError<DescribeResourcePermissionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeResourcePermissionsResponse,
+                        RusotoError<DescribeResourcePermissionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
             resource_id = input.resource_id
@@ -5904,28 +6302,38 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeResourcePermissionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeResourcePermissionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeResourcePermissionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeResourcePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
-    async fn describe_root_folders(
+    fn describe_root_folders(
         &self,
         input: DescribeRootFoldersRequest,
-    ) -> Result<DescribeRootFoldersResponse, RusotoError<DescribeRootFoldersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRootFoldersResponse,
+                        RusotoError<DescribeRootFoldersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/me/root";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -5941,28 +6349,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRootFoldersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRootFoldersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRootFoldersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRootFoldersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
-    async fn describe_users(
+    fn describe_users(
         &self,
         input: DescribeUsersRequest,
-    ) -> Result<DescribeUsersResponse, RusotoError<DescribeUsersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeUsersResponse, RusotoError<DescribeUsersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/users";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6001,28 +6415,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUsersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeUsersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeUsersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeUsersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
-    async fn get_current_user(
+    fn get_current_user(
         &self,
         input: GetCurrentUserRequest,
-    ) -> Result<GetCurrentUserResponse, RusotoError<GetCurrentUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetCurrentUserResponse, RusotoError<GetCurrentUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/me";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6030,28 +6450,34 @@ impl Workdocs for WorkdocsClient {
 
         request.add_header("Authentication", &input.authentication_token);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCurrentUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetCurrentUserResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCurrentUserError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCurrentUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves details of a document.</p>
-    async fn get_document(
+    fn get_document(
         &self,
         input: GetDocumentRequest,
-    ) -> Result<GetDocumentResponse, RusotoError<GetDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDocumentResponse, RusotoError<GetDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
             document_id = input.document_id
@@ -6069,28 +6495,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDocumentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDocumentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
-    async fn get_document_path(
+    fn get_document_path(
         &self,
         input: GetDocumentPathRequest,
-    ) -> Result<GetDocumentPathResponse, RusotoError<GetDocumentPathError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDocumentPathResponse, RusotoError<GetDocumentPathError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/path",
             document_id = input.document_id
@@ -6114,28 +6546,38 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDocumentPathResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDocumentPathResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentPathError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentPathError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves version metadata for the specified document.</p>
-    async fn get_document_version(
+    fn get_document_version(
         &self,
         input: GetDocumentVersionRequest,
-    ) -> Result<GetDocumentVersionResponse, RusotoError<GetDocumentVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDocumentVersionResponse,
+                        RusotoError<GetDocumentVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
             document_id = input.document_id,
@@ -6157,28 +6599,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDocumentVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDocumentVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the metadata of the specified folder.</p>
-    async fn get_folder(
+    fn get_folder(
         &self,
         input: GetFolderRequest,
-    ) -> Result<GetFolderResponse, RusotoError<GetFolderError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFolderResponse, RusotoError<GetFolderError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6193,28 +6641,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFolderResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetFolderResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFolderError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetFolderError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
-    async fn get_folder_path(
+    fn get_folder_path(
         &self,
         input: GetFolderPathRequest,
-    ) -> Result<GetFolderPathResponse, RusotoError<GetFolderPathError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetFolderPathResponse, RusotoError<GetFolderPathError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/path",
             folder_id = input.folder_id
@@ -6238,28 +6692,34 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFolderPathResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetFolderPathResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFolderPathError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetFolderPathError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
-    async fn get_resources(
+    fn get_resources(
         &self,
         input: GetResourcesRequest,
-    ) -> Result<GetResourcesResponse, RusotoError<GetResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetResourcesResponse, RusotoError<GetResourcesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/api/v1/resources";
 
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
@@ -6283,30 +6743,37 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourcesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResourcesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourcesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
-    async fn initiate_document_version_upload(
+    fn initiate_document_version_upload(
         &self,
         input: InitiateDocumentVersionUploadRequest,
-    ) -> Result<
-        InitiateDocumentVersionUploadResponse,
-        RusotoError<InitiateDocumentVersionUploadError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        InitiateDocumentVersionUploadResponse,
+                        RusotoError<InitiateDocumentVersionUploadError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/api/v1/documents";
 
@@ -6320,28 +6787,34 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitiateDocumentVersionUploadResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<InitiateDocumentVersionUploadResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(InitiateDocumentVersionUploadError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(InitiateDocumentVersionUploadError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes all the permissions from the specified resource.</p>
-    async fn remove_all_resource_permissions(
+    fn remove_all_resource_permissions(
         &self,
         input: RemoveAllResourcePermissionsRequest,
-    ) -> Result<(), RusotoError<RemoveAllResourcePermissionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<RemoveAllResourcePermissionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
             resource_id = input.resource_id
@@ -6354,27 +6827,33 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveAllResourcePermissionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveAllResourcePermissionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the permission for the specified principal from the specified resource.</p>
-    async fn remove_resource_permission(
+    fn remove_resource_permission(
         &self,
         input: RemoveResourcePermissionRequest,
-    ) -> Result<(), RusotoError<RemoveResourcePermissionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<RemoveResourcePermissionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions/{principal_id}",
             principal_id = input.principal_id,
@@ -6393,27 +6872,28 @@ impl Workdocs for WorkdocsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveResourcePermissionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveResourcePermissionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
-    async fn update_document(
+    fn update_document(
         &self,
         input: UpdateDocumentRequest,
-    ) -> Result<(), RusotoError<UpdateDocumentError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateDocumentError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
             document_id = input.document_id
@@ -6429,27 +6909,33 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
-    async fn update_document_version(
+    fn update_document_version(
         &self,
         input: UpdateDocumentVersionRequest,
-    ) -> Result<(), RusotoError<UpdateDocumentVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<UpdateDocumentVersionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
             document_id = input.document_id,
@@ -6466,27 +6952,28 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDocumentVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
-    async fn update_folder(
+    fn update_folder(
         &self,
         input: UpdateFolderRequest,
-    ) -> Result<(), RusotoError<UpdateFolderError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateFolderError>>> + Send + 'static>>
+    {
         let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
@@ -6499,27 +6986,33 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFolderError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateFolderError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
-    async fn update_user(
+    fn update_user(
         &self,
         input: UpdateUserRequest,
-    ) -> Result<UpdateUserResponse, RusotoError<UpdateUserError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateUserResponse, RusotoError<UpdateUserError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
 
         let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
@@ -6532,20 +7025,20 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateUserResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateUserResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUserError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateUserError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

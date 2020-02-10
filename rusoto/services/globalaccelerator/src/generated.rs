@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>An accelerator is a complex type that includes one or more listeners that process inbound connections and then direct traffic to one or more endpoint groups, each of which includes endpoints, such as load balancers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1525,112 +1526,230 @@ impl fmt::Display for UpdateListenerError {
 }
 impl Error for UpdateListenerError {}
 /// Trait representing the capabilities of the AWS Global Accelerator API. AWS Global Accelerator clients implement this trait.
-#[async_trait]
 pub trait GlobalAccelerator {
     /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
-    async fn create_accelerator(
+    fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
-    ) -> Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
-    async fn create_endpoint_group(
+    fn create_endpoint_group(
         &self,
         input: CreateEndpointGroupRequest,
-    ) -> Result<CreateEndpointGroupResponse, RusotoError<CreateEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateEndpointGroupResponse,
+                        RusotoError<CreateEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. To see an AWS CLI example of creating a listener, scroll down to <b>Example</b>.</p>
-    async fn create_listener(
+    fn create_listener(
         &self,
         input: CreateListenerRequest,
-    ) -> Result<CreateListenerResponse, RusotoError<CreateListenerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateListenerResponse, RusotoError<CreateListenerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an accelerator. Note: before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups).</p>
-    async fn delete_accelerator(
+    fn delete_accelerator(
         &self,
         input: DeleteAcceleratorRequest,
-    ) -> Result<(), RusotoError<DeleteAcceleratorError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteAcceleratorError>>> + Send + 'static>,
+    >;
 
     /// <p>Delete an endpoint group from a listener.</p>
-    async fn delete_endpoint_group(
+    fn delete_endpoint_group(
         &self,
         input: DeleteEndpointGroupRequest,
-    ) -> Result<(), RusotoError<DeleteEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteEndpointGroupError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Delete a listener from an accelerator.</p>
-    async fn delete_listener(
+    fn delete_listener(
         &self,
         input: DeleteListenerRequest,
-    ) -> Result<(), RusotoError<DeleteListenerError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteListenerError>>> + Send + 'static>>;
 
     /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
-    async fn describe_accelerator(
+    fn describe_accelerator(
         &self,
         input: DescribeAcceleratorRequest,
-    ) -> Result<DescribeAcceleratorResponse, RusotoError<DescribeAcceleratorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAcceleratorResponse,
+                        RusotoError<DescribeAcceleratorError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describe the attributes of an accelerator.</p>
-    async fn describe_accelerator_attributes(
+    fn describe_accelerator_attributes(
         &self,
         input: DescribeAcceleratorAttributesRequest,
-    ) -> Result<
-        DescribeAcceleratorAttributesResponse,
-        RusotoError<DescribeAcceleratorAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAcceleratorAttributesResponse,
+                        RusotoError<DescribeAcceleratorAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describe an endpoint group.</p>
-    async fn describe_endpoint_group(
+    fn describe_endpoint_group(
         &self,
         input: DescribeEndpointGroupRequest,
-    ) -> Result<DescribeEndpointGroupResponse, RusotoError<DescribeEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEndpointGroupResponse,
+                        RusotoError<DescribeEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describe a listener.</p>
-    async fn describe_listener(
+    fn describe_listener(
         &self,
         input: DescribeListenerRequest,
-    ) -> Result<DescribeListenerResponse, RusotoError<DescribeListenerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeListenerResponse, RusotoError<DescribeListenerError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the accelerators for an AWS account.</p>
-    async fn list_accelerators(
+    fn list_accelerators(
         &self,
         input: ListAcceleratorsRequest,
-    ) -> Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the endpoint groups that are associated with a listener.</p>
-    async fn list_endpoint_groups(
+    fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
-    ) -> Result<ListEndpointGroupsResponse, RusotoError<ListEndpointGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEndpointGroupsResponse,
+                        RusotoError<ListEndpointGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the listeners for an accelerator.</p>
-    async fn list_listeners(
+    fn list_listeners(
         &self,
         input: ListListenersRequest,
-    ) -> Result<ListListenersResponse, RusotoError<ListListenersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListListenersResponse, RusotoError<ListListenersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
-    async fn update_accelerator(
+    fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
-    ) -> Result<UpdateAcceleratorResponse, RusotoError<UpdateAcceleratorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateAcceleratorResponse, RusotoError<UpdateAcceleratorError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update the attributes for an accelerator. To see an AWS CLI example of updating an accelerator to enable flow logs, scroll down to <b>Example</b>.</p>
-    async fn update_accelerator_attributes(
+    fn update_accelerator_attributes(
         &self,
         input: UpdateAcceleratorAttributesRequest,
-    ) -> Result<UpdateAcceleratorAttributesResponse, RusotoError<UpdateAcceleratorAttributesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateAcceleratorAttributesResponse,
+                        RusotoError<UpdateAcceleratorAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
-    async fn update_endpoint_group(
+    fn update_endpoint_group(
         &self,
         input: UpdateEndpointGroupRequest,
-    ) -> Result<UpdateEndpointGroupResponse, RusotoError<UpdateEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateEndpointGroupResponse,
+                        RusotoError<UpdateEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update a listener.</p>
-    async fn update_listener(
+    fn update_listener(
         &self,
         input: UpdateListenerRequest,
-    ) -> Result<UpdateListenerResponse, RusotoError<UpdateListenerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateListenerResponse, RusotoError<UpdateListenerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Global Accelerator API.
 #[derive(Clone)]
@@ -1670,13 +1789,19 @@ impl GlobalAcceleratorClient {
     }
 }
 
-#[async_trait]
 impl GlobalAccelerator for GlobalAcceleratorClient {
     /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
-    async fn create_accelerator(
+    fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
-    ) -> Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1687,27 +1812,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAcceleratorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAcceleratorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateAcceleratorResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAcceleratorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
-    async fn create_endpoint_group(
+    fn create_endpoint_group(
         &self,
         input: CreateEndpointGroupRequest,
-    ) -> Result<CreateEndpointGroupResponse, RusotoError<CreateEndpointGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateEndpointGroupResponse,
+                        RusotoError<CreateEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1718,27 +1853,33 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateEndpointGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEndpointGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateEndpointGroupResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. To see an AWS CLI example of creating a listener, scroll down to <b>Example</b>.</p>
-    async fn create_listener(
+    fn create_listener(
         &self,
         input: CreateListenerRequest,
-    ) -> Result<CreateListenerResponse, RusotoError<CreateListenerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateListenerResponse, RusotoError<CreateListenerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1746,26 +1887,29 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateListenerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateListenerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateListenerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateListenerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an accelerator. Note: before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups).</p>
-    async fn delete_accelerator(
+    fn delete_accelerator(
         &self,
         input: DeleteAcceleratorRequest,
-    ) -> Result<(), RusotoError<DeleteAcceleratorError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteAcceleratorError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1776,26 +1920,30 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAcceleratorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAcceleratorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an endpoint group from a listener.</p>
-    async fn delete_endpoint_group(
+    fn delete_endpoint_group(
         &self,
         input: DeleteEndpointGroupRequest,
-    ) -> Result<(), RusotoError<DeleteEndpointGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteEndpointGroupError>>> + Send + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1806,26 +1954,27 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEndpointGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a listener from an accelerator.</p>
-    async fn delete_listener(
+    fn delete_listener(
         &self,
         input: DeleteListenerRequest,
-    ) -> Result<(), RusotoError<DeleteListenerError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteListenerError>>> + Send + 'static>>
+    {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1833,26 +1982,36 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteListenerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteListenerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
-    async fn describe_accelerator(
+    fn describe_accelerator(
         &self,
         input: DescribeAcceleratorRequest,
-    ) -> Result<DescribeAcceleratorResponse, RusotoError<DescribeAcceleratorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAcceleratorResponse,
+                        RusotoError<DescribeAcceleratorError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1863,29 +2022,36 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAcceleratorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAcceleratorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAcceleratorResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAcceleratorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe the attributes of an accelerator.</p>
-    async fn describe_accelerator_attributes(
+    fn describe_accelerator_attributes(
         &self,
         input: DescribeAcceleratorAttributesRequest,
-    ) -> Result<
-        DescribeAcceleratorAttributesResponse,
-        RusotoError<DescribeAcceleratorAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAcceleratorAttributesResponse,
+                        RusotoError<DescribeAcceleratorAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
@@ -1897,27 +2063,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAcceleratorAttributesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAcceleratorAttributesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAcceleratorAttributesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAcceleratorAttributesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe an endpoint group.</p>
-    async fn describe_endpoint_group(
+    fn describe_endpoint_group(
         &self,
         input: DescribeEndpointGroupRequest,
-    ) -> Result<DescribeEndpointGroupResponse, RusotoError<DescribeEndpointGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEndpointGroupResponse,
+                        RusotoError<DescribeEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1928,27 +2104,34 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEndpointGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEndpointGroupResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe a listener.</p>
-    async fn describe_listener(
+    fn describe_listener(
         &self,
         input: DescribeListenerRequest,
-    ) -> Result<DescribeListenerResponse, RusotoError<DescribeListenerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeListenerResponse, RusotoError<DescribeListenerError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1959,27 +2142,34 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeListenerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeListenerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeListenerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeListenerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the accelerators for an AWS account.</p>
-    async fn list_accelerators(
+    fn list_accelerators(
         &self,
         input: ListAcceleratorsRequest,
-    ) -> Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1990,27 +2180,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAcceleratorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAcceleratorsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAcceleratorsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAcceleratorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the endpoint groups that are associated with a listener.</p>
-    async fn list_endpoint_groups(
+    fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
-    ) -> Result<ListEndpointGroupsResponse, RusotoError<ListEndpointGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEndpointGroupsResponse,
+                        RusotoError<ListEndpointGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2021,27 +2221,33 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEndpointGroupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEndpointGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEndpointGroupsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEndpointGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the listeners for an accelerator.</p>
-    async fn list_listeners(
+    fn list_listeners(
         &self,
         input: ListListenersRequest,
-    ) -> Result<ListListenersResponse, RusotoError<ListListenersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListListenersResponse, RusotoError<ListListenersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2049,26 +2255,34 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListListenersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListListenersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListListenersResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListListenersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
-    async fn update_accelerator(
+    fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
-    ) -> Result<UpdateAcceleratorResponse, RusotoError<UpdateAcceleratorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateAcceleratorResponse, RusotoError<UpdateAcceleratorError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2079,28 +2293,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAcceleratorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAcceleratorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAcceleratorResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAcceleratorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update the attributes for an accelerator. To see an AWS CLI example of updating an accelerator to enable flow logs, scroll down to <b>Example</b>.</p>
-    async fn update_accelerator_attributes(
+    fn update_accelerator_attributes(
         &self,
         input: UpdateAcceleratorAttributesRequest,
-    ) -> Result<UpdateAcceleratorAttributesResponse, RusotoError<UpdateAcceleratorAttributesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateAcceleratorAttributesResponse,
+                        RusotoError<UpdateAcceleratorAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2111,27 +2334,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAcceleratorAttributesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAcceleratorAttributesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAcceleratorAttributesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAcceleratorAttributesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
-    async fn update_endpoint_group(
+    fn update_endpoint_group(
         &self,
         input: UpdateEndpointGroupRequest,
-    ) -> Result<UpdateEndpointGroupResponse, RusotoError<UpdateEndpointGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateEndpointGroupResponse,
+                        RusotoError<UpdateEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2142,27 +2375,33 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateEndpointGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEndpointGroupError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateEndpointGroupResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update a listener.</p>
-    async fn update_listener(
+    fn update_listener(
         &self,
         input: UpdateListenerRequest,
-    ) -> Result<UpdateListenerResponse, RusotoError<UpdateListenerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateListenerResponse, RusotoError<UpdateListenerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2170,18 +2409,19 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateListenerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateListenerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateListenerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateListenerError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

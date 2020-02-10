@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRawMessageContentRequest {
@@ -71,13 +72,22 @@ impl fmt::Display for GetRawMessageContentError {
 }
 impl Error for GetRawMessageContentError {}
 /// Trait representing the capabilities of the Amazon WorkMail Message Flow API. Amazon WorkMail Message Flow clients implement this trait.
-#[async_trait]
 pub trait WorkmailMessageFlow {
     /// <p>Retrieves the raw content of an in-transit email message, in MIME format. </p>
-    async fn get_raw_message_content(
+    fn get_raw_message_content(
         &self,
         input: GetRawMessageContentRequest,
-    ) -> Result<GetRawMessageContentResponse, RusotoError<GetRawMessageContentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRawMessageContentResponse,
+                        RusotoError<GetRawMessageContentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon WorkMail Message Flow API.
 #[derive(Clone)]
@@ -117,34 +127,43 @@ impl WorkmailMessageFlowClient {
     }
 }
 
-#[async_trait]
 impl WorkmailMessageFlow for WorkmailMessageFlowClient {
     /// <p>Retrieves the raw content of an in-transit email message, in MIME format. </p>
-    async fn get_raw_message_content(
+    fn get_raw_message_content(
         &self,
         input: GetRawMessageContentRequest,
-    ) -> Result<GetRawMessageContentResponse, RusotoError<GetRawMessageContentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRawMessageContentResponse,
+                        RusotoError<GetRawMessageContentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/messages/{message_id}", message_id = input.message_id);
 
         let mut request =
             SignedRequest::new("GET", "workmailmessageflow", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetRawMessageContentResponse::default();
-            result.message_content = response.body;
+                let mut result = GetRawMessageContentResponse::default();
+                result.message_content = response.body;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRawMessageContentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRawMessageContentError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Aac Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AacSettings {
@@ -8700,265 +8701,573 @@ impl fmt::Display for UpdateReservationError {
 }
 impl Error for UpdateReservationError {}
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
-#[async_trait]
 pub trait MediaLive {
     /// <p>Update a channel schedule</p>
-    async fn batch_update_schedule(
+    fn batch_update_schedule(
         &self,
         input: BatchUpdateScheduleRequest,
-    ) -> Result<BatchUpdateScheduleResponse, RusotoError<BatchUpdateScheduleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchUpdateScheduleResponse,
+                        RusotoError<BatchUpdateScheduleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new channel</p>
-    async fn create_channel(
+    fn create_channel(
         &self,
         input: CreateChannelRequest,
-    ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateChannelResponse, RusotoError<CreateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create an input</p>
-    async fn create_input(
+    fn create_input(
         &self,
         input: CreateInputRequest,
-    ) -> Result<CreateInputResponse, RusotoError<CreateInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateInputResponse, RusotoError<CreateInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a Input Security Group</p>
-    async fn create_input_security_group(
+    fn create_input_security_group(
         &self,
         input: CreateInputSecurityGroupRequest,
-    ) -> Result<CreateInputSecurityGroupResponse, RusotoError<CreateInputSecurityGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateInputSecurityGroupResponse,
+                        RusotoError<CreateInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new multiplex.</p>
-    async fn create_multiplex(
+    fn create_multiplex(
         &self,
         input: CreateMultiplexRequest,
-    ) -> Result<CreateMultiplexResponse, RusotoError<CreateMultiplexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMultiplexResponse, RusotoError<CreateMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new program in the multiplex.</p>
-    async fn create_multiplex_program(
+    fn create_multiplex_program(
         &self,
         input: CreateMultiplexProgramRequest,
-    ) -> Result<CreateMultiplexProgramResponse, RusotoError<CreateMultiplexProgramError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateMultiplexProgramResponse,
+                        RusotoError<CreateMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create tags for a resource</p>
-    async fn create_tags(
+    fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> Result<(), RusotoError<CreateTagsError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<CreateTagsError>>> + Send + 'static>>;
 
     /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
-    async fn delete_channel(
+    fn delete_channel(
         &self,
         input: DeleteChannelRequest,
-    ) -> Result<DeleteChannelResponse, RusotoError<DeleteChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteChannelResponse, RusotoError<DeleteChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the input end point</p>
-    async fn delete_input(
+    fn delete_input(
         &self,
         input: DeleteInputRequest,
-    ) -> Result<DeleteInputResponse, RusotoError<DeleteInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInputResponse, RusotoError<DeleteInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an Input Security Group</p>
-    async fn delete_input_security_group(
+    fn delete_input_security_group(
         &self,
         input: DeleteInputSecurityGroupRequest,
-    ) -> Result<DeleteInputSecurityGroupResponse, RusotoError<DeleteInputSecurityGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteInputSecurityGroupResponse,
+                        RusotoError<DeleteInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a multiplex. The multiplex must be idle.</p>
-    async fn delete_multiplex(
+    fn delete_multiplex(
         &self,
         input: DeleteMultiplexRequest,
-    ) -> Result<DeleteMultiplexResponse, RusotoError<DeleteMultiplexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMultiplexResponse, RusotoError<DeleteMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete a program from a multiplex.</p>
-    async fn delete_multiplex_program(
+    fn delete_multiplex_program(
         &self,
         input: DeleteMultiplexProgramRequest,
-    ) -> Result<DeleteMultiplexProgramResponse, RusotoError<DeleteMultiplexProgramError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteMultiplexProgramResponse,
+                        RusotoError<DeleteMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an expired reservation.</p>
-    async fn delete_reservation(
+    fn delete_reservation(
         &self,
         input: DeleteReservationRequest,
-    ) -> Result<DeleteReservationResponse, RusotoError<DeleteReservationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteReservationResponse, RusotoError<DeleteReservationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete all schedule actions on a channel.</p>
-    async fn delete_schedule(
+    fn delete_schedule(
         &self,
         input: DeleteScheduleRequest,
-    ) -> Result<DeleteScheduleResponse, RusotoError<DeleteScheduleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteScheduleResponse, RusotoError<DeleteScheduleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes tags for a resource</p>
-    async fn delete_tags(
+    fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> Result<(), RusotoError<DeleteTagsError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteTagsError>>> + Send + 'static>>;
 
     /// <p>Gets details about a channel</p>
-    async fn describe_channel(
+    fn describe_channel(
         &self,
         input: DescribeChannelRequest,
-    ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Produces details about an input</p>
-    async fn describe_input(
+    fn describe_input(
         &self,
         input: DescribeInputRequest,
-    ) -> Result<DescribeInputResponse, RusotoError<DescribeInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeInputResponse, RusotoError<DescribeInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Produces a summary of an Input Security Group</p>
-    async fn describe_input_security_group(
+    fn describe_input_security_group(
         &self,
         input: DescribeInputSecurityGroupRequest,
-    ) -> Result<DescribeInputSecurityGroupResponse, RusotoError<DescribeInputSecurityGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInputSecurityGroupResponse,
+                        RusotoError<DescribeInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets details about a multiplex.</p>
-    async fn describe_multiplex(
+    fn describe_multiplex(
         &self,
         input: DescribeMultiplexRequest,
-    ) -> Result<DescribeMultiplexResponse, RusotoError<DescribeMultiplexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeMultiplexResponse, RusotoError<DescribeMultiplexError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get the details for a program in a multiplex.</p>
-    async fn describe_multiplex_program(
+    fn describe_multiplex_program(
         &self,
         input: DescribeMultiplexProgramRequest,
-    ) -> Result<DescribeMultiplexProgramResponse, RusotoError<DescribeMultiplexProgramError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMultiplexProgramResponse,
+                        RusotoError<DescribeMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get details for an offering.</p>
-    async fn describe_offering(
+    fn describe_offering(
         &self,
         input: DescribeOfferingRequest,
-    ) -> Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get details for a reservation.</p>
-    async fn describe_reservation(
+    fn describe_reservation(
         &self,
         input: DescribeReservationRequest,
-    ) -> Result<DescribeReservationResponse, RusotoError<DescribeReservationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeReservationResponse,
+                        RusotoError<DescribeReservationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get a channel schedule</p>
-    async fn describe_schedule(
+    fn describe_schedule(
         &self,
         input: DescribeScheduleRequest,
-    ) -> Result<DescribeScheduleResponse, RusotoError<DescribeScheduleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeScheduleResponse, RusotoError<DescribeScheduleError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Produces list of channels that have been created</p>
-    async fn list_channels(
+    fn list_channels(
         &self,
         input: ListChannelsRequest,
-    ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChannelsResponse, RusotoError<ListChannelsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Produces a list of Input Security Groups for an account</p>
-    async fn list_input_security_groups(
+    fn list_input_security_groups(
         &self,
         input: ListInputSecurityGroupsRequest,
-    ) -> Result<ListInputSecurityGroupsResponse, RusotoError<ListInputSecurityGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInputSecurityGroupsResponse,
+                        RusotoError<ListInputSecurityGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Produces list of inputs that have been created</p>
-    async fn list_inputs(
+    fn list_inputs(
         &self,
         input: ListInputsRequest,
-    ) -> Result<ListInputsResponse, RusotoError<ListInputsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInputsResponse, RusotoError<ListInputsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the programs that currently exist for a specific multiplex.</p>
-    async fn list_multiplex_programs(
+    fn list_multiplex_programs(
         &self,
         input: ListMultiplexProgramsRequest,
-    ) -> Result<ListMultiplexProgramsResponse, RusotoError<ListMultiplexProgramsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListMultiplexProgramsResponse,
+                        RusotoError<ListMultiplexProgramsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a list of the existing multiplexes.</p>
-    async fn list_multiplexes(
+    fn list_multiplexes(
         &self,
         input: ListMultiplexesRequest,
-    ) -> Result<ListMultiplexesResponse, RusotoError<ListMultiplexesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMultiplexesResponse, RusotoError<ListMultiplexesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List offerings available for purchase.</p>
-    async fn list_offerings(
+    fn list_offerings(
         &self,
         input: ListOfferingsRequest,
-    ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List purchased reservations.</p>
-    async fn list_reservations(
+    fn list_reservations(
         &self,
         input: ListReservationsRequest,
-    ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListReservationsResponse, RusotoError<ListReservationsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Produces list of tags that have been created for a resource</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Purchase an offering and create a reservation.</p>
-    async fn purchase_offering(
+    fn purchase_offering(
         &self,
         input: PurchaseOfferingRequest,
-    ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an existing channel</p>
-    async fn start_channel(
+    fn start_channel(
         &self,
         input: StartChannelRequest,
-    ) -> Result<StartChannelResponse, RusotoError<StartChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartChannelResponse, RusotoError<StartChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Start (run) the multiplex. Starting the multiplex does not start the channels. You must explicitly start each channel.</p>
-    async fn start_multiplex(
+    fn start_multiplex(
         &self,
         input: StartMultiplexRequest,
-    ) -> Result<StartMultiplexResponse, RusotoError<StartMultiplexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartMultiplexResponse, RusotoError<StartMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a running channel</p>
-    async fn stop_channel(
+    fn stop_channel(
         &self,
         input: StopChannelRequest,
-    ) -> Result<StopChannelResponse, RusotoError<StopChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopChannelResponse, RusotoError<StopChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a running multiplex. If the multiplex isn&#39;t running, this action has no effect.</p>
-    async fn stop_multiplex(
+    fn stop_multiplex(
         &self,
         input: StopMultiplexRequest,
-    ) -> Result<StopMultiplexResponse, RusotoError<StopMultiplexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopMultiplexResponse, RusotoError<StopMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a channel.</p>
-    async fn update_channel(
+    fn update_channel(
         &self,
         input: UpdateChannelRequest,
-    ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes the class of the channel.</p>
-    async fn update_channel_class(
+    fn update_channel_class(
         &self,
         input: UpdateChannelClassRequest,
-    ) -> Result<UpdateChannelClassResponse, RusotoError<UpdateChannelClassError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateChannelClassResponse,
+                        RusotoError<UpdateChannelClassError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an input.</p>
-    async fn update_input(
+    fn update_input(
         &self,
         input: UpdateInputRequest,
-    ) -> Result<UpdateInputResponse, RusotoError<UpdateInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateInputResponse, RusotoError<UpdateInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update an Input Security Group&#39;s Whilelists.</p>
-    async fn update_input_security_group(
+    fn update_input_security_group(
         &self,
         input: UpdateInputSecurityGroupRequest,
-    ) -> Result<UpdateInputSecurityGroupResponse, RusotoError<UpdateInputSecurityGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateInputSecurityGroupResponse,
+                        RusotoError<UpdateInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a multiplex.</p>
-    async fn update_multiplex(
+    fn update_multiplex(
         &self,
         input: UpdateMultiplexRequest,
-    ) -> Result<UpdateMultiplexResponse, RusotoError<UpdateMultiplexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateMultiplexResponse, RusotoError<UpdateMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update a program in a multiplex.</p>
-    async fn update_multiplex_program(
+    fn update_multiplex_program(
         &self,
         input: UpdateMultiplexProgramRequest,
-    ) -> Result<UpdateMultiplexProgramResponse, RusotoError<UpdateMultiplexProgramError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMultiplexProgramResponse,
+                        RusotoError<UpdateMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update reservation.</p>
-    async fn update_reservation(
+    fn update_reservation(
         &self,
         input: UpdateReservationRequest,
-    ) -> Result<UpdateReservationResponse, RusotoError<UpdateReservationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateReservationResponse, RusotoError<UpdateReservationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the MediaLive API.
 #[derive(Clone)]
@@ -8998,13 +9307,22 @@ impl MediaLiveClient {
     }
 }
 
-#[async_trait]
 impl MediaLive for MediaLiveClient {
     /// <p>Update a channel schedule</p>
-    async fn batch_update_schedule(
+    fn batch_update_schedule(
         &self,
         input: BatchUpdateScheduleRequest,
-    ) -> Result<BatchUpdateScheduleResponse, RusotoError<BatchUpdateScheduleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchUpdateScheduleResponse,
+                        RusotoError<BatchUpdateScheduleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
             channel_id = input.channel_id
@@ -9016,28 +9334,34 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchUpdateScheduleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchUpdateScheduleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchUpdateScheduleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchUpdateScheduleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new channel</p>
-    async fn create_channel(
+    fn create_channel(
         &self,
         input: CreateChannelRequest,
-    ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateChannelResponse, RusotoError<CreateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/channels";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -9046,28 +9370,34 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create an input</p>
-    async fn create_input(
+    fn create_input(
         &self,
         input: CreateInputRequest,
-    ) -> Result<CreateInputResponse, RusotoError<CreateInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateInputResponse, RusotoError<CreateInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/inputs";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -9076,28 +9406,38 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a Input Security Group</p>
-    async fn create_input_security_group(
+    fn create_input_security_group(
         &self,
         input: CreateInputSecurityGroupRequest,
-    ) -> Result<CreateInputSecurityGroupResponse, RusotoError<CreateInputSecurityGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateInputSecurityGroupResponse,
+                        RusotoError<CreateInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/inputSecurityGroups";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -9106,28 +9446,34 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInputSecurityGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateInputSecurityGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInputSecurityGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateInputSecurityGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new multiplex.</p>
-    async fn create_multiplex(
+    fn create_multiplex(
         &self,
         input: CreateMultiplexRequest,
-    ) -> Result<CreateMultiplexResponse, RusotoError<CreateMultiplexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMultiplexResponse, RusotoError<CreateMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/multiplexes";
 
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
@@ -9136,28 +9482,38 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMultiplexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMultiplexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMultiplexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMultiplexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new program in the multiplex.</p>
-    async fn create_multiplex_program(
+    fn create_multiplex_program(
         &self,
         input: CreateMultiplexProgramRequest,
-    ) -> Result<CreateMultiplexProgramResponse, RusotoError<CreateMultiplexProgramError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateMultiplexProgramResponse,
+                        RusotoError<CreateMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs",
             multiplex_id = input.multiplex_id
@@ -9169,28 +9525,29 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMultiplexProgramResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMultiplexProgramResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMultiplexProgramError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMultiplexProgramError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create tags for a resource</p>
-    async fn create_tags(
+    fn create_tags(
         &self,
         input: CreateTagsRequest,
-    ) -> Result<(), RusotoError<CreateTagsError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<CreateTagsError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
             resource_arn = input.resource_arn
@@ -9202,81 +9559,103 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
-    async fn delete_channel(
+    fn delete_channel(
         &self,
         input: DeleteChannelRequest,
-    ) -> Result<DeleteChannelResponse, RusotoError<DeleteChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteChannelResponse, RusotoError<DeleteChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
 
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the input end point</p>
-    async fn delete_input(
+    fn delete_input(
         &self,
         input: DeleteInputRequest,
-    ) -> Result<DeleteInputResponse, RusotoError<DeleteInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInputResponse, RusotoError<DeleteInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
 
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an Input Security Group</p>
-    async fn delete_input_security_group(
+    fn delete_input_security_group(
         &self,
         input: DeleteInputSecurityGroupRequest,
-    ) -> Result<DeleteInputSecurityGroupResponse, RusotoError<DeleteInputSecurityGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteInputSecurityGroupResponse,
+                        RusotoError<DeleteInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
             input_security_group_id = input.input_security_group_id
@@ -9285,28 +9664,34 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInputSecurityGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInputSecurityGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInputSecurityGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInputSecurityGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a multiplex. The multiplex must be idle.</p>
-    async fn delete_multiplex(
+    fn delete_multiplex(
         &self,
         input: DeleteMultiplexRequest,
-    ) -> Result<DeleteMultiplexResponse, RusotoError<DeleteMultiplexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMultiplexResponse, RusotoError<DeleteMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}",
             multiplex_id = input.multiplex_id
@@ -9315,28 +9700,38 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMultiplexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMultiplexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMultiplexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMultiplexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a program from a multiplex.</p>
-    async fn delete_multiplex_program(
+    fn delete_multiplex_program(
         &self,
         input: DeleteMultiplexProgramRequest,
-    ) -> Result<DeleteMultiplexProgramResponse, RusotoError<DeleteMultiplexProgramError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteMultiplexProgramResponse,
+                        RusotoError<DeleteMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
             multiplex_id = input.multiplex_id,
@@ -9346,28 +9741,35 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMultiplexProgramResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMultiplexProgramResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMultiplexProgramError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMultiplexProgramError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an expired reservation.</p>
-    async fn delete_reservation(
+    fn delete_reservation(
         &self,
         input: DeleteReservationRequest,
-    ) -> Result<DeleteReservationResponse, RusotoError<DeleteReservationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteReservationResponse, RusotoError<DeleteReservationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
             reservation_id = input.reservation_id
@@ -9376,28 +9778,34 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteReservationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteReservationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteReservationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteReservationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete all schedule actions on a channel.</p>
-    async fn delete_schedule(
+    fn delete_schedule(
         &self,
         input: DeleteScheduleRequest,
-    ) -> Result<DeleteScheduleResponse, RusotoError<DeleteScheduleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteScheduleResponse, RusotoError<DeleteScheduleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
             channel_id = input.channel_id
@@ -9406,28 +9814,29 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteScheduleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteScheduleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteScheduleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteScheduleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes tags for a resource</p>
-    async fn delete_tags(
+    fn delete_tags(
         &self,
         input: DeleteTagsRequest,
-    ) -> Result<(), RusotoError<DeleteTagsError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteTagsError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
             resource_arn = input.resource_arn
@@ -9442,82 +9851,103 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets details about a channel</p>
-    async fn describe_channel(
+    fn describe_channel(
         &self,
         input: DescribeChannelRequest,
-    ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Produces details about an input</p>
-    async fn describe_input(
+    fn describe_input(
         &self,
         input: DescribeInputRequest,
-    ) -> Result<DescribeInputResponse, RusotoError<DescribeInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeInputResponse, RusotoError<DescribeInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Produces a summary of an Input Security Group</p>
-    async fn describe_input_security_group(
+    fn describe_input_security_group(
         &self,
         input: DescribeInputSecurityGroupRequest,
-    ) -> Result<DescribeInputSecurityGroupResponse, RusotoError<DescribeInputSecurityGroupError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeInputSecurityGroupResponse,
+                        RusotoError<DescribeInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
             input_security_group_id = input.input_security_group_id
@@ -9526,28 +9956,35 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInputSecurityGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInputSecurityGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInputSecurityGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInputSecurityGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets details about a multiplex.</p>
-    async fn describe_multiplex(
+    fn describe_multiplex(
         &self,
         input: DescribeMultiplexRequest,
-    ) -> Result<DescribeMultiplexResponse, RusotoError<DescribeMultiplexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeMultiplexResponse, RusotoError<DescribeMultiplexError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}",
             multiplex_id = input.multiplex_id
@@ -9556,28 +9993,38 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMultiplexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMultiplexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMultiplexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMultiplexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get the details for a program in a multiplex.</p>
-    async fn describe_multiplex_program(
+    fn describe_multiplex_program(
         &self,
         input: DescribeMultiplexProgramRequest,
-    ) -> Result<DescribeMultiplexProgramResponse, RusotoError<DescribeMultiplexProgramError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMultiplexProgramResponse,
+                        RusotoError<DescribeMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
             multiplex_id = input.multiplex_id,
@@ -9587,28 +10034,35 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMultiplexProgramResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMultiplexProgramResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMultiplexProgramError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMultiplexProgramError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get details for an offering.</p>
-    async fn describe_offering(
+    fn describe_offering(
         &self,
         input: DescribeOfferingRequest,
-    ) -> Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeOfferingResponse, RusotoError<DescribeOfferingError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/offerings/{offering_id}",
             offering_id = input.offering_id
@@ -9617,28 +10071,38 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOfferingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeOfferingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOfferingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeOfferingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get details for a reservation.</p>
-    async fn describe_reservation(
+    fn describe_reservation(
         &self,
         input: DescribeReservationRequest,
-    ) -> Result<DescribeReservationResponse, RusotoError<DescribeReservationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeReservationResponse,
+                        RusotoError<DescribeReservationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
             reservation_id = input.reservation_id
@@ -9647,28 +10111,35 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeReservationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeReservationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeReservationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeReservationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get a channel schedule</p>
-    async fn describe_schedule(
+    fn describe_schedule(
         &self,
         input: DescribeScheduleRequest,
-    ) -> Result<DescribeScheduleResponse, RusotoError<DescribeScheduleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeScheduleResponse, RusotoError<DescribeScheduleError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/channels/{channel_id}/schedule",
             channel_id = input.channel_id
@@ -9686,28 +10157,34 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeScheduleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeScheduleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeScheduleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeScheduleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Produces list of channels that have been created</p>
-    async fn list_channels(
+    fn list_channels(
         &self,
         input: ListChannelsRequest,
-    ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChannelsResponse, RusotoError<ListChannelsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/channels";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -9722,28 +10199,38 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChannelsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListChannelsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListChannelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListChannelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Produces a list of Input Security Groups for an account</p>
-    async fn list_input_security_groups(
+    fn list_input_security_groups(
         &self,
         input: ListInputSecurityGroupsRequest,
-    ) -> Result<ListInputSecurityGroupsResponse, RusotoError<ListInputSecurityGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInputSecurityGroupsResponse,
+                        RusotoError<ListInputSecurityGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/inputSecurityGroups";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -9758,28 +10245,34 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInputSecurityGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInputSecurityGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInputSecurityGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInputSecurityGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Produces list of inputs that have been created</p>
-    async fn list_inputs(
+    fn list_inputs(
         &self,
         input: ListInputsRequest,
-    ) -> Result<ListInputsResponse, RusotoError<ListInputsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInputsResponse, RusotoError<ListInputsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/inputs";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -9794,28 +10287,38 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInputsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInputsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInputsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInputsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the programs that currently exist for a specific multiplex.</p>
-    async fn list_multiplex_programs(
+    fn list_multiplex_programs(
         &self,
         input: ListMultiplexProgramsRequest,
-    ) -> Result<ListMultiplexProgramsResponse, RusotoError<ListMultiplexProgramsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListMultiplexProgramsResponse,
+                        RusotoError<ListMultiplexProgramsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs",
             multiplex_id = input.multiplex_id
@@ -9833,28 +10336,34 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMultiplexProgramsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMultiplexProgramsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMultiplexProgramsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMultiplexProgramsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a list of the existing multiplexes.</p>
-    async fn list_multiplexes(
+    fn list_multiplexes(
         &self,
         input: ListMultiplexesRequest,
-    ) -> Result<ListMultiplexesResponse, RusotoError<ListMultiplexesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMultiplexesResponse, RusotoError<ListMultiplexesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/multiplexes";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -9869,28 +10378,34 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMultiplexesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMultiplexesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMultiplexesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMultiplexesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List offerings available for purchase.</p>
-    async fn list_offerings(
+    fn list_offerings(
         &self,
         input: ListOfferingsRequest,
-    ) -> Result<ListOfferingsResponse, RusotoError<ListOfferingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOfferingsResponse, RusotoError<ListOfferingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/offerings";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -9935,28 +10450,35 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOfferingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOfferingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOfferingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List purchased reservations.</p>
-    async fn list_reservations(
+    fn list_reservations(
         &self,
         input: ListReservationsRequest,
-    ) -> Result<ListReservationsResponse, RusotoError<ListReservationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListReservationsResponse, RusotoError<ListReservationsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/prod/reservations";
 
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
@@ -9995,28 +10517,38 @@ impl MediaLive for MediaLiveClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListReservationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListReservationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListReservationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListReservationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Produces list of tags that have been created for a resource</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/tags/{resource_arn}",
             resource_arn = input.resource_arn
@@ -10025,28 +10557,35 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Purchase an offering and create a reservation.</p>
-    async fn purchase_offering(
+    fn purchase_offering(
         &self,
         input: PurchaseOfferingRequest,
-    ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/offerings/{offering_id}/purchase",
             offering_id = input.offering_id
@@ -10058,28 +10597,34 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PurchaseOfferingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PurchaseOfferingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PurchaseOfferingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PurchaseOfferingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an existing channel</p>
-    async fn start_channel(
+    fn start_channel(
         &self,
         input: StartChannelRequest,
-    ) -> Result<StartChannelResponse, RusotoError<StartChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartChannelResponse, RusotoError<StartChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/channels/{channel_id}/start",
             channel_id = input.channel_id
@@ -10088,28 +10633,34 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Start (run) the multiplex. Starting the multiplex does not start the channels. You must explicitly start each channel.</p>
-    async fn start_multiplex(
+    fn start_multiplex(
         &self,
         input: StartMultiplexRequest,
-    ) -> Result<StartMultiplexResponse, RusotoError<StartMultiplexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartMultiplexResponse, RusotoError<StartMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/start",
             multiplex_id = input.multiplex_id
@@ -10118,28 +10669,34 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartMultiplexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartMultiplexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartMultiplexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartMultiplexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a running channel</p>
-    async fn stop_channel(
+    fn stop_channel(
         &self,
         input: StopChannelRequest,
-    ) -> Result<StopChannelResponse, RusotoError<StopChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopChannelResponse, RusotoError<StopChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/channels/{channel_id}/stop",
             channel_id = input.channel_id
@@ -10148,28 +10705,34 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a running multiplex. If the multiplex isn&#39;t running, this action has no effect.</p>
-    async fn stop_multiplex(
+    fn stop_multiplex(
         &self,
         input: StopMultiplexRequest,
-    ) -> Result<StopMultiplexResponse, RusotoError<StopMultiplexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopMultiplexResponse, RusotoError<StopMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/stop",
             multiplex_id = input.multiplex_id
@@ -10178,28 +10741,34 @@ impl MediaLive for MediaLiveClient {
         let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopMultiplexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopMultiplexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopMultiplexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopMultiplexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a channel.</p>
-    async fn update_channel(
+    fn update_channel(
         &self,
         input: UpdateChannelRequest,
-    ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/prod/channels/{channel_id}", channel_id = input.channel_id);
 
         let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
@@ -10208,28 +10777,38 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes the class of the channel.</p>
-    async fn update_channel_class(
+    fn update_channel_class(
         &self,
         input: UpdateChannelClassRequest,
-    ) -> Result<UpdateChannelClassResponse, RusotoError<UpdateChannelClassError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateChannelClassResponse,
+                        RusotoError<UpdateChannelClassError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/channels/{channel_id}/channelClass",
             channel_id = input.channel_id
@@ -10241,28 +10820,34 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateChannelClassResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateChannelClassResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateChannelClassError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateChannelClassError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an input.</p>
-    async fn update_input(
+    fn update_input(
         &self,
         input: UpdateInputRequest,
-    ) -> Result<UpdateInputResponse, RusotoError<UpdateInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateInputResponse, RusotoError<UpdateInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/prod/inputs/{input_id}", input_id = input.input_id);
 
         let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
@@ -10271,28 +10856,38 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update an Input Security Group&#39;s Whilelists.</p>
-    async fn update_input_security_group(
+    fn update_input_security_group(
         &self,
         input: UpdateInputSecurityGroupRequest,
-    ) -> Result<UpdateInputSecurityGroupResponse, RusotoError<UpdateInputSecurityGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateInputSecurityGroupResponse,
+                        RusotoError<UpdateInputSecurityGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/inputSecurityGroups/{input_security_group_id}",
             input_security_group_id = input.input_security_group_id
@@ -10304,28 +10899,34 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInputSecurityGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateInputSecurityGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInputSecurityGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInputSecurityGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a multiplex.</p>
-    async fn update_multiplex(
+    fn update_multiplex(
         &self,
         input: UpdateMultiplexRequest,
-    ) -> Result<UpdateMultiplexResponse, RusotoError<UpdateMultiplexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateMultiplexResponse, RusotoError<UpdateMultiplexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}",
             multiplex_id = input.multiplex_id
@@ -10337,28 +10938,38 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMultiplexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMultiplexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMultiplexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMultiplexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update a program in a multiplex.</p>
-    async fn update_multiplex_program(
+    fn update_multiplex_program(
         &self,
         input: UpdateMultiplexProgramRequest,
-    ) -> Result<UpdateMultiplexProgramResponse, RusotoError<UpdateMultiplexProgramError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMultiplexProgramResponse,
+                        RusotoError<UpdateMultiplexProgramError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/multiplexes/{multiplex_id}/programs/{program_name}",
             multiplex_id = input.multiplex_id,
@@ -10371,28 +10982,35 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMultiplexProgramResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMultiplexProgramResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMultiplexProgramError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMultiplexProgramError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update reservation.</p>
-    async fn update_reservation(
+    fn update_reservation(
         &self,
         input: UpdateReservationRequest,
-    ) -> Result<UpdateReservationResponse, RusotoError<UpdateReservationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateReservationResponse, RusotoError<UpdateReservationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/prod/reservations/{reservation_id}",
             reservation_id = input.reservation_id
@@ -10404,20 +11022,20 @@ impl MediaLive for MediaLiveClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateReservationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateReservationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateReservationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateReservationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

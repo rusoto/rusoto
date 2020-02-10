@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>An action to be performed when the <code>"condition"</code> is TRUE.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
@@ -1790,102 +1791,225 @@ impl fmt::Display for UpdateInputError {
 }
 impl Error for UpdateInputError {}
 /// Trait representing the capabilities of the AWS IoT Events API. AWS IoT Events clients implement this trait.
-#[async_trait]
 pub trait IotEvents {
     /// <p>Creates a detector model.</p>
-    async fn create_detector_model(
+    fn create_detector_model(
         &self,
         input: CreateDetectorModelRequest,
-    ) -> Result<CreateDetectorModelResponse, RusotoError<CreateDetectorModelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDetectorModelResponse,
+                        RusotoError<CreateDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an input.</p>
-    async fn create_input(
+    fn create_input(
         &self,
         input: CreateInputRequest,
-    ) -> Result<CreateInputResponse, RusotoError<CreateInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateInputResponse, RusotoError<CreateInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a detector model. Any active instances of the detector model are also deleted.</p>
-    async fn delete_detector_model(
+    fn delete_detector_model(
         &self,
         input: DeleteDetectorModelRequest,
-    ) -> Result<DeleteDetectorModelResponse, RusotoError<DeleteDetectorModelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDetectorModelResponse,
+                        RusotoError<DeleteDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an input.</p>
-    async fn delete_input(
+    fn delete_input(
         &self,
         input: DeleteInputRequest,
-    ) -> Result<DeleteInputResponse, RusotoError<DeleteInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInputResponse, RusotoError<DeleteInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a detector model. If the <code>"version"</code> parameter is not specified, information about the latest version is returned.</p>
-    async fn describe_detector_model(
+    fn describe_detector_model(
         &self,
         input: DescribeDetectorModelRequest,
-    ) -> Result<DescribeDetectorModelResponse, RusotoError<DescribeDetectorModelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDetectorModelResponse,
+                        RusotoError<DescribeDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an input.</p>
-    async fn describe_input(
+    fn describe_input(
         &self,
         input: DescribeInputRequest,
-    ) -> Result<DescribeInputResponse, RusotoError<DescribeInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeInputResponse, RusotoError<DescribeInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the current settings of the AWS IoT Events logging options.</p>
-    async fn describe_logging_options(
+    fn describe_logging_options(
         &self,
-    ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLoggingOptionsResponse,
+                        RusotoError<DescribeLoggingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the versions of a detector model. Only the metadata associated with each detector model version is returned.</p>
-    async fn list_detector_model_versions(
+    fn list_detector_model_versions(
         &self,
         input: ListDetectorModelVersionsRequest,
-    ) -> Result<ListDetectorModelVersionsResponse, RusotoError<ListDetectorModelVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDetectorModelVersionsResponse,
+                        RusotoError<ListDetectorModelVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the detector models you have created. Only the metadata associated with each detector model is returned.</p>
-    async fn list_detector_models(
+    fn list_detector_models(
         &self,
         input: ListDetectorModelsRequest,
-    ) -> Result<ListDetectorModelsResponse, RusotoError<ListDetectorModelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDetectorModelsResponse,
+                        RusotoError<ListDetectorModelsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the inputs you have created.</p>
-    async fn list_inputs(
+    fn list_inputs(
         &self,
         input: ListInputsRequest,
-    ) -> Result<ListInputsResponse, RusotoError<ListInputsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInputsResponse, RusotoError<ListInputsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets or updates the AWS IoT Events logging options.</p> <p>If you update the value of any <code>"loggingOptions"</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the <code>"roleArn"</code> field (for example, to correct an invalid policy) it takes up to five minutes for that change to take effect.</p>
-    async fn put_logging_options(
+    fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
-    ) -> Result<(), RusotoError<PutLoggingOptionsError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<PutLoggingOptionsError>>> + Send + 'static>,
+    >;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a detector model. Detectors (instances) spawned by the previous version are deleted and then re-created as new inputs arrive.</p>
-    async fn update_detector_model(
+    fn update_detector_model(
         &self,
         input: UpdateDetectorModelRequest,
-    ) -> Result<UpdateDetectorModelResponse, RusotoError<UpdateDetectorModelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorModelResponse,
+                        RusotoError<UpdateDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an input.</p>
-    async fn update_input(
+    fn update_input(
         &self,
         input: UpdateInputRequest,
-    ) -> Result<UpdateInputResponse, RusotoError<UpdateInputError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateInputResponse, RusotoError<UpdateInputError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS IoT Events API.
 #[derive(Clone)]
@@ -1925,13 +2049,22 @@ impl IotEventsClient {
     }
 }
 
-#[async_trait]
 impl IotEvents for IotEventsClient {
     /// <p>Creates a detector model.</p>
-    async fn create_detector_model(
+    fn create_detector_model(
         &self,
         input: CreateDetectorModelRequest,
-    ) -> Result<CreateDetectorModelResponse, RusotoError<CreateDetectorModelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDetectorModelResponse,
+                        RusotoError<CreateDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/detector-models";
 
         let mut request = SignedRequest::new("POST", "iotevents", &self.region, &request_uri);
@@ -1940,28 +2073,34 @@ impl IotEvents for IotEventsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDetectorModelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDetectorModelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDetectorModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDetectorModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an input.</p>
-    async fn create_input(
+    fn create_input(
         &self,
         input: CreateInputRequest,
-    ) -> Result<CreateInputResponse, RusotoError<CreateInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateInputResponse, RusotoError<CreateInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/inputs";
 
         let mut request = SignedRequest::new("POST", "iotevents", &self.region, &request_uri);
@@ -1970,28 +2109,38 @@ impl IotEvents for IotEventsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a detector model. Any active instances of the detector model are also deleted.</p>
-    async fn delete_detector_model(
+    fn delete_detector_model(
         &self,
         input: DeleteDetectorModelRequest,
-    ) -> Result<DeleteDetectorModelResponse, RusotoError<DeleteDetectorModelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDetectorModelResponse,
+                        RusotoError<DeleteDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/detector-models/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -2000,55 +2149,71 @@ impl IotEvents for IotEventsClient {
         let mut request = SignedRequest::new("DELETE", "iotevents", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDetectorModelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDetectorModelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDetectorModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDetectorModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an input.</p>
-    async fn delete_input(
+    fn delete_input(
         &self,
         input: DeleteInputRequest,
-    ) -> Result<DeleteInputResponse, RusotoError<DeleteInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteInputResponse, RusotoError<DeleteInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/inputs/{input_name}", input_name = input.input_name);
 
         let mut request = SignedRequest::new("DELETE", "iotevents", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a detector model. If the <code>"version"</code> parameter is not specified, information about the latest version is returned.</p>
-    async fn describe_detector_model(
+    fn describe_detector_model(
         &self,
         input: DescribeDetectorModelRequest,
-    ) -> Result<DescribeDetectorModelResponse, RusotoError<DescribeDetectorModelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDetectorModelResponse,
+                        RusotoError<DescribeDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/detector-models/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -2063,82 +2228,107 @@ impl IotEvents for IotEventsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDetectorModelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDetectorModelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDetectorModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDetectorModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an input.</p>
-    async fn describe_input(
+    fn describe_input(
         &self,
         input: DescribeInputRequest,
-    ) -> Result<DescribeInputResponse, RusotoError<DescribeInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeInputResponse, RusotoError<DescribeInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/inputs/{input_name}", input_name = input.input_name);
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the current settings of the AWS IoT Events logging options.</p>
-    async fn describe_logging_options(
+    fn describe_logging_options(
         &self,
-    ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLoggingOptionsResponse,
+                        RusotoError<DescribeLoggingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/logging";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLoggingOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLoggingOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLoggingOptionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLoggingOptionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the versions of a detector model. Only the metadata associated with each detector model version is returned.</p>
-    async fn list_detector_model_versions(
+    fn list_detector_model_versions(
         &self,
         input: ListDetectorModelVersionsRequest,
-    ) -> Result<ListDetectorModelVersionsResponse, RusotoError<ListDetectorModelVersionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDetectorModelVersionsResponse,
+                        RusotoError<ListDetectorModelVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/detector-models/{detector_model_name}/versions",
             detector_model_name = input.detector_model_name
@@ -2156,28 +2346,38 @@ impl IotEvents for IotEventsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDetectorModelVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDetectorModelVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDetectorModelVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDetectorModelVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the detector models you have created. Only the metadata associated with each detector model is returned.</p>
-    async fn list_detector_models(
+    fn list_detector_models(
         &self,
         input: ListDetectorModelsRequest,
-    ) -> Result<ListDetectorModelsResponse, RusotoError<ListDetectorModelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDetectorModelsResponse,
+                        RusotoError<ListDetectorModelsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/detector-models";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2192,28 +2392,34 @@ impl IotEvents for IotEventsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDetectorModelsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDetectorModelsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDetectorModelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDetectorModelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the inputs you have created.</p>
-    async fn list_inputs(
+    fn list_inputs(
         &self,
         input: ListInputsRequest,
-    ) -> Result<ListInputsResponse, RusotoError<ListInputsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInputsResponse, RusotoError<ListInputsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/inputs";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2228,28 +2434,38 @@ impl IotEvents for IotEventsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInputsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInputsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInputsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInputsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "iotevents", &self.region, &request_uri);
@@ -2259,28 +2475,30 @@ impl IotEvents for IotEventsClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets or updates the AWS IoT Events logging options.</p> <p>If you update the value of any <code>"loggingOptions"</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the <code>"roleArn"</code> field (for example, to correct an invalid policy) it takes up to five minutes for that change to take effect.</p>
-    async fn put_logging_options(
+    fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
-    ) -> Result<(), RusotoError<PutLoggingOptionsError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<PutLoggingOptionsError>>> + Send + 'static>,
+    > {
         let request_uri = "/logging";
 
         let mut request = SignedRequest::new("PUT", "iotevents", &self.region, &request_uri);
@@ -2289,27 +2507,33 @@ impl IotEvents for IotEventsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutLoggingOptionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutLoggingOptionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "iotevents", &self.region, &request_uri);
@@ -2322,28 +2546,34 @@ impl IotEvents for IotEventsClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("DELETE", "iotevents", &self.region, &request_uri);
@@ -2356,28 +2586,38 @@ impl IotEvents for IotEventsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a detector model. Detectors (instances) spawned by the previous version are deleted and then re-created as new inputs arrive.</p>
-    async fn update_detector_model(
+    fn update_detector_model(
         &self,
         input: UpdateDetectorModelRequest,
-    ) -> Result<UpdateDetectorModelResponse, RusotoError<UpdateDetectorModelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorModelResponse,
+                        RusotoError<UpdateDetectorModelError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/detector-models/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -2389,28 +2629,34 @@ impl IotEvents for IotEventsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorModelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDetectorModelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDetectorModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an input.</p>
-    async fn update_input(
+    fn update_input(
         &self,
         input: UpdateInputRequest,
-    ) -> Result<UpdateInputResponse, RusotoError<UpdateInputError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateInputResponse, RusotoError<UpdateInputError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/inputs/{input_name}", input_name = input.input_name);
 
         let mut request = SignedRequest::new("PUT", "iotevents", &self.region, &request_uri);
@@ -2419,20 +2665,20 @@ impl IotEvents for IotEventsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInputResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateInputResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInputError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInputError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>CDN Authorization credentials</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Authorization {
@@ -2410,115 +2411,244 @@ impl fmt::Display for UpdateOriginEndpointError {
 }
 impl Error for UpdateOriginEndpointError {}
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
-#[async_trait]
 pub trait MediaPackage {
     /// <p>Creates a new Channel.</p>
-    async fn create_channel(
+    fn create_channel(
         &self,
         input: CreateChannelRequest,
-    ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>>;
-
-    /// <p>Creates a new HarvestJob record.</p>
-    async fn create_harvest_job(
-        &self,
-        input: CreateHarvestJobRequest,
-    ) -> Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>>;
-
-    /// <p>Creates a new OriginEndpoint record.</p>
-    async fn create_origin_endpoint(
-        &self,
-        input: CreateOriginEndpointRequest,
-    ) -> Result<CreateOriginEndpointResponse, RusotoError<CreateOriginEndpointError>>;
-
-    /// <p>Deletes an existing Channel.</p>
-    async fn delete_channel(
-        &self,
-        input: DeleteChannelRequest,
-    ) -> Result<DeleteChannelResponse, RusotoError<DeleteChannelError>>;
-
-    /// <p>Deletes an existing OriginEndpoint.</p>
-    async fn delete_origin_endpoint(
-        &self,
-        input: DeleteOriginEndpointRequest,
-    ) -> Result<DeleteOriginEndpointResponse, RusotoError<DeleteOriginEndpointError>>;
-
-    /// <p>Gets details about a Channel.</p>
-    async fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>;
-
-    /// <p>Gets details about an existing HarvestJob.</p>
-    async fn describe_harvest_job(
-        &self,
-        input: DescribeHarvestJobRequest,
-    ) -> Result<DescribeHarvestJobResponse, RusotoError<DescribeHarvestJobError>>;
-
-    /// <p>Gets details about an existing OriginEndpoint.</p>
-    async fn describe_origin_endpoint(
-        &self,
-        input: DescribeOriginEndpointRequest,
-    ) -> Result<DescribeOriginEndpointResponse, RusotoError<DescribeOriginEndpointError>>;
-
-    /// <p>Returns a collection of Channels.</p>
-    async fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
-
-    /// <p>Returns a collection of HarvestJob records.</p>
-    async fn list_harvest_jobs(
-        &self,
-        input: ListHarvestJobsRequest,
-    ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>>;
-
-    /// <p>Returns a collection of OriginEndpoint records.</p>
-    async fn list_origin_endpoints(
-        &self,
-        input: ListOriginEndpointsRequest,
-    ) -> Result<ListOriginEndpointsResponse, RusotoError<ListOriginEndpointsError>>;
-
-    async fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
-
-    /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
-    async fn rotate_channel_credentials(
-        &self,
-        input: RotateChannelCredentialsRequest,
-    ) -> Result<RotateChannelCredentialsResponse, RusotoError<RotateChannelCredentialsError>>;
-
-    /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
-    async fn rotate_ingest_endpoint_credentials(
-        &self,
-        input: RotateIngestEndpointCredentialsRequest,
-    ) -> Result<
-        RotateIngestEndpointCredentialsResponse,
-        RusotoError<RotateIngestEndpointCredentialsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateChannelResponse, RusotoError<CreateChannelError>>>
+                + Send
+                + 'static,
+        >,
     >;
 
-    async fn tag_resource(
+    /// <p>Creates a new HarvestJob record.</p>
+    fn create_harvest_job(
+        &self,
+        input: CreateHarvestJobRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Creates a new OriginEndpoint record.</p>
+    fn create_origin_endpoint(
+        &self,
+        input: CreateOriginEndpointRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateOriginEndpointResponse,
+                        RusotoError<CreateOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Deletes an existing Channel.</p>
+    fn delete_channel(
+        &self,
+        input: DeleteChannelRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteChannelResponse, RusotoError<DeleteChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Deletes an existing OriginEndpoint.</p>
+    fn delete_origin_endpoint(
+        &self,
+        input: DeleteOriginEndpointRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteOriginEndpointResponse,
+                        RusotoError<DeleteOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Gets details about a Channel.</p>
+    fn describe_channel(
+        &self,
+        input: DescribeChannelRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Gets details about an existing HarvestJob.</p>
+    fn describe_harvest_job(
+        &self,
+        input: DescribeHarvestJobRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeHarvestJobResponse,
+                        RusotoError<DescribeHarvestJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Gets details about an existing OriginEndpoint.</p>
+    fn describe_origin_endpoint(
+        &self,
+        input: DescribeOriginEndpointRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeOriginEndpointResponse,
+                        RusotoError<DescribeOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Returns a collection of Channels.</p>
+    fn list_channels(
+        &self,
+        input: ListChannelsRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChannelsResponse, RusotoError<ListChannelsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Returns a collection of HarvestJob records.</p>
+    fn list_harvest_jobs(
+        &self,
+        input: ListHarvestJobsRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Returns a collection of OriginEndpoint records.</p>
+    fn list_origin_endpoints(
+        &self,
+        input: ListOriginEndpointsRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOriginEndpointsResponse,
+                        RusotoError<ListOriginEndpointsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
+    fn rotate_channel_credentials(
+        &self,
+        input: RotateChannelCredentialsRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RotateChannelCredentialsResponse,
+                        RusotoError<RotateChannelCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
+    fn rotate_ingest_endpoint_credentials(
+        &self,
+        input: RotateIngestEndpointCredentialsRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RotateIngestEndpointCredentialsResponse,
+                        RusotoError<RotateIngestEndpointCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>Updates an existing Channel.</p>
-    async fn update_channel(
+    fn update_channel(
         &self,
         input: UpdateChannelRequest,
-    ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing OriginEndpoint.</p>
-    async fn update_origin_endpoint(
+    fn update_origin_endpoint(
         &self,
         input: UpdateOriginEndpointRequest,
-    ) -> Result<UpdateOriginEndpointResponse, RusotoError<UpdateOriginEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateOriginEndpointResponse,
+                        RusotoError<UpdateOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the MediaPackage API.
 #[derive(Clone)]
@@ -2558,13 +2688,18 @@ impl MediaPackageClient {
     }
 }
 
-#[async_trait]
 impl MediaPackage for MediaPackageClient {
     /// <p>Creates a new Channel.</p>
-    async fn create_channel(
+    fn create_channel(
         &self,
         input: CreateChannelRequest,
-    ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateChannelResponse, RusotoError<CreateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -2573,28 +2708,35 @@ impl MediaPackage for MediaPackageClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new HarvestJob record.</p>
-    async fn create_harvest_job(
+    fn create_harvest_job(
         &self,
         input: CreateHarvestJobRequest,
-    ) -> Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateHarvestJobResponse, RusotoError<CreateHarvestJobError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/harvest_jobs";
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -2603,28 +2745,38 @@ impl MediaPackage for MediaPackageClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateHarvestJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateHarvestJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHarvestJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateHarvestJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new OriginEndpoint record.</p>
-    async fn create_origin_endpoint(
+    fn create_origin_endpoint(
         &self,
         input: CreateOriginEndpointRequest,
-    ) -> Result<CreateOriginEndpointResponse, RusotoError<CreateOriginEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateOriginEndpointResponse,
+                        RusotoError<CreateOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/origin_endpoints";
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -2633,163 +2785,211 @@ impl MediaPackage for MediaPackageClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateOriginEndpointResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateOriginEndpointResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateOriginEndpointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateOriginEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing Channel.</p>
-    async fn delete_channel(
+    fn delete_channel(
         &self,
         input: DeleteChannelRequest,
-    ) -> Result<DeleteChannelResponse, RusotoError<DeleteChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteChannelResponse, RusotoError<DeleteChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/channels/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing OriginEndpoint.</p>
-    async fn delete_origin_endpoint(
+    fn delete_origin_endpoint(
         &self,
         input: DeleteOriginEndpointRequest,
-    ) -> Result<DeleteOriginEndpointResponse, RusotoError<DeleteOriginEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteOriginEndpointResponse,
+                        RusotoError<DeleteOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/origin_endpoints/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteOriginEndpointResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteOriginEndpointResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteOriginEndpointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteOriginEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets details about a Channel.</p>
-    async fn describe_channel(
+    fn describe_channel(
         &self,
         input: DescribeChannelRequest,
-    ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/channels/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets details about an existing HarvestJob.</p>
-    async fn describe_harvest_job(
+    fn describe_harvest_job(
         &self,
         input: DescribeHarvestJobRequest,
-    ) -> Result<DescribeHarvestJobResponse, RusotoError<DescribeHarvestJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeHarvestJobResponse,
+                        RusotoError<DescribeHarvestJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/harvest_jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeHarvestJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeHarvestJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeHarvestJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeHarvestJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets details about an existing OriginEndpoint.</p>
-    async fn describe_origin_endpoint(
+    fn describe_origin_endpoint(
         &self,
         input: DescribeOriginEndpointRequest,
-    ) -> Result<DescribeOriginEndpointResponse, RusotoError<DescribeOriginEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeOriginEndpointResponse,
+                        RusotoError<DescribeOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/origin_endpoints/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOriginEndpointResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeOriginEndpointResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOriginEndpointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeOriginEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a collection of Channels.</p>
-    async fn list_channels(
+    fn list_channels(
         &self,
         input: ListChannelsRequest,
-    ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListChannelsResponse, RusotoError<ListChannelsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/channels";
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -2804,28 +3004,34 @@ impl MediaPackage for MediaPackageClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChannelsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListChannelsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListChannelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListChannelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a collection of HarvestJob records.</p>
-    async fn list_harvest_jobs(
+    fn list_harvest_jobs(
         &self,
         input: ListHarvestJobsRequest,
-    ) -> Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListHarvestJobsResponse, RusotoError<ListHarvestJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/harvest_jobs";
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -2846,28 +3052,38 @@ impl MediaPackage for MediaPackageClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListHarvestJobsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListHarvestJobsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListHarvestJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListHarvestJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
-    async fn list_origin_endpoints(
+    fn list_origin_endpoints(
         &self,
         input: ListOriginEndpointsRequest,
-    ) -> Result<ListOriginEndpointsResponse, RusotoError<ListOriginEndpointsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOriginEndpointsResponse,
+                        RusotoError<ListOriginEndpointsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/origin_endpoints";
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
@@ -2885,83 +3101,110 @@ impl MediaPackage for MediaPackageClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOriginEndpointsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOriginEndpointsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOriginEndpointsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOriginEndpointsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
-    async fn rotate_channel_credentials(
+    fn rotate_channel_credentials(
         &self,
         input: RotateChannelCredentialsRequest,
-    ) -> Result<RotateChannelCredentialsResponse, RusotoError<RotateChannelCredentialsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RotateChannelCredentialsResponse,
+                        RusotoError<RotateChannelCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/channels/{id}/credentials", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RotateChannelCredentialsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RotateChannelCredentialsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RotateChannelCredentialsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RotateChannelCredentialsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
-    async fn rotate_ingest_endpoint_credentials(
+    fn rotate_ingest_endpoint_credentials(
         &self,
         input: RotateIngestEndpointCredentialsRequest,
-    ) -> Result<
-        RotateIngestEndpointCredentialsResponse,
-        RusotoError<RotateIngestEndpointCredentialsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RotateIngestEndpointCredentialsResponse,
+                        RusotoError<RotateIngestEndpointCredentialsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/channels/{id}/ingest_endpoints/{ingest_endpoint_id}/credentials",
@@ -2972,29 +3215,30 @@ impl MediaPackage for MediaPackageClient {
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RotateIngestEndpointCredentialsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RotateIngestEndpointCredentialsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RotateIngestEndpointCredentialsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RotateIngestEndpointCredentialsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
@@ -3003,26 +3247,27 @@ impl MediaPackage for MediaPackageClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
@@ -3034,27 +3279,33 @@ impl MediaPackage for MediaPackageClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing Channel.</p>
-    async fn update_channel(
+    fn update_channel(
         &self,
         input: UpdateChannelRequest,
-    ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/channels/{id}", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
@@ -3063,28 +3314,38 @@ impl MediaPackage for MediaPackageClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateChannelResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateChannelResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateChannelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateChannelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing OriginEndpoint.</p>
-    async fn update_origin_endpoint(
+    fn update_origin_endpoint(
         &self,
         input: UpdateOriginEndpointRequest,
-    ) -> Result<UpdateOriginEndpointResponse, RusotoError<UpdateOriginEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateOriginEndpointResponse,
+                        RusotoError<UpdateOriginEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/origin_endpoints/{id}", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
@@ -3093,20 +3354,20 @@ impl MediaPackage for MediaPackageClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateOriginEndpointResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateOriginEndpointResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateOriginEndpointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateOriginEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

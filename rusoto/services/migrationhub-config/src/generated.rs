@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHomeRegionControlRequest {
@@ -308,23 +309,49 @@ impl fmt::Display for GetHomeRegionError {
 }
 impl Error for GetHomeRegionError {}
 /// Trait representing the capabilities of the AWS Migration Hub Config API. AWS Migration Hub Config clients implement this trait.
-#[async_trait]
 pub trait MigrationHubConfig {
     /// <p>This API sets up the home region for the calling account only.</p>
-    async fn create_home_region_control(
+    fn create_home_region_control(
         &self,
         input: CreateHomeRegionControlRequest,
-    ) -> Result<CreateHomeRegionControlResult, RusotoError<CreateHomeRegionControlError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateHomeRegionControlResult,
+                        RusotoError<CreateHomeRegionControlError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This API permits filtering on the <code>ControlId</code>, <code>HomeRegion</code>, and <code>RegionControlScope</code> fields.</p>
-    async fn describe_home_region_controls(
+    fn describe_home_region_controls(
         &self,
         input: DescribeHomeRegionControlsRequest,
-    ) -> Result<DescribeHomeRegionControlsResult, RusotoError<DescribeHomeRegionControlsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeHomeRegionControlsResult,
+                        RusotoError<DescribeHomeRegionControlsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the calling account’s home region, if configured. This API is used by other AWS services to determine the regional endpoint for calling AWS Application Discovery Service and Migration Hub. You must call <code>GetHomeRegion</code> at least once before you call any other AWS Application Discovery Service and AWS Migration Hub APIs, to obtain the account's Migration Hub home region.</p>
-    async fn get_home_region(&self)
-        -> Result<GetHomeRegionResult, RusotoError<GetHomeRegionError>>;
+    fn get_home_region(
+        &self,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetHomeRegionResult, RusotoError<GetHomeRegionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Migration Hub Config API.
 #[derive(Clone)]
@@ -364,13 +391,22 @@ impl MigrationHubConfigClient {
     }
 }
 
-#[async_trait]
 impl MigrationHubConfig for MigrationHubConfigClient {
     /// <p>This API sets up the home region for the calling account only.</p>
-    async fn create_home_region_control(
+    fn create_home_region_control(
         &self,
         input: CreateHomeRegionControlRequest,
-    ) -> Result<CreateHomeRegionControlResult, RusotoError<CreateHomeRegionControlError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateHomeRegionControlResult,
+                        RusotoError<CreateHomeRegionControlError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
         request.set_endpoint_prefix("migrationhub-config".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -381,28 +417,37 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateHomeRegionControlResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHomeRegionControlError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateHomeRegionControlResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateHomeRegionControlError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This API permits filtering on the <code>ControlId</code>, <code>HomeRegion</code>, and <code>RegionControlScope</code> fields.</p>
-    async fn describe_home_region_controls(
+    fn describe_home_region_controls(
         &self,
         input: DescribeHomeRegionControlsRequest,
-    ) -> Result<DescribeHomeRegionControlsResult, RusotoError<DescribeHomeRegionControlsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeHomeRegionControlsResult,
+                        RusotoError<DescribeHomeRegionControlsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
         request.set_endpoint_prefix("migrationhub-config".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -413,26 +458,32 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeHomeRegionControlsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeHomeRegionControlsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeHomeRegionControlsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeHomeRegionControlsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the calling account’s home region, if configured. This API is used by other AWS services to determine the regional endpoint for calling AWS Application Discovery Service and Migration Hub. You must call <code>GetHomeRegion</code> at least once before you call any other AWS Application Discovery Service and AWS Migration Hub APIs, to obtain the account's Migration Hub home region.</p>
-    async fn get_home_region(
+    fn get_home_region(
         &self,
-    ) -> Result<GetHomeRegionResult, RusotoError<GetHomeRegionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetHomeRegionResult, RusotoError<GetHomeRegionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
         request.set_endpoint_prefix("migrationhub-config".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -442,18 +493,18 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetHomeRegionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetHomeRegionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetHomeRegionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetHomeRegionError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

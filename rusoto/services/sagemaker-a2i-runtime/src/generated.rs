@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanLoopRequest {
@@ -441,37 +442,67 @@ impl fmt::Display for StopHumanLoopError {
 }
 impl Error for StopHumanLoopError {}
 /// Trait representing the capabilities of the Amazon Augmented AI Runtime API. Amazon Augmented AI Runtime clients implement this trait.
-#[async_trait]
 pub trait SagemakerA2iRuntime {
     /// <p>Deletes the specified human loop for a flow definition.</p>
-    async fn delete_human_loop(
+    fn delete_human_loop(
         &self,
         input: DeleteHumanLoopRequest,
-    ) -> Result<DeleteHumanLoopResponse, RusotoError<DeleteHumanLoopError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteHumanLoopResponse, RusotoError<DeleteHumanLoopError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the specified human loop.</p>
-    async fn describe_human_loop(
+    fn describe_human_loop(
         &self,
         input: DescribeHumanLoopRequest,
-    ) -> Result<DescribeHumanLoopResponse, RusotoError<DescribeHumanLoopError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeHumanLoopResponse, RusotoError<DescribeHumanLoopError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about human loops, given the specified parameters.</p>
-    async fn list_human_loops(
+    fn list_human_loops(
         &self,
         input: ListHumanLoopsRequest,
-    ) -> Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts a human loop, provided that at least one activation condition is met.</p>
-    async fn start_human_loop(
+    fn start_human_loop(
         &self,
         input: StartHumanLoopRequest,
-    ) -> Result<StartHumanLoopResponse, RusotoError<StartHumanLoopError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartHumanLoopResponse, RusotoError<StartHumanLoopError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops the specified human loop.</p>
-    async fn stop_human_loop(
+    fn stop_human_loop(
         &self,
         input: StopHumanLoopRequest,
-    ) -> Result<StopHumanLoopResponse, RusotoError<StopHumanLoopError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopHumanLoopResponse, RusotoError<StopHumanLoopError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Augmented AI Runtime API.
 #[derive(Clone)]
@@ -511,13 +542,18 @@ impl SagemakerA2iRuntimeClient {
     }
 }
 
-#[async_trait]
 impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     /// <p>Deletes the specified human loop for a flow definition.</p>
-    async fn delete_human_loop(
+    fn delete_human_loop(
         &self,
         input: DeleteHumanLoopRequest,
-    ) -> Result<DeleteHumanLoopResponse, RusotoError<DeleteHumanLoopError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteHumanLoopResponse, RusotoError<DeleteHumanLoopError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/human-loops/{human_loop_name}",
             human_loop_name = input.human_loop_name
@@ -528,28 +564,35 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
 
         request.set_endpoint_prefix("a2i-runtime.sagemaker".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteHumanLoopResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteHumanLoopResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteHumanLoopError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteHumanLoopError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the specified human loop.</p>
-    async fn describe_human_loop(
+    fn describe_human_loop(
         &self,
         input: DescribeHumanLoopRequest,
-    ) -> Result<DescribeHumanLoopResponse, RusotoError<DescribeHumanLoopError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeHumanLoopResponse, RusotoError<DescribeHumanLoopError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/human-loops/{human_loop_name}",
             human_loop_name = input.human_loop_name
@@ -560,28 +603,34 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
 
         request.set_endpoint_prefix("a2i-runtime.sagemaker".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeHumanLoopResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeHumanLoopResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeHumanLoopError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeHumanLoopError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about human loops, given the specified parameters.</p>
-    async fn list_human_loops(
+    fn list_human_loops(
         &self,
         input: ListHumanLoopsRequest,
-    ) -> Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListHumanLoopsResponse, RusotoError<ListHumanLoopsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/human-loops";
 
         let mut request = SignedRequest::new("GET", "sagemaker", &self.region, &request_uri);
@@ -607,28 +656,34 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListHumanLoopsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListHumanLoopsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListHumanLoopsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListHumanLoopsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a human loop, provided that at least one activation condition is met.</p>
-    async fn start_human_loop(
+    fn start_human_loop(
         &self,
         input: StartHumanLoopRequest,
-    ) -> Result<StartHumanLoopResponse, RusotoError<StartHumanLoopError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartHumanLoopResponse, RusotoError<StartHumanLoopError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/human-loops";
 
         let mut request = SignedRequest::new("POST", "sagemaker", &self.region, &request_uri);
@@ -638,28 +693,34 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartHumanLoopResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartHumanLoopResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartHumanLoopError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartHumanLoopError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops the specified human loop.</p>
-    async fn stop_human_loop(
+    fn stop_human_loop(
         &self,
         input: StopHumanLoopRequest,
-    ) -> Result<StopHumanLoopResponse, RusotoError<StopHumanLoopError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopHumanLoopResponse, RusotoError<StopHumanLoopError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/human-loops/stop";
 
         let mut request = SignedRequest::new("POST", "sagemaker", &self.region, &request_uri);
@@ -669,20 +730,20 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopHumanLoopResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopHumanLoopResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopHumanLoopError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopHumanLoopError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

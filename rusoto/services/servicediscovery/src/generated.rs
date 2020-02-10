@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHttpNamespaceRequest {
@@ -1837,127 +1838,268 @@ impl fmt::Display for UpdateServiceError {
 }
 impl Error for UpdateServiceError {}
 /// Trait representing the capabilities of the ServiceDiscovery API. ServiceDiscovery clients implement this trait.
-#[async_trait]
 pub trait ServiceDiscovery {
     /// <p>Creates an HTTP namespace. Service instances that you register using an HTTP namespace can be discovered using a <code>DiscoverInstances</code> request but can't be discovered using DNS. </p> <p>For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_http_namespace(
+    fn create_http_namespace(
         &self,
         input: CreateHttpNamespaceRequest,
-    ) -> Result<CreateHttpNamespaceResponse, RusotoError<CreateHttpNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateHttpNamespaceResponse,
+                        RusotoError<CreateHttpNamespaceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_private_dns_namespace(
+    fn create_private_dns_namespace(
         &self,
         input: CreatePrivateDnsNamespaceRequest,
-    ) -> Result<CreatePrivateDnsNamespaceResponse, RusotoError<CreatePrivateDnsNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePrivateDnsNamespaceResponse,
+                        RusotoError<CreatePrivateDnsNamespaceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_public_dns_namespace(
+    fn create_public_dns_namespace(
         &self,
         input: CreatePublicDnsNamespaceRequest,
-    ) -> Result<CreatePublicDnsNamespaceResponse, RusotoError<CreatePublicDnsNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePublicDnsNamespaceResponse,
+                        RusotoError<CreatePublicDnsNamespaceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>For public and private DNS namespaces, one of the following combinations of DNS records in Amazon Route 53:</p> <ul> <li> <p>A</p> </li> <li> <p>AAAA</p> </li> <li> <p>A and AAAA</p> </li> <li> <p>SRV</p> </li> <li> <p>CNAME</p> </li> </ul> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a>RegisterInstance</a> request, and AWS Cloud Map uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_service(
+    fn create_service(
         &self,
         input: CreateServiceRequest,
-    ) -> Result<CreateServiceResponse, RusotoError<CreateServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateServiceResponse, RusotoError<CreateServiceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
-    async fn delete_namespace(
+    fn delete_namespace(
         &self,
         input: DeleteNamespaceRequest,
-    ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
-    async fn delete_service(
+    fn delete_service(
         &self,
         input: DeleteServiceRequest,
-    ) -> Result<DeleteServiceResponse, RusotoError<DeleteServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteServiceResponse, RusotoError<DeleteServiceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the Amazon Route 53 DNS records and health check, if any, that AWS Cloud Map created for the specified instance.</p>
-    async fn deregister_instance(
+    fn deregister_instance(
         &self,
         input: DeregisterInstanceRequest,
-    ) -> Result<DeregisterInstanceResponse, RusotoError<DeregisterInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterInstanceResponse,
+                        RusotoError<DeregisterInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Discovers registered instances for a specified namespace and service.</p>
-    async fn discover_instances(
+    fn discover_instances(
         &self,
         input: DiscoverInstancesRequest,
-    ) -> Result<DiscoverInstancesResponse, RusotoError<DiscoverInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DiscoverInstancesResponse, RusotoError<DiscoverInstancesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a specified instance.</p>
-    async fn get_instance(
+    fn get_instance(
         &self,
         input: GetInstanceRequest,
-    ) -> Result<GetInstanceResponse, RusotoError<GetInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetInstanceResponse, RusotoError<GetInstanceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
-    async fn get_instances_health_status(
+    fn get_instances_health_status(
         &self,
         input: GetInstancesHealthStatusRequest,
-    ) -> Result<GetInstancesHealthStatusResponse, RusotoError<GetInstancesHealthStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInstancesHealthStatusResponse,
+                        RusotoError<GetInstancesHealthStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a namespace.</p>
-    async fn get_namespace(
+    fn get_namespace(
         &self,
         input: GetNamespaceRequest,
-    ) -> Result<GetNamespaceResponse, RusotoError<GetNamespaceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetNamespaceResponse, RusotoError<GetNamespaceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a>ListOperations</a>.</p> </note></p>
-    async fn get_operation(
+    fn get_operation(
         &self,
         input: GetOperationRequest,
-    ) -> Result<GetOperationResponse, RusotoError<GetOperationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOperationResponse, RusotoError<GetOperationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the settings for a specified service.</p>
-    async fn get_service(
+    fn get_service(
         &self,
         input: GetServiceRequest,
-    ) -> Result<GetServiceResponse, RusotoError<GetServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetServiceResponse, RusotoError<GetServiceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
-    async fn list_instances(
+    fn list_instances(
         &self,
         input: ListInstancesRequest,
-    ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInstancesResponse, RusotoError<ListInstancesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
-    async fn list_namespaces(
+    fn list_namespaces(
         &self,
         input: ListNamespacesRequest,
-    ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNamespacesResponse, RusotoError<ListNamespacesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists operations that match the criteria that you specify.</p>
-    async fn list_operations(
+    fn list_operations(
         &self,
         input: ListOperationsRequest,
-    ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOperationsResponse, RusotoError<ListOperationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
-    async fn list_services(
+    fn list_services(
         &self,
         input: ListServicesRequest,
-    ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListServicesResponse, RusotoError<ListServicesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a>CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn register_instance(
+    fn register_instance(
         &self,
         input: RegisterInstanceRequest,
-    ) -> Result<RegisterInstanceResponse, RusotoError<RegisterInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RegisterInstanceResponse, RusotoError<RegisterInstanceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a>HealthCheckCustomConfig</a>.</p>
-    async fn update_instance_custom_health_status(
+    fn update_instance_custom_health_status(
         &self,
         input: UpdateInstanceCustomHealthStatusRequest,
-    ) -> Result<(), RusotoError<UpdateInstanceCustomHealthStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<UpdateInstanceCustomHealthStatusError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Add or delete <code>DnsRecords</code> configurations</p> </li> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> </li> </ul> <p>For public and private DNS namespaces, you must specify all <code>DnsRecords</code> configurations (and, optionally, <code>HealthCheckConfig</code>) that you want to appear in the updated service. Any current configurations that don't appear in an <code>UpdateService</code> request are deleted.</p> <p>When you update the TTL setting for a service, AWS Cloud Map also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
-    async fn update_service(
+    fn update_service(
         &self,
         input: UpdateServiceRequest,
-    ) -> Result<UpdateServiceResponse, RusotoError<UpdateServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateServiceResponse, RusotoError<UpdateServiceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the ServiceDiscovery API.
 #[derive(Clone)]
@@ -1997,13 +2139,22 @@ impl ServiceDiscoveryClient {
     }
 }
 
-#[async_trait]
 impl ServiceDiscovery for ServiceDiscoveryClient {
     /// <p>Creates an HTTP namespace. Service instances that you register using an HTTP namespace can be discovered using a <code>DiscoverInstances</code> request but can't be discovered using DNS. </p> <p>For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_http_namespace(
+    fn create_http_namespace(
         &self,
         input: CreateHttpNamespaceRequest,
-    ) -> Result<CreateHttpNamespaceResponse, RusotoError<CreateHttpNamespaceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateHttpNamespaceResponse,
+                        RusotoError<CreateHttpNamespaceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2014,28 +2165,37 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateHttpNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHttpNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateHttpNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateHttpNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_private_dns_namespace(
+    fn create_private_dns_namespace(
         &self,
         input: CreatePrivateDnsNamespaceRequest,
-    ) -> Result<CreatePrivateDnsNamespaceResponse, RusotoError<CreatePrivateDnsNamespaceError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePrivateDnsNamespaceResponse,
+                        RusotoError<CreatePrivateDnsNamespaceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2046,27 +2206,37 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePrivateDnsNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePrivateDnsNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePrivateDnsNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePrivateDnsNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_public_dns_namespace(
+    fn create_public_dns_namespace(
         &self,
         input: CreatePublicDnsNamespaceRequest,
-    ) -> Result<CreatePublicDnsNamespaceResponse, RusotoError<CreatePublicDnsNamespaceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePublicDnsNamespaceResponse,
+                        RusotoError<CreatePublicDnsNamespaceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2077,27 +2247,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePublicDnsNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePublicDnsNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePublicDnsNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePublicDnsNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>For public and private DNS namespaces, one of the following combinations of DNS records in Amazon Route 53:</p> <ul> <li> <p>A</p> </li> <li> <p>AAAA</p> </li> <li> <p>A and AAAA</p> </li> <li> <p>SRV</p> </li> <li> <p>CNAME</p> </li> </ul> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a>RegisterInstance</a> request, and AWS Cloud Map uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn create_service(
+    fn create_service(
         &self,
         input: CreateServiceRequest,
-    ) -> Result<CreateServiceResponse, RusotoError<CreateServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateServiceResponse, RusotoError<CreateServiceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2105,26 +2281,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateServiceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateServiceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
-    async fn delete_namespace(
+    fn delete_namespace(
         &self,
         input: DeleteNamespaceRequest,
-    ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2135,26 +2318,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
-    async fn delete_service(
+    fn delete_service(
         &self,
         input: DeleteServiceRequest,
-    ) -> Result<DeleteServiceResponse, RusotoError<DeleteServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteServiceResponse, RusotoError<DeleteServiceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2162,26 +2352,37 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteServiceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteServiceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the Amazon Route 53 DNS records and health check, if any, that AWS Cloud Map created for the specified instance.</p>
-    async fn deregister_instance(
+    fn deregister_instance(
         &self,
         input: DeregisterInstanceRequest,
-    ) -> Result<DeregisterInstanceResponse, RusotoError<DeregisterInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeregisterInstanceResponse,
+                        RusotoError<DeregisterInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2192,27 +2393,34 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Discovers registered instances for a specified namespace and service.</p>
-    async fn discover_instances(
+    fn discover_instances(
         &self,
         input: DiscoverInstancesRequest,
-    ) -> Result<DiscoverInstancesResponse, RusotoError<DiscoverInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DiscoverInstancesResponse, RusotoError<DiscoverInstancesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2223,27 +2431,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DiscoverInstancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DiscoverInstancesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DiscoverInstancesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DiscoverInstancesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a specified instance.</p>
-    async fn get_instance(
+    fn get_instance(
         &self,
         input: GetInstanceRequest,
-    ) -> Result<GetInstanceResponse, RusotoError<GetInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetInstanceResponse, RusotoError<GetInstanceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2251,26 +2465,36 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
-    async fn get_instances_health_status(
+    fn get_instances_health_status(
         &self,
         input: GetInstancesHealthStatusRequest,
-    ) -> Result<GetInstancesHealthStatusResponse, RusotoError<GetInstancesHealthStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInstancesHealthStatusResponse,
+                        RusotoError<GetInstancesHealthStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2281,27 +2505,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstancesHealthStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstancesHealthStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInstancesHealthStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInstancesHealthStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a namespace.</p>
-    async fn get_namespace(
+    fn get_namespace(
         &self,
         input: GetNamespaceRequest,
-    ) -> Result<GetNamespaceResponse, RusotoError<GetNamespaceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetNamespaceResponse, RusotoError<GetNamespaceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2309,26 +2539,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNamespaceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetNamespaceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetNamespaceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a>ListOperations</a>.</p> </note></p>
-    async fn get_operation(
+    fn get_operation(
         &self,
         input: GetOperationRequest,
-    ) -> Result<GetOperationResponse, RusotoError<GetOperationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOperationResponse, RusotoError<GetOperationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2336,26 +2573,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOperationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOperationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetOperationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOperationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the settings for a specified service.</p>
-    async fn get_service(
+    fn get_service(
         &self,
         input: GetServiceRequest,
-    ) -> Result<GetServiceResponse, RusotoError<GetServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetServiceResponse, RusotoError<GetServiceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2363,26 +2607,32 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetServiceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
-    async fn list_instances(
+    fn list_instances(
         &self,
         input: ListInstancesRequest,
-    ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInstancesResponse, RusotoError<ListInstancesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2390,26 +2640,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstancesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInstancesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInstancesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
-    async fn list_namespaces(
+    fn list_namespaces(
         &self,
         input: ListNamespacesRequest,
-    ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListNamespacesResponse, RusotoError<ListNamespacesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2417,26 +2674,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListNamespacesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNamespacesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListNamespacesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListNamespacesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists operations that match the criteria that you specify.</p>
-    async fn list_operations(
+    fn list_operations(
         &self,
         input: ListOperationsRequest,
-    ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOperationsResponse, RusotoError<ListOperationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2444,26 +2708,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListOperationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOperationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOperationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOperationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
-    async fn list_services(
+    fn list_services(
         &self,
         input: ListServicesRequest,
-    ) -> Result<ListServicesResponse, RusotoError<ListServicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListServicesResponse, RusotoError<ListServicesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2471,26 +2742,34 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServicesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListServicesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListServicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a>CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
-    async fn register_instance(
+    fn register_instance(
         &self,
         input: RegisterInstanceRequest,
-    ) -> Result<RegisterInstanceResponse, RusotoError<RegisterInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<RegisterInstanceResponse, RusotoError<RegisterInstanceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2501,27 +2780,33 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterInstanceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a>HealthCheckCustomConfig</a>.</p>
-    async fn update_instance_custom_health_status(
+    fn update_instance_custom_health_status(
         &self,
         input: UpdateInstanceCustomHealthStatusRequest,
-    ) -> Result<(), RusotoError<UpdateInstanceCustomHealthStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<UpdateInstanceCustomHealthStatusError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2532,28 +2817,34 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInstanceCustomHealthStatusError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInstanceCustomHealthStatusError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Add or delete <code>DnsRecords</code> configurations</p> </li> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> </li> </ul> <p>For public and private DNS namespaces, you must specify all <code>DnsRecords</code> configurations (and, optionally, <code>HealthCheckConfig</code>) that you want to appear in the updated service. Any current configurations that don't appear in an <code>UpdateService</code> request are deleted.</p> <p>When you update the TTL setting for a service, AWS Cloud Map also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
-    async fn update_service(
+    fn update_service(
         &self,
         input: UpdateServiceRequest,
-    ) -> Result<UpdateServiceResponse, RusotoError<UpdateServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateServiceResponse, RusotoError<UpdateServiceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2561,18 +2852,19 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateServiceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateServiceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

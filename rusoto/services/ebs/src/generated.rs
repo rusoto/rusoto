@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>A block of data in an Amazon Elastic Block Store snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -268,25 +269,48 @@ impl fmt::Display for ListSnapshotBlocksError {
 }
 impl Error for ListSnapshotBlocksError {}
 /// Trait representing the capabilities of the Amazon EBS API. Amazon EBS clients implement this trait.
-#[async_trait]
 pub trait Ebs {
     /// <p>Returns the data in a block in an Amazon Elastic Block Store snapshot.</p>
-    async fn get_snapshot_block(
+    fn get_snapshot_block(
         &self,
         input: GetSnapshotBlockRequest,
-    ) -> Result<GetSnapshotBlockResponse, RusotoError<GetSnapshotBlockError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetSnapshotBlockResponse, RusotoError<GetSnapshotBlockError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the block indexes and block tokens for blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
-    async fn list_changed_blocks(
+    fn list_changed_blocks(
         &self,
         input: ListChangedBlocksRequest,
-    ) -> Result<ListChangedBlocksResponse, RusotoError<ListChangedBlocksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListChangedBlocksResponse, RusotoError<ListChangedBlocksError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the block indexes and block tokens for blocks in an Amazon Elastic Block Store snapshot.</p>
-    async fn list_snapshot_blocks(
+    fn list_snapshot_blocks(
         &self,
         input: ListSnapshotBlocksRequest,
-    ) -> Result<ListSnapshotBlocksResponse, RusotoError<ListSnapshotBlocksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSnapshotBlocksResponse,
+                        RusotoError<ListSnapshotBlocksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon EBS API.
 #[derive(Clone)]
@@ -326,13 +350,19 @@ impl EbsClient {
     }
 }
 
-#[async_trait]
 impl Ebs for EbsClient {
     /// <p>Returns the data in a block in an Amazon Elastic Block Store snapshot.</p>
-    async fn get_snapshot_block(
+    fn get_snapshot_block(
         &self,
         input: GetSnapshotBlockRequest,
-    ) -> Result<GetSnapshotBlockResponse, RusotoError<GetSnapshotBlockError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetSnapshotBlockResponse, RusotoError<GetSnapshotBlockError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/snapshots/{snapshot_id}/blocks/{block_index}",
             block_index = input.block_index,
@@ -346,42 +376,49 @@ impl Ebs for EbsClient {
         params.put("blockToken", &input.block_token);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = GetSnapshotBlockResponse::default();
-            result.block_data = Some(response.body);
+                let mut result = GetSnapshotBlockResponse::default();
+                result.block_data = Some(response.body);
 
-            if let Some(checksum) = response.headers.get("x-amz-Checksum") {
-                let value = checksum.to_owned();
-                result.checksum = Some(value)
-            };
-            if let Some(checksum_algorithm) = response.headers.get("x-amz-Checksum-Algorithm") {
-                let value = checksum_algorithm.to_owned();
-                result.checksum_algorithm = Some(value)
-            };
-            if let Some(data_length) = response.headers.get("x-amz-Data-Length") {
-                let value = data_length.to_owned();
-                result.data_length = Some(value.parse::<i64>().unwrap())
-            };
+                if let Some(checksum) = response.headers.get("x-amz-Checksum") {
+                    let value = checksum.to_owned();
+                    result.checksum = Some(value)
+                };
+                if let Some(checksum_algorithm) = response.headers.get("x-amz-Checksum-Algorithm") {
+                    let value = checksum_algorithm.to_owned();
+                    result.checksum_algorithm = Some(value)
+                };
+                if let Some(data_length) = response.headers.get("x-amz-Data-Length") {
+                    let value = data_length.to_owned();
+                    result.data_length = Some(value.parse::<i64>().unwrap())
+                };
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSnapshotBlockError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSnapshotBlockError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the block indexes and block tokens for blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
-    async fn list_changed_blocks(
+    fn list_changed_blocks(
         &self,
         input: ListChangedBlocksRequest,
-    ) -> Result<ListChangedBlocksResponse, RusotoError<ListChangedBlocksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListChangedBlocksResponse, RusotoError<ListChangedBlocksError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/snapshots/{second_snapshot_id}/changedblocks",
             second_snapshot_id = input.second_snapshot_id
@@ -405,28 +442,38 @@ impl Ebs for EbsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListChangedBlocksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListChangedBlocksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListChangedBlocksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListChangedBlocksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the block indexes and block tokens for blocks in an Amazon Elastic Block Store snapshot.</p>
-    async fn list_snapshot_blocks(
+    fn list_snapshot_blocks(
         &self,
         input: ListSnapshotBlocksRequest,
-    ) -> Result<ListSnapshotBlocksResponse, RusotoError<ListSnapshotBlocksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSnapshotBlocksResponse,
+                        RusotoError<ListSnapshotBlocksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/snapshots/{snapshot_id}/blocks",
             snapshot_id = input.snapshot_id
@@ -447,20 +494,20 @@ impl Ebs for EbsClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSnapshotBlocksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSnapshotBlocksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSnapshotBlocksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSnapshotBlocksError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>A container for account-level settings in AWS Device Farm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -7125,464 +7126,1046 @@ impl fmt::Display for UpdateVPCEConfigurationError {
 }
 impl Error for UpdateVPCEConfigurationError {}
 /// Trait representing the capabilities of the AWS Device Farm API. AWS Device Farm clients implement this trait.
-#[async_trait]
 pub trait DeviceFarm {
     /// <p>Creates a device pool.</p>
-    async fn create_device_pool(
+    fn create_device_pool(
         &self,
         input: CreateDevicePoolRequest,
-    ) -> Result<CreateDevicePoolResult, RusotoError<CreateDevicePoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDevicePoolResult, RusotoError<CreateDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a profile that can be applied to one or more private fleet device instances.</p>
-    async fn create_instance_profile(
+    fn create_instance_profile(
         &self,
         input: CreateInstanceProfileRequest,
-    ) -> Result<CreateInstanceProfileResult, RusotoError<CreateInstanceProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateInstanceProfileResult,
+                        RusotoError<CreateInstanceProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a network profile.</p>
-    async fn create_network_profile(
+    fn create_network_profile(
         &self,
         input: CreateNetworkProfileRequest,
-    ) -> Result<CreateNetworkProfileResult, RusotoError<CreateNetworkProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateNetworkProfileResult,
+                        RusotoError<CreateNetworkProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a project.</p>
-    async fn create_project(
+    fn create_project(
         &self,
         input: CreateProjectRequest,
-    ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProjectResult, RusotoError<CreateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Specifies and starts a remote access session.</p>
-    async fn create_remote_access_session(
+    fn create_remote_access_session(
         &self,
         input: CreateRemoteAccessSessionRequest,
-    ) -> Result<CreateRemoteAccessSessionResult, RusotoError<CreateRemoteAccessSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateRemoteAccessSessionResult,
+                        RusotoError<CreateRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a Selenium testing project. Projects are used to track <a>TestGridSession</a> instances.</p>
-    async fn create_test_grid_project(
+    fn create_test_grid_project(
         &self,
         input: CreateTestGridProjectRequest,
-    ) -> Result<CreateTestGridProjectResult, RusotoError<CreateTestGridProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateTestGridProjectResult,
+                        RusotoError<CreateTestGridProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a signed, short-term URL that can be passed to a Selenium <code>RemoteWebDriver</code> constructor.</p>
-    async fn create_test_grid_url(
+    fn create_test_grid_url(
         &self,
         input: CreateTestGridUrlRequest,
-    ) -> Result<CreateTestGridUrlResult, RusotoError<CreateTestGridUrlError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateTestGridUrlResult, RusotoError<CreateTestGridUrlError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Uploads an app or test scripts.</p>
-    async fn create_upload(
+    fn create_upload(
         &self,
         input: CreateUploadRequest,
-    ) -> Result<CreateUploadResult, RusotoError<CreateUploadError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateUploadResult, RusotoError<CreateUploadError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a configuration record in Device Farm for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
-    async fn create_vpce_configuration(
+    fn create_vpce_configuration(
         &self,
         input: CreateVPCEConfigurationRequest,
-    ) -> Result<CreateVPCEConfigurationResult, RusotoError<CreateVPCEConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVPCEConfigurationResult,
+                        RusotoError<CreateVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>
-    async fn delete_device_pool(
+    fn delete_device_pool(
         &self,
         input: DeleteDevicePoolRequest,
-    ) -> Result<DeleteDevicePoolResult, RusotoError<DeleteDevicePoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDevicePoolResult, RusotoError<DeleteDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a profile that can be applied to one or more private device instances.</p>
-    async fn delete_instance_profile(
+    fn delete_instance_profile(
         &self,
         input: DeleteInstanceProfileRequest,
-    ) -> Result<DeleteInstanceProfileResult, RusotoError<DeleteInstanceProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteInstanceProfileResult,
+                        RusotoError<DeleteInstanceProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a network profile.</p>
-    async fn delete_network_profile(
+    fn delete_network_profile(
         &self,
         input: DeleteNetworkProfileRequest,
-    ) -> Result<DeleteNetworkProfileResult, RusotoError<DeleteNetworkProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteNetworkProfileResult,
+                        RusotoError<DeleteNetworkProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> Deleting this resource does not stop an in-progress run.</p>
-    async fn delete_project(
+    fn delete_project(
         &self,
         input: DeleteProjectRequest,
-    ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteProjectResult, RusotoError<DeleteProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a completed remote access session and its results.</p>
-    async fn delete_remote_access_session(
+    fn delete_remote_access_session(
         &self,
         input: DeleteRemoteAccessSessionRequest,
-    ) -> Result<DeleteRemoteAccessSessionResult, RusotoError<DeleteRemoteAccessSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteRemoteAccessSessionResult,
+                        RusotoError<DeleteRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the run, given the run ARN.</p> <p> Deleting this resource does not stop an in-progress run.</p>
-    async fn delete_run(
+    fn delete_run(
         &self,
         input: DeleteRunRequest,
-    ) -> Result<DeleteRunResult, RusotoError<DeleteRunError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRunResult, RusotoError<DeleteRunError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p> Deletes a Selenium testing project and all content generated under it. </p> <important> <p>You cannot undo this operation.</p> </important> <note> <p>You cannot delete a project if it has active sessions.</p> </note></p>
-    async fn delete_test_grid_project(
+    fn delete_test_grid_project(
         &self,
         input: DeleteTestGridProjectRequest,
-    ) -> Result<DeleteTestGridProjectResult, RusotoError<DeleteTestGridProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteTestGridProjectResult,
+                        RusotoError<DeleteTestGridProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an upload given the upload ARN.</p>
-    async fn delete_upload(
+    fn delete_upload(
         &self,
         input: DeleteUploadRequest,
-    ) -> Result<DeleteUploadResult, RusotoError<DeleteUploadError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteUploadResult, RusotoError<DeleteUploadError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a configuration for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
-    async fn delete_vpce_configuration(
+    fn delete_vpce_configuration(
         &self,
         input: DeleteVPCEConfigurationRequest,
-    ) -> Result<DeleteVPCEConfigurationResult, RusotoError<DeleteVPCEConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteVPCEConfigurationResult,
+                        RusotoError<DeleteVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the number of unmetered iOS or unmetered Android devices that have been purchased by the account.</p>
-    async fn get_account_settings(
+    fn get_account_settings(
         &self,
-    ) -> Result<GetAccountSettingsResult, RusotoError<GetAccountSettingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetAccountSettingsResult, RusotoError<GetAccountSettingsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a unique device type.</p>
-    async fn get_device(
+    fn get_device(
         &self,
         input: GetDeviceRequest,
-    ) -> Result<GetDeviceResult, RusotoError<GetDeviceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDeviceResult, RusotoError<GetDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a device instance that belongs to a private device fleet.</p>
-    async fn get_device_instance(
+    fn get_device_instance(
         &self,
         input: GetDeviceInstanceRequest,
-    ) -> Result<GetDeviceInstanceResult, RusotoError<GetDeviceInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetDeviceInstanceResult, RusotoError<GetDeviceInstanceError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a device pool.</p>
-    async fn get_device_pool(
+    fn get_device_pool(
         &self,
         input: GetDevicePoolRequest,
-    ) -> Result<GetDevicePoolResult, RusotoError<GetDevicePoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDevicePoolResult, RusotoError<GetDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about compatibility with a device pool.</p>
-    async fn get_device_pool_compatibility(
+    fn get_device_pool_compatibility(
         &self,
         input: GetDevicePoolCompatibilityRequest,
-    ) -> Result<GetDevicePoolCompatibilityResult, RusotoError<GetDevicePoolCompatibilityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDevicePoolCompatibilityResult,
+                        RusotoError<GetDevicePoolCompatibilityError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the specified instance profile.</p>
-    async fn get_instance_profile(
+    fn get_instance_profile(
         &self,
         input: GetInstanceProfileRequest,
-    ) -> Result<GetInstanceProfileResult, RusotoError<GetInstanceProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetInstanceProfileResult, RusotoError<GetInstanceProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a job.</p>
-    async fn get_job(&self, input: GetJobRequest)
-        -> Result<GetJobResult, RusotoError<GetJobError>>;
+    fn get_job(
+        &self,
+        input: GetJobRequest,
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetJobResult, RusotoError<GetJobError>>> + Send + 'static>,
+    >;
 
     /// <p>Returns information about a network profile.</p>
-    async fn get_network_profile(
+    fn get_network_profile(
         &self,
         input: GetNetworkProfileRequest,
-    ) -> Result<GetNetworkProfileResult, RusotoError<GetNetworkProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetNetworkProfileResult, RusotoError<GetNetworkProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn get_offering_status(
+    fn get_offering_status(
         &self,
         input: GetOfferingStatusRequest,
-    ) -> Result<GetOfferingStatusResult, RusotoError<GetOfferingStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetOfferingStatusResult, RusotoError<GetOfferingStatusError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a project.</p>
-    async fn get_project(
+    fn get_project(
         &self,
         input: GetProjectRequest,
-    ) -> Result<GetProjectResult, RusotoError<GetProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetProjectResult, RusotoError<GetProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a link to a currently running remote access session.</p>
-    async fn get_remote_access_session(
+    fn get_remote_access_session(
         &self,
         input: GetRemoteAccessSessionRequest,
-    ) -> Result<GetRemoteAccessSessionResult, RusotoError<GetRemoteAccessSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRemoteAccessSessionResult,
+                        RusotoError<GetRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a run.</p>
-    async fn get_run(&self, input: GetRunRequest)
-        -> Result<GetRunResult, RusotoError<GetRunError>>;
+    fn get_run(
+        &self,
+        input: GetRunRequest,
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetRunResult, RusotoError<GetRunError>>> + Send + 'static>,
+    >;
 
     /// <p>Gets information about a suite.</p>
-    async fn get_suite(
+    fn get_suite(
         &self,
         input: GetSuiteRequest,
-    ) -> Result<GetSuiteResult, RusotoError<GetSuiteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetSuiteResult, RusotoError<GetSuiteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a test.</p>
-    async fn get_test(
+    fn get_test(
         &self,
         input: GetTestRequest,
-    ) -> Result<GetTestResult, RusotoError<GetTestError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetTestResult, RusotoError<GetTestError>>> + Send + 'static>,
+    >;
 
     /// <p>Retrieves information about a Selenium testing project.</p>
-    async fn get_test_grid_project(
+    fn get_test_grid_project(
         &self,
         input: GetTestGridProjectRequest,
-    ) -> Result<GetTestGridProjectResult, RusotoError<GetTestGridProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetTestGridProjectResult, RusotoError<GetTestGridProjectError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>A session is an instance of a browser created through a <code>RemoteWebDriver</code> with the URL from <a>CreateTestGridUrlResult$url</a>. You can use the following to look up sessions:</p> <ul> <li> <p>The session ARN (<a>GetTestGridSessionRequest$sessionArn</a>).</p> </li> <li> <p>The project ARN and a session ID (<a>GetTestGridSessionRequest$projectArn</a> and <a>GetTestGridSessionRequest$sessionId</a>).</p> </li> </ul> <p/></p>
-    async fn get_test_grid_session(
+    fn get_test_grid_session(
         &self,
         input: GetTestGridSessionRequest,
-    ) -> Result<GetTestGridSessionResult, RusotoError<GetTestGridSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetTestGridSessionResult, RusotoError<GetTestGridSessionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about an upload.</p>
-    async fn get_upload(
+    fn get_upload(
         &self,
         input: GetUploadRequest,
-    ) -> Result<GetUploadResult, RusotoError<GetUploadError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetUploadResult, RusotoError<GetUploadError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the configuration settings for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
-    async fn get_vpce_configuration(
+    fn get_vpce_configuration(
         &self,
         input: GetVPCEConfigurationRequest,
-    ) -> Result<GetVPCEConfigurationResult, RusotoError<GetVPCEConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetVPCEConfigurationResult,
+                        RusotoError<GetVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>
-    async fn install_to_remote_access_session(
+    fn install_to_remote_access_session(
         &self,
         input: InstallToRemoteAccessSessionRequest,
-    ) -> Result<InstallToRemoteAccessSessionResult, RusotoError<InstallToRemoteAccessSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        InstallToRemoteAccessSessionResult,
+                        RusotoError<InstallToRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about artifacts.</p>
-    async fn list_artifacts(
+    fn list_artifacts(
         &self,
         input: ListArtifactsRequest,
-    ) -> Result<ListArtifactsResult, RusotoError<ListArtifactsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListArtifactsResult, RusotoError<ListArtifactsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
-    async fn list_device_instances(
+    fn list_device_instances(
         &self,
         input: ListDeviceInstancesRequest,
-    ) -> Result<ListDeviceInstancesResult, RusotoError<ListDeviceInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDeviceInstancesResult,
+                        RusotoError<ListDeviceInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about device pools.</p>
-    async fn list_device_pools(
+    fn list_device_pools(
         &self,
         input: ListDevicePoolsRequest,
-    ) -> Result<ListDevicePoolsResult, RusotoError<ListDevicePoolsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDevicePoolsResult, RusotoError<ListDevicePoolsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about unique device types.</p>
-    async fn list_devices(
+    fn list_devices(
         &self,
         input: ListDevicesRequest,
-    ) -> Result<ListDevicesResult, RusotoError<ListDevicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDevicesResult, RusotoError<ListDevicesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about all the instance profiles in an AWS account.</p>
-    async fn list_instance_profiles(
+    fn list_instance_profiles(
         &self,
         input: ListInstanceProfilesRequest,
-    ) -> Result<ListInstanceProfilesResult, RusotoError<ListInstanceProfilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInstanceProfilesResult,
+                        RusotoError<ListInstanceProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about jobs for a given test run.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResult, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the list of available network profiles.</p>
-    async fn list_network_profiles(
+    fn list_network_profiles(
         &self,
         input: ListNetworkProfilesRequest,
-    ) -> Result<ListNetworkProfilesResult, RusotoError<ListNetworkProfilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListNetworkProfilesResult,
+                        RusotoError<ListNetworkProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you must be able to invoke this operation.</p>
-    async fn list_offering_promotions(
+    fn list_offering_promotions(
         &self,
         input: ListOfferingPromotionsRequest,
-    ) -> Result<ListOfferingPromotionsResult, RusotoError<ListOfferingPromotionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOfferingPromotionsResult,
+                        RusotoError<ListOfferingPromotionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn list_offering_transactions(
+    fn list_offering_transactions(
         &self,
         input: ListOfferingTransactionsRequest,
-    ) -> Result<ListOfferingTransactionsResult, RusotoError<ListOfferingTransactionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOfferingTransactionsResult,
+                        RusotoError<ListOfferingTransactionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn list_offerings(
+    fn list_offerings(
         &self,
         input: ListOfferingsRequest,
-    ) -> Result<ListOfferingsResult, RusotoError<ListOfferingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOfferingsResult, RusotoError<ListOfferingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about projects.</p>
-    async fn list_projects(
+    fn list_projects(
         &self,
         input: ListProjectsRequest,
-    ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProjectsResult, RusotoError<ListProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of all currently running remote access sessions.</p>
-    async fn list_remote_access_sessions(
+    fn list_remote_access_sessions(
         &self,
         input: ListRemoteAccessSessionsRequest,
-    ) -> Result<ListRemoteAccessSessionsResult, RusotoError<ListRemoteAccessSessionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRemoteAccessSessionsResult,
+                        RusotoError<ListRemoteAccessSessionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about runs, given an AWS Device Farm project ARN.</p>
-    async fn list_runs(
+    fn list_runs(
         &self,
         input: ListRunsRequest,
-    ) -> Result<ListRunsResult, RusotoError<ListRunsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRunsResult, RusotoError<ListRunsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about samples, given an AWS Device Farm job ARN.</p>
-    async fn list_samples(
+    fn list_samples(
         &self,
         input: ListSamplesRequest,
-    ) -> Result<ListSamplesResult, RusotoError<ListSamplesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSamplesResult, RusotoError<ListSamplesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about test suites for a given job.</p>
-    async fn list_suites(
+    fn list_suites(
         &self,
         input: ListSuitesRequest,
-    ) -> Result<ListSuitesResult, RusotoError<ListSuitesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSuitesResult, RusotoError<ListSuitesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the tags for an AWS Device Farm resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of all Selenium testing projects in your account.</p>
-    async fn list_test_grid_projects(
+    fn list_test_grid_projects(
         &self,
         input: ListTestGridProjectsRequest,
-    ) -> Result<ListTestGridProjectsResult, RusotoError<ListTestGridProjectsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridProjectsResult,
+                        RusotoError<ListTestGridProjectsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the actions taken in a <a>TestGridSession</a>.</p>
-    async fn list_test_grid_session_actions(
+    fn list_test_grid_session_actions(
         &self,
         input: ListTestGridSessionActionsRequest,
-    ) -> Result<ListTestGridSessionActionsResult, RusotoError<ListTestGridSessionActionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridSessionActionsResult,
+                        RusotoError<ListTestGridSessionActionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a list of artifacts created during the session.</p>
-    async fn list_test_grid_session_artifacts(
+    fn list_test_grid_session_artifacts(
         &self,
         input: ListTestGridSessionArtifactsRequest,
-    ) -> Result<ListTestGridSessionArtifactsResult, RusotoError<ListTestGridSessionArtifactsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridSessionArtifactsResult,
+                        RusotoError<ListTestGridSessionArtifactsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a list of sessions for a <a>TestGridProject</a>.</p>
-    async fn list_test_grid_sessions(
+    fn list_test_grid_sessions(
         &self,
         input: ListTestGridSessionsRequest,
-    ) -> Result<ListTestGridSessionsResult, RusotoError<ListTestGridSessionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridSessionsResult,
+                        RusotoError<ListTestGridSessionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about tests in a given test suite.</p>
-    async fn list_tests(
+    fn list_tests(
         &self,
         input: ListTestsRequest,
-    ) -> Result<ListTestsResult, RusotoError<ListTestsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTestsResult, RusotoError<ListTestsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about unique problems, such as exceptions or crashes.</p> <p>Unique problems are defined as a single instance of an error across a run, job, or suite. For example, if a call in your application consistently raises an exception (<code>OutOfBoundsException in MyActivity.java:386</code>), <code>ListUniqueProblems</code> returns a single entry instead of many individual entries for that exception.</p>
-    async fn list_unique_problems(
+    fn list_unique_problems(
         &self,
         input: ListUniqueProblemsRequest,
-    ) -> Result<ListUniqueProblemsResult, RusotoError<ListUniqueProblemsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListUniqueProblemsResult, RusotoError<ListUniqueProblemsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about uploads, given an AWS Device Farm project ARN.</p>
-    async fn list_uploads(
+    fn list_uploads(
         &self,
         input: ListUploadsRequest,
-    ) -> Result<ListUploadsResult, RusotoError<ListUploadsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUploadsResult, RusotoError<ListUploadsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
-    async fn list_vpce_configurations(
+    fn list_vpce_configurations(
         &self,
         input: ListVPCEConfigurationsRequest,
-    ) -> Result<ListVPCEConfigurationsResult, RusotoError<ListVPCEConfigurationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListVPCEConfigurationsResult,
+                        RusotoError<ListVPCEConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn purchase_offering(
+    fn purchase_offering(
         &self,
         input: PurchaseOfferingRequest,
-    ) -> Result<PurchaseOfferingResult, RusotoError<PurchaseOfferingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PurchaseOfferingResult, RusotoError<PurchaseOfferingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn renew_offering(
+    fn renew_offering(
         &self,
         input: RenewOfferingRequest,
-    ) -> Result<RenewOfferingResult, RusotoError<RenewOfferingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RenewOfferingResult, RusotoError<RenewOfferingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Schedules a run.</p>
-    async fn schedule_run(
+    fn schedule_run(
         &self,
         input: ScheduleRunRequest,
-    ) -> Result<ScheduleRunResult, RusotoError<ScheduleRunError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ScheduleRunResult, RusotoError<ScheduleRunError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Initiates a stop request for the current job. AWS Device Farm immediately stops the job on the device where tests have not started. You are not billed for this device. On the device where tests have started, setup suite and teardown suite tests run to completion on the device. You are billed for setup, teardown, and any tests that were in progress or already completed.</p>
-    async fn stop_job(
+    fn stop_job(
         &self,
         input: StopJobRequest,
-    ) -> Result<StopJobResult, RusotoError<StopJobError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<StopJobResult, RusotoError<StopJobError>>> + Send + 'static>,
+    >;
 
     /// <p>Ends a specified remote access session.</p>
-    async fn stop_remote_access_session(
+    fn stop_remote_access_session(
         &self,
         input: StopRemoteAccessSessionRequest,
-    ) -> Result<StopRemoteAccessSessionResult, RusotoError<StopRemoteAccessSessionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopRemoteAccessSessionResult,
+                        RusotoError<StopRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Initiates a stop request for the current test run. AWS Device Farm immediately stops the run on devices where tests have not started. You are not billed for these devices. On devices where tests have started executing, setup suite and teardown suite tests run to completion on those devices. You are billed for setup, teardown, and any tests that were in progress or already completed.</p>
-    async fn stop_run(
+    fn stop_run(
         &self,
         input: StopRunRequest,
-    ) -> Result<StopRunResult, RusotoError<StopRunError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<StopRunResult, RusotoError<StopRunError>>> + Send + 'static>,
+    >;
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates information about a private device instance.</p>
-    async fn update_device_instance(
+    fn update_device_instance(
         &self,
         input: UpdateDeviceInstanceRequest,
-    ) -> Result<UpdateDeviceInstanceResult, RusotoError<UpdateDeviceInstanceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDeviceInstanceResult,
+                        RusotoError<UpdateDeviceInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>
-    async fn update_device_pool(
+    fn update_device_pool(
         &self,
         input: UpdateDevicePoolRequest,
-    ) -> Result<UpdateDevicePoolResult, RusotoError<UpdateDevicePoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDevicePoolResult, RusotoError<UpdateDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates information about an existing private device instance profile.</p>
-    async fn update_instance_profile(
+    fn update_instance_profile(
         &self,
         input: UpdateInstanceProfileRequest,
-    ) -> Result<UpdateInstanceProfileResult, RusotoError<UpdateInstanceProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateInstanceProfileResult,
+                        RusotoError<UpdateInstanceProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the network profile.</p>
-    async fn update_network_profile(
+    fn update_network_profile(
         &self,
         input: UpdateNetworkProfileRequest,
-    ) -> Result<UpdateNetworkProfileResult, RusotoError<UpdateNetworkProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateNetworkProfileResult,
+                        RusotoError<UpdateNetworkProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modifies the specified project name, given the project ARN and a new name.</p>
-    async fn update_project(
+    fn update_project(
         &self,
         input: UpdateProjectRequest,
-    ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateProjectResult, RusotoError<UpdateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Change details of a project.</p>
-    async fn update_test_grid_project(
+    fn update_test_grid_project(
         &self,
         input: UpdateTestGridProjectRequest,
-    ) -> Result<UpdateTestGridProjectResult, RusotoError<UpdateTestGridProjectError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTestGridProjectResult,
+                        RusotoError<UpdateTestGridProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an uploaded test spec.</p>
-    async fn update_upload(
+    fn update_upload(
         &self,
         input: UpdateUploadRequest,
-    ) -> Result<UpdateUploadResult, RusotoError<UpdateUploadError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateUploadResult, RusotoError<UpdateUploadError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates information about an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
-    async fn update_vpce_configuration(
+    fn update_vpce_configuration(
         &self,
         input: UpdateVPCEConfigurationRequest,
-    ) -> Result<UpdateVPCEConfigurationResult, RusotoError<UpdateVPCEConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVPCEConfigurationResult,
+                        RusotoError<UpdateVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Device Farm API.
 #[derive(Clone)]
@@ -7622,13 +8205,18 @@ impl DeviceFarmClient {
     }
 }
 
-#[async_trait]
 impl DeviceFarm for DeviceFarmClient {
     /// <p>Creates a device pool.</p>
-    async fn create_device_pool(
+    fn create_device_pool(
         &self,
         input: CreateDevicePoolRequest,
-    ) -> Result<CreateDevicePoolResult, RusotoError<CreateDevicePoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateDevicePoolResult, RusotoError<CreateDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7636,26 +8224,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDevicePoolError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDevicePoolResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDevicePoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a profile that can be applied to one or more private fleet device instances.</p>
-    async fn create_instance_profile(
+    fn create_instance_profile(
         &self,
         input: CreateInstanceProfileRequest,
-    ) -> Result<CreateInstanceProfileResult, RusotoError<CreateInstanceProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateInstanceProfileResult,
+                        RusotoError<CreateInstanceProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7663,27 +8262,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInstanceProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateInstanceProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateInstanceProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a network profile.</p>
-    async fn create_network_profile(
+    fn create_network_profile(
         &self,
         input: CreateNetworkProfileRequest,
-    ) -> Result<CreateNetworkProfileResult, RusotoError<CreateNetworkProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateNetworkProfileResult,
+                        RusotoError<CreateNetworkProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7691,27 +8300,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNetworkProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateNetworkProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateNetworkProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a project.</p>
-    async fn create_project(
+    fn create_project(
         &self,
         input: CreateProjectRequest,
-    ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateProjectResult, RusotoError<CreateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7719,26 +8334,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Specifies and starts a remote access session.</p>
-    async fn create_remote_access_session(
+    fn create_remote_access_session(
         &self,
         input: CreateRemoteAccessSessionRequest,
-    ) -> Result<CreateRemoteAccessSessionResult, RusotoError<CreateRemoteAccessSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateRemoteAccessSessionResult,
+                        RusotoError<CreateRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7749,27 +8374,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRemoteAccessSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRemoteAccessSessionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRemoteAccessSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a Selenium testing project. Projects are used to track <a>TestGridSession</a> instances.</p>
-    async fn create_test_grid_project(
+    fn create_test_grid_project(
         &self,
         input: CreateTestGridProjectRequest,
-    ) -> Result<CreateTestGridProjectResult, RusotoError<CreateTestGridProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateTestGridProjectResult,
+                        RusotoError<CreateTestGridProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7777,27 +8412,34 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTestGridProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTestGridProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTestGridProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a signed, short-term URL that can be passed to a Selenium <code>RemoteWebDriver</code> constructor.</p>
-    async fn create_test_grid_url(
+    fn create_test_grid_url(
         &self,
         input: CreateTestGridUrlRequest,
-    ) -> Result<CreateTestGridUrlResult, RusotoError<CreateTestGridUrlError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateTestGridUrlResult, RusotoError<CreateTestGridUrlError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7805,26 +8447,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTestGridUrlResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTestGridUrlError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTestGridUrlResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTestGridUrlError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Uploads an app or test scripts.</p>
-    async fn create_upload(
+    fn create_upload(
         &self,
         input: CreateUploadRequest,
-    ) -> Result<CreateUploadResult, RusotoError<CreateUploadError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateUploadResult, RusotoError<CreateUploadError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7832,26 +8481,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUploadError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateUploadResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateUploadError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a configuration record in Device Farm for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
-    async fn create_vpce_configuration(
+    fn create_vpce_configuration(
         &self,
         input: CreateVPCEConfigurationRequest,
-    ) -> Result<CreateVPCEConfigurationResult, RusotoError<CreateVPCEConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVPCEConfigurationResult,
+                        RusotoError<CreateVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7862,27 +8521,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVPCEConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVPCEConfigurationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVPCEConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>
-    async fn delete_device_pool(
+    fn delete_device_pool(
         &self,
         input: DeleteDevicePoolRequest,
-    ) -> Result<DeleteDevicePoolResult, RusotoError<DeleteDevicePoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteDevicePoolResult, RusotoError<DeleteDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7890,26 +8555,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDevicePoolError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDevicePoolResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDevicePoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a profile that can be applied to one or more private device instances.</p>
-    async fn delete_instance_profile(
+    fn delete_instance_profile(
         &self,
         input: DeleteInstanceProfileRequest,
-    ) -> Result<DeleteInstanceProfileResult, RusotoError<DeleteInstanceProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteInstanceProfileResult,
+                        RusotoError<DeleteInstanceProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7917,27 +8593,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInstanceProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInstanceProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInstanceProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a network profile.</p>
-    async fn delete_network_profile(
+    fn delete_network_profile(
         &self,
         input: DeleteNetworkProfileRequest,
-    ) -> Result<DeleteNetworkProfileResult, RusotoError<DeleteNetworkProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteNetworkProfileResult,
+                        RusotoError<DeleteNetworkProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7945,27 +8631,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNetworkProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteNetworkProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNetworkProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> Deleting this resource does not stop an in-progress run.</p>
-    async fn delete_project(
+    fn delete_project(
         &self,
         input: DeleteProjectRequest,
-    ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteProjectResult, RusotoError<DeleteProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7973,26 +8665,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a completed remote access session and its results.</p>
-    async fn delete_remote_access_session(
+    fn delete_remote_access_session(
         &self,
         input: DeleteRemoteAccessSessionRequest,
-    ) -> Result<DeleteRemoteAccessSessionResult, RusotoError<DeleteRemoteAccessSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteRemoteAccessSessionResult,
+                        RusotoError<DeleteRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8003,27 +8705,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRemoteAccessSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteRemoteAccessSessionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRemoteAccessSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the run, given the run ARN.</p> <p> Deleting this resource does not stop an in-progress run.</p>
-    async fn delete_run(
+    fn delete_run(
         &self,
         input: DeleteRunRequest,
-    ) -> Result<DeleteRunResult, RusotoError<DeleteRunError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRunResult, RusotoError<DeleteRunError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8031,26 +8739,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRunError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteRunResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRunError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p> Deletes a Selenium testing project and all content generated under it. </p> <important> <p>You cannot undo this operation.</p> </important> <note> <p>You cannot delete a project if it has active sessions.</p> </note></p>
-    async fn delete_test_grid_project(
+    fn delete_test_grid_project(
         &self,
         input: DeleteTestGridProjectRequest,
-    ) -> Result<DeleteTestGridProjectResult, RusotoError<DeleteTestGridProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteTestGridProjectResult,
+                        RusotoError<DeleteTestGridProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8058,27 +8776,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTestGridProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteTestGridProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTestGridProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an upload given the upload ARN.</p>
-    async fn delete_upload(
+    fn delete_upload(
         &self,
         input: DeleteUploadRequest,
-    ) -> Result<DeleteUploadResult, RusotoError<DeleteUploadError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteUploadResult, RusotoError<DeleteUploadError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8086,26 +8810,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUploadError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteUploadResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUploadError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a configuration for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
-    async fn delete_vpce_configuration(
+    fn delete_vpce_configuration(
         &self,
         input: DeleteVPCEConfigurationRequest,
-    ) -> Result<DeleteVPCEConfigurationResult, RusotoError<DeleteVPCEConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteVPCEConfigurationResult,
+                        RusotoError<DeleteVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8116,53 +8850,66 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVPCEConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteVPCEConfigurationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVPCEConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the number of unmetered iOS or unmetered Android devices that have been purchased by the account.</p>
-    async fn get_account_settings(
+    fn get_account_settings(
         &self,
-    ) -> Result<GetAccountSettingsResult, RusotoError<GetAccountSettingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetAccountSettingsResult, RusotoError<GetAccountSettingsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetAccountSettings");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAccountSettingsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAccountSettingsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAccountSettingsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAccountSettingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a unique device type.</p>
-    async fn get_device(
+    fn get_device(
         &self,
         input: GetDeviceRequest,
-    ) -> Result<GetDeviceResult, RusotoError<GetDeviceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDeviceResult, RusotoError<GetDeviceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8170,26 +8917,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeviceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeviceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a device instance that belongs to a private device fleet.</p>
-    async fn get_device_instance(
+    fn get_device_instance(
         &self,
         input: GetDeviceInstanceRequest,
-    ) -> Result<GetDeviceInstanceResult, RusotoError<GetDeviceInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetDeviceInstanceResult, RusotoError<GetDeviceInstanceError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8197,26 +8951,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeviceInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDeviceInstanceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeviceInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a device pool.</p>
-    async fn get_device_pool(
+    fn get_device_pool(
         &self,
         input: GetDevicePoolRequest,
-    ) -> Result<GetDevicePoolResult, RusotoError<GetDevicePoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDevicePoolResult, RusotoError<GetDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8224,27 +8985,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevicePoolError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetDevicePoolResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDevicePoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about compatibility with a device pool.</p>
-    async fn get_device_pool_compatibility(
+    fn get_device_pool_compatibility(
         &self,
         input: GetDevicePoolCompatibilityRequest,
-    ) -> Result<GetDevicePoolCompatibilityResult, RusotoError<GetDevicePoolCompatibilityError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDevicePoolCompatibilityResult,
+                        RusotoError<GetDevicePoolCompatibilityError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8255,27 +9025,34 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDevicePoolCompatibilityResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevicePoolCompatibilityError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDevicePoolCompatibilityResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDevicePoolCompatibilityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the specified instance profile.</p>
-    async fn get_instance_profile(
+    fn get_instance_profile(
         &self,
         input: GetInstanceProfileRequest,
-    ) -> Result<GetInstanceProfileResult, RusotoError<GetInstanceProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetInstanceProfileResult, RusotoError<GetInstanceProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8283,27 +9060,29 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInstanceProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInstanceProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a job.</p>
-    async fn get_job(
+    fn get_job(
         &self,
         input: GetJobRequest,
-    ) -> Result<GetJobResult, RusotoError<GetJobError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetJobResult, RusotoError<GetJobError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8311,26 +9090,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a network profile.</p>
-    async fn get_network_profile(
+    fn get_network_profile(
         &self,
         input: GetNetworkProfileRequest,
-    ) -> Result<GetNetworkProfileResult, RusotoError<GetNetworkProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetNetworkProfileResult, RusotoError<GetNetworkProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8338,26 +9124,34 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNetworkProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetNetworkProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetNetworkProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn get_offering_status(
+    fn get_offering_status(
         &self,
         input: GetOfferingStatusRequest,
-    ) -> Result<GetOfferingStatusResult, RusotoError<GetOfferingStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetOfferingStatusResult, RusotoError<GetOfferingStatusError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8365,26 +9159,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOfferingStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOfferingStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetOfferingStatusResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOfferingStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a project.</p>
-    async fn get_project(
+    fn get_project(
         &self,
         input: GetProjectRequest,
-    ) -> Result<GetProjectResult, RusotoError<GetProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetProjectResult, RusotoError<GetProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8392,26 +9193,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a link to a currently running remote access session.</p>
-    async fn get_remote_access_session(
+    fn get_remote_access_session(
         &self,
         input: GetRemoteAccessSessionRequest,
-    ) -> Result<GetRemoteAccessSessionResult, RusotoError<GetRemoteAccessSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRemoteAccessSessionResult,
+                        RusotoError<GetRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8419,27 +9230,29 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRemoteAccessSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRemoteAccessSessionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRemoteAccessSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a run.</p>
-    async fn get_run(
+    fn get_run(
         &self,
         input: GetRunRequest,
-    ) -> Result<GetRunResult, RusotoError<GetRunError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetRunResult, RusotoError<GetRunError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8447,26 +9260,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRunError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetRunResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRunError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a suite.</p>
-    async fn get_suite(
+    fn get_suite(
         &self,
         input: GetSuiteRequest,
-    ) -> Result<GetSuiteResult, RusotoError<GetSuiteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetSuiteResult, RusotoError<GetSuiteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8474,26 +9293,28 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetSuiteResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSuiteError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetSuiteResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSuiteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a test.</p>
-    async fn get_test(
+    fn get_test(
         &self,
         input: GetTestRequest,
-    ) -> Result<GetTestResult, RusotoError<GetTestError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetTestResult, RusotoError<GetTestError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8501,26 +9322,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTestResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTestError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetTestResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTestError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves information about a Selenium testing project.</p>
-    async fn get_test_grid_project(
+    fn get_test_grid_project(
         &self,
         input: GetTestGridProjectRequest,
-    ) -> Result<GetTestGridProjectResult, RusotoError<GetTestGridProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetTestGridProjectResult, RusotoError<GetTestGridProjectError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8528,27 +9356,34 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTestGridProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTestGridProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTestGridProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>A session is an instance of a browser created through a <code>RemoteWebDriver</code> with the URL from <a>CreateTestGridUrlResult$url</a>. You can use the following to look up sessions:</p> <ul> <li> <p>The session ARN (<a>GetTestGridSessionRequest$sessionArn</a>).</p> </li> <li> <p>The project ARN and a session ID (<a>GetTestGridSessionRequest$projectArn</a> and <a>GetTestGridSessionRequest$sessionId</a>).</p> </li> </ul> <p/></p>
-    async fn get_test_grid_session(
+    fn get_test_grid_session(
         &self,
         input: GetTestGridSessionRequest,
-    ) -> Result<GetTestGridSessionResult, RusotoError<GetTestGridSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetTestGridSessionResult, RusotoError<GetTestGridSessionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8556,27 +9391,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTestGridSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTestGridSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTestGridSessionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTestGridSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about an upload.</p>
-    async fn get_upload(
+    fn get_upload(
         &self,
         input: GetUploadRequest,
-    ) -> Result<GetUploadResult, RusotoError<GetUploadError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetUploadResult, RusotoError<GetUploadError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8584,26 +9425,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUploadError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetUploadResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUploadError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the configuration settings for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
-    async fn get_vpce_configuration(
+    fn get_vpce_configuration(
         &self,
         input: GetVPCEConfigurationRequest,
-    ) -> Result<GetVPCEConfigurationResult, RusotoError<GetVPCEConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetVPCEConfigurationResult,
+                        RusotoError<GetVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8611,28 +9462,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVPCEConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetVPCEConfigurationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetVPCEConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>
-    async fn install_to_remote_access_session(
+    fn install_to_remote_access_session(
         &self,
         input: InstallToRemoteAccessSessionRequest,
-    ) -> Result<InstallToRemoteAccessSessionResult, RusotoError<InstallToRemoteAccessSessionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        InstallToRemoteAccessSessionResult,
+                        RusotoError<InstallToRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8643,27 +9503,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<InstallToRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InstallToRemoteAccessSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<InstallToRemoteAccessSessionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(InstallToRemoteAccessSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about artifacts.</p>
-    async fn list_artifacts(
+    fn list_artifacts(
         &self,
         input: ListArtifactsRequest,
-    ) -> Result<ListArtifactsResult, RusotoError<ListArtifactsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListArtifactsResult, RusotoError<ListArtifactsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8671,26 +9537,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListArtifactsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListArtifactsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListArtifactsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListArtifactsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
-    async fn list_device_instances(
+    fn list_device_instances(
         &self,
         input: ListDeviceInstancesRequest,
-    ) -> Result<ListDeviceInstancesResult, RusotoError<ListDeviceInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDeviceInstancesResult,
+                        RusotoError<ListDeviceInstancesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8698,27 +9574,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeviceInstancesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeviceInstancesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDeviceInstancesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDeviceInstancesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about device pools.</p>
-    async fn list_device_pools(
+    fn list_device_pools(
         &self,
         input: ListDevicePoolsRequest,
-    ) -> Result<ListDevicePoolsResult, RusotoError<ListDevicePoolsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDevicePoolsResult, RusotoError<ListDevicePoolsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8726,26 +9608,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDevicePoolsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDevicePoolsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDevicePoolsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDevicePoolsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about unique device types.</p>
-    async fn list_devices(
+    fn list_devices(
         &self,
         input: ListDevicesRequest,
-    ) -> Result<ListDevicesResult, RusotoError<ListDevicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDevicesResult, RusotoError<ListDevicesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8753,26 +9642,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDevicesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDevicesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListDevicesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDevicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about all the instance profiles in an AWS account.</p>
-    async fn list_instance_profiles(
+    fn list_instance_profiles(
         &self,
         input: ListInstanceProfilesRequest,
-    ) -> Result<ListInstanceProfilesResult, RusotoError<ListInstanceProfilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInstanceProfilesResult,
+                        RusotoError<ListInstanceProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8780,27 +9679,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInstanceProfilesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstanceProfilesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInstanceProfilesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInstanceProfilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about jobs for a given test run.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResult, RusotoError<ListJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResult, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8808,26 +9713,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the list of available network profiles.</p>
-    async fn list_network_profiles(
+    fn list_network_profiles(
         &self,
         input: ListNetworkProfilesRequest,
-    ) -> Result<ListNetworkProfilesResult, RusotoError<ListNetworkProfilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListNetworkProfilesResult,
+                        RusotoError<ListNetworkProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8835,27 +9750,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListNetworkProfilesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNetworkProfilesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListNetworkProfilesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListNetworkProfilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you must be able to invoke this operation.</p>
-    async fn list_offering_promotions(
+    fn list_offering_promotions(
         &self,
         input: ListOfferingPromotionsRequest,
-    ) -> Result<ListOfferingPromotionsResult, RusotoError<ListOfferingPromotionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOfferingPromotionsResult,
+                        RusotoError<ListOfferingPromotionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8863,27 +9788,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOfferingPromotionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingPromotionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOfferingPromotionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOfferingPromotionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn list_offering_transactions(
+    fn list_offering_transactions(
         &self,
         input: ListOfferingTransactionsRequest,
-    ) -> Result<ListOfferingTransactionsResult, RusotoError<ListOfferingTransactionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOfferingTransactionsResult,
+                        RusotoError<ListOfferingTransactionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8894,27 +9829,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOfferingTransactionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingTransactionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOfferingTransactionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOfferingTransactionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn list_offerings(
+    fn list_offerings(
         &self,
         input: ListOfferingsRequest,
-    ) -> Result<ListOfferingsResult, RusotoError<ListOfferingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOfferingsResult, RusotoError<ListOfferingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8922,26 +9863,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListOfferingsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListOfferingsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOfferingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about projects.</p>
-    async fn list_projects(
+    fn list_projects(
         &self,
         input: ListProjectsRequest,
-    ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProjectsResult, RusotoError<ListProjectsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8949,26 +9896,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProjectsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProjectsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of all currently running remote access sessions.</p>
-    async fn list_remote_access_sessions(
+    fn list_remote_access_sessions(
         &self,
         input: ListRemoteAccessSessionsRequest,
-    ) -> Result<ListRemoteAccessSessionsResult, RusotoError<ListRemoteAccessSessionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRemoteAccessSessionsResult,
+                        RusotoError<ListRemoteAccessSessionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8979,27 +9936,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRemoteAccessSessionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRemoteAccessSessionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRemoteAccessSessionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRemoteAccessSessionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about runs, given an AWS Device Farm project ARN.</p>
-    async fn list_runs(
+    fn list_runs(
         &self,
         input: ListRunsRequest,
-    ) -> Result<ListRunsResult, RusotoError<ListRunsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRunsResult, RusotoError<ListRunsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9007,26 +9970,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRunsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRunsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListRunsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRunsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about samples, given an AWS Device Farm job ARN.</p>
-    async fn list_samples(
+    fn list_samples(
         &self,
         input: ListSamplesRequest,
-    ) -> Result<ListSamplesResult, RusotoError<ListSamplesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSamplesResult, RusotoError<ListSamplesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9034,26 +10003,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSamplesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSamplesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListSamplesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSamplesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about test suites for a given job.</p>
-    async fn list_suites(
+    fn list_suites(
         &self,
         input: ListSuitesRequest,
-    ) -> Result<ListSuitesResult, RusotoError<ListSuitesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSuitesResult, RusotoError<ListSuitesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9061,26 +10036,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSuitesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSuitesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListSuitesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSuitesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the tags for an AWS Device Farm resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9088,27 +10073,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of all Selenium testing projects in your account.</p>
-    async fn list_test_grid_projects(
+    fn list_test_grid_projects(
         &self,
         input: ListTestGridProjectsRequest,
-    ) -> Result<ListTestGridProjectsResult, RusotoError<ListTestGridProjectsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridProjectsResult,
+                        RusotoError<ListTestGridProjectsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9116,28 +10111,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridProjectsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridProjectsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTestGridProjectsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTestGridProjectsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the actions taken in a <a>TestGridSession</a>.</p>
-    async fn list_test_grid_session_actions(
+    fn list_test_grid_session_actions(
         &self,
         input: ListTestGridSessionActionsRequest,
-    ) -> Result<ListTestGridSessionActionsResult, RusotoError<ListTestGridSessionActionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridSessionActionsResult,
+                        RusotoError<ListTestGridSessionActionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9148,28 +10152,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridSessionActionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridSessionActionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTestGridSessionActionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTestGridSessionActionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a list of artifacts created during the session.</p>
-    async fn list_test_grid_session_artifacts(
+    fn list_test_grid_session_artifacts(
         &self,
         input: ListTestGridSessionArtifactsRequest,
-    ) -> Result<ListTestGridSessionArtifactsResult, RusotoError<ListTestGridSessionArtifactsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridSessionArtifactsResult,
+                        RusotoError<ListTestGridSessionArtifactsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9180,27 +10193,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridSessionArtifactsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridSessionArtifactsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTestGridSessionArtifactsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTestGridSessionArtifactsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a list of sessions for a <a>TestGridProject</a>.</p>
-    async fn list_test_grid_sessions(
+    fn list_test_grid_sessions(
         &self,
         input: ListTestGridSessionsRequest,
-    ) -> Result<ListTestGridSessionsResult, RusotoError<ListTestGridSessionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTestGridSessionsResult,
+                        RusotoError<ListTestGridSessionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9208,27 +10231,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridSessionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridSessionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTestGridSessionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTestGridSessionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about tests in a given test suite.</p>
-    async fn list_tests(
+    fn list_tests(
         &self,
         input: ListTestsRequest,
-    ) -> Result<ListTestsResult, RusotoError<ListTestsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTestsResult, RusotoError<ListTestsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9236,26 +10265,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTestsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListTestsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTestsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about unique problems, such as exceptions or crashes.</p> <p>Unique problems are defined as a single instance of an error across a run, job, or suite. For example, if a call in your application consistently raises an exception (<code>OutOfBoundsException in MyActivity.java:386</code>), <code>ListUniqueProblems</code> returns a single entry instead of many individual entries for that exception.</p>
-    async fn list_unique_problems(
+    fn list_unique_problems(
         &self,
         input: ListUniqueProblemsRequest,
-    ) -> Result<ListUniqueProblemsResult, RusotoError<ListUniqueProblemsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListUniqueProblemsResult, RusotoError<ListUniqueProblemsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9263,27 +10299,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListUniqueProblemsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUniqueProblemsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListUniqueProblemsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListUniqueProblemsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about uploads, given an AWS Device Farm project ARN.</p>
-    async fn list_uploads(
+    fn list_uploads(
         &self,
         input: ListUploadsRequest,
-    ) -> Result<ListUploadsResult, RusotoError<ListUploadsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListUploadsResult, RusotoError<ListUploadsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9291,26 +10333,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListUploadsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUploadsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListUploadsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListUploadsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
-    async fn list_vpce_configurations(
+    fn list_vpce_configurations(
         &self,
         input: ListVPCEConfigurationsRequest,
-    ) -> Result<ListVPCEConfigurationsResult, RusotoError<ListVPCEConfigurationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListVPCEConfigurationsResult,
+                        RusotoError<ListVPCEConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9318,27 +10370,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVPCEConfigurationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVPCEConfigurationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListVPCEConfigurationsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListVPCEConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn purchase_offering(
+    fn purchase_offering(
         &self,
         input: PurchaseOfferingRequest,
-    ) -> Result<PurchaseOfferingResult, RusotoError<PurchaseOfferingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PurchaseOfferingResult, RusotoError<PurchaseOfferingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9346,26 +10404,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PurchaseOfferingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PurchaseOfferingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PurchaseOfferingResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PurchaseOfferingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
-    async fn renew_offering(
+    fn renew_offering(
         &self,
         input: RenewOfferingRequest,
-    ) -> Result<RenewOfferingResult, RusotoError<RenewOfferingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RenewOfferingResult, RusotoError<RenewOfferingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9373,26 +10438,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RenewOfferingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RenewOfferingError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<RenewOfferingResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RenewOfferingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Schedules a run.</p>
-    async fn schedule_run(
+    fn schedule_run(
         &self,
         input: ScheduleRunRequest,
-    ) -> Result<ScheduleRunResult, RusotoError<ScheduleRunError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ScheduleRunResult, RusotoError<ScheduleRunError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9400,26 +10471,28 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ScheduleRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ScheduleRunError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ScheduleRunResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ScheduleRunError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Initiates a stop request for the current job. AWS Device Farm immediately stops the job on the device where tests have not started. You are not billed for this device. On the device where tests have started, setup suite and teardown suite tests run to completion on the device. You are billed for setup, teardown, and any tests that were in progress or already completed.</p>
-    async fn stop_job(
+    fn stop_job(
         &self,
         input: StopJobRequest,
-    ) -> Result<StopJobResult, RusotoError<StopJobError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<StopJobResult, RusotoError<StopJobError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9427,26 +10500,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Ends a specified remote access session.</p>
-    async fn stop_remote_access_session(
+    fn stop_remote_access_session(
         &self,
         input: StopRemoteAccessSessionRequest,
-    ) -> Result<StopRemoteAccessSessionResult, RusotoError<StopRemoteAccessSessionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopRemoteAccessSessionResult,
+                        RusotoError<StopRemoteAccessSessionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9457,27 +10540,29 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopRemoteAccessSessionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopRemoteAccessSessionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopRemoteAccessSessionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Initiates a stop request for the current test run. AWS Device Farm immediately stops the run on devices where tests have not started. You are not billed for these devices. On devices where tests have started executing, setup suite and teardown suite tests run to completion on those devices. You are billed for setup, teardown, and any tests that were in progress or already completed.</p>
-    async fn stop_run(
+    fn stop_run(
         &self,
         input: StopRunRequest,
-    ) -> Result<StopRunResult, RusotoError<StopRunError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<StopRunResult, RusotoError<StopRunError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9485,26 +10570,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopRunError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<StopRunResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopRunError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9512,26 +10603,32 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9539,26 +10636,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates information about a private device instance.</p>
-    async fn update_device_instance(
+    fn update_device_instance(
         &self,
         input: UpdateDeviceInstanceRequest,
-    ) -> Result<UpdateDeviceInstanceResult, RusotoError<UpdateDeviceInstanceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDeviceInstanceResult,
+                        RusotoError<UpdateDeviceInstanceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9566,27 +10674,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeviceInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeviceInstanceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDeviceInstanceResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDeviceInstanceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>
-    async fn update_device_pool(
+    fn update_device_pool(
         &self,
         input: UpdateDevicePoolRequest,
-    ) -> Result<UpdateDevicePoolResult, RusotoError<UpdateDevicePoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateDevicePoolResult, RusotoError<UpdateDevicePoolError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9594,26 +10708,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDevicePoolError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDevicePoolResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDevicePoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates information about an existing private device instance profile.</p>
-    async fn update_instance_profile(
+    fn update_instance_profile(
         &self,
         input: UpdateInstanceProfileRequest,
-    ) -> Result<UpdateInstanceProfileResult, RusotoError<UpdateInstanceProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateInstanceProfileResult,
+                        RusotoError<UpdateInstanceProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9621,27 +10746,37 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInstanceProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateInstanceProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInstanceProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the network profile.</p>
-    async fn update_network_profile(
+    fn update_network_profile(
         &self,
         input: UpdateNetworkProfileRequest,
-    ) -> Result<UpdateNetworkProfileResult, RusotoError<UpdateNetworkProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateNetworkProfileResult,
+                        RusotoError<UpdateNetworkProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9649,27 +10784,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateNetworkProfileError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateNetworkProfileResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateNetworkProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modifies the specified project name, given the project ARN and a new name.</p>
-    async fn update_project(
+    fn update_project(
         &self,
         input: UpdateProjectRequest,
-    ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateProjectResult, RusotoError<UpdateProjectError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9677,26 +10818,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Change details of a project.</p>
-    async fn update_test_grid_project(
+    fn update_test_grid_project(
         &self,
         input: UpdateTestGridProjectRequest,
-    ) -> Result<UpdateTestGridProjectResult, RusotoError<UpdateTestGridProjectError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTestGridProjectResult,
+                        RusotoError<UpdateTestGridProjectError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9704,27 +10855,33 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTestGridProjectError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTestGridProjectResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTestGridProjectError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an uploaded test spec.</p>
-    async fn update_upload(
+    fn update_upload(
         &self,
         input: UpdateUploadRequest,
-    ) -> Result<UpdateUploadResult, RusotoError<UpdateUploadError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateUploadResult, RusotoError<UpdateUploadError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9732,26 +10889,36 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUploadError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateUploadResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateUploadError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates information about an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
-    async fn update_vpce_configuration(
+    fn update_vpce_configuration(
         &self,
         input: UpdateVPCEConfigurationRequest,
-    ) -> Result<UpdateVPCEConfigurationResult, RusotoError<UpdateVPCEConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVPCEConfigurationResult,
+                        RusotoError<UpdateVPCEConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9762,19 +10929,19 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVPCEConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVPCEConfigurationResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVPCEConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

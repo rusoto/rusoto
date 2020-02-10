@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverEndpointIpAddressRequest {
@@ -2228,148 +2229,343 @@ impl fmt::Display for UpdateResolverRuleError {
 }
 impl Error for UpdateResolverRuleError {}
 /// Trait representing the capabilities of the Route53Resolver API. Route53Resolver clients implement this trait.
-#[async_trait]
 pub trait Route53Resolver {
     /// <p>Adds IP addresses to an inbound or an outbound resolver endpoint. If you want to adding more than one IP address, submit one <code>AssociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To remove an IP address from an endpoint, see <a>DisassociateResolverEndpointIpAddress</a>.</p>
-    async fn associate_resolver_endpoint_ip_address(
+    fn associate_resolver_endpoint_ip_address(
         &self,
         input: AssociateResolverEndpointIpAddressRequest,
-    ) -> Result<
-        AssociateResolverEndpointIpAddressResponse,
-        RusotoError<AssociateResolverEndpointIpAddressError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateResolverEndpointIpAddressResponse,
+                        RusotoError<AssociateResolverEndpointIpAddressError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Associates a resolver rule with a VPC. When you associate a rule with a VPC, Resolver forwards all DNS queries for the domain name that is specified in the rule and that originate in the VPC. The queries are forwarded to the IP addresses for the DNS resolvers that are specified in the rule. For more information about rules, see <a>CreateResolverRule</a>. </p>
-    async fn associate_resolver_rule(
+    fn associate_resolver_rule(
         &self,
         input: AssociateResolverRuleRequest,
-    ) -> Result<AssociateResolverRuleResponse, RusotoError<AssociateResolverRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateResolverRuleResponse,
+                        RusotoError<AssociateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a resolver endpoint. There are two types of resolver endpoints, inbound and outbound:</p> <ul> <li> <p>An <i>inbound resolver endpoint</i> forwards DNS queries to the DNS service for a VPC from your network or another VPC.</p> </li> <li> <p>An <i>outbound resolver endpoint</i> forwards DNS queries from the DNS service for a VPC to your network or another VPC.</p> </li> </ul></p>
-    async fn create_resolver_endpoint(
+    fn create_resolver_endpoint(
         &self,
         input: CreateResolverEndpointRequest,
-    ) -> Result<CreateResolverEndpointResponse, RusotoError<CreateResolverEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateResolverEndpointResponse,
+                        RusotoError<CreateResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>For DNS queries that originate in your VPCs, specifies which resolver endpoint the queries pass through, one domain name that you want to forward to your network, and the IP addresses of the DNS resolvers in your network.</p>
-    async fn create_resolver_rule(
+    fn create_resolver_rule(
         &self,
         input: CreateResolverRuleRequest,
-    ) -> Result<CreateResolverRuleResponse, RusotoError<CreateResolverRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateResolverRuleResponse,
+                        RusotoError<CreateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Deletes a resolver endpoint. The effect of deleting a resolver endpoint depends on whether it&#39;s an inbound or an outbound resolver endpoint:</p> <ul> <li> <p> <b>Inbound</b>: DNS queries from your network or another VPC are no longer routed to the DNS service for the specified VPC.</p> </li> <li> <p> <b>Outbound</b>: DNS queries from a VPC are no longer routed to your network or to another VPC.</p> </li> </ul></p>
-    async fn delete_resolver_endpoint(
+    fn delete_resolver_endpoint(
         &self,
         input: DeleteResolverEndpointRequest,
-    ) -> Result<DeleteResolverEndpointResponse, RusotoError<DeleteResolverEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResolverEndpointResponse,
+                        RusotoError<DeleteResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a resolver rule. Before you can delete a resolver rule, you must disassociate it from all the VPCs that you associated the resolver rule with. For more infomation, see <a>DisassociateResolverRule</a>.</p>
-    async fn delete_resolver_rule(
+    fn delete_resolver_rule(
         &self,
         input: DeleteResolverRuleRequest,
-    ) -> Result<DeleteResolverRuleResponse, RusotoError<DeleteResolverRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResolverRuleResponse,
+                        RusotoError<DeleteResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes IP addresses from an inbound or an outbound resolver endpoint. If you want to remove more than one IP address, submit one <code>DisassociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To add an IP address to an endpoint, see <a>AssociateResolverEndpointIpAddress</a>.</p>
-    async fn disassociate_resolver_endpoint_ip_address(
+    fn disassociate_resolver_endpoint_ip_address(
         &self,
         input: DisassociateResolverEndpointIpAddressRequest,
-    ) -> Result<
-        DisassociateResolverEndpointIpAddressResponse,
-        RusotoError<DisassociateResolverEndpointIpAddressError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateResolverEndpointIpAddressResponse,
+                        RusotoError<DisassociateResolverEndpointIpAddressError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Removes the association between a specified resolver rule and a specified VPC.</p> <important> <p>If you disassociate a resolver rule from a VPC, Resolver stops forwarding DNS queries for the domain name that you specified in the resolver rule. </p> </important></p>
-    async fn disassociate_resolver_rule(
+    fn disassociate_resolver_rule(
         &self,
         input: DisassociateResolverRuleRequest,
-    ) -> Result<DisassociateResolverRuleResponse, RusotoError<DisassociateResolverRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateResolverRuleResponse,
+                        RusotoError<DisassociateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a specified resolver endpoint, such as whether it's an inbound or an outbound resolver endpoint, and the current status of the endpoint.</p>
-    async fn get_resolver_endpoint(
+    fn get_resolver_endpoint(
         &self,
         input: GetResolverEndpointRequest,
-    ) -> Result<GetResolverEndpointResponse, RusotoError<GetResolverEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResolverEndpointResponse,
+                        RusotoError<GetResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a specified resolver rule, such as the domain name that the rule forwards DNS queries for and the ID of the outbound resolver endpoint that the rule is associated with.</p>
-    async fn get_resolver_rule(
+    fn get_resolver_rule(
         &self,
         input: GetResolverRuleRequest,
-    ) -> Result<GetResolverRuleResponse, RusotoError<GetResolverRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetResolverRuleResponse, RusotoError<GetResolverRuleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about an association between a specified resolver rule and a VPC. You associate a resolver rule and a VPC using <a>AssociateResolverRule</a>. </p>
-    async fn get_resolver_rule_association(
+    fn get_resolver_rule_association(
         &self,
         input: GetResolverRuleAssociationRequest,
-    ) -> Result<GetResolverRuleAssociationResponse, RusotoError<GetResolverRuleAssociationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResolverRuleAssociationResponse,
+                        RusotoError<GetResolverRuleAssociationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a resolver rule policy. A resolver rule policy specifies the Resolver operations and resources that you want to allow another AWS account to be able to use. </p>
-    async fn get_resolver_rule_policy(
+    fn get_resolver_rule_policy(
         &self,
         input: GetResolverRulePolicyRequest,
-    ) -> Result<GetResolverRulePolicyResponse, RusotoError<GetResolverRulePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResolverRulePolicyResponse,
+                        RusotoError<GetResolverRulePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the IP addresses for a specified resolver endpoint.</p>
-    async fn list_resolver_endpoint_ip_addresses(
+    fn list_resolver_endpoint_ip_addresses(
         &self,
         input: ListResolverEndpointIpAddressesRequest,
-    ) -> Result<
-        ListResolverEndpointIpAddressesResponse,
-        RusotoError<ListResolverEndpointIpAddressesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolverEndpointIpAddressesResponse,
+                        RusotoError<ListResolverEndpointIpAddressesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists all the resolver endpoints that were created using the current AWS account.</p>
-    async fn list_resolver_endpoints(
+    fn list_resolver_endpoints(
         &self,
         input: ListResolverEndpointsRequest,
-    ) -> Result<ListResolverEndpointsResponse, RusotoError<ListResolverEndpointsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolverEndpointsResponse,
+                        RusotoError<ListResolverEndpointsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the associations that were created between resolver rules and VPCs using the current AWS account.</p>
-    async fn list_resolver_rule_associations(
+    fn list_resolver_rule_associations(
         &self,
         input: ListResolverRuleAssociationsRequest,
-    ) -> Result<ListResolverRuleAssociationsResponse, RusotoError<ListResolverRuleAssociationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolverRuleAssociationsResponse,
+                        RusotoError<ListResolverRuleAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the resolver rules that were created using the current AWS account.</p>
-    async fn list_resolver_rules(
+    fn list_resolver_rules(
         &self,
         input: ListResolverRulesRequest,
-    ) -> Result<ListResolverRulesResponse, RusotoError<ListResolverRulesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListResolverRulesResponse, RusotoError<ListResolverRulesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags that you associated with the specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Specifies the Resolver operations and resources that you want to allow another AWS account to be able to use.</p>
-    async fn put_resolver_rule_policy(
+    fn put_resolver_rule_policy(
         &self,
         input: PutResolverRulePolicyRequest,
-    ) -> Result<PutResolverRulePolicyResponse, RusotoError<PutResolverRulePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutResolverRulePolicyResponse,
+                        RusotoError<PutResolverRulePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more tags to a specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes one or more tags from a specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the name of an inbound or an outbound resolver endpoint. </p>
-    async fn update_resolver_endpoint(
+    fn update_resolver_endpoint(
         &self,
         input: UpdateResolverEndpointRequest,
-    ) -> Result<UpdateResolverEndpointResponse, RusotoError<UpdateResolverEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateResolverEndpointResponse,
+                        RusotoError<UpdateResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates settings for a specified resolver rule. <code>ResolverRuleId</code> is required, and all other parameters are optional. If you don't specify a parameter, it retains its current value.</p>
-    async fn update_resolver_rule(
+    fn update_resolver_rule(
         &self,
         input: UpdateResolverRuleRequest,
-    ) -> Result<UpdateResolverRuleResponse, RusotoError<UpdateResolverRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateResolverRuleResponse,
+                        RusotoError<UpdateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Route53Resolver API.
 #[derive(Clone)]
@@ -2409,15 +2605,21 @@ impl Route53ResolverClient {
     }
 }
 
-#[async_trait]
 impl Route53Resolver for Route53ResolverClient {
     /// <p>Adds IP addresses to an inbound or an outbound resolver endpoint. If you want to adding more than one IP address, submit one <code>AssociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To remove an IP address from an endpoint, see <a>DisassociateResolverEndpointIpAddress</a>.</p>
-    async fn associate_resolver_endpoint_ip_address(
+    fn associate_resolver_endpoint_ip_address(
         &self,
         input: AssociateResolverEndpointIpAddressRequest,
-    ) -> Result<
-        AssociateResolverEndpointIpAddressResponse,
-        RusotoError<AssociateResolverEndpointIpAddressError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateResolverEndpointIpAddressResponse,
+                        RusotoError<AssociateResolverEndpointIpAddressError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
@@ -2429,29 +2631,39 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateResolverEndpointIpAddressResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateResolverEndpointIpAddressError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateResolverEndpointIpAddressResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateResolverEndpointIpAddressError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates a resolver rule with a VPC. When you associate a rule with a VPC, Resolver forwards all DNS queries for the domain name that is specified in the rule and that originate in the VPC. The queries are forwarded to the IP addresses for the DNS resolvers that are specified in the rule. For more information about rules, see <a>CreateResolverRule</a>. </p>
-    async fn associate_resolver_rule(
+    fn associate_resolver_rule(
         &self,
         input: AssociateResolverRuleRequest,
-    ) -> Result<AssociateResolverRuleResponse, RusotoError<AssociateResolverRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateResolverRuleResponse,
+                        RusotoError<AssociateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2459,27 +2671,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateResolverRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateResolverRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateResolverRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateResolverRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a resolver endpoint. There are two types of resolver endpoints, inbound and outbound:</p> <ul> <li> <p>An <i>inbound resolver endpoint</i> forwards DNS queries to the DNS service for a VPC from your network or another VPC.</p> </li> <li> <p>An <i>outbound resolver endpoint</i> forwards DNS queries from the DNS service for a VPC to your network or another VPC.</p> </li> </ul></p>
-    async fn create_resolver_endpoint(
+    fn create_resolver_endpoint(
         &self,
         input: CreateResolverEndpointRequest,
-    ) -> Result<CreateResolverEndpointResponse, RusotoError<CreateResolverEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateResolverEndpointResponse,
+                        RusotoError<CreateResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2487,27 +2709,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResolverEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResolverEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateResolverEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateResolverEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>For DNS queries that originate in your VPCs, specifies which resolver endpoint the queries pass through, one domain name that you want to forward to your network, and the IP addresses of the DNS resolvers in your network.</p>
-    async fn create_resolver_rule(
+    fn create_resolver_rule(
         &self,
         input: CreateResolverRuleRequest,
-    ) -> Result<CreateResolverRuleResponse, RusotoError<CreateResolverRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateResolverRuleResponse,
+                        RusotoError<CreateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2515,27 +2747,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResolverRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResolverRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateResolverRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateResolverRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Deletes a resolver endpoint. The effect of deleting a resolver endpoint depends on whether it&#39;s an inbound or an outbound resolver endpoint:</p> <ul> <li> <p> <b>Inbound</b>: DNS queries from your network or another VPC are no longer routed to the DNS service for the specified VPC.</p> </li> <li> <p> <b>Outbound</b>: DNS queries from a VPC are no longer routed to your network or to another VPC.</p> </li> </ul></p>
-    async fn delete_resolver_endpoint(
+    fn delete_resolver_endpoint(
         &self,
         input: DeleteResolverEndpointRequest,
-    ) -> Result<DeleteResolverEndpointResponse, RusotoError<DeleteResolverEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResolverEndpointResponse,
+                        RusotoError<DeleteResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2543,27 +2785,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResolverEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResolverEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteResolverEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteResolverEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a resolver rule. Before you can delete a resolver rule, you must disassociate it from all the VPCs that you associated the resolver rule with. For more infomation, see <a>DisassociateResolverRule</a>.</p>
-    async fn delete_resolver_rule(
+    fn delete_resolver_rule(
         &self,
         input: DeleteResolverRuleRequest,
-    ) -> Result<DeleteResolverRuleResponse, RusotoError<DeleteResolverRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteResolverRuleResponse,
+                        RusotoError<DeleteResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2571,29 +2823,36 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResolverRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResolverRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteResolverRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteResolverRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes IP addresses from an inbound or an outbound resolver endpoint. If you want to remove more than one IP address, submit one <code>DisassociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To add an IP address to an endpoint, see <a>AssociateResolverEndpointIpAddress</a>.</p>
-    async fn disassociate_resolver_endpoint_ip_address(
+    fn disassociate_resolver_endpoint_ip_address(
         &self,
         input: DisassociateResolverEndpointIpAddressRequest,
-    ) -> Result<
-        DisassociateResolverEndpointIpAddressResponse,
-        RusotoError<DisassociateResolverEndpointIpAddressError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateResolverEndpointIpAddressResponse,
+                        RusotoError<DisassociateResolverEndpointIpAddressError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
@@ -2605,29 +2864,39 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateResolverEndpointIpAddressResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateResolverEndpointIpAddressError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateResolverEndpointIpAddressResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateResolverEndpointIpAddressError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Removes the association between a specified resolver rule and a specified VPC.</p> <important> <p>If you disassociate a resolver rule from a VPC, Resolver stops forwarding DNS queries for the domain name that you specified in the resolver rule. </p> </important></p>
-    async fn disassociate_resolver_rule(
+    fn disassociate_resolver_rule(
         &self,
         input: DisassociateResolverRuleRequest,
-    ) -> Result<DisassociateResolverRuleResponse, RusotoError<DisassociateResolverRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateResolverRuleResponse,
+                        RusotoError<DisassociateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2635,27 +2904,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateResolverRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateResolverRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateResolverRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateResolverRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a specified resolver endpoint, such as whether it's an inbound or an outbound resolver endpoint, and the current status of the endpoint.</p>
-    async fn get_resolver_endpoint(
+    fn get_resolver_endpoint(
         &self,
         input: GetResolverEndpointRequest,
-    ) -> Result<GetResolverEndpointResponse, RusotoError<GetResolverEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResolverEndpointResponse,
+                        RusotoError<GetResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2663,27 +2942,33 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResolverEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResolverEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResolverEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResolverEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a specified resolver rule, such as the domain name that the rule forwards DNS queries for and the ID of the outbound resolver endpoint that the rule is associated with.</p>
-    async fn get_resolver_rule(
+    fn get_resolver_rule(
         &self,
         input: GetResolverRuleRequest,
-    ) -> Result<GetResolverRuleResponse, RusotoError<GetResolverRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetResolverRuleResponse, RusotoError<GetResolverRuleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2691,27 +2976,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetResolverRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResolverRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResolverRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResolverRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about an association between a specified resolver rule and a VPC. You associate a resolver rule and a VPC using <a>AssociateResolverRule</a>. </p>
-    async fn get_resolver_rule_association(
+    fn get_resolver_rule_association(
         &self,
         input: GetResolverRuleAssociationRequest,
-    ) -> Result<GetResolverRuleAssociationResponse, RusotoError<GetResolverRuleAssociationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResolverRuleAssociationResponse,
+                        RusotoError<GetResolverRuleAssociationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2719,27 +3014,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResolverRuleAssociationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResolverRuleAssociationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResolverRuleAssociationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResolverRuleAssociationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a resolver rule policy. A resolver rule policy specifies the Resolver operations and resources that you want to allow another AWS account to be able to use. </p>
-    async fn get_resolver_rule_policy(
+    fn get_resolver_rule_policy(
         &self,
         input: GetResolverRulePolicyRequest,
-    ) -> Result<GetResolverRulePolicyResponse, RusotoError<GetResolverRulePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetResolverRulePolicyResponse,
+                        RusotoError<GetResolverRulePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2747,29 +3052,36 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResolverRulePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResolverRulePolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetResolverRulePolicyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResolverRulePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the IP addresses for a specified resolver endpoint.</p>
-    async fn list_resolver_endpoint_ip_addresses(
+    fn list_resolver_endpoint_ip_addresses(
         &self,
         input: ListResolverEndpointIpAddressesRequest,
-    ) -> Result<
-        ListResolverEndpointIpAddressesResponse,
-        RusotoError<ListResolverEndpointIpAddressesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolverEndpointIpAddressesResponse,
+                        RusotoError<ListResolverEndpointIpAddressesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
@@ -2781,29 +3093,39 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolverEndpointIpAddressesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResolverEndpointIpAddressesError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResolverEndpointIpAddressesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResolverEndpointIpAddressesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the resolver endpoints that were created using the current AWS account.</p>
-    async fn list_resolver_endpoints(
+    fn list_resolver_endpoints(
         &self,
         input: ListResolverEndpointsRequest,
-    ) -> Result<ListResolverEndpointsResponse, RusotoError<ListResolverEndpointsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolverEndpointsResponse,
+                        RusotoError<ListResolverEndpointsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2811,28 +3133,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolverEndpointsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResolverEndpointsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResolverEndpointsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResolverEndpointsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the associations that were created between resolver rules and VPCs using the current AWS account.</p>
-    async fn list_resolver_rule_associations(
+    fn list_resolver_rule_associations(
         &self,
         input: ListResolverRuleAssociationsRequest,
-    ) -> Result<ListResolverRuleAssociationsResponse, RusotoError<ListResolverRuleAssociationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListResolverRuleAssociationsResponse,
+                        RusotoError<ListResolverRuleAssociationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2843,27 +3174,34 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolverRuleAssociationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResolverRuleAssociationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResolverRuleAssociationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResolverRuleAssociationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the resolver rules that were created using the current AWS account.</p>
-    async fn list_resolver_rules(
+    fn list_resolver_rules(
         &self,
         input: ListResolverRulesRequest,
-    ) -> Result<ListResolverRulesResponse, RusotoError<ListResolverRulesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListResolverRulesResponse, RusotoError<ListResolverRulesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2871,27 +3209,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResolverRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResolverRulesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListResolverRulesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListResolverRulesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags that you associated with the specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2899,27 +3247,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Specifies the Resolver operations and resources that you want to allow another AWS account to be able to use.</p>
-    async fn put_resolver_rule_policy(
+    fn put_resolver_rule_policy(
         &self,
         input: PutResolverRulePolicyRequest,
-    ) -> Result<PutResolverRulePolicyResponse, RusotoError<PutResolverRulePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutResolverRulePolicyResponse,
+                        RusotoError<PutResolverRulePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2927,27 +3285,33 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutResolverRulePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutResolverRulePolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutResolverRulePolicyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutResolverRulePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more tags to a specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2955,26 +3319,32 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes one or more tags from a specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2982,26 +3352,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the name of an inbound or an outbound resolver endpoint. </p>
-    async fn update_resolver_endpoint(
+    fn update_resolver_endpoint(
         &self,
         input: UpdateResolverEndpointRequest,
-    ) -> Result<UpdateResolverEndpointResponse, RusotoError<UpdateResolverEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateResolverEndpointResponse,
+                        RusotoError<UpdateResolverEndpointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3009,27 +3390,37 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResolverEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResolverEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateResolverEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateResolverEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates settings for a specified resolver rule. <code>ResolverRuleId</code> is required, and all other parameters are optional. If you don't specify a parameter, it retains its current value.</p>
-    async fn update_resolver_rule(
+    fn update_resolver_rule(
         &self,
         input: UpdateResolverRuleRequest,
-    ) -> Result<UpdateResolverRuleResponse, RusotoError<UpdateResolverRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateResolverRuleResponse,
+                        RusotoError<UpdateResolverRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "route53resolver", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3037,19 +3428,19 @@ impl Route53Resolver for Route53ResolverClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResolverRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResolverRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateResolverRuleResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateResolverRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

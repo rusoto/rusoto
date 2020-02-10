@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The custom terminology applied to the input text by Amazon Translate for the translated text response. This is optional in the response and will only be present if you specified terminology input in the request. Currently, only one terminology can be applied per TranslateText request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -975,61 +976,128 @@ impl fmt::Display for TranslateTextError {
 }
 impl Error for TranslateTextError {}
 /// Trait representing the capabilities of the Amazon Translate API. Amazon Translate clients implement this trait.
-#[async_trait]
 pub trait Translate {
     /// <p>A synchronous action that deletes a custom terminology.</p>
-    async fn delete_terminology(
+    fn delete_terminology(
         &self,
         input: DeleteTerminologyRequest,
-    ) -> Result<(), RusotoError<DeleteTerminologyError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteTerminologyError>>> + Send + 'static>,
+    >;
 
     /// <p>Gets the properties associated with an asycnhronous batch translation job including name, ID, status, source and target languages, input/output S3 buckets, and so on.</p>
-    async fn describe_text_translation_job(
+    fn describe_text_translation_job(
         &self,
         input: DescribeTextTranslationJobRequest,
-    ) -> Result<DescribeTextTranslationJobResponse, RusotoError<DescribeTextTranslationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTextTranslationJobResponse,
+                        RusotoError<DescribeTextTranslationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves a custom terminology.</p>
-    async fn get_terminology(
+    fn get_terminology(
         &self,
         input: GetTerminologyRequest,
-    ) -> Result<GetTerminologyResponse, RusotoError<GetTerminologyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTerminologyResponse, RusotoError<GetTerminologyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates a custom terminology, depending on whether or not one already exists for the given terminology name. Importing a terminology with the same name as an existing one will merge the terminologies based on the chosen merge strategy. Currently, the only supported merge strategy is OVERWRITE, and so the imported terminology will overwrite an existing terminology of the same name.</p> <p>If you import a terminology that overwrites an existing one, the new terminology take up to 10 minutes to fully propagate and be available for use in a translation due to cache policies with the DataPlane service that performs the translations.</p>
-    async fn import_terminology(
+    fn import_terminology(
         &self,
         input: ImportTerminologyRequest,
-    ) -> Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
-    async fn list_terminologies(
+    fn list_terminologies(
         &self,
         input: ListTerminologiesRequest,
-    ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the batch translation jobs that you have submitted.</p>
-    async fn list_text_translation_jobs(
+    fn list_text_translation_jobs(
         &self,
         input: ListTextTranslationJobsRequest,
-    ) -> Result<ListTextTranslationJobsResponse, RusotoError<ListTextTranslationJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTextTranslationJobsResponse,
+                        RusotoError<ListTextTranslationJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Starts an asynchronous batch translation job. Batch translation jobs can be used to translate large volumes of text across multiple documents at once. For more information, see <a>async</a>.</p> <p>Batch translation jobs can be described with the <a>DescribeTextTranslationJob</a> operation, listed with the <a>ListTextTranslationJobs</a> operation, and stopped with the <a>StopTextTranslationJob</a> operation.</p> <note> <p>Amazon Translate does not support batch translation of multiple source languages at once.</p> </note></p>
-    async fn start_text_translation_job(
+    fn start_text_translation_job(
         &self,
         input: StartTextTranslationJobRequest,
-    ) -> Result<StartTextTranslationJobResponse, RusotoError<StartTextTranslationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTextTranslationJobResponse,
+                        RusotoError<StartTextTranslationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops an asynchronous batch translation job that is in progress.</p> <p>If the job's state is <code>IN_PROGRESS</code>, the job will be marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state. Otherwise, the job is put into the <code>STOPPED</code> state.</p> <p>Asynchronous batch translation jobs are started with the <a>StartTextTranslationJob</a> operation. You can use the <a>DescribeTextTranslationJob</a> or <a>ListTextTranslationJobs</a> operations to get a batch translation job's <code>JobId</code>.</p>
-    async fn stop_text_translation_job(
+    fn stop_text_translation_job(
         &self,
         input: StopTextTranslationJobRequest,
-    ) -> Result<StopTextTranslationJobResponse, RusotoError<StopTextTranslationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopTextTranslationJobResponse,
+                        RusotoError<StopTextTranslationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Translates input text from the source language to the target language. For a list of available languages and language codes, see <a>what-is-languages</a>.</p>
-    async fn translate_text(
+    fn translate_text(
         &self,
         input: TranslateTextRequest,
-    ) -> Result<TranslateTextResponse, RusotoError<TranslateTextError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TranslateTextResponse, RusotoError<TranslateTextError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Translate API.
 #[derive(Clone)]
@@ -1069,13 +1137,14 @@ impl TranslateClient {
     }
 }
 
-#[async_trait]
 impl Translate for TranslateClient {
     /// <p>A synchronous action that deletes a custom terminology.</p>
-    async fn delete_terminology(
+    fn delete_terminology(
         &self,
         input: DeleteTerminologyRequest,
-    ) -> Result<(), RusotoError<DeleteTerminologyError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteTerminologyError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1086,27 +1155,36 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTerminologyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTerminologyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with an asycnhronous batch translation job including name, ID, status, source and target languages, input/output S3 buckets, and so on.</p>
-    async fn describe_text_translation_job(
+    fn describe_text_translation_job(
         &self,
         input: DescribeTextTranslationJobRequest,
-    ) -> Result<DescribeTextTranslationJobResponse, RusotoError<DescribeTextTranslationJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTextTranslationJobResponse,
+                        RusotoError<DescribeTextTranslationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1117,27 +1195,33 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTextTranslationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTextTranslationJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTextTranslationJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTextTranslationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves a custom terminology.</p>
-    async fn get_terminology(
+    fn get_terminology(
         &self,
         input: GetTerminologyRequest,
-    ) -> Result<GetTerminologyResponse, RusotoError<GetTerminologyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTerminologyResponse, RusotoError<GetTerminologyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1148,26 +1232,34 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTerminologyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTerminologyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTerminologyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTerminologyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates a custom terminology, depending on whether or not one already exists for the given terminology name. Importing a terminology with the same name as an existing one will merge the terminologies based on the chosen merge strategy. Currently, the only supported merge strategy is OVERWRITE, and so the imported terminology will overwrite an existing terminology of the same name.</p> <p>If you import a terminology that overwrites an existing one, the new terminology take up to 10 minutes to fully propagate and be available for use in a translation due to cache policies with the DataPlane service that performs the translations.</p>
-    async fn import_terminology(
+    fn import_terminology(
         &self,
         input: ImportTerminologyRequest,
-    ) -> Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1178,27 +1270,34 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportTerminologyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportTerminologyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ImportTerminologyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ImportTerminologyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
-    async fn list_terminologies(
+    fn list_terminologies(
         &self,
         input: ListTerminologiesRequest,
-    ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1209,27 +1308,37 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTerminologiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTerminologiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTerminologiesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTerminologiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the batch translation jobs that you have submitted.</p>
-    async fn list_text_translation_jobs(
+    fn list_text_translation_jobs(
         &self,
         input: ListTextTranslationJobsRequest,
-    ) -> Result<ListTextTranslationJobsResponse, RusotoError<ListTextTranslationJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTextTranslationJobsResponse,
+                        RusotoError<ListTextTranslationJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1240,27 +1349,37 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTextTranslationJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTextTranslationJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTextTranslationJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTextTranslationJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Starts an asynchronous batch translation job. Batch translation jobs can be used to translate large volumes of text across multiple documents at once. For more information, see <a>async</a>.</p> <p>Batch translation jobs can be described with the <a>DescribeTextTranslationJob</a> operation, listed with the <a>ListTextTranslationJobs</a> operation, and stopped with the <a>StopTextTranslationJob</a> operation.</p> <note> <p>Amazon Translate does not support batch translation of multiple source languages at once.</p> </note></p>
-    async fn start_text_translation_job(
+    fn start_text_translation_job(
         &self,
         input: StartTextTranslationJobRequest,
-    ) -> Result<StartTextTranslationJobResponse, RusotoError<StartTextTranslationJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTextTranslationJobResponse,
+                        RusotoError<StartTextTranslationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1271,27 +1390,37 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTextTranslationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTextTranslationJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartTextTranslationJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartTextTranslationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops an asynchronous batch translation job that is in progress.</p> <p>If the job's state is <code>IN_PROGRESS</code>, the job will be marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state. Otherwise, the job is put into the <code>STOPPED</code> state.</p> <p>Asynchronous batch translation jobs are started with the <a>StartTextTranslationJob</a> operation. You can use the <a>DescribeTextTranslationJob</a> or <a>ListTextTranslationJobs</a> operations to get a batch translation job's <code>JobId</code>.</p>
-    async fn stop_text_translation_job(
+    fn stop_text_translation_job(
         &self,
         input: StopTextTranslationJobRequest,
-    ) -> Result<StopTextTranslationJobResponse, RusotoError<StopTextTranslationJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopTextTranslationJobResponse,
+                        RusotoError<StopTextTranslationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1302,27 +1431,33 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopTextTranslationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTextTranslationJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopTextTranslationJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopTextTranslationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Translates input text from the source language to the target language. For a list of available languages and language codes, see <a>what-is-languages</a>.</p>
-    async fn translate_text(
+    fn translate_text(
         &self,
         input: TranslateTextRequest,
-    ) -> Result<TranslateTextResponse, RusotoError<TranslateTextError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TranslateTextResponse, RusotoError<TranslateTextError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1333,18 +1468,19 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TranslateTextResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TranslateTextError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TranslateTextResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TranslateTextError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

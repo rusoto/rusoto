@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Information about how AWS Ground Station should configure an
 /// antenna for downlink during a contact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2250,22 +2251,33 @@ impl fmt::Display for UpdateMissionProfileError {
 }
 impl Error for UpdateMissionProfileError {}
 /// Trait representing the capabilities of the AWS Ground Station API. AWS Ground Station clients implement this trait.
-#[async_trait]
 pub trait GroundStation {
     /// <p>Cancels a contact with a specified contact ID.</p>
-    async fn cancel_contact(
+    fn cancel_contact(
         &self,
         input: CancelContactRequest,
-    ) -> Result<ContactIdResponse, RusotoError<CancelContactError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ContactIdResponse, RusotoError<CancelContactError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p>
     ///
     /// <pre><code>     &lt;p&gt;Only one type of &lt;code&gt;configData&lt;/code&gt; can be specified.&lt;/p&gt;
     /// </code></pre>
-    async fn create_config(
+    fn create_config(
         &self,
         input: CreateConfigRequest,
-    ) -> Result<ConfigIdResponse, RusotoError<CreateConfigError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigIdResponse, RusotoError<CreateConfigError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p>
     ///
@@ -2274,10 +2286,20 @@ pub trait GroundStation {
     /// &lt;p&gt;When a contact uses multiple &lt;code&gt;DataflowEndpointConfig&lt;/code&gt; objects, each &lt;code&gt;Config&lt;/code&gt;
     /// must match a &lt;code&gt;DataflowEndpoint&lt;/code&gt; in the same group.&lt;/p&gt;
     /// </code></pre>
-    async fn create_dataflow_endpoint_group(
+    fn create_dataflow_endpoint_group(
         &self,
         input: CreateDataflowEndpointGroupRequest,
-    ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<CreateDataflowEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DataflowEndpointGroupIdResponse,
+                        RusotoError<CreateDataflowEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a mission profile.</p>
     ///
@@ -2285,73 +2307,156 @@ pub trait GroundStation {
     /// &lt;code&gt;dataflowEdges&lt;/code&gt; is a list of lists of strings. Each lower level list of strings
     /// has two elements: a &lt;i&gt;from ARN&lt;/i&gt; and a &lt;i&gt;to ARN&lt;/i&gt;.&lt;/p&gt;
     /// </code></pre>
-    async fn create_mission_profile(
+    fn create_mission_profile(
         &self,
         input: CreateMissionProfileRequest,
-    ) -> Result<MissionProfileIdResponse, RusotoError<CreateMissionProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        MissionProfileIdResponse,
+                        RusotoError<CreateMissionProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <code>Config</code>.</p>
-    async fn delete_config(
+    fn delete_config(
         &self,
         input: DeleteConfigRequest,
-    ) -> Result<ConfigIdResponse, RusotoError<DeleteConfigError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigIdResponse, RusotoError<DeleteConfigError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a dataflow endpoint group.</p>
-    async fn delete_dataflow_endpoint_group(
+    fn delete_dataflow_endpoint_group(
         &self,
         input: DeleteDataflowEndpointGroupRequest,
-    ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<DeleteDataflowEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DataflowEndpointGroupIdResponse,
+                        RusotoError<DeleteDataflowEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a mission profile.</p>
-    async fn delete_mission_profile(
+    fn delete_mission_profile(
         &self,
         input: DeleteMissionProfileRequest,
-    ) -> Result<MissionProfileIdResponse, RusotoError<DeleteMissionProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        MissionProfileIdResponse,
+                        RusotoError<DeleteMissionProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing contact.</p>
-    async fn describe_contact(
+    fn describe_contact(
         &self,
         input: DescribeContactRequest,
-    ) -> Result<DescribeContactResponse, RusotoError<DescribeContactError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeContactResponse, RusotoError<DescribeContactError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns <code>Config</code> information.</p>
     ///
     /// <pre><code>     &lt;p&gt;Only one &lt;code&gt;Config&lt;/code&gt; response can be returned.&lt;/p&gt;
     /// </code></pre>
-    async fn get_config(
+    fn get_config(
         &self,
         input: GetConfigRequest,
-    ) -> Result<GetConfigResponse, RusotoError<GetConfigError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetConfigResponse, RusotoError<GetConfigError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the dataflow endpoint group.</p>
-    async fn get_dataflow_endpoint_group(
+    fn get_dataflow_endpoint_group(
         &self,
         input: GetDataflowEndpointGroupRequest,
-    ) -> Result<GetDataflowEndpointGroupResponse, RusotoError<GetDataflowEndpointGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDataflowEndpointGroupResponse,
+                        RusotoError<GetDataflowEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the number of minutes used by account.</p>
-    async fn get_minute_usage(
+    fn get_minute_usage(
         &self,
         input: GetMinuteUsageRequest,
-    ) -> Result<GetMinuteUsageResponse, RusotoError<GetMinuteUsageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMinuteUsageResponse, RusotoError<GetMinuteUsageError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a mission profile.</p>
-    async fn get_mission_profile(
+    fn get_mission_profile(
         &self,
         input: GetMissionProfileRequest,
-    ) -> Result<GetMissionProfileResponse, RusotoError<GetMissionProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetMissionProfileResponse, RusotoError<GetMissionProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a satellite.</p>
-    async fn get_satellite(
+    fn get_satellite(
         &self,
         input: GetSatelliteRequest,
-    ) -> Result<GetSatelliteResponse, RusotoError<GetSatelliteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetSatelliteResponse, RusotoError<GetSatelliteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of <code>Config</code> objects.</p>
-    async fn list_configs(
+    fn list_configs(
         &self,
         input: ListConfigsRequest,
-    ) -> Result<ListConfigsResponse, RusotoError<ListConfigsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListConfigsResponse, RusotoError<ListConfigsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of contacts.</p>
     ///
@@ -2359,78 +2464,164 @@ pub trait GroundStation {
     /// &lt;code&gt;groundstation&lt;/code&gt;, &lt;code&gt;missionprofileArn&lt;/code&gt;, and &lt;code&gt;satelliteArn&lt;/code&gt;.
     /// &lt;/p&gt;
     /// </code></pre>
-    async fn list_contacts(
+    fn list_contacts(
         &self,
         input: ListContactsRequest,
-    ) -> Result<ListContactsResponse, RusotoError<ListContactsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListContactsResponse, RusotoError<ListContactsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of <code>DataflowEndpoint</code> groups.</p>
-    async fn list_dataflow_endpoint_groups(
+    fn list_dataflow_endpoint_groups(
         &self,
         input: ListDataflowEndpointGroupsRequest,
-    ) -> Result<ListDataflowEndpointGroupsResponse, RusotoError<ListDataflowEndpointGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDataflowEndpointGroupsResponse,
+                        RusotoError<ListDataflowEndpointGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of ground stations. </p>
-    async fn list_ground_stations(
+    fn list_ground_stations(
         &self,
         input: ListGroundStationsRequest,
-    ) -> Result<ListGroundStationsResponse, RusotoError<ListGroundStationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListGroundStationsResponse,
+                        RusotoError<ListGroundStationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of mission profiles.</p>
-    async fn list_mission_profiles(
+    fn list_mission_profiles(
         &self,
         input: ListMissionProfilesRequest,
-    ) -> Result<ListMissionProfilesResponse, RusotoError<ListMissionProfilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListMissionProfilesResponse,
+                        RusotoError<ListMissionProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of satellites.</p>
-    async fn list_satellites(
+    fn list_satellites(
         &self,
         input: ListSatellitesRequest,
-    ) -> Result<ListSatellitesResponse, RusotoError<ListSatellitesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSatellitesResponse, RusotoError<ListSatellitesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of tags or a specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Reserves a contact using specified parameters.</p>
-    async fn reserve_contact(
+    fn reserve_contact(
         &self,
         input: ReserveContactRequest,
-    ) -> Result<ContactIdResponse, RusotoError<ReserveContactError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ContactIdResponse, RusotoError<ReserveContactError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Assigns a tag to a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deassigns a resource tag.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the <code>Config</code> used when scheduling contacts.</p>
     ///
     /// <pre><code>     &lt;p&gt;Updating a &lt;code&gt;Config&lt;/code&gt; will not update the execution parameters
     /// for existing future contacts scheduled with this &lt;code&gt;Config&lt;/code&gt;.&lt;/p&gt;
     /// </code></pre>
-    async fn update_config(
+    fn update_config(
         &self,
         input: UpdateConfigRequest,
-    ) -> Result<ConfigIdResponse, RusotoError<UpdateConfigError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigIdResponse, RusotoError<UpdateConfigError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a mission profile.</p>
     ///
     /// <pre><code>     &lt;p&gt;Updating a mission profile will not update the execution parameters
     /// for existing future contacts.&lt;/p&gt;
     /// </code></pre>
-    async fn update_mission_profile(
+    fn update_mission_profile(
         &self,
         input: UpdateMissionProfileRequest,
-    ) -> Result<MissionProfileIdResponse, RusotoError<UpdateMissionProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        MissionProfileIdResponse,
+                        RusotoError<UpdateMissionProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Ground Station API.
 #[derive(Clone)]
@@ -2470,43 +2661,54 @@ impl GroundStationClient {
     }
 }
 
-#[async_trait]
 impl GroundStation for GroundStationClient {
     /// <p>Cancels a contact with a specified contact ID.</p>
-    async fn cancel_contact(
+    fn cancel_contact(
         &self,
         input: CancelContactRequest,
-    ) -> Result<ContactIdResponse, RusotoError<CancelContactError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ContactIdResponse, RusotoError<CancelContactError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/contact/{contact_id}", contact_id = input.contact_id);
 
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ContactIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ContactIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelContactError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelContactError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p>
     ///
     /// <pre><code>     &lt;p&gt;Only one type of &lt;code&gt;configData&lt;/code&gt; can be specified.&lt;/p&gt;
     /// </code></pre>
-    async fn create_config(
+    fn create_config(
         &self,
         input: CreateConfigRequest,
-    ) -> Result<ConfigIdResponse, RusotoError<CreateConfigError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigIdResponse, RusotoError<CreateConfigError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/config";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2515,21 +2717,21 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConfigError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConfigError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p>
@@ -2539,11 +2741,20 @@ impl GroundStation for GroundStationClient {
     /// &lt;p&gt;When a contact uses multiple &lt;code&gt;DataflowEndpointConfig&lt;/code&gt; objects, each &lt;code&gt;Config&lt;/code&gt;
     /// must match a &lt;code&gt;DataflowEndpoint&lt;/code&gt; in the same group.&lt;/p&gt;
     /// </code></pre>
-    async fn create_dataflow_endpoint_group(
+    fn create_dataflow_endpoint_group(
         &self,
         input: CreateDataflowEndpointGroupRequest,
-    ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<CreateDataflowEndpointGroupError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DataflowEndpointGroupIdResponse,
+                        RusotoError<CreateDataflowEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/dataflowEndpointGroup";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2552,21 +2763,21 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataflowEndpointGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDataflowEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a mission profile.</p>
@@ -2575,10 +2786,20 @@ impl GroundStation for GroundStationClient {
     /// &lt;code&gt;dataflowEdges&lt;/code&gt; is a list of lists of strings. Each lower level list of strings
     /// has two elements: a &lt;i&gt;from ARN&lt;/i&gt; and a &lt;i&gt;to ARN&lt;/i&gt;.&lt;/p&gt;
     /// </code></pre>
-    async fn create_mission_profile(
+    fn create_mission_profile(
         &self,
         input: CreateMissionProfileRequest,
-    ) -> Result<MissionProfileIdResponse, RusotoError<CreateMissionProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        MissionProfileIdResponse,
+                        RusotoError<CreateMissionProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/missionprofile";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2587,28 +2808,34 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<MissionProfileIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<MissionProfileIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMissionProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMissionProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <code>Config</code>.</p>
-    async fn delete_config(
+    fn delete_config(
         &self,
         input: DeleteConfigRequest,
-    ) -> Result<ConfigIdResponse, RusotoError<DeleteConfigError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigIdResponse, RusotoError<DeleteConfigError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/config/{config_type}/{config_id}",
             config_id = input.config_id,
@@ -2618,29 +2845,38 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConfigError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a dataflow endpoint group.</p>
-    async fn delete_dataflow_endpoint_group(
+    fn delete_dataflow_endpoint_group(
         &self,
         input: DeleteDataflowEndpointGroupRequest,
-    ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<DeleteDataflowEndpointGroupError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DataflowEndpointGroupIdResponse,
+                        RusotoError<DeleteDataflowEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/dataflowEndpointGroup/{dataflow_endpoint_group_id}",
             dataflow_endpoint_group_id = input.dataflow_endpoint_group_id
@@ -2649,28 +2885,38 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDataflowEndpointGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDataflowEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a mission profile.</p>
-    async fn delete_mission_profile(
+    fn delete_mission_profile(
         &self,
         input: DeleteMissionProfileRequest,
-    ) -> Result<MissionProfileIdResponse, RusotoError<DeleteMissionProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        MissionProfileIdResponse,
+                        RusotoError<DeleteMissionProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/missionprofile/{mission_profile_id}",
             mission_profile_id = input.mission_profile_id
@@ -2679,58 +2925,70 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<MissionProfileIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<MissionProfileIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMissionProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMissionProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing contact.</p>
-    async fn describe_contact(
+    fn describe_contact(
         &self,
         input: DescribeContactRequest,
-    ) -> Result<DescribeContactResponse, RusotoError<DescribeContactError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeContactResponse, RusotoError<DescribeContactError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/contact/{contact_id}", contact_id = input.contact_id);
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeContactResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeContactResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeContactError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeContactError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns <code>Config</code> information.</p>
     ///
     /// <pre><code>     &lt;p&gt;Only one &lt;code&gt;Config&lt;/code&gt; response can be returned.&lt;/p&gt;
     /// </code></pre>
-    async fn get_config(
+    fn get_config(
         &self,
         input: GetConfigRequest,
-    ) -> Result<GetConfigResponse, RusotoError<GetConfigError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetConfigResponse, RusotoError<GetConfigError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/config/{config_type}/{config_id}",
             config_id = input.config_id,
@@ -2740,28 +2998,38 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConfigResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetConfigResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConfigError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConfigError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the dataflow endpoint group.</p>
-    async fn get_dataflow_endpoint_group(
+    fn get_dataflow_endpoint_group(
         &self,
         input: GetDataflowEndpointGroupRequest,
-    ) -> Result<GetDataflowEndpointGroupResponse, RusotoError<GetDataflowEndpointGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDataflowEndpointGroupResponse,
+                        RusotoError<GetDataflowEndpointGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/dataflowEndpointGroup/{dataflow_endpoint_group_id}",
             dataflow_endpoint_group_id = input.dataflow_endpoint_group_id
@@ -2770,28 +3038,34 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataflowEndpointGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDataflowEndpointGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataflowEndpointGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDataflowEndpointGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the number of minutes used by account.</p>
-    async fn get_minute_usage(
+    fn get_minute_usage(
         &self,
         input: GetMinuteUsageRequest,
-    ) -> Result<GetMinuteUsageResponse, RusotoError<GetMinuteUsageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetMinuteUsageResponse, RusotoError<GetMinuteUsageError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/minute-usage";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2800,28 +3074,35 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMinuteUsageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMinuteUsageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMinuteUsageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMinuteUsageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a mission profile.</p>
-    async fn get_mission_profile(
+    fn get_mission_profile(
         &self,
         input: GetMissionProfileRequest,
-    ) -> Result<GetMissionProfileResponse, RusotoError<GetMissionProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetMissionProfileResponse, RusotoError<GetMissionProfileError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/missionprofile/{mission_profile_id}",
             mission_profile_id = input.mission_profile_id
@@ -2830,28 +3111,34 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMissionProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetMissionProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMissionProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMissionProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a satellite.</p>
-    async fn get_satellite(
+    fn get_satellite(
         &self,
         input: GetSatelliteRequest,
-    ) -> Result<GetSatelliteResponse, RusotoError<GetSatelliteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetSatelliteResponse, RusotoError<GetSatelliteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/satellite/{satellite_id}",
             satellite_id = input.satellite_id
@@ -2860,28 +3147,34 @@ impl GroundStation for GroundStationClient {
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSatelliteResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSatelliteResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSatelliteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSatelliteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of <code>Config</code> objects.</p>
-    async fn list_configs(
+    fn list_configs(
         &self,
         input: ListConfigsRequest,
-    ) -> Result<ListConfigsResponse, RusotoError<ListConfigsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListConfigsResponse, RusotoError<ListConfigsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/config";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -2896,21 +3189,21 @@ impl GroundStation for GroundStationClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListConfigsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConfigsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListConfigsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of contacts.</p>
@@ -2919,10 +3212,16 @@ impl GroundStation for GroundStationClient {
     /// &lt;code&gt;groundstation&lt;/code&gt;, &lt;code&gt;missionprofileArn&lt;/code&gt;, and &lt;code&gt;satelliteArn&lt;/code&gt;.
     /// &lt;/p&gt;
     /// </code></pre>
-    async fn list_contacts(
+    fn list_contacts(
         &self,
         input: ListContactsRequest,
-    ) -> Result<ListContactsResponse, RusotoError<ListContactsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListContactsResponse, RusotoError<ListContactsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/contacts";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -2931,29 +3230,38 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListContactsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListContactsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListContactsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListContactsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of <code>DataflowEndpoint</code> groups.</p>
-    async fn list_dataflow_endpoint_groups(
+    fn list_dataflow_endpoint_groups(
         &self,
         input: ListDataflowEndpointGroupsRequest,
-    ) -> Result<ListDataflowEndpointGroupsResponse, RusotoError<ListDataflowEndpointGroupsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDataflowEndpointGroupsResponse,
+                        RusotoError<ListDataflowEndpointGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/dataflowEndpointGroup";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -2968,28 +3276,38 @@ impl GroundStation for GroundStationClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataflowEndpointGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDataflowEndpointGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataflowEndpointGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDataflowEndpointGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of ground stations. </p>
-    async fn list_ground_stations(
+    fn list_ground_stations(
         &self,
         input: ListGroundStationsRequest,
-    ) -> Result<ListGroundStationsResponse, RusotoError<ListGroundStationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListGroundStationsResponse,
+                        RusotoError<ListGroundStationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/groundstation";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3004,28 +3322,38 @@ impl GroundStation for GroundStationClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGroundStationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListGroundStationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGroundStationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListGroundStationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of mission profiles.</p>
-    async fn list_mission_profiles(
+    fn list_mission_profiles(
         &self,
         input: ListMissionProfilesRequest,
-    ) -> Result<ListMissionProfilesResponse, RusotoError<ListMissionProfilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListMissionProfilesResponse,
+                        RusotoError<ListMissionProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/missionprofile";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3040,28 +3368,34 @@ impl GroundStation for GroundStationClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMissionProfilesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMissionProfilesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMissionProfilesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMissionProfilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of satellites.</p>
-    async fn list_satellites(
+    fn list_satellites(
         &self,
         input: ListSatellitesRequest,
-    ) -> Result<ListSatellitesResponse, RusotoError<ListSatellitesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListSatellitesResponse, RusotoError<ListSatellitesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/satellite";
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
@@ -3076,55 +3410,71 @@ impl GroundStation for GroundStationClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSatellitesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSatellitesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSatellitesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSatellitesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of tags or a specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "groundstation", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Reserves a contact using specified parameters.</p>
-    async fn reserve_contact(
+    fn reserve_contact(
         &self,
         input: ReserveContactRequest,
-    ) -> Result<ContactIdResponse, RusotoError<ReserveContactError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ContactIdResponse, RusotoError<ReserveContactError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/contact";
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -3133,28 +3483,34 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ContactIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ContactIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ReserveContactError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ReserveContactError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Assigns a tag to a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "groundstation", &self.region, &request_uri);
@@ -3163,28 +3519,34 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deassigns a resource tag.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "groundstation", &self.region, &request_uri);
@@ -3196,21 +3558,21 @@ impl GroundStation for GroundStationClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the <code>Config</code> used when scheduling contacts.</p>
@@ -3218,10 +3580,16 @@ impl GroundStation for GroundStationClient {
     /// <pre><code>     &lt;p&gt;Updating a &lt;code&gt;Config&lt;/code&gt; will not update the execution parameters
     /// for existing future contacts scheduled with this &lt;code&gt;Config&lt;/code&gt;.&lt;/p&gt;
     /// </code></pre>
-    async fn update_config(
+    fn update_config(
         &self,
         input: UpdateConfigRequest,
-    ) -> Result<ConfigIdResponse, RusotoError<UpdateConfigError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ConfigIdResponse, RusotoError<UpdateConfigError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/config/{config_type}/{config_id}",
             config_id = input.config_id,
@@ -3234,21 +3602,21 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfigIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConfigError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateConfigError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a mission profile.</p>
@@ -3256,10 +3624,20 @@ impl GroundStation for GroundStationClient {
     /// <pre><code>     &lt;p&gt;Updating a mission profile will not update the execution parameters
     /// for existing future contacts.&lt;/p&gt;
     /// </code></pre>
-    async fn update_mission_profile(
+    fn update_mission_profile(
         &self,
         input: UpdateMissionProfileRequest,
-    ) -> Result<MissionProfileIdResponse, RusotoError<UpdateMissionProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        MissionProfileIdResponse,
+                        RusotoError<UpdateMissionProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/missionprofile/{mission_profile_id}",
             mission_profile_id = input.mission_profile_id
@@ -3271,20 +3649,20 @@ impl GroundStation for GroundStationClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<MissionProfileIdResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<MissionProfileIdResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMissionProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMissionProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

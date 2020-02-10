@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Contains information about the errors encountered.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -543,31 +544,59 @@ impl fmt::Display for ListDetectorsError {
 }
 impl Error for ListDetectorsError {}
 /// Trait representing the capabilities of the AWS IoT Events Data API. AWS IoT Events Data clients implement this trait.
-#[async_trait]
 pub trait IotEventsData {
     /// <p>Sends a set of messages to the AWS IoT Events system. Each message payload is transformed into the input you specify (<code>"inputName"</code>) and ingested into any detectors that monitor that input. If multiple messages are sent, the order in which the messages are processed isn't guaranteed. To guarantee ordering, you must send messages one at a time and wait for a successful response.</p>
-    async fn batch_put_message(
+    fn batch_put_message(
         &self,
         input: BatchPutMessageRequest,
-    ) -> Result<BatchPutMessageResponse, RusotoError<BatchPutMessageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchPutMessageResponse, RusotoError<BatchPutMessageError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the state, variable values, and timer settings of one or more detectors (instances) of a specified detector model.</p>
-    async fn batch_update_detector(
+    fn batch_update_detector(
         &self,
         input: BatchUpdateDetectorRequest,
-    ) -> Result<BatchUpdateDetectorResponse, RusotoError<BatchUpdateDetectorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchUpdateDetectorResponse,
+                        RusotoError<BatchUpdateDetectorError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the specified detector (instance).</p>
-    async fn describe_detector(
+    fn describe_detector(
         &self,
         input: DescribeDetectorRequest,
-    ) -> Result<DescribeDetectorResponse, RusotoError<DescribeDetectorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeDetectorResponse, RusotoError<DescribeDetectorError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists detectors (the instances of a detector model).</p>
-    async fn list_detectors(
+    fn list_detectors(
         &self,
         input: ListDetectorsRequest,
-    ) -> Result<ListDetectorsResponse, RusotoError<ListDetectorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDetectorsResponse, RusotoError<ListDetectorsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS IoT Events Data API.
 #[derive(Clone)]
@@ -607,13 +636,18 @@ impl IotEventsDataClient {
     }
 }
 
-#[async_trait]
 impl IotEventsData for IotEventsDataClient {
     /// <p>Sends a set of messages to the AWS IoT Events system. Each message payload is transformed into the input you specify (<code>"inputName"</code>) and ingested into any detectors that monitor that input. If multiple messages are sent, the order in which the messages are processed isn't guaranteed. To guarantee ordering, you must send messages one at a time and wait for a successful response.</p>
-    async fn batch_put_message(
+    fn batch_put_message(
         &self,
         input: BatchPutMessageRequest,
-    ) -> Result<BatchPutMessageResponse, RusotoError<BatchPutMessageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchPutMessageResponse, RusotoError<BatchPutMessageError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/inputs/messages";
 
         let mut request = SignedRequest::new("POST", "ioteventsdata", &self.region, &request_uri);
@@ -623,28 +657,38 @@ impl IotEventsData for IotEventsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchPutMessageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchPutMessageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchPutMessageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchPutMessageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the state, variable values, and timer settings of one or more detectors (instances) of a specified detector model.</p>
-    async fn batch_update_detector(
+    fn batch_update_detector(
         &self,
         input: BatchUpdateDetectorRequest,
-    ) -> Result<BatchUpdateDetectorResponse, RusotoError<BatchUpdateDetectorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchUpdateDetectorResponse,
+                        RusotoError<BatchUpdateDetectorError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/detectors";
 
         let mut request = SignedRequest::new("POST", "ioteventsdata", &self.region, &request_uri);
@@ -654,28 +698,35 @@ impl IotEventsData for IotEventsDataClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchUpdateDetectorResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchUpdateDetectorResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchUpdateDetectorError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchUpdateDetectorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the specified detector (instance).</p>
-    async fn describe_detector(
+    fn describe_detector(
         &self,
         input: DescribeDetectorRequest,
-    ) -> Result<DescribeDetectorResponse, RusotoError<DescribeDetectorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeDetectorResponse, RusotoError<DescribeDetectorError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/detectors/{detector_model_name}/keyValues/",
             detector_model_name = input.detector_model_name
@@ -692,28 +743,34 @@ impl IotEventsData for IotEventsDataClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDetectorResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDetectorResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDetectorError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDetectorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists detectors (the instances of a detector model).</p>
-    async fn list_detectors(
+    fn list_detectors(
         &self,
         input: ListDetectorsRequest,
-    ) -> Result<ListDetectorsResponse, RusotoError<ListDetectorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListDetectorsResponse, RusotoError<ListDetectorsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/detectors/{detector_model_name}",
             detector_model_name = input.detector_model_name
@@ -736,20 +793,20 @@ impl IotEventsData for IotEventsDataClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDetectorsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDetectorsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDetectorsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDetectorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

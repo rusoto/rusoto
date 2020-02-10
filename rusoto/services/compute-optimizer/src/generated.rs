@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Describes the configuration of an Auto Scaling group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1040,51 +1041,101 @@ impl fmt::Display for UpdateEnrollmentStatusError {
 }
 impl Error for UpdateEnrollmentStatusError {}
 /// Trait representing the capabilities of the AWS Compute Optimizer API. AWS Compute Optimizer clients implement this trait.
-#[async_trait]
 pub trait ComputeOptimizer {
     /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Auto Scaling groups that are configured to run instances of the M, C, R, T, and X instance families. The service does not generate recommendations for Auto Scaling groups that have a scaling policy attached to them, or that do not have the same values for desired, minimum, and maximum capacity. In order for Compute Optimizer to analyze your Auto Scaling groups, they must be of a fixed size. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
-    async fn get_auto_scaling_group_recommendations(
+    fn get_auto_scaling_group_recommendations(
         &self,
         input: GetAutoScalingGroupRecommendationsRequest,
-    ) -> Result<
-        GetAutoScalingGroupRecommendationsResponse,
-        RusotoError<GetAutoScalingGroupRecommendationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAutoScalingGroupRecommendationsResponse,
+                        RusotoError<GetAutoScalingGroupRecommendationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) and Amazon EC2 Auto Scaling. It generates recommendations for M, C, R, T, and X instance families. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
-    async fn get_ec2_instance_recommendations(
+    fn get_ec2_instance_recommendations(
         &self,
         input: GetEC2InstanceRecommendationsRequest,
-    ) -> Result<
-        GetEC2InstanceRecommendationsResponse,
-        RusotoError<GetEC2InstanceRecommendationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEC2InstanceRecommendationsResponse,
+                        RusotoError<GetEC2InstanceRecommendationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p>
-    async fn get_ec2_recommendation_projected_metrics(
+    fn get_ec2_recommendation_projected_metrics(
         &self,
         input: GetEC2RecommendationProjectedMetricsRequest,
-    ) -> Result<
-        GetEC2RecommendationProjectedMetricsResponse,
-        RusotoError<GetEC2RecommendationProjectedMetricsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEC2RecommendationProjectedMetricsResponse,
+                        RusotoError<GetEC2RecommendationProjectedMetricsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation also confirms the enrollment status of member accounts within the organization.</p>
-    async fn get_enrollment_status(
+    fn get_enrollment_status(
         &self,
-    ) -> Result<GetEnrollmentStatusResponse, RusotoError<GetEnrollmentStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEnrollmentStatusResponse,
+                        RusotoError<GetEnrollmentStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the optimization findings for an account.</p> <p>For example, it returns the number of Amazon EC2 instances in an account that are under-provisioned, over-provisioned, or optimized. It also returns the number of Auto Scaling groups in an account that are not optimized, or optimized.</p>
-    async fn get_recommendation_summaries(
+    fn get_recommendation_summaries(
         &self,
         input: GetRecommendationSummariesRequest,
-    ) -> Result<GetRecommendationSummariesResponse, RusotoError<GetRecommendationSummariesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRecommendationSummariesResponse,
+                        RusotoError<GetRecommendationSummariesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation can also enroll member accounts within the organization.</p>
-    async fn update_enrollment_status(
+    fn update_enrollment_status(
         &self,
         input: UpdateEnrollmentStatusRequest,
-    ) -> Result<UpdateEnrollmentStatusResponse, RusotoError<UpdateEnrollmentStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateEnrollmentStatusResponse,
+                        RusotoError<UpdateEnrollmentStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Compute Optimizer API.
 #[derive(Clone)]
@@ -1124,15 +1175,21 @@ impl ComputeOptimizerClient {
     }
 }
 
-#[async_trait]
 impl ComputeOptimizer for ComputeOptimizerClient {
     /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Auto Scaling groups that are configured to run instances of the M, C, R, T, and X instance families. The service does not generate recommendations for Auto Scaling groups that have a scaling policy attached to them, or that do not have the same values for desired, minimum, and maximum capacity. In order for Compute Optimizer to analyze your Auto Scaling groups, they must be of a fixed size. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
-    async fn get_auto_scaling_group_recommendations(
+    fn get_auto_scaling_group_recommendations(
         &self,
         input: GetAutoScalingGroupRecommendationsRequest,
-    ) -> Result<
-        GetAutoScalingGroupRecommendationsResponse,
-        RusotoError<GetAutoScalingGroupRecommendationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAutoScalingGroupRecommendationsResponse,
+                        RusotoError<GetAutoScalingGroupRecommendationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
 
@@ -1144,31 +1201,38 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAutoScalingGroupRecommendationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAutoScalingGroupRecommendationsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAutoScalingGroupRecommendationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAutoScalingGroupRecommendationsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) and Amazon EC2 Auto Scaling. It generates recommendations for M, C, R, T, and X instance families. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
-    async fn get_ec2_instance_recommendations(
+    fn get_ec2_instance_recommendations(
         &self,
         input: GetEC2InstanceRecommendationsRequest,
-    ) -> Result<
-        GetEC2InstanceRecommendationsResponse,
-        RusotoError<GetEC2InstanceRecommendationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEC2InstanceRecommendationsResponse,
+                        RusotoError<GetEC2InstanceRecommendationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
 
@@ -1180,29 +1244,36 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEC2InstanceRecommendationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEC2InstanceRecommendationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEC2InstanceRecommendationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEC2InstanceRecommendationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p>
-    async fn get_ec2_recommendation_projected_metrics(
+    fn get_ec2_recommendation_projected_metrics(
         &self,
         input: GetEC2RecommendationProjectedMetricsRequest,
-    ) -> Result<
-        GetEC2RecommendationProjectedMetricsResponse,
-        RusotoError<GetEC2RecommendationProjectedMetricsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEC2RecommendationProjectedMetricsResponse,
+                        RusotoError<GetEC2RecommendationProjectedMetricsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
 
@@ -1214,28 +1285,38 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEC2RecommendationProjectedMetricsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEC2RecommendationProjectedMetricsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEC2RecommendationProjectedMetricsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEC2RecommendationProjectedMetricsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation also confirms the enrollment status of member accounts within the organization.</p>
-    async fn get_enrollment_status(
+    fn get_enrollment_status(
         &self,
-    ) -> Result<GetEnrollmentStatusResponse, RusotoError<GetEnrollmentStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEnrollmentStatusResponse,
+                        RusotoError<GetEnrollmentStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -1245,28 +1326,37 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEnrollmentStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEnrollmentStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEnrollmentStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEnrollmentStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the optimization findings for an account.</p> <p>For example, it returns the number of Amazon EC2 instances in an account that are under-provisioned, over-provisioned, or optimized. It also returns the number of Auto Scaling groups in an account that are not optimized, or optimized.</p>
-    async fn get_recommendation_summaries(
+    fn get_recommendation_summaries(
         &self,
         input: GetRecommendationSummariesRequest,
-    ) -> Result<GetRecommendationSummariesResponse, RusotoError<GetRecommendationSummariesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRecommendationSummariesResponse,
+                        RusotoError<GetRecommendationSummariesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -1277,27 +1367,37 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRecommendationSummariesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRecommendationSummariesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRecommendationSummariesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRecommendationSummariesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation can also enroll member accounts within the organization.</p>
-    async fn update_enrollment_status(
+    fn update_enrollment_status(
         &self,
         input: UpdateEnrollmentStatusRequest,
-    ) -> Result<UpdateEnrollmentStatusResponse, RusotoError<UpdateEnrollmentStatusError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateEnrollmentStatusResponse,
+                        RusotoError<UpdateEnrollmentStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -1308,19 +1408,19 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateEnrollmentStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEnrollmentStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateEnrollmentStatusResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateEnrollmentStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

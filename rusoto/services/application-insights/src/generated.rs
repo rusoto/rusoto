@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Describes a standalone resource or similarly grouped resources that the application is made up of.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1958,175 +1959,378 @@ impl fmt::Display for UpdateLogPatternError {
 }
 impl Error for UpdateLogPatternError {}
 /// Trait representing the capabilities of the Application Insights API. Application Insights clients implement this trait.
-#[async_trait]
 pub trait ApplicationInsights {
     /// <p>Adds an application that is created from a resource group.</p>
-    async fn create_application(
+    fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a custom component by grouping similar standalone instances to monitor.</p>
-    async fn create_component(
+    fn create_component(
         &self,
         input: CreateComponentRequest,
-    ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateComponentResponse, RusotoError<CreateComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds an log pattern to a <code>LogPatternSet</code>.</p>
-    async fn create_log_pattern(
+    fn create_log_pattern(
         &self,
         input: CreateLogPatternRequest,
-    ) -> Result<CreateLogPatternResponse, RusotoError<CreateLogPatternError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLogPatternResponse, RusotoError<CreateLogPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the specified application from monitoring. Does not delete the application.</p>
-    async fn delete_application(
+    fn delete_application(
         &self,
         input: DeleteApplicationRequest,
-    ) -> Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Ungroups a custom component. When you ungroup custom components, all applicable monitors that are set up for the component are removed and the instances revert to their standalone status.</p>
-    async fn delete_component(
+    fn delete_component(
         &self,
         input: DeleteComponentRequest,
-    ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the specified log pattern from a <code>LogPatternSet</code>.</p>
-    async fn delete_log_pattern(
+    fn delete_log_pattern(
         &self,
         input: DeleteLogPatternRequest,
-    ) -> Result<DeleteLogPatternResponse, RusotoError<DeleteLogPatternError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteLogPatternResponse, RusotoError<DeleteLogPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the application.</p>
-    async fn describe_application(
+    fn describe_application(
         &self,
         input: DescribeApplicationRequest,
-    ) -> Result<DescribeApplicationResponse, RusotoError<DescribeApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeApplicationResponse,
+                        RusotoError<DescribeApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a component and lists the resources that are grouped together in a component.</p>
-    async fn describe_component(
+    fn describe_component(
         &self,
         input: DescribeComponentRequest,
-    ) -> Result<DescribeComponentResponse, RusotoError<DescribeComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeComponentResponse, RusotoError<DescribeComponentError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the monitoring configuration of the component.</p>
-    async fn describe_component_configuration(
+    fn describe_component_configuration(
         &self,
         input: DescribeComponentConfigurationRequest,
-    ) -> Result<
-        DescribeComponentConfigurationResponse,
-        RusotoError<DescribeComponentConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeComponentConfigurationResponse,
+                        RusotoError<DescribeComponentConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describes the recommended monitoring configuration of the component.</p>
-    async fn describe_component_configuration_recommendation(
+    fn describe_component_configuration_recommendation(
         &self,
         input: DescribeComponentConfigurationRecommendationRequest,
-    ) -> Result<
-        DescribeComponentConfigurationRecommendationResponse,
-        RusotoError<DescribeComponentConfigurationRecommendationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeComponentConfigurationRecommendationResponse,
+                        RusotoError<DescribeComponentConfigurationRecommendationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describe a specific log pattern from a <code>LogPatternSet</code>.</p>
-    async fn describe_log_pattern(
+    fn describe_log_pattern(
         &self,
         input: DescribeLogPatternRequest,
-    ) -> Result<DescribeLogPatternResponse, RusotoError<DescribeLogPatternError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLogPatternResponse,
+                        RusotoError<DescribeLogPatternError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an anomaly or error with the application.</p>
-    async fn describe_observation(
+    fn describe_observation(
         &self,
         input: DescribeObservationRequest,
-    ) -> Result<DescribeObservationResponse, RusotoError<DescribeObservationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeObservationResponse,
+                        RusotoError<DescribeObservationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an application problem.</p>
-    async fn describe_problem(
+    fn describe_problem(
         &self,
         input: DescribeProblemRequest,
-    ) -> Result<DescribeProblemResponse, RusotoError<DescribeProblemError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeProblemResponse, RusotoError<DescribeProblemError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the anomalies or errors associated with the problem.</p>
-    async fn describe_problem_observations(
+    fn describe_problem_observations(
         &self,
         input: DescribeProblemObservationsRequest,
-    ) -> Result<DescribeProblemObservationsResponse, RusotoError<DescribeProblemObservationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProblemObservationsResponse,
+                        RusotoError<DescribeProblemObservationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the IDs of the applications that you are monitoring. </p>
-    async fn list_applications(
+    fn list_applications(
         &self,
         input: ListApplicationsRequest,
-    ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the auto-grouped, standalone, and custom components of the application.</p>
-    async fn list_components(
+    fn list_components(
         &self,
         input: ListComponentsRequest,
-    ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListComponentsResponse, RusotoError<ListComponentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p> Lists the INFO, WARN, and ERROR events for periodic configuration updates performed by Application Insights. Examples of events represented are: </p> <ul> <li> <p>INFO: creating a new alarm or updating an alarm threshold.</p> </li> <li> <p>WARN: alarm not created due to insufficient data points used to predict thresholds.</p> </li> <li> <p>ERROR: alarm not created due to permission errors or exceeding quotas. </p> </li> </ul></p>
-    async fn list_configuration_history(
+    fn list_configuration_history(
         &self,
         input: ListConfigurationHistoryRequest,
-    ) -> Result<ListConfigurationHistoryResponse, RusotoError<ListConfigurationHistoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListConfigurationHistoryResponse,
+                        RusotoError<ListConfigurationHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the log pattern sets in the specific application.</p>
-    async fn list_log_pattern_sets(
+    fn list_log_pattern_sets(
         &self,
         input: ListLogPatternSetsRequest,
-    ) -> Result<ListLogPatternSetsResponse, RusotoError<ListLogPatternSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListLogPatternSetsResponse,
+                        RusotoError<ListLogPatternSetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the log patterns in the specific log <code>LogPatternSet</code>.</p>
-    async fn list_log_patterns(
+    fn list_log_patterns(
         &self,
         input: ListLogPatternsRequest,
-    ) -> Result<ListLogPatternsResponse, RusotoError<ListLogPatternsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListLogPatternsResponse, RusotoError<ListLogPatternsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the problems with your application.</p>
-    async fn list_problems(
+    fn list_problems(
         &self,
         input: ListProblemsRequest,
-    ) -> Result<ListProblemsResponse, RusotoError<ListProblemsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProblemsResponse, RusotoError<ListProblemsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified application. A <i>tag</i> is a label that you optionally define and associate with an application. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add one or more tags (keys and values) to a specified application. A <i>tag</i> is a label that you optionally define and associate with an application. Tags can help you categorize and manage application in different ways, such as by purpose, owner, environment, or other criteria. </p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Remove one or more tags (keys and values) from a specified application.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the application.</p>
-    async fn update_application(
+    fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the custom component name and/or the list of resources that make up the component.</p>
-    async fn update_component(
+    fn update_component(
         &self,
         input: UpdateComponentRequest,
-    ) -> Result<UpdateComponentResponse, RusotoError<UpdateComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateComponentResponse, RusotoError<UpdateComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the monitoring configurations for the component. The configuration input parameter is an escaped JSON of the configuration and should match the schema of what is returned by <code>DescribeComponentConfigurationRecommendation</code>. </p>
-    async fn update_component_configuration(
+    fn update_component_configuration(
         &self,
         input: UpdateComponentConfigurationRequest,
-    ) -> Result<UpdateComponentConfigurationResponse, RusotoError<UpdateComponentConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateComponentConfigurationResponse,
+                        RusotoError<UpdateComponentConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a log pattern to a <code>LogPatternSet</code>.</p>
-    async fn update_log_pattern(
+    fn update_log_pattern(
         &self,
         input: UpdateLogPatternRequest,
-    ) -> Result<UpdateLogPatternResponse, RusotoError<UpdateLogPatternError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateLogPatternResponse, RusotoError<UpdateLogPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Application Insights API.
 #[derive(Clone)]
@@ -2166,13 +2370,19 @@ impl ApplicationInsightsClient {
     }
 }
 
-#[async_trait]
 impl ApplicationInsights for ApplicationInsightsClient {
     /// <p>Adds an application that is created from a resource group.</p>
-    async fn create_application(
+    fn create_application(
         &self,
         input: CreateApplicationRequest,
-    ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2180,27 +2390,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a custom component by grouping similar standalone instances to monitor.</p>
-    async fn create_component(
+    fn create_component(
         &self,
         input: CreateComponentRequest,
-    ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateComponentResponse, RusotoError<CreateComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2208,26 +2424,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateComponentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateComponentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds an log pattern to a <code>LogPatternSet</code>.</p>
-    async fn create_log_pattern(
+    fn create_log_pattern(
         &self,
         input: CreateLogPatternRequest,
-    ) -> Result<CreateLogPatternResponse, RusotoError<CreateLogPatternError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLogPatternResponse, RusotoError<CreateLogPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2235,27 +2459,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLogPatternError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLogPatternResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLogPatternError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified application from monitoring. Does not delete the application.</p>
-    async fn delete_application(
+    fn delete_application(
         &self,
         input: DeleteApplicationRequest,
-    ) -> Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2263,27 +2494,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Ungroups a custom component. When you ungroup custom components, all applicable monitors that are set up for the component are removed and the instances revert to their standalone status.</p>
-    async fn delete_component(
+    fn delete_component(
         &self,
         input: DeleteComponentRequest,
-    ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2291,26 +2528,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteComponentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteComponentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified log pattern from a <code>LogPatternSet</code>.</p>
-    async fn delete_log_pattern(
+    fn delete_log_pattern(
         &self,
         input: DeleteLogPatternRequest,
-    ) -> Result<DeleteLogPatternResponse, RusotoError<DeleteLogPatternError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteLogPatternResponse, RusotoError<DeleteLogPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2318,27 +2563,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLogPatternError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteLogPatternResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteLogPatternError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the application.</p>
-    async fn describe_application(
+    fn describe_application(
         &self,
         input: DescribeApplicationRequest,
-    ) -> Result<DescribeApplicationResponse, RusotoError<DescribeApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeApplicationResponse,
+                        RusotoError<DescribeApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2349,27 +2604,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a component and lists the resources that are grouped together in a component.</p>
-    async fn describe_component(
+    fn describe_component(
         &self,
         input: DescribeComponentRequest,
-    ) -> Result<DescribeComponentResponse, RusotoError<DescribeComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeComponentResponse, RusotoError<DescribeComponentError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2377,29 +2639,36 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComponentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeComponentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the monitoring configuration of the component.</p>
-    async fn describe_component_configuration(
+    fn describe_component_configuration(
         &self,
         input: DescribeComponentConfigurationRequest,
-    ) -> Result<
-        DescribeComponentConfigurationResponse,
-        RusotoError<DescribeComponentConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeComponentConfigurationResponse,
+                        RusotoError<DescribeComponentConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
@@ -2411,29 +2680,36 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComponentConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComponentConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeComponentConfigurationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeComponentConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the recommended monitoring configuration of the component.</p>
-    async fn describe_component_configuration_recommendation(
+    fn describe_component_configuration_recommendation(
         &self,
         input: DescribeComponentConfigurationRecommendationRequest,
-    ) -> Result<
-        DescribeComponentConfigurationRecommendationResponse,
-        RusotoError<DescribeComponentConfigurationRecommendationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeComponentConfigurationRecommendationResponse,
+                        RusotoError<DescribeComponentConfigurationRecommendationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
@@ -2445,27 +2721,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComponentConfigurationRecommendationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComponentConfigurationRecommendationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeComponentConfigurationRecommendationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeComponentConfigurationRecommendationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe a specific log pattern from a <code>LogPatternSet</code>.</p>
-    async fn describe_log_pattern(
+    fn describe_log_pattern(
         &self,
         input: DescribeLogPatternRequest,
-    ) -> Result<DescribeLogPatternResponse, RusotoError<DescribeLogPatternError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLogPatternResponse,
+                        RusotoError<DescribeLogPatternError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2473,27 +2759,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLogPatternError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLogPatternResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLogPatternError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an anomaly or error with the application.</p>
-    async fn describe_observation(
+    fn describe_observation(
         &self,
         input: DescribeObservationRequest,
-    ) -> Result<DescribeObservationResponse, RusotoError<DescribeObservationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeObservationResponse,
+                        RusotoError<DescribeObservationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2504,27 +2800,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeObservationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeObservationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeObservationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeObservationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an application problem.</p>
-    async fn describe_problem(
+    fn describe_problem(
         &self,
         input: DescribeProblemRequest,
-    ) -> Result<DescribeProblemResponse, RusotoError<DescribeProblemError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeProblemResponse, RusotoError<DescribeProblemError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2532,27 +2834,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeProblemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProblemError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProblemResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProblemError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the anomalies or errors associated with the problem.</p>
-    async fn describe_problem_observations(
+    fn describe_problem_observations(
         &self,
         input: DescribeProblemObservationsRequest,
-    ) -> Result<DescribeProblemObservationsResponse, RusotoError<DescribeProblemObservationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProblemObservationsResponse,
+                        RusotoError<DescribeProblemObservationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2563,27 +2875,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProblemObservationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProblemObservationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProblemObservationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProblemObservationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the IDs of the applications that you are monitoring. </p>
-    async fn list_applications(
+    fn list_applications(
         &self,
         input: ListApplicationsRequest,
-    ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListApplicationsResponse, RusotoError<ListApplicationsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2591,27 +2910,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListApplicationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListApplicationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the auto-grouped, standalone, and custom components of the application.</p>
-    async fn list_components(
+    fn list_components(
         &self,
         input: ListComponentsRequest,
-    ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListComponentsResponse, RusotoError<ListComponentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2619,26 +2944,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListComponentsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComponentsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListComponentsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListComponentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p> Lists the INFO, WARN, and ERROR events for periodic configuration updates performed by Application Insights. Examples of events represented are: </p> <ul> <li> <p>INFO: creating a new alarm or updating an alarm threshold.</p> </li> <li> <p>WARN: alarm not created due to insufficient data points used to predict thresholds.</p> </li> <li> <p>ERROR: alarm not created due to permission errors or exceeding quotas. </p> </li> </ul></p>
-    async fn list_configuration_history(
+    fn list_configuration_history(
         &self,
         input: ListConfigurationHistoryRequest,
-    ) -> Result<ListConfigurationHistoryResponse, RusotoError<ListConfigurationHistoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListConfigurationHistoryResponse,
+                        RusotoError<ListConfigurationHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2649,27 +2985,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationHistoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConfigurationHistoryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListConfigurationHistoryResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListConfigurationHistoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the log pattern sets in the specific application.</p>
-    async fn list_log_pattern_sets(
+    fn list_log_pattern_sets(
         &self,
         input: ListLogPatternSetsRequest,
-    ) -> Result<ListLogPatternSetsResponse, RusotoError<ListLogPatternSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListLogPatternSetsResponse,
+                        RusotoError<ListLogPatternSetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2677,27 +3023,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListLogPatternSetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLogPatternSetsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListLogPatternSetsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListLogPatternSetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the log patterns in the specific log <code>LogPatternSet</code>.</p>
-    async fn list_log_patterns(
+    fn list_log_patterns(
         &self,
         input: ListLogPatternsRequest,
-    ) -> Result<ListLogPatternsResponse, RusotoError<ListLogPatternsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListLogPatternsResponse, RusotoError<ListLogPatternsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2705,26 +3057,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListLogPatternsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLogPatternsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListLogPatternsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListLogPatternsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the problems with your application.</p>
-    async fn list_problems(
+    fn list_problems(
         &self,
         input: ListProblemsRequest,
-    ) -> Result<ListProblemsResponse, RusotoError<ListProblemsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListProblemsResponse, RusotoError<ListProblemsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2732,26 +3091,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProblemsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProblemsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProblemsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProblemsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified application. A <i>tag</i> is a label that you optionally define and associate with an application. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2762,27 +3132,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add one or more tags (keys and values) to a specified application. A <i>tag</i> is a label that you optionally define and associate with an application. Tags can help you categorize and manage application in different ways, such as by purpose, owner, environment, or other criteria. </p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2790,26 +3166,32 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Remove one or more tags (keys and values) from a specified application.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2817,26 +3199,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the application.</p>
-    async fn update_application(
+    fn update_application(
         &self,
         input: UpdateApplicationRequest,
-    ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2844,27 +3234,33 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApplicationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateApplicationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the custom component name and/or the list of resources that make up the component.</p>
-    async fn update_component(
+    fn update_component(
         &self,
         input: UpdateComponentRequest,
-    ) -> Result<UpdateComponentResponse, RusotoError<UpdateComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateComponentResponse, RusotoError<UpdateComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2872,27 +3268,37 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateComponentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateComponentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the monitoring configurations for the component. The configuration input parameter is an escaped JSON of the configuration and should match the schema of what is returned by <code>DescribeComponentConfigurationRecommendation</code>. </p>
-    async fn update_component_configuration(
+    fn update_component_configuration(
         &self,
         input: UpdateComponentConfigurationRequest,
-    ) -> Result<UpdateComponentConfigurationResponse, RusotoError<UpdateComponentConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateComponentConfigurationResponse,
+                        RusotoError<UpdateComponentConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2903,27 +3309,34 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateComponentConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateComponentConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateComponentConfigurationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateComponentConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a log pattern to a <code>LogPatternSet</code>.</p>
-    async fn update_log_pattern(
+    fn update_log_pattern(
         &self,
         input: UpdateLogPatternRequest,
-    ) -> Result<UpdateLogPatternResponse, RusotoError<UpdateLogPatternError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateLogPatternResponse, RusotoError<UpdateLogPatternError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2931,19 +3344,19 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateLogPatternError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateLogPatternResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateLogPatternError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

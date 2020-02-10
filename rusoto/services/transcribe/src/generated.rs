@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyFilterRequest {
@@ -1319,91 +1320,201 @@ impl fmt::Display for UpdateVocabularyFilterError {
 }
 impl Error for UpdateVocabularyFilterError {}
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
-#[async_trait]
 pub trait Transcribe {
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
-    async fn create_vocabulary(
+    fn create_vocabulary(
         &self,
         input: CreateVocabularyRequest,
-    ) -> Result<CreateVocabularyResponse, RusotoError<CreateVocabularyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateVocabularyResponse, RusotoError<CreateVocabularyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new vocabulary filter that you can use to filter words, such as profane words, from the output of a transcription job.</p>
-    async fn create_vocabulary_filter(
+    fn create_vocabulary_filter(
         &self,
         input: CreateVocabularyFilterRequest,
-    ) -> Result<CreateVocabularyFilterResponse, RusotoError<CreateVocabularyFilterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVocabularyFilterResponse,
+                        RusotoError<CreateVocabularyFilterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>
-    async fn delete_transcription_job(
+    fn delete_transcription_job(
         &self,
         input: DeleteTranscriptionJobRequest,
-    ) -> Result<(), RusotoError<DeleteTranscriptionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteTranscriptionJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a vocabulary from Amazon Transcribe. </p>
-    async fn delete_vocabulary(
+    fn delete_vocabulary(
         &self,
         input: DeleteVocabularyRequest,
-    ) -> Result<(), RusotoError<DeleteVocabularyError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteVocabularyError>>> + Send + 'static>,
+    >;
 
     /// <p>Removes a vocabulary filter.</p>
-    async fn delete_vocabulary_filter(
+    fn delete_vocabulary_filter(
         &self,
         input: DeleteVocabularyFilterRequest,
-    ) -> Result<(), RusotoError<DeleteVocabularyFilterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteVocabularyFilterError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptionFileUri</code> field.</p>
-    async fn get_transcription_job(
+    fn get_transcription_job(
         &self,
         input: GetTranscriptionJobRequest,
-    ) -> Result<GetTranscriptionJobResponse, RusotoError<GetTranscriptionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetTranscriptionJobResponse,
+                        RusotoError<GetTranscriptionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a vocabulary. </p>
-    async fn get_vocabulary(
+    fn get_vocabulary(
         &self,
         input: GetVocabularyRequest,
-    ) -> Result<GetVocabularyResponse, RusotoError<GetVocabularyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetVocabularyResponse, RusotoError<GetVocabularyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a vocabulary filter.</p>
-    async fn get_vocabulary_filter(
+    fn get_vocabulary_filter(
         &self,
         input: GetVocabularyFilterRequest,
-    ) -> Result<GetVocabularyFilterResponse, RusotoError<GetVocabularyFilterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetVocabularyFilterResponse,
+                        RusotoError<GetVocabularyFilterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists transcription jobs with the specified status.</p>
-    async fn list_transcription_jobs(
+    fn list_transcription_jobs(
         &self,
         input: ListTranscriptionJobsRequest,
-    ) -> Result<ListTranscriptionJobsResponse, RusotoError<ListTranscriptionJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTranscriptionJobsResponse,
+                        RusotoError<ListTranscriptionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of vocabularies that match the specified criteria. If no criteria are specified, returns the entire list of vocabularies.</p>
-    async fn list_vocabularies(
+    fn list_vocabularies(
         &self,
         input: ListVocabulariesRequest,
-    ) -> Result<ListVocabulariesResponse, RusotoError<ListVocabulariesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListVocabulariesResponse, RusotoError<ListVocabulariesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about vocabulary filters.</p>
-    async fn list_vocabulary_filters(
+    fn list_vocabulary_filters(
         &self,
         input: ListVocabularyFiltersRequest,
-    ) -> Result<ListVocabularyFiltersResponse, RusotoError<ListVocabularyFiltersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListVocabularyFiltersResponse,
+                        RusotoError<ListVocabularyFiltersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous job to transcribe speech to text. </p>
-    async fn start_transcription_job(
+    fn start_transcription_job(
         &self,
         input: StartTranscriptionJobRequest,
-    ) -> Result<StartTranscriptionJobResponse, RusotoError<StartTranscriptionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTranscriptionJobResponse,
+                        RusotoError<StartTranscriptionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request. </p>
-    async fn update_vocabulary(
+    fn update_vocabulary(
         &self,
         input: UpdateVocabularyRequest,
-    ) -> Result<UpdateVocabularyResponse, RusotoError<UpdateVocabularyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateVocabularyResponse, RusotoError<UpdateVocabularyError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a vocabulary filter with a new list of filtered words.</p>
-    async fn update_vocabulary_filter(
+    fn update_vocabulary_filter(
         &self,
         input: UpdateVocabularyFilterRequest,
-    ) -> Result<UpdateVocabularyFilterResponse, RusotoError<UpdateVocabularyFilterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVocabularyFilterResponse,
+                        RusotoError<UpdateVocabularyFilterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Transcribe Service API.
 #[derive(Clone)]
@@ -1443,13 +1554,19 @@ impl TranscribeClient {
     }
 }
 
-#[async_trait]
 impl Transcribe for TranscribeClient {
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
-    async fn create_vocabulary(
+    fn create_vocabulary(
         &self,
         input: CreateVocabularyRequest,
-    ) -> Result<CreateVocabularyResponse, RusotoError<CreateVocabularyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateVocabularyResponse, RusotoError<CreateVocabularyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1457,27 +1574,37 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVocabularyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVocabularyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVocabularyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new vocabulary filter that you can use to filter words, such as profane words, from the output of a transcription job.</p>
-    async fn create_vocabulary_filter(
+    fn create_vocabulary_filter(
         &self,
         input: CreateVocabularyFilterRequest,
-    ) -> Result<CreateVocabularyFilterResponse, RusotoError<CreateVocabularyFilterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVocabularyFilterResponse,
+                        RusotoError<CreateVocabularyFilterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1485,27 +1612,33 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVocabularyFilterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVocabularyFilterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVocabularyFilterResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVocabularyFilterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>
-    async fn delete_transcription_job(
+    fn delete_transcription_job(
         &self,
         input: DeleteTranscriptionJobRequest,
-    ) -> Result<(), RusotoError<DeleteTranscriptionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteTranscriptionJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1513,26 +1646,28 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTranscriptionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTranscriptionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a vocabulary from Amazon Transcribe. </p>
-    async fn delete_vocabulary(
+    fn delete_vocabulary(
         &self,
         input: DeleteVocabularyRequest,
-    ) -> Result<(), RusotoError<DeleteVocabularyError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteVocabularyError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1540,26 +1675,32 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVocabularyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVocabularyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a vocabulary filter.</p>
-    async fn delete_vocabulary_filter(
+    fn delete_vocabulary_filter(
         &self,
         input: DeleteVocabularyFilterRequest,
-    ) -> Result<(), RusotoError<DeleteVocabularyFilterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteVocabularyFilterError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1567,26 +1708,36 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVocabularyFilterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVocabularyFilterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptionFileUri</code> field.</p>
-    async fn get_transcription_job(
+    fn get_transcription_job(
         &self,
         input: GetTranscriptionJobRequest,
-    ) -> Result<GetTranscriptionJobResponse, RusotoError<GetTranscriptionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetTranscriptionJobResponse,
+                        RusotoError<GetTranscriptionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1594,27 +1745,33 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTranscriptionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTranscriptionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTranscriptionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTranscriptionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a vocabulary. </p>
-    async fn get_vocabulary(
+    fn get_vocabulary(
         &self,
         input: GetVocabularyRequest,
-    ) -> Result<GetVocabularyResponse, RusotoError<GetVocabularyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetVocabularyResponse, RusotoError<GetVocabularyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1622,26 +1779,37 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVocabularyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetVocabularyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetVocabularyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a vocabulary filter.</p>
-    async fn get_vocabulary_filter(
+    fn get_vocabulary_filter(
         &self,
         input: GetVocabularyFilterRequest,
-    ) -> Result<GetVocabularyFilterResponse, RusotoError<GetVocabularyFilterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetVocabularyFilterResponse,
+                        RusotoError<GetVocabularyFilterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1649,27 +1817,37 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVocabularyFilterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVocabularyFilterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetVocabularyFilterResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetVocabularyFilterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists transcription jobs with the specified status.</p>
-    async fn list_transcription_jobs(
+    fn list_transcription_jobs(
         &self,
         input: ListTranscriptionJobsRequest,
-    ) -> Result<ListTranscriptionJobsResponse, RusotoError<ListTranscriptionJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTranscriptionJobsResponse,
+                        RusotoError<ListTranscriptionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1677,27 +1855,34 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTranscriptionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTranscriptionJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTranscriptionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTranscriptionJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of vocabularies that match the specified criteria. If no criteria are specified, returns the entire list of vocabularies.</p>
-    async fn list_vocabularies(
+    fn list_vocabularies(
         &self,
         input: ListVocabulariesRequest,
-    ) -> Result<ListVocabulariesResponse, RusotoError<ListVocabulariesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListVocabulariesResponse, RusotoError<ListVocabulariesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1705,27 +1890,37 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVocabulariesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVocabulariesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListVocabulariesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListVocabulariesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about vocabulary filters.</p>
-    async fn list_vocabulary_filters(
+    fn list_vocabulary_filters(
         &self,
         input: ListVocabularyFiltersRequest,
-    ) -> Result<ListVocabularyFiltersResponse, RusotoError<ListVocabularyFiltersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListVocabularyFiltersResponse,
+                        RusotoError<ListVocabularyFiltersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1733,27 +1928,37 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVocabularyFiltersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVocabularyFiltersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListVocabularyFiltersResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListVocabularyFiltersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous job to transcribe speech to text. </p>
-    async fn start_transcription_job(
+    fn start_transcription_job(
         &self,
         input: StartTranscriptionJobRequest,
-    ) -> Result<StartTranscriptionJobResponse, RusotoError<StartTranscriptionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTranscriptionJobResponse,
+                        RusotoError<StartTranscriptionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1761,27 +1966,34 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTranscriptionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTranscriptionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartTranscriptionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartTranscriptionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request. </p>
-    async fn update_vocabulary(
+    fn update_vocabulary(
         &self,
         input: UpdateVocabularyRequest,
-    ) -> Result<UpdateVocabularyResponse, RusotoError<UpdateVocabularyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateVocabularyResponse, RusotoError<UpdateVocabularyError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1789,27 +2001,37 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVocabularyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVocabularyResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVocabularyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a vocabulary filter with a new list of filtered words.</p>
-    async fn update_vocabulary_filter(
+    fn update_vocabulary_filter(
         &self,
         input: UpdateVocabularyFilterRequest,
-    ) -> Result<UpdateVocabularyFilterResponse, RusotoError<UpdateVocabularyFilterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVocabularyFilterResponse,
+                        RusotoError<UpdateVocabularyFilterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1817,19 +2039,19 @@ impl Transcribe for TranscribeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVocabularyFilterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVocabularyFilterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVocabularyFilterResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVocabularyFilterError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

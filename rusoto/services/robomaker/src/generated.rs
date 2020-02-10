@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeSimulationJobRequest {
@@ -4132,232 +4133,531 @@ impl fmt::Display for UpdateSimulationApplicationError {
 }
 impl Error for UpdateSimulationApplicationError {}
 /// Trait representing the capabilities of the RoboMaker API. RoboMaker clients implement this trait.
-#[async_trait]
 pub trait Robomaker {
     /// <p>Describes one or more simulation jobs.</p>
-    async fn batch_describe_simulation_job(
+    fn batch_describe_simulation_job(
         &self,
         input: BatchDescribeSimulationJobRequest,
-    ) -> Result<BatchDescribeSimulationJobResponse, RusotoError<BatchDescribeSimulationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDescribeSimulationJobResponse,
+                        RusotoError<BatchDescribeSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels the specified deployment job.</p>
-    async fn cancel_deployment_job(
+    fn cancel_deployment_job(
         &self,
         input: CancelDeploymentJobRequest,
-    ) -> Result<CancelDeploymentJobResponse, RusotoError<CancelDeploymentJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelDeploymentJobResponse,
+                        RusotoError<CancelDeploymentJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels the specified simulation job.</p>
-    async fn cancel_simulation_job(
+    fn cancel_simulation_job(
         &self,
         input: CancelSimulationJobRequest,
-    ) -> Result<CancelSimulationJobResponse, RusotoError<CancelSimulationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelSimulationJobResponse,
+                        RusotoError<CancelSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Deploys a specific version of a robot application to robots in a fleet.</p> <p>The robot application must have a numbered <code>applicationVersion</code> for consistency reasons. To create a new version, use <code>CreateRobotApplicationVersion</code> or see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/create-robot-application-version.html">Creating a Robot Application Version</a>. </p> <note> <p>After 90 days, deployment jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
-    async fn create_deployment_job(
+    fn create_deployment_job(
         &self,
         input: CreateDeploymentJobRequest,
-    ) -> Result<CreateDeploymentJobResponse, RusotoError<CreateDeploymentJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDeploymentJobResponse,
+                        RusotoError<CreateDeploymentJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a fleet, a logical group of robots running the same robot application.</p>
-    async fn create_fleet(
+    fn create_fleet(
         &self,
         input: CreateFleetRequest,
-    ) -> Result<CreateFleetResponse, RusotoError<CreateFleetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFleetResponse, RusotoError<CreateFleetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a robot.</p>
-    async fn create_robot(
+    fn create_robot(
         &self,
         input: CreateRobotRequest,
-    ) -> Result<CreateRobotResponse, RusotoError<CreateRobotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRobotResponse, RusotoError<CreateRobotError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a robot application. </p>
-    async fn create_robot_application(
+    fn create_robot_application(
         &self,
         input: CreateRobotApplicationRequest,
-    ) -> Result<CreateRobotApplicationResponse, RusotoError<CreateRobotApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateRobotApplicationResponse,
+                        RusotoError<CreateRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a version of a robot application.</p>
-    async fn create_robot_application_version(
+    fn create_robot_application_version(
         &self,
         input: CreateRobotApplicationVersionRequest,
-    ) -> Result<
-        CreateRobotApplicationVersionResponse,
-        RusotoError<CreateRobotApplicationVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateRobotApplicationVersionResponse,
+                        RusotoError<CreateRobotApplicationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Creates a simulation application.</p>
-    async fn create_simulation_application(
+    fn create_simulation_application(
         &self,
         input: CreateSimulationApplicationRequest,
-    ) -> Result<CreateSimulationApplicationResponse, RusotoError<CreateSimulationApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSimulationApplicationResponse,
+                        RusotoError<CreateSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a simulation application with a specific revision id.</p>
-    async fn create_simulation_application_version(
+    fn create_simulation_application_version(
         &self,
         input: CreateSimulationApplicationVersionRequest,
-    ) -> Result<
-        CreateSimulationApplicationVersionResponse,
-        RusotoError<CreateSimulationApplicationVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSimulationApplicationVersionResponse,
+                        RusotoError<CreateSimulationApplicationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Creates a simulation job.</p> <note> <p>After 90 days, simulation jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
-    async fn create_simulation_job(
+    fn create_simulation_job(
         &self,
         input: CreateSimulationJobRequest,
-    ) -> Result<CreateSimulationJobResponse, RusotoError<CreateSimulationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSimulationJobResponse,
+                        RusotoError<CreateSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a fleet.</p>
-    async fn delete_fleet(
+    fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
-    ) -> Result<DeleteFleetResponse, RusotoError<DeleteFleetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteFleetResponse, RusotoError<DeleteFleetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a robot.</p>
-    async fn delete_robot(
+    fn delete_robot(
         &self,
         input: DeleteRobotRequest,
-    ) -> Result<DeleteRobotResponse, RusotoError<DeleteRobotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRobotResponse, RusotoError<DeleteRobotError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a robot application.</p>
-    async fn delete_robot_application(
+    fn delete_robot_application(
         &self,
         input: DeleteRobotApplicationRequest,
-    ) -> Result<DeleteRobotApplicationResponse, RusotoError<DeleteRobotApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteRobotApplicationResponse,
+                        RusotoError<DeleteRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a simulation application.</p>
-    async fn delete_simulation_application(
+    fn delete_simulation_application(
         &self,
         input: DeleteSimulationApplicationRequest,
-    ) -> Result<DeleteSimulationApplicationResponse, RusotoError<DeleteSimulationApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSimulationApplicationResponse,
+                        RusotoError<DeleteSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deregisters a robot.</p>
-    async fn deregister_robot(
+    fn deregister_robot(
         &self,
         input: DeregisterRobotRequest,
-    ) -> Result<DeregisterRobotResponse, RusotoError<DeregisterRobotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeregisterRobotResponse, RusotoError<DeregisterRobotError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a deployment job.</p>
-    async fn describe_deployment_job(
+    fn describe_deployment_job(
         &self,
         input: DescribeDeploymentJobRequest,
-    ) -> Result<DescribeDeploymentJobResponse, RusotoError<DescribeDeploymentJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDeploymentJobResponse,
+                        RusotoError<DescribeDeploymentJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a fleet.</p>
-    async fn describe_fleet(
+    fn describe_fleet(
         &self,
         input: DescribeFleetRequest,
-    ) -> Result<DescribeFleetResponse, RusotoError<DescribeFleetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeFleetResponse, RusotoError<DescribeFleetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a robot.</p>
-    async fn describe_robot(
+    fn describe_robot(
         &self,
         input: DescribeRobotRequest,
-    ) -> Result<DescribeRobotResponse, RusotoError<DescribeRobotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeRobotResponse, RusotoError<DescribeRobotError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a robot application.</p>
-    async fn describe_robot_application(
+    fn describe_robot_application(
         &self,
         input: DescribeRobotApplicationRequest,
-    ) -> Result<DescribeRobotApplicationResponse, RusotoError<DescribeRobotApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRobotApplicationResponse,
+                        RusotoError<DescribeRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a simulation application.</p>
-    async fn describe_simulation_application(
+    fn describe_simulation_application(
         &self,
         input: DescribeSimulationApplicationRequest,
-    ) -> Result<
-        DescribeSimulationApplicationResponse,
-        RusotoError<DescribeSimulationApplicationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSimulationApplicationResponse,
+                        RusotoError<DescribeSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describes a simulation job.</p>
-    async fn describe_simulation_job(
+    fn describe_simulation_job(
         &self,
         input: DescribeSimulationJobRequest,
-    ) -> Result<DescribeSimulationJobResponse, RusotoError<DescribeSimulationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSimulationJobResponse,
+                        RusotoError<DescribeSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p> <note> <p> </p> </note></p>
-    async fn list_deployment_jobs(
+    fn list_deployment_jobs(
         &self,
         input: ListDeploymentJobsRequest,
-    ) -> Result<ListDeploymentJobsResponse, RusotoError<ListDeploymentJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDeploymentJobsResponse,
+                        RusotoError<ListDeploymentJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of fleets. You can optionally provide filters to retrieve specific fleets. </p>
-    async fn list_fleets(
+    fn list_fleets(
         &self,
         input: ListFleetsRequest,
-    ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFleetsResponse, RusotoError<ListFleetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of robot application. You can optionally provide filters to retrieve specific robot applications.</p>
-    async fn list_robot_applications(
+    fn list_robot_applications(
         &self,
         input: ListRobotApplicationsRequest,
-    ) -> Result<ListRobotApplicationsResponse, RusotoError<ListRobotApplicationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRobotApplicationsResponse,
+                        RusotoError<ListRobotApplicationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of robots. You can optionally provide filters to retrieve specific robots.</p>
-    async fn list_robots(
+    fn list_robots(
         &self,
         input: ListRobotsRequest,
-    ) -> Result<ListRobotsResponse, RusotoError<ListRobotsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRobotsResponse, RusotoError<ListRobotsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of simulation applications. You can optionally provide filters to retrieve specific simulation applications. </p>
-    async fn list_simulation_applications(
+    fn list_simulation_applications(
         &self,
         input: ListSimulationApplicationsRequest,
-    ) -> Result<ListSimulationApplicationsResponse, RusotoError<ListSimulationApplicationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSimulationApplicationsResponse,
+                        RusotoError<ListSimulationApplicationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
-    async fn list_simulation_jobs(
+    fn list_simulation_jobs(
         &self,
         input: ListSimulationJobsRequest,
-    ) -> Result<ListSimulationJobsResponse, RusotoError<ListSimulationJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSimulationJobsResponse,
+                        RusotoError<ListSimulationJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all tags on a AWS RoboMaker resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a robot with a fleet.</p>
-    async fn register_robot(
+    fn register_robot(
         &self,
         input: RegisterRobotRequest,
-    ) -> Result<RegisterRobotResponse, RusotoError<RegisterRobotError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterRobotResponse, RusotoError<RegisterRobotError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Restarts a running simulation job.</p>
-    async fn restart_simulation_job(
+    fn restart_simulation_job(
         &self,
         input: RestartSimulationJobRequest,
-    ) -> Result<RestartSimulationJobResponse, RusotoError<RestartSimulationJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RestartSimulationJobResponse,
+                        RusotoError<RestartSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Syncrhonizes robots in a fleet to the latest deployment. This is helpful if robots were added after a deployment.</p>
-    async fn sync_deployment_job(
+    fn sync_deployment_job(
         &self,
         input: SyncDeploymentJobRequest,
-    ) -> Result<SyncDeploymentJobResponse, RusotoError<SyncDeploymentJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SyncDeploymentJobResponse, RusotoError<SyncDeploymentJobError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds or edits tags for a AWS RoboMaker resource.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty strings. </p> <p>For information about the rules that apply to tag keys and tag values, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the specified tags from the specified AWS RoboMaker resource.</p> <p>To remove a tag, specify the tag key. To change the tag value of an existing tag key, use <a href="https://docs.aws.amazon.com/robomaker/latest/dg/API_TagResource.html"> <code>TagResource</code> </a>. </p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a robot application.</p>
-    async fn update_robot_application(
+    fn update_robot_application(
         &self,
         input: UpdateRobotApplicationRequest,
-    ) -> Result<UpdateRobotApplicationResponse, RusotoError<UpdateRobotApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateRobotApplicationResponse,
+                        RusotoError<UpdateRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a simulation application.</p>
-    async fn update_simulation_application(
+    fn update_simulation_application(
         &self,
         input: UpdateSimulationApplicationRequest,
-    ) -> Result<UpdateSimulationApplicationResponse, RusotoError<UpdateSimulationApplicationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateSimulationApplicationResponse,
+                        RusotoError<UpdateSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the RoboMaker API.
 #[derive(Clone)]
@@ -4397,14 +4697,22 @@ impl RobomakerClient {
     }
 }
 
-#[async_trait]
 impl Robomaker for RobomakerClient {
     /// <p>Describes one or more simulation jobs.</p>
-    async fn batch_describe_simulation_job(
+    fn batch_describe_simulation_job(
         &self,
         input: BatchDescribeSimulationJobRequest,
-    ) -> Result<BatchDescribeSimulationJobResponse, RusotoError<BatchDescribeSimulationJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDescribeSimulationJobResponse,
+                        RusotoError<BatchDescribeSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/batchDescribeSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4413,28 +4721,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDescribeSimulationJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDescribeSimulationJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDescribeSimulationJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDescribeSimulationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels the specified deployment job.</p>
-    async fn cancel_deployment_job(
+    fn cancel_deployment_job(
         &self,
         input: CancelDeploymentJobRequest,
-    ) -> Result<CancelDeploymentJobResponse, RusotoError<CancelDeploymentJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelDeploymentJobResponse,
+                        RusotoError<CancelDeploymentJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/cancelDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4443,28 +4761,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelDeploymentJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelDeploymentJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelDeploymentJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelDeploymentJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels the specified simulation job.</p>
-    async fn cancel_simulation_job(
+    fn cancel_simulation_job(
         &self,
         input: CancelSimulationJobRequest,
-    ) -> Result<CancelSimulationJobResponse, RusotoError<CancelSimulationJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelSimulationJobResponse,
+                        RusotoError<CancelSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/cancelSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4473,28 +4801,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelSimulationJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelSimulationJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelSimulationJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelSimulationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Deploys a specific version of a robot application to robots in a fleet.</p> <p>The robot application must have a numbered <code>applicationVersion</code> for consistency reasons. To create a new version, use <code>CreateRobotApplicationVersion</code> or see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/create-robot-application-version.html">Creating a Robot Application Version</a>. </p> <note> <p>After 90 days, deployment jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
-    async fn create_deployment_job(
+    fn create_deployment_job(
         &self,
         input: CreateDeploymentJobRequest,
-    ) -> Result<CreateDeploymentJobResponse, RusotoError<CreateDeploymentJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDeploymentJobResponse,
+                        RusotoError<CreateDeploymentJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4503,28 +4841,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeploymentJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDeploymentJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeploymentJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDeploymentJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a fleet, a logical group of robots running the same robot application.</p>
-    async fn create_fleet(
+    fn create_fleet(
         &self,
         input: CreateFleetRequest,
-    ) -> Result<CreateFleetResponse, RusotoError<CreateFleetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateFleetResponse, RusotoError<CreateFleetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createFleet";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4533,28 +4877,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFleetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateFleetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFleetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateFleetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a robot.</p>
-    async fn create_robot(
+    fn create_robot(
         &self,
         input: CreateRobotRequest,
-    ) -> Result<CreateRobotResponse, RusotoError<CreateRobotError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRobotResponse, RusotoError<CreateRobotError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4563,28 +4913,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRobotResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRobotResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRobotError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRobotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a robot application. </p>
-    async fn create_robot_application(
+    fn create_robot_application(
         &self,
         input: CreateRobotApplicationRequest,
-    ) -> Result<CreateRobotApplicationResponse, RusotoError<CreateRobotApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateRobotApplicationResponse,
+                        RusotoError<CreateRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4593,30 +4953,37 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRobotApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRobotApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRobotApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRobotApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a version of a robot application.</p>
-    async fn create_robot_application_version(
+    fn create_robot_application_version(
         &self,
         input: CreateRobotApplicationVersionRequest,
-    ) -> Result<
-        CreateRobotApplicationVersionResponse,
-        RusotoError<CreateRobotApplicationVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateRobotApplicationVersionResponse,
+                        RusotoError<CreateRobotApplicationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/createRobotApplicationVersion";
 
@@ -4626,29 +4993,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRobotApplicationVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRobotApplicationVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRobotApplicationVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRobotApplicationVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a simulation application.</p>
-    async fn create_simulation_application(
+    fn create_simulation_application(
         &self,
         input: CreateSimulationApplicationRequest,
-    ) -> Result<CreateSimulationApplicationResponse, RusotoError<CreateSimulationApplicationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSimulationApplicationResponse,
+                        RusotoError<CreateSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4657,30 +5033,37 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSimulationApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSimulationApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSimulationApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSimulationApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a simulation application with a specific revision id.</p>
-    async fn create_simulation_application_version(
+    fn create_simulation_application_version(
         &self,
         input: CreateSimulationApplicationVersionRequest,
-    ) -> Result<
-        CreateSimulationApplicationVersionResponse,
-        RusotoError<CreateSimulationApplicationVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSimulationApplicationVersionResponse,
+                        RusotoError<CreateSimulationApplicationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/createSimulationApplicationVersion";
 
@@ -4690,30 +5073,40 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSimulationApplicationVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSimulationApplicationVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSimulationApplicationVersionError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSimulationApplicationVersionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a simulation job.</p> <note> <p>After 90 days, simulation jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
-    async fn create_simulation_job(
+    fn create_simulation_job(
         &self,
         input: CreateSimulationJobRequest,
-    ) -> Result<CreateSimulationJobResponse, RusotoError<CreateSimulationJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSimulationJobResponse,
+                        RusotoError<CreateSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4722,28 +5115,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSimulationJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSimulationJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSimulationJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSimulationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a fleet.</p>
-    async fn delete_fleet(
+    fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
-    ) -> Result<DeleteFleetResponse, RusotoError<DeleteFleetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteFleetResponse, RusotoError<DeleteFleetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deleteFleet";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4752,28 +5151,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFleetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteFleetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFleetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteFleetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a robot.</p>
-    async fn delete_robot(
+    fn delete_robot(
         &self,
         input: DeleteRobotRequest,
-    ) -> Result<DeleteRobotResponse, RusotoError<DeleteRobotError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRobotResponse, RusotoError<DeleteRobotError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deleteRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4782,28 +5187,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRobotResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteRobotResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRobotError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRobotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a robot application.</p>
-    async fn delete_robot_application(
+    fn delete_robot_application(
         &self,
         input: DeleteRobotApplicationRequest,
-    ) -> Result<DeleteRobotApplicationResponse, RusotoError<DeleteRobotApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteRobotApplicationResponse,
+                        RusotoError<DeleteRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deleteRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4812,29 +5227,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRobotApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteRobotApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRobotApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRobotApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a simulation application.</p>
-    async fn delete_simulation_application(
+    fn delete_simulation_application(
         &self,
         input: DeleteSimulationApplicationRequest,
-    ) -> Result<DeleteSimulationApplicationResponse, RusotoError<DeleteSimulationApplicationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSimulationApplicationResponse,
+                        RusotoError<DeleteSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deleteSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4843,28 +5267,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSimulationApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSimulationApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSimulationApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSimulationApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deregisters a robot.</p>
-    async fn deregister_robot(
+    fn deregister_robot(
         &self,
         input: DeregisterRobotRequest,
-    ) -> Result<DeregisterRobotResponse, RusotoError<DeregisterRobotError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeregisterRobotResponse, RusotoError<DeregisterRobotError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deregisterRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4873,28 +5303,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterRobotResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeregisterRobotResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterRobotError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeregisterRobotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a deployment job.</p>
-    async fn describe_deployment_job(
+    fn describe_deployment_job(
         &self,
         input: DescribeDeploymentJobRequest,
-    ) -> Result<DescribeDeploymentJobResponse, RusotoError<DescribeDeploymentJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDeploymentJobResponse,
+                        RusotoError<DescribeDeploymentJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/describeDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4903,28 +5343,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeploymentJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDeploymentJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDeploymentJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDeploymentJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a fleet.</p>
-    async fn describe_fleet(
+    fn describe_fleet(
         &self,
         input: DescribeFleetRequest,
-    ) -> Result<DescribeFleetResponse, RusotoError<DescribeFleetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeFleetResponse, RusotoError<DescribeFleetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/describeFleet";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4933,28 +5379,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFleetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeFleetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFleetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeFleetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a robot.</p>
-    async fn describe_robot(
+    fn describe_robot(
         &self,
         input: DescribeRobotRequest,
-    ) -> Result<DescribeRobotResponse, RusotoError<DescribeRobotError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeRobotResponse, RusotoError<DescribeRobotError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/describeRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4963,28 +5415,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRobotResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRobotResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRobotError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRobotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a robot application.</p>
-    async fn describe_robot_application(
+    fn describe_robot_application(
         &self,
         input: DescribeRobotApplicationRequest,
-    ) -> Result<DescribeRobotApplicationResponse, RusotoError<DescribeRobotApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRobotApplicationResponse,
+                        RusotoError<DescribeRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/describeRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -4993,30 +5455,37 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRobotApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRobotApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRobotApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRobotApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a simulation application.</p>
-    async fn describe_simulation_application(
+    fn describe_simulation_application(
         &self,
         input: DescribeSimulationApplicationRequest,
-    ) -> Result<
-        DescribeSimulationApplicationResponse,
-        RusotoError<DescribeSimulationApplicationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSimulationApplicationResponse,
+                        RusotoError<DescribeSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/describeSimulationApplication";
 
@@ -5026,28 +5495,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSimulationApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSimulationApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSimulationApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSimulationApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a simulation job.</p>
-    async fn describe_simulation_job(
+    fn describe_simulation_job(
         &self,
         input: DescribeSimulationJobRequest,
-    ) -> Result<DescribeSimulationJobResponse, RusotoError<DescribeSimulationJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSimulationJobResponse,
+                        RusotoError<DescribeSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/describeSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5056,28 +5535,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSimulationJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSimulationJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSimulationJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSimulationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p> <note> <p> </p> </note></p>
-    async fn list_deployment_jobs(
+    fn list_deployment_jobs(
         &self,
         input: ListDeploymentJobsRequest,
-    ) -> Result<ListDeploymentJobsResponse, RusotoError<ListDeploymentJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDeploymentJobsResponse,
+                        RusotoError<ListDeploymentJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listDeploymentJobs";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5086,28 +5575,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeploymentJobsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDeploymentJobsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDeploymentJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of fleets. You can optionally provide filters to retrieve specific fleets. </p>
-    async fn list_fleets(
+    fn list_fleets(
         &self,
         input: ListFleetsRequest,
-    ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListFleetsResponse, RusotoError<ListFleetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listFleets";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5116,28 +5611,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFleetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListFleetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFleetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListFleetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of robot application. You can optionally provide filters to retrieve specific robot applications.</p>
-    async fn list_robot_applications(
+    fn list_robot_applications(
         &self,
         input: ListRobotApplicationsRequest,
-    ) -> Result<ListRobotApplicationsResponse, RusotoError<ListRobotApplicationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRobotApplicationsResponse,
+                        RusotoError<ListRobotApplicationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listRobotApplications";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5146,28 +5651,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRobotApplicationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRobotApplicationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRobotApplicationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRobotApplicationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of robots. You can optionally provide filters to retrieve specific robots.</p>
-    async fn list_robots(
+    fn list_robots(
         &self,
         input: ListRobotsRequest,
-    ) -> Result<ListRobotsResponse, RusotoError<ListRobotsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRobotsResponse, RusotoError<ListRobotsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listRobots";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5176,29 +5687,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRobotsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRobotsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRobotsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRobotsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of simulation applications. You can optionally provide filters to retrieve specific simulation applications. </p>
-    async fn list_simulation_applications(
+    fn list_simulation_applications(
         &self,
         input: ListSimulationApplicationsRequest,
-    ) -> Result<ListSimulationApplicationsResponse, RusotoError<ListSimulationApplicationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSimulationApplicationsResponse,
+                        RusotoError<ListSimulationApplicationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listSimulationApplications";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5207,28 +5727,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSimulationApplicationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSimulationApplicationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSimulationApplicationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSimulationApplicationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
-    async fn list_simulation_jobs(
+    fn list_simulation_jobs(
         &self,
         input: ListSimulationJobsRequest,
-    ) -> Result<ListSimulationJobsResponse, RusotoError<ListSimulationJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSimulationJobsResponse,
+                        RusotoError<ListSimulationJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listSimulationJobs";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5237,55 +5767,71 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSimulationJobsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSimulationJobsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSimulationJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSimulationJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all tags on a AWS RoboMaker resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "robomaker", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a robot with a fleet.</p>
-    async fn register_robot(
+    fn register_robot(
         &self,
         input: RegisterRobotRequest,
-    ) -> Result<RegisterRobotResponse, RusotoError<RegisterRobotError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterRobotResponse, RusotoError<RegisterRobotError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/registerRobot";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5294,28 +5840,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterRobotResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterRobotResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterRobotError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterRobotError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Restarts a running simulation job.</p>
-    async fn restart_simulation_job(
+    fn restart_simulation_job(
         &self,
         input: RestartSimulationJobRequest,
-    ) -> Result<RestartSimulationJobResponse, RusotoError<RestartSimulationJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RestartSimulationJobResponse,
+                        RusotoError<RestartSimulationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/restartSimulationJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5324,28 +5880,35 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RestartSimulationJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RestartSimulationJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RestartSimulationJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RestartSimulationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Syncrhonizes robots in a fleet to the latest deployment. This is helpful if robots were added after a deployment.</p>
-    async fn sync_deployment_job(
+    fn sync_deployment_job(
         &self,
         input: SyncDeploymentJobRequest,
-    ) -> Result<SyncDeploymentJobResponse, RusotoError<SyncDeploymentJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SyncDeploymentJobResponse, RusotoError<SyncDeploymentJobError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/syncDeploymentJob";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5354,28 +5917,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SyncDeploymentJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SyncDeploymentJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SyncDeploymentJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SyncDeploymentJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds or edits tags for a AWS RoboMaker resource.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty strings. </p> <p>For information about the rules that apply to tag keys and tag values, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5384,28 +5953,34 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified tags from the specified AWS RoboMaker resource.</p> <p>To remove a tag, specify the tag key. To change the tag value of an existing tag key, use <a href="https://docs.aws.amazon.com/robomaker/latest/dg/API_TagResource.html"> <code>TagResource</code> </a>. </p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "robomaker", &self.region, &request_uri);
@@ -5417,28 +5992,38 @@ impl Robomaker for RobomakerClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a robot application.</p>
-    async fn update_robot_application(
+    fn update_robot_application(
         &self,
         input: UpdateRobotApplicationRequest,
-    ) -> Result<UpdateRobotApplicationResponse, RusotoError<UpdateRobotApplicationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateRobotApplicationResponse,
+                        RusotoError<UpdateRobotApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/updateRobotApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5447,29 +6032,38 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRobotApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRobotApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRobotApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRobotApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a simulation application.</p>
-    async fn update_simulation_application(
+    fn update_simulation_application(
         &self,
         input: UpdateSimulationApplicationRequest,
-    ) -> Result<UpdateSimulationApplicationResponse, RusotoError<UpdateSimulationApplicationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateSimulationApplicationResponse,
+                        RusotoError<UpdateSimulationApplicationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/updateSimulationApplication";
 
         let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
@@ -5478,20 +6072,20 @@ impl Robomaker for RobomakerClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSimulationApplicationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateSimulationApplicationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSimulationApplicationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateSimulationApplicationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

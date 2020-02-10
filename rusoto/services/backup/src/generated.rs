@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Contains detailed information about a backup job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4581,288 +4582,609 @@ impl fmt::Display for UpdateRecoveryPointLifecycleError {
 }
 impl Error for UpdateRecoveryPointLifecycleError {}
 /// Trait representing the capabilities of the AWS Backup API. AWS Backup clients implement this trait.
-#[async_trait]
 pub trait Backup {
     /// <p>Backup plans are documents that contain information that AWS Backup uses to schedule tasks that create recovery points of resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
-    async fn create_backup_plan(
+    fn create_backup_plan(
         &self,
         input: CreateBackupPlanInput,
-    ) -> Result<CreateBackupPlanOutput, RusotoError<CreateBackupPlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateBackupPlanOutput, RusotoError<CreateBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume Id.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically 'put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
-    async fn create_backup_selection(
+    fn create_backup_selection(
         &self,
         input: CreateBackupSelectionInput,
-    ) -> Result<CreateBackupSelectionOutput, RusotoError<CreateBackupSelectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateBackupSelectionOutput,
+                        RusotoError<CreateBackupSelectionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a logical container where backups are stored. A <code>CreateBackupVault</code> request includes a name, optionally one or more resource tags, an encryption key, and a request ID.</p> <note> <p>Sensitive data, such as passport numbers, should not be included the name of a backup vault.</p> </note></p>
-    async fn create_backup_vault(
+    fn create_backup_vault(
         &self,
         input: CreateBackupVaultInput,
-    ) -> Result<CreateBackupVaultOutput, RusotoError<CreateBackupVaultError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateBackupVaultOutput, RusotoError<CreateBackupVaultError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a backup plan. A backup plan can only be deleted after all associated selections of resources have been deleted. Deleting a backup plan deletes the current version of a backup plan. Previous versions, if any, will still exist.</p>
-    async fn delete_backup_plan(
+    fn delete_backup_plan(
         &self,
         input: DeleteBackupPlanInput,
-    ) -> Result<DeleteBackupPlanOutput, RusotoError<DeleteBackupPlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteBackupPlanOutput, RusotoError<DeleteBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the resource selection associated with a backup plan that is specified by the <code>SelectionId</code>.</p>
-    async fn delete_backup_selection(
+    fn delete_backup_selection(
         &self,
         input: DeleteBackupSelectionInput,
-    ) -> Result<(), RusotoError<DeleteBackupSelectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBackupSelectionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the backup vault identified by its name. A vault can be deleted only if it is empty.</p>
-    async fn delete_backup_vault(
+    fn delete_backup_vault(
         &self,
         input: DeleteBackupVaultInput,
-    ) -> Result<(), RusotoError<DeleteBackupVaultError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteBackupVaultError>>> + Send + 'static>,
+    >;
 
     /// <p>Deletes the policy document that manages permissions on a backup vault.</p>
-    async fn delete_backup_vault_access_policy(
+    fn delete_backup_vault_access_policy(
         &self,
         input: DeleteBackupVaultAccessPolicyInput,
-    ) -> Result<(), RusotoError<DeleteBackupVaultAccessPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBackupVaultAccessPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes event notifications for the specified backup vault.</p>
-    async fn delete_backup_vault_notifications(
+    fn delete_backup_vault_notifications(
         &self,
         input: DeleteBackupVaultNotificationsInput,
-    ) -> Result<(), RusotoError<DeleteBackupVaultNotificationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBackupVaultNotificationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the recovery point specified by a recovery point ID.</p>
-    async fn delete_recovery_point(
+    fn delete_recovery_point(
         &self,
         input: DeleteRecoveryPointInput,
-    ) -> Result<(), RusotoError<DeleteRecoveryPointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteRecoveryPointError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata associated with creating a backup of a resource.</p>
-    async fn describe_backup_job(
+    fn describe_backup_job(
         &self,
         input: DescribeBackupJobInput,
-    ) -> Result<DescribeBackupJobOutput, RusotoError<DescribeBackupJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeBackupJobOutput, RusotoError<DescribeBackupJobError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata about a backup vault specified by its name.</p>
-    async fn describe_backup_vault(
+    fn describe_backup_vault(
         &self,
         input: DescribeBackupVaultInput,
-    ) -> Result<DescribeBackupVaultOutput, RusotoError<DescribeBackupVaultError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeBackupVaultOutput,
+                        RusotoError<DescribeBackupVaultError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata associated with creating a copy of a resource.</p>
-    async fn describe_copy_job(
+    fn describe_copy_job(
         &self,
         input: DescribeCopyJobInput,
-    ) -> Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a saved resource, including the last time it was backed-up, its Amazon Resource Name (ARN), and the AWS service type of the saved resource.</p>
-    async fn describe_protected_resource(
+    fn describe_protected_resource(
         &self,
         input: DescribeProtectedResourceInput,
-    ) -> Result<DescribeProtectedResourceOutput, RusotoError<DescribeProtectedResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProtectedResourceOutput,
+                        RusotoError<DescribeProtectedResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata associated with a recovery point, including ID, status, encryption, and lifecycle.</p>
-    async fn describe_recovery_point(
+    fn describe_recovery_point(
         &self,
         input: DescribeRecoveryPointInput,
-    ) -> Result<DescribeRecoveryPointOutput, RusotoError<DescribeRecoveryPointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRecoveryPointOutput,
+                        RusotoError<DescribeRecoveryPointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata associated with a restore job that is specified by a job ID.</p>
-    async fn describe_restore_job(
+    fn describe_restore_job(
         &self,
         input: DescribeRestoreJobInput,
-    ) -> Result<DescribeRestoreJobOutput, RusotoError<DescribeRestoreJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeRestoreJobOutput, RusotoError<DescribeRestoreJobError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the backup plan that is specified by the plan ID as a backup template.</p>
-    async fn export_backup_plan_template(
+    fn export_backup_plan_template(
         &self,
         input: ExportBackupPlanTemplateInput,
-    ) -> Result<ExportBackupPlanTemplateOutput, RusotoError<ExportBackupPlanTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ExportBackupPlanTemplateOutput,
+                        RusotoError<ExportBackupPlanTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
-    async fn get_backup_plan(
+    fn get_backup_plan(
         &self,
         input: GetBackupPlanInput,
-    ) -> Result<GetBackupPlanOutput, RusotoError<GetBackupPlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetBackupPlanOutput, RusotoError<GetBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a valid JSON document specifying a backup plan or an error.</p>
-    async fn get_backup_plan_from_json(
+    fn get_backup_plan_from_json(
         &self,
         input: GetBackupPlanFromJSONInput,
-    ) -> Result<GetBackupPlanFromJSONOutput, RusotoError<GetBackupPlanFromJSONError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupPlanFromJSONOutput,
+                        RusotoError<GetBackupPlanFromJSONError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the template specified by its <code>templateId</code> as a backup plan.</p>
-    async fn get_backup_plan_from_template(
+    fn get_backup_plan_from_template(
         &self,
         input: GetBackupPlanFromTemplateInput,
-    ) -> Result<GetBackupPlanFromTemplateOutput, RusotoError<GetBackupPlanFromTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupPlanFromTemplateOutput,
+                        RusotoError<GetBackupPlanFromTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns selection metadata and a document in JSON format that specifies a list of resources that are associated with a backup plan.</p>
-    async fn get_backup_selection(
+    fn get_backup_selection(
         &self,
         input: GetBackupSelectionInput,
-    ) -> Result<GetBackupSelectionOutput, RusotoError<GetBackupSelectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetBackupSelectionOutput, RusotoError<GetBackupSelectionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the access policy document that is associated with the named backup vault.</p>
-    async fn get_backup_vault_access_policy(
+    fn get_backup_vault_access_policy(
         &self,
         input: GetBackupVaultAccessPolicyInput,
-    ) -> Result<GetBackupVaultAccessPolicyOutput, RusotoError<GetBackupVaultAccessPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupVaultAccessPolicyOutput,
+                        RusotoError<GetBackupVaultAccessPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns event notifications for the specified backup vault.</p>
-    async fn get_backup_vault_notifications(
+    fn get_backup_vault_notifications(
         &self,
         input: GetBackupVaultNotificationsInput,
-    ) -> Result<GetBackupVaultNotificationsOutput, RusotoError<GetBackupVaultNotificationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupVaultNotificationsOutput,
+                        RusotoError<GetBackupVaultNotificationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a set of metadata key-value pairs that were used to create the backup.</p>
-    async fn get_recovery_point_restore_metadata(
+    fn get_recovery_point_restore_metadata(
         &self,
         input: GetRecoveryPointRestoreMetadataInput,
-    ) -> Result<
-        GetRecoveryPointRestoreMetadataOutput,
-        RusotoError<GetRecoveryPointRestoreMetadataError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRecoveryPointRestoreMetadataOutput,
+                        RusotoError<GetRecoveryPointRestoreMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns the AWS resource types supported by AWS Backup.</p>
-    async fn get_supported_resource_types(
+    fn get_supported_resource_types(
         &self,
-    ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetSupportedResourceTypesOutput,
+                        RusotoError<GetSupportedResourceTypesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata about your backup jobs.</p>
-    async fn list_backup_jobs(
+    fn list_backup_jobs(
         &self,
         input: ListBackupJobsInput,
-    ) -> Result<ListBackupJobsOutput, RusotoError<ListBackupJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBackupJobsOutput, RusotoError<ListBackupJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata of your saved backup plan templates, including the template ID, name, and the creation and deletion dates.</p>
-    async fn list_backup_plan_templates(
+    fn list_backup_plan_templates(
         &self,
         input: ListBackupPlanTemplatesInput,
-    ) -> Result<ListBackupPlanTemplatesOutput, RusotoError<ListBackupPlanTemplatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBackupPlanTemplatesOutput,
+                        RusotoError<ListBackupPlanTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns version metadata of your backup plans, including Amazon Resource Names (ARNs), backup plan IDs, creation and deletion dates, plan names, and version IDs.</p>
-    async fn list_backup_plan_versions(
+    fn list_backup_plan_versions(
         &self,
         input: ListBackupPlanVersionsInput,
-    ) -> Result<ListBackupPlanVersionsOutput, RusotoError<ListBackupPlanVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBackupPlanVersionsOutput,
+                        RusotoError<ListBackupPlanVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata of your saved backup plans, including Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
-    async fn list_backup_plans(
+    fn list_backup_plans(
         &self,
         input: ListBackupPlansInput,
-    ) -> Result<ListBackupPlansOutput, RusotoError<ListBackupPlansError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBackupPlansOutput, RusotoError<ListBackupPlansError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns an array containing metadata of the resources associated with the target backup plan.</p>
-    async fn list_backup_selections(
+    fn list_backup_selections(
         &self,
         input: ListBackupSelectionsInput,
-    ) -> Result<ListBackupSelectionsOutput, RusotoError<ListBackupSelectionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBackupSelectionsOutput,
+                        RusotoError<ListBackupSelectionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of recovery point storage containers along with information about them.</p>
-    async fn list_backup_vaults(
+    fn list_backup_vaults(
         &self,
         input: ListBackupVaultsInput,
-    ) -> Result<ListBackupVaultsOutput, RusotoError<ListBackupVaultsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBackupVaultsOutput, RusotoError<ListBackupVaultsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata about your copy jobs.</p>
-    async fn list_copy_jobs(
+    fn list_copy_jobs(
         &self,
         input: ListCopyJobsInput,
-    ) -> Result<ListCopyJobsOutput, RusotoError<ListCopyJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListCopyJobsOutput, RusotoError<ListCopyJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns an array of resources successfully backed up by AWS Backup, including the time the resource was saved, an Amazon Resource Name (ARN) of the resource, and a resource type.</p>
-    async fn list_protected_resources(
+    fn list_protected_resources(
         &self,
         input: ListProtectedResourcesInput,
-    ) -> Result<ListProtectedResourcesOutput, RusotoError<ListProtectedResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProtectedResourcesOutput,
+                        RusotoError<ListProtectedResourcesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed information about the recovery points stored in a backup vault.</p>
-    async fn list_recovery_points_by_backup_vault(
+    fn list_recovery_points_by_backup_vault(
         &self,
         input: ListRecoveryPointsByBackupVaultInput,
-    ) -> Result<
-        ListRecoveryPointsByBackupVaultOutput,
-        RusotoError<ListRecoveryPointsByBackupVaultError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRecoveryPointsByBackupVaultOutput,
+                        RusotoError<ListRecoveryPointsByBackupVaultError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns detailed information about recovery points of the type specified by a resource Amazon Resource Name (ARN).</p>
-    async fn list_recovery_points_by_resource(
+    fn list_recovery_points_by_resource(
         &self,
         input: ListRecoveryPointsByResourceInput,
-    ) -> Result<ListRecoveryPointsByResourceOutput, RusotoError<ListRecoveryPointsByResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRecoveryPointsByResourceOutput,
+                        RusotoError<ListRecoveryPointsByResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of jobs that AWS Backup initiated to restore a saved resource, including metadata about the recovery process.</p>
-    async fn list_restore_jobs(
+    fn list_restore_jobs(
         &self,
         input: ListRestoreJobsInput,
-    ) -> Result<ListRestoreJobsOutput, RusotoError<ListRestoreJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRestoreJobsOutput, RusotoError<ListRestoreJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of key-value pairs assigned to a target recovery point, backup plan, or backup vault.</p>
-    async fn list_tags(
+    fn list_tags(
         &self,
         input: ListTagsInput,
-    ) -> Result<ListTagsOutput, RusotoError<ListTagsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTagsOutput, RusotoError<ListTagsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets a resource-based policy that is used to manage access permissions on the target backup vault. Requires a backup vault name and an access policy document in JSON format.</p>
-    async fn put_backup_vault_access_policy(
+    fn put_backup_vault_access_policy(
         &self,
         input: PutBackupVaultAccessPolicyInput,
-    ) -> Result<(), RusotoError<PutBackupVaultAccessPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<PutBackupVaultAccessPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Turns on notifications on a backup vault for the specified topic and events.</p>
-    async fn put_backup_vault_notifications(
+    fn put_backup_vault_notifications(
         &self,
         input: PutBackupVaultNotificationsInput,
-    ) -> Result<(), RusotoError<PutBackupVaultNotificationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<PutBackupVaultNotificationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts a job to create a one-time backup of the specified resource.</p>
-    async fn start_backup_job(
+    fn start_backup_job(
         &self,
         input: StartBackupJobInput,
-    ) -> Result<StartBackupJobOutput, RusotoError<StartBackupJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartBackupJobOutput, RusotoError<StartBackupJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts a job to create a one-time copy of the specified resource.</p>
-    async fn start_copy_job(
+    fn start_copy_job(
         &self,
         input: StartCopyJobInput,
-    ) -> Result<StartCopyJobOutput, RusotoError<StartCopyJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartCopyJobOutput, RusotoError<StartCopyJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p> <p>If the resource ARN is included in the request, then the last complete backup of that resource is recovered. If the ARN of a recovery point is supplied, then that recovery point is restored.</p>
-    async fn start_restore_job(
+    fn start_restore_job(
         &self,
         input: StartRestoreJobInput,
-    ) -> Result<StartRestoreJobOutput, RusotoError<StartRestoreJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartRestoreJobOutput, RusotoError<StartRestoreJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Attempts to cancel a job to create a one-time backup of a resource.</p>
-    async fn stop_backup_job(
+    fn stop_backup_job(
         &self,
         input: StopBackupJobInput,
-    ) -> Result<(), RusotoError<StopBackupJobError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<StopBackupJobError>>> + Send + 'static>>;
 
     /// <p>Assigns a set of key-value pairs to a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN).</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
     /// <p>Removes a set of key-value pairs from a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN)</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>Replaces the body of a saved backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
-    async fn update_backup_plan(
+    fn update_backup_plan(
         &self,
         input: UpdateBackupPlanInput,
-    ) -> Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
-    async fn update_recovery_point_lifecycle(
+    fn update_recovery_point_lifecycle(
         &self,
         input: UpdateRecoveryPointLifecycleInput,
-    ) -> Result<UpdateRecoveryPointLifecycleOutput, RusotoError<UpdateRecoveryPointLifecycleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateRecoveryPointLifecycleOutput,
+                        RusotoError<UpdateRecoveryPointLifecycleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS Backup API.
 #[derive(Clone)]
@@ -4902,13 +5224,18 @@ impl BackupClient {
     }
 }
 
-#[async_trait]
 impl Backup for BackupClient {
     /// <p>Backup plans are documents that contain information that AWS Backup uses to schedule tasks that create recovery points of resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
-    async fn create_backup_plan(
+    fn create_backup_plan(
         &self,
         input: CreateBackupPlanInput,
-    ) -> Result<CreateBackupPlanOutput, RusotoError<CreateBackupPlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateBackupPlanOutput, RusotoError<CreateBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup/plans/";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -4917,28 +5244,38 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBackupPlanOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateBackupPlanOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBackupPlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateBackupPlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume Id.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically 'put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
-    async fn create_backup_selection(
+    fn create_backup_selection(
         &self,
         input: CreateBackupSelectionInput,
-    ) -> Result<CreateBackupSelectionOutput, RusotoError<CreateBackupSelectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateBackupSelectionOutput,
+                        RusotoError<CreateBackupSelectionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/",
             backup_plan_id = input.backup_plan_id
@@ -4950,28 +5287,35 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBackupSelectionOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateBackupSelectionOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBackupSelectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateBackupSelectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a logical container where backups are stored. A <code>CreateBackupVault</code> request includes a name, optionally one or more resource tags, an encryption key, and a request ID.</p> <note> <p>Sensitive data, such as passport numbers, should not be included the name of a backup vault.</p> </note></p>
-    async fn create_backup_vault(
+    fn create_backup_vault(
         &self,
         input: CreateBackupVaultInput,
-    ) -> Result<CreateBackupVaultOutput, RusotoError<CreateBackupVaultError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateBackupVaultOutput, RusotoError<CreateBackupVaultError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}",
             backup_vault_name = input.backup_vault_name
@@ -4983,28 +5327,34 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBackupVaultOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateBackupVaultOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBackupVaultError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateBackupVaultError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a backup plan. A backup plan can only be deleted after all associated selections of resources have been deleted. Deleting a backup plan deletes the current version of a backup plan. Previous versions, if any, will still exist.</p>
-    async fn delete_backup_plan(
+    fn delete_backup_plan(
         &self,
         input: DeleteBackupPlanInput,
-    ) -> Result<DeleteBackupPlanOutput, RusotoError<DeleteBackupPlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteBackupPlanOutput, RusotoError<DeleteBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}",
             backup_plan_id = input.backup_plan_id
@@ -5013,28 +5363,34 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("DELETE", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteBackupPlanOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteBackupPlanOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBackupPlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBackupPlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the resource selection associated with a backup plan that is specified by the <code>SelectionId</code>.</p>
-    async fn delete_backup_selection(
+    fn delete_backup_selection(
         &self,
         input: DeleteBackupSelectionInput,
-    ) -> Result<(), RusotoError<DeleteBackupSelectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBackupSelectionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/{selection_id}",
             backup_plan_id = input.backup_plan_id,
@@ -5044,27 +5400,29 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("DELETE", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBackupSelectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBackupSelectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the backup vault identified by its name. A vault can be deleted only if it is empty.</p>
-    async fn delete_backup_vault(
+    fn delete_backup_vault(
         &self,
         input: DeleteBackupVaultInput,
-    ) -> Result<(), RusotoError<DeleteBackupVaultError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteBackupVaultError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}",
             backup_vault_name = input.backup_vault_name
@@ -5073,27 +5431,33 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("DELETE", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBackupVaultError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBackupVaultError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the policy document that manages permissions on a backup vault.</p>
-    async fn delete_backup_vault_access_policy(
+    fn delete_backup_vault_access_policy(
         &self,
         input: DeleteBackupVaultAccessPolicyInput,
-    ) -> Result<(), RusotoError<DeleteBackupVaultAccessPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBackupVaultAccessPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/access-policy",
             backup_vault_name = input.backup_vault_name
@@ -5102,27 +5466,33 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("DELETE", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBackupVaultAccessPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBackupVaultAccessPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes event notifications for the specified backup vault.</p>
-    async fn delete_backup_vault_notifications(
+    fn delete_backup_vault_notifications(
         &self,
         input: DeleteBackupVaultNotificationsInput,
-    ) -> Result<(), RusotoError<DeleteBackupVaultNotificationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBackupVaultNotificationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/notification-configuration",
             backup_vault_name = input.backup_vault_name
@@ -5131,27 +5501,31 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("DELETE", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBackupVaultNotificationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBackupVaultNotificationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the recovery point specified by a recovery point ID.</p>
-    async fn delete_recovery_point(
+    fn delete_recovery_point(
         &self,
         input: DeleteRecoveryPointInput,
-    ) -> Result<(), RusotoError<DeleteRecoveryPointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteRecoveryPointError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}",
             backup_vault_name = input.backup_vault_name,
@@ -5161,27 +5535,34 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("DELETE", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRecoveryPointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRecoveryPointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata associated with creating a backup of a resource.</p>
-    async fn describe_backup_job(
+    fn describe_backup_job(
         &self,
         input: DescribeBackupJobInput,
-    ) -> Result<DescribeBackupJobOutput, RusotoError<DescribeBackupJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeBackupJobOutput, RusotoError<DescribeBackupJobError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-jobs/{backup_job_id}",
             backup_job_id = input.backup_job_id
@@ -5190,28 +5571,38 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBackupJobOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeBackupJobOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeBackupJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeBackupJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata about a backup vault specified by its name.</p>
-    async fn describe_backup_vault(
+    fn describe_backup_vault(
         &self,
         input: DescribeBackupVaultInput,
-    ) -> Result<DescribeBackupVaultOutput, RusotoError<DescribeBackupVaultError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeBackupVaultOutput,
+                        RusotoError<DescribeBackupVaultError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}",
             backup_vault_name = input.backup_vault_name
@@ -5220,55 +5611,71 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBackupVaultOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeBackupVaultOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeBackupVaultError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeBackupVaultError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata associated with creating a copy of a resource.</p>
-    async fn describe_copy_job(
+    fn describe_copy_job(
         &self,
         input: DescribeCopyJobInput,
-    ) -> Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/copy-jobs/{copy_job_id}", copy_job_id = input.copy_job_id);
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCopyJobOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeCopyJobOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCopyJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeCopyJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a saved resource, including the last time it was backed-up, its Amazon Resource Name (ARN), and the AWS service type of the saved resource.</p>
-    async fn describe_protected_resource(
+    fn describe_protected_resource(
         &self,
         input: DescribeProtectedResourceInput,
-    ) -> Result<DescribeProtectedResourceOutput, RusotoError<DescribeProtectedResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProtectedResourceOutput,
+                        RusotoError<DescribeProtectedResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/resources/{resource_arn}",
             resource_arn = input.resource_arn
@@ -5277,28 +5684,38 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProtectedResourceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProtectedResourceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProtectedResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProtectedResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata associated with a recovery point, including ID, status, encryption, and lifecycle.</p>
-    async fn describe_recovery_point(
+    fn describe_recovery_point(
         &self,
         input: DescribeRecoveryPointInput,
-    ) -> Result<DescribeRecoveryPointOutput, RusotoError<DescribeRecoveryPointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeRecoveryPointOutput,
+                        RusotoError<DescribeRecoveryPointError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}",
             backup_vault_name = input.backup_vault_name,
@@ -5308,28 +5725,35 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRecoveryPointOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRecoveryPointOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRecoveryPointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRecoveryPointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata associated with a restore job that is specified by a job ID.</p>
-    async fn describe_restore_job(
+    fn describe_restore_job(
         &self,
         input: DescribeRestoreJobInput,
-    ) -> Result<DescribeRestoreJobOutput, RusotoError<DescribeRestoreJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeRestoreJobOutput, RusotoError<DescribeRestoreJobError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restore-jobs/{restore_job_id}",
             restore_job_id = input.restore_job_id
@@ -5338,28 +5762,38 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRestoreJobOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRestoreJobOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRestoreJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRestoreJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the backup plan that is specified by the plan ID as a backup template.</p>
-    async fn export_backup_plan_template(
+    fn export_backup_plan_template(
         &self,
         input: ExportBackupPlanTemplateInput,
-    ) -> Result<ExportBackupPlanTemplateOutput, RusotoError<ExportBackupPlanTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ExportBackupPlanTemplateOutput,
+                        RusotoError<ExportBackupPlanTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/toTemplate/",
             backup_plan_id = input.backup_plan_id
@@ -5368,28 +5802,34 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ExportBackupPlanTemplateOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ExportBackupPlanTemplateOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ExportBackupPlanTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ExportBackupPlanTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
-    async fn get_backup_plan(
+    fn get_backup_plan(
         &self,
         input: GetBackupPlanInput,
-    ) -> Result<GetBackupPlanOutput, RusotoError<GetBackupPlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetBackupPlanOutput, RusotoError<GetBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/",
             backup_plan_id = input.backup_plan_id
@@ -5404,28 +5844,38 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBackupPlanOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBackupPlanOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBackupPlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBackupPlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a valid JSON document specifying a backup plan or an error.</p>
-    async fn get_backup_plan_from_json(
+    fn get_backup_plan_from_json(
         &self,
         input: GetBackupPlanFromJSONInput,
-    ) -> Result<GetBackupPlanFromJSONOutput, RusotoError<GetBackupPlanFromJSONError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupPlanFromJSONOutput,
+                        RusotoError<GetBackupPlanFromJSONError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup/template/json/toPlan";
 
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
@@ -5434,28 +5884,38 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBackupPlanFromJSONOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBackupPlanFromJSONOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBackupPlanFromJSONError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBackupPlanFromJSONError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the template specified by its <code>templateId</code> as a backup plan.</p>
-    async fn get_backup_plan_from_template(
+    fn get_backup_plan_from_template(
         &self,
         input: GetBackupPlanFromTemplateInput,
-    ) -> Result<GetBackupPlanFromTemplateOutput, RusotoError<GetBackupPlanFromTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupPlanFromTemplateOutput,
+                        RusotoError<GetBackupPlanFromTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/template/plans/{template_id}/toPlan",
             template_id = input.backup_plan_template_id
@@ -5464,28 +5924,35 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBackupPlanFromTemplateOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBackupPlanFromTemplateOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBackupPlanFromTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBackupPlanFromTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns selection metadata and a document in JSON format that specifies a list of resources that are associated with a backup plan.</p>
-    async fn get_backup_selection(
+    fn get_backup_selection(
         &self,
         input: GetBackupSelectionInput,
-    ) -> Result<GetBackupSelectionOutput, RusotoError<GetBackupSelectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetBackupSelectionOutput, RusotoError<GetBackupSelectionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/{selection_id}",
             backup_plan_id = input.backup_plan_id,
@@ -5495,29 +5962,38 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBackupSelectionOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBackupSelectionOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBackupSelectionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBackupSelectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the access policy document that is associated with the named backup vault.</p>
-    async fn get_backup_vault_access_policy(
+    fn get_backup_vault_access_policy(
         &self,
         input: GetBackupVaultAccessPolicyInput,
-    ) -> Result<GetBackupVaultAccessPolicyOutput, RusotoError<GetBackupVaultAccessPolicyError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupVaultAccessPolicyOutput,
+                        RusotoError<GetBackupVaultAccessPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/access-policy",
             backup_vault_name = input.backup_vault_name
@@ -5526,29 +6002,38 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBackupVaultAccessPolicyOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBackupVaultAccessPolicyOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBackupVaultAccessPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBackupVaultAccessPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns event notifications for the specified backup vault.</p>
-    async fn get_backup_vault_notifications(
+    fn get_backup_vault_notifications(
         &self,
         input: GetBackupVaultNotificationsInput,
-    ) -> Result<GetBackupVaultNotificationsOutput, RusotoError<GetBackupVaultNotificationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBackupVaultNotificationsOutput,
+                        RusotoError<GetBackupVaultNotificationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/notification-configuration",
             backup_vault_name = input.backup_vault_name
@@ -5557,86 +6042,109 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBackupVaultNotificationsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBackupVaultNotificationsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBackupVaultNotificationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBackupVaultNotificationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a set of metadata key-value pairs that were used to create the backup.</p>
-    async fn get_recovery_point_restore_metadata(
+    fn get_recovery_point_restore_metadata(
         &self,
         input: GetRecoveryPointRestoreMetadataInput,
-    ) -> Result<
-        GetRecoveryPointRestoreMetadataOutput,
-        RusotoError<GetRecoveryPointRestoreMetadataError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRecoveryPointRestoreMetadataOutput,
+                        RusotoError<GetRecoveryPointRestoreMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}/restore-metadata", backup_vault_name = input.backup_vault_name, recovery_point_arn = input.recovery_point_arn);
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRecoveryPointRestoreMetadataOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRecoveryPointRestoreMetadataOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRecoveryPointRestoreMetadataError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRecoveryPointRestoreMetadataError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the AWS resource types supported by AWS Backup.</p>
-    async fn get_supported_resource_types(
+    fn get_supported_resource_types(
         &self,
-    ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetSupportedResourceTypesOutput,
+                        RusotoError<GetSupportedResourceTypesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/supported-resource-types";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSupportedResourceTypesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetSupportedResourceTypesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSupportedResourceTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSupportedResourceTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata about your backup jobs.</p>
-    async fn list_backup_jobs(
+    fn list_backup_jobs(
         &self,
         input: ListBackupJobsInput,
-    ) -> Result<ListBackupJobsOutput, RusotoError<ListBackupJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBackupJobsOutput, RusotoError<ListBackupJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup-jobs/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5669,28 +6177,38 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBackupJobsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBackupJobsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBackupJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBackupJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata of your saved backup plan templates, including the template ID, name, and the creation and deletion dates.</p>
-    async fn list_backup_plan_templates(
+    fn list_backup_plan_templates(
         &self,
         input: ListBackupPlanTemplatesInput,
-    ) -> Result<ListBackupPlanTemplatesOutput, RusotoError<ListBackupPlanTemplatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBackupPlanTemplatesOutput,
+                        RusotoError<ListBackupPlanTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup/template/plans";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5705,28 +6223,38 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBackupPlanTemplatesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBackupPlanTemplatesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBackupPlanTemplatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBackupPlanTemplatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns version metadata of your backup plans, including Amazon Resource Names (ARNs), backup plan IDs, creation and deletion dates, plan names, and version IDs.</p>
-    async fn list_backup_plan_versions(
+    fn list_backup_plan_versions(
         &self,
         input: ListBackupPlanVersionsInput,
-    ) -> Result<ListBackupPlanVersionsOutput, RusotoError<ListBackupPlanVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBackupPlanVersionsOutput,
+                        RusotoError<ListBackupPlanVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/versions/",
             backup_plan_id = input.backup_plan_id
@@ -5744,28 +6272,34 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBackupPlanVersionsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBackupPlanVersionsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBackupPlanVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBackupPlanVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata of your saved backup plans, including Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
-    async fn list_backup_plans(
+    fn list_backup_plans(
         &self,
         input: ListBackupPlansInput,
-    ) -> Result<ListBackupPlansOutput, RusotoError<ListBackupPlansError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBackupPlansOutput, RusotoError<ListBackupPlansError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup/plans/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5783,28 +6317,38 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBackupPlansOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBackupPlansOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBackupPlansError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBackupPlansError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns an array containing metadata of the resources associated with the target backup plan.</p>
-    async fn list_backup_selections(
+    fn list_backup_selections(
         &self,
         input: ListBackupSelectionsInput,
-    ) -> Result<ListBackupSelectionsOutput, RusotoError<ListBackupSelectionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBackupSelectionsOutput,
+                        RusotoError<ListBackupSelectionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}/selections/",
             backup_plan_id = input.backup_plan_id
@@ -5822,28 +6366,34 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBackupSelectionsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBackupSelectionsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBackupSelectionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBackupSelectionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of recovery point storage containers along with information about them.</p>
-    async fn list_backup_vaults(
+    fn list_backup_vaults(
         &self,
         input: ListBackupVaultsInput,
-    ) -> Result<ListBackupVaultsOutput, RusotoError<ListBackupVaultsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListBackupVaultsOutput, RusotoError<ListBackupVaultsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup-vaults/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5858,28 +6408,34 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBackupVaultsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBackupVaultsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBackupVaultsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBackupVaultsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata about your copy jobs.</p>
-    async fn list_copy_jobs(
+    fn list_copy_jobs(
         &self,
         input: ListCopyJobsInput,
-    ) -> Result<ListCopyJobsOutput, RusotoError<ListCopyJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListCopyJobsOutput, RusotoError<ListCopyJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/copy-jobs/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5912,28 +6468,38 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCopyJobsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListCopyJobsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCopyJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCopyJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns an array of resources successfully backed up by AWS Backup, including the time the resource was saved, an Amazon Resource Name (ARN) of the resource, and a resource type.</p>
-    async fn list_protected_resources(
+    fn list_protected_resources(
         &self,
         input: ListProtectedResourcesInput,
-    ) -> Result<ListProtectedResourcesOutput, RusotoError<ListProtectedResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProtectedResourcesOutput,
+                        RusotoError<ListProtectedResourcesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/resources/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -5948,30 +6514,37 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProtectedResourcesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProtectedResourcesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProtectedResourcesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProtectedResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about the recovery points stored in a backup vault.</p>
-    async fn list_recovery_points_by_backup_vault(
+    fn list_recovery_points_by_backup_vault(
         &self,
         input: ListRecoveryPointsByBackupVaultInput,
-    ) -> Result<
-        ListRecoveryPointsByBackupVaultOutput,
-        RusotoError<ListRecoveryPointsByBackupVaultError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRecoveryPointsByBackupVaultOutput,
+                        RusotoError<ListRecoveryPointsByBackupVaultError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/",
@@ -6005,31 +6578,40 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRecoveryPointsByBackupVaultOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRecoveryPointsByBackupVaultOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRecoveryPointsByBackupVaultError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRecoveryPointsByBackupVaultError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed information about recovery points of the type specified by a resource Amazon Resource Name (ARN).</p>
-    async fn list_recovery_points_by_resource(
+    fn list_recovery_points_by_resource(
         &self,
         input: ListRecoveryPointsByResourceInput,
-    ) -> Result<ListRecoveryPointsByResourceOutput, RusotoError<ListRecoveryPointsByResourceError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRecoveryPointsByResourceOutput,
+                        RusotoError<ListRecoveryPointsByResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/resources/{resource_arn}/recovery-points/",
             resource_arn = input.resource_arn
@@ -6047,28 +6629,34 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRecoveryPointsByResourceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRecoveryPointsByResourceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRecoveryPointsByResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRecoveryPointsByResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of jobs that AWS Backup initiated to restore a saved resource, including metadata about the recovery process.</p>
-    async fn list_restore_jobs(
+    fn list_restore_jobs(
         &self,
         input: ListRestoreJobsInput,
-    ) -> Result<ListRestoreJobsOutput, RusotoError<ListRestoreJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRestoreJobsOutput, RusotoError<ListRestoreJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/restore-jobs/";
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6083,28 +6671,34 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRestoreJobsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRestoreJobsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRestoreJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRestoreJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of key-value pairs assigned to a target recovery point, backup plan, or backup vault.</p>
-    async fn list_tags(
+    fn list_tags(
         &self,
         input: ListTagsInput,
-    ) -> Result<ListTagsOutput, RusotoError<ListTagsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTagsOutput, RusotoError<ListTagsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}/", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "backup", &self.region, &request_uri);
@@ -6119,28 +6713,34 @@ impl Backup for BackupClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ListTagsOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets a resource-based policy that is used to manage access permissions on the target backup vault. Requires a backup vault name and an access policy document in JSON format.</p>
-    async fn put_backup_vault_access_policy(
+    fn put_backup_vault_access_policy(
         &self,
         input: PutBackupVaultAccessPolicyInput,
-    ) -> Result<(), RusotoError<PutBackupVaultAccessPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<PutBackupVaultAccessPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/access-policy",
             backup_vault_name = input.backup_vault_name
@@ -6152,27 +6752,33 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutBackupVaultAccessPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutBackupVaultAccessPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Turns on notifications on a backup vault for the specified topic and events.</p>
-    async fn put_backup_vault_notifications(
+    fn put_backup_vault_notifications(
         &self,
         input: PutBackupVaultNotificationsInput,
-    ) -> Result<(), RusotoError<PutBackupVaultNotificationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<PutBackupVaultNotificationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/notification-configuration",
             backup_vault_name = input.backup_vault_name
@@ -6184,27 +6790,33 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutBackupVaultNotificationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutBackupVaultNotificationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a job to create a one-time backup of the specified resource.</p>
-    async fn start_backup_job(
+    fn start_backup_job(
         &self,
         input: StartBackupJobInput,
-    ) -> Result<StartBackupJobOutput, RusotoError<StartBackupJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartBackupJobOutput, RusotoError<StartBackupJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/backup-jobs";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6213,28 +6825,34 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartBackupJobOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartBackupJobOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartBackupJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartBackupJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a job to create a one-time copy of the specified resource.</p>
-    async fn start_copy_job(
+    fn start_copy_job(
         &self,
         input: StartCopyJobInput,
-    ) -> Result<StartCopyJobOutput, RusotoError<StartCopyJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartCopyJobOutput, RusotoError<StartCopyJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/copy-jobs";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6243,28 +6861,34 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartCopyJobOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartCopyJobOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartCopyJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartCopyJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p> <p>If the resource ARN is included in the request, then the last complete backup of that resource is recovered. If the ARN of a recovery point is supplied, then that recovery point is restored.</p>
-    async fn start_restore_job(
+    fn start_restore_job(
         &self,
         input: StartRestoreJobInput,
-    ) -> Result<StartRestoreJobOutput, RusotoError<StartRestoreJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartRestoreJobOutput, RusotoError<StartRestoreJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/restore-jobs";
 
         let mut request = SignedRequest::new("PUT", "backup", &self.region, &request_uri);
@@ -6273,28 +6897,29 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartRestoreJobOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartRestoreJobOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartRestoreJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartRestoreJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Attempts to cancel a job to create a one-time backup of a resource.</p>
-    async fn stop_backup_job(
+    fn stop_backup_job(
         &self,
         input: StopBackupJobInput,
-    ) -> Result<(), RusotoError<StopBackupJobError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<StopBackupJobError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/backup-jobs/{backup_job_id}",
             backup_job_id = input.backup_job_id
@@ -6303,27 +6928,28 @@ impl Backup for BackupClient {
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopBackupJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopBackupJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Assigns a set of key-value pairs to a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN).</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
@@ -6332,27 +6958,28 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a set of key-value pairs from a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN)</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/untag/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
@@ -6361,27 +6988,33 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Replaces the body of a saved backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
-    async fn update_backup_plan(
+    fn update_backup_plan(
         &self,
         input: UpdateBackupPlanInput,
-    ) -> Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup/plans/{backup_plan_id}",
             backup_plan_id = input.backup_plan_id
@@ -6393,29 +7026,38 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateBackupPlanOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateBackupPlanOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateBackupPlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateBackupPlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
-    async fn update_recovery_point_lifecycle(
+    fn update_recovery_point_lifecycle(
         &self,
         input: UpdateRecoveryPointLifecycleInput,
-    ) -> Result<UpdateRecoveryPointLifecycleOutput, RusotoError<UpdateRecoveryPointLifecycleError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateRecoveryPointLifecycleOutput,
+                        RusotoError<UpdateRecoveryPointLifecycleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}",
             backup_vault_name = input.backup_vault_name,
@@ -6428,20 +7070,20 @@ impl Backup for BackupClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRecoveryPointLifecycleOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRecoveryPointLifecycleOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRecoveryPointLifecycleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRecoveryPointLifecycleError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

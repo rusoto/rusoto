@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Details of abort criteria to abort the job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AbortConfig {
@@ -20711,1248 +20712,2798 @@ impl fmt::Display for ValidateSecurityProfileBehaviorsError {
 }
 impl Error for ValidateSecurityProfileBehaviorsError {}
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
-#[async_trait]
 pub trait Iot {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
-    async fn accept_certificate_transfer(
+    fn accept_certificate_transfer(
         &self,
         input: AcceptCertificateTransferRequest,
-    ) -> Result<(), RusotoError<AcceptCertificateTransferError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<AcceptCertificateTransferError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a thing to a billing group.</p>
-    async fn add_thing_to_billing_group(
+    fn add_thing_to_billing_group(
         &self,
         input: AddThingToBillingGroupRequest,
-    ) -> Result<AddThingToBillingGroupResponse, RusotoError<AddThingToBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddThingToBillingGroupResponse,
+                        RusotoError<AddThingToBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a thing to a thing group.</p>
-    async fn add_thing_to_thing_group(
+    fn add_thing_to_thing_group(
         &self,
         input: AddThingToThingGroupRequest,
-    ) -> Result<AddThingToThingGroupResponse, RusotoError<AddThingToThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddThingToThingGroupResponse,
+                        RusotoError<AddThingToThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
-    async fn associate_targets_with_job(
+    fn associate_targets_with_job(
         &self,
         input: AssociateTargetsWithJobRequest,
-    ) -> Result<AssociateTargetsWithJobResponse, RusotoError<AssociateTargetsWithJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateTargetsWithJobResponse,
+                        RusotoError<AssociateTargetsWithJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Attaches a policy to the specified target.</p>
-    async fn attach_policy(
+    fn attach_policy(
         &self,
         input: AttachPolicyRequest,
-    ) -> Result<(), RusotoError<AttachPolicyError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<AttachPolicyError>>> + Send + 'static>>;
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
-    async fn attach_principal_policy(
+    fn attach_principal_policy(
         &self,
         input: AttachPrincipalPolicyRequest,
-    ) -> Result<(), RusotoError<AttachPrincipalPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<AttachPrincipalPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates a Device Defender security profile with a thing group or this account. Each thing group or account can have up to five security profiles associated with it.</p>
-    async fn attach_security_profile(
+    fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
-    ) -> Result<AttachSecurityProfileResponse, RusotoError<AttachSecurityProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AttachSecurityProfileResponse,
+                        RusotoError<AttachSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    async fn attach_thing_principal(
+    fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
-    ) -> Result<AttachThingPrincipalResponse, RusotoError<AttachThingPrincipalError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AttachThingPrincipalResponse,
+                        RusotoError<AttachThingPrincipalError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels a mitigation action task that is in progress. If the task is not in progress, an InvalidRequestException occurs.</p>
-    async fn cancel_audit_mitigation_actions_task(
+    fn cancel_audit_mitigation_actions_task(
         &self,
         input: CancelAuditMitigationActionsTaskRequest,
-    ) -> Result<
-        CancelAuditMitigationActionsTaskResponse,
-        RusotoError<CancelAuditMitigationActionsTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelAuditMitigationActionsTaskResponse,
+                        RusotoError<CancelAuditMitigationActionsTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
-    async fn cancel_audit_task(
+    fn cancel_audit_task(
         &self,
         input: CancelAuditTaskRequest,
-    ) -> Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
-    async fn cancel_certificate_transfer(
+    fn cancel_certificate_transfer(
         &self,
         input: CancelCertificateTransferRequest,
-    ) -> Result<(), RusotoError<CancelCertificateTransferError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<CancelCertificateTransferError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels a job.</p>
-    async fn cancel_job(
+    fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelJobResponse, RusotoError<CancelJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels the execution of a job for a given thing.</p>
-    async fn cancel_job_execution(
+    fn cancel_job_execution(
         &self,
         input: CancelJobExecutionRequest,
-    ) -> Result<(), RusotoError<CancelJobExecutionError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<CancelJobExecutionError>>> + Send + 'static>,
+    >;
 
     /// <p>Clears the default authorizer.</p>
-    async fn clear_default_authorizer(
+    fn clear_default_authorizer(
         &self,
-    ) -> Result<ClearDefaultAuthorizerResponse, RusotoError<ClearDefaultAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ClearDefaultAuthorizerResponse,
+                        RusotoError<ClearDefaultAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Confirms a topic rule destination. When you create a rule requiring a destination, AWS IoT sends a confirmation message to the endpoint or base address you specify. The message includes a token which you pass back when calling <code>ConfirmTopicRuleDestination</code> to confirm that you own or have access to the endpoint.</p>
-    async fn confirm_topic_rule_destination(
+    fn confirm_topic_rule_destination(
         &self,
         input: ConfirmTopicRuleDestinationRequest,
-    ) -> Result<ConfirmTopicRuleDestinationResponse, RusotoError<ConfirmTopicRuleDestinationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfirmTopicRuleDestinationResponse,
+                        RusotoError<ConfirmTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an authorizer.</p>
-    async fn create_authorizer(
+    fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
-    ) -> Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a billing group.</p>
-    async fn create_billing_group(
+    fn create_billing_group(
         &self,
         input: CreateBillingGroupRequest,
-    ) -> Result<CreateBillingGroupResponse, RusotoError<CreateBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateBillingGroupResponse,
+                        RusotoError<CreateBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
-    async fn create_certificate_from_csr(
+    fn create_certificate_from_csr(
         &self,
         input: CreateCertificateFromCsrRequest,
-    ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateCertificateFromCsrResponse,
+                        RusotoError<CreateCertificateFromCsrError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn create_domain_configuration(
+    fn create_domain_configuration(
         &self,
         input: CreateDomainConfigurationRequest,
-    ) -> Result<CreateDomainConfigurationResponse, RusotoError<CreateDomainConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDomainConfigurationResponse,
+                        RusotoError<CreateDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a dynamic thing group.</p>
-    async fn create_dynamic_thing_group(
+    fn create_dynamic_thing_group(
         &self,
         input: CreateDynamicThingGroupRequest,
-    ) -> Result<CreateDynamicThingGroupResponse, RusotoError<CreateDynamicThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDynamicThingGroupResponse,
+                        RusotoError<CreateDynamicThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a job.</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
-    async fn create_keys_and_certificate(
+    fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
-    ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateKeysAndCertificateResponse,
+                        RusotoError<CreateKeysAndCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
-    async fn create_mitigation_action(
+    fn create_mitigation_action(
         &self,
         input: CreateMitigationActionRequest,
-    ) -> Result<CreateMitigationActionResponse, RusotoError<CreateMitigationActionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateMitigationActionResponse,
+                        RusotoError<CreateMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
-    async fn create_ota_update(
+    fn create_ota_update(
         &self,
         input: CreateOTAUpdateRequest,
-    ) -> Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
-    async fn create_policy(
+    fn create_policy(
         &self,
         input: CreatePolicyRequest,
-    ) -> Result<CreatePolicyResponse, RusotoError<CreatePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePolicyResponse, RusotoError<CreatePolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
-    async fn create_policy_version(
+    fn create_policy_version(
         &self,
         input: CreatePolicyVersionRequest,
-    ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePolicyVersionResponse,
+                        RusotoError<CreatePolicyVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a provisioning claim.</p>
-    async fn create_provisioning_claim(
+    fn create_provisioning_claim(
         &self,
         input: CreateProvisioningClaimRequest,
-    ) -> Result<CreateProvisioningClaimResponse, RusotoError<CreateProvisioningClaimError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProvisioningClaimResponse,
+                        RusotoError<CreateProvisioningClaimError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a fleet provisioning template.</p>
-    async fn create_provisioning_template(
+    fn create_provisioning_template(
         &self,
         input: CreateProvisioningTemplateRequest,
-    ) -> Result<CreateProvisioningTemplateResponse, RusotoError<CreateProvisioningTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProvisioningTemplateResponse,
+                        RusotoError<CreateProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new version of a fleet provisioning template.</p>
-    async fn create_provisioning_template_version(
+    fn create_provisioning_template_version(
         &self,
         input: CreateProvisioningTemplateVersionRequest,
-    ) -> Result<
-        CreateProvisioningTemplateVersionResponse,
-        RusotoError<CreateProvisioningTemplateVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProvisioningTemplateVersionResponse,
+                        RusotoError<CreateProvisioningTemplateVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Creates a role alias.</p>
-    async fn create_role_alias(
+    fn create_role_alias(
         &self,
         input: CreateRoleAliasRequest,
-    ) -> Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
-    async fn create_scheduled_audit(
+    fn create_scheduled_audit(
         &self,
         input: CreateScheduledAuditRequest,
-    ) -> Result<CreateScheduledAuditResponse, RusotoError<CreateScheduledAuditError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateScheduledAuditResponse,
+                        RusotoError<CreateScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a Device Defender security profile.</p>
-    async fn create_security_profile(
+    fn create_security_profile(
         &self,
         input: CreateSecurityProfileRequest,
-    ) -> Result<CreateSecurityProfileResponse, RusotoError<CreateSecurityProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSecurityProfileResponse,
+                        RusotoError<CreateSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream.</p>
-    async fn create_stream(
+    fn create_stream(
         &self,
         input: CreateStreamRequest,
-    ) -> Result<CreateStreamResponse, RusotoError<CreateStreamError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateStreamResponse, RusotoError<CreateStreamError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    async fn create_thing(
+    fn create_thing(
         &self,
         input: CreateThingRequest,
-    ) -> Result<CreateThingResponse, RusotoError<CreateThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateThingResponse, RusotoError<CreateThingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    async fn create_thing_group(
+    fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
-    ) -> Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new thing type.</p>
-    async fn create_thing_type(
+    fn create_thing_type(
         &self,
         input: CreateThingTypeRequest,
-    ) -> Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    async fn create_topic_rule(
+    fn create_topic_rule(
         &self,
         input: CreateTopicRuleRequest,
-    ) -> Result<(), RusotoError<CreateTopicRuleError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<CreateTopicRuleError>>> + Send + 'static>>;
 
     /// <p>Creates a topic rule destination. The destination must be confirmed prior to use.</p>
-    async fn create_topic_rule_destination(
+    fn create_topic_rule_destination(
         &self,
         input: CreateTopicRuleDestinationRequest,
-    ) -> Result<CreateTopicRuleDestinationResponse, RusotoError<CreateTopicRuleDestinationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateTopicRuleDestinationResponse,
+                        RusotoError<CreateTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
-    async fn delete_account_audit_configuration(
+    fn delete_account_audit_configuration(
         &self,
         input: DeleteAccountAuditConfigurationRequest,
-    ) -> Result<
-        DeleteAccountAuditConfigurationResponse,
-        RusotoError<DeleteAccountAuditConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteAccountAuditConfigurationResponse,
+                        RusotoError<DeleteAccountAuditConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Deletes an authorizer.</p>
-    async fn delete_authorizer(
+    fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
-    ) -> Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the billing group.</p>
-    async fn delete_billing_group(
+    fn delete_billing_group(
         &self,
         input: DeleteBillingGroupRequest,
-    ) -> Result<DeleteBillingGroupResponse, RusotoError<DeleteBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteBillingGroupResponse,
+                        RusotoError<DeleteBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a registered CA certificate.</p>
-    async fn delete_ca_certificate(
+    fn delete_ca_certificate(
         &self,
         input: DeleteCACertificateRequest,
-    ) -> Result<DeleteCACertificateResponse, RusotoError<DeleteCACertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteCACertificateResponse,
+                        RusotoError<DeleteCACertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy or IoT thing attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
-    async fn delete_certificate(
+    fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
-    ) -> Result<(), RusotoError<DeleteCertificateError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteCertificateError>>> + Send + 'static>,
+    >;
 
     /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn delete_domain_configuration(
+    fn delete_domain_configuration(
         &self,
         input: DeleteDomainConfigurationRequest,
-    ) -> Result<DeleteDomainConfigurationResponse, RusotoError<DeleteDomainConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDomainConfigurationResponse,
+                        RusotoError<DeleteDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a dynamic thing group.</p>
-    async fn delete_dynamic_thing_group(
+    fn delete_dynamic_thing_group(
         &self,
         input: DeleteDynamicThingGroupRequest,
-    ) -> Result<DeleteDynamicThingGroupResponse, RusotoError<DeleteDynamicThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDynamicThingGroupResponse,
+                        RusotoError<DeleteDynamicThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
-    async fn delete_job(&self, input: DeleteJobRequest) -> Result<(), RusotoError<DeleteJobError>>;
+    fn delete_job(
+        &self,
+        input: DeleteJobRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteJobError>>> + Send + 'static>>;
 
     /// <p>Deletes a job execution.</p>
-    async fn delete_job_execution(
+    fn delete_job_execution(
         &self,
         input: DeleteJobExecutionRequest,
-    ) -> Result<(), RusotoError<DeleteJobExecutionError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteJobExecutionError>>> + Send + 'static>,
+    >;
 
     /// <p>Deletes a defined mitigation action from your AWS account.</p>
-    async fn delete_mitigation_action(
+    fn delete_mitigation_action(
         &self,
         input: DeleteMitigationActionRequest,
-    ) -> Result<DeleteMitigationActionResponse, RusotoError<DeleteMitigationActionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteMitigationActionResponse,
+                        RusotoError<DeleteMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an OTA update.</p>
-    async fn delete_ota_update(
+    fn delete_ota_update(
         &self,
         input: DeleteOTAUpdateRequest,
-    ) -> Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    async fn delete_policy(
+    fn delete_policy(
         &self,
         input: DeletePolicyRequest,
-    ) -> Result<(), RusotoError<DeletePolicyError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeletePolicyError>>> + Send + 'static>>;
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
-    async fn delete_policy_version(
+    fn delete_policy_version(
         &self,
         input: DeletePolicyVersionRequest,
-    ) -> Result<(), RusotoError<DeletePolicyVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeletePolicyVersionError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Deletes a fleet provisioning template.</p>
-    async fn delete_provisioning_template(
+    fn delete_provisioning_template(
         &self,
         input: DeleteProvisioningTemplateRequest,
-    ) -> Result<DeleteProvisioningTemplateResponse, RusotoError<DeleteProvisioningTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteProvisioningTemplateResponse,
+                        RusotoError<DeleteProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a fleet provisioning template version.</p>
-    async fn delete_provisioning_template_version(
+    fn delete_provisioning_template_version(
         &self,
         input: DeleteProvisioningTemplateVersionRequest,
-    ) -> Result<
-        DeleteProvisioningTemplateVersionResponse,
-        RusotoError<DeleteProvisioningTemplateVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteProvisioningTemplateVersionResponse,
+                        RusotoError<DeleteProvisioningTemplateVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Deletes a CA certificate registration code.</p>
-    async fn delete_registration_code(
+    fn delete_registration_code(
         &self,
-    ) -> Result<DeleteRegistrationCodeResponse, RusotoError<DeleteRegistrationCodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteRegistrationCodeResponse,
+                        RusotoError<DeleteRegistrationCodeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a role alias</p>
-    async fn delete_role_alias(
+    fn delete_role_alias(
         &self,
         input: DeleteRoleAliasRequest,
-    ) -> Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a scheduled audit.</p>
-    async fn delete_scheduled_audit(
+    fn delete_scheduled_audit(
         &self,
         input: DeleteScheduledAuditRequest,
-    ) -> Result<DeleteScheduledAuditResponse, RusotoError<DeleteScheduledAuditError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteScheduledAuditResponse,
+                        RusotoError<DeleteScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a Device Defender security profile.</p>
-    async fn delete_security_profile(
+    fn delete_security_profile(
         &self,
         input: DeleteSecurityProfileRequest,
-    ) -> Result<DeleteSecurityProfileResponse, RusotoError<DeleteSecurityProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSecurityProfileResponse,
+                        RusotoError<DeleteSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a stream.</p>
-    async fn delete_stream(
+    fn delete_stream(
         &self,
         input: DeleteStreamRequest,
-    ) -> Result<DeleteStreamResponse, RusotoError<DeleteStreamError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteStreamResponse, RusotoError<DeleteStreamError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
-    async fn delete_thing(
+    fn delete_thing(
         &self,
         input: DeleteThingRequest,
-    ) -> Result<DeleteThingResponse, RusotoError<DeleteThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteThingResponse, RusotoError<DeleteThingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a thing group.</p>
-    async fn delete_thing_group(
+    fn delete_thing_group(
         &self,
         input: DeleteThingGroupRequest,
-    ) -> Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
-    async fn delete_thing_type(
+    fn delete_thing_type(
         &self,
         input: DeleteThingTypeRequest,
-    ) -> Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the rule.</p>
-    async fn delete_topic_rule(
+    fn delete_topic_rule(
         &self,
         input: DeleteTopicRuleRequest,
-    ) -> Result<(), RusotoError<DeleteTopicRuleError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteTopicRuleError>>> + Send + 'static>>;
 
     /// <p>Deletes a topic rule destination.</p>
-    async fn delete_topic_rule_destination(
+    fn delete_topic_rule_destination(
         &self,
         input: DeleteTopicRuleDestinationRequest,
-    ) -> Result<DeleteTopicRuleDestinationResponse, RusotoError<DeleteTopicRuleDestinationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteTopicRuleDestinationResponse,
+                        RusotoError<DeleteTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a logging level.</p>
-    async fn delete_v2_logging_level(
+    fn delete_v2_logging_level(
         &self,
         input: DeleteV2LoggingLevelRequest,
-    ) -> Result<(), RusotoError<DeleteV2LoggingLevelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteV2LoggingLevelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
-    async fn deprecate_thing_type(
+    fn deprecate_thing_type(
         &self,
         input: DeprecateThingTypeRequest,
-    ) -> Result<DeprecateThingTypeResponse, RusotoError<DeprecateThingTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeprecateThingTypeResponse,
+                        RusotoError<DeprecateThingTypeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    async fn describe_account_audit_configuration(
+    fn describe_account_audit_configuration(
         &self,
-    ) -> Result<
-        DescribeAccountAuditConfigurationResponse,
-        RusotoError<DescribeAccountAuditConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAccountAuditConfigurationResponse,
+                        RusotoError<DescribeAccountAuditConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
-    async fn describe_audit_finding(
+    fn describe_audit_finding(
         &self,
         input: DescribeAuditFindingRequest,
-    ) -> Result<DescribeAuditFindingResponse, RusotoError<DescribeAuditFindingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAuditFindingResponse,
+                        RusotoError<DescribeAuditFindingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about an audit mitigation task that is used to apply mitigation actions to a set of audit findings. Properties include the actions being applied, the audit checks to which they're being applied, the task status, and aggregated task statistics.</p>
-    async fn describe_audit_mitigation_actions_task(
+    fn describe_audit_mitigation_actions_task(
         &self,
         input: DescribeAuditMitigationActionsTaskRequest,
-    ) -> Result<
-        DescribeAuditMitigationActionsTaskResponse,
-        RusotoError<DescribeAuditMitigationActionsTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAuditMitigationActionsTaskResponse,
+                        RusotoError<DescribeAuditMitigationActionsTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets information about a Device Defender audit.</p>
-    async fn describe_audit_task(
+    fn describe_audit_task(
         &self,
         input: DescribeAuditTaskRequest,
-    ) -> Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an authorizer.</p>
-    async fn describe_authorizer(
+    fn describe_authorizer(
         &self,
         input: DescribeAuthorizerRequest,
-    ) -> Result<DescribeAuthorizerResponse, RusotoError<DescribeAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAuthorizerResponse,
+                        RusotoError<DescribeAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a billing group.</p>
-    async fn describe_billing_group(
+    fn describe_billing_group(
         &self,
         input: DescribeBillingGroupRequest,
-    ) -> Result<DescribeBillingGroupResponse, RusotoError<DescribeBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeBillingGroupResponse,
+                        RusotoError<DescribeBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a registered CA certificate.</p>
-    async fn describe_ca_certificate(
+    fn describe_ca_certificate(
         &self,
         input: DescribeCACertificateRequest,
-    ) -> Result<DescribeCACertificateResponse, RusotoError<DescribeCACertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeCACertificateResponse,
+                        RusotoError<DescribeCACertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the specified certificate.</p>
-    async fn describe_certificate(
+    fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
-    ) -> Result<DescribeCertificateResponse, RusotoError<DescribeCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeCertificateResponse,
+                        RusotoError<DescribeCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the default authorizer.</p>
-    async fn describe_default_authorizer(
+    fn describe_default_authorizer(
         &self,
-    ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDefaultAuthorizerResponse,
+                        RusotoError<DescribeDefaultAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn describe_domain_configuration(
+    fn describe_domain_configuration(
         &self,
         input: DescribeDomainConfigurationRequest,
-    ) -> Result<DescribeDomainConfigurationResponse, RusotoError<DescribeDomainConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDomainConfigurationResponse,
+                        RusotoError<DescribeDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    async fn describe_endpoint(
+    fn describe_endpoint(
         &self,
         input: DescribeEndpointRequest,
-    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes event configurations.</p>
-    async fn describe_event_configurations(
+    fn describe_event_configurations(
         &self,
-    ) -> Result<DescribeEventConfigurationsResponse, RusotoError<DescribeEventConfigurationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEventConfigurationsResponse,
+                        RusotoError<DescribeEventConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a search index.</p>
-    async fn describe_index(
+    fn describe_index(
         &self,
         input: DescribeIndexRequest,
-    ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a job.</p>
-    async fn describe_job(
+    fn describe_job(
         &self,
         input: DescribeJobRequest,
-    ) -> Result<DescribeJobResponse, RusotoError<DescribeJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeJobResponse, RusotoError<DescribeJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a job execution.</p>
-    async fn describe_job_execution(
+    fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeJobExecutionResponse,
+                        RusotoError<DescribeJobExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a mitigation action.</p>
-    async fn describe_mitigation_action(
+    fn describe_mitigation_action(
         &self,
         input: DescribeMitigationActionRequest,
-    ) -> Result<DescribeMitigationActionResponse, RusotoError<DescribeMitigationActionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMitigationActionResponse,
+                        RusotoError<DescribeMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a fleet provisioning template.</p>
-    async fn describe_provisioning_template(
+    fn describe_provisioning_template(
         &self,
         input: DescribeProvisioningTemplateRequest,
-    ) -> Result<DescribeProvisioningTemplateResponse, RusotoError<DescribeProvisioningTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProvisioningTemplateResponse,
+                        RusotoError<DescribeProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a fleet provisioning template version.</p>
-    async fn describe_provisioning_template_version(
+    fn describe_provisioning_template_version(
         &self,
         input: DescribeProvisioningTemplateVersionRequest,
-    ) -> Result<
-        DescribeProvisioningTemplateVersionResponse,
-        RusotoError<DescribeProvisioningTemplateVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProvisioningTemplateVersionResponse,
+                        RusotoError<DescribeProvisioningTemplateVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describes a role alias.</p>
-    async fn describe_role_alias(
+    fn describe_role_alias(
         &self,
         input: DescribeRoleAliasRequest,
-    ) -> Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a scheduled audit.</p>
-    async fn describe_scheduled_audit(
+    fn describe_scheduled_audit(
         &self,
         input: DescribeScheduledAuditRequest,
-    ) -> Result<DescribeScheduledAuditResponse, RusotoError<DescribeScheduledAuditError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeScheduledAuditResponse,
+                        RusotoError<DescribeScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a Device Defender security profile.</p>
-    async fn describe_security_profile(
+    fn describe_security_profile(
         &self,
         input: DescribeSecurityProfileRequest,
-    ) -> Result<DescribeSecurityProfileResponse, RusotoError<DescribeSecurityProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSecurityProfileResponse,
+                        RusotoError<DescribeSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a stream.</p>
-    async fn describe_stream(
+    fn describe_stream(
         &self,
         input: DescribeStreamRequest,
-    ) -> Result<DescribeStreamResponse, RusotoError<DescribeStreamError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStreamResponse, RusotoError<DescribeStreamError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the specified thing.</p>
-    async fn describe_thing(
+    fn describe_thing(
         &self,
         input: DescribeThingRequest,
-    ) -> Result<DescribeThingResponse, RusotoError<DescribeThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeThingResponse, RusotoError<DescribeThingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describe a thing group.</p>
-    async fn describe_thing_group(
+    fn describe_thing_group(
         &self,
         input: DescribeThingGroupRequest,
-    ) -> Result<DescribeThingGroupResponse, RusotoError<DescribeThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeThingGroupResponse,
+                        RusotoError<DescribeThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes a bulk thing provisioning task.</p>
-    async fn describe_thing_registration_task(
+    fn describe_thing_registration_task(
         &self,
         input: DescribeThingRegistrationTaskRequest,
-    ) -> Result<
-        DescribeThingRegistrationTaskResponse,
-        RusotoError<DescribeThingRegistrationTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeThingRegistrationTaskResponse,
+                        RusotoError<DescribeThingRegistrationTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets information about the specified thing type.</p>
-    async fn describe_thing_type(
+    fn describe_thing_type(
         &self,
         input: DescribeThingTypeRequest,
-    ) -> Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Detaches a policy from the specified target.</p>
-    async fn detach_policy(
+    fn detach_policy(
         &self,
         input: DetachPolicyRequest,
-    ) -> Result<(), RusotoError<DetachPolicyError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DetachPolicyError>>> + Send + 'static>>;
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
-    async fn detach_principal_policy(
+    fn detach_principal_policy(
         &self,
         input: DetachPrincipalPolicyRequest,
-    ) -> Result<(), RusotoError<DetachPrincipalPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DetachPrincipalPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
-    async fn detach_security_profile(
+    fn detach_security_profile(
         &self,
         input: DetachSecurityProfileRequest,
-    ) -> Result<DetachSecurityProfileResponse, RusotoError<DetachSecurityProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetachSecurityProfileResponse,
+                        RusotoError<DetachSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
-    async fn detach_thing_principal(
+    fn detach_thing_principal(
         &self,
         input: DetachThingPrincipalRequest,
-    ) -> Result<DetachThingPrincipalResponse, RusotoError<DetachThingPrincipalError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetachThingPrincipalResponse,
+                        RusotoError<DetachThingPrincipalError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Disables the rule.</p>
-    async fn disable_topic_rule(
+    fn disable_topic_rule(
         &self,
         input: DisableTopicRuleRequest,
-    ) -> Result<(), RusotoError<DisableTopicRuleError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DisableTopicRuleError>>> + Send + 'static>,
+    >;
 
     /// <p>Enables the rule.</p>
-    async fn enable_topic_rule(
+    fn enable_topic_rule(
         &self,
         input: EnableTopicRuleRequest,
-    ) -> Result<(), RusotoError<EnableTopicRuleError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<EnableTopicRuleError>>> + Send + 'static>>;
 
     /// <p>Returns the approximate count of unique values that match the query.</p>
-    async fn get_cardinality(
+    fn get_cardinality(
         &self,
         input: GetCardinalityRequest,
-    ) -> Result<GetCardinalityResponse, RusotoError<GetCardinalityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetCardinalityResponse, RusotoError<GetCardinalityError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
-    async fn get_effective_policies(
+    fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
-    ) -> Result<GetEffectivePoliciesResponse, RusotoError<GetEffectivePoliciesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEffectivePoliciesResponse,
+                        RusotoError<GetEffectivePoliciesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the indexing configuration.</p>
-    async fn get_indexing_configuration(
+    fn get_indexing_configuration(
         &self,
-    ) -> Result<GetIndexingConfigurationResponse, RusotoError<GetIndexingConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetIndexingConfigurationResponse,
+                        RusotoError<GetIndexingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a job document.</p>
-    async fn get_job_document(
+    fn get_job_document(
         &self,
         input: GetJobDocumentRequest,
-    ) -> Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
-    async fn get_logging_options(
+    fn get_logging_options(
         &self,
-    ) -> Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets an OTA update.</p>
-    async fn get_ota_update(
+    fn get_ota_update(
         &self,
         input: GetOTAUpdateRequest,
-    ) -> Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Groups the aggregated values that match the query into percentile groupings. The default percentile groupings are: 1,5,25,50,75,95,99, although you can specify your own when you call <code>GetPercentiles</code>. This function returns a value for each percentile group specified (or the default percentile groupings). The percentile group "1" contains the aggregated field value that occurs in approximately one percent of the values that match the query. The percentile group "5" contains the aggregated field value that occurs in approximately five percent of the values that match the query, and so on. The result is an approximation, the more values that match the query, the more accurate the percentile values.</p>
-    async fn get_percentiles(
+    fn get_percentiles(
         &self,
         input: GetPercentilesRequest,
-    ) -> Result<GetPercentilesResponse, RusotoError<GetPercentilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPercentilesResponse, RusotoError<GetPercentilesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    async fn get_policy(
+    fn get_policy(
         &self,
         input: GetPolicyRequest,
-    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPolicyResponse, RusotoError<GetPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the specified policy version.</p>
-    async fn get_policy_version(
+    fn get_policy_version(
         &self,
         input: GetPolicyVersionRequest,
-    ) -> Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
-    async fn get_registration_code(
+    fn get_registration_code(
         &self,
-    ) -> Result<GetRegistrationCodeResponse, RusotoError<GetRegistrationCodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRegistrationCodeResponse,
+                        RusotoError<GetRegistrationCodeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the count, average, sum, minimum, maximum, sum of squares, variance, and standard deviation for the specified aggregated field. If the aggregation field is of type <code>String</code>, only the count statistic is returned.</p>
-    async fn get_statistics(
+    fn get_statistics(
         &self,
         input: GetStatisticsRequest,
-    ) -> Result<GetStatisticsResponse, RusotoError<GetStatisticsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetStatisticsResponse, RusotoError<GetStatisticsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the rule.</p>
-    async fn get_topic_rule(
+    fn get_topic_rule(
         &self,
         input: GetTopicRuleRequest,
-    ) -> Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a topic rule destination.</p>
-    async fn get_topic_rule_destination(
+    fn get_topic_rule_destination(
         &self,
         input: GetTopicRuleDestinationRequest,
-    ) -> Result<GetTopicRuleDestinationResponse, RusotoError<GetTopicRuleDestinationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetTopicRuleDestinationResponse,
+                        RusotoError<GetTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the fine grained logging options.</p>
-    async fn get_v2_logging_options(
+    fn get_v2_logging_options(
         &self,
-    ) -> Result<GetV2LoggingOptionsResponse, RusotoError<GetV2LoggingOptionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetV2LoggingOptionsResponse,
+                        RusotoError<GetV2LoggingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the active violations for a given Device Defender security profile.</p>
-    async fn list_active_violations(
+    fn list_active_violations(
         &self,
         input: ListActiveViolationsRequest,
-    ) -> Result<ListActiveViolationsResponse, RusotoError<ListActiveViolationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListActiveViolationsResponse,
+                        RusotoError<ListActiveViolationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the policies attached to the specified thing group.</p>
-    async fn list_attached_policies(
+    fn list_attached_policies(
         &self,
         input: ListAttachedPoliciesRequest,
-    ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAttachedPoliciesResponse,
+                        RusotoError<ListAttachedPoliciesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
-    async fn list_audit_findings(
+    fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
-    ) -> Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
-    async fn list_audit_mitigation_actions_executions(
+    fn list_audit_mitigation_actions_executions(
         &self,
         input: ListAuditMitigationActionsExecutionsRequest,
-    ) -> Result<
-        ListAuditMitigationActionsExecutionsResponse,
-        RusotoError<ListAuditMitigationActionsExecutionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAuditMitigationActionsExecutionsResponse,
+                        RusotoError<ListAuditMitigationActionsExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
-    async fn list_audit_mitigation_actions_tasks(
+    fn list_audit_mitigation_actions_tasks(
         &self,
         input: ListAuditMitigationActionsTasksRequest,
-    ) -> Result<
-        ListAuditMitigationActionsTasksResponse,
-        RusotoError<ListAuditMitigationActionsTasksError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAuditMitigationActionsTasksResponse,
+                        RusotoError<ListAuditMitigationActionsTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
-    async fn list_audit_tasks(
+    fn list_audit_tasks(
         &self,
         input: ListAuditTasksRequest,
-    ) -> Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the authorizers registered in your account.</p>
-    async fn list_authorizers(
+    fn list_authorizers(
         &self,
         input: ListAuthorizersRequest,
-    ) -> Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the billing groups you have created.</p>
-    async fn list_billing_groups(
+    fn list_billing_groups(
         &self,
         input: ListBillingGroupsRequest,
-    ) -> Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    async fn list_ca_certificates(
+    fn list_ca_certificates(
         &self,
         input: ListCACertificatesRequest,
-    ) -> Result<ListCACertificatesResponse, RusotoError<ListCACertificatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCACertificatesResponse,
+                        RusotoError<ListCACertificatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    async fn list_certificates(
+    fn list_certificates(
         &self,
         input: ListCertificatesRequest,
-    ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
-    async fn list_certificates_by_ca(
+    fn list_certificates_by_ca(
         &self,
         input: ListCertificatesByCARequest,
-    ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCertificatesByCAResponse,
+                        RusotoError<ListCertificatesByCAError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn list_domain_configurations(
+    fn list_domain_configurations(
         &self,
         input: ListDomainConfigurationsRequest,
-    ) -> Result<ListDomainConfigurationsResponse, RusotoError<ListDomainConfigurationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDomainConfigurationsResponse,
+                        RusotoError<ListDomainConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the search indices.</p>
-    async fn list_indices(
+    fn list_indices(
         &self,
         input: ListIndicesRequest,
-    ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListIndicesResponse, RusotoError<ListIndicesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the job executions for a job.</p>
-    async fn list_job_executions_for_job(
+    fn list_job_executions_for_job(
         &self,
         input: ListJobExecutionsForJobRequest,
-    ) -> Result<ListJobExecutionsForJobResponse, RusotoError<ListJobExecutionsForJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJobExecutionsForJobResponse,
+                        RusotoError<ListJobExecutionsForJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the job executions for the specified thing.</p>
-    async fn list_job_executions_for_thing(
+    fn list_job_executions_for_thing(
         &self,
         input: ListJobExecutionsForThingRequest,
-    ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJobExecutionsForThingResponse,
+                        RusotoError<ListJobExecutionsForThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists jobs.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResponse, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
-    async fn list_mitigation_actions(
+    fn list_mitigation_actions(
         &self,
         input: ListMitigationActionsRequest,
-    ) -> Result<ListMitigationActionsResponse, RusotoError<ListMitigationActionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListMitigationActionsResponse,
+                        RusotoError<ListMitigationActionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists OTA updates.</p>
-    async fn list_ota_updates(
+    fn list_ota_updates(
         &self,
         input: ListOTAUpdatesRequest,
-    ) -> Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
-    async fn list_outgoing_certificates(
+    fn list_outgoing_certificates(
         &self,
         input: ListOutgoingCertificatesRequest,
-    ) -> Result<ListOutgoingCertificatesResponse, RusotoError<ListOutgoingCertificatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOutgoingCertificatesResponse,
+                        RusotoError<ListOutgoingCertificatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists your policies.</p>
-    async fn list_policies(
+    fn list_policies(
         &self,
         input: ListPoliciesRequest,
-    ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
-    async fn list_policy_principals(
+    fn list_policy_principals(
         &self,
         input: ListPolicyPrincipalsRequest,
-    ) -> Result<ListPolicyPrincipalsResponse, RusotoError<ListPolicyPrincipalsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPolicyPrincipalsResponse,
+                        RusotoError<ListPolicyPrincipalsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
-    async fn list_policy_versions(
+    fn list_policy_versions(
         &self,
         input: ListPolicyVersionsRequest,
-    ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPolicyVersionsResponse,
+                        RusotoError<ListPolicyVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
-    async fn list_principal_policies(
+    fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
-    ) -> Result<ListPrincipalPoliciesResponse, RusotoError<ListPrincipalPoliciesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPrincipalPoliciesResponse,
+                        RusotoError<ListPrincipalPoliciesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
-    async fn list_principal_things(
+    fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
-    ) -> Result<ListPrincipalThingsResponse, RusotoError<ListPrincipalThingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPrincipalThingsResponse,
+                        RusotoError<ListPrincipalThingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>A list of fleet provisioning template versions.</p>
-    async fn list_provisioning_template_versions(
+    fn list_provisioning_template_versions(
         &self,
         input: ListProvisioningTemplateVersionsRequest,
-    ) -> Result<
-        ListProvisioningTemplateVersionsResponse,
-        RusotoError<ListProvisioningTemplateVersionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProvisioningTemplateVersionsResponse,
+                        RusotoError<ListProvisioningTemplateVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the fleet provisioning templates in your AWS account.</p>
-    async fn list_provisioning_templates(
+    fn list_provisioning_templates(
         &self,
         input: ListProvisioningTemplatesRequest,
-    ) -> Result<ListProvisioningTemplatesResponse, RusotoError<ListProvisioningTemplatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProvisioningTemplatesResponse,
+                        RusotoError<ListProvisioningTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the role aliases registered in your account.</p>
-    async fn list_role_aliases(
+    fn list_role_aliases(
         &self,
         input: ListRoleAliasesRequest,
-    ) -> Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all of your scheduled audits.</p>
-    async fn list_scheduled_audits(
+    fn list_scheduled_audits(
         &self,
         input: ListScheduledAuditsRequest,
-    ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListScheduledAuditsResponse,
+                        RusotoError<ListScheduledAuditsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
-    async fn list_security_profiles(
+    fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
-    ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSecurityProfilesResponse,
+                        RusotoError<ListSecurityProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
-    async fn list_security_profiles_for_target(
+    fn list_security_profiles_for_target(
         &self,
         input: ListSecurityProfilesForTargetRequest,
-    ) -> Result<
-        ListSecurityProfilesForTargetResponse,
-        RusotoError<ListSecurityProfilesForTargetError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSecurityProfilesForTargetResponse,
+                        RusotoError<ListSecurityProfilesForTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists all of the streams in your AWS account.</p>
-    async fn list_streams(
+    fn list_streams(
         &self,
         input: ListStreamsRequest,
-    ) -> Result<ListStreamsResponse, RusotoError<ListStreamsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStreamsResponse, RusotoError<ListStreamsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List targets for the specified policy.</p>
-    async fn list_targets_for_policy(
+    fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
-    ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTargetsForPolicyResponse,
+                        RusotoError<ListTargetsForPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
-    async fn list_targets_for_security_profile(
+    fn list_targets_for_security_profile(
         &self,
         input: ListTargetsForSecurityProfileRequest,
-    ) -> Result<
-        ListTargetsForSecurityProfileResponse,
-        RusotoError<ListTargetsForSecurityProfileError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTargetsForSecurityProfileResponse,
+                        RusotoError<ListTargetsForSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>List the thing groups in your account.</p>
-    async fn list_thing_groups(
+    fn list_thing_groups(
         &self,
         input: ListThingGroupsRequest,
-    ) -> Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
-    async fn list_thing_groups_for_thing(
+    fn list_thing_groups_for_thing(
         &self,
         input: ListThingGroupsForThingRequest,
-    ) -> Result<ListThingGroupsForThingResponse, RusotoError<ListThingGroupsForThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingGroupsForThingResponse,
+                        RusotoError<ListThingGroupsForThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    async fn list_thing_principals(
+    fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
-    ) -> Result<ListThingPrincipalsResponse, RusotoError<ListThingPrincipalsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingPrincipalsResponse,
+                        RusotoError<ListThingPrincipalsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Information about the thing registration tasks.</p>
-    async fn list_thing_registration_task_reports(
+    fn list_thing_registration_task_reports(
         &self,
         input: ListThingRegistrationTaskReportsRequest,
-    ) -> Result<
-        ListThingRegistrationTaskReportsResponse,
-        RusotoError<ListThingRegistrationTaskReportsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingRegistrationTaskReportsResponse,
+                        RusotoError<ListThingRegistrationTaskReportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>List bulk thing provisioning tasks.</p>
-    async fn list_thing_registration_tasks(
+    fn list_thing_registration_tasks(
         &self,
         input: ListThingRegistrationTasksRequest,
-    ) -> Result<ListThingRegistrationTasksResponse, RusotoError<ListThingRegistrationTasksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingRegistrationTasksResponse,
+                        RusotoError<ListThingRegistrationTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the existing thing types.</p>
-    async fn list_thing_types(
+    fn list_thing_types(
         &self,
         input: ListThingTypesRequest,
-    ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    async fn list_things(
+    fn list_things(
         &self,
         input: ListThingsRequest,
-    ) -> Result<ListThingsResponse, RusotoError<ListThingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListThingsResponse, RusotoError<ListThingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the things you have added to the given billing group.</p>
-    async fn list_things_in_billing_group(
+    fn list_things_in_billing_group(
         &self,
         input: ListThingsInBillingGroupRequest,
-    ) -> Result<ListThingsInBillingGroupResponse, RusotoError<ListThingsInBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingsInBillingGroupResponse,
+                        RusotoError<ListThingsInBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the things in the specified group.</p>
-    async fn list_things_in_thing_group(
+    fn list_things_in_thing_group(
         &self,
         input: ListThingsInThingGroupRequest,
-    ) -> Result<ListThingsInThingGroupResponse, RusotoError<ListThingsInThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingsInThingGroupResponse,
+                        RusotoError<ListThingsInThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the topic rule destinations in your AWS account.</p>
-    async fn list_topic_rule_destinations(
+    fn list_topic_rule_destinations(
         &self,
         input: ListTopicRuleDestinationsRequest,
-    ) -> Result<ListTopicRuleDestinationsResponse, RusotoError<ListTopicRuleDestinationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTopicRuleDestinationsResponse,
+                        RusotoError<ListTopicRuleDestinationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the rules for the specific topic.</p>
-    async fn list_topic_rules(
+    fn list_topic_rules(
         &self,
         input: ListTopicRulesRequest,
-    ) -> Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists logging levels.</p>
-    async fn list_v2_logging_levels(
+    fn list_v2_logging_levels(
         &self,
         input: ListV2LoggingLevelsRequest,
-    ) -> Result<ListV2LoggingLevelsResponse, RusotoError<ListV2LoggingLevelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListV2LoggingLevelsResponse,
+                        RusotoError<ListV2LoggingLevelsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
-    async fn list_violation_events(
+    fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
-    ) -> Result<ListViolationEventsResponse, RusotoError<ListViolationEventsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListViolationEventsResponse,
+                        RusotoError<ListViolationEventsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
-    async fn register_ca_certificate(
+    fn register_ca_certificate(
         &self,
         input: RegisterCACertificateRequest,
-    ) -> Result<RegisterCACertificateResponse, RusotoError<RegisterCACertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterCACertificateResponse,
+                        RusotoError<RegisterCACertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
-    async fn register_certificate(
+    fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
-    ) -> Result<RegisterCertificateResponse, RusotoError<RegisterCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterCertificateResponse,
+                        RusotoError<RegisterCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
-    async fn register_thing(
+    fn register_thing(
         &self,
         input: RegisterThingRequest,
-    ) -> Result<RegisterThingResponse, RusotoError<RegisterThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterThingResponse, RusotoError<RegisterThingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
-    async fn reject_certificate_transfer(
+    fn reject_certificate_transfer(
         &self,
         input: RejectCertificateTransferRequest,
-    ) -> Result<(), RusotoError<RejectCertificateTransferError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<RejectCertificateTransferError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the given thing from the billing group.</p>
-    async fn remove_thing_from_billing_group(
+    fn remove_thing_from_billing_group(
         &self,
         input: RemoveThingFromBillingGroupRequest,
-    ) -> Result<RemoveThingFromBillingGroupResponse, RusotoError<RemoveThingFromBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveThingFromBillingGroupResponse,
+                        RusotoError<RemoveThingFromBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Remove the specified thing from the specified group.</p>
-    async fn remove_thing_from_thing_group(
+    fn remove_thing_from_thing_group(
         &self,
         input: RemoveThingFromThingGroupRequest,
-    ) -> Result<RemoveThingFromThingGroupResponse, RusotoError<RemoveThingFromThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveThingFromThingGroupResponse,
+                        RusotoError<RemoveThingFromThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    async fn replace_topic_rule(
+    fn replace_topic_rule(
         &self,
         input: ReplaceTopicRuleRequest,
-    ) -> Result<(), RusotoError<ReplaceTopicRuleError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<ReplaceTopicRuleError>>> + Send + 'static>,
+    >;
 
     /// <p>The query search index.</p>
-    async fn search_index(
+    fn search_index(
         &self,
         input: SearchIndexRequest,
-    ) -> Result<SearchIndexResponse, RusotoError<SearchIndexError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchIndexResponse, RusotoError<SearchIndexError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
-    async fn set_default_authorizer(
+    fn set_default_authorizer(
         &self,
         input: SetDefaultAuthorizerRequest,
-    ) -> Result<SetDefaultAuthorizerResponse, RusotoError<SetDefaultAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SetDefaultAuthorizerResponse,
+                        RusotoError<SetDefaultAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
-    async fn set_default_policy_version(
+    fn set_default_policy_version(
         &self,
         input: SetDefaultPolicyVersionRequest,
-    ) -> Result<(), RusotoError<SetDefaultPolicyVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetDefaultPolicyVersionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
-    async fn set_logging_options(
+    fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
-    ) -> Result<(), RusotoError<SetLoggingOptionsError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<SetLoggingOptionsError>>> + Send + 'static>,
+    >;
 
     /// <p>Sets the logging level.</p>
-    async fn set_v2_logging_level(
+    fn set_v2_logging_level(
         &self,
         input: SetV2LoggingLevelRequest,
-    ) -> Result<(), RusotoError<SetV2LoggingLevelError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<SetV2LoggingLevelError>>> + Send + 'static>,
+    >;
 
     /// <p>Sets the logging options for the V2 logging service.</p>
-    async fn set_v2_logging_options(
+    fn set_v2_logging_options(
         &self,
         input: SetV2LoggingOptionsRequest,
-    ) -> Result<(), RusotoError<SetV2LoggingOptionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetV2LoggingOptionsError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Starts a task that applies a set of mitigation actions to the specified target.</p>
-    async fn start_audit_mitigation_actions_task(
+    fn start_audit_mitigation_actions_task(
         &self,
         input: StartAuditMitigationActionsTaskRequest,
-    ) -> Result<
-        StartAuditMitigationActionsTaskResponse,
-        RusotoError<StartAuditMitigationActionsTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartAuditMitigationActionsTaskResponse,
+                        RusotoError<StartAuditMitigationActionsTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Starts an on-demand Device Defender audit.</p>
-    async fn start_on_demand_audit_task(
+    fn start_on_demand_audit_task(
         &self,
         input: StartOnDemandAuditTaskRequest,
-    ) -> Result<StartOnDemandAuditTaskResponse, RusotoError<StartOnDemandAuditTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartOnDemandAuditTaskResponse,
+                        RusotoError<StartOnDemandAuditTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a bulk thing provisioning task.</p>
-    async fn start_thing_registration_task(
+    fn start_thing_registration_task(
         &self,
         input: StartThingRegistrationTaskRequest,
-    ) -> Result<StartThingRegistrationTaskResponse, RusotoError<StartThingRegistrationTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartThingRegistrationTaskResponse,
+                        RusotoError<StartThingRegistrationTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Cancels a bulk thing provisioning task.</p>
-    async fn stop_thing_registration_task(
+    fn stop_thing_registration_task(
         &self,
         input: StopThingRegistrationTaskRequest,
-    ) -> Result<StopThingRegistrationTaskResponse, RusotoError<StopThingRegistrationTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopThingRegistrationTaskResponse,
+                        RusotoError<StopThingRegistrationTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    async fn test_authorization(
+    fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
-    ) -> Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    async fn test_invoke_authorizer(
+    fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        TestInvokeAuthorizerResponse,
+                        RusotoError<TestInvokeAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
-    async fn transfer_certificate(
+    fn transfer_certificate(
         &self,
         input: TransferCertificateRequest,
-    ) -> Result<TransferCertificateResponse, RusotoError<TransferCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        TransferCertificateResponse,
+                        RusotoError<TransferCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    async fn update_account_audit_configuration(
+    fn update_account_audit_configuration(
         &self,
         input: UpdateAccountAuditConfigurationRequest,
-    ) -> Result<
-        UpdateAccountAuditConfigurationResponse,
-        RusotoError<UpdateAccountAuditConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateAccountAuditConfigurationResponse,
+                        RusotoError<UpdateAccountAuditConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Updates an authorizer.</p>
-    async fn update_authorizer(
+    fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
-    ) -> Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates information about the billing group.</p>
-    async fn update_billing_group(
+    fn update_billing_group(
         &self,
         input: UpdateBillingGroupRequest,
-    ) -> Result<UpdateBillingGroupResponse, RusotoError<UpdateBillingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateBillingGroupResponse,
+                        RusotoError<UpdateBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a registered CA certificate.</p>
-    async fn update_ca_certificate(
+    fn update_ca_certificate(
         &self,
         input: UpdateCACertificateRequest,
-    ) -> Result<(), RusotoError<UpdateCACertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<UpdateCACertificateError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
-    async fn update_certificate(
+    fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
-    ) -> Result<(), RusotoError<UpdateCertificateError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<UpdateCertificateError>>> + Send + 'static>,
+    >;
 
     /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn update_domain_configuration(
+    fn update_domain_configuration(
         &self,
         input: UpdateDomainConfigurationRequest,
-    ) -> Result<UpdateDomainConfigurationResponse, RusotoError<UpdateDomainConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDomainConfigurationResponse,
+                        RusotoError<UpdateDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a dynamic thing group.</p>
-    async fn update_dynamic_thing_group(
+    fn update_dynamic_thing_group(
         &self,
         input: UpdateDynamicThingGroupRequest,
-    ) -> Result<UpdateDynamicThingGroupResponse, RusotoError<UpdateDynamicThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDynamicThingGroupResponse,
+                        RusotoError<UpdateDynamicThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the event configurations.</p>
-    async fn update_event_configurations(
+    fn update_event_configurations(
         &self,
         input: UpdateEventConfigurationsRequest,
-    ) -> Result<UpdateEventConfigurationsResponse, RusotoError<UpdateEventConfigurationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateEventConfigurationsResponse,
+                        RusotoError<UpdateEventConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the search configuration.</p>
-    async fn update_indexing_configuration(
+    fn update_indexing_configuration(
         &self,
         input: UpdateIndexingConfigurationRequest,
-    ) -> Result<UpdateIndexingConfigurationResponse, RusotoError<UpdateIndexingConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateIndexingConfigurationResponse,
+                        RusotoError<UpdateIndexingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates supported fields of the specified job.</p>
-    async fn update_job(&self, input: UpdateJobRequest) -> Result<(), RusotoError<UpdateJobError>>;
+    fn update_job(
+        &self,
+        input: UpdateJobRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateJobError>>> + Send + 'static>>;
 
     /// <p>Updates the definition for the specified mitigation action.</p>
-    async fn update_mitigation_action(
+    fn update_mitigation_action(
         &self,
         input: UpdateMitigationActionRequest,
-    ) -> Result<UpdateMitigationActionResponse, RusotoError<UpdateMitigationActionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMitigationActionResponse,
+                        RusotoError<UpdateMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a fleet provisioning template.</p>
-    async fn update_provisioning_template(
+    fn update_provisioning_template(
         &self,
         input: UpdateProvisioningTemplateRequest,
-    ) -> Result<UpdateProvisioningTemplateResponse, RusotoError<UpdateProvisioningTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateProvisioningTemplateResponse,
+                        RusotoError<UpdateProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a role alias.</p>
-    async fn update_role_alias(
+    fn update_role_alias(
         &self,
         input: UpdateRoleAliasRequest,
-    ) -> Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a scheduled audit, including which checks are performed and how often the audit takes place.</p>
-    async fn update_scheduled_audit(
+    fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,
-    ) -> Result<UpdateScheduledAuditResponse, RusotoError<UpdateScheduledAuditError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateScheduledAuditResponse,
+                        RusotoError<UpdateScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a Device Defender security profile.</p>
-    async fn update_security_profile(
+    fn update_security_profile(
         &self,
         input: UpdateSecurityProfileRequest,
-    ) -> Result<UpdateSecurityProfileResponse, RusotoError<UpdateSecurityProfileError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateSecurityProfileResponse,
+                        RusotoError<UpdateSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
-    async fn update_stream(
+    fn update_stream(
         &self,
         input: UpdateStreamRequest,
-    ) -> Result<UpdateStreamResponse, RusotoError<UpdateStreamError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateStreamResponse, RusotoError<UpdateStreamError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the data for a thing.</p>
-    async fn update_thing(
+    fn update_thing(
         &self,
         input: UpdateThingRequest,
-    ) -> Result<UpdateThingResponse, RusotoError<UpdateThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateThingResponse, RusotoError<UpdateThingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update a thing group.</p>
-    async fn update_thing_group(
+    fn update_thing_group(
         &self,
         input: UpdateThingGroupRequest,
-    ) -> Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the groups to which the thing belongs.</p>
-    async fn update_thing_groups_for_thing(
+    fn update_thing_groups_for_thing(
         &self,
         input: UpdateThingGroupsForThingRequest,
-    ) -> Result<UpdateThingGroupsForThingResponse, RusotoError<UpdateThingGroupsForThingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateThingGroupsForThingResponse,
+                        RusotoError<UpdateThingGroupsForThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a topic rule destination. You use this to change the status, endpoint URL, or confirmation URL of the destination.</p>
-    async fn update_topic_rule_destination(
+    fn update_topic_rule_destination(
         &self,
         input: UpdateTopicRuleDestinationRequest,
-    ) -> Result<UpdateTopicRuleDestinationResponse, RusotoError<UpdateTopicRuleDestinationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTopicRuleDestinationResponse,
+                        RusotoError<UpdateTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Validates a Device Defender security profile behaviors specification.</p>
-    async fn validate_security_profile_behaviors(
+    fn validate_security_profile_behaviors(
         &self,
         input: ValidateSecurityProfileBehaviorsRequest,
-    ) -> Result<
-        ValidateSecurityProfileBehaviorsResponse,
-        RusotoError<ValidateSecurityProfileBehaviorsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ValidateSecurityProfileBehaviorsResponse,
+                        RusotoError<ValidateSecurityProfileBehaviorsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 }
 /// A client for the AWS IoT API.
@@ -21993,13 +23544,18 @@ impl IotClient {
     }
 }
 
-#[async_trait]
 impl Iot for IotClient {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
-    async fn accept_certificate_transfer(
+    fn accept_certificate_transfer(
         &self,
         input: AcceptCertificateTransferRequest,
-    ) -> Result<(), RusotoError<AcceptCertificateTransferError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<AcceptCertificateTransferError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/accept-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -22016,27 +23572,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AcceptCertificateTransferError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AcceptCertificateTransferError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a thing to a billing group.</p>
-    async fn add_thing_to_billing_group(
+    fn add_thing_to_billing_group(
         &self,
         input: AddThingToBillingGroupRequest,
-    ) -> Result<AddThingToBillingGroupResponse, RusotoError<AddThingToBillingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddThingToBillingGroupResponse,
+                        RusotoError<AddThingToBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/billing-groups/addThingToBillingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22046,28 +23612,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddThingToBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddThingToBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AddThingToBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AddThingToBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a thing to a thing group.</p>
-    async fn add_thing_to_thing_group(
+    fn add_thing_to_thing_group(
         &self,
         input: AddThingToThingGroupRequest,
-    ) -> Result<AddThingToThingGroupResponse, RusotoError<AddThingToThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AddThingToThingGroupResponse,
+                        RusotoError<AddThingToThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-groups/addThingToThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22077,28 +23653,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddThingToThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddThingToThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AddThingToThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AddThingToThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
-    async fn associate_targets_with_job(
+    fn associate_targets_with_job(
         &self,
         input: AssociateTargetsWithJobRequest,
-    ) -> Result<AssociateTargetsWithJobResponse, RusotoError<AssociateTargetsWithJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateTargetsWithJobResponse,
+                        RusotoError<AssociateTargetsWithJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22108,28 +23694,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateTargetsWithJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateTargetsWithJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateTargetsWithJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateTargetsWithJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Attaches a policy to the specified target.</p>
-    async fn attach_policy(
+    fn attach_policy(
         &self,
         input: AttachPolicyRequest,
-    ) -> Result<(), RusotoError<AttachPolicyError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<AttachPolicyError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -22142,27 +23729,33 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AttachPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
-    async fn attach_principal_policy(
+    fn attach_principal_policy(
         &self,
         input: AttachPrincipalPolicyRequest,
-    ) -> Result<(), RusotoError<AttachPrincipalPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<AttachPrincipalPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -22175,27 +23768,37 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachPrincipalPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AttachPrincipalPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates a Device Defender security profile with a thing group or this account. Each thing group or account can have up to five security profiles associated with it.</p>
-    async fn attach_security_profile(
+    fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
-    ) -> Result<AttachSecurityProfileResponse, RusotoError<AttachSecurityProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AttachSecurityProfileResponse,
+                        RusotoError<AttachSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -22213,28 +23816,38 @@ impl Iot for IotClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AttachSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AttachSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    async fn attach_thing_principal(
+    fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
-    ) -> Result<AttachThingPrincipalResponse, RusotoError<AttachThingPrincipalError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AttachThingPrincipalResponse,
+                        RusotoError<AttachThingPrincipalError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -22247,30 +23860,37 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachThingPrincipalResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AttachThingPrincipalResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachThingPrincipalError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AttachThingPrincipalError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels a mitigation action task that is in progress. If the task is not in progress, an InvalidRequestException occurs.</p>
-    async fn cancel_audit_mitigation_actions_task(
+    fn cancel_audit_mitigation_actions_task(
         &self,
         input: CancelAuditMitigationActionsTaskRequest,
-    ) -> Result<
-        CancelAuditMitigationActionsTaskResponse,
-        RusotoError<CancelAuditMitigationActionsTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelAuditMitigationActionsTaskResponse,
+                        RusotoError<CancelAuditMitigationActionsTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/audit/mitigationactions/tasks/{task_id}/cancel",
@@ -22282,30 +23902,36 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelAuditMitigationActionsTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelAuditMitigationActionsTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelAuditMitigationActionsTaskError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelAuditMitigationActionsTaskError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
-    async fn cancel_audit_task(
+    fn cancel_audit_task(
         &self,
         input: CancelAuditTaskRequest,
-    ) -> Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelAuditTaskResponse, RusotoError<CancelAuditTaskError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/audit/tasks/{task_id}/cancel", task_id = input.task_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22313,28 +23939,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelAuditTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelAuditTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelAuditTaskError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelAuditTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
-    async fn cancel_certificate_transfer(
+    fn cancel_certificate_transfer(
         &self,
         input: CancelCertificateTransferRequest,
-    ) -> Result<(), RusotoError<CancelCertificateTransferError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<CancelCertificateTransferError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/cancel-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -22345,27 +23977,33 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelCertificateTransferError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelCertificateTransferError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels a job.</p>
-    async fn cancel_job(
+    fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelJobResponse, RusotoError<CancelJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22381,28 +24019,30 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels the execution of a job for a given thing.</p>
-    async fn cancel_job_execution(
+    fn cancel_job_execution(
         &self,
         input: CancelJobExecutionRequest,
-    ) -> Result<(), RusotoError<CancelJobExecutionError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<CancelJobExecutionError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/cancel",
             job_id = input.job_id,
@@ -22422,26 +24062,36 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelJobExecutionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelJobExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Clears the default authorizer.</p>
-    async fn clear_default_authorizer(
+    fn clear_default_authorizer(
         &self,
-    ) -> Result<ClearDefaultAuthorizerResponse, RusotoError<ClearDefaultAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ClearDefaultAuthorizerResponse,
+                        RusotoError<ClearDefaultAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -22449,29 +24099,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClearDefaultAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ClearDefaultAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ClearDefaultAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ClearDefaultAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Confirms a topic rule destination. When you create a rule requiring a destination, AWS IoT sends a confirmation message to the endpoint or base address you specify. The message includes a token which you pass back when calling <code>ConfirmTopicRuleDestination</code> to confirm that you own or have access to the endpoint.</p>
-    async fn confirm_topic_rule_destination(
+    fn confirm_topic_rule_destination(
         &self,
         input: ConfirmTopicRuleDestinationRequest,
-    ) -> Result<ConfirmTopicRuleDestinationResponse, RusotoError<ConfirmTopicRuleDestinationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ConfirmTopicRuleDestinationResponse,
+                        RusotoError<ConfirmTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/confirmdestination/{confirmation_token}",
             confirmation_token = input.confirmation_token
@@ -22482,28 +24141,35 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfirmTopicRuleDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ConfirmTopicRuleDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ConfirmTopicRuleDestinationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ConfirmTopicRuleDestinationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an authorizer.</p>
-    async fn create_authorizer(
+    fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
-    ) -> Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateAuthorizerResponse, RusotoError<CreateAuthorizerError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -22516,28 +24182,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a billing group.</p>
-    async fn create_billing_group(
+    fn create_billing_group(
         &self,
         input: CreateBillingGroupRequest,
-    ) -> Result<CreateBillingGroupResponse, RusotoError<CreateBillingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateBillingGroupResponse,
+                        RusotoError<CreateBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -22550,28 +24226,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
-    async fn create_certificate_from_csr(
+    fn create_certificate_from_csr(
         &self,
         input: CreateCertificateFromCsrRequest,
-    ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateCertificateFromCsrResponse,
+                        RusotoError<CreateCertificateFromCsrError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22587,29 +24273,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCertificateFromCsrResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateCertificateFromCsrResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCertificateFromCsrError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateCertificateFromCsrError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn create_domain_configuration(
+    fn create_domain_configuration(
         &self,
         input: CreateDomainConfigurationRequest,
-    ) -> Result<CreateDomainConfigurationResponse, RusotoError<CreateDomainConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDomainConfigurationResponse,
+                        RusotoError<CreateDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -22622,28 +24317,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDomainConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDomainConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDomainConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDomainConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a dynamic thing group.</p>
-    async fn create_dynamic_thing_group(
+    fn create_dynamic_thing_group(
         &self,
         input: CreateDynamicThingGroupRequest,
-    ) -> Result<CreateDynamicThingGroupResponse, RusotoError<CreateDynamicThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDynamicThingGroupResponse,
+                        RusotoError<CreateDynamicThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -22656,28 +24361,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDynamicThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDynamicThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDynamicThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDynamicThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a job.</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22687,28 +24398,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
-    async fn create_keys_and_certificate(
+    fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
-    ) -> Result<CreateKeysAndCertificateResponse, RusotoError<CreateKeysAndCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateKeysAndCertificateResponse,
+                        RusotoError<CreateKeysAndCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/keys-and-certificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22722,28 +24443,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateKeysAndCertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateKeysAndCertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateKeysAndCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateKeysAndCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Defines an action that can be applied to audit findings by using StartAuditMitigationActionsTask. Each mitigation action can apply only one type of change.</p>
-    async fn create_mitigation_action(
+    fn create_mitigation_action(
         &self,
         input: CreateMitigationActionRequest,
-    ) -> Result<CreateMitigationActionResponse, RusotoError<CreateMitigationActionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateMitigationActionResponse,
+                        RusotoError<CreateMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -22756,28 +24487,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMitigationActionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMitigationActionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMitigationActionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMitigationActionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
-    async fn create_ota_update(
+    fn create_ota_update(
         &self,
         input: CreateOTAUpdateRequest,
-    ) -> Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateOTAUpdateResponse, RusotoError<CreateOTAUpdateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -22790,28 +24527,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateOTAUpdateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateOTAUpdateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateOTAUpdateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateOTAUpdateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
-    async fn create_policy(
+    fn create_policy(
         &self,
         input: CreatePolicyRequest,
-    ) -> Result<CreatePolicyResponse, RusotoError<CreatePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePolicyResponse, RusotoError<CreatePolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22821,28 +24564,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
-    async fn create_policy_version(
+    fn create_policy_version(
         &self,
         input: CreatePolicyVersionRequest,
-    ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePolicyVersionResponse,
+                        RusotoError<CreatePolicyVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -22861,28 +24614,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePolicyVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePolicyVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePolicyVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePolicyVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a provisioning claim.</p>
-    async fn create_provisioning_claim(
+    fn create_provisioning_claim(
         &self,
         input: CreateProvisioningClaimRequest,
-    ) -> Result<CreateProvisioningClaimResponse, RusotoError<CreateProvisioningClaimError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProvisioningClaimResponse,
+                        RusotoError<CreateProvisioningClaimError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}/provisioning-claim",
             template_name = input.template_name
@@ -22893,29 +24656,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProvisioningClaimResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateProvisioningClaimResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProvisioningClaimError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProvisioningClaimError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a fleet provisioning template.</p>
-    async fn create_provisioning_template(
+    fn create_provisioning_template(
         &self,
         input: CreateProvisioningTemplateRequest,
-    ) -> Result<CreateProvisioningTemplateResponse, RusotoError<CreateProvisioningTemplateError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProvisioningTemplateResponse,
+                        RusotoError<CreateProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/provisioning-templates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22925,30 +24697,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProvisioningTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateProvisioningTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProvisioningTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProvisioningTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new version of a fleet provisioning template.</p>
-    async fn create_provisioning_template_version(
+    fn create_provisioning_template_version(
         &self,
         input: CreateProvisioningTemplateVersionRequest,
-    ) -> Result<
-        CreateProvisioningTemplateVersionResponse,
-        RusotoError<CreateProvisioningTemplateVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateProvisioningTemplateVersionResponse,
+                        RusotoError<CreateProvisioningTemplateVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions",
@@ -22968,30 +24747,36 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProvisioningTemplateVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateProvisioningTemplateVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProvisioningTemplateVersionError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateProvisioningTemplateVersionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a role alias.</p>
-    async fn create_role_alias(
+    fn create_role_alias(
         &self,
         input: CreateRoleAliasRequest,
-    ) -> Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRoleAliasResponse, RusotoError<CreateRoleAliasError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23001,28 +24786,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRoleAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRoleAliasResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRoleAliasError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRoleAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
-    async fn create_scheduled_audit(
+    fn create_scheduled_audit(
         &self,
         input: CreateScheduledAuditRequest,
-    ) -> Result<CreateScheduledAuditResponse, RusotoError<CreateScheduledAuditError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateScheduledAuditResponse,
+                        RusotoError<CreateScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -23035,28 +24830,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateScheduledAuditResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateScheduledAuditResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateScheduledAuditError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateScheduledAuditError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a Device Defender security profile.</p>
-    async fn create_security_profile(
+    fn create_security_profile(
         &self,
         input: CreateSecurityProfileRequest,
-    ) -> Result<CreateSecurityProfileResponse, RusotoError<CreateSecurityProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSecurityProfileResponse,
+                        RusotoError<CreateSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -23069,28 +24874,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream.</p>
-    async fn create_stream(
+    fn create_stream(
         &self,
         input: CreateStreamRequest,
-    ) -> Result<CreateStreamResponse, RusotoError<CreateStreamError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateStreamResponse, RusotoError<CreateStreamError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23100,28 +24911,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateStreamResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateStreamResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateStreamError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateStreamError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    async fn create_thing(
+    fn create_thing(
         &self,
         input: CreateThingRequest,
-    ) -> Result<CreateThingResponse, RusotoError<CreateThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateThingResponse, RusotoError<CreateThingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23131,28 +24948,35 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    async fn create_thing_group(
+    fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
-    ) -> Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateThingGroupResponse, RusotoError<CreateThingGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -23165,28 +24989,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new thing type.</p>
-    async fn create_thing_type(
+    fn create_thing_type(
         &self,
         input: CreateThingTypeRequest,
-    ) -> Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateThingTypeResponse, RusotoError<CreateThingTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -23199,28 +25029,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateThingTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateThingTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateThingTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateThingTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    async fn create_topic_rule(
+    fn create_topic_rule(
         &self,
         input: CreateTopicRuleRequest,
-    ) -> Result<(), RusotoError<CreateTopicRuleError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<CreateTopicRuleError>>> + Send + 'static>>
+    {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23234,28 +25065,37 @@ impl Iot for IotClient {
             request.add_header("x-amz-tagging", &tags.to_string());
         }
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTopicRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTopicRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a topic rule destination. The destination must be confirmed prior to use.</p>
-    async fn create_topic_rule_destination(
+    fn create_topic_rule_destination(
         &self,
         input: CreateTopicRuleDestinationRequest,
-    ) -> Result<CreateTopicRuleDestinationResponse, RusotoError<CreateTopicRuleDestinationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateTopicRuleDestinationResponse,
+                        RusotoError<CreateTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/destinations";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23265,30 +25105,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTopicRuleDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTopicRuleDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTopicRuleDestinationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTopicRuleDestinationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
-    async fn delete_account_audit_configuration(
+    fn delete_account_audit_configuration(
         &self,
         input: DeleteAccountAuditConfigurationRequest,
-    ) -> Result<
-        DeleteAccountAuditConfigurationResponse,
-        RusotoError<DeleteAccountAuditConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteAccountAuditConfigurationResponse,
+                        RusotoError<DeleteAccountAuditConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/audit/configuration";
 
@@ -23303,30 +25150,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAccountAuditConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteAccountAuditConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAccountAuditConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAccountAuditConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an authorizer.</p>
-    async fn delete_authorizer(
+    fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
-    ) -> Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteAuthorizerResponse, RusotoError<DeleteAuthorizerError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -23337,28 +25191,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the billing group.</p>
-    async fn delete_billing_group(
+    fn delete_billing_group(
         &self,
         input: DeleteBillingGroupRequest,
-    ) -> Result<DeleteBillingGroupResponse, RusotoError<DeleteBillingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteBillingGroupResponse,
+                        RusotoError<DeleteBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -23375,28 +25239,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a registered CA certificate.</p>
-    async fn delete_ca_certificate(
+    fn delete_ca_certificate(
         &self,
         input: DeleteCACertificateRequest,
-    ) -> Result<DeleteCACertificateResponse, RusotoError<DeleteCACertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteCACertificateResponse,
+                        RusotoError<DeleteCACertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -23407,28 +25281,30 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCACertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteCACertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCACertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteCACertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy or IoT thing attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
-    async fn delete_certificate(
+    fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
-    ) -> Result<(), RusotoError<DeleteCertificateError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteCertificateError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -23445,28 +25321,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn delete_domain_configuration(
+    fn delete_domain_configuration(
         &self,
         input: DeleteDomainConfigurationRequest,
-    ) -> Result<DeleteDomainConfigurationResponse, RusotoError<DeleteDomainConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDomainConfigurationResponse,
+                        RusotoError<DeleteDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -23477,28 +25362,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDomainConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDomainConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDomainConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDomainConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a dynamic thing group.</p>
-    async fn delete_dynamic_thing_group(
+    fn delete_dynamic_thing_group(
         &self,
         input: DeleteDynamicThingGroupRequest,
-    ) -> Result<DeleteDynamicThingGroupResponse, RusotoError<DeleteDynamicThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDynamicThingGroupResponse,
+                        RusotoError<DeleteDynamicThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -23515,25 +25410,29 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDynamicThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDynamicThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDynamicThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDynamicThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
-    async fn delete_job(&self, input: DeleteJobRequest) -> Result<(), RusotoError<DeleteJobError>> {
+    fn delete_job(
+        &self,
+        input: DeleteJobRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteJobError>>> + Send + 'static>>
+    {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23547,27 +25446,29 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a job execution.</p>
-    async fn delete_job_execution(
+    fn delete_job_execution(
         &self,
         input: DeleteJobExecutionRequest,
-    ) -> Result<(), RusotoError<DeleteJobExecutionError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteJobExecutionError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/executionNumber/{execution_number}",
             execution_number = input.execution_number,
@@ -23586,27 +25487,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteJobExecutionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteJobExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a defined mitigation action from your AWS account.</p>
-    async fn delete_mitigation_action(
+    fn delete_mitigation_action(
         &self,
         input: DeleteMitigationActionRequest,
-    ) -> Result<DeleteMitigationActionResponse, RusotoError<DeleteMitigationActionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteMitigationActionResponse,
+                        RusotoError<DeleteMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -23617,28 +25528,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMitigationActionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMitigationActionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMitigationActionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMitigationActionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an OTA update.</p>
-    async fn delete_ota_update(
+    fn delete_ota_update(
         &self,
         input: DeleteOTAUpdateRequest,
-    ) -> Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteOTAUpdateResponse, RusotoError<DeleteOTAUpdateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -23658,28 +25575,29 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteOTAUpdateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteOTAUpdateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteOTAUpdateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteOTAUpdateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    async fn delete_policy(
+    fn delete_policy(
         &self,
         input: DeletePolicyRequest,
-    ) -> Result<(), RusotoError<DeletePolicyError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeletePolicyError>>> + Send + 'static>>
+    {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23687,27 +25605,31 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
-    async fn delete_policy_version(
+    fn delete_policy_version(
         &self,
         input: DeletePolicyVersionRequest,
-    ) -> Result<(), RusotoError<DeletePolicyVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeletePolicyVersionError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -23719,28 +25641,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePolicyVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePolicyVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a fleet provisioning template.</p>
-    async fn delete_provisioning_template(
+    fn delete_provisioning_template(
         &self,
         input: DeleteProvisioningTemplateRequest,
-    ) -> Result<DeleteProvisioningTemplateResponse, RusotoError<DeleteProvisioningTemplateError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteProvisioningTemplateResponse,
+                        RusotoError<DeleteProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}",
             template_name = input.template_name
@@ -23751,30 +25682,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProvisioningTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteProvisioningTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProvisioningTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteProvisioningTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a fleet provisioning template version.</p>
-    async fn delete_provisioning_template_version(
+    fn delete_provisioning_template_version(
         &self,
         input: DeleteProvisioningTemplateVersionRequest,
-    ) -> Result<
-        DeleteProvisioningTemplateVersionResponse,
-        RusotoError<DeleteProvisioningTemplateVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteProvisioningTemplateVersionResponse,
+                        RusotoError<DeleteProvisioningTemplateVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions/{version_id}",
@@ -23787,29 +25725,39 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProvisioningTemplateVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteProvisioningTemplateVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProvisioningTemplateVersionError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteProvisioningTemplateVersionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a CA certificate registration code.</p>
-    async fn delete_registration_code(
+    fn delete_registration_code(
         &self,
-    ) -> Result<DeleteRegistrationCodeResponse, RusotoError<DeleteRegistrationCodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteRegistrationCodeResponse,
+                        RusotoError<DeleteRegistrationCodeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23817,28 +25765,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRegistrationCodeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteRegistrationCodeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRegistrationCodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRegistrationCodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a role alias</p>
-    async fn delete_role_alias(
+    fn delete_role_alias(
         &self,
         input: DeleteRoleAliasRequest,
-    ) -> Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRoleAliasResponse, RusotoError<DeleteRoleAliasError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23846,28 +25800,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRoleAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteRoleAliasResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRoleAliasError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRoleAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a scheduled audit.</p>
-    async fn delete_scheduled_audit(
+    fn delete_scheduled_audit(
         &self,
         input: DeleteScheduledAuditRequest,
-    ) -> Result<DeleteScheduledAuditResponse, RusotoError<DeleteScheduledAuditError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteScheduledAuditResponse,
+                        RusotoError<DeleteScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -23878,28 +25842,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteScheduledAuditResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteScheduledAuditResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteScheduledAuditError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteScheduledAuditError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a Device Defender security profile.</p>
-    async fn delete_security_profile(
+    fn delete_security_profile(
         &self,
         input: DeleteSecurityProfileRequest,
-    ) -> Result<DeleteSecurityProfileResponse, RusotoError<DeleteSecurityProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSecurityProfileResponse,
+                        RusotoError<DeleteSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -23916,28 +25890,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a stream.</p>
-    async fn delete_stream(
+    fn delete_stream(
         &self,
         input: DeleteStreamRequest,
-    ) -> Result<DeleteStreamResponse, RusotoError<DeleteStreamError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteStreamResponse, RusotoError<DeleteStreamError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23945,28 +25925,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteStreamResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteStreamResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteStreamError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteStreamError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
-    async fn delete_thing(
+    fn delete_thing(
         &self,
         input: DeleteThingRequest,
-    ) -> Result<DeleteThingResponse, RusotoError<DeleteThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteThingResponse, RusotoError<DeleteThingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -23980,28 +25966,35 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a thing group.</p>
-    async fn delete_thing_group(
+    fn delete_thing_group(
         &self,
         input: DeleteThingGroupRequest,
-    ) -> Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteThingGroupResponse, RusotoError<DeleteThingGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -24018,28 +26011,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
-    async fn delete_thing_type(
+    fn delete_thing_type(
         &self,
         input: DeleteThingTypeRequest,
-    ) -> Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteThingTypeResponse, RusotoError<DeleteThingTypeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -24050,28 +26049,29 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteThingTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteThingTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteThingTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteThingTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the rule.</p>
-    async fn delete_topic_rule(
+    fn delete_topic_rule(
         &self,
         input: DeleteTopicRuleRequest,
-    ) -> Result<(), RusotoError<DeleteTopicRuleError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteTopicRuleError>>> + Send + 'static>>
+    {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24079,28 +26079,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTopicRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTopicRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a topic rule destination.</p>
-    async fn delete_topic_rule_destination(
+    fn delete_topic_rule_destination(
         &self,
         input: DeleteTopicRuleDestinationRequest,
-    ) -> Result<DeleteTopicRuleDestinationResponse, RusotoError<DeleteTopicRuleDestinationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteTopicRuleDestinationResponse,
+                        RusotoError<DeleteTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/destinations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24108,28 +26117,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTopicRuleDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteTopicRuleDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTopicRuleDestinationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTopicRuleDestinationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a logging level.</p>
-    async fn delete_v2_logging_level(
+    fn delete_v2_logging_level(
         &self,
         input: DeleteV2LoggingLevelRequest,
-    ) -> Result<(), RusotoError<DeleteV2LoggingLevelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteV2LoggingLevelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -24142,27 +26157,37 @@ impl Iot for IotClient {
         params.put("targetType", &input.target_type);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteV2LoggingLevelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteV2LoggingLevelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
-    async fn deprecate_thing_type(
+    fn deprecate_thing_type(
         &self,
         input: DeprecateThingTypeRequest,
-    ) -> Result<DeprecateThingTypeResponse, RusotoError<DeprecateThingTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeprecateThingTypeResponse,
+                        RusotoError<DeprecateThingTypeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-types/{thing_type_name}/deprecate",
             thing_type_name = input.thing_type_name
@@ -24175,29 +26200,36 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprecateThingTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeprecateThingTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeprecateThingTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeprecateThingTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    async fn describe_account_audit_configuration(
+    fn describe_account_audit_configuration(
         &self,
-    ) -> Result<
-        DescribeAccountAuditConfigurationResponse,
-        RusotoError<DescribeAccountAuditConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAccountAuditConfigurationResponse,
+                        RusotoError<DescribeAccountAuditConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/audit/configuration";
 
@@ -24206,30 +26238,40 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAccountAuditConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAccountAuditConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAccountAuditConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAccountAuditConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a single audit finding. Properties include the reason for noncompliance, the severity of the issue, and when the audit that returned the finding was started.</p>
-    async fn describe_audit_finding(
+    fn describe_audit_finding(
         &self,
         input: DescribeAuditFindingRequest,
-    ) -> Result<DescribeAuditFindingResponse, RusotoError<DescribeAuditFindingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAuditFindingResponse,
+                        RusotoError<DescribeAuditFindingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/audit/findings/{finding_id}",
             finding_id = input.finding_id
@@ -24240,30 +26282,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuditFindingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAuditFindingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAuditFindingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAuditFindingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about an audit mitigation task that is used to apply mitigation actions to a set of audit findings. Properties include the actions being applied, the audit checks to which they're being applied, the task status, and aggregated task statistics.</p>
-    async fn describe_audit_mitigation_actions_task(
+    fn describe_audit_mitigation_actions_task(
         &self,
         input: DescribeAuditMitigationActionsTaskRequest,
-    ) -> Result<
-        DescribeAuditMitigationActionsTaskResponse,
-        RusotoError<DescribeAuditMitigationActionsTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAuditMitigationActionsTaskResponse,
+                        RusotoError<DescribeAuditMitigationActionsTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/audit/mitigationactions/tasks/{task_id}",
@@ -24275,30 +26324,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuditMitigationActionsTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAuditMitigationActionsTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAuditMitigationActionsTaskError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAuditMitigationActionsTaskError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a Device Defender audit.</p>
-    async fn describe_audit_task(
+    fn describe_audit_task(
         &self,
         input: DescribeAuditTaskRequest,
-    ) -> Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeAuditTaskResponse, RusotoError<DescribeAuditTaskError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/audit/tasks/{task_id}", task_id = input.task_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24306,28 +26362,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuditTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAuditTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAuditTaskError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAuditTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an authorizer.</p>
-    async fn describe_authorizer(
+    fn describe_authorizer(
         &self,
         input: DescribeAuthorizerRequest,
-    ) -> Result<DescribeAuthorizerResponse, RusotoError<DescribeAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeAuthorizerResponse,
+                        RusotoError<DescribeAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -24338,28 +26404,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a billing group.</p>
-    async fn describe_billing_group(
+    fn describe_billing_group(
         &self,
         input: DescribeBillingGroupRequest,
-    ) -> Result<DescribeBillingGroupResponse, RusotoError<DescribeBillingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeBillingGroupResponse,
+                        RusotoError<DescribeBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -24370,28 +26446,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a registered CA certificate.</p>
-    async fn describe_ca_certificate(
+    fn describe_ca_certificate(
         &self,
         input: DescribeCACertificateRequest,
-    ) -> Result<DescribeCACertificateResponse, RusotoError<DescribeCACertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeCACertificateResponse,
+                        RusotoError<DescribeCACertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -24402,28 +26488,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCACertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeCACertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCACertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeCACertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the specified certificate.</p>
-    async fn describe_certificate(
+    fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
-    ) -> Result<DescribeCertificateResponse, RusotoError<DescribeCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeCertificateResponse,
+                        RusotoError<DescribeCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -24434,28 +26530,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeCertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the default authorizer.</p>
-    async fn describe_default_authorizer(
+    fn describe_default_authorizer(
         &self,
-    ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDefaultAuthorizerResponse,
+                        RusotoError<DescribeDefaultAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24463,29 +26568,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDefaultAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDefaultAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDefaultAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDefaultAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn describe_domain_configuration(
+    fn describe_domain_configuration(
         &self,
         input: DescribeDomainConfigurationRequest,
-    ) -> Result<DescribeDomainConfigurationResponse, RusotoError<DescribeDomainConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDomainConfigurationResponse,
+                        RusotoError<DescribeDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -24496,28 +26610,35 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDomainConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDomainConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDomainConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDomainConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    async fn describe_endpoint(
+    fn describe_endpoint(
         &self,
         input: DescribeEndpointRequest,
-    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/endpoint";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24531,28 +26652,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEndpointResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEndpointError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes event configurations.</p>
-    async fn describe_event_configurations(
+    fn describe_event_configurations(
         &self,
-    ) -> Result<DescribeEventConfigurationsResponse, RusotoError<DescribeEventConfigurationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEventConfigurationsResponse,
+                        RusotoError<DescribeEventConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24560,28 +26690,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEventConfigurationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEventConfigurationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEventConfigurationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEventConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a search index.</p>
-    async fn describe_index(
+    fn describe_index(
         &self,
         input: DescribeIndexRequest,
-    ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24589,28 +26725,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeIndexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeIndexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeIndexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeIndexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a job.</p>
-    async fn describe_job(
+    fn describe_job(
         &self,
         input: DescribeJobRequest,
-    ) -> Result<DescribeJobResponse, RusotoError<DescribeJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeJobResponse, RusotoError<DescribeJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24618,28 +26760,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a job execution.</p>
-    async fn describe_job_execution(
+    fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeJobExecutionResponse,
+                        RusotoError<DescribeJobExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -24657,28 +26809,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJobExecutionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeJobExecutionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeJobExecutionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeJobExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a mitigation action.</p>
-    async fn describe_mitigation_action(
+    fn describe_mitigation_action(
         &self,
         input: DescribeMitigationActionRequest,
-    ) -> Result<DescribeMitigationActionResponse, RusotoError<DescribeMitigationActionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeMitigationActionResponse,
+                        RusotoError<DescribeMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -24689,29 +26851,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMitigationActionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMitigationActionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMitigationActionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMitigationActionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a fleet provisioning template.</p>
-    async fn describe_provisioning_template(
+    fn describe_provisioning_template(
         &self,
         input: DescribeProvisioningTemplateRequest,
-    ) -> Result<DescribeProvisioningTemplateResponse, RusotoError<DescribeProvisioningTemplateError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProvisioningTemplateResponse,
+                        RusotoError<DescribeProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}",
             template_name = input.template_name
@@ -24722,30 +26893,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProvisioningTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProvisioningTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProvisioningTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProvisioningTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a fleet provisioning template version.</p>
-    async fn describe_provisioning_template_version(
+    fn describe_provisioning_template_version(
         &self,
         input: DescribeProvisioningTemplateVersionRequest,
-    ) -> Result<
-        DescribeProvisioningTemplateVersionResponse,
-        RusotoError<DescribeProvisioningTemplateVersionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeProvisioningTemplateVersionResponse,
+                        RusotoError<DescribeProvisioningTemplateVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions/{version_id}",
@@ -24758,30 +26936,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProvisioningTemplateVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeProvisioningTemplateVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProvisioningTemplateVersionError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeProvisioningTemplateVersionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a role alias.</p>
-    async fn describe_role_alias(
+    fn describe_role_alias(
         &self,
         input: DescribeRoleAliasRequest,
-    ) -> Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeRoleAliasResponse, RusotoError<DescribeRoleAliasError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24789,28 +26974,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRoleAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRoleAliasResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRoleAliasError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRoleAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a scheduled audit.</p>
-    async fn describe_scheduled_audit(
+    fn describe_scheduled_audit(
         &self,
         input: DescribeScheduledAuditRequest,
-    ) -> Result<DescribeScheduledAuditResponse, RusotoError<DescribeScheduledAuditError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeScheduledAuditResponse,
+                        RusotoError<DescribeScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -24821,28 +27016,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeScheduledAuditResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeScheduledAuditResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeScheduledAuditError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeScheduledAuditError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a Device Defender security profile.</p>
-    async fn describe_security_profile(
+    fn describe_security_profile(
         &self,
         input: DescribeSecurityProfileRequest,
-    ) -> Result<DescribeSecurityProfileResponse, RusotoError<DescribeSecurityProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSecurityProfileResponse,
+                        RusotoError<DescribeSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -24853,28 +27058,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a stream.</p>
-    async fn describe_stream(
+    fn describe_stream(
         &self,
         input: DescribeStreamRequest,
-    ) -> Result<DescribeStreamResponse, RusotoError<DescribeStreamError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStreamResponse, RusotoError<DescribeStreamError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24882,28 +27093,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeStreamResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeStreamResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStreamError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeStreamError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the specified thing.</p>
-    async fn describe_thing(
+    fn describe_thing(
         &self,
         input: DescribeThingRequest,
-    ) -> Result<DescribeThingResponse, RusotoError<DescribeThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeThingResponse, RusotoError<DescribeThingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -24911,28 +27128,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe a thing group.</p>
-    async fn describe_thing_group(
+    fn describe_thing_group(
         &self,
         input: DescribeThingGroupRequest,
-    ) -> Result<DescribeThingGroupResponse, RusotoError<DescribeThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeThingGroupResponse,
+                        RusotoError<DescribeThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -24943,30 +27170,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a bulk thing provisioning task.</p>
-    async fn describe_thing_registration_task(
+    fn describe_thing_registration_task(
         &self,
         input: DescribeThingRegistrationTaskRequest,
-    ) -> Result<
-        DescribeThingRegistrationTaskResponse,
-        RusotoError<DescribeThingRegistrationTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeThingRegistrationTaskResponse,
+                        RusotoError<DescribeThingRegistrationTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}",
@@ -24978,28 +27212,35 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingRegistrationTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeThingRegistrationTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeThingRegistrationTaskError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeThingRegistrationTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the specified thing type.</p>
-    async fn describe_thing_type(
+    fn describe_thing_type(
         &self,
         input: DescribeThingTypeRequest,
-    ) -> Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeThingTypeResponse, RusotoError<DescribeThingTypeError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -25010,28 +27251,29 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeThingTypeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeThingTypeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeThingTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeThingTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Detaches a policy from the specified target.</p>
-    async fn detach_policy(
+    fn detach_policy(
         &self,
         input: DetachPolicyRequest,
-    ) -> Result<(), RusotoError<DetachPolicyError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DetachPolicyError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -25044,27 +27286,33 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DetachPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
-    async fn detach_principal_policy(
+    fn detach_principal_policy(
         &self,
         input: DetachPrincipalPolicyRequest,
-    ) -> Result<(), RusotoError<DetachPrincipalPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DetachPrincipalPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -25077,27 +27325,37 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachPrincipalPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DetachPrincipalPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
-    async fn detach_security_profile(
+    fn detach_security_profile(
         &self,
         input: DetachSecurityProfileRequest,
-    ) -> Result<DetachSecurityProfileResponse, RusotoError<DetachSecurityProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetachSecurityProfileResponse,
+                        RusotoError<DetachSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
             security_profile_name = input.security_profile_name
@@ -25115,28 +27373,38 @@ impl Iot for IotClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetachSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DetachSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
-    async fn detach_thing_principal(
+    fn detach_thing_principal(
         &self,
         input: DetachThingPrincipalRequest,
-    ) -> Result<DetachThingPrincipalResponse, RusotoError<DetachThingPrincipalError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetachThingPrincipalResponse,
+                        RusotoError<DetachThingPrincipalError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -25149,28 +27417,30 @@ impl Iot for IotClient {
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachThingPrincipalResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetachThingPrincipalResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachThingPrincipalError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DetachThingPrincipalError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Disables the rule.</p>
-    async fn disable_topic_rule(
+    fn disable_topic_rule(
         &self,
         input: DisableTopicRuleRequest,
-    ) -> Result<(), RusotoError<DisableTopicRuleError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DisableTopicRuleError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25178,27 +27448,28 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisableTopicRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisableTopicRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enables the rule.</p>
-    async fn enable_topic_rule(
+    fn enable_topic_rule(
         &self,
         input: EnableTopicRuleRequest,
-    ) -> Result<(), RusotoError<EnableTopicRuleError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<EnableTopicRuleError>>> + Send + 'static>>
+    {
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25206,27 +27477,33 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(EnableTopicRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(EnableTopicRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the approximate count of unique values that match the query.</p>
-    async fn get_cardinality(
+    fn get_cardinality(
         &self,
         input: GetCardinalityRequest,
-    ) -> Result<GetCardinalityResponse, RusotoError<GetCardinalityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetCardinalityResponse, RusotoError<GetCardinalityError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indices/cardinality";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25236,28 +27513,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCardinalityResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetCardinalityResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCardinalityError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetCardinalityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
-    async fn get_effective_policies(
+    fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
-    ) -> Result<GetEffectivePoliciesResponse, RusotoError<GetEffectivePoliciesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetEffectivePoliciesResponse,
+                        RusotoError<GetEffectivePoliciesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/effective-policies";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25273,27 +27560,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEffectivePoliciesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEffectivePoliciesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEffectivePoliciesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEffectivePoliciesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the indexing configuration.</p>
-    async fn get_indexing_configuration(
+    fn get_indexing_configuration(
         &self,
-    ) -> Result<GetIndexingConfigurationResponse, RusotoError<GetIndexingConfigurationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetIndexingConfigurationResponse,
+                        RusotoError<GetIndexingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25301,28 +27598,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIndexingConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetIndexingConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetIndexingConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetIndexingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a job document.</p>
-    async fn get_job_document(
+    fn get_job_document(
         &self,
         input: GetJobDocumentRequest,
-    ) -> Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetJobDocumentResponse, RusotoError<GetJobDocumentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25330,27 +27633,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetJobDocumentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetJobDocumentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobDocumentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetJobDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
-    async fn get_logging_options(
+    fn get_logging_options(
         &self,
-    ) -> Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetLoggingOptionsResponse, RusotoError<GetLoggingOptionsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25358,28 +27668,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLoggingOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetLoggingOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLoggingOptionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetLoggingOptionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets an OTA update.</p>
-    async fn get_ota_update(
+    fn get_ota_update(
         &self,
         input: GetOTAUpdateRequest,
-    ) -> Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOTAUpdateResponse, RusotoError<GetOTAUpdateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -25390,28 +27706,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOTAUpdateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetOTAUpdateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOTAUpdateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOTAUpdateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Groups the aggregated values that match the query into percentile groupings. The default percentile groupings are: 1,5,25,50,75,95,99, although you can specify your own when you call <code>GetPercentiles</code>. This function returns a value for each percentile group specified (or the default percentile groupings). The percentile group "1" contains the aggregated field value that occurs in approximately one percent of the values that match the query. The percentile group "5" contains the aggregated field value that occurs in approximately five percent of the values that match the query, and so on. The result is an approximation, the more values that match the query, the more accurate the percentile values.</p>
-    async fn get_percentiles(
+    fn get_percentiles(
         &self,
         input: GetPercentilesRequest,
-    ) -> Result<GetPercentilesResponse, RusotoError<GetPercentilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPercentilesResponse, RusotoError<GetPercentilesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indices/percentiles";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25421,28 +27743,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPercentilesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPercentilesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPercentilesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPercentilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    async fn get_policy(
+    fn get_policy(
         &self,
         input: GetPolicyRequest,
-    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPolicyResponse, RusotoError<GetPolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25450,28 +27778,35 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the specified policy version.</p>
-    async fn get_policy_version(
+    fn get_policy_version(
         &self,
         input: GetPolicyVersionRequest,
-    ) -> Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -25483,27 +27818,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPolicyVersionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPolicyVersionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPolicyVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPolicyVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
-    async fn get_registration_code(
+    fn get_registration_code(
         &self,
-    ) -> Result<GetRegistrationCodeResponse, RusotoError<GetRegistrationCodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRegistrationCodeResponse,
+                        RusotoError<GetRegistrationCodeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25511,28 +27856,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRegistrationCodeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRegistrationCodeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRegistrationCodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRegistrationCodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the count, average, sum, minimum, maximum, sum of squares, variance, and standard deviation for the specified aggregated field. If the aggregation field is of type <code>String</code>, only the count statistic is returned.</p>
-    async fn get_statistics(
+    fn get_statistics(
         &self,
         input: GetStatisticsRequest,
-    ) -> Result<GetStatisticsResponse, RusotoError<GetStatisticsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetStatisticsResponse, RusotoError<GetStatisticsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indices/statistics";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25542,28 +27893,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetStatisticsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetStatisticsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetStatisticsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetStatisticsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the rule.</p>
-    async fn get_topic_rule(
+    fn get_topic_rule(
         &self,
         input: GetTopicRuleRequest,
-    ) -> Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetTopicRuleResponse, RusotoError<GetTopicRuleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25571,28 +27928,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTopicRuleResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTopicRuleResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTopicRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTopicRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a topic rule destination.</p>
-    async fn get_topic_rule_destination(
+    fn get_topic_rule_destination(
         &self,
         input: GetTopicRuleDestinationRequest,
-    ) -> Result<GetTopicRuleDestinationResponse, RusotoError<GetTopicRuleDestinationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetTopicRuleDestinationResponse,
+                        RusotoError<GetTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/destinations/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25600,27 +27967,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTopicRuleDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetTopicRuleDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTopicRuleDestinationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTopicRuleDestinationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the fine grained logging options.</p>
-    async fn get_v2_logging_options(
+    fn get_v2_logging_options(
         &self,
-    ) -> Result<GetV2LoggingOptionsResponse, RusotoError<GetV2LoggingOptionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetV2LoggingOptionsResponse,
+                        RusotoError<GetV2LoggingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25628,28 +28005,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetV2LoggingOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetV2LoggingOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetV2LoggingOptionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetV2LoggingOptionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the active violations for a given Device Defender security profile.</p>
-    async fn list_active_violations(
+    fn list_active_violations(
         &self,
         input: ListActiveViolationsRequest,
-    ) -> Result<ListActiveViolationsResponse, RusotoError<ListActiveViolationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListActiveViolationsResponse,
+                        RusotoError<ListActiveViolationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/active-violations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25672,28 +28059,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListActiveViolationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListActiveViolationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListActiveViolationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListActiveViolationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the policies attached to the specified thing group.</p>
-    async fn list_attached_policies(
+    fn list_attached_policies(
         &self,
         input: ListAttachedPoliciesRequest,
-    ) -> Result<ListAttachedPoliciesResponse, RusotoError<ListAttachedPoliciesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAttachedPoliciesResponse,
+                        RusotoError<ListAttachedPoliciesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/attached-policies/{target}", target = input.target);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25713,28 +28110,35 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAttachedPoliciesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAttachedPoliciesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAttachedPoliciesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAttachedPoliciesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
-    async fn list_audit_findings(
+    fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
-    ) -> Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListAuditFindingsResponse, RusotoError<ListAuditFindingsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/audit/findings";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -25744,30 +28148,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuditFindingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAuditFindingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAuditFindingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAuditFindingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the status of audit mitigation action tasks that were executed.</p>
-    async fn list_audit_mitigation_actions_executions(
+    fn list_audit_mitigation_actions_executions(
         &self,
         input: ListAuditMitigationActionsExecutionsRequest,
-    ) -> Result<
-        ListAuditMitigationActionsExecutionsResponse,
-        RusotoError<ListAuditMitigationActionsExecutionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAuditMitigationActionsExecutionsResponse,
+                        RusotoError<ListAuditMitigationActionsExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/audit/mitigationactions/executions";
 
@@ -25790,32 +28201,39 @@ impl Iot for IotClient {
         params.put("taskId", &input.task_id);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuditMitigationActionsExecutionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAuditMitigationActionsExecutionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAuditMitigationActionsExecutionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAuditMitigationActionsExecutionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of audit mitigation action tasks that match the specified filters.</p>
-    async fn list_audit_mitigation_actions_tasks(
+    fn list_audit_mitigation_actions_tasks(
         &self,
         input: ListAuditMitigationActionsTasksRequest,
-    ) -> Result<
-        ListAuditMitigationActionsTasksResponse,
-        RusotoError<ListAuditMitigationActionsTasksError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAuditMitigationActionsTasksResponse,
+                        RusotoError<ListAuditMitigationActionsTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/audit/mitigationactions/tasks";
 
@@ -25844,30 +28262,36 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuditMitigationActionsTasksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAuditMitigationActionsTasksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAuditMitigationActionsTasksError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAuditMitigationActionsTasksError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
-    async fn list_audit_tasks(
+    fn list_audit_tasks(
         &self,
         input: ListAuditTasksRequest,
-    ) -> Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAuditTasksResponse, RusotoError<ListAuditTasksError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/audit/tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25892,28 +28316,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuditTasksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAuditTasksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAuditTasksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAuditTasksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the authorizers registered in your account.</p>
-    async fn list_authorizers(
+    fn list_authorizers(
         &self,
         input: ListAuthorizersRequest,
-    ) -> Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAuthorizersResponse, RusotoError<ListAuthorizersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/authorizers/";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25936,28 +28366,35 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAuthorizersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAuthorizersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAuthorizersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAuthorizersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the billing groups you have created.</p>
-    async fn list_billing_groups(
+    fn list_billing_groups(
         &self,
         input: ListBillingGroupsRequest,
-    ) -> Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListBillingGroupsResponse, RusotoError<ListBillingGroupsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/billing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -25977,28 +28414,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBillingGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBillingGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBillingGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBillingGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    async fn list_ca_certificates(
+    fn list_ca_certificates(
         &self,
         input: ListCACertificatesRequest,
-    ) -> Result<ListCACertificatesResponse, RusotoError<ListCACertificatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCACertificatesResponse,
+                        RusotoError<ListCACertificatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/cacertificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26018,28 +28465,35 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCACertificatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListCACertificatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCACertificatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCACertificatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    async fn list_certificates(
+    fn list_certificates(
         &self,
         input: ListCertificatesRequest,
-    ) -> Result<ListCertificatesResponse, RusotoError<ListCertificatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListCertificatesResponse, RusotoError<ListCertificatesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26059,28 +28513,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCertificatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListCertificatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCertificatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCertificatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
-    async fn list_certificates_by_ca(
+    fn list_certificates_by_ca(
         &self,
         input: ListCertificatesByCARequest,
-    ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListCertificatesByCAResponse,
+                        RusotoError<ListCertificatesByCAError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/certificates-by-ca/{ca_certificate_id}",
             ca_certificate_id = input.ca_certificate_id
@@ -26103,28 +28567,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCertificatesByCAResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListCertificatesByCAResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCertificatesByCAError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListCertificatesByCAError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn list_domain_configurations(
+    fn list_domain_configurations(
         &self,
         input: ListDomainConfigurationsRequest,
-    ) -> Result<ListDomainConfigurationsResponse, RusotoError<ListDomainConfigurationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDomainConfigurationsResponse,
+                        RusotoError<ListDomainConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/domainConfigurations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26144,28 +28618,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDomainConfigurationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDomainConfigurationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDomainConfigurationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDomainConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the search indices.</p>
-    async fn list_indices(
+    fn list_indices(
         &self,
         input: ListIndicesRequest,
-    ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListIndicesResponse, RusotoError<ListIndicesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indices";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26182,28 +28662,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListIndicesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListIndicesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListIndicesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListIndicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the job executions for a job.</p>
-    async fn list_job_executions_for_job(
+    fn list_job_executions_for_job(
         &self,
         input: ListJobExecutionsForJobRequest,
-    ) -> Result<ListJobExecutionsForJobResponse, RusotoError<ListJobExecutionsForJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJobExecutionsForJobResponse,
+                        RusotoError<ListJobExecutionsForJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26223,29 +28713,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobExecutionsForJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobExecutionsForJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobExecutionsForJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobExecutionsForJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the job executions for the specified thing.</p>
-    async fn list_job_executions_for_thing(
+    fn list_job_executions_for_thing(
         &self,
         input: ListJobExecutionsForThingRequest,
-    ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJobExecutionsForThingResponse,
+                        RusotoError<ListJobExecutionsForThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26265,28 +28764,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobExecutionsForThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobExecutionsForThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobExecutionsForThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobExecutionsForThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists jobs.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResponse, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/jobs";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26315,28 +28820,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of all mitigation actions that match the specified filter criteria.</p>
-    async fn list_mitigation_actions(
+    fn list_mitigation_actions(
         &self,
         input: ListMitigationActionsRequest,
-    ) -> Result<ListMitigationActionsResponse, RusotoError<ListMitigationActionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListMitigationActionsResponse,
+                        RusotoError<ListMitigationActionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/mitigationactions/actions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26356,28 +28871,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMitigationActionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMitigationActionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMitigationActionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMitigationActionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists OTA updates.</p>
-    async fn list_ota_updates(
+    fn list_ota_updates(
         &self,
         input: ListOTAUpdatesRequest,
-    ) -> Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListOTAUpdatesResponse, RusotoError<ListOTAUpdatesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/otaUpdates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26397,28 +28918,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOTAUpdatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOTAUpdatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOTAUpdatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOTAUpdatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
-    async fn list_outgoing_certificates(
+    fn list_outgoing_certificates(
         &self,
         input: ListOutgoingCertificatesRequest,
-    ) -> Result<ListOutgoingCertificatesResponse, RusotoError<ListOutgoingCertificatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListOutgoingCertificatesResponse,
+                        RusotoError<ListOutgoingCertificatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/certificates-out-going";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26438,28 +28969,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOutgoingCertificatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListOutgoingCertificatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOutgoingCertificatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListOutgoingCertificatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists your policies.</p>
-    async fn list_policies(
+    fn list_policies(
         &self,
         input: ListPoliciesRequest,
-    ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26479,28 +29016,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPoliciesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPoliciesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPoliciesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPoliciesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
-    async fn list_policy_principals(
+    fn list_policy_principals(
         &self,
         input: ListPolicyPrincipalsRequest,
-    ) -> Result<ListPolicyPrincipalsResponse, RusotoError<ListPolicyPrincipalsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPolicyPrincipalsResponse,
+                        RusotoError<ListPolicyPrincipalsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/policy-principals";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26521,28 +29068,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPolicyPrincipalsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPolicyPrincipalsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPolicyPrincipalsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPolicyPrincipalsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
-    async fn list_policy_versions(
+    fn list_policy_versions(
         &self,
         input: ListPolicyVersionsRequest,
-    ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPolicyVersionsResponse,
+                        RusotoError<ListPolicyVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -26553,28 +29110,38 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPolicyVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPolicyVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPolicyVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPolicyVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
-    async fn list_principal_policies(
+    fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
-    ) -> Result<ListPrincipalPoliciesResponse, RusotoError<ListPrincipalPoliciesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPrincipalPoliciesResponse,
+                        RusotoError<ListPrincipalPoliciesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/principal-policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26595,28 +29162,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPrincipalPoliciesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPrincipalPoliciesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPrincipalPoliciesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPrincipalPoliciesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
-    async fn list_principal_things(
+    fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
-    ) -> Result<ListPrincipalThingsResponse, RusotoError<ListPrincipalThingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPrincipalThingsResponse,
+                        RusotoError<ListPrincipalThingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/principals/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26634,30 +29211,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPrincipalThingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPrincipalThingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPrincipalThingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPrincipalThingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>A list of fleet provisioning template versions.</p>
-    async fn list_provisioning_template_versions(
+    fn list_provisioning_template_versions(
         &self,
         input: ListProvisioningTemplateVersionsRequest,
-    ) -> Result<
-        ListProvisioningTemplateVersionsResponse,
-        RusotoError<ListProvisioningTemplateVersionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProvisioningTemplateVersionsResponse,
+                        RusotoError<ListProvisioningTemplateVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}/versions",
@@ -26678,31 +29262,40 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProvisioningTemplateVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProvisioningTemplateVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProvisioningTemplateVersionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProvisioningTemplateVersionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the fleet provisioning templates in your AWS account.</p>
-    async fn list_provisioning_templates(
+    fn list_provisioning_templates(
         &self,
         input: ListProvisioningTemplatesRequest,
-    ) -> Result<ListProvisioningTemplatesResponse, RusotoError<ListProvisioningTemplatesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListProvisioningTemplatesResponse,
+                        RusotoError<ListProvisioningTemplatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/provisioning-templates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26719,28 +29312,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProvisioningTemplatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListProvisioningTemplatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProvisioningTemplatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListProvisioningTemplatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the role aliases registered in your account.</p>
-    async fn list_role_aliases(
+    fn list_role_aliases(
         &self,
         input: ListRoleAliasesRequest,
-    ) -> Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRoleAliasesResponse, RusotoError<ListRoleAliasesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/role-aliases";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26760,28 +29359,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRoleAliasesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRoleAliasesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRoleAliasesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRoleAliasesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all of your scheduled audits.</p>
-    async fn list_scheduled_audits(
+    fn list_scheduled_audits(
         &self,
         input: ListScheduledAuditsRequest,
-    ) -> Result<ListScheduledAuditsResponse, RusotoError<ListScheduledAuditsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListScheduledAuditsResponse,
+                        RusotoError<ListScheduledAuditsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/audit/scheduledaudits";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26798,28 +29407,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListScheduledAuditsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListScheduledAuditsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListScheduledAuditsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListScheduledAuditsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
-    async fn list_security_profiles(
+    fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
-    ) -> Result<ListSecurityProfilesResponse, RusotoError<ListSecurityProfilesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSecurityProfilesResponse,
+                        RusotoError<ListSecurityProfilesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/security-profiles";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26836,30 +29455,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityProfilesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSecurityProfilesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSecurityProfilesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSecurityProfilesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
-    async fn list_security_profiles_for_target(
+    fn list_security_profiles_for_target(
         &self,
         input: ListSecurityProfilesForTargetRequest,
-    ) -> Result<
-        ListSecurityProfilesForTargetResponse,
-        RusotoError<ListSecurityProfilesForTargetError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSecurityProfilesForTargetResponse,
+                        RusotoError<ListSecurityProfilesForTargetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/security-profiles-for-target";
 
@@ -26884,28 +29510,34 @@ impl Iot for IotClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityProfilesForTargetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSecurityProfilesForTargetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSecurityProfilesForTargetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSecurityProfilesForTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all of the streams in your AWS account.</p>
-    async fn list_streams(
+    fn list_streams(
         &self,
         input: ListStreamsRequest,
-    ) -> Result<ListStreamsResponse, RusotoError<ListStreamsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStreamsResponse, RusotoError<ListStreamsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/streams";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26925,28 +29557,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListStreamsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListStreamsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStreamsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListStreamsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -26961,28 +29603,38 @@ impl Iot for IotClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List targets for the specified policy.</p>
-    async fn list_targets_for_policy(
+    fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
-    ) -> Result<ListTargetsForPolicyResponse, RusotoError<ListTargetsForPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTargetsForPolicyResponse,
+                        RusotoError<ListTargetsForPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/policy-targets/{policy_name}",
             policy_name = input.policy_name
@@ -27002,30 +29654,37 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTargetsForPolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTargetsForPolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTargetsForPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTargetsForPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
-    async fn list_targets_for_security_profile(
+    fn list_targets_for_security_profile(
         &self,
         input: ListTargetsForSecurityProfileRequest,
-    ) -> Result<
-        ListTargetsForSecurityProfileResponse,
-        RusotoError<ListTargetsForSecurityProfileError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTargetsForSecurityProfileResponse,
+                        RusotoError<ListTargetsForSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
@@ -27046,28 +29705,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTargetsForSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTargetsForSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTargetsForSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTargetsForSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the thing groups in your account.</p>
-    async fn list_thing_groups(
+    fn list_thing_groups(
         &self,
         input: ListThingGroupsRequest,
-    ) -> Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListThingGroupsResponse, RusotoError<ListThingGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27093,28 +29758,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
-    async fn list_thing_groups_for_thing(
+    fn list_thing_groups_for_thing(
         &self,
         input: ListThingGroupsForThingRequest,
-    ) -> Result<ListThingGroupsForThingResponse, RusotoError<ListThingGroupsForThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingGroupsForThingResponse,
+                        RusotoError<ListThingGroupsForThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/thing-groups",
             thing_name = input.thing_name
@@ -27134,28 +29809,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingGroupsForThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingGroupsForThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingGroupsForThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingGroupsForThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    async fn list_thing_principals(
+    fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
-    ) -> Result<ListThingPrincipalsResponse, RusotoError<ListThingPrincipalsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingPrincipalsResponse,
+                        RusotoError<ListThingPrincipalsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -27166,30 +29851,37 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingPrincipalsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingPrincipalsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingPrincipalsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingPrincipalsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Information about the thing registration tasks.</p>
-    async fn list_thing_registration_task_reports(
+    fn list_thing_registration_task_reports(
         &self,
         input: ListThingRegistrationTaskReportsRequest,
-    ) -> Result<
-        ListThingRegistrationTaskReportsResponse,
-        RusotoError<ListThingRegistrationTaskReportsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingRegistrationTaskReportsResponse,
+                        RusotoError<ListThingRegistrationTaskReportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/reports",
@@ -27211,31 +29903,40 @@ impl Iot for IotClient {
         params.put("reportType", &input.report_type);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingRegistrationTaskReportsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingRegistrationTaskReportsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingRegistrationTaskReportsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingRegistrationTaskReportsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>List bulk thing provisioning tasks.</p>
-    async fn list_thing_registration_tasks(
+    fn list_thing_registration_tasks(
         &self,
         input: ListThingRegistrationTasksRequest,
-    ) -> Result<ListThingRegistrationTasksResponse, RusotoError<ListThingRegistrationTasksError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingRegistrationTasksResponse,
+                        RusotoError<ListThingRegistrationTasksError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27255,28 +29956,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingRegistrationTasksResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingRegistrationTasksResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingRegistrationTasksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingRegistrationTasksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the existing thing types.</p>
-    async fn list_thing_types(
+    fn list_thing_types(
         &self,
         input: ListThingTypesRequest,
-    ) -> Result<ListThingTypesResponse, RusotoError<ListThingTypesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListThingTypesResponse, RusotoError<ListThingTypesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-types";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27296,28 +30003,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingTypesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingTypesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    async fn list_things(
+    fn list_things(
         &self,
         input: ListThingsRequest,
-    ) -> Result<ListThingsResponse, RusotoError<ListThingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListThingsResponse, RusotoError<ListThingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27343,28 +30056,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the things you have added to the given billing group.</p>
-    async fn list_things_in_billing_group(
+    fn list_things_in_billing_group(
         &self,
         input: ListThingsInBillingGroupRequest,
-    ) -> Result<ListThingsInBillingGroupResponse, RusotoError<ListThingsInBillingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingsInBillingGroupResponse,
+                        RusotoError<ListThingsInBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}/things",
             billing_group_name = input.billing_group_name
@@ -27384,28 +30107,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingsInBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingsInBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingsInBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingsInBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the things in the specified group.</p>
-    async fn list_things_in_thing_group(
+    fn list_things_in_thing_group(
         &self,
         input: ListThingsInThingGroupRequest,
-    ) -> Result<ListThingsInThingGroupResponse, RusotoError<ListThingsInThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListThingsInThingGroupResponse,
+                        RusotoError<ListThingsInThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}/things",
             thing_group_name = input.thing_group_name
@@ -27428,29 +30161,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListThingsInThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListThingsInThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListThingsInThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListThingsInThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the topic rule destinations in your AWS account.</p>
-    async fn list_topic_rule_destinations(
+    fn list_topic_rule_destinations(
         &self,
         input: ListTopicRuleDestinationsRequest,
-    ) -> Result<ListTopicRuleDestinationsResponse, RusotoError<ListTopicRuleDestinationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTopicRuleDestinationsResponse,
+                        RusotoError<ListTopicRuleDestinationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/destinations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27467,28 +30209,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTopicRuleDestinationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTopicRuleDestinationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTopicRuleDestinationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTopicRuleDestinationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the rules for the specific topic.</p>
-    async fn list_topic_rules(
+    fn list_topic_rules(
         &self,
         input: ListTopicRulesRequest,
-    ) -> Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTopicRulesResponse, RusotoError<ListTopicRulesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/rules";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27511,28 +30259,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTopicRulesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTopicRulesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTopicRulesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTopicRulesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists logging levels.</p>
-    async fn list_v2_logging_levels(
+    fn list_v2_logging_levels(
         &self,
         input: ListV2LoggingLevelsRequest,
-    ) -> Result<ListV2LoggingLevelsResponse, RusotoError<ListV2LoggingLevelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListV2LoggingLevelsResponse,
+                        RusotoError<ListV2LoggingLevelsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27552,28 +30310,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListV2LoggingLevelsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListV2LoggingLevelsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListV2LoggingLevelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListV2LoggingLevelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior, or thing (device).</p>
-    async fn list_violation_events(
+    fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
-    ) -> Result<ListViolationEventsResponse, RusotoError<ListViolationEventsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListViolationEventsResponse,
+                        RusotoError<ListViolationEventsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/violation-events";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -27598,28 +30366,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListViolationEventsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListViolationEventsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListViolationEventsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListViolationEventsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
-    async fn register_ca_certificate(
+    fn register_ca_certificate(
         &self,
         input: RegisterCACertificateRequest,
-    ) -> Result<RegisterCACertificateResponse, RusotoError<RegisterCACertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterCACertificateResponse,
+                        RusotoError<RegisterCACertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/cacertificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27638,28 +30416,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterCACertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterCACertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterCACertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterCACertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
-    async fn register_certificate(
+    fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
-    ) -> Result<RegisterCertificateResponse, RusotoError<RegisterCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RegisterCertificateResponse,
+                        RusotoError<RegisterCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/certificate/register";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27669,28 +30457,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterCertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterCertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
-    async fn register_thing(
+    fn register_thing(
         &self,
         input: RegisterThingRequest,
-    ) -> Result<RegisterThingResponse, RusotoError<RegisterThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterThingResponse, RusotoError<RegisterThingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27700,28 +30494,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
-    async fn reject_certificate_transfer(
+    fn reject_certificate_transfer(
         &self,
         input: RejectCertificateTransferRequest,
-    ) -> Result<(), RusotoError<RejectCertificateTransferError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<RejectCertificateTransferError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/reject-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -27734,28 +30534,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectCertificateTransferError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RejectCertificateTransferError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the given thing from the billing group.</p>
-    async fn remove_thing_from_billing_group(
+    fn remove_thing_from_billing_group(
         &self,
         input: RemoveThingFromBillingGroupRequest,
-    ) -> Result<RemoveThingFromBillingGroupResponse, RusotoError<RemoveThingFromBillingGroupError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveThingFromBillingGroupResponse,
+                        RusotoError<RemoveThingFromBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/billing-groups/removeThingFromBillingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -27765,29 +30574,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveThingFromBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RemoveThingFromBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveThingFromBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveThingFromBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Remove the specified thing from the specified group.</p>
-    async fn remove_thing_from_thing_group(
+    fn remove_thing_from_thing_group(
         &self,
         input: RemoveThingFromThingGroupRequest,
-    ) -> Result<RemoveThingFromThingGroupResponse, RusotoError<RemoveThingFromThingGroupError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveThingFromThingGroupResponse,
+                        RusotoError<RemoveThingFromThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-groups/removeThingFromThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -27797,28 +30615,30 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveThingFromThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RemoveThingFromThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveThingFromThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveThingFromThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    async fn replace_topic_rule(
+    fn replace_topic_rule(
         &self,
         input: ReplaceTopicRuleRequest,
-    ) -> Result<(), RusotoError<ReplaceTopicRuleError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<ReplaceTopicRuleError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -27828,27 +30648,33 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ReplaceTopicRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ReplaceTopicRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The query search index.</p>
-    async fn search_index(
+    fn search_index(
         &self,
         input: SearchIndexRequest,
-    ) -> Result<SearchIndexResponse, RusotoError<SearchIndexError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SearchIndexResponse, RusotoError<SearchIndexError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indices/search";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27858,28 +30684,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchIndexResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SearchIndexResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchIndexError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SearchIndexError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
-    async fn set_default_authorizer(
+    fn set_default_authorizer(
         &self,
         input: SetDefaultAuthorizerRequest,
-    ) -> Result<SetDefaultAuthorizerResponse, RusotoError<SetDefaultAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SetDefaultAuthorizerResponse,
+                        RusotoError<SetDefaultAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27889,28 +30725,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SetDefaultAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SetDefaultAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SetDefaultAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SetDefaultAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
-    async fn set_default_policy_version(
+    fn set_default_policy_version(
         &self,
         input: SetDefaultPolicyVersionRequest,
-    ) -> Result<(), RusotoError<SetDefaultPolicyVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetDefaultPolicyVersionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -27922,27 +30764,29 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SetDefaultPolicyVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SetDefaultPolicyVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
-    async fn set_logging_options(
+    fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
-    ) -> Result<(), RusotoError<SetLoggingOptionsError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<SetLoggingOptionsError>>> + Send + 'static>,
+    > {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27952,27 +30796,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input.logging_options_payload).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SetLoggingOptionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SetLoggingOptionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the logging level.</p>
-    async fn set_v2_logging_level(
+    fn set_v2_logging_level(
         &self,
         input: SetV2LoggingLevelRequest,
-    ) -> Result<(), RusotoError<SetV2LoggingLevelError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<SetV2LoggingLevelError>>> + Send + 'static>,
+    > {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -27982,27 +30828,31 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SetV2LoggingLevelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SetV2LoggingLevelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the logging options for the V2 logging service.</p>
-    async fn set_v2_logging_options(
+    fn set_v2_logging_options(
         &self,
         input: SetV2LoggingOptionsRequest,
-    ) -> Result<(), RusotoError<SetV2LoggingOptionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetV2LoggingOptionsError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28012,29 +30862,36 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SetV2LoggingOptionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SetV2LoggingOptionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a task that applies a set of mitigation actions to the specified target.</p>
-    async fn start_audit_mitigation_actions_task(
+    fn start_audit_mitigation_actions_task(
         &self,
         input: StartAuditMitigationActionsTaskRequest,
-    ) -> Result<
-        StartAuditMitigationActionsTaskResponse,
-        RusotoError<StartAuditMitigationActionsTaskError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartAuditMitigationActionsTaskResponse,
+                        RusotoError<StartAuditMitigationActionsTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/audit/mitigationactions/tasks/{task_id}",
@@ -28048,30 +30905,40 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAuditMitigationActionsTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartAuditMitigationActionsTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAuditMitigationActionsTaskError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartAuditMitigationActionsTaskError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an on-demand Device Defender audit.</p>
-    async fn start_on_demand_audit_task(
+    fn start_on_demand_audit_task(
         &self,
         input: StartOnDemandAuditTaskRequest,
-    ) -> Result<StartOnDemandAuditTaskResponse, RusotoError<StartOnDemandAuditTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartOnDemandAuditTaskResponse,
+                        RusotoError<StartOnDemandAuditTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/audit/tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28081,29 +30948,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartOnDemandAuditTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartOnDemandAuditTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartOnDemandAuditTaskError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartOnDemandAuditTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a bulk thing provisioning task.</p>
-    async fn start_thing_registration_task(
+    fn start_thing_registration_task(
         &self,
         input: StartThingRegistrationTaskRequest,
-    ) -> Result<StartThingRegistrationTaskResponse, RusotoError<StartThingRegistrationTaskError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartThingRegistrationTaskResponse,
+                        RusotoError<StartThingRegistrationTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28113,29 +30989,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartThingRegistrationTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartThingRegistrationTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartThingRegistrationTaskError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartThingRegistrationTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels a bulk thing provisioning task.</p>
-    async fn stop_thing_registration_task(
+    fn stop_thing_registration_task(
         &self,
         input: StopThingRegistrationTaskRequest,
-    ) -> Result<StopThingRegistrationTaskResponse, RusotoError<StopThingRegistrationTaskError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopThingRegistrationTaskResponse,
+                        RusotoError<StopThingRegistrationTaskError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/cancel",
             task_id = input.task_id
@@ -28146,28 +31031,34 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopThingRegistrationTaskResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopThingRegistrationTaskResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StopThingRegistrationTaskError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StopThingRegistrationTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/tags";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28177,28 +31068,35 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    async fn test_authorization(
+    fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
-    ) -> Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TestAuthorizationResponse, RusotoError<TestAuthorizationError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/test-authorization";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28214,28 +31112,38 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestAuthorizationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TestAuthorizationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TestAuthorizationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TestAuthorizationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    async fn test_invoke_authorizer(
+    fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        TestInvokeAuthorizerResponse,
+                        RusotoError<TestInvokeAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/authorizer/{authorizer_name}/test",
             authorizer_name = input.authorizer_name
@@ -28248,28 +31156,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestInvokeAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TestInvokeAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TestInvokeAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TestInvokeAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
-    async fn transfer_certificate(
+    fn transfer_certificate(
         &self,
         input: TransferCertificateRequest,
-    ) -> Result<TransferCertificateResponse, RusotoError<TransferCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        TransferCertificateResponse,
+                        RusotoError<TransferCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/transfer-certificate/{certificate_id}",
             certificate_id = input.certificate_id
@@ -28286,28 +31204,34 @@ impl Iot for IotClient {
         params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TransferCertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TransferCertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TransferCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TransferCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/untag";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28317,30 +31241,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    async fn update_account_audit_configuration(
+    fn update_account_audit_configuration(
         &self,
         input: UpdateAccountAuditConfigurationRequest,
-    ) -> Result<
-        UpdateAccountAuditConfigurationResponse,
-        RusotoError<UpdateAccountAuditConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateAccountAuditConfigurationResponse,
+                        RusotoError<UpdateAccountAuditConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/audit/configuration";
 
@@ -28351,30 +31282,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAccountAuditConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAccountAuditConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAccountAuditConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAccountAuditConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an authorizer.</p>
-    async fn update_authorizer(
+    fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
-    ) -> Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateAuthorizerResponse, RusotoError<UpdateAuthorizerError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -28387,28 +31325,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates information about the billing group.</p>
-    async fn update_billing_group(
+    fn update_billing_group(
         &self,
         input: UpdateBillingGroupRequest,
-    ) -> Result<UpdateBillingGroupResponse, RusotoError<UpdateBillingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateBillingGroupResponse,
+                        RusotoError<UpdateBillingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
             billing_group_name = input.billing_group_name
@@ -28421,28 +31369,32 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateBillingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateBillingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateBillingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateBillingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a registered CA certificate.</p>
-    async fn update_ca_certificate(
+    fn update_ca_certificate(
         &self,
         input: UpdateCACertificateRequest,
-    ) -> Result<(), RusotoError<UpdateCACertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<UpdateCACertificateError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -28464,27 +31416,29 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCACertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateCACertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
-    async fn update_certificate(
+    fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
-    ) -> Result<(), RusotoError<UpdateCertificateError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<UpdateCertificateError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -28499,28 +31453,37 @@ impl Iot for IotClient {
         params.put("newStatus", &input.new_status);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-    async fn update_domain_configuration(
+    fn update_domain_configuration(
         &self,
         input: UpdateDomainConfigurationRequest,
-    ) -> Result<UpdateDomainConfigurationResponse, RusotoError<UpdateDomainConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDomainConfigurationResponse,
+                        RusotoError<UpdateDomainConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainConfigurations/{domain_configuration_name}",
             domain_configuration_name = input.domain_configuration_name
@@ -28533,28 +31496,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDomainConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDomainConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDomainConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDomainConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a dynamic thing group.</p>
-    async fn update_dynamic_thing_group(
+    fn update_dynamic_thing_group(
         &self,
         input: UpdateDynamicThingGroupRequest,
-    ) -> Result<UpdateDynamicThingGroupResponse, RusotoError<UpdateDynamicThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDynamicThingGroupResponse,
+                        RusotoError<UpdateDynamicThingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -28567,29 +31540,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDynamicThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDynamicThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDynamicThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDynamicThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the event configurations.</p>
-    async fn update_event_configurations(
+    fn update_event_configurations(
         &self,
         input: UpdateEventConfigurationsRequest,
-    ) -> Result<UpdateEventConfigurationsResponse, RusotoError<UpdateEventConfigurationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateEventConfigurationsResponse,
+                        RusotoError<UpdateEventConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28599,29 +31581,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateEventConfigurationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateEventConfigurationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEventConfigurationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateEventConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the search configuration.</p>
-    async fn update_indexing_configuration(
+    fn update_indexing_configuration(
         &self,
         input: UpdateIndexingConfigurationRequest,
-    ) -> Result<UpdateIndexingConfigurationResponse, RusotoError<UpdateIndexingConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateIndexingConfigurationResponse,
+                        RusotoError<UpdateIndexingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -28631,25 +31622,29 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateIndexingConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateIndexingConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateIndexingConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateIndexingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates supported fields of the specified job.</p>
-    async fn update_job(&self, input: UpdateJobRequest) -> Result<(), RusotoError<UpdateJobError>> {
+    fn update_job(
+        &self,
+        input: UpdateJobRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UpdateJobError>>> + Send + 'static>>
+    {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28659,27 +31654,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the definition for the specified mitigation action.</p>
-    async fn update_mitigation_action(
+    fn update_mitigation_action(
         &self,
         input: UpdateMitigationActionRequest,
-    ) -> Result<UpdateMitigationActionResponse, RusotoError<UpdateMitigationActionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateMitigationActionResponse,
+                        RusotoError<UpdateMitigationActionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/mitigationactions/actions/{action_name}",
             action_name = input.action_name
@@ -28692,29 +31697,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMitigationActionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMitigationActionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMitigationActionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMitigationActionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a fleet provisioning template.</p>
-    async fn update_provisioning_template(
+    fn update_provisioning_template(
         &self,
         input: UpdateProvisioningTemplateRequest,
-    ) -> Result<UpdateProvisioningTemplateResponse, RusotoError<UpdateProvisioningTemplateError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateProvisioningTemplateResponse,
+                        RusotoError<UpdateProvisioningTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/provisioning-templates/{template_name}",
             template_name = input.template_name
@@ -28727,28 +31741,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProvisioningTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateProvisioningTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProvisioningTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateProvisioningTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a role alias.</p>
-    async fn update_role_alias(
+    fn update_role_alias(
         &self,
         input: UpdateRoleAliasRequest,
-    ) -> Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRoleAliasResponse, RusotoError<UpdateRoleAliasError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -28758,28 +31778,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRoleAliasResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRoleAliasResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRoleAliasError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRoleAliasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a scheduled audit, including which checks are performed and how often the audit takes place.</p>
-    async fn update_scheduled_audit(
+    fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,
-    ) -> Result<UpdateScheduledAuditResponse, RusotoError<UpdateScheduledAuditError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateScheduledAuditResponse,
+                        RusotoError<UpdateScheduledAuditError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
             scheduled_audit_name = input.scheduled_audit_name
@@ -28792,28 +31822,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateScheduledAuditResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateScheduledAuditResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateScheduledAuditError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateScheduledAuditError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a Device Defender security profile.</p>
-    async fn update_security_profile(
+    fn update_security_profile(
         &self,
         input: UpdateSecurityProfileRequest,
-    ) -> Result<UpdateSecurityProfileResponse, RusotoError<UpdateSecurityProfileError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateSecurityProfileResponse,
+                        RusotoError<UpdateSecurityProfileError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
             security_profile_name = input.security_profile_name
@@ -28832,28 +31872,34 @@ impl Iot for IotClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSecurityProfileResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateSecurityProfileResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSecurityProfileError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateSecurityProfileError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
-    async fn update_stream(
+    fn update_stream(
         &self,
         input: UpdateStreamRequest,
-    ) -> Result<UpdateStreamResponse, RusotoError<UpdateStreamError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateStreamResponse, RusotoError<UpdateStreamError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -28863,28 +31909,34 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateStreamResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateStreamResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateStreamError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateStreamError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the data for a thing.</p>
-    async fn update_thing(
+    fn update_thing(
         &self,
         input: UpdateThingRequest,
-    ) -> Result<UpdateThingResponse, RusotoError<UpdateThingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateThingResponse, RusotoError<UpdateThingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28894,28 +31946,35 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update a thing group.</p>
-    async fn update_thing_group(
+    fn update_thing_group(
         &self,
         input: UpdateThingGroupRequest,
-    ) -> Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateThingGroupResponse, RusotoError<UpdateThingGroupError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -28928,29 +31987,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateThingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateThingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateThingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the groups to which the thing belongs.</p>
-    async fn update_thing_groups_for_thing(
+    fn update_thing_groups_for_thing(
         &self,
         input: UpdateThingGroupsForThingRequest,
-    ) -> Result<UpdateThingGroupsForThingResponse, RusotoError<UpdateThingGroupsForThingError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateThingGroupsForThingResponse,
+                        RusotoError<UpdateThingGroupsForThingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/thing-groups/updateThingGroupsForThing";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -28960,29 +32028,38 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateThingGroupsForThingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateThingGroupsForThingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateThingGroupsForThingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateThingGroupsForThingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a topic rule destination. You use this to change the status, endpoint URL, or confirmation URL of the destination.</p>
-    async fn update_topic_rule_destination(
+    fn update_topic_rule_destination(
         &self,
         input: UpdateTopicRuleDestinationRequest,
-    ) -> Result<UpdateTopicRuleDestinationResponse, RusotoError<UpdateTopicRuleDestinationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateTopicRuleDestinationResponse,
+                        RusotoError<UpdateTopicRuleDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/destinations";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -28992,30 +32069,37 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTopicRuleDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateTopicRuleDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTopicRuleDestinationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTopicRuleDestinationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Validates a Device Defender security profile behaviors specification.</p>
-    async fn validate_security_profile_behaviors(
+    fn validate_security_profile_behaviors(
         &self,
         input: ValidateSecurityProfileBehaviorsRequest,
-    ) -> Result<
-        ValidateSecurityProfileBehaviorsResponse,
-        RusotoError<ValidateSecurityProfileBehaviorsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ValidateSecurityProfileBehaviorsResponse,
+                        RusotoError<ValidateSecurityProfileBehaviorsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/security-profile-behaviors/validate";
 
@@ -29026,22 +32110,22 @@ impl Iot for IotClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ValidateSecurityProfileBehaviorsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ValidateSecurityProfileBehaviorsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 }

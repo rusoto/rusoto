@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceFleetInput {
@@ -3607,192 +3608,394 @@ impl fmt::Display for TerminateJobFlowsError {
 }
 impl Error for TerminateJobFlowsError {}
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
-#[async_trait]
 pub trait Emr {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
-    async fn add_instance_fleet(
+    fn add_instance_fleet(
         &self,
         input: AddInstanceFleetInput,
-    ) -> Result<AddInstanceFleetOutput, RusotoError<AddInstanceFleetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddInstanceFleetOutput, RusotoError<AddInstanceFleetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more instance groups to a running cluster.</p>
-    async fn add_instance_groups(
+    fn add_instance_groups(
         &self,
         input: AddInstanceGroupsInput,
-    ) -> Result<AddInstanceGroupsOutput, RusotoError<AddInstanceGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<AddInstanceGroupsOutput, RusotoError<AddInstanceGroupsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
-    async fn add_job_flow_steps(
+    fn add_job_flow_steps(
         &self,
         input: AddJobFlowStepsInput,
-    ) -> Result<AddJobFlowStepsOutput, RusotoError<AddJobFlowStepsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddJobFlowStepsOutput, RusotoError<AddJobFlowStepsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
-    async fn add_tags(
+    fn add_tags(
         &self,
         input: AddTagsInput,
-    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<AddTagsOutput, RusotoError<AddTagsError>>> + Send + 'static>,
+    >;
 
     /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
-    async fn cancel_steps(
+    fn cancel_steps(
         &self,
         input: CancelStepsInput,
-    ) -> Result<CancelStepsOutput, RusotoError<CancelStepsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelStepsOutput, RusotoError<CancelStepsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>
-    async fn create_security_configuration(
+    fn create_security_configuration(
         &self,
         input: CreateSecurityConfigurationInput,
-    ) -> Result<CreateSecurityConfigurationOutput, RusotoError<CreateSecurityConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSecurityConfigurationOutput,
+                        RusotoError<CreateSecurityConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a security configuration.</p>
-    async fn delete_security_configuration(
+    fn delete_security_configuration(
         &self,
         input: DeleteSecurityConfigurationInput,
-    ) -> Result<DeleteSecurityConfigurationOutput, RusotoError<DeleteSecurityConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSecurityConfigurationOutput,
+                        RusotoError<DeleteSecurityConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. </p>
-    async fn describe_cluster(
+    fn describe_cluster(
         &self,
         input: DescribeClusterInput,
-    ) -> Result<DescribeClusterOutput, RusotoError<DescribeClusterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeClusterOutput, RusotoError<DescribeClusterError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
-    async fn describe_job_flows(
+    fn describe_job_flows(
         &self,
         input: DescribeJobFlowsInput,
-    ) -> Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
-    async fn describe_security_configuration(
+    fn describe_security_configuration(
         &self,
         input: DescribeSecurityConfigurationInput,
-    ) -> Result<DescribeSecurityConfigurationOutput, RusotoError<DescribeSecurityConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSecurityConfigurationOutput,
+                        RusotoError<DescribeSecurityConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides more detail about the cluster step.</p>
-    async fn describe_step(
+    fn describe_step(
         &self,
         input: DescribeStepInput,
-    ) -> Result<DescribeStepOutput, RusotoError<DescribeStepError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStepOutput, RusotoError<DescribeStepError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
-    async fn get_block_public_access_configuration(
+    fn get_block_public_access_configuration(
         &self,
-    ) -> Result<
-        GetBlockPublicAccessConfigurationOutput,
-        RusotoError<GetBlockPublicAccessConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBlockPublicAccessConfigurationOutput,
+                        RusotoError<GetBlockPublicAccessConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
-    async fn list_bootstrap_actions(
+    fn list_bootstrap_actions(
         &self,
         input: ListBootstrapActionsInput,
-    ) -> Result<ListBootstrapActionsOutput, RusotoError<ListBootstrapActionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBootstrapActionsOutput,
+                        RusotoError<ListBootstrapActionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>
-    async fn list_clusters(
+    fn list_clusters(
         &self,
         input: ListClustersInput,
-    ) -> Result<ListClustersOutput, RusotoError<ListClustersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListClustersOutput, RusotoError<ListClustersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-    async fn list_instance_fleets(
+    fn list_instance_fleets(
         &self,
         input: ListInstanceFleetsInput,
-    ) -> Result<ListInstanceFleetsOutput, RusotoError<ListInstanceFleetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListInstanceFleetsOutput, RusotoError<ListInstanceFleetsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides all available details about the instance groups in a cluster.</p>
-    async fn list_instance_groups(
+    fn list_instance_groups(
         &self,
         input: ListInstanceGroupsInput,
-    ) -> Result<ListInstanceGroupsOutput, RusotoError<ListInstanceGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListInstanceGroupsOutput, RusotoError<ListInstanceGroupsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>
-    async fn list_instances(
+    fn list_instances(
         &self,
         input: ListInstancesInput,
-    ) -> Result<ListInstancesOutput, RusotoError<ListInstancesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInstancesOutput, RusotoError<ListInstancesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
-    async fn list_security_configurations(
+    fn list_security_configurations(
         &self,
         input: ListSecurityConfigurationsInput,
-    ) -> Result<ListSecurityConfigurationsOutput, RusotoError<ListSecurityConfigurationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSecurityConfigurationsOutput,
+                        RusotoError<ListSecurityConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
-    async fn list_steps(
+    fn list_steps(
         &self,
         input: ListStepsInput,
-    ) -> Result<ListStepsOutput, RusotoError<ListStepsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStepsOutput, RusotoError<ListStepsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
-    async fn modify_cluster(
+    fn modify_cluster(
         &self,
         input: ModifyClusterInput,
-    ) -> Result<ModifyClusterOutput, RusotoError<ModifyClusterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ModifyClusterOutput, RusotoError<ModifyClusterError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-    async fn modify_instance_fleet(
+    fn modify_instance_fleet(
         &self,
         input: ModifyInstanceFleetInput,
-    ) -> Result<(), RusotoError<ModifyInstanceFleetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ModifyInstanceFleetError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>
-    async fn modify_instance_groups(
+    fn modify_instance_groups(
         &self,
         input: ModifyInstanceGroupsInput,
-    ) -> Result<(), RusotoError<ModifyInstanceGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ModifyInstanceGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>
-    async fn put_auto_scaling_policy(
+    fn put_auto_scaling_policy(
         &self,
         input: PutAutoScalingPolicyInput,
-    ) -> Result<PutAutoScalingPolicyOutput, RusotoError<PutAutoScalingPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutAutoScalingPolicyOutput,
+                        RusotoError<PutAutoScalingPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates an Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
-    async fn put_block_public_access_configuration(
+    fn put_block_public_access_configuration(
         &self,
         input: PutBlockPublicAccessConfigurationInput,
-    ) -> Result<
-        PutBlockPublicAccessConfigurationOutput,
-        RusotoError<PutBlockPublicAccessConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutBlockPublicAccessConfigurationOutput,
+                        RusotoError<PutBlockPublicAccessConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
-    async fn remove_auto_scaling_policy(
+    fn remove_auto_scaling_policy(
         &self,
         input: RemoveAutoScalingPolicyInput,
-    ) -> Result<RemoveAutoScalingPolicyOutput, RusotoError<RemoveAutoScalingPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveAutoScalingPolicyOutput,
+                        RusotoError<RemoveAutoScalingPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>
-    async fn remove_tags(
+    fn remove_tags(
         &self,
         input: RemoveTagsInput,
-    ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RemoveTagsOutput, RusotoError<RemoveTagsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note></p>
-    async fn run_job_flow(
+    fn run_job_flow(
         &self,
         input: RunJobFlowInput,
-    ) -> Result<RunJobFlowOutput, RusotoError<RunJobFlowError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RunJobFlowOutput, RusotoError<RunJobFlowError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>
-    async fn set_termination_protection(
+    fn set_termination_protection(
         &self,
         input: SetTerminationProtectionInput,
-    ) -> Result<(), RusotoError<SetTerminationProtectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetTerminationProtectionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
-    async fn set_visible_to_all_users(
+    fn set_visible_to_all_users(
         &self,
         input: SetVisibleToAllUsersInput,
-    ) -> Result<(), RusotoError<SetVisibleToAllUsersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetVisibleToAllUsersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
-    async fn terminate_job_flows(
+    fn terminate_job_flows(
         &self,
         input: TerminateJobFlowsInput,
-    ) -> Result<(), RusotoError<TerminateJobFlowsError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<TerminateJobFlowsError>>> + Send + 'static>,
+    >;
 }
 /// A client for the Amazon EMR API.
 #[derive(Clone)]
@@ -3832,13 +4035,18 @@ impl EmrClient {
     }
 }
 
-#[async_trait]
 impl Emr for EmrClient {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
-    async fn add_instance_fleet(
+    fn add_instance_fleet(
         &self,
         input: AddInstanceFleetInput,
-    ) -> Result<AddInstanceFleetOutput, RusotoError<AddInstanceFleetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddInstanceFleetOutput, RusotoError<AddInstanceFleetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3846,26 +4054,34 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddInstanceFleetOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddInstanceFleetError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddInstanceFleetOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddInstanceFleetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more instance groups to a running cluster.</p>
-    async fn add_instance_groups(
+    fn add_instance_groups(
         &self,
         input: AddInstanceGroupsInput,
-    ) -> Result<AddInstanceGroupsOutput, RusotoError<AddInstanceGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<AddInstanceGroupsOutput, RusotoError<AddInstanceGroupsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3873,26 +4089,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddInstanceGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddInstanceGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddInstanceGroupsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddInstanceGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
-    async fn add_job_flow_steps(
+    fn add_job_flow_steps(
         &self,
         input: AddJobFlowStepsInput,
-    ) -> Result<AddJobFlowStepsOutput, RusotoError<AddJobFlowStepsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<AddJobFlowStepsOutput, RusotoError<AddJobFlowStepsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3900,26 +4123,29 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddJobFlowStepsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddJobFlowStepsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AddJobFlowStepsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddJobFlowStepsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
-    async fn add_tags(
+    fn add_tags(
         &self,
         input: AddTagsInput,
-    ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<AddTagsOutput, RusotoError<AddTagsError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3927,26 +4153,32 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AddTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
-    async fn cancel_steps(
+    fn cancel_steps(
         &self,
         input: CancelStepsInput,
-    ) -> Result<CancelStepsOutput, RusotoError<CancelStepsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelStepsOutput, RusotoError<CancelStepsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3954,27 +4186,36 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CancelStepsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelStepsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CancelStepsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelStepsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>
-    async fn create_security_configuration(
+    fn create_security_configuration(
         &self,
         input: CreateSecurityConfigurationInput,
-    ) -> Result<CreateSecurityConfigurationOutput, RusotoError<CreateSecurityConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateSecurityConfigurationOutput,
+                        RusotoError<CreateSecurityConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3985,28 +4226,37 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSecurityConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSecurityConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSecurityConfigurationOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSecurityConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a security configuration.</p>
-    async fn delete_security_configuration(
+    fn delete_security_configuration(
         &self,
         input: DeleteSecurityConfigurationInput,
-    ) -> Result<DeleteSecurityConfigurationOutput, RusotoError<DeleteSecurityConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteSecurityConfigurationOutput,
+                        RusotoError<DeleteSecurityConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4017,27 +4267,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSecurityConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSecurityConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteSecurityConfigurationOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteSecurityConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. </p>
-    async fn describe_cluster(
+    fn describe_cluster(
         &self,
         input: DescribeClusterInput,
-    ) -> Result<DescribeClusterOutput, RusotoError<DescribeClusterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeClusterOutput, RusotoError<DescribeClusterError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4045,26 +4301,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeClusterOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeClusterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeClusterOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeClusterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
-    async fn describe_job_flows(
+    fn describe_job_flows(
         &self,
         input: DescribeJobFlowsInput,
-    ) -> Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4072,27 +4335,37 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeJobFlowsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeJobFlowsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeJobFlowsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeJobFlowsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
-    async fn describe_security_configuration(
+    fn describe_security_configuration(
         &self,
         input: DescribeSecurityConfigurationInput,
-    ) -> Result<DescribeSecurityConfigurationOutput, RusotoError<DescribeSecurityConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSecurityConfigurationOutput,
+                        RusotoError<DescribeSecurityConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4103,27 +4376,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSecurityConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSecurityConfigurationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSecurityConfigurationOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSecurityConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides more detail about the cluster step.</p>
-    async fn describe_step(
+    fn describe_step(
         &self,
         input: DescribeStepInput,
-    ) -> Result<DescribeStepOutput, RusotoError<DescribeStepError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeStepOutput, RusotoError<DescribeStepError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4131,27 +4410,34 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeStepOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStepError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DescribeStepOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeStepError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
-    async fn get_block_public_access_configuration(
+    fn get_block_public_access_configuration(
         &self,
-    ) -> Result<
-        GetBlockPublicAccessConfigurationOutput,
-        RusotoError<GetBlockPublicAccessConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBlockPublicAccessConfigurationOutput,
+                        RusotoError<GetBlockPublicAccessConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -4162,29 +4448,39 @@ impl Emr for EmrClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBlockPublicAccessConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlockPublicAccessConfigurationError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBlockPublicAccessConfigurationOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBlockPublicAccessConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
-    async fn list_bootstrap_actions(
+    fn list_bootstrap_actions(
         &self,
         input: ListBootstrapActionsInput,
-    ) -> Result<ListBootstrapActionsOutput, RusotoError<ListBootstrapActionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListBootstrapActionsOutput,
+                        RusotoError<ListBootstrapActionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4192,27 +4488,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBootstrapActionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBootstrapActionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListBootstrapActionsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListBootstrapActionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>
-    async fn list_clusters(
+    fn list_clusters(
         &self,
         input: ListClustersInput,
-    ) -> Result<ListClustersOutput, RusotoError<ListClustersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListClustersOutput, RusotoError<ListClustersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4220,26 +4522,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListClustersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListClustersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListClustersOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListClustersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-    async fn list_instance_fleets(
+    fn list_instance_fleets(
         &self,
         input: ListInstanceFleetsInput,
-    ) -> Result<ListInstanceFleetsOutput, RusotoError<ListInstanceFleetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListInstanceFleetsOutput, RusotoError<ListInstanceFleetsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4247,27 +4556,34 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInstanceFleetsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstanceFleetsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInstanceFleetsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInstanceFleetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides all available details about the instance groups in a cluster.</p>
-    async fn list_instance_groups(
+    fn list_instance_groups(
         &self,
         input: ListInstanceGroupsInput,
-    ) -> Result<ListInstanceGroupsOutput, RusotoError<ListInstanceGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListInstanceGroupsOutput, RusotoError<ListInstanceGroupsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4275,27 +4591,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInstanceGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstanceGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInstanceGroupsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInstanceGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>
-    async fn list_instances(
+    fn list_instances(
         &self,
         input: ListInstancesInput,
-    ) -> Result<ListInstancesOutput, RusotoError<ListInstancesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListInstancesOutput, RusotoError<ListInstancesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4303,27 +4625,36 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstancesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInstancesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
-    async fn list_security_configurations(
+    fn list_security_configurations(
         &self,
         input: ListSecurityConfigurationsInput,
-    ) -> Result<ListSecurityConfigurationsOutput, RusotoError<ListSecurityConfigurationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSecurityConfigurationsOutput,
+                        RusotoError<ListSecurityConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4334,27 +4665,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityConfigurationsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSecurityConfigurationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSecurityConfigurationsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSecurityConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
-    async fn list_steps(
+    fn list_steps(
         &self,
         input: ListStepsInput,
-    ) -> Result<ListStepsOutput, RusotoError<ListStepsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListStepsOutput, RusotoError<ListStepsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4362,26 +4699,32 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListStepsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStepsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListStepsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListStepsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
-    async fn modify_cluster(
+    fn modify_cluster(
         &self,
         input: ModifyClusterInput,
-    ) -> Result<ModifyClusterOutput, RusotoError<ModifyClusterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ModifyClusterOutput, RusotoError<ModifyClusterError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4389,26 +4732,30 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ModifyClusterOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyClusterError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ModifyClusterOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ModifyClusterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-    async fn modify_instance_fleet(
+    fn modify_instance_fleet(
         &self,
         input: ModifyInstanceFleetInput,
-    ) -> Result<(), RusotoError<ModifyInstanceFleetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ModifyInstanceFleetError>>> + Send + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4416,26 +4763,32 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyInstanceFleetError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ModifyInstanceFleetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>
-    async fn modify_instance_groups(
+    fn modify_instance_groups(
         &self,
         input: ModifyInstanceGroupsInput,
-    ) -> Result<(), RusotoError<ModifyInstanceGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<ModifyInstanceGroupsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4443,26 +4796,36 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyInstanceGroupsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ModifyInstanceGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>
-    async fn put_auto_scaling_policy(
+    fn put_auto_scaling_policy(
         &self,
         input: PutAutoScalingPolicyInput,
-    ) -> Result<PutAutoScalingPolicyOutput, RusotoError<PutAutoScalingPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutAutoScalingPolicyOutput,
+                        RusotoError<PutAutoScalingPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4470,29 +4833,36 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAutoScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAutoScalingPolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutAutoScalingPolicyOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutAutoScalingPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates an Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
-    async fn put_block_public_access_configuration(
+    fn put_block_public_access_configuration(
         &self,
         input: PutBlockPublicAccessConfigurationInput,
-    ) -> Result<
-        PutBlockPublicAccessConfigurationOutput,
-        RusotoError<PutBlockPublicAccessConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutBlockPublicAccessConfigurationOutput,
+                        RusotoError<PutBlockPublicAccessConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -4504,29 +4874,39 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutBlockPublicAccessConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutBlockPublicAccessConfigurationError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutBlockPublicAccessConfigurationOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutBlockPublicAccessConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
-    async fn remove_auto_scaling_policy(
+    fn remove_auto_scaling_policy(
         &self,
         input: RemoveAutoScalingPolicyInput,
-    ) -> Result<RemoveAutoScalingPolicyOutput, RusotoError<RemoveAutoScalingPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RemoveAutoScalingPolicyOutput,
+                        RusotoError<RemoveAutoScalingPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4534,27 +4914,33 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveAutoScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveAutoScalingPolicyError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RemoveAutoScalingPolicyOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveAutoScalingPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>
-    async fn remove_tags(
+    fn remove_tags(
         &self,
         input: RemoveTagsInput,
-    ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RemoveTagsOutput, RusotoError<RemoveTagsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4562,26 +4948,32 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RemoveTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note></p>
-    async fn run_job_flow(
+    fn run_job_flow(
         &self,
         input: RunJobFlowInput,
-    ) -> Result<RunJobFlowOutput, RusotoError<RunJobFlowError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RunJobFlowOutput, RusotoError<RunJobFlowError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4589,26 +4981,32 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RunJobFlowOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RunJobFlowError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<RunJobFlowOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RunJobFlowError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>
-    async fn set_termination_protection(
+    fn set_termination_protection(
         &self,
         input: SetTerminationProtectionInput,
-    ) -> Result<(), RusotoError<SetTerminationProtectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetTerminationProtectionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4616,26 +5014,32 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetTerminationProtectionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SetTerminationProtectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
-    async fn set_visible_to_all_users(
+    fn set_visible_to_all_users(
         &self,
         input: SetVisibleToAllUsersInput,
-    ) -> Result<(), RusotoError<SetVisibleToAllUsersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<SetVisibleToAllUsersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4643,26 +5047,28 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetVisibleToAllUsersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SetVisibleToAllUsersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
-    async fn terminate_job_flows(
+    fn terminate_job_flows(
         &self,
         input: TerminateJobFlowsInput,
-    ) -> Result<(), RusotoError<TerminateJobFlowsError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<TerminateJobFlowsError>>> + Send + 'static>,
+    > {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4670,18 +5076,18 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateJobFlowsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                std::mem::drop(response);
+                Ok(())
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TerminateJobFlowsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

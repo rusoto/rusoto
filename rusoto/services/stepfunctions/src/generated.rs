@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2203,142 +2204,292 @@ impl fmt::Display for UpdateStateMachineError {
 }
 impl Error for UpdateStateMachineError {}
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
-#[async_trait]
 pub trait StepFunctions {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
-    async fn create_activity(
+    fn create_activity(
         &self,
         input: CreateActivityInput,
-    ) -> Result<CreateActivityOutput, RusotoError<CreateActivityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateActivityOutput, RusotoError<CreateActivityError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code> and <code>definition</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
-    async fn create_state_machine(
+    fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
-    ) -> Result<CreateStateMachineOutput, RusotoError<CreateStateMachineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateStateMachineOutput, RusotoError<CreateStateMachineError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an activity.</p>
-    async fn delete_activity(
+    fn delete_activity(
         &self,
         input: DeleteActivityInput,
-    ) -> Result<DeleteActivityOutput, RusotoError<DeleteActivityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteActivityOutput, RusotoError<DeleteActivityError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
-    async fn delete_state_machine(
+    fn delete_state_machine(
         &self,
         input: DeleteStateMachineInput,
-    ) -> Result<DeleteStateMachineOutput, RusotoError<DeleteStateMachineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteStateMachineOutput, RusotoError<DeleteStateMachineError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_activity(
+    fn describe_activity(
         &self,
         input: DescribeActivityInput,
-    ) -> Result<DescribeActivityOutput, RusotoError<DescribeActivityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeActivityOutput, RusotoError<DescribeActivityError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_execution(
+    fn describe_execution(
         &self,
         input: DescribeExecutionInput,
-    ) -> Result<DescribeExecutionOutput, RusotoError<DescribeExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeExecutionOutput, RusotoError<DescribeExecutionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_state_machine(
+    fn describe_state_machine(
         &self,
         input: DescribeStateMachineInput,
-    ) -> Result<DescribeStateMachineOutput, RusotoError<DescribeStateMachineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStateMachineOutput,
+                        RusotoError<DescribeStateMachineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_state_machine_for_execution(
+    fn describe_state_machine_for_execution(
         &self,
         input: DescribeStateMachineForExecutionInput,
-    ) -> Result<
-        DescribeStateMachineForExecutionOutput,
-        RusotoError<DescribeStateMachineForExecutionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStateMachineForExecutionOutput,
+                        RusotoError<DescribeStateMachineForExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
-    async fn get_activity_task(
+    fn get_activity_task(
         &self,
         input: GetActivityTaskInput,
-    ) -> Result<GetActivityTaskOutput, RusotoError<GetActivityTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetActivityTaskOutput, RusotoError<GetActivityTaskError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
-    async fn get_execution_history(
+    fn get_execution_history(
         &self,
         input: GetExecutionHistoryInput,
-    ) -> Result<GetExecutionHistoryOutput, RusotoError<GetExecutionHistoryError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetExecutionHistoryOutput,
+                        RusotoError<GetExecutionHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn list_activities(
+    fn list_activities(
         &self,
         input: ListActivitiesInput,
-    ) -> Result<ListActivitiesOutput, RusotoError<ListActivitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListActivitiesOutput, RusotoError<ListActivitiesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn list_executions(
+    fn list_executions(
         &self,
         input: ListExecutionsInput,
-    ) -> Result<ListExecutionsOutput, RusotoError<ListExecutionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListExecutionsOutput, RusotoError<ListExecutionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn list_state_machines(
+    fn list_state_machines(
         &self,
         input: ListStateMachinesInput,
-    ) -> Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceOutput,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> failed.</p>
-    async fn send_task_failure(
+    fn send_task_failure(
         &self,
         input: SendTaskFailureInput,
-    ) -> Result<SendTaskFailureOutput, RusotoError<SendTaskFailureError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendTaskFailureOutput, RusotoError<SendTaskFailureError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report to Step Functions that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition (<code>HeartbeatSeconds</code>). This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> entry for activities, or a <code>TaskTimedOut</code> entry for for tasks using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-sync">job run</a> or <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received. Use <code>HeartbeatSeconds</code> to configure the timeout interval for heartbeats.</p> </note></p>
-    async fn send_task_heartbeat(
+    fn send_task_heartbeat(
         &self,
         input: SendTaskHeartbeatInput,
-    ) -> Result<SendTaskHeartbeatOutput, RusotoError<SendTaskHeartbeatError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SendTaskHeartbeatOutput, RusotoError<SendTaskHeartbeatError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> completed successfully.</p>
-    async fn send_task_success(
+    fn send_task_success(
         &self,
         input: SendTaskSuccessInput,
-    ) -> Result<SendTaskSuccessOutput, RusotoError<SendTaskSuccessError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendTaskSuccessOutput, RusotoError<SendTaskSuccessError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
-    async fn start_execution(
+    fn start_execution(
         &self,
         input: StartExecutionInput,
-    ) -> Result<StartExecutionOutput, RusotoError<StartExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartExecutionOutput, RusotoError<StartExecutionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops an execution.</p>
-    async fn stop_execution(
+    fn stop_execution(
         &self,
         input: StopExecutionInput,
-    ) -> Result<StopExecutionOutput, RusotoError<StopExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopExecutionOutput, RusotoError<StopExecutionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add a tag to a Step Functions resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceOutput, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Remove a tag from a Step Functions resource</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceOutput, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
-    async fn update_state_machine(
+    fn update_state_machine(
         &self,
         input: UpdateStateMachineInput,
-    ) -> Result<UpdateStateMachineOutput, RusotoError<UpdateStateMachineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateStateMachineOutput, RusotoError<UpdateStateMachineError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS SFN API.
 #[derive(Clone)]
@@ -2378,13 +2529,18 @@ impl StepFunctionsClient {
     }
 }
 
-#[async_trait]
 impl StepFunctions for StepFunctionsClient {
     /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateActivity</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateActivity</code>&#39;s idempotency check is based on the activity <code>name</code>. If a following request has different <code>tags</code> values, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>tags</code> will not be updated, even if they are different.</p> </note></p>
-    async fn create_activity(
+    fn create_activity(
         &self,
         input: CreateActivityInput,
-    ) -> Result<CreateActivityOutput, RusotoError<CreateActivityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateActivityOutput, RusotoError<CreateActivityError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2392,26 +2548,34 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateActivityOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateActivityError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateActivityOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateActivityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note> <note> <p> <code>CreateStateMachine</code> is an idempotent API. Subsequent requests won’t create a duplicate resource if it was already created. <code>CreateStateMachine</code>&#39;s idempotency check is based on the state machine <code>name</code> and <code>definition</code>. If a following request has a different <code>roleArn</code> or <code>tags</code>, Step Functions will ignore these differences and treat it as an idempotent request of the previous. In this case, <code>roleArn</code> and <code>tags</code> will not be updated, even if they are different.</p> </note></p>
-    async fn create_state_machine(
+    fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
-    ) -> Result<CreateStateMachineOutput, RusotoError<CreateStateMachineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateStateMachineOutput, RusotoError<CreateStateMachineError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2419,27 +2583,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateStateMachineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateStateMachineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateStateMachineOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateStateMachineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an activity.</p>
-    async fn delete_activity(
+    fn delete_activity(
         &self,
         input: DeleteActivityInput,
-    ) -> Result<DeleteActivityOutput, RusotoError<DeleteActivityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteActivityOutput, RusotoError<DeleteActivityError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2447,26 +2617,34 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteActivityOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteActivityError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteActivityOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteActivityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
-    async fn delete_state_machine(
+    fn delete_state_machine(
         &self,
         input: DeleteStateMachineInput,
-    ) -> Result<DeleteStateMachineOutput, RusotoError<DeleteStateMachineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteStateMachineOutput, RusotoError<DeleteStateMachineError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2474,27 +2652,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteStateMachineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteStateMachineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteStateMachineOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteStateMachineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_activity(
+    fn describe_activity(
         &self,
         input: DescribeActivityInput,
-    ) -> Result<DescribeActivityOutput, RusotoError<DescribeActivityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeActivityOutput, RusotoError<DescribeActivityError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2502,26 +2686,34 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeActivityOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeActivityError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeActivityOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeActivityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_execution(
+    fn describe_execution(
         &self,
         input: DescribeExecutionInput,
-    ) -> Result<DescribeExecutionOutput, RusotoError<DescribeExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeExecutionOutput, RusotoError<DescribeExecutionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2529,26 +2721,37 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_state_machine(
+    fn describe_state_machine(
         &self,
         input: DescribeStateMachineInput,
-    ) -> Result<DescribeStateMachineOutput, RusotoError<DescribeStateMachineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStateMachineOutput,
+                        RusotoError<DescribeStateMachineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2556,29 +2759,36 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeStateMachineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStateMachineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeStateMachineOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeStateMachineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn describe_state_machine_for_execution(
+    fn describe_state_machine_for_execution(
         &self,
         input: DescribeStateMachineForExecutionInput,
-    ) -> Result<
-        DescribeStateMachineForExecutionOutput,
-        RusotoError<DescribeStateMachineForExecutionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeStateMachineForExecutionOutput,
+                        RusotoError<DescribeStateMachineForExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
@@ -2590,29 +2800,35 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeStateMachineForExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStateMachineForExecutionError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeStateMachineForExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeStateMachineForExecutionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
-    async fn get_activity_task(
+    fn get_activity_task(
         &self,
         input: GetActivityTaskInput,
-    ) -> Result<GetActivityTaskOutput, RusotoError<GetActivityTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetActivityTaskOutput, RusotoError<GetActivityTaskError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2620,26 +2836,37 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetActivityTaskOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetActivityTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetActivityTaskOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetActivityTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
-    async fn get_execution_history(
+    fn get_execution_history(
         &self,
         input: GetExecutionHistoryInput,
-    ) -> Result<GetExecutionHistoryOutput, RusotoError<GetExecutionHistoryError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetExecutionHistoryOutput,
+                        RusotoError<GetExecutionHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2647,27 +2874,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetExecutionHistoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetExecutionHistoryError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetExecutionHistoryOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetExecutionHistoryError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn list_activities(
+    fn list_activities(
         &self,
         input: ListActivitiesInput,
-    ) -> Result<ListActivitiesOutput, RusotoError<ListActivitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListActivitiesOutput, RusotoError<ListActivitiesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2675,26 +2908,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListActivitiesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListActivitiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListActivitiesOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListActivitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn list_executions(
+    fn list_executions(
         &self,
         input: ListExecutionsInput,
-    ) -> Result<ListExecutionsOutput, RusotoError<ListExecutionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListExecutionsOutput, RusotoError<ListExecutionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2702,26 +2942,34 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListExecutionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListExecutionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListExecutionsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListExecutionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
-    async fn list_state_machines(
+    fn list_state_machines(
         &self,
         input: ListStateMachinesInput,
-    ) -> Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListStateMachinesOutput, RusotoError<ListStateMachinesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2729,26 +2977,37 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListStateMachinesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStateMachinesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListStateMachinesOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListStateMachinesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List tags for a given resource.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceOutput,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2756,27 +3015,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> failed.</p>
-    async fn send_task_failure(
+    fn send_task_failure(
         &self,
         input: SendTaskFailureInput,
-    ) -> Result<SendTaskFailureOutput, RusotoError<SendTaskFailureError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendTaskFailureOutput, RusotoError<SendTaskFailureError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2784,26 +3049,34 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendTaskFailureOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendTaskFailureError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendTaskFailureOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SendTaskFailureError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report to Step Functions that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition (<code>HeartbeatSeconds</code>). This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> entry for activities, or a <code>TaskTimedOut</code> entry for for tasks using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-sync">job run</a> or <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received. Use <code>HeartbeatSeconds</code> to configure the timeout interval for heartbeats.</p> </note></p>
-    async fn send_task_heartbeat(
+    fn send_task_heartbeat(
         &self,
         input: SendTaskHeartbeatInput,
-    ) -> Result<SendTaskHeartbeatOutput, RusotoError<SendTaskHeartbeatError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<SendTaskHeartbeatOutput, RusotoError<SendTaskHeartbeatError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2811,26 +3084,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendTaskHeartbeatOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendTaskHeartbeatError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendTaskHeartbeatOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SendTaskHeartbeatError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Used by activity workers and task states using the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html#connect-wait-token">callback</a> pattern to report that the task identified by the <code>taskToken</code> completed successfully.</p>
-    async fn send_task_success(
+    fn send_task_success(
         &self,
         input: SendTaskSuccessInput,
-    ) -> Result<SendTaskSuccessOutput, RusotoError<SendTaskSuccessError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendTaskSuccessOutput, RusotoError<SendTaskSuccessError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2838,26 +3118,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendTaskSuccessOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendTaskSuccessError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendTaskSuccessOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(SendTaskSuccessError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
-    async fn start_execution(
+    fn start_execution(
         &self,
         input: StartExecutionInput,
-    ) -> Result<StartExecutionOutput, RusotoError<StartExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StartExecutionOutput, RusotoError<StartExecutionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2865,26 +3152,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops an execution.</p>
-    async fn stop_execution(
+    fn stop_execution(
         &self,
         input: StopExecutionInput,
-    ) -> Result<StopExecutionOutput, RusotoError<StopExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<StopExecutionOutput, RusotoError<StopExecutionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2892,26 +3186,32 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopExecutionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<StopExecutionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add a tag to a Step Functions resource.</p> <p>An array of key-value pairs. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>, and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html">Controlling Access Using IAM Tags</a>.</p> <p>Tags may only contain Unicode letters, digits, white space, or these symbols: <code>_ . : / = + - @</code>.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceOutput, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2919,26 +3219,32 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Remove a tag from a Step Functions resource</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceOutput, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2946,26 +3252,33 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
-    async fn update_state_machine(
+    fn update_state_machine(
         &self,
         input: UpdateStateMachineInput,
-    ) -> Result<UpdateStateMachineOutput, RusotoError<UpdateStateMachineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateStateMachineOutput, RusotoError<UpdateStateMachineError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2973,19 +3286,19 @@ impl StepFunctions for StepFunctionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateStateMachineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateStateMachineError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateStateMachineOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateStateMachineError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

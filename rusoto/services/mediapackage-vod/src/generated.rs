@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>A MediaPackage VOD Asset resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1530,82 +1531,182 @@ impl fmt::Display for ListPackagingGroupsError {
 }
 impl Error for ListPackagingGroupsError {}
 /// Trait representing the capabilities of the MediaPackage Vod API. MediaPackage Vod clients implement this trait.
-#[async_trait]
 pub trait MediaPackageVod {
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
-    async fn create_asset(
+    fn create_asset(
         &self,
         input: CreateAssetRequest,
-    ) -> Result<CreateAssetResponse, RusotoError<CreateAssetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateAssetResponse, RusotoError<CreateAssetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new MediaPackage VOD PackagingConfiguration resource.</p>
-    async fn create_packaging_configuration(
+    fn create_packaging_configuration(
         &self,
         input: CreatePackagingConfigurationRequest,
-    ) -> Result<CreatePackagingConfigurationResponse, RusotoError<CreatePackagingConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePackagingConfigurationResponse,
+                        RusotoError<CreatePackagingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new MediaPackage VOD PackagingGroup resource.</p>
-    async fn create_packaging_group(
+    fn create_packaging_group(
         &self,
         input: CreatePackagingGroupRequest,
-    ) -> Result<CreatePackagingGroupResponse, RusotoError<CreatePackagingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePackagingGroupResponse,
+                        RusotoError<CreatePackagingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing MediaPackage VOD Asset resource.</p>
-    async fn delete_asset(
+    fn delete_asset(
         &self,
         input: DeleteAssetRequest,
-    ) -> Result<DeleteAssetResponse, RusotoError<DeleteAssetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteAssetResponse, RusotoError<DeleteAssetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a MediaPackage VOD PackagingConfiguration resource.</p>
-    async fn delete_packaging_configuration(
+    fn delete_packaging_configuration(
         &self,
         input: DeletePackagingConfigurationRequest,
-    ) -> Result<DeletePackagingConfigurationResponse, RusotoError<DeletePackagingConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeletePackagingConfigurationResponse,
+                        RusotoError<DeletePackagingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a MediaPackage VOD PackagingGroup resource.</p>
-    async fn delete_packaging_group(
+    fn delete_packaging_group(
         &self,
         input: DeletePackagingGroupRequest,
-    ) -> Result<DeletePackagingGroupResponse, RusotoError<DeletePackagingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeletePackagingGroupResponse,
+                        RusotoError<DeletePackagingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a description of a MediaPackage VOD Asset resource.</p>
-    async fn describe_asset(
+    fn describe_asset(
         &self,
         input: DescribeAssetRequest,
-    ) -> Result<DescribeAssetResponse, RusotoError<DescribeAssetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeAssetResponse, RusotoError<DescribeAssetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a description of a MediaPackage VOD PackagingConfiguration resource.</p>
-    async fn describe_packaging_configuration(
+    fn describe_packaging_configuration(
         &self,
         input: DescribePackagingConfigurationRequest,
-    ) -> Result<
-        DescribePackagingConfigurationResponse,
-        RusotoError<DescribePackagingConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePackagingConfigurationResponse,
+                        RusotoError<DescribePackagingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns a description of a MediaPackage VOD PackagingGroup resource.</p>
-    async fn describe_packaging_group(
+    fn describe_packaging_group(
         &self,
         input: DescribePackagingGroupRequest,
-    ) -> Result<DescribePackagingGroupResponse, RusotoError<DescribePackagingGroupError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePackagingGroupResponse,
+                        RusotoError<DescribePackagingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a collection of MediaPackage VOD Asset resources.</p>
-    async fn list_assets(
+    fn list_assets(
         &self,
         input: ListAssetsRequest,
-    ) -> Result<ListAssetsResponse, RusotoError<ListAssetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAssetsResponse, RusotoError<ListAssetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a collection of MediaPackage VOD PackagingConfiguration resources.</p>
-    async fn list_packaging_configurations(
+    fn list_packaging_configurations(
         &self,
         input: ListPackagingConfigurationsRequest,
-    ) -> Result<ListPackagingConfigurationsResponse, RusotoError<ListPackagingConfigurationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPackagingConfigurationsResponse,
+                        RusotoError<ListPackagingConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a collection of MediaPackage VOD PackagingGroup resources.</p>
-    async fn list_packaging_groups(
+    fn list_packaging_groups(
         &self,
         input: ListPackagingGroupsRequest,
-    ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPackagingGroupsResponse,
+                        RusotoError<ListPackagingGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the MediaPackage Vod API.
 #[derive(Clone)]
@@ -1645,13 +1746,18 @@ impl MediaPackageVodClient {
     }
 }
 
-#[async_trait]
 impl MediaPackageVod for MediaPackageVodClient {
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
-    async fn create_asset(
+    fn create_asset(
         &self,
         input: CreateAssetRequest,
-    ) -> Result<CreateAssetResponse, RusotoError<CreateAssetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateAssetResponse, RusotoError<CreateAssetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/assets";
 
         let mut request =
@@ -1661,29 +1767,38 @@ impl MediaPackageVod for MediaPackageVodClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAssetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateAssetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAssetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new MediaPackage VOD PackagingConfiguration resource.</p>
-    async fn create_packaging_configuration(
+    fn create_packaging_configuration(
         &self,
         input: CreatePackagingConfigurationRequest,
-    ) -> Result<CreatePackagingConfigurationResponse, RusotoError<CreatePackagingConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePackagingConfigurationResponse,
+                        RusotoError<CreatePackagingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/packaging_configurations";
 
         let mut request =
@@ -1693,28 +1808,38 @@ impl MediaPackageVod for MediaPackageVodClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePackagingConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePackagingConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePackagingConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePackagingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new MediaPackage VOD PackagingGroup resource.</p>
-    async fn create_packaging_group(
+    fn create_packaging_group(
         &self,
         input: CreatePackagingGroupRequest,
-    ) -> Result<CreatePackagingGroupResponse, RusotoError<CreatePackagingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreatePackagingGroupResponse,
+                        RusotoError<CreatePackagingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/packaging_groups";
 
         let mut request =
@@ -1724,197 +1849,251 @@ impl MediaPackageVod for MediaPackageVodClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePackagingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePackagingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePackagingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePackagingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing MediaPackage VOD Asset resource.</p>
-    async fn delete_asset(
+    fn delete_asset(
         &self,
         input: DeleteAssetRequest,
-    ) -> Result<DeleteAssetResponse, RusotoError<DeleteAssetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteAssetResponse, RusotoError<DeleteAssetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/assets/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "mediapackage-vod", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAssetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteAssetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAssetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a MediaPackage VOD PackagingConfiguration resource.</p>
-    async fn delete_packaging_configuration(
+    fn delete_packaging_configuration(
         &self,
         input: DeletePackagingConfigurationRequest,
-    ) -> Result<DeletePackagingConfigurationResponse, RusotoError<DeletePackagingConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeletePackagingConfigurationResponse,
+                        RusotoError<DeletePackagingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/packaging_configurations/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "mediapackage-vod", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePackagingConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeletePackagingConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePackagingConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePackagingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a MediaPackage VOD PackagingGroup resource.</p>
-    async fn delete_packaging_group(
+    fn delete_packaging_group(
         &self,
         input: DeletePackagingGroupRequest,
-    ) -> Result<DeletePackagingGroupResponse, RusotoError<DeletePackagingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeletePackagingGroupResponse,
+                        RusotoError<DeletePackagingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/packaging_groups/{id}", id = input.id);
 
         let mut request =
             SignedRequest::new("DELETE", "mediapackage-vod", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePackagingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeletePackagingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePackagingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePackagingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a description of a MediaPackage VOD Asset resource.</p>
-    async fn describe_asset(
+    fn describe_asset(
         &self,
         input: DescribeAssetRequest,
-    ) -> Result<DescribeAssetResponse, RusotoError<DescribeAssetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeAssetResponse, RusotoError<DescribeAssetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/assets/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAssetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAssetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a description of a MediaPackage VOD PackagingConfiguration resource.</p>
-    async fn describe_packaging_configuration(
+    fn describe_packaging_configuration(
         &self,
         input: DescribePackagingConfigurationRequest,
-    ) -> Result<
-        DescribePackagingConfigurationResponse,
-        RusotoError<DescribePackagingConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePackagingConfigurationResponse,
+                        RusotoError<DescribePackagingConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/packaging_configurations/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePackagingConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePackagingConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePackagingConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePackagingConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a description of a MediaPackage VOD PackagingGroup resource.</p>
-    async fn describe_packaging_group(
+    fn describe_packaging_group(
         &self,
         input: DescribePackagingGroupRequest,
-    ) -> Result<DescribePackagingGroupResponse, RusotoError<DescribePackagingGroupError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribePackagingGroupResponse,
+                        RusotoError<DescribePackagingGroupError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/packaging_groups/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePackagingGroupResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribePackagingGroupResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePackagingGroupError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribePackagingGroupError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a collection of MediaPackage VOD Asset resources.</p>
-    async fn list_assets(
+    fn list_assets(
         &self,
         input: ListAssetsRequest,
-    ) -> Result<ListAssetsResponse, RusotoError<ListAssetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAssetsResponse, RusotoError<ListAssetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/assets";
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -1932,29 +2111,38 @@ impl MediaPackageVod for MediaPackageVodClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAssetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAssetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingConfiguration resources.</p>
-    async fn list_packaging_configurations(
+    fn list_packaging_configurations(
         &self,
         input: ListPackagingConfigurationsRequest,
-    ) -> Result<ListPackagingConfigurationsResponse, RusotoError<ListPackagingConfigurationsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPackagingConfigurationsResponse,
+                        RusotoError<ListPackagingConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/packaging_configurations";
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -1972,28 +2160,38 @@ impl MediaPackageVod for MediaPackageVodClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPackagingConfigurationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPackagingConfigurationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPackagingConfigurationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPackagingConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingGroup resources.</p>
-    async fn list_packaging_groups(
+    fn list_packaging_groups(
         &self,
         input: ListPackagingGroupsRequest,
-    ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListPackagingGroupsResponse,
+                        RusotoError<ListPackagingGroupsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/packaging_groups";
 
         let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
@@ -2008,20 +2206,20 @@ impl MediaPackageVod for MediaPackageVodClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPackagingGroupsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPackagingGroupsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPackagingGroupsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPackagingGroupsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

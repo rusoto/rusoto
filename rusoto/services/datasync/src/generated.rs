@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Represents a single entry in a list of agents. <code>AgentListEntry</code> returns an array that contains a list of agents when the <a>ListAgents</a> operation is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2262,181 +2263,402 @@ impl fmt::Display for UpdateTaskError {
 }
 impl Error for UpdateTaskError {}
 /// Trait representing the capabilities of the DataSync API. DataSync clients implement this trait.
-#[async_trait]
 pub trait DataSync {
     /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files are abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
-    async fn cancel_task_execution(
+    fn cancel_task_execution(
         &self,
         input: CancelTaskExecutionRequest,
-    ) -> Result<CancelTaskExecutionResponse, RusotoError<CancelTaskExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelTaskExecutionResponse,
+                        RusotoError<CancelTaskExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Activates an AWS DataSync agent that you have deployed on your host. The activation process associates your agent with your account. In the activation process, you specify information such as the AWS Region that you want to activate the agent in. You activate the agent in the AWS Region where your target locations (in Amazon S3 or Amazon EFS) reside. Your tasks are created in this AWS Region.</p> <p>You can activate the agent in a VPC (Virtual private Cloud) or provide the agent access to a VPC endpoint so you can run tasks without going over the public Internet.</p> <p>You can use an agent for more than one location. If a task uses multiple agents, all of them need to have status AVAILABLE for the task to run. If you use multiple agents for a source location, the status of all the agents must be AVAILABLE for the task to run. </p> <p>Agents are automatically updated by AWS on a regular basis, using a mechanism that ensures minimal interruption to your tasks.</p> <p/></p>
-    async fn create_agent(
+    fn create_agent(
         &self,
         input: CreateAgentRequest,
-    ) -> Result<CreateAgentResponse, RusotoError<CreateAgentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateAgentResponse, RusotoError<CreateAgentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an endpoint for an Amazon EFS file system.</p>
-    async fn create_location_efs(
+    fn create_location_efs(
         &self,
         input: CreateLocationEfsRequest,
-    ) -> Result<CreateLocationEfsResponse, RusotoError<CreateLocationEfsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationEfsResponse, RusotoError<CreateLocationEfsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an endpoint for an Amazon FSx for Windows file system.</p>
-    async fn create_location_fsx_windows(
+    fn create_location_fsx_windows(
         &self,
         input: CreateLocationFsxWindowsRequest,
-    ) -> Result<CreateLocationFsxWindowsResponse, RusotoError<CreateLocationFsxWindowsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateLocationFsxWindowsResponse,
+                        RusotoError<CreateLocationFsxWindowsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Defines a file system on a Network File System (NFS) server that can be read from or written to</p>
-    async fn create_location_nfs(
+    fn create_location_nfs(
         &self,
         input: CreateLocationNfsRequest,
-    ) -> Result<CreateLocationNfsResponse, RusotoError<CreateLocationNfsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationNfsResponse, RusotoError<CreateLocationNfsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an endpoint for an Amazon S3 bucket.</p> <p>For AWS DataSync to access a destination S3 bucket, it needs an AWS Identity and Access Management (IAM) role that has the required permissions. You can set up the required permissions by creating an IAM policy that grants the required permissions and attaching the policy to the role. An example of such a policy is shown in the examples section.</p> <p>For more information, see https://docs.aws.amazon.com/datasync/latest/userguide/working-with-locations.html#create-s3-location in the <i>AWS DataSync User Guide.</i> </p>
-    async fn create_location_s3(
+    fn create_location_s3(
         &self,
         input: CreateLocationS3Request,
-    ) -> Result<CreateLocationS3Response, RusotoError<CreateLocationS3Error>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationS3Response, RusotoError<CreateLocationS3Error>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Defines a file system on an Server Message Block (SMB) server that can be read from or written to.</p>
-    async fn create_location_smb(
+    fn create_location_smb(
         &self,
         input: CreateLocationSmbRequest,
-    ) -> Result<CreateLocationSmbResponse, RusotoError<CreateLocationSmbError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationSmbResponse, RusotoError<CreateLocationSmbError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a task. A task is a set of two locations (source and destination) and a set of Options that you use to control the behavior of a task. If you don't specify Options when you create a task, AWS DataSync populates them with service defaults.</p> <p>When you create a task, it first enters the CREATING state. During CREATING AWS DataSync attempts to mount the on-premises Network File System (NFS) location. The task transitions to the AVAILABLE state without waiting for the AWS location to become mounted. If required, AWS DataSync mounts the AWS location before each task execution.</p> <p>If an agent that is associated with a source (NFS) location goes offline, the task transitions to the UNAVAILABLE status. If the status of the task remains in the CREATING status for more than a few minutes, it means that your agent might be having trouble mounting the source NFS file system. Check the task's ErrorCode and ErrorDetail. Mount issues are often caused by either a misconfigured firewall or a mistyped NFS server host name.</p>
-    async fn create_task(
+    fn create_task(
         &self,
         input: CreateTaskRequest,
-    ) -> Result<CreateTaskResponse, RusotoError<CreateTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTaskResponse, RusotoError<CreateTaskError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an agent. To specify which agent to delete, use the Amazon Resource Name (ARN) of the agent in your request. The operation disassociates the agent from your AWS account. However, it doesn't delete the agent virtual machine (VM) from your on-premises environment.</p>
-    async fn delete_agent(
+    fn delete_agent(
         &self,
         input: DeleteAgentRequest,
-    ) -> Result<DeleteAgentResponse, RusotoError<DeleteAgentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteAgentResponse, RusotoError<DeleteAgentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the configuration of a location used by AWS DataSync. </p>
-    async fn delete_location(
+    fn delete_location(
         &self,
         input: DeleteLocationRequest,
-    ) -> Result<DeleteLocationResponse, RusotoError<DeleteLocationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteLocationResponse, RusotoError<DeleteLocationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a task.</p>
-    async fn delete_task(
+    fn delete_task(
         &self,
         input: DeleteTaskRequest,
-    ) -> Result<DeleteTaskResponse, RusotoError<DeleteTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTaskResponse, RusotoError<DeleteTaskError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata such as the name, the network interfaces, and the status (that is, whether the agent is running or not) for an agent. To specify which agent to describe, use the Amazon Resource Name (ARN) of the agent in your request. </p>
-    async fn describe_agent(
+    fn describe_agent(
         &self,
         input: DescribeAgentRequest,
-    ) -> Result<DescribeAgentResponse, RusotoError<DescribeAgentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeAgentResponse, RusotoError<DescribeAgentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata, such as the path information about an Amazon EFS location.</p>
-    async fn describe_location_efs(
+    fn describe_location_efs(
         &self,
         input: DescribeLocationEfsRequest,
-    ) -> Result<DescribeLocationEfsResponse, RusotoError<DescribeLocationEfsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationEfsResponse,
+                        RusotoError<DescribeLocationEfsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata, such as the path information about an Amazon FSx for Windows location.</p>
-    async fn describe_location_fsx_windows(
+    fn describe_location_fsx_windows(
         &self,
         input: DescribeLocationFsxWindowsRequest,
-    ) -> Result<DescribeLocationFsxWindowsResponse, RusotoError<DescribeLocationFsxWindowsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationFsxWindowsResponse,
+                        RusotoError<DescribeLocationFsxWindowsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata, such as the path information, about a NFS location.</p>
-    async fn describe_location_nfs(
+    fn describe_location_nfs(
         &self,
         input: DescribeLocationNfsRequest,
-    ) -> Result<DescribeLocationNfsResponse, RusotoError<DescribeLocationNfsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationNfsResponse,
+                        RusotoError<DescribeLocationNfsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata, such as bucket name, about an Amazon S3 bucket location.</p>
-    async fn describe_location_s3(
+    fn describe_location_s3(
         &self,
         input: DescribeLocationS3Request,
-    ) -> Result<DescribeLocationS3Response, RusotoError<DescribeLocationS3Error>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationS3Response,
+                        RusotoError<DescribeLocationS3Error>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata, such as the path and user information about a SMB location.</p>
-    async fn describe_location_smb(
+    fn describe_location_smb(
         &self,
         input: DescribeLocationSmbRequest,
-    ) -> Result<DescribeLocationSmbResponse, RusotoError<DescribeLocationSmbError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationSmbResponse,
+                        RusotoError<DescribeLocationSmbError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns metadata about a task.</p>
-    async fn describe_task(
+    fn describe_task(
         &self,
         input: DescribeTaskRequest,
-    ) -> Result<DescribeTaskResponse, RusotoError<DescribeTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeTaskResponse, RusotoError<DescribeTaskError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns detailed metadata about a task that is being executed.</p>
-    async fn describe_task_execution(
+    fn describe_task_execution(
         &self,
         input: DescribeTaskExecutionRequest,
-    ) -> Result<DescribeTaskExecutionResponse, RusotoError<DescribeTaskExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTaskExecutionResponse,
+                        RusotoError<DescribeTaskExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of agents owned by an AWS account in the AWS Region specified in the request. The returned list is ordered by agent Amazon Resource Name (ARN).</p> <p>By default, this operation returns a maximum of 100 agents. This operation supports pagination that enables you to optionally reduce the number of agents returned in a response.</p> <p>If you have more agents than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a marker that you can specify in your next request to fetch the next page of agents.</p>
-    async fn list_agents(
+    fn list_agents(
         &self,
         input: ListAgentsRequest,
-    ) -> Result<ListAgentsResponse, RusotoError<ListAgentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAgentsResponse, RusotoError<ListAgentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a lists of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
-    async fn list_locations(
+    fn list_locations(
         &self,
         input: ListLocationsRequest,
-    ) -> Result<ListLocationsResponse, RusotoError<ListLocationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListLocationsResponse, RusotoError<ListLocationsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns all the tags associated with a specified resources. </p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of executed tasks.</p>
-    async fn list_task_executions(
+    fn list_task_executions(
         &self,
         input: ListTaskExecutionsRequest,
-    ) -> Result<ListTaskExecutionsResponse, RusotoError<ListTaskExecutionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTaskExecutionsResponse,
+                        RusotoError<ListTaskExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of all the tasks.</p>
-    async fn list_tasks(
+    fn list_tasks(
         &self,
         input: ListTasksRequest,
-    ) -> Result<ListTasksResponse, RusotoError<ListTasksError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTasksResponse, RusotoError<ListTasksError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts a specific invocation of a task. A <code>TaskExecution</code> value represents an individual run of a task. Each task can have at most one <code>TaskExecution</code> at a time.</p> <p> <code>TaskExecution</code> has the following transition phases: INITIALIZING | PREPARING | TRANSFERRING | VERIFYING | SUCCESS/FAILURE. </p> <p>For detailed information, see the Task Execution section in the Components and Terminology topic in the <i>AWS DataSync User Guide</i>.</p>
-    async fn start_task_execution(
+    fn start_task_execution(
         &self,
         input: StartTaskExecutionRequest,
-    ) -> Result<StartTaskExecutionResponse, RusotoError<StartTaskExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTaskExecutionResponse,
+                        RusotoError<StartTaskExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Applies a key-value pair to an AWS resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a tag from an AWS resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the name of an agent.</p>
-    async fn update_agent(
+    fn update_agent(
         &self,
         input: UpdateAgentRequest,
-    ) -> Result<UpdateAgentResponse, RusotoError<UpdateAgentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateAgentResponse, RusotoError<UpdateAgentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the metadata associated with a task.</p>
-    async fn update_task(
+    fn update_task(
         &self,
         input: UpdateTaskRequest,
-    ) -> Result<UpdateTaskResponse, RusotoError<UpdateTaskError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTaskResponse, RusotoError<UpdateTaskError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the DataSync API.
 #[derive(Clone)]
@@ -2476,13 +2698,22 @@ impl DataSyncClient {
     }
 }
 
-#[async_trait]
 impl DataSync for DataSyncClient {
     /// <p>Cancels execution of a task. </p> <p>When you cancel a task execution, the transfer of some files are abruptly interrupted. The contents of files that are transferred to the destination might be incomplete or inconsistent with the source files. However, if you start a new task execution on the same task and you allow the task execution to complete, file content on the destination is complete and consistent. This applies to other unexpected failures that interrupt a task execution. In all of these cases, AWS DataSync successfully complete the transfer when you start the next task execution.</p>
-    async fn cancel_task_execution(
+    fn cancel_task_execution(
         &self,
         input: CancelTaskExecutionRequest,
-    ) -> Result<CancelTaskExecutionResponse, RusotoError<CancelTaskExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelTaskExecutionResponse,
+                        RusotoError<CancelTaskExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2490,27 +2721,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelTaskExecutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelTaskExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelTaskExecutionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelTaskExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Activates an AWS DataSync agent that you have deployed on your host. The activation process associates your agent with your account. In the activation process, you specify information such as the AWS Region that you want to activate the agent in. You activate the agent in the AWS Region where your target locations (in Amazon S3 or Amazon EFS) reside. Your tasks are created in this AWS Region.</p> <p>You can activate the agent in a VPC (Virtual private Cloud) or provide the agent access to a VPC endpoint so you can run tasks without going over the public Internet.</p> <p>You can use an agent for more than one location. If a task uses multiple agents, all of them need to have status AVAILABLE for the task to run. If you use multiple agents for a source location, the status of all the agents must be AVAILABLE for the task to run. </p> <p>Agents are automatically updated by AWS on a regular basis, using a mechanism that ensures minimal interruption to your tasks.</p> <p/></p>
-    async fn create_agent(
+    fn create_agent(
         &self,
         input: CreateAgentRequest,
-    ) -> Result<CreateAgentResponse, RusotoError<CreateAgentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateAgentResponse, RusotoError<CreateAgentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2518,26 +2755,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateAgentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAgentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateAgentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAgentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an endpoint for an Amazon EFS file system.</p>
-    async fn create_location_efs(
+    fn create_location_efs(
         &self,
         input: CreateLocationEfsRequest,
-    ) -> Result<CreateLocationEfsResponse, RusotoError<CreateLocationEfsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationEfsResponse, RusotoError<CreateLocationEfsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2545,27 +2789,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLocationEfsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLocationEfsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLocationEfsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLocationEfsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an endpoint for an Amazon FSx for Windows file system.</p>
-    async fn create_location_fsx_windows(
+    fn create_location_fsx_windows(
         &self,
         input: CreateLocationFsxWindowsRequest,
-    ) -> Result<CreateLocationFsxWindowsResponse, RusotoError<CreateLocationFsxWindowsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateLocationFsxWindowsResponse,
+                        RusotoError<CreateLocationFsxWindowsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2573,27 +2827,34 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLocationFsxWindowsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLocationFsxWindowsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLocationFsxWindowsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLocationFsxWindowsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Defines a file system on a Network File System (NFS) server that can be read from or written to</p>
-    async fn create_location_nfs(
+    fn create_location_nfs(
         &self,
         input: CreateLocationNfsRequest,
-    ) -> Result<CreateLocationNfsResponse, RusotoError<CreateLocationNfsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationNfsResponse, RusotoError<CreateLocationNfsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2601,27 +2862,34 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLocationNfsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLocationNfsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLocationNfsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLocationNfsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an endpoint for an Amazon S3 bucket.</p> <p>For AWS DataSync to access a destination S3 bucket, it needs an AWS Identity and Access Management (IAM) role that has the required permissions. You can set up the required permissions by creating an IAM policy that grants the required permissions and attaching the policy to the role. An example of such a policy is shown in the examples section.</p> <p>For more information, see https://docs.aws.amazon.com/datasync/latest/userguide/working-with-locations.html#create-s3-location in the <i>AWS DataSync User Guide.</i> </p>
-    async fn create_location_s3(
+    fn create_location_s3(
         &self,
         input: CreateLocationS3Request,
-    ) -> Result<CreateLocationS3Response, RusotoError<CreateLocationS3Error>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationS3Response, RusotoError<CreateLocationS3Error>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2629,27 +2897,34 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLocationS3Response, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLocationS3Error::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLocationS3Response, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLocationS3Error::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Defines a file system on an Server Message Block (SMB) server that can be read from or written to.</p>
-    async fn create_location_smb(
+    fn create_location_smb(
         &self,
         input: CreateLocationSmbRequest,
-    ) -> Result<CreateLocationSmbResponse, RusotoError<CreateLocationSmbError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateLocationSmbResponse, RusotoError<CreateLocationSmbError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2657,27 +2932,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLocationSmbResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLocationSmbError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLocationSmbResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLocationSmbError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a task. A task is a set of two locations (source and destination) and a set of Options that you use to control the behavior of a task. If you don't specify Options when you create a task, AWS DataSync populates them with service defaults.</p> <p>When you create a task, it first enters the CREATING state. During CREATING AWS DataSync attempts to mount the on-premises Network File System (NFS) location. The task transitions to the AVAILABLE state without waiting for the AWS location to become mounted. If required, AWS DataSync mounts the AWS location before each task execution.</p> <p>If an agent that is associated with a source (NFS) location goes offline, the task transitions to the UNAVAILABLE status. If the status of the task remains in the CREATING status for more than a few minutes, it means that your agent might be having trouble mounting the source NFS file system. Check the task's ErrorCode and ErrorDetail. Mount issues are often caused by either a misconfigured firewall or a mistyped NFS server host name.</p>
-    async fn create_task(
+    fn create_task(
         &self,
         input: CreateTaskRequest,
-    ) -> Result<CreateTaskResponse, RusotoError<CreateTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTaskResponse, RusotoError<CreateTaskError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2685,26 +2966,32 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTaskResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateTaskResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an agent. To specify which agent to delete, use the Amazon Resource Name (ARN) of the agent in your request. The operation disassociates the agent from your AWS account. However, it doesn't delete the agent virtual machine (VM) from your on-premises environment.</p>
-    async fn delete_agent(
+    fn delete_agent(
         &self,
         input: DeleteAgentRequest,
-    ) -> Result<DeleteAgentResponse, RusotoError<DeleteAgentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteAgentResponse, RusotoError<DeleteAgentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2712,26 +2999,32 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAgentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAgentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteAgentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAgentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the configuration of a location used by AWS DataSync. </p>
-    async fn delete_location(
+    fn delete_location(
         &self,
         input: DeleteLocationRequest,
-    ) -> Result<DeleteLocationResponse, RusotoError<DeleteLocationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteLocationResponse, RusotoError<DeleteLocationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2739,26 +3032,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteLocationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLocationError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteLocationResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteLocationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a task.</p>
-    async fn delete_task(
+    fn delete_task(
         &self,
         input: DeleteTaskRequest,
-    ) -> Result<DeleteTaskResponse, RusotoError<DeleteTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTaskResponse, RusotoError<DeleteTaskError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2766,26 +3066,32 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTaskResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteTaskResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata such as the name, the network interfaces, and the status (that is, whether the agent is running or not) for an agent. To specify which agent to describe, use the Amazon Resource Name (ARN) of the agent in your request. </p>
-    async fn describe_agent(
+    fn describe_agent(
         &self,
         input: DescribeAgentRequest,
-    ) -> Result<DescribeAgentResponse, RusotoError<DescribeAgentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeAgentResponse, RusotoError<DescribeAgentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2793,26 +3099,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAgentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAgentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeAgentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeAgentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata, such as the path information about an Amazon EFS location.</p>
-    async fn describe_location_efs(
+    fn describe_location_efs(
         &self,
         input: DescribeLocationEfsRequest,
-    ) -> Result<DescribeLocationEfsResponse, RusotoError<DescribeLocationEfsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationEfsResponse,
+                        RusotoError<DescribeLocationEfsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2820,28 +3137,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLocationEfsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLocationEfsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLocationEfsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLocationEfsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata, such as the path information about an Amazon FSx for Windows location.</p>
-    async fn describe_location_fsx_windows(
+    fn describe_location_fsx_windows(
         &self,
         input: DescribeLocationFsxWindowsRequest,
-    ) -> Result<DescribeLocationFsxWindowsResponse, RusotoError<DescribeLocationFsxWindowsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationFsxWindowsResponse,
+                        RusotoError<DescribeLocationFsxWindowsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2849,27 +3175,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLocationFsxWindowsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLocationFsxWindowsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLocationFsxWindowsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLocationFsxWindowsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata, such as the path information, about a NFS location.</p>
-    async fn describe_location_nfs(
+    fn describe_location_nfs(
         &self,
         input: DescribeLocationNfsRequest,
-    ) -> Result<DescribeLocationNfsResponse, RusotoError<DescribeLocationNfsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationNfsResponse,
+                        RusotoError<DescribeLocationNfsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2877,27 +3213,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLocationNfsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLocationNfsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLocationNfsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLocationNfsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata, such as bucket name, about an Amazon S3 bucket location.</p>
-    async fn describe_location_s3(
+    fn describe_location_s3(
         &self,
         input: DescribeLocationS3Request,
-    ) -> Result<DescribeLocationS3Response, RusotoError<DescribeLocationS3Error>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationS3Response,
+                        RusotoError<DescribeLocationS3Error>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2905,27 +3251,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLocationS3Response, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLocationS3Error::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLocationS3Response, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLocationS3Error::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata, such as the path and user information about a SMB location.</p>
-    async fn describe_location_smb(
+    fn describe_location_smb(
         &self,
         input: DescribeLocationSmbRequest,
-    ) -> Result<DescribeLocationSmbResponse, RusotoError<DescribeLocationSmbError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeLocationSmbResponse,
+                        RusotoError<DescribeLocationSmbError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2933,27 +3289,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLocationSmbResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLocationSmbError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLocationSmbResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLocationSmbError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns metadata about a task.</p>
-    async fn describe_task(
+    fn describe_task(
         &self,
         input: DescribeTaskRequest,
-    ) -> Result<DescribeTaskResponse, RusotoError<DescribeTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeTaskResponse, RusotoError<DescribeTaskError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2961,26 +3323,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTaskResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTaskResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns detailed metadata about a task that is being executed.</p>
-    async fn describe_task_execution(
+    fn describe_task_execution(
         &self,
         input: DescribeTaskExecutionRequest,
-    ) -> Result<DescribeTaskExecutionResponse, RusotoError<DescribeTaskExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTaskExecutionResponse,
+                        RusotoError<DescribeTaskExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2988,27 +3361,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTaskExecutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTaskExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTaskExecutionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTaskExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of agents owned by an AWS account in the AWS Region specified in the request. The returned list is ordered by agent Amazon Resource Name (ARN).</p> <p>By default, this operation returns a maximum of 100 agents. This operation supports pagination that enables you to optionally reduce the number of agents returned in a response.</p> <p>If you have more agents than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a marker that you can specify in your next request to fetch the next page of agents.</p>
-    async fn list_agents(
+    fn list_agents(
         &self,
         input: ListAgentsRequest,
-    ) -> Result<ListAgentsResponse, RusotoError<ListAgentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListAgentsResponse, RusotoError<ListAgentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3016,26 +3395,32 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListAgentsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAgentsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListAgentsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAgentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a lists of source and destination locations.</p> <p>If you have more locations than are returned in a response (that is, the response returns only a truncated list of your agents), the response contains a token that you can specify in your next request to fetch the next page of locations.</p>
-    async fn list_locations(
+    fn list_locations(
         &self,
         input: ListLocationsRequest,
-    ) -> Result<ListLocationsResponse, RusotoError<ListLocationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListLocationsResponse, RusotoError<ListLocationsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3043,26 +3428,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListLocationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLocationsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListLocationsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListLocationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns all the tags associated with a specified resources. </p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3070,27 +3466,37 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of executed tasks.</p>
-    async fn list_task_executions(
+    fn list_task_executions(
         &self,
         input: ListTaskExecutionsRequest,
-    ) -> Result<ListTaskExecutionsResponse, RusotoError<ListTaskExecutionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTaskExecutionsResponse,
+                        RusotoError<ListTaskExecutionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3098,27 +3504,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTaskExecutionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTaskExecutionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTaskExecutionsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTaskExecutionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of all the tasks.</p>
-    async fn list_tasks(
+    fn list_tasks(
         &self,
         input: ListTasksRequest,
-    ) -> Result<ListTasksResponse, RusotoError<ListTasksError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTasksResponse, RusotoError<ListTasksError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3126,26 +3538,36 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTasksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTasksError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<ListTasksResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTasksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts a specific invocation of a task. A <code>TaskExecution</code> value represents an individual run of a task. Each task can have at most one <code>TaskExecution</code> at a time.</p> <p> <code>TaskExecution</code> has the following transition phases: INITIALIZING | PREPARING | TRANSFERRING | VERIFYING | SUCCESS/FAILURE. </p> <p>For detailed information, see the Task Execution section in the Components and Terminology topic in the <i>AWS DataSync User Guide</i>.</p>
-    async fn start_task_execution(
+    fn start_task_execution(
         &self,
         input: StartTaskExecutionRequest,
-    ) -> Result<StartTaskExecutionResponse, RusotoError<StartTaskExecutionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTaskExecutionResponse,
+                        RusotoError<StartTaskExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3153,27 +3575,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTaskExecutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTaskExecutionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartTaskExecutionResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartTaskExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Applies a key-value pair to an AWS resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3181,26 +3609,32 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a tag from an AWS resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3208,26 +3642,33 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the name of an agent.</p>
-    async fn update_agent(
+    fn update_agent(
         &self,
         input: UpdateAgentRequest,
-    ) -> Result<UpdateAgentResponse, RusotoError<UpdateAgentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateAgentResponse, RusotoError<UpdateAgentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3235,26 +3676,32 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateAgentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAgentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateAgentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAgentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the metadata associated with a task.</p>
-    async fn update_task(
+    fn update_task(
         &self,
         input: UpdateTaskRequest,
-    ) -> Result<UpdateTaskResponse, RusotoError<UpdateTaskError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateTaskResponse, RusotoError<UpdateTaskError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "datasync", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3262,18 +3709,18 @@ impl DataSync for DataSyncClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTaskResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTaskError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<UpdateTaskResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateTaskError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

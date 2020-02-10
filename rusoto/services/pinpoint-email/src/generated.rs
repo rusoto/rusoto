@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>An object that contains information about a blacklisting event that impacts one of the dedicated IP addresses that is associated with your account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3821,311 +3822,648 @@ impl fmt::Display for UpdateConfigurationSetEventDestinationError {
 }
 impl Error for UpdateConfigurationSetEventDestinationError {}
 /// Trait representing the capabilities of the Pinpoint Email API. Pinpoint Email clients implement this trait.
-#[async_trait]
 pub trait PinpointEmail {
     /// <p>Create a configuration set. <i>Configuration sets</i> are groups of rules that you can apply to the emails you send using Amazon Pinpoint. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email. </p>
-    async fn create_configuration_set(
+    fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetResponse,
+                        RusotoError<CreateConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create an event destination. In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p> <p>A single configuration set can include more than one event destination.</p>
-    async fn create_configuration_set_event_destination(
+    fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        CreateConfigurationSetEventDestinationResponse,
-        RusotoError<CreateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetEventDestinationResponse,
+                        RusotoError<CreateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Create a new pool of dedicated IP addresses. A pool can include one or more dedicated IP addresses that are associated with your Amazon Pinpoint account. You can associate a pool with a configuration set. When you send an email that uses that configuration set, Amazon Pinpoint sends it using only the IP addresses in the associated pool.</p>
-    async fn create_dedicated_ip_pool(
+    fn create_dedicated_ip_pool(
         &self,
         input: CreateDedicatedIpPoolRequest,
-    ) -> Result<CreateDedicatedIpPoolResponse, RusotoError<CreateDedicatedIpPoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDedicatedIpPoolResponse,
+                        RusotoError<CreateDedicatedIpPoolError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new predictive inbox placement test. Predictive inbox placement tests can help you predict how your messages will be handled by various email providers around the world. When you perform a predictive inbox placement test, you provide a sample message that contains the content that you plan to send to your customers. Amazon Pinpoint then sends that message to special email addresses spread across several major email providers. After about 24 hours, the test is complete, and you can use the <code>GetDeliverabilityTestReport</code> operation to view the results of the test.</p>
-    async fn create_deliverability_test_report(
+    fn create_deliverability_test_report(
         &self,
         input: CreateDeliverabilityTestReportRequest,
-    ) -> Result<
-        CreateDeliverabilityTestReportResponse,
-        RusotoError<CreateDeliverabilityTestReportError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDeliverabilityTestReportResponse,
+                        RusotoError<CreateDeliverabilityTestReportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Verifies an email identity for use with Amazon Pinpoint. In Amazon Pinpoint, an identity is an email address or domain that you use when you send email. Before you can use an identity to send email with Amazon Pinpoint, you first have to verify it. By verifying an address, you demonstrate that you're the owner of the address, and that you've given Amazon Pinpoint permission to send email from the address.</p> <p>When you verify an email address, Amazon Pinpoint sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain, this operation provides a set of DKIM tokens, which you can convert into CNAME tokens. You add these CNAME tokens to the DNS configuration for your domain. Your domain is verified when Amazon Pinpoint detects these records in the DNS configuration for your domain. It usually takes around 72 hours to complete the domain verification process.</p>
-    async fn create_email_identity(
+    fn create_email_identity(
         &self,
         input: CreateEmailIdentityRequest,
-    ) -> Result<CreateEmailIdentityResponse, RusotoError<CreateEmailIdentityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateEmailIdentityResponse,
+                        RusotoError<CreateEmailIdentityError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an existing configuration set.</p> <p>In Amazon Pinpoint, <i>configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
-    async fn delete_configuration_set(
+    fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetResponse,
+                        RusotoError<DeleteConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Delete an event destination.</p> <p>In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
-    async fn delete_configuration_set_event_destination(
+    fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        DeleteConfigurationSetEventDestinationResponse,
-        RusotoError<DeleteConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetEventDestinationResponse,
+                        RusotoError<DeleteConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Delete a dedicated IP pool.</p>
-    async fn delete_dedicated_ip_pool(
+    fn delete_dedicated_ip_pool(
         &self,
         input: DeleteDedicatedIpPoolRequest,
-    ) -> Result<DeleteDedicatedIpPoolResponse, RusotoError<DeleteDedicatedIpPoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDedicatedIpPoolResponse,
+                        RusotoError<DeleteDedicatedIpPoolError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an email identity that you previously verified for use with Amazon Pinpoint. An identity can be either an email address or a domain name.</p>
-    async fn delete_email_identity(
+    fn delete_email_identity(
         &self,
         input: DeleteEmailIdentityRequest,
-    ) -> Result<DeleteEmailIdentityResponse, RusotoError<DeleteEmailIdentityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteEmailIdentityResponse,
+                        RusotoError<DeleteEmailIdentityError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Obtain information about the email-sending status and capabilities of your Amazon Pinpoint account in the current AWS Region.</p>
-    async fn get_account(&self) -> Result<GetAccountResponse, RusotoError<GetAccountError>>;
+    fn get_account(
+        &self,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetAccountResponse, RusotoError<GetAccountError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a list of the blacklists that your dedicated IP addresses appear on.</p>
-    async fn get_blacklist_reports(
+    fn get_blacklist_reports(
         &self,
         input: GetBlacklistReportsRequest,
-    ) -> Result<GetBlacklistReportsResponse, RusotoError<GetBlacklistReportsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBlacklistReportsResponse,
+                        RusotoError<GetBlacklistReportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get information about an existing configuration set, including the dedicated IP pool that it's associated with, whether or not it's enabled for sending email, and more.</p> <p>In Amazon Pinpoint, <i>configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
-    async fn get_configuration_set(
+    fn get_configuration_set(
         &self,
         input: GetConfigurationSetRequest,
-    ) -> Result<GetConfigurationSetResponse, RusotoError<GetConfigurationSetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConfigurationSetResponse,
+                        RusotoError<GetConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a list of event destinations that are associated with a configuration set.</p> <p>In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
-    async fn get_configuration_set_event_destinations(
+    fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
-    ) -> Result<
-        GetConfigurationSetEventDestinationsResponse,
-        RusotoError<GetConfigurationSetEventDestinationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConfigurationSetEventDestinationsResponse,
+                        RusotoError<GetConfigurationSetEventDestinationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Get information about a dedicated IP address, including the name of the dedicated IP pool that it's associated with, as well information about the automatic warm-up process for the address.</p>
-    async fn get_dedicated_ip(
+    fn get_dedicated_ip(
         &self,
         input: GetDedicatedIpRequest,
-    ) -> Result<GetDedicatedIpResponse, RusotoError<GetDedicatedIpError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDedicatedIpResponse, RusotoError<GetDedicatedIpError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the dedicated IP addresses that are associated with your Amazon Pinpoint account.</p>
-    async fn get_dedicated_ips(
+    fn get_dedicated_ips(
         &self,
         input: GetDedicatedIpsRequest,
-    ) -> Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve information about the status of the Deliverability dashboard for your Amazon Pinpoint account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
-    async fn get_deliverability_dashboard_options(
+    fn get_deliverability_dashboard_options(
         &self,
-    ) -> Result<
-        GetDeliverabilityDashboardOptionsResponse,
-        RusotoError<GetDeliverabilityDashboardOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDeliverabilityDashboardOptionsResponse,
+                        RusotoError<GetDeliverabilityDashboardOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieve the results of a predictive inbox placement test.</p>
-    async fn get_deliverability_test_report(
+    fn get_deliverability_test_report(
         &self,
         input: GetDeliverabilityTestReportRequest,
-    ) -> Result<GetDeliverabilityTestReportResponse, RusotoError<GetDeliverabilityTestReportError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDeliverabilityTestReportResponse,
+                        RusotoError<GetDeliverabilityTestReportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for (<code>PutDeliverabilityDashboardOption</code> operation).</p>
-    async fn get_domain_deliverability_campaign(
+    fn get_domain_deliverability_campaign(
         &self,
         input: GetDomainDeliverabilityCampaignRequest,
-    ) -> Result<
-        GetDomainDeliverabilityCampaignResponse,
-        RusotoError<GetDomainDeliverabilityCampaignError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDomainDeliverabilityCampaignResponse,
+                        RusotoError<GetDomainDeliverabilityCampaignError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieve inbox placement and engagement rates for the domains that you use to send email.</p>
-    async fn get_domain_statistics_report(
+    fn get_domain_statistics_report(
         &self,
         input: GetDomainStatisticsReportRequest,
-    ) -> Result<GetDomainStatisticsReportResponse, RusotoError<GetDomainStatisticsReportError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDomainStatisticsReportResponse,
+                        RusotoError<GetDomainStatisticsReportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides information about a specific identity associated with your Amazon Pinpoint account, including the identity's verification status, its DKIM authentication status, and its custom Mail-From settings.</p>
-    async fn get_email_identity(
+    fn get_email_identity(
         &self,
         input: GetEmailIdentityRequest,
-    ) -> Result<GetEmailIdentityResponse, RusotoError<GetEmailIdentityError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetEmailIdentityResponse, RusotoError<GetEmailIdentityError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all of the configuration sets associated with your Amazon Pinpoint account in the current region.</p> <p>In Amazon Pinpoint, <i>configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
-    async fn list_configuration_sets(
+    fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListConfigurationSetsResponse,
+                        RusotoError<ListConfigurationSetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List all of the dedicated IP pools that exist in your Amazon Pinpoint account in the current AWS Region.</p>
-    async fn list_dedicated_ip_pools(
+    fn list_dedicated_ip_pools(
         &self,
         input: ListDedicatedIpPoolsRequest,
-    ) -> Result<ListDedicatedIpPoolsResponse, RusotoError<ListDedicatedIpPoolsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDedicatedIpPoolsResponse,
+                        RusotoError<ListDedicatedIpPoolsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Show a list of the predictive inbox placement tests that you've performed, regardless of their statuses. For predictive inbox placement tests that are complete, you can use the <code>GetDeliverabilityTestReport</code> operation to view the results.</p>
-    async fn list_deliverability_test_reports(
+    fn list_deliverability_test_reports(
         &self,
         input: ListDeliverabilityTestReportsRequest,
-    ) -> Result<
-        ListDeliverabilityTestReportsResponse,
-        RusotoError<ListDeliverabilityTestReportsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDeliverabilityTestReportsResponse,
+                        RusotoError<ListDeliverabilityTestReportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard (<code>PutDeliverabilityDashboardOption</code> operation) for the domain.</p>
-    async fn list_domain_deliverability_campaigns(
+    fn list_domain_deliverability_campaigns(
         &self,
         input: ListDomainDeliverabilityCampaignsRequest,
-    ) -> Result<
-        ListDomainDeliverabilityCampaignsResponse,
-        RusotoError<ListDomainDeliverabilityCampaignsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDomainDeliverabilityCampaignsResponse,
+                        RusotoError<ListDomainDeliverabilityCampaignsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns a list of all of the email identities that are associated with your Amazon Pinpoint account. An identity can be either an email address or a domain. This operation returns identities that are verified as well as those that aren't.</p>
-    async fn list_email_identities(
+    fn list_email_identities(
         &self,
         input: ListEmailIdentitiesRequest,
-    ) -> Result<ListEmailIdentitiesResponse, RusotoError<ListEmailIdentitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEmailIdentitiesResponse,
+                        RusotoError<ListEmailIdentitiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource in Amazon Pinpoint. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Enable or disable the automatic warm-up feature for dedicated IP addresses.</p>
-    async fn put_account_dedicated_ip_warmup_attributes(
+    fn put_account_dedicated_ip_warmup_attributes(
         &self,
         input: PutAccountDedicatedIpWarmupAttributesRequest,
-    ) -> Result<
-        PutAccountDedicatedIpWarmupAttributesResponse,
-        RusotoError<PutAccountDedicatedIpWarmupAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutAccountDedicatedIpWarmupAttributesResponse,
+                        RusotoError<PutAccountDedicatedIpWarmupAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Enable or disable the ability of your account to send email.</p>
-    async fn put_account_sending_attributes(
+    fn put_account_sending_attributes(
         &self,
         input: PutAccountSendingAttributesRequest,
-    ) -> Result<PutAccountSendingAttributesResponse, RusotoError<PutAccountSendingAttributesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutAccountSendingAttributesResponse,
+                        RusotoError<PutAccountSendingAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associate a configuration set with a dedicated IP pool. You can use dedicated IP pools to create groups of dedicated IP addresses for sending specific types of email.</p>
-    async fn put_configuration_set_delivery_options(
+    fn put_configuration_set_delivery_options(
         &self,
         input: PutConfigurationSetDeliveryOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetDeliveryOptionsResponse,
-        RusotoError<PutConfigurationSetDeliveryOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetDeliveryOptionsResponse,
+                        RusotoError<PutConfigurationSetDeliveryOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Enable or disable collection of reputation metrics for emails that you send using a particular configuration set in a specific AWS Region.</p>
-    async fn put_configuration_set_reputation_options(
+    fn put_configuration_set_reputation_options(
         &self,
         input: PutConfigurationSetReputationOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetReputationOptionsResponse,
-        RusotoError<PutConfigurationSetReputationOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetReputationOptionsResponse,
+                        RusotoError<PutConfigurationSetReputationOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Enable or disable email sending for messages that use a particular configuration set in a specific AWS Region.</p>
-    async fn put_configuration_set_sending_options(
+    fn put_configuration_set_sending_options(
         &self,
         input: PutConfigurationSetSendingOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetSendingOptionsResponse,
-        RusotoError<PutConfigurationSetSendingOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetSendingOptionsResponse,
+                        RusotoError<PutConfigurationSetSendingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Specify a custom domain to use for open and click tracking elements in email that you send using Amazon Pinpoint.</p>
-    async fn put_configuration_set_tracking_options(
+    fn put_configuration_set_tracking_options(
         &self,
         input: PutConfigurationSetTrackingOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetTrackingOptionsResponse,
-        RusotoError<PutConfigurationSetTrackingOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetTrackingOptionsResponse,
+                        RusotoError<PutConfigurationSetTrackingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Move a dedicated IP address to an existing dedicated IP pool.</p> <note> <p>The dedicated IP address that you specify must already exist, and must be associated with your Amazon Pinpoint account. </p> <p>The dedicated IP pool you specify must already exist. You can create a new pool by using the <code>CreateDedicatedIpPool</code> operation.</p> </note></p>
-    async fn put_dedicated_ip_in_pool(
+    fn put_dedicated_ip_in_pool(
         &self,
         input: PutDedicatedIpInPoolRequest,
-    ) -> Result<PutDedicatedIpInPoolResponse, RusotoError<PutDedicatedIpInPoolError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDedicatedIpInPoolResponse,
+                        RusotoError<PutDedicatedIpInPoolError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p/></p>
-    async fn put_dedicated_ip_warmup_attributes(
+    fn put_dedicated_ip_warmup_attributes(
         &self,
         input: PutDedicatedIpWarmupAttributesRequest,
-    ) -> Result<
-        PutDedicatedIpWarmupAttributesResponse,
-        RusotoError<PutDedicatedIpWarmupAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDedicatedIpWarmupAttributesResponse,
+                        RusotoError<PutDedicatedIpWarmupAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Enable or disable the Deliverability dashboard for your Amazon Pinpoint account. When you enable the Deliverability dashboard, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
-    async fn put_deliverability_dashboard_option(
+    fn put_deliverability_dashboard_option(
         &self,
         input: PutDeliverabilityDashboardOptionRequest,
-    ) -> Result<
-        PutDeliverabilityDashboardOptionResponse,
-        RusotoError<PutDeliverabilityDashboardOptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDeliverabilityDashboardOptionResponse,
+                        RusotoError<PutDeliverabilityDashboardOptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Used to enable or disable DKIM authentication for an email identity.</p>
-    async fn put_email_identity_dkim_attributes(
+    fn put_email_identity_dkim_attributes(
         &self,
         input: PutEmailIdentityDkimAttributesRequest,
-    ) -> Result<
-        PutEmailIdentityDkimAttributesResponse,
-        RusotoError<PutEmailIdentityDkimAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutEmailIdentityDkimAttributesResponse,
+                        RusotoError<PutEmailIdentityDkimAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Used to enable or disable feedback forwarding for an identity. This setting determines what happens when an identity is used to send an email that results in a bounce or complaint event.</p> <p>When you enable feedback forwarding, Amazon Pinpoint sends you email notifications when bounce or complaint events occur. Amazon Pinpoint sends this notification to the address that you specified in the Return-Path header of the original email.</p> <p>When you disable feedback forwarding, Amazon Pinpoint sends notifications through other mechanisms, such as by notifying an Amazon SNS topic. You're required to have a method of tracking bounces and complaints. If you haven't set up another mechanism for receiving bounce or complaint notifications, Amazon Pinpoint sends an email notification when these events occur (even if this setting is disabled).</p>
-    async fn put_email_identity_feedback_attributes(
+    fn put_email_identity_feedback_attributes(
         &self,
         input: PutEmailIdentityFeedbackAttributesRequest,
-    ) -> Result<
-        PutEmailIdentityFeedbackAttributesResponse,
-        RusotoError<PutEmailIdentityFeedbackAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutEmailIdentityFeedbackAttributesResponse,
+                        RusotoError<PutEmailIdentityFeedbackAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Used to enable or disable the custom Mail-From domain configuration for an email identity.</p>
-    async fn put_email_identity_mail_from_attributes(
+    fn put_email_identity_mail_from_attributes(
         &self,
         input: PutEmailIdentityMailFromAttributesRequest,
-    ) -> Result<
-        PutEmailIdentityMailFromAttributesResponse,
-        RusotoError<PutEmailIdentityMailFromAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutEmailIdentityMailFromAttributesResponse,
+                        RusotoError<PutEmailIdentityMailFromAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Sends an email message. You can use the Amazon Pinpoint Email API to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon Pinpoint assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> </ul></p>
-    async fn send_email(
+    fn send_email(
         &self,
         input: SendEmailRequest,
-    ) -> Result<SendEmailResponse, RusotoError<SendEmailError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendEmailResponse, RusotoError<SendEmailError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add one or more tags (keys and values) to a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource in Amazon Pinpoint. Tags can help you categorize and manage resources in different ways, such as by purpose, owner, environment, or other criteria. A resource can have as many as 50 tags.</p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Remove one or more tags (keys and values) from a specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Update the configuration of an event destination for a configuration set.</p> <p>In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
-    async fn update_configuration_set_event_destination(
+    fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        UpdateConfigurationSetEventDestinationResponse,
-        RusotoError<UpdateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateConfigurationSetEventDestinationResponse,
+                        RusotoError<UpdateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 }
 /// A client for the Pinpoint Email API.
@@ -4166,13 +4504,22 @@ impl PinpointEmailClient {
     }
 }
 
-#[async_trait]
 impl PinpointEmail for PinpointEmailClient {
     /// <p>Create a configuration set. <i>Configuration sets</i> are groups of rules that you can apply to the emails you send using Amazon Pinpoint. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email. </p>
-    async fn create_configuration_set(
+    fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
-    ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetResponse,
+                        RusotoError<CreateConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/configuration-sets";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4182,30 +4529,37 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConfigurationSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateConfigurationSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConfigurationSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConfigurationSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create an event destination. In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p> <p>A single configuration set can include more than one event destination.</p>
-    async fn create_configuration_set_event_destination(
+    fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        CreateConfigurationSetEventDestinationResponse,
-        RusotoError<CreateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateConfigurationSetEventDestinationResponse,
+                        RusotoError<CreateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/event-destinations",
@@ -4219,30 +4573,40 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConfigurationSetEventDestinationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConfigurationSetEventDestinationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new pool of dedicated IP addresses. A pool can include one or more dedicated IP addresses that are associated with your Amazon Pinpoint account. You can associate a pool with a configuration set. When you send an email that uses that configuration set, Amazon Pinpoint sends it using only the IP addresses in the associated pool.</p>
-    async fn create_dedicated_ip_pool(
+    fn create_dedicated_ip_pool(
         &self,
         input: CreateDedicatedIpPoolRequest,
-    ) -> Result<CreateDedicatedIpPoolResponse, RusotoError<CreateDedicatedIpPoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDedicatedIpPoolResponse,
+                        RusotoError<CreateDedicatedIpPoolError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/dedicated-ip-pools";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4252,30 +4616,37 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDedicatedIpPoolResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDedicatedIpPoolResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDedicatedIpPoolError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDedicatedIpPoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new predictive inbox placement test. Predictive inbox placement tests can help you predict how your messages will be handled by various email providers around the world. When you perform a predictive inbox placement test, you provide a sample message that contains the content that you plan to send to your customers. Amazon Pinpoint then sends that message to special email addresses spread across several major email providers. After about 24 hours, the test is complete, and you can use the <code>GetDeliverabilityTestReport</code> operation to view the results of the test.</p>
-    async fn create_deliverability_test_report(
+    fn create_deliverability_test_report(
         &self,
         input: CreateDeliverabilityTestReportRequest,
-    ) -> Result<
-        CreateDeliverabilityTestReportResponse,
-        RusotoError<CreateDeliverabilityTestReportError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDeliverabilityTestReportResponse,
+                        RusotoError<CreateDeliverabilityTestReportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/v1/email/deliverability-dashboard/test";
 
@@ -4286,28 +4657,38 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeliverabilityTestReportResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDeliverabilityTestReportResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeliverabilityTestReportError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDeliverabilityTestReportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Verifies an email identity for use with Amazon Pinpoint. In Amazon Pinpoint, an identity is an email address or domain that you use when you send email. Before you can use an identity to send email with Amazon Pinpoint, you first have to verify it. By verifying an address, you demonstrate that you're the owner of the address, and that you've given Amazon Pinpoint permission to send email from the address.</p> <p>When you verify an email address, Amazon Pinpoint sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain, this operation provides a set of DKIM tokens, which you can convert into CNAME tokens. You add these CNAME tokens to the DNS configuration for your domain. Your domain is verified when Amazon Pinpoint detects these records in the DNS configuration for your domain. It usually takes around 72 hours to complete the domain verification process.</p>
-    async fn create_email_identity(
+    fn create_email_identity(
         &self,
         input: CreateEmailIdentityRequest,
-    ) -> Result<CreateEmailIdentityResponse, RusotoError<CreateEmailIdentityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateEmailIdentityResponse,
+                        RusotoError<CreateEmailIdentityError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/identities";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -4317,28 +4698,38 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateEmailIdentityResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateEmailIdentityResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEmailIdentityError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateEmailIdentityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an existing configuration set.</p> <p>In Amazon Pinpoint, <i>configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
-    async fn delete_configuration_set(
+    fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
-    ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetResponse,
+                        RusotoError<DeleteConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}",
             configuration_set_name = input.configuration_set_name
@@ -4349,30 +4740,37 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConfigurationSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteConfigurationSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConfigurationSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete an event destination.</p> <p>In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
-    async fn delete_configuration_set_event_destination(
+    fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        DeleteConfigurationSetEventDestinationResponse,
-        RusotoError<DeleteConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteConfigurationSetEventDestinationResponse,
+                        RusotoError<DeleteConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/v1/email/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
@@ -4381,30 +4779,40 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationSetEventDestinationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConfigurationSetEventDestinationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Delete a dedicated IP pool.</p>
-    async fn delete_dedicated_ip_pool(
+    fn delete_dedicated_ip_pool(
         &self,
         input: DeleteDedicatedIpPoolRequest,
-    ) -> Result<DeleteDedicatedIpPoolResponse, RusotoError<DeleteDedicatedIpPoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDedicatedIpPoolResponse,
+                        RusotoError<DeleteDedicatedIpPoolError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/dedicated-ip-pools/{pool_name}",
             pool_name = input.pool_name
@@ -4415,28 +4823,38 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDedicatedIpPoolResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDedicatedIpPoolResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDedicatedIpPoolError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDedicatedIpPoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an email identity that you previously verified for use with Amazon Pinpoint. An identity can be either an email address or a domain name.</p>
-    async fn delete_email_identity(
+    fn delete_email_identity(
         &self,
         input: DeleteEmailIdentityRequest,
-    ) -> Result<DeleteEmailIdentityResponse, RusotoError<DeleteEmailIdentityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteEmailIdentityResponse,
+                        RusotoError<DeleteEmailIdentityError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/identities/{email_identity}",
             email_identity = input.email_identity
@@ -4447,25 +4865,33 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteEmailIdentityResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteEmailIdentityResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEmailIdentityError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEmailIdentityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Obtain information about the email-sending status and capabilities of your Amazon Pinpoint account in the current AWS Region.</p>
-    async fn get_account(&self) -> Result<GetAccountResponse, RusotoError<GetAccountError>> {
+    fn get_account(
+        &self,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetAccountResponse, RusotoError<GetAccountError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/account";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4473,28 +4899,38 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAccountResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAccountResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAccountError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAccountError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a list of the blacklists that your dedicated IP addresses appear on.</p>
-    async fn get_blacklist_reports(
+    fn get_blacklist_reports(
         &self,
         input: GetBlacklistReportsRequest,
-    ) -> Result<GetBlacklistReportsResponse, RusotoError<GetBlacklistReportsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetBlacklistReportsResponse,
+                        RusotoError<GetBlacklistReportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/deliverability-dashboard/blacklist-report";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4508,28 +4944,38 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBlacklistReportsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBlacklistReportsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlacklistReportsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBlacklistReportsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get information about an existing configuration set, including the dedicated IP pool that it's associated with, whether or not it's enabled for sending email, and more.</p> <p>In Amazon Pinpoint, <i>configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
-    async fn get_configuration_set(
+    fn get_configuration_set(
         &self,
         input: GetConfigurationSetRequest,
-    ) -> Result<GetConfigurationSetResponse, RusotoError<GetConfigurationSetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConfigurationSetResponse,
+                        RusotoError<GetConfigurationSetError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}",
             configuration_set_name = input.configuration_set_name
@@ -4540,30 +4986,37 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConfigurationSetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetConfigurationSetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConfigurationSetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConfigurationSetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a list of event destinations that are associated with a configuration set.</p> <p>In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
-    async fn get_configuration_set_event_destinations(
+    fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
-    ) -> Result<
-        GetConfigurationSetEventDestinationsResponse,
-        RusotoError<GetConfigurationSetEventDestinationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetConfigurationSetEventDestinationsResponse,
+                        RusotoError<GetConfigurationSetEventDestinationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/event-destinations",
@@ -4575,30 +5028,36 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConfigurationSetEventDestinationsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConfigurationSetEventDestinationsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get information about a dedicated IP address, including the name of the dedicated IP pool that it's associated with, as well information about the automatic warm-up process for the address.</p>
-    async fn get_dedicated_ip(
+    fn get_dedicated_ip(
         &self,
         input: GetDedicatedIpRequest,
-    ) -> Result<GetDedicatedIpResponse, RusotoError<GetDedicatedIpError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDedicatedIpResponse, RusotoError<GetDedicatedIpError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/email/dedicated-ips/{ip}", ip = input.ip);
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4606,28 +5065,34 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDedicatedIpResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDedicatedIpResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDedicatedIpError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDedicatedIpError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the dedicated IP addresses that are associated with your Amazon Pinpoint account.</p>
-    async fn get_dedicated_ips(
+    fn get_dedicated_ips(
         &self,
         input: GetDedicatedIpsRequest,
-    ) -> Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDedicatedIpsResponse, RusotoError<GetDedicatedIpsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/dedicated-ips";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4647,29 +5112,36 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDedicatedIpsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDedicatedIpsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDedicatedIpsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDedicatedIpsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve information about the status of the Deliverability dashboard for your Amazon Pinpoint account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
-    async fn get_deliverability_dashboard_options(
+    fn get_deliverability_dashboard_options(
         &self,
-    ) -> Result<
-        GetDeliverabilityDashboardOptionsResponse,
-        RusotoError<GetDeliverabilityDashboardOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDeliverabilityDashboardOptionsResponse,
+                        RusotoError<GetDeliverabilityDashboardOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/v1/email/deliverability-dashboard";
 
@@ -4678,31 +5150,40 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeliverabilityDashboardOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDeliverabilityDashboardOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeliverabilityDashboardOptionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeliverabilityDashboardOptionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the results of a predictive inbox placement test.</p>
-    async fn get_deliverability_test_report(
+    fn get_deliverability_test_report(
         &self,
         input: GetDeliverabilityTestReportRequest,
-    ) -> Result<GetDeliverabilityTestReportResponse, RusotoError<GetDeliverabilityTestReportError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDeliverabilityTestReportResponse,
+                        RusotoError<GetDeliverabilityTestReportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/test-reports/{report_id}",
             report_id = input.report_id
@@ -4713,30 +5194,37 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeliverabilityTestReportResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDeliverabilityTestReportResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeliverabilityTestReportError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeliverabilityTestReportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for (<code>PutDeliverabilityDashboardOption</code> operation).</p>
-    async fn get_domain_deliverability_campaign(
+    fn get_domain_deliverability_campaign(
         &self,
         input: GetDomainDeliverabilityCampaignRequest,
-    ) -> Result<
-        GetDomainDeliverabilityCampaignResponse,
-        RusotoError<GetDomainDeliverabilityCampaignError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDomainDeliverabilityCampaignResponse,
+                        RusotoError<GetDomainDeliverabilityCampaignError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/campaigns/{campaign_id}",
@@ -4748,31 +5236,40 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDomainDeliverabilityCampaignResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDomainDeliverabilityCampaignResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDomainDeliverabilityCampaignError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDomainDeliverabilityCampaignError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve inbox placement and engagement rates for the domains that you use to send email.</p>
-    async fn get_domain_statistics_report(
+    fn get_domain_statistics_report(
         &self,
         input: GetDomainStatisticsReportRequest,
-    ) -> Result<GetDomainStatisticsReportResponse, RusotoError<GetDomainStatisticsReportError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDomainStatisticsReportResponse,
+                        RusotoError<GetDomainStatisticsReportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/statistics-report/{domain}",
             domain = input.domain
@@ -4788,28 +5285,35 @@ impl PinpointEmail for PinpointEmailClient {
         params.put("StartDate", &input.start_date);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDomainStatisticsReportResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDomainStatisticsReportResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDomainStatisticsReportError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDomainStatisticsReportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides information about a specific identity associated with your Amazon Pinpoint account, including the identity's verification status, its DKIM authentication status, and its custom Mail-From settings.</p>
-    async fn get_email_identity(
+    fn get_email_identity(
         &self,
         input: GetEmailIdentityRequest,
-    ) -> Result<GetEmailIdentityResponse, RusotoError<GetEmailIdentityError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetEmailIdentityResponse, RusotoError<GetEmailIdentityError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v1/email/identities/{email_identity}",
             email_identity = input.email_identity
@@ -4820,28 +5324,38 @@ impl PinpointEmail for PinpointEmailClient {
 
         request.set_endpoint_prefix("email".to_string());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEmailIdentityResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetEmailIdentityResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEmailIdentityError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetEmailIdentityError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all of the configuration sets associated with your Amazon Pinpoint account in the current region.</p> <p>In Amazon Pinpoint, <i>configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
-    async fn list_configuration_sets(
+    fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
-    ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListConfigurationSetsResponse,
+                        RusotoError<ListConfigurationSetsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/configuration-sets";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4858,28 +5372,38 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationSetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListConfigurationSetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConfigurationSetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListConfigurationSetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List all of the dedicated IP pools that exist in your Amazon Pinpoint account in the current AWS Region.</p>
-    async fn list_dedicated_ip_pools(
+    fn list_dedicated_ip_pools(
         &self,
         input: ListDedicatedIpPoolsRequest,
-    ) -> Result<ListDedicatedIpPoolsResponse, RusotoError<ListDedicatedIpPoolsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDedicatedIpPoolsResponse,
+                        RusotoError<ListDedicatedIpPoolsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/dedicated-ip-pools";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -4896,30 +5420,37 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDedicatedIpPoolsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDedicatedIpPoolsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDedicatedIpPoolsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDedicatedIpPoolsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Show a list of the predictive inbox placement tests that you've performed, regardless of their statuses. For predictive inbox placement tests that are complete, you can use the <code>GetDeliverabilityTestReport</code> operation to view the results.</p>
-    async fn list_deliverability_test_reports(
+    fn list_deliverability_test_reports(
         &self,
         input: ListDeliverabilityTestReportsRequest,
-    ) -> Result<
-        ListDeliverabilityTestReportsResponse,
-        RusotoError<ListDeliverabilityTestReportsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDeliverabilityTestReportsResponse,
+                        RusotoError<ListDeliverabilityTestReportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/v1/email/deliverability-dashboard/test-reports";
 
@@ -4937,30 +5468,37 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeliverabilityTestReportsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDeliverabilityTestReportsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeliverabilityTestReportsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDeliverabilityTestReportsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard (<code>PutDeliverabilityDashboardOption</code> operation) for the domain.</p>
-    async fn list_domain_deliverability_campaigns(
+    fn list_domain_deliverability_campaigns(
         &self,
         input: ListDomainDeliverabilityCampaignsRequest,
-    ) -> Result<
-        ListDomainDeliverabilityCampaignsResponse,
-        RusotoError<ListDomainDeliverabilityCampaignsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDomainDeliverabilityCampaignsResponse,
+                        RusotoError<ListDomainDeliverabilityCampaignsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/deliverability-dashboard/domains/{subscribed_domain}/campaigns",
@@ -4983,30 +5521,40 @@ impl PinpointEmail for PinpointEmailClient {
         params.put("StartDate", &input.start_date);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDomainDeliverabilityCampaignsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDomainDeliverabilityCampaignsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDomainDeliverabilityCampaignsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDomainDeliverabilityCampaignsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of all of the email identities that are associated with your Amazon Pinpoint account. An identity can be either an email address or a domain. This operation returns identities that are verified as well as those that aren't.</p>
-    async fn list_email_identities(
+    fn list_email_identities(
         &self,
         input: ListEmailIdentitiesRequest,
-    ) -> Result<ListEmailIdentitiesResponse, RusotoError<ListEmailIdentitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEmailIdentitiesResponse,
+                        RusotoError<ListEmailIdentitiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/identities";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -5023,28 +5571,38 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEmailIdentitiesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEmailIdentitiesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEmailIdentitiesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEmailIdentitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource in Amazon Pinpoint. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/tags";
 
         let mut request = SignedRequest::new("GET", "ses", &self.region, &request_uri);
@@ -5056,30 +5614,37 @@ impl PinpointEmail for PinpointEmailClient {
         params.put("ResourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enable or disable the automatic warm-up feature for dedicated IP addresses.</p>
-    async fn put_account_dedicated_ip_warmup_attributes(
+    fn put_account_dedicated_ip_warmup_attributes(
         &self,
         input: PutAccountDedicatedIpWarmupAttributesRequest,
-    ) -> Result<
-        PutAccountDedicatedIpWarmupAttributesResponse,
-        RusotoError<PutAccountDedicatedIpWarmupAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutAccountDedicatedIpWarmupAttributesResponse,
+                        RusotoError<PutAccountDedicatedIpWarmupAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/v1/email/account/dedicated-ips/warmup";
 
@@ -5090,31 +5655,40 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAccountDedicatedIpWarmupAttributesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutAccountDedicatedIpWarmupAttributesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAccountDedicatedIpWarmupAttributesError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutAccountDedicatedIpWarmupAttributesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enable or disable the ability of your account to send email.</p>
-    async fn put_account_sending_attributes(
+    fn put_account_sending_attributes(
         &self,
         input: PutAccountSendingAttributesRequest,
-    ) -> Result<PutAccountSendingAttributesResponse, RusotoError<PutAccountSendingAttributesError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutAccountSendingAttributesResponse,
+                        RusotoError<PutAccountSendingAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/account/sending";
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5124,30 +5698,37 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAccountSendingAttributesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutAccountSendingAttributesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAccountSendingAttributesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutAccountSendingAttributesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associate a configuration set with a dedicated IP pool. You can use dedicated IP pools to create groups of dedicated IP addresses for sending specific types of email.</p>
-    async fn put_configuration_set_delivery_options(
+    fn put_configuration_set_delivery_options(
         &self,
         input: PutConfigurationSetDeliveryOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetDeliveryOptionsResponse,
-        RusotoError<PutConfigurationSetDeliveryOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetDeliveryOptionsResponse,
+                        RusotoError<PutConfigurationSetDeliveryOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/delivery-options",
@@ -5161,32 +5742,39 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConfigurationSetDeliveryOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutConfigurationSetDeliveryOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationSetDeliveryOptionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutConfigurationSetDeliveryOptionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enable or disable collection of reputation metrics for emails that you send using a particular configuration set in a specific AWS Region.</p>
-    async fn put_configuration_set_reputation_options(
+    fn put_configuration_set_reputation_options(
         &self,
         input: PutConfigurationSetReputationOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetReputationOptionsResponse,
-        RusotoError<PutConfigurationSetReputationOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetReputationOptionsResponse,
+                        RusotoError<PutConfigurationSetReputationOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/reputation-options",
@@ -5200,32 +5788,39 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConfigurationSetReputationOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutConfigurationSetReputationOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationSetReputationOptionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutConfigurationSetReputationOptionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enable or disable email sending for messages that use a particular configuration set in a specific AWS Region.</p>
-    async fn put_configuration_set_sending_options(
+    fn put_configuration_set_sending_options(
         &self,
         input: PutConfigurationSetSendingOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetSendingOptionsResponse,
-        RusotoError<PutConfigurationSetSendingOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetSendingOptionsResponse,
+                        RusotoError<PutConfigurationSetSendingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/sending",
@@ -5239,32 +5834,39 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConfigurationSetSendingOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutConfigurationSetSendingOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationSetSendingOptionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutConfigurationSetSendingOptionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Specify a custom domain to use for open and click tracking elements in email that you send using Amazon Pinpoint.</p>
-    async fn put_configuration_set_tracking_options(
+    fn put_configuration_set_tracking_options(
         &self,
         input: PutConfigurationSetTrackingOptionsRequest,
-    ) -> Result<
-        PutConfigurationSetTrackingOptionsResponse,
-        RusotoError<PutConfigurationSetTrackingOptionsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutConfigurationSetTrackingOptionsResponse,
+                        RusotoError<PutConfigurationSetTrackingOptionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/configuration-sets/{configuration_set_name}/tracking-options",
@@ -5278,30 +5880,40 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConfigurationSetTrackingOptionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutConfigurationSetTrackingOptionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationSetTrackingOptionsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutConfigurationSetTrackingOptionsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Move a dedicated IP address to an existing dedicated IP pool.</p> <note> <p>The dedicated IP address that you specify must already exist, and must be associated with your Amazon Pinpoint account. </p> <p>The dedicated IP pool you specify must already exist. You can create a new pool by using the <code>CreateDedicatedIpPool</code> operation.</p> </note></p>
-    async fn put_dedicated_ip_in_pool(
+    fn put_dedicated_ip_in_pool(
         &self,
         input: PutDedicatedIpInPoolRequest,
-    ) -> Result<PutDedicatedIpInPoolResponse, RusotoError<PutDedicatedIpInPoolError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDedicatedIpInPoolResponse,
+                        RusotoError<PutDedicatedIpInPoolError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v1/email/dedicated-ips/{ip}/pool", ip = input.ip);
 
         let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
@@ -5311,30 +5923,37 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutDedicatedIpInPoolResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutDedicatedIpInPoolResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDedicatedIpInPoolError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutDedicatedIpInPoolError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p/></p>
-    async fn put_dedicated_ip_warmup_attributes(
+    fn put_dedicated_ip_warmup_attributes(
         &self,
         input: PutDedicatedIpWarmupAttributesRequest,
-    ) -> Result<
-        PutDedicatedIpWarmupAttributesResponse,
-        RusotoError<PutDedicatedIpWarmupAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDedicatedIpWarmupAttributesResponse,
+                        RusotoError<PutDedicatedIpWarmupAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/v1/email/dedicated-ips/{ip}/warmup", ip = input.ip);
 
@@ -5345,30 +5964,37 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutDedicatedIpWarmupAttributesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutDedicatedIpWarmupAttributesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDedicatedIpWarmupAttributesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutDedicatedIpWarmupAttributesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Enable or disable the Deliverability dashboard for your Amazon Pinpoint account. When you enable the Deliverability dashboard, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email using Amazon Pinpoint. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon Pinpoint. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/pinpoint/pricing/">Amazon Pinpoint Pricing</a>.</p>
-    async fn put_deliverability_dashboard_option(
+    fn put_deliverability_dashboard_option(
         &self,
         input: PutDeliverabilityDashboardOptionRequest,
-    ) -> Result<
-        PutDeliverabilityDashboardOptionResponse,
-        RusotoError<PutDeliverabilityDashboardOptionError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutDeliverabilityDashboardOptionResponse,
+                        RusotoError<PutDeliverabilityDashboardOptionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/v1/email/deliverability-dashboard";
 
@@ -5379,32 +6005,39 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutDeliverabilityDashboardOptionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutDeliverabilityDashboardOptionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDeliverabilityDashboardOptionError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutDeliverabilityDashboardOptionError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Used to enable or disable DKIM authentication for an email identity.</p>
-    async fn put_email_identity_dkim_attributes(
+    fn put_email_identity_dkim_attributes(
         &self,
         input: PutEmailIdentityDkimAttributesRequest,
-    ) -> Result<
-        PutEmailIdentityDkimAttributesResponse,
-        RusotoError<PutEmailIdentityDkimAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutEmailIdentityDkimAttributesResponse,
+                        RusotoError<PutEmailIdentityDkimAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/identities/{email_identity}/dkim",
@@ -5418,30 +6051,37 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutEmailIdentityDkimAttributesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutEmailIdentityDkimAttributesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEmailIdentityDkimAttributesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutEmailIdentityDkimAttributesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Used to enable or disable feedback forwarding for an identity. This setting determines what happens when an identity is used to send an email that results in a bounce or complaint event.</p> <p>When you enable feedback forwarding, Amazon Pinpoint sends you email notifications when bounce or complaint events occur. Amazon Pinpoint sends this notification to the address that you specified in the Return-Path header of the original email.</p> <p>When you disable feedback forwarding, Amazon Pinpoint sends notifications through other mechanisms, such as by notifying an Amazon SNS topic. You're required to have a method of tracking bounces and complaints. If you haven't set up another mechanism for receiving bounce or complaint notifications, Amazon Pinpoint sends an email notification when these events occur (even if this setting is disabled).</p>
-    async fn put_email_identity_feedback_attributes(
+    fn put_email_identity_feedback_attributes(
         &self,
         input: PutEmailIdentityFeedbackAttributesRequest,
-    ) -> Result<
-        PutEmailIdentityFeedbackAttributesResponse,
-        RusotoError<PutEmailIdentityFeedbackAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutEmailIdentityFeedbackAttributesResponse,
+                        RusotoError<PutEmailIdentityFeedbackAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/identities/{email_identity}/feedback",
@@ -5455,32 +6095,39 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutEmailIdentityFeedbackAttributesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutEmailIdentityFeedbackAttributesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEmailIdentityFeedbackAttributesError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutEmailIdentityFeedbackAttributesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Used to enable or disable the custom Mail-From domain configuration for an email identity.</p>
-    async fn put_email_identity_mail_from_attributes(
+    fn put_email_identity_mail_from_attributes(
         &self,
         input: PutEmailIdentityMailFromAttributesRequest,
-    ) -> Result<
-        PutEmailIdentityMailFromAttributesResponse,
-        RusotoError<PutEmailIdentityMailFromAttributesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutEmailIdentityMailFromAttributesResponse,
+                        RusotoError<PutEmailIdentityMailFromAttributesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!(
             "/v1/email/identities/{email_identity}/mail-from",
@@ -5494,30 +6141,36 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutEmailIdentityMailFromAttributesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutEmailIdentityMailFromAttributesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEmailIdentityMailFromAttributesError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutEmailIdentityMailFromAttributesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Sends an email message. You can use the Amazon Pinpoint Email API to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon Pinpoint assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> </ul></p>
-    async fn send_email(
+    fn send_email(
         &self,
         input: SendEmailRequest,
-    ) -> Result<SendEmailResponse, RusotoError<SendEmailError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SendEmailResponse, RusotoError<SendEmailError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/outbound-emails";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -5527,28 +6180,34 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendEmailResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendEmailResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SendEmailError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SendEmailError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add one or more tags (keys and values) to a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource in Amazon Pinpoint. Tags can help you categorize and manage resources in different ways, such as by purpose, owner, environment, or other criteria. A resource can have as many as 50 tags.</p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/tags";
 
         let mut request = SignedRequest::new("POST", "ses", &self.region, &request_uri);
@@ -5558,28 +6217,34 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Remove one or more tags (keys and values) from a specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/email/tags";
 
         let mut request = SignedRequest::new("DELETE", "ses", &self.region, &request_uri);
@@ -5594,30 +6259,37 @@ impl PinpointEmail for PinpointEmailClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Update the configuration of an event destination for a configuration set.</p> <p>In Amazon Pinpoint, <i>events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
-    async fn update_configuration_set_event_destination(
+    fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
-    ) -> Result<
-        UpdateConfigurationSetEventDestinationResponse,
-        RusotoError<UpdateConfigurationSetEventDestinationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateConfigurationSetEventDestinationResponse,
+                        RusotoError<UpdateConfigurationSetEventDestinationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/v1/email/configuration-sets/{configuration_set_name}/event-destinations/{event_destination_name}", configuration_set_name = input.configuration_set_name, event_destination_name = input.event_destination_name);
 
@@ -5628,22 +6300,22 @@ impl PinpointEmail for PinpointEmailClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConfigurationSetEventDestinationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateConfigurationSetEventDestinationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 }

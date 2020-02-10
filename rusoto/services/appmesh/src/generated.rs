@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>An object that represents the access logging information for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccessLog {
@@ -3680,7 +3681,6 @@ impl fmt::Display for UpdateVirtualServiceError {
 }
 impl Error for UpdateVirtualServiceError {}
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
-#[async_trait]
 pub trait AppMesh {
     /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
     /// the services that reside within it.</p>
@@ -3689,10 +3689,16 @@ pub trait AppMesh {
     /// virtual routers, and routes to distribute traffic between the applications in your
     /// mesh.&lt;/p&gt;
     /// </code></pre>
-    async fn create_mesh(
+    fn create_mesh(
         &self,
         input: CreateMeshInput,
-    ) -> Result<CreateMeshOutput, RusotoError<CreateMeshError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMeshOutput, RusotoError<CreateMeshError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a route that is associated with a virtual router.</p>
     ///
@@ -3704,10 +3710,16 @@ pub trait AppMesh {
     /// &lt;p&gt;If your route matches a request, you can distribute traffic to one or more target
     /// virtual nodes with relative weighting.&lt;/p&gt;
     /// </code></pre>
-    async fn create_route(
+    fn create_route(
         &self,
         input: CreateRouteInput,
-    ) -> Result<CreateRouteOutput, RusotoError<CreateRouteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRouteOutput, RusotoError<CreateRouteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a virtual node within a service mesh.</p>
     ///
@@ -3730,10 +3742,17 @@ pub trait AppMesh {
     /// &lt;code&gt;APPMESH_VIRTUAL_NODE_CLUSTER&lt;/code&gt; environment variable.&lt;/p&gt;
     /// &lt;/note&gt;
     /// </code></pre>
-    async fn create_virtual_node(
+    fn create_virtual_node(
         &self,
         input: CreateVirtualNodeInput,
-    ) -> Result<CreateVirtualNodeOutput, RusotoError<CreateVirtualNodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateVirtualNodeOutput, RusotoError<CreateVirtualNodeError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a virtual router within a service mesh.</p>
     ///
@@ -3743,10 +3762,20 @@ pub trait AppMesh {
     /// you create your virtual router, create and associate routes for your virtual router that
     /// direct incoming requests to different virtual nodes.&lt;/p&gt;
     /// </code></pre>
-    async fn create_virtual_router(
+    fn create_virtual_router(
         &self,
         input: CreateVirtualRouterInput,
-    ) -> Result<CreateVirtualRouterOutput, RusotoError<CreateVirtualRouterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVirtualRouterOutput,
+                        RusotoError<CreateVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a virtual service within a service mesh.</p>
     ///
@@ -3756,163 +3785,350 @@ pub trait AppMesh {
     /// virtual node or virtual router that is specified as the provider for the virtual
     /// service.&lt;/p&gt;
     /// </code></pre>
-    async fn create_virtual_service(
+    fn create_virtual_service(
         &self,
         input: CreateVirtualServiceInput,
-    ) -> Result<CreateVirtualServiceOutput, RusotoError<CreateVirtualServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVirtualServiceOutput,
+                        RusotoError<CreateVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
     /// nodes) in the service mesh before you can delete the mesh itself.&lt;/p&gt;
     /// </code></pre>
-    async fn delete_mesh(
+    fn delete_mesh(
         &self,
         input: DeleteMeshInput,
-    ) -> Result<DeleteMeshOutput, RusotoError<DeleteMeshError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMeshOutput, RusotoError<DeleteMeshError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing route.</p>
-    async fn delete_route(
+    fn delete_route(
         &self,
         input: DeleteRouteInput,
-    ) -> Result<DeleteRouteOutput, RusotoError<DeleteRouteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRouteOutput, RusotoError<DeleteRouteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing virtual node.</p>
     ///
     /// <pre><code>     &lt;p&gt;You must delete any virtual services that list a virtual node as a service provider
     /// before you can delete the virtual node itself.&lt;/p&gt;
     /// </code></pre>
-    async fn delete_virtual_node(
+    fn delete_virtual_node(
         &self,
         input: DeleteVirtualNodeInput,
-    ) -> Result<DeleteVirtualNodeOutput, RusotoError<DeleteVirtualNodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteVirtualNodeOutput, RusotoError<DeleteVirtualNodeError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing virtual router.</p>
     ///
     /// <pre><code>     &lt;p&gt;You must delete any routes associated with the virtual router before you can delete the
     /// router itself.&lt;/p&gt;
     /// </code></pre>
-    async fn delete_virtual_router(
+    fn delete_virtual_router(
         &self,
         input: DeleteVirtualRouterInput,
-    ) -> Result<DeleteVirtualRouterOutput, RusotoError<DeleteVirtualRouterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteVirtualRouterOutput,
+                        RusotoError<DeleteVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing virtual service.</p>
-    async fn delete_virtual_service(
+    fn delete_virtual_service(
         &self,
         input: DeleteVirtualServiceInput,
-    ) -> Result<DeleteVirtualServiceOutput, RusotoError<DeleteVirtualServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteVirtualServiceOutput,
+                        RusotoError<DeleteVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing service mesh.</p>
-    async fn describe_mesh(
+    fn describe_mesh(
         &self,
         input: DescribeMeshInput,
-    ) -> Result<DescribeMeshOutput, RusotoError<DescribeMeshError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeMeshOutput, RusotoError<DescribeMeshError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing route.</p>
-    async fn describe_route(
+    fn describe_route(
         &self,
         input: DescribeRouteInput,
-    ) -> Result<DescribeRouteOutput, RusotoError<DescribeRouteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeRouteOutput, RusotoError<DescribeRouteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing virtual node.</p>
-    async fn describe_virtual_node(
+    fn describe_virtual_node(
         &self,
         input: DescribeVirtualNodeInput,
-    ) -> Result<DescribeVirtualNodeOutput, RusotoError<DescribeVirtualNodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeVirtualNodeOutput,
+                        RusotoError<DescribeVirtualNodeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing virtual router.</p>
-    async fn describe_virtual_router(
+    fn describe_virtual_router(
         &self,
         input: DescribeVirtualRouterInput,
-    ) -> Result<DescribeVirtualRouterOutput, RusotoError<DescribeVirtualRouterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeVirtualRouterOutput,
+                        RusotoError<DescribeVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing virtual service.</p>
-    async fn describe_virtual_service(
+    fn describe_virtual_service(
         &self,
         input: DescribeVirtualServiceInput,
-    ) -> Result<DescribeVirtualServiceOutput, RusotoError<DescribeVirtualServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeVirtualServiceOutput,
+                        RusotoError<DescribeVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of existing service meshes.</p>
-    async fn list_meshes(
+    fn list_meshes(
         &self,
         input: ListMeshesInput,
-    ) -> Result<ListMeshesOutput, RusotoError<ListMeshesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMeshesOutput, RusotoError<ListMeshesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of existing routes in a service mesh.</p>
-    async fn list_routes(
+    fn list_routes(
         &self,
         input: ListRoutesInput,
-    ) -> Result<ListRoutesOutput, RusotoError<ListRoutesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRoutesOutput, RusotoError<ListRoutesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>List the tags for an App Mesh resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceOutput,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of existing virtual nodes.</p>
-    async fn list_virtual_nodes(
+    fn list_virtual_nodes(
         &self,
         input: ListVirtualNodesInput,
-    ) -> Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of existing virtual routers in a service mesh.</p>
-    async fn list_virtual_routers(
+    fn list_virtual_routers(
         &self,
         input: ListVirtualRoutersInput,
-    ) -> Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of existing virtual services in a service mesh.</p>
-    async fn list_virtual_services(
+    fn list_virtual_services(
         &self,
         input: ListVirtualServicesInput,
-    ) -> Result<ListVirtualServicesOutput, RusotoError<ListVirtualServicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListVirtualServicesOutput,
+                        RusotoError<ListVirtualServicesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>.
     /// If existing tags on a resource aren't specified in the request parameters, they aren't
     /// changed. When a resource is deleted, the tags associated with that resource are also
     /// deleted.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceOutput, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes specified tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceOutput, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing service mesh.</p>
-    async fn update_mesh(
+    fn update_mesh(
         &self,
         input: UpdateMeshInput,
-    ) -> Result<UpdateMeshOutput, RusotoError<UpdateMeshError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateMeshOutput, RusotoError<UpdateMeshError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing route for a specified service mesh and virtual router.</p>
-    async fn update_route(
+    fn update_route(
         &self,
         input: UpdateRouteInput,
-    ) -> Result<UpdateRouteOutput, RusotoError<UpdateRouteError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRouteOutput, RusotoError<UpdateRouteError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing virtual node in a specified service mesh.</p>
-    async fn update_virtual_node(
+    fn update_virtual_node(
         &self,
         input: UpdateVirtualNodeInput,
-    ) -> Result<UpdateVirtualNodeOutput, RusotoError<UpdateVirtualNodeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateVirtualNodeOutput, RusotoError<UpdateVirtualNodeError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing virtual router in a specified service mesh.</p>
-    async fn update_virtual_router(
+    fn update_virtual_router(
         &self,
         input: UpdateVirtualRouterInput,
-    ) -> Result<UpdateVirtualRouterOutput, RusotoError<UpdateVirtualRouterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVirtualRouterOutput,
+                        RusotoError<UpdateVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing virtual service in a specified service mesh.</p>
-    async fn update_virtual_service(
+    fn update_virtual_service(
         &self,
         input: UpdateVirtualServiceInput,
-    ) -> Result<UpdateVirtualServiceOutput, RusotoError<UpdateVirtualServiceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVirtualServiceOutput,
+                        RusotoError<UpdateVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS App Mesh API.
 #[derive(Clone)]
@@ -3952,7 +4168,6 @@ impl AppMeshClient {
     }
 }
 
-#[async_trait]
 impl AppMesh for AppMeshClient {
     /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
     /// the services that reside within it.</p>
@@ -3961,10 +4176,16 @@ impl AppMesh for AppMeshClient {
     /// virtual routers, and routes to distribute traffic between the applications in your
     /// mesh.&lt;/p&gt;
     /// </code></pre>
-    async fn create_mesh(
+    fn create_mesh(
         &self,
         input: CreateMeshInput,
-    ) -> Result<CreateMeshOutput, RusotoError<CreateMeshError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateMeshOutput, RusotoError<CreateMeshError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v20190125/meshes";
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -3973,21 +4194,21 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMeshOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateMeshOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMeshError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateMeshError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a route that is associated with a virtual router.</p>
@@ -4000,10 +4221,16 @@ impl AppMesh for AppMeshClient {
     /// &lt;p&gt;If your route matches a request, you can distribute traffic to one or more target
     /// virtual nodes with relative weighting.&lt;/p&gt;
     /// </code></pre>
-    async fn create_route(
+    fn create_route(
         &self,
         input: CreateRouteInput,
-    ) -> Result<CreateRouteOutput, RusotoError<CreateRouteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRouteOutput, RusotoError<CreateRouteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes",
             mesh_name = input.mesh_name,
@@ -4016,21 +4243,21 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRouteOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateRouteOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRouteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRouteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a virtual node within a service mesh.</p>
@@ -4054,10 +4281,17 @@ impl AppMesh for AppMeshClient {
     /// &lt;code&gt;APPMESH_VIRTUAL_NODE_CLUSTER&lt;/code&gt; environment variable.&lt;/p&gt;
     /// &lt;/note&gt;
     /// </code></pre>
-    async fn create_virtual_node(
+    fn create_virtual_node(
         &self,
         input: CreateVirtualNodeInput,
-    ) -> Result<CreateVirtualNodeOutput, RusotoError<CreateVirtualNodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateVirtualNodeOutput, RusotoError<CreateVirtualNodeError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes",
             mesh_name = input.mesh_name
@@ -4069,21 +4303,21 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVirtualNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVirtualNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVirtualNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVirtualNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a virtual router within a service mesh.</p>
@@ -4094,10 +4328,20 @@ impl AppMesh for AppMeshClient {
     /// you create your virtual router, create and associate routes for your virtual router that
     /// direct incoming requests to different virtual nodes.&lt;/p&gt;
     /// </code></pre>
-    async fn create_virtual_router(
+    fn create_virtual_router(
         &self,
         input: CreateVirtualRouterInput,
-    ) -> Result<CreateVirtualRouterOutput, RusotoError<CreateVirtualRouterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVirtualRouterOutput,
+                        RusotoError<CreateVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters",
             mesh_name = input.mesh_name
@@ -4109,21 +4353,21 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVirtualRouterOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVirtualRouterOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVirtualRouterError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVirtualRouterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a virtual service within a service mesh.</p>
@@ -4134,10 +4378,20 @@ impl AppMesh for AppMeshClient {
     /// virtual node or virtual router that is specified as the provider for the virtual
     /// service.&lt;/p&gt;
     /// </code></pre>
-    async fn create_virtual_service(
+    fn create_virtual_service(
         &self,
         input: CreateVirtualServiceInput,
-    ) -> Result<CreateVirtualServiceOutput, RusotoError<CreateVirtualServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateVirtualServiceOutput,
+                        RusotoError<CreateVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices",
             mesh_name = input.mesh_name
@@ -4149,21 +4403,21 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVirtualServiceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVirtualServiceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVirtualServiceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVirtualServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing service mesh.</p>
@@ -4171,37 +4425,49 @@ impl AppMesh for AppMeshClient {
     /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
     /// nodes) in the service mesh before you can delete the mesh itself.&lt;/p&gt;
     /// </code></pre>
-    async fn delete_mesh(
+    fn delete_mesh(
         &self,
         input: DeleteMeshInput,
-    ) -> Result<DeleteMeshOutput, RusotoError<DeleteMeshError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteMeshOutput, RusotoError<DeleteMeshError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v20190125/meshes/{mesh_name}", mesh_name = input.mesh_name);
 
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMeshOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteMeshOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMeshError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMeshError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing route.</p>
-    async fn delete_route(
+    fn delete_route(
         &self,
         input: DeleteRouteInput,
-    ) -> Result<DeleteRouteOutput, RusotoError<DeleteRouteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteRouteOutput, RusotoError<DeleteRouteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes/{route_name}",
             mesh_name = input.mesh_name,
@@ -4212,21 +4478,21 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRouteOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteRouteOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRouteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRouteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing virtual node.</p>
@@ -4234,10 +4500,17 @@ impl AppMesh for AppMeshClient {
     /// <pre><code>     &lt;p&gt;You must delete any virtual services that list a virtual node as a service provider
     /// before you can delete the virtual node itself.&lt;/p&gt;
     /// </code></pre>
-    async fn delete_virtual_node(
+    fn delete_virtual_node(
         &self,
         input: DeleteVirtualNodeInput,
-    ) -> Result<DeleteVirtualNodeOutput, RusotoError<DeleteVirtualNodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteVirtualNodeOutput, RusotoError<DeleteVirtualNodeError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes/{virtual_node_name}",
             mesh_name = input.mesh_name,
@@ -4247,21 +4520,21 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteVirtualNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteVirtualNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVirtualNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVirtualNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing virtual router.</p>
@@ -4269,10 +4542,20 @@ impl AppMesh for AppMeshClient {
     /// <pre><code>     &lt;p&gt;You must delete any routes associated with the virtual router before you can delete the
     /// router itself.&lt;/p&gt;
     /// </code></pre>
-    async fn delete_virtual_router(
+    fn delete_virtual_router(
         &self,
         input: DeleteVirtualRouterInput,
-    ) -> Result<DeleteVirtualRouterOutput, RusotoError<DeleteVirtualRouterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteVirtualRouterOutput,
+                        RusotoError<DeleteVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters/{virtual_router_name}",
             mesh_name = input.mesh_name,
@@ -4282,28 +4565,38 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteVirtualRouterOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteVirtualRouterOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVirtualRouterError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVirtualRouterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing virtual service.</p>
-    async fn delete_virtual_service(
+    fn delete_virtual_service(
         &self,
         input: DeleteVirtualServiceInput,
-    ) -> Result<DeleteVirtualServiceOutput, RusotoError<DeleteVirtualServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteVirtualServiceOutput,
+                        RusotoError<DeleteVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices/{virtual_service_name}",
             mesh_name = input.mesh_name,
@@ -4313,55 +4606,67 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteVirtualServiceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteVirtualServiceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVirtualServiceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVirtualServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing service mesh.</p>
-    async fn describe_mesh(
+    fn describe_mesh(
         &self,
         input: DescribeMeshInput,
-    ) -> Result<DescribeMeshOutput, RusotoError<DescribeMeshError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeMeshOutput, RusotoError<DescribeMeshError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v20190125/meshes/{mesh_name}", mesh_name = input.mesh_name);
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMeshOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeMeshOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMeshError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeMeshError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing route.</p>
-    async fn describe_route(
+    fn describe_route(
         &self,
         input: DescribeRouteInput,
-    ) -> Result<DescribeRouteOutput, RusotoError<DescribeRouteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeRouteOutput, RusotoError<DescribeRouteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes/{route_name}",
             mesh_name = input.mesh_name,
@@ -4372,28 +4677,38 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRouteOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeRouteOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRouteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeRouteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing virtual node.</p>
-    async fn describe_virtual_node(
+    fn describe_virtual_node(
         &self,
         input: DescribeVirtualNodeInput,
-    ) -> Result<DescribeVirtualNodeOutput, RusotoError<DescribeVirtualNodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeVirtualNodeOutput,
+                        RusotoError<DescribeVirtualNodeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes/{virtual_node_name}",
             mesh_name = input.mesh_name,
@@ -4403,28 +4718,38 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeVirtualNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeVirtualNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeVirtualNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeVirtualNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing virtual router.</p>
-    async fn describe_virtual_router(
+    fn describe_virtual_router(
         &self,
         input: DescribeVirtualRouterInput,
-    ) -> Result<DescribeVirtualRouterOutput, RusotoError<DescribeVirtualRouterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeVirtualRouterOutput,
+                        RusotoError<DescribeVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters/{virtual_router_name}",
             mesh_name = input.mesh_name,
@@ -4434,28 +4759,38 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeVirtualRouterOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeVirtualRouterOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeVirtualRouterError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeVirtualRouterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing virtual service.</p>
-    async fn describe_virtual_service(
+    fn describe_virtual_service(
         &self,
         input: DescribeVirtualServiceInput,
-    ) -> Result<DescribeVirtualServiceOutput, RusotoError<DescribeVirtualServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeVirtualServiceOutput,
+                        RusotoError<DescribeVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices/{virtual_service_name}",
             mesh_name = input.mesh_name,
@@ -4465,28 +4800,34 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeVirtualServiceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeVirtualServiceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeVirtualServiceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeVirtualServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of existing service meshes.</p>
-    async fn list_meshes(
+    fn list_meshes(
         &self,
         input: ListMeshesInput,
-    ) -> Result<ListMeshesOutput, RusotoError<ListMeshesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListMeshesOutput, RusotoError<ListMeshesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v20190125/meshes";
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
@@ -4501,28 +4842,34 @@ impl AppMesh for AppMeshClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMeshesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListMeshesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMeshesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListMeshesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of existing routes in a service mesh.</p>
-    async fn list_routes(
+    fn list_routes(
         &self,
         input: ListRoutesInput,
-    ) -> Result<ListRoutesOutput, RusotoError<ListRoutesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListRoutesOutput, RusotoError<ListRoutesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes",
             mesh_name = input.mesh_name,
@@ -4541,28 +4888,38 @@ impl AppMesh for AppMeshClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRoutesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRoutesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRoutesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRoutesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>List the tags for an App Mesh resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
-    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceOutput,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v20190125/tags";
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
@@ -4578,28 +4935,34 @@ impl AppMesh for AppMeshClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of existing virtual nodes.</p>
-    async fn list_virtual_nodes(
+    fn list_virtual_nodes(
         &self,
         input: ListVirtualNodesInput,
-    ) -> Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListVirtualNodesOutput, RusotoError<ListVirtualNodesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes",
             mesh_name = input.mesh_name
@@ -4617,28 +4980,35 @@ impl AppMesh for AppMeshClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVirtualNodesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListVirtualNodesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVirtualNodesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListVirtualNodesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of existing virtual routers in a service mesh.</p>
-    async fn list_virtual_routers(
+    fn list_virtual_routers(
         &self,
         input: ListVirtualRoutersInput,
-    ) -> Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListVirtualRoutersOutput, RusotoError<ListVirtualRoutersError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters",
             mesh_name = input.mesh_name
@@ -4656,28 +5026,38 @@ impl AppMesh for AppMeshClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVirtualRoutersOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListVirtualRoutersOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVirtualRoutersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListVirtualRoutersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of existing virtual services in a service mesh.</p>
-    async fn list_virtual_services(
+    fn list_virtual_services(
         &self,
         input: ListVirtualServicesInput,
-    ) -> Result<ListVirtualServicesOutput, RusotoError<ListVirtualServicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListVirtualServicesOutput,
+                        RusotoError<ListVirtualServicesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices",
             mesh_name = input.mesh_name
@@ -4695,31 +5075,37 @@ impl AppMesh for AppMeshClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVirtualServicesOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListVirtualServicesOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVirtualServicesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListVirtualServicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>.
     /// If existing tags on a resource aren't specified in the request parameters, they aren't
     /// changed. When a resource is deleted, the tags associated with that resource are also
     /// deleted.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceInput,
-    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceOutput, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v20190125/tag";
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -4732,28 +5118,34 @@ impl AppMesh for AppMeshClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes specified tags from a resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceInput,
-    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceOutput, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v20190125/untag";
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -4766,28 +5158,34 @@ impl AppMesh for AppMeshClient {
         params.put("resourceArn", &input.resource_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing service mesh.</p>
-    async fn update_mesh(
+    fn update_mesh(
         &self,
         input: UpdateMeshInput,
-    ) -> Result<UpdateMeshOutput, RusotoError<UpdateMeshError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateMeshOutput, RusotoError<UpdateMeshError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/v20190125/meshes/{mesh_name}", mesh_name = input.mesh_name);
 
         let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
@@ -4796,28 +5194,34 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMeshOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateMeshOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMeshError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMeshError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing route for a specified service mesh and virtual router.</p>
-    async fn update_route(
+    fn update_route(
         &self,
         input: UpdateRouteInput,
-    ) -> Result<UpdateRouteOutput, RusotoError<UpdateRouteError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateRouteOutput, RusotoError<UpdateRouteError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouter/{virtual_router_name}/routes/{route_name}",
             mesh_name = input.mesh_name,
@@ -4831,28 +5235,35 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRouteOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRouteOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRouteError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRouteError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing virtual node in a specified service mesh.</p>
-    async fn update_virtual_node(
+    fn update_virtual_node(
         &self,
         input: UpdateVirtualNodeInput,
-    ) -> Result<UpdateVirtualNodeOutput, RusotoError<UpdateVirtualNodeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateVirtualNodeOutput, RusotoError<UpdateVirtualNodeError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualNodes/{virtual_node_name}",
             mesh_name = input.mesh_name,
@@ -4865,28 +5276,38 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVirtualNodeOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVirtualNodeOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVirtualNodeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVirtualNodeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing virtual router in a specified service mesh.</p>
-    async fn update_virtual_router(
+    fn update_virtual_router(
         &self,
         input: UpdateVirtualRouterInput,
-    ) -> Result<UpdateVirtualRouterOutput, RusotoError<UpdateVirtualRouterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVirtualRouterOutput,
+                        RusotoError<UpdateVirtualRouterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualRouters/{virtual_router_name}",
             mesh_name = input.mesh_name,
@@ -4899,28 +5320,38 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVirtualRouterOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVirtualRouterOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVirtualRouterError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVirtualRouterError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing virtual service in a specified service mesh.</p>
-    async fn update_virtual_service(
+    fn update_virtual_service(
         &self,
         input: UpdateVirtualServiceInput,
-    ) -> Result<UpdateVirtualServiceOutput, RusotoError<UpdateVirtualServiceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateVirtualServiceOutput,
+                        RusotoError<UpdateVirtualServiceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/v20190125/meshes/{mesh_name}/virtualServices/{virtual_service_name}",
             mesh_name = input.mesh_name,
@@ -4933,20 +5364,20 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVirtualServiceOutput, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVirtualServiceOutput, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVirtualServiceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVirtualServiceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIceServerConfigRequest {
@@ -217,19 +218,38 @@ impl fmt::Display for SendAlexaOfferToMasterError {
 }
 impl Error for SendAlexaOfferToMasterError {}
 /// Trait representing the capabilities of the Amazon Kinesis Video Signaling Channels API. Amazon Kinesis Video Signaling Channels clients implement this trait.
-#[async_trait]
 pub trait KinesisVideoSignaling {
     /// <p>Gets the Interactive Connectivity Establishment (ICE) server configuration information, including URIs, username, and password which can be used to configure the WebRTC connection. The ICE component uses this configuration information to setup the WebRTC connection, including authenticating with the Traversal Using Relays around NAT (TURN) relay server. </p> <p>TURN is a protocol that is used to improve the connectivity of peer-to-peer applications. By providing a cloud-based relay service, TURN ensures that a connection can be established even when one or more peers are incapable of a direct peer-to-peer connection. For more information, see <a href="https://tools.ietf.org/html/draft-uberti-rtcweb-turn-rest-00">A REST API For Access To TURN Services</a>.</p> <p> You can invoke this API to establish a fallback mechanism in case either of the peers is unable to establish a direct peer-to-peer connection over a signaling channel. You must specify either a signaling channel ARN or the client ID in order to invoke this API.</p>
-    async fn get_ice_server_config(
+    fn get_ice_server_config(
         &self,
         input: GetIceServerConfigRequest,
-    ) -> Result<GetIceServerConfigResponse, RusotoError<GetIceServerConfigError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetIceServerConfigResponse,
+                        RusotoError<GetIceServerConfigError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>This API allows you to connect WebRTC-enabled devices with Alexa display devices. When invoked, it sends the Alexa Session Description Protocol (SDP) offer to the master peer. The offer is delivered as soon as the master is connected to the specified signaling channel. This API returns the SDP answer from the connected master. If the master is not connected to the signaling channel, redelivery requests are made until the message expires.</p>
-    async fn send_alexa_offer_to_master(
+    fn send_alexa_offer_to_master(
         &self,
         input: SendAlexaOfferToMasterRequest,
-    ) -> Result<SendAlexaOfferToMasterResponse, RusotoError<SendAlexaOfferToMasterError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SendAlexaOfferToMasterResponse,
+                        RusotoError<SendAlexaOfferToMasterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Kinesis Video Signaling Channels API.
 #[derive(Clone)]
@@ -269,13 +289,22 @@ impl KinesisVideoSignalingClient {
     }
 }
 
-#[async_trait]
 impl KinesisVideoSignaling for KinesisVideoSignalingClient {
     /// <p>Gets the Interactive Connectivity Establishment (ICE) server configuration information, including URIs, username, and password which can be used to configure the WebRTC connection. The ICE component uses this configuration information to setup the WebRTC connection, including authenticating with the Traversal Using Relays around NAT (TURN) relay server. </p> <p>TURN is a protocol that is used to improve the connectivity of peer-to-peer applications. By providing a cloud-based relay service, TURN ensures that a connection can be established even when one or more peers are incapable of a direct peer-to-peer connection. For more information, see <a href="https://tools.ietf.org/html/draft-uberti-rtcweb-turn-rest-00">A REST API For Access To TURN Services</a>.</p> <p> You can invoke this API to establish a fallback mechanism in case either of the peers is unable to establish a direct peer-to-peer connection over a signaling channel. You must specify either a signaling channel ARN or the client ID in order to invoke this API.</p>
-    async fn get_ice_server_config(
+    fn get_ice_server_config(
         &self,
         input: GetIceServerConfigRequest,
-    ) -> Result<GetIceServerConfigResponse, RusotoError<GetIceServerConfigError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetIceServerConfigResponse,
+                        RusotoError<GetIceServerConfigError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/get-ice-server-config";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -284,28 +313,38 @@ impl KinesisVideoSignaling for KinesisVideoSignalingClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetIceServerConfigResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetIceServerConfigResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetIceServerConfigError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetIceServerConfigError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>This API allows you to connect WebRTC-enabled devices with Alexa display devices. When invoked, it sends the Alexa Session Description Protocol (SDP) offer to the master peer. The offer is delivered as soon as the master is connected to the specified signaling channel. This API returns the SDP answer from the connected master. If the master is not connected to the signaling channel, redelivery requests are made until the message expires.</p>
-    async fn send_alexa_offer_to_master(
+    fn send_alexa_offer_to_master(
         &self,
         input: SendAlexaOfferToMasterRequest,
-    ) -> Result<SendAlexaOfferToMasterResponse, RusotoError<SendAlexaOfferToMasterError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        SendAlexaOfferToMasterResponse,
+                        RusotoError<SendAlexaOfferToMasterError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/v1/send-alexa-offer-to-master";
 
         let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
@@ -314,20 +353,20 @@ impl KinesisVideoSignaling for KinesisVideoSignalingClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendAlexaOfferToMasterResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SendAlexaOfferToMasterResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SendAlexaOfferToMasterError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SendAlexaOfferToMasterError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

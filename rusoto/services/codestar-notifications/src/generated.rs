@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRuleRequest {
@@ -917,85 +918,186 @@ impl fmt::Display for UpdateNotificationRuleError {
 }
 impl Error for UpdateNotificationRuleError {}
 /// Trait representing the capabilities of the AWS CodeStar Notifications API. AWS CodeStar Notifications clients implement this trait.
-#[async_trait]
 pub trait CodeStarNotifications {
     /// <p>Creates a notification rule for a resource. The rule specifies the events you want notifications about and the targets (such as SNS topics) where you want to receive them.</p>
-    async fn create_notification_rule(
+    fn create_notification_rule(
         &self,
         input: CreateNotificationRuleRequest,
-    ) -> Result<CreateNotificationRuleResult, RusotoError<CreateNotificationRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateNotificationRuleResult,
+                        RusotoError<CreateNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a notification rule for a resource.</p>
-    async fn delete_notification_rule(
+    fn delete_notification_rule(
         &self,
         input: DeleteNotificationRuleRequest,
-    ) -> Result<DeleteNotificationRuleResult, RusotoError<DeleteNotificationRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteNotificationRuleResult,
+                        RusotoError<DeleteNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a specified target for notifications.</p>
-    async fn delete_target(
+    fn delete_target(
         &self,
         input: DeleteTargetRequest,
-    ) -> Result<DeleteTargetResult, RusotoError<DeleteTargetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTargetResult, RusotoError<DeleteTargetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a specified notification rule.</p>
-    async fn describe_notification_rule(
+    fn describe_notification_rule(
         &self,
         input: DescribeNotificationRuleRequest,
-    ) -> Result<DescribeNotificationRuleResult, RusotoError<DescribeNotificationRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeNotificationRuleResult,
+                        RusotoError<DescribeNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about the event types available for configuring notifications.</p>
-    async fn list_event_types(
+    fn list_event_types(
         &self,
         input: ListEventTypesRequest,
-    ) -> Result<ListEventTypesResult, RusotoError<ListEventTypesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEventTypesResult, RusotoError<ListEventTypesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the notification rules for an AWS account.</p>
-    async fn list_notification_rules(
+    fn list_notification_rules(
         &self,
         input: ListNotificationRulesRequest,
-    ) -> Result<ListNotificationRulesResult, RusotoError<ListNotificationRulesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListNotificationRulesResult,
+                        RusotoError<ListNotificationRulesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the tags associated with a notification rule.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResult,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of the notification rule targets for an AWS account.</p>
-    async fn list_targets(
+    fn list_targets(
         &self,
         input: ListTargetsRequest,
-    ) -> Result<ListTargetsResult, RusotoError<ListTargetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTargetsResult, RusotoError<ListTargetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an association between a notification rule and an SNS topic so that the associated target can receive notifications when the events described in the rule are triggered.</p>
-    async fn subscribe(
+    fn subscribe(
         &self,
         input: SubscribeRequest,
-    ) -> Result<SubscribeResult, RusotoError<SubscribeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SubscribeResult, RusotoError<SubscribeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates a set of provided tags with a notification rule.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResult, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResult, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes an association between a notification rule and an Amazon SNS topic so that subscribers to that topic stop receiving notifications when the events described in the rule are triggered.</p>
-    async fn unsubscribe(
+    fn unsubscribe(
         &self,
         input: UnsubscribeRequest,
-    ) -> Result<UnsubscribeResult, RusotoError<UnsubscribeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UnsubscribeResult, RusotoError<UnsubscribeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the association between one or more provided tags and a notification rule.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResult, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Updates a notification rule for a resource. You can change the events that trigger the notification rule, the status of the rule, and the targets that receive the notifications.</p> <note> <p>To add or remove tags for a notification rule, you must use <a>TagResource</a> and <a>UntagResource</a>.</p> </note></p>
-    async fn update_notification_rule(
+    fn update_notification_rule(
         &self,
         input: UpdateNotificationRuleRequest,
-    ) -> Result<UpdateNotificationRuleResult, RusotoError<UpdateNotificationRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateNotificationRuleResult,
+                        RusotoError<UpdateNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS CodeStar Notifications API.
 #[derive(Clone)]
@@ -1035,13 +1137,22 @@ impl CodeStarNotificationsClient {
     }
 }
 
-#[async_trait]
 impl CodeStarNotifications for CodeStarNotificationsClient {
     /// <p>Creates a notification rule for a resource. The rule specifies the events you want notifications about and the targets (such as SNS topics) where you want to receive them.</p>
-    async fn create_notification_rule(
+    fn create_notification_rule(
         &self,
         input: CreateNotificationRuleRequest,
-    ) -> Result<CreateNotificationRuleResult, RusotoError<CreateNotificationRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateNotificationRuleResult,
+                        RusotoError<CreateNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/createNotificationRule";
 
         let mut request =
@@ -1051,28 +1162,38 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNotificationRuleResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateNotificationRuleResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNotificationRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateNotificationRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a notification rule for a resource.</p>
-    async fn delete_notification_rule(
+    fn delete_notification_rule(
         &self,
         input: DeleteNotificationRuleRequest,
-    ) -> Result<DeleteNotificationRuleResult, RusotoError<DeleteNotificationRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteNotificationRuleResult,
+                        RusotoError<DeleteNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deleteNotificationRule";
 
         let mut request =
@@ -1082,28 +1203,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteNotificationRuleResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteNotificationRuleResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNotificationRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteNotificationRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a specified target for notifications.</p>
-    async fn delete_target(
+    fn delete_target(
         &self,
         input: DeleteTargetRequest,
-    ) -> Result<DeleteTargetResult, RusotoError<DeleteTargetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteTargetResult, RusotoError<DeleteTargetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/deleteTarget";
 
         let mut request =
@@ -1113,28 +1240,38 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTargetResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteTargetResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTargetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteTargetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a specified notification rule.</p>
-    async fn describe_notification_rule(
+    fn describe_notification_rule(
         &self,
         input: DescribeNotificationRuleRequest,
-    ) -> Result<DescribeNotificationRuleResult, RusotoError<DescribeNotificationRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeNotificationRuleResult,
+                        RusotoError<DescribeNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/describeNotificationRule";
 
         let mut request =
@@ -1144,28 +1281,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeNotificationRuleResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeNotificationRuleResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeNotificationRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeNotificationRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about the event types available for configuring notifications.</p>
-    async fn list_event_types(
+    fn list_event_types(
         &self,
         input: ListEventTypesRequest,
-    ) -> Result<ListEventTypesResult, RusotoError<ListEventTypesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEventTypesResult, RusotoError<ListEventTypesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listEventTypes";
 
         let mut request =
@@ -1175,28 +1318,38 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEventTypesResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEventTypesResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEventTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEventTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the notification rules for an AWS account.</p>
-    async fn list_notification_rules(
+    fn list_notification_rules(
         &self,
         input: ListNotificationRulesRequest,
-    ) -> Result<ListNotificationRulesResult, RusotoError<ListNotificationRulesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListNotificationRulesResult,
+                        RusotoError<ListNotificationRulesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listNotificationRules";
 
         let mut request =
@@ -1206,28 +1359,38 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListNotificationRulesResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListNotificationRulesResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNotificationRulesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListNotificationRulesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the tags associated with a notification rule.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResult,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listTagsForResource";
 
         let mut request =
@@ -1237,28 +1400,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the notification rule targets for an AWS account.</p>
-    async fn list_targets(
+    fn list_targets(
         &self,
         input: ListTargetsRequest,
-    ) -> Result<ListTargetsResult, RusotoError<ListTargetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListTargetsResult, RusotoError<ListTargetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/listTargets";
 
         let mut request =
@@ -1268,28 +1437,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTargetsResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTargetsResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTargetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTargetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an association between a notification rule and an SNS topic so that the associated target can receive notifications when the events described in the rule are triggered.</p>
-    async fn subscribe(
+    fn subscribe(
         &self,
         input: SubscribeRequest,
-    ) -> Result<SubscribeResult, RusotoError<SubscribeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<SubscribeResult, RusotoError<SubscribeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/subscribe";
 
         let mut request =
@@ -1299,28 +1474,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<SubscribeResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<SubscribeResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(SubscribeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(SubscribeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates a set of provided tags with a notification rule.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResult, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResult, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/tagResource";
 
         let mut request =
@@ -1330,28 +1511,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes an association between a notification rule and an Amazon SNS topic so that subscribers to that topic stop receiving notifications when the events described in the rule are triggered.</p>
-    async fn unsubscribe(
+    fn unsubscribe(
         &self,
         input: UnsubscribeRequest,
-    ) -> Result<UnsubscribeResult, RusotoError<UnsubscribeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UnsubscribeResult, RusotoError<UnsubscribeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/unsubscribe";
 
         let mut request =
@@ -1361,28 +1548,34 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UnsubscribeResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UnsubscribeResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UnsubscribeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UnsubscribeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the association between one or more provided tags and a notification rule.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResult, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/untagResource";
 
         let mut request =
@@ -1392,28 +1585,38 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates a notification rule for a resource. You can change the events that trigger the notification rule, the status of the rule, and the targets that receive the notifications.</p> <note> <p>To add or remove tags for a notification rule, you must use <a>TagResource</a> and <a>UntagResource</a>.</p> </note></p>
-    async fn update_notification_rule(
+    fn update_notification_rule(
         &self,
         input: UpdateNotificationRuleRequest,
-    ) -> Result<UpdateNotificationRuleResult, RusotoError<UpdateNotificationRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateNotificationRuleResult,
+                        RusotoError<UpdateNotificationRuleError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/updateNotificationRule";
 
         let mut request =
@@ -1423,20 +1626,20 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateNotificationRuleResult, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateNotificationRuleResult, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateNotificationRuleError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateNotificationRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

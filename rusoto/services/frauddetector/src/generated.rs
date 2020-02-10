@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Provides the error of the batch create variable API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2571,187 +2572,400 @@ impl fmt::Display for UpdateVariableError {
 }
 impl Error for UpdateVariableError {}
 /// Trait representing the capabilities of the Amazon Fraud Detector API. Amazon Fraud Detector clients implement this trait.
-#[async_trait]
 pub trait FraudDetector {
     /// <p>Creates a batch of variables.</p>
-    async fn batch_create_variable(
+    fn batch_create_variable(
         &self,
         input: BatchCreateVariableRequest,
-    ) -> Result<BatchCreateVariableResult, RusotoError<BatchCreateVariableError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchCreateVariableResult,
+                        RusotoError<BatchCreateVariableError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a batch of variables.</p>
-    async fn batch_get_variable(
+    fn batch_get_variable(
         &self,
         input: BatchGetVariableRequest,
-    ) -> Result<BatchGetVariableResult, RusotoError<BatchGetVariableError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetVariableResult, RusotoError<BatchGetVariableError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a detector version. The detector version starts in a <code>DRAFT</code> status.</p>
-    async fn create_detector_version(
+    fn create_detector_version(
         &self,
         input: CreateDetectorVersionRequest,
-    ) -> Result<CreateDetectorVersionResult, RusotoError<CreateDetectorVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDetectorVersionResult,
+                        RusotoError<CreateDetectorVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a version of the model using the specified model type. </p>
-    async fn create_model_version(
+    fn create_model_version(
         &self,
         input: CreateModelVersionRequest,
-    ) -> Result<CreateModelVersionResult, RusotoError<CreateModelVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateModelVersionResult, RusotoError<CreateModelVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a rule for use with the specified detector. </p>
-    async fn create_rule(
+    fn create_rule(
         &self,
         input: CreateRuleRequest,
-    ) -> Result<CreateRuleResult, RusotoError<CreateRuleError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRuleResult, RusotoError<CreateRuleError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a variable.</p>
-    async fn create_variable(
+    fn create_variable(
         &self,
         input: CreateVariableRequest,
-    ) -> Result<CreateVariableResult, RusotoError<CreateVariableError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateVariableResult, RusotoError<CreateVariableError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the detector version.</p>
-    async fn delete_detector_version(
+    fn delete_detector_version(
         &self,
         input: DeleteDetectorVersionRequest,
-    ) -> Result<DeleteDetectorVersionResult, RusotoError<DeleteDetectorVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDetectorVersionResult,
+                        RusotoError<DeleteDetectorVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the specified event.</p>
-    async fn delete_event(
+    fn delete_event(
         &self,
         input: DeleteEventRequest,
-    ) -> Result<DeleteEventResult, RusotoError<DeleteEventError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteEventResult, RusotoError<DeleteEventError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all versions for a specified detector.</p>
-    async fn describe_detector(
+    fn describe_detector(
         &self,
         input: DescribeDetectorRequest,
-    ) -> Result<DescribeDetectorResult, RusotoError<DescribeDetectorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeDetectorResult, RusotoError<DescribeDetectorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all of the model versions for the specified model type or for the specified model type and model ID. You can also get details for a single, specified model version. </p>
-    async fn describe_model_versions(
+    fn describe_model_versions(
         &self,
         input: DescribeModelVersionsRequest,
-    ) -> Result<DescribeModelVersionsResult, RusotoError<DescribeModelVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeModelVersionsResult,
+                        RusotoError<DescribeModelVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a particular detector version. </p>
-    async fn get_detector_version(
+    fn get_detector_version(
         &self,
         input: GetDetectorVersionRequest,
-    ) -> Result<GetDetectorVersionResult, RusotoError<GetDetectorVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetDetectorVersionResult, RusotoError<GetDetectorVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all of detectors. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 5 and 10. To get the next page results, provide the pagination token from the <code>GetEventTypesResponse</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
-    async fn get_detectors(
+    fn get_detectors(
         &self,
         input: GetDetectorsRequest,
-    ) -> Result<GetDetectorsResult, RusotoError<GetDetectorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDetectorsResult, RusotoError<GetDetectorsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the details for one or more Amazon SageMaker models that have been imported into the service. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 5 and 10. To get the next page results, provide the pagination token from the <code>GetExternalModelsResult</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
-    async fn get_external_models(
+    fn get_external_models(
         &self,
         input: GetExternalModelsRequest,
-    ) -> Result<GetExternalModelsResult, RusotoError<GetExternalModelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetExternalModelsResult, RusotoError<GetExternalModelsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a model version. </p>
-    async fn get_model_version(
+    fn get_model_version(
         &self,
         input: GetModelVersionRequest,
-    ) -> Result<GetModelVersionResult, RusotoError<GetModelVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetModelVersionResult, RusotoError<GetModelVersionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all of the models for the AWS account, or the specified model type, or gets a single model for the specified model type, model ID combination. </p>
-    async fn get_models(
+    fn get_models(
         &self,
         input: GetModelsRequest,
-    ) -> Result<GetModelsResult, RusotoError<GetModelsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetModelsResult, RusotoError<GetModelsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets one or more outcomes. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 50 and 100. To get the next page results, provide the pagination token from the <code>GetOutcomesResult</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
-    async fn get_outcomes(
+    fn get_outcomes(
         &self,
         input: GetOutcomesRequest,
-    ) -> Result<GetOutcomesResult, RusotoError<GetOutcomesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOutcomesResult, RusotoError<GetOutcomesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Evaluates an event against a detector version. If a version ID is not provided, the detector’s (<code>ACTIVE</code>) version is used. </p>
-    async fn get_prediction(
+    fn get_prediction(
         &self,
         input: GetPredictionRequest,
-    ) -> Result<GetPredictionResult, RusotoError<GetPredictionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPredictionResult, RusotoError<GetPredictionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all rules available for the specified detector.</p>
-    async fn get_rules(
+    fn get_rules(
         &self,
         input: GetRulesRequest,
-    ) -> Result<GetRulesResult, RusotoError<GetRulesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRulesResult, RusotoError<GetRulesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all of the variables or the specific variable. This is a paginated API. Providing null <code>maxSizePerPage</code> results in retrieving maximum of 100 records per page. If you provide <code>maxSizePerPage</code> the value must be between 50 and 100. To get the next page result, a provide a pagination token from <code>GetVariablesResult</code> as part of your request. Null pagination token fetches the records from the beginning. </p>
-    async fn get_variables(
+    fn get_variables(
         &self,
         input: GetVariablesRequest,
-    ) -> Result<GetVariablesResult, RusotoError<GetVariablesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetVariablesResult, RusotoError<GetVariablesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates a detector. </p>
-    async fn put_detector(
+    fn put_detector(
         &self,
         input: PutDetectorRequest,
-    ) -> Result<PutDetectorResult, RusotoError<PutDetectorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutDetectorResult, RusotoError<PutDetectorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates an Amazon SageMaker model endpoint. You can also use this action to update the configuration of the model endpoint, including the IAM role and/or the mapped variables. </p>
-    async fn put_external_model(
+    fn put_external_model(
         &self,
         input: PutExternalModelRequest,
-    ) -> Result<PutExternalModelResult, RusotoError<PutExternalModelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutExternalModelResult, RusotoError<PutExternalModelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates a model. </p>
-    async fn put_model(
+    fn put_model(
         &self,
         input: PutModelRequest,
-    ) -> Result<PutModelResult, RusotoError<PutModelError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutModelResult, RusotoError<PutModelError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates or updates an outcome. </p>
-    async fn put_outcome(
+    fn put_outcome(
         &self,
         input: PutOutcomeRequest,
-    ) -> Result<PutOutcomeResult, RusotoError<PutOutcomeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutOutcomeResult, RusotoError<PutOutcomeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Updates a detector version. The detector version attributes that you can update include models, external model endpoints, rules, and description. You can only update a <code>DRAFT</code> detector version.</p>
-    async fn update_detector_version(
+    fn update_detector_version(
         &self,
         input: UpdateDetectorVersionRequest,
-    ) -> Result<UpdateDetectorVersionResult, RusotoError<UpdateDetectorVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorVersionResult,
+                        RusotoError<UpdateDetectorVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the detector version's description. You can update the metadata for any detector version (<code>DRAFT, ACTIVE,</code> or <code>INACTIVE</code>). </p>
-    async fn update_detector_version_metadata(
+    fn update_detector_version_metadata(
         &self,
         input: UpdateDetectorVersionMetadataRequest,
-    ) -> Result<UpdateDetectorVersionMetadataResult, RusotoError<UpdateDetectorVersionMetadataError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorVersionMetadataResult,
+                        RusotoError<UpdateDetectorVersionMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates the detector version’s status. You can perform the following promotions or demotions using <code>UpdateDetectorVersionStatus</code>: <code>DRAFT</code> to <code>ACTIVE</code>, <code>ACTIVE</code> to <code>INACTIVE</code>, and <code>INACTIVE</code> to <code>ACTIVE</code>.</p>
-    async fn update_detector_version_status(
+    fn update_detector_version_status(
         &self,
         input: UpdateDetectorVersionStatusRequest,
-    ) -> Result<UpdateDetectorVersionStatusResult, RusotoError<UpdateDetectorVersionStatusError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorVersionStatusResult,
+                        RusotoError<UpdateDetectorVersionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Updates a model version. You can update the description and status attributes using this action. You can perform the following status updates: </p> <ol> <li> <p>Change the <code>TRAINING<em>COMPLETE</code> status to <code>ACTIVE</code> </p> </li> <li> <p>Change <code>ACTIVE</code> back to <code>TRAINING</em>COMPLETE</code> </p> </li> </ol></p>
-    async fn update_model_version(
+    fn update_model_version(
         &self,
         input: UpdateModelVersionRequest,
-    ) -> Result<UpdateModelVersionResult, RusotoError<UpdateModelVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateModelVersionResult, RusotoError<UpdateModelVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a rule's metadata. </p>
-    async fn update_rule_metadata(
+    fn update_rule_metadata(
         &self,
         input: UpdateRuleMetadataRequest,
-    ) -> Result<UpdateRuleMetadataResult, RusotoError<UpdateRuleMetadataError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateRuleMetadataResult, RusotoError<UpdateRuleMetadataError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a rule version resulting in a new rule version. </p>
-    async fn update_rule_version(
+    fn update_rule_version(
         &self,
         input: UpdateRuleVersionRequest,
-    ) -> Result<UpdateRuleVersionResult, RusotoError<UpdateRuleVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateRuleVersionResult, RusotoError<UpdateRuleVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a variable.</p>
-    async fn update_variable(
+    fn update_variable(
         &self,
         input: UpdateVariableRequest,
-    ) -> Result<UpdateVariableResult, RusotoError<UpdateVariableError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateVariableResult, RusotoError<UpdateVariableError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Fraud Detector API.
 #[derive(Clone)]
@@ -2791,13 +3005,22 @@ impl FraudDetectorClient {
     }
 }
 
-#[async_trait]
 impl FraudDetector for FraudDetectorClient {
     /// <p>Creates a batch of variables.</p>
-    async fn batch_create_variable(
+    fn batch_create_variable(
         &self,
         input: BatchCreateVariableRequest,
-    ) -> Result<BatchCreateVariableResult, RusotoError<BatchCreateVariableError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchCreateVariableResult,
+                        RusotoError<BatchCreateVariableError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2808,27 +3031,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchCreateVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchCreateVariableError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchCreateVariableResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchCreateVariableError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a batch of variables.</p>
-    async fn batch_get_variable(
+    fn batch_get_variable(
         &self,
         input: BatchGetVariableRequest,
-    ) -> Result<BatchGetVariableResult, RusotoError<BatchGetVariableError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BatchGetVariableResult, RusotoError<BatchGetVariableError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2836,26 +3065,37 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetVariableError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchGetVariableResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchGetVariableError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a detector version. The detector version starts in a <code>DRAFT</code> status.</p>
-    async fn create_detector_version(
+    fn create_detector_version(
         &self,
         input: CreateDetectorVersionRequest,
-    ) -> Result<CreateDetectorVersionResult, RusotoError<CreateDetectorVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDetectorVersionResult,
+                        RusotoError<CreateDetectorVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2866,27 +3106,34 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDetectorVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDetectorVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDetectorVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a version of the model using the specified model type. </p>
-    async fn create_model_version(
+    fn create_model_version(
         &self,
         input: CreateModelVersionRequest,
-    ) -> Result<CreateModelVersionResult, RusotoError<CreateModelVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateModelVersionResult, RusotoError<CreateModelVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2897,27 +3144,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateModelVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateModelVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateModelVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateModelVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a rule for use with the specified detector. </p>
-    async fn create_rule(
+    fn create_rule(
         &self,
         input: CreateRuleRequest,
-    ) -> Result<CreateRuleResult, RusotoError<CreateRuleError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateRuleResult, RusotoError<CreateRuleError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2925,26 +3178,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateRuleResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRuleError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<CreateRuleResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRuleError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a variable.</p>
-    async fn create_variable(
+    fn create_variable(
         &self,
         input: CreateVariableRequest,
-    ) -> Result<CreateVariableResult, RusotoError<CreateVariableError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateVariableResult, RusotoError<CreateVariableError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2952,26 +3211,37 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVariableError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateVariableResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVariableError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the detector version.</p>
-    async fn delete_detector_version(
+    fn delete_detector_version(
         &self,
         input: DeleteDetectorVersionRequest,
-    ) -> Result<DeleteDetectorVersionResult, RusotoError<DeleteDetectorVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDetectorVersionResult,
+                        RusotoError<DeleteDetectorVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2982,27 +3252,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDetectorVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDetectorVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDetectorVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified event.</p>
-    async fn delete_event(
+    fn delete_event(
         &self,
         input: DeleteEventRequest,
-    ) -> Result<DeleteEventResult, RusotoError<DeleteEventError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteEventResult, RusotoError<DeleteEventError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3010,26 +3286,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEventResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEventError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<DeleteEventResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEventError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all versions for a specified detector.</p>
-    async fn describe_detector(
+    fn describe_detector(
         &self,
         input: DescribeDetectorRequest,
-    ) -> Result<DescribeDetectorResult, RusotoError<DescribeDetectorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeDetectorResult, RusotoError<DescribeDetectorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3037,26 +3319,37 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeDetectorResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDetectorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDetectorResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDetectorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all of the model versions for the specified model type or for the specified model type and model ID. You can also get details for a single, specified model version. </p>
-    async fn describe_model_versions(
+    fn describe_model_versions(
         &self,
         input: DescribeModelVersionsRequest,
-    ) -> Result<DescribeModelVersionsResult, RusotoError<DescribeModelVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeModelVersionsResult,
+                        RusotoError<DescribeModelVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3067,27 +3360,34 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeModelVersionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeModelVersionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeModelVersionsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeModelVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a particular detector version. </p>
-    async fn get_detector_version(
+    fn get_detector_version(
         &self,
         input: GetDetectorVersionRequest,
-    ) -> Result<GetDetectorVersionResult, RusotoError<GetDetectorVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetDetectorVersionResult, RusotoError<GetDetectorVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3098,27 +3398,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDetectorVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDetectorVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDetectorVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all of detectors. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 5 and 10. To get the next page results, provide the pagination token from the <code>GetEventTypesResponse</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
-    async fn get_detectors(
+    fn get_detectors(
         &self,
         input: GetDetectorsRequest,
-    ) -> Result<GetDetectorsResult, RusotoError<GetDetectorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDetectorsResult, RusotoError<GetDetectorsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3126,26 +3432,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDetectorsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDetectorsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetDetectorsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDetectorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the details for one or more Amazon SageMaker models that have been imported into the service. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 5 and 10. To get the next page results, provide the pagination token from the <code>GetExternalModelsResult</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
-    async fn get_external_models(
+    fn get_external_models(
         &self,
         input: GetExternalModelsRequest,
-    ) -> Result<GetExternalModelsResult, RusotoError<GetExternalModelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetExternalModelsResult, RusotoError<GetExternalModelsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3156,26 +3469,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetExternalModelsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetExternalModelsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetExternalModelsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetExternalModelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a model version. </p>
-    async fn get_model_version(
+    fn get_model_version(
         &self,
         input: GetModelVersionRequest,
-    ) -> Result<GetModelVersionResult, RusotoError<GetModelVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetModelVersionResult, RusotoError<GetModelVersionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3183,26 +3503,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetModelVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetModelVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetModelVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all of the models for the AWS account, or the specified model type, or gets a single model for the specified model type, model ID combination. </p>
-    async fn get_models(
+    fn get_models(
         &self,
         input: GetModelsRequest,
-    ) -> Result<GetModelsResult, RusotoError<GetModelsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetModelsResult, RusotoError<GetModelsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3210,26 +3537,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetModelsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetModelsResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetModelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets one or more outcomes. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 50 and 100. To get the next page results, provide the pagination token from the <code>GetOutcomesResult</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
-    async fn get_outcomes(
+    fn get_outcomes(
         &self,
         input: GetOutcomesRequest,
-    ) -> Result<GetOutcomesResult, RusotoError<GetOutcomesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetOutcomesResult, RusotoError<GetOutcomesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3237,26 +3570,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOutcomesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOutcomesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetOutcomesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetOutcomesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Evaluates an event against a detector version. If a version ID is not provided, the detector’s (<code>ACTIVE</code>) version is used. </p>
-    async fn get_prediction(
+    fn get_prediction(
         &self,
         input: GetPredictionRequest,
-    ) -> Result<GetPredictionResult, RusotoError<GetPredictionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPredictionResult, RusotoError<GetPredictionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3264,26 +3603,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPredictionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPredictionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetPredictionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPredictionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all rules available for the specified detector.</p>
-    async fn get_rules(
+    fn get_rules(
         &self,
         input: GetRulesRequest,
-    ) -> Result<GetRulesResult, RusotoError<GetRulesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRulesResult, RusotoError<GetRulesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3291,26 +3636,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRulesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRulesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetRulesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRulesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all of the variables or the specific variable. This is a paginated API. Providing null <code>maxSizePerPage</code> results in retrieving maximum of 100 records per page. If you provide <code>maxSizePerPage</code> the value must be between 50 and 100. To get the next page result, a provide a pagination token from <code>GetVariablesResult</code> as part of your request. Null pagination token fetches the records from the beginning. </p>
-    async fn get_variables(
+    fn get_variables(
         &self,
         input: GetVariablesRequest,
-    ) -> Result<GetVariablesResult, RusotoError<GetVariablesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetVariablesResult, RusotoError<GetVariablesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3318,26 +3669,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetVariablesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVariablesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetVariablesResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetVariablesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates a detector. </p>
-    async fn put_detector(
+    fn put_detector(
         &self,
         input: PutDetectorRequest,
-    ) -> Result<PutDetectorResult, RusotoError<PutDetectorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutDetectorResult, RusotoError<PutDetectorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3345,26 +3702,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutDetectorResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDetectorError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutDetectorResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutDetectorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates an Amazon SageMaker model endpoint. You can also use this action to update the configuration of the model endpoint, including the IAM role and/or the mapped variables. </p>
-    async fn put_external_model(
+    fn put_external_model(
         &self,
         input: PutExternalModelRequest,
-    ) -> Result<PutExternalModelResult, RusotoError<PutExternalModelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutExternalModelResult, RusotoError<PutExternalModelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3372,26 +3735,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutExternalModelResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutExternalModelError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutExternalModelResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutExternalModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates a model. </p>
-    async fn put_model(
+    fn put_model(
         &self,
         input: PutModelRequest,
-    ) -> Result<PutModelResult, RusotoError<PutModelError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutModelResult, RusotoError<PutModelError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3399,26 +3769,32 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutModelResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutModelError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutModelResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates or updates an outcome. </p>
-    async fn put_outcome(
+    fn put_outcome(
         &self,
         input: PutOutcomeRequest,
-    ) -> Result<PutOutcomeResult, RusotoError<PutOutcomeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutOutcomeResult, RusotoError<PutOutcomeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3426,26 +3802,36 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutOutcomeResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutOutcomeError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<PutOutcomeResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutOutcomeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Updates a detector version. The detector version attributes that you can update include models, external model endpoints, rules, and description. You can only update a <code>DRAFT</code> detector version.</p>
-    async fn update_detector_version(
+    fn update_detector_version(
         &self,
         input: UpdateDetectorVersionRequest,
-    ) -> Result<UpdateDetectorVersionResult, RusotoError<UpdateDetectorVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorVersionResult,
+                        RusotoError<UpdateDetectorVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3456,28 +3842,37 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDetectorVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDetectorVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the detector version's description. You can update the metadata for any detector version (<code>DRAFT, ACTIVE,</code> or <code>INACTIVE</code>). </p>
-    async fn update_detector_version_metadata(
+    fn update_detector_version_metadata(
         &self,
         input: UpdateDetectorVersionMetadataRequest,
-    ) -> Result<UpdateDetectorVersionMetadataResult, RusotoError<UpdateDetectorVersionMetadataError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorVersionMetadataResult,
+                        RusotoError<UpdateDetectorVersionMetadataError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3488,28 +3883,37 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorVersionMetadataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorVersionMetadataError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDetectorVersionMetadataResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDetectorVersionMetadataError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates the detector version’s status. You can perform the following promotions or demotions using <code>UpdateDetectorVersionStatus</code>: <code>DRAFT</code> to <code>ACTIVE</code>, <code>ACTIVE</code> to <code>INACTIVE</code>, and <code>INACTIVE</code> to <code>ACTIVE</code>.</p>
-    async fn update_detector_version_status(
+    fn update_detector_version_status(
         &self,
         input: UpdateDetectorVersionStatusRequest,
-    ) -> Result<UpdateDetectorVersionStatusResult, RusotoError<UpdateDetectorVersionStatusError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDetectorVersionStatusResult,
+                        RusotoError<UpdateDetectorVersionStatusError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3520,27 +3924,34 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorVersionStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorVersionStatusError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDetectorVersionStatusResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDetectorVersionStatusError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates a model version. You can update the description and status attributes using this action. You can perform the following status updates: </p> <ol> <li> <p>Change the <code>TRAINING<em>COMPLETE</code> status to <code>ACTIVE</code> </p> </li> <li> <p>Change <code>ACTIVE</code> back to <code>TRAINING</em>COMPLETE</code> </p> </li> </ol></p>
-    async fn update_model_version(
+    fn update_model_version(
         &self,
         input: UpdateModelVersionRequest,
-    ) -> Result<UpdateModelVersionResult, RusotoError<UpdateModelVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateModelVersionResult, RusotoError<UpdateModelVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3551,27 +3962,34 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateModelVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateModelVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateModelVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateModelVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a rule's metadata. </p>
-    async fn update_rule_metadata(
+    fn update_rule_metadata(
         &self,
         input: UpdateRuleMetadataRequest,
-    ) -> Result<UpdateRuleMetadataResult, RusotoError<UpdateRuleMetadataError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateRuleMetadataResult, RusotoError<UpdateRuleMetadataError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3582,27 +4000,34 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRuleMetadataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRuleMetadataError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRuleMetadataResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRuleMetadataError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a rule version resulting in a new rule version. </p>
-    async fn update_rule_version(
+    fn update_rule_version(
         &self,
         input: UpdateRuleVersionRequest,
-    ) -> Result<UpdateRuleVersionResult, RusotoError<UpdateRuleVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateRuleVersionResult, RusotoError<UpdateRuleVersionError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3613,26 +4038,33 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateRuleVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRuleVersionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateRuleVersionResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRuleVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a variable.</p>
-    async fn update_variable(
+    fn update_variable(
         &self,
         input: UpdateVariableRequest,
-    ) -> Result<UpdateVariableResult, RusotoError<UpdateVariableError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateVariableResult, RusotoError<UpdateVariableError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3640,18 +4072,19 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVariableError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateVariableResult, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVariableError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

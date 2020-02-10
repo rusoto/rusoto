@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AAC. The service accepts one of two mutually exclusive groups of AAC settings--VBR and CBR. To select one of these modes, set the value of Bitrate control mode (rateControlMode) to &quot;VBR&quot; or &quot;CBR&quot;.  In VBR mode, you control the audio quality with the setting VBR quality (vbrQuality). In CBR mode, you use the setting Bitrate (bitrate). Defaults and valid values depend on the rate control mode.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AacSettings {
@@ -6036,157 +6037,319 @@ impl fmt::Display for UpdateQueueError {
 }
 impl Error for UpdateQueueError {}
 /// Trait representing the capabilities of the MediaConvert API. MediaConvert clients implement this trait.
-#[async_trait]
 pub trait MediaConvert {
     /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
-    async fn associate_certificate(
+    fn associate_certificate(
         &self,
         input: AssociateCertificateRequest,
-    ) -> Result<AssociateCertificateResponse, RusotoError<AssociateCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateCertificateResponse,
+                        RusotoError<AssociateCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently cancel a job. Once you have canceled a job, you can&#39;t start it again.</p>
-    async fn cancel_job(
+    fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelJobResponse, RusotoError<CancelJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new transcoding job. For information about jobs and job settings, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new job template. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
-    async fn create_job_template(
+    fn create_job_template(
         &self,
         input: CreateJobTemplateRequest,
-    ) -> Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new preset. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
-    async fn create_preset(
+    fn create_preset(
         &self,
         input: CreatePresetRequest,
-    ) -> Result<CreatePresetResponse, RusotoError<CreatePresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePresetResponse, RusotoError<CreatePresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Create a new transcoding queue. For information about queues, see Working With Queues in the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html</p>
-    async fn create_queue(
+    fn create_queue(
         &self,
         input: CreateQueueRequest,
-    ) -> Result<CreateQueueResponse, RusotoError<CreateQueueError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateQueueResponse, RusotoError<CreateQueueError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently delete a job template you have created.</p>
-    async fn delete_job_template(
+    fn delete_job_template(
         &self,
         input: DeleteJobTemplateRequest,
-    ) -> Result<DeleteJobTemplateResponse, RusotoError<DeleteJobTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteJobTemplateResponse, RusotoError<DeleteJobTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently delete a preset you have created.</p>
-    async fn delete_preset(
+    fn delete_preset(
         &self,
         input: DeletePresetRequest,
-    ) -> Result<DeletePresetResponse, RusotoError<DeletePresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeletePresetResponse, RusotoError<DeletePresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Permanently delete a queue you have created.</p>
-    async fn delete_queue(
+    fn delete_queue(
         &self,
         input: DeleteQueueRequest,
-    ) -> Result<DeleteQueueResponse, RusotoError<DeleteQueueError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteQueueResponse, RusotoError<DeleteQueueError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Send an request with an empty body to the regional API endpoint to get your account API endpoint.</p>
-    async fn describe_endpoints(
+    fn describe_endpoints(
         &self,
         input: DescribeEndpointsRequest,
-    ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.</p>
-    async fn disassociate_certificate(
+    fn disassociate_certificate(
         &self,
         input: DisassociateCertificateRequest,
-    ) -> Result<DisassociateCertificateResponse, RusotoError<DisassociateCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateCertificateResponse,
+                        RusotoError<DisassociateCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve the JSON for a specific completed transcoding job.</p>
-    async fn get_job(
+    fn get_job(
         &self,
         input: GetJobRequest,
-    ) -> Result<GetJobResponse, RusotoError<GetJobError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetJobResponse, RusotoError<GetJobError>>> + Send + 'static>,
+    >;
 
     /// <p>Retrieve the JSON for a specific job template.</p>
-    async fn get_job_template(
+    fn get_job_template(
         &self,
         input: GetJobTemplateRequest,
-    ) -> Result<GetJobTemplateResponse, RusotoError<GetJobTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetJobTemplateResponse, RusotoError<GetJobTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve the JSON for a specific preset.</p>
-    async fn get_preset(
+    fn get_preset(
         &self,
         input: GetPresetRequest,
-    ) -> Result<GetPresetResponse, RusotoError<GetPresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPresetResponse, RusotoError<GetPresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve the JSON for a specific queue.</p>
-    async fn get_queue(
+    fn get_queue(
         &self,
         input: GetQueueRequest,
-    ) -> Result<GetQueueResponse, RusotoError<GetQueueError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetQueueResponse, RusotoError<GetQueueError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a JSON array of up to twenty of your job templates. This will return the templates themselves, not just a list of them. To retrieve the next twenty templates, use the nextToken string returned with the array</p>
-    async fn list_job_templates(
+    fn list_job_templates(
         &self,
         input: ListJobTemplatesRequest,
-    ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a JSON array of up to twenty of your most recently created jobs. This array includes in-process, completed, and errored jobs. This will return the jobs themselves, not just a list of the jobs. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResponse, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a JSON array of up to twenty of your presets. This will return the presets themselves, not just a list of them. To retrieve the next twenty presets, use the nextToken string returned with the array.</p>
-    async fn list_presets(
+    fn list_presets(
         &self,
         input: ListPresetsRequest,
-    ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPresetsResponse, RusotoError<ListPresetsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve a JSON array of up to twenty of your queues. This will return the queues themselves, not just a list of them. To retrieve the next twenty queues, use the nextToken string returned with the array.</p>
-    async fn list_queues(
+    fn list_queues(
         &self,
         input: ListQueuesRequest,
-    ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListQueuesResponse, RusotoError<ListQueuesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieve the tags for a MediaConvert resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add tags to a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Remove tags from a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modify one of your existing job templates.</p>
-    async fn update_job_template(
+    fn update_job_template(
         &self,
         input: UpdateJobTemplateRequest,
-    ) -> Result<UpdateJobTemplateResponse, RusotoError<UpdateJobTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateJobTemplateResponse, RusotoError<UpdateJobTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modify one of your existing presets.</p>
-    async fn update_preset(
+    fn update_preset(
         &self,
         input: UpdatePresetRequest,
-    ) -> Result<UpdatePresetResponse, RusotoError<UpdatePresetError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdatePresetResponse, RusotoError<UpdatePresetError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Modify one of your existing queues.</p>
-    async fn update_queue(
+    fn update_queue(
         &self,
         input: UpdateQueueRequest,
-    ) -> Result<UpdateQueueResponse, RusotoError<UpdateQueueError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateQueueResponse, RusotoError<UpdateQueueError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the MediaConvert API.
 #[derive(Clone)]
@@ -6226,13 +6389,22 @@ impl MediaConvertClient {
     }
 }
 
-#[async_trait]
 impl MediaConvert for MediaConvertClient {
     /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
-    async fn associate_certificate(
+    fn associate_certificate(
         &self,
         input: AssociateCertificateRequest,
-    ) -> Result<AssociateCertificateResponse, RusotoError<AssociateCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateCertificateResponse,
+                        RusotoError<AssociateCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/certificates";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6241,55 +6413,67 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateCertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateCertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently cancel a job. Once you have canceled a job, you can&#39;t start it again.</p>
-    async fn cancel_job(
+    fn cancel_job(
         &self,
         input: CancelJobRequest,
-    ) -> Result<CancelJobResponse, RusotoError<CancelJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CancelJobResponse, RusotoError<CancelJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new transcoding job. For information about jobs and job settings, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
-    async fn create_job(
+    fn create_job(
         &self,
         input: CreateJobRequest,
-    ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateJobResponse, RusotoError<CreateJobError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/jobs";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6298,28 +6482,35 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new job template. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
-    async fn create_job_template(
+    fn create_job_template(
         &self,
         input: CreateJobTemplateRequest,
-    ) -> Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/jobTemplates";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6328,28 +6519,34 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateJobTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateJobTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateJobTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateJobTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new preset. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
-    async fn create_preset(
+    fn create_preset(
         &self,
         input: CreatePresetRequest,
-    ) -> Result<CreatePresetResponse, RusotoError<CreatePresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreatePresetResponse, RusotoError<CreatePresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/presets";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6358,28 +6555,34 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreatePresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreatePresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Create a new transcoding queue. For information about queues, see Working With Queues in the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html</p>
-    async fn create_queue(
+    fn create_queue(
         &self,
         input: CreateQueueRequest,
-    ) -> Result<CreateQueueResponse, RusotoError<CreateQueueError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateQueueResponse, RusotoError<CreateQueueError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/queues";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6388,109 +6591,135 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateQueueResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateQueueResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateQueueError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateQueueError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently delete a job template you have created.</p>
-    async fn delete_job_template(
+    fn delete_job_template(
         &self,
         input: DeleteJobTemplateRequest,
-    ) -> Result<DeleteJobTemplateResponse, RusotoError<DeleteJobTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteJobTemplateResponse, RusotoError<DeleteJobTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/jobTemplates/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteJobTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteJobTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteJobTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteJobTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently delete a preset you have created.</p>
-    async fn delete_preset(
+    fn delete_preset(
         &self,
         input: DeletePresetRequest,
-    ) -> Result<DeletePresetResponse, RusotoError<DeletePresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeletePresetResponse, RusotoError<DeletePresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/presets/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeletePresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeletePresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Permanently delete a queue you have created.</p>
-    async fn delete_queue(
+    fn delete_queue(
         &self,
         input: DeleteQueueRequest,
-    ) -> Result<DeleteQueueResponse, RusotoError<DeleteQueueError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteQueueResponse, RusotoError<DeleteQueueError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/queues/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteQueueResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteQueueResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteQueueError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteQueueError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Send an request with an empty body to the regional API endpoint to get your account API endpoint.</p>
-    async fn describe_endpoints(
+    fn describe_endpoints(
         &self,
         input: DescribeEndpointsRequest,
-    ) -> Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEndpointsResponse, RusotoError<DescribeEndpointsError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/endpoints";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6499,163 +6728,200 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEndpointsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEndpointsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEndpointsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.</p>
-    async fn disassociate_certificate(
+    fn disassociate_certificate(
         &self,
         input: DisassociateCertificateRequest,
-    ) -> Result<DisassociateCertificateResponse, RusotoError<DisassociateCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateCertificateResponse,
+                        RusotoError<DisassociateCertificateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/certificates/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateCertificateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateCertificateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the JSON for a specific completed transcoding job.</p>
-    async fn get_job(
+    fn get_job(
         &self,
         input: GetJobRequest,
-    ) -> Result<GetJobResponse, RusotoError<GetJobError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<GetJobResponse, RusotoError<GetJobError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/2017-08-29/jobs/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetJobResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the JSON for a specific job template.</p>
-    async fn get_job_template(
+    fn get_job_template(
         &self,
         input: GetJobTemplateRequest,
-    ) -> Result<GetJobTemplateResponse, RusotoError<GetJobTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetJobTemplateResponse, RusotoError<GetJobTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/jobTemplates/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetJobTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetJobTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetJobTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the JSON for a specific preset.</p>
-    async fn get_preset(
+    fn get_preset(
         &self,
         input: GetPresetRequest,
-    ) -> Result<GetPresetResponse, RusotoError<GetPresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetPresetResponse, RusotoError<GetPresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/presets/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the JSON for a specific queue.</p>
-    async fn get_queue(
+    fn get_queue(
         &self,
         input: GetQueueRequest,
-    ) -> Result<GetQueueResponse, RusotoError<GetQueueError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetQueueResponse, RusotoError<GetQueueError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/queues/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetQueueResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetQueueResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetQueueError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetQueueError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your job templates. This will return the templates themselves, not just a list of them. To retrieve the next twenty templates, use the nextToken string returned with the array</p>
-    async fn list_job_templates(
+    fn list_job_templates(
         &self,
         input: ListJobTemplatesRequest,
-    ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/jobTemplates";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -6679,28 +6945,34 @@ impl MediaConvert for MediaConvertClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobTemplatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobTemplatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobTemplatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobTemplatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your most recently created jobs. This array includes in-process, completed, and errored jobs. This will return the jobs themselves, not just a list of the jobs. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.</p>
-    async fn list_jobs(
+    fn list_jobs(
         &self,
         input: ListJobsRequest,
-    ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListJobsResponse, RusotoError<ListJobsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/jobs";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -6724,28 +6996,34 @@ impl MediaConvert for MediaConvertClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJobsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJobsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your presets. This will return the presets themselves, not just a list of them. To retrieve the next twenty presets, use the nextToken string returned with the array.</p>
-    async fn list_presets(
+    fn list_presets(
         &self,
         input: ListPresetsRequest,
-    ) -> Result<ListPresetsResponse, RusotoError<ListPresetsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListPresetsResponse, RusotoError<ListPresetsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/presets";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -6769,28 +7047,34 @@ impl MediaConvert for MediaConvertClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPresetsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListPresetsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPresetsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListPresetsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve a JSON array of up to twenty of your queues. This will return the queues themselves, not just a list of them. To retrieve the next twenty queues, use the nextToken string returned with the array.</p>
-    async fn list_queues(
+    fn list_queues(
         &self,
         input: ListQueuesRequest,
-    ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListQueuesResponse, RusotoError<ListQueuesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/queues";
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
@@ -6811,55 +7095,71 @@ impl MediaConvert for MediaConvertClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListQueuesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListQueuesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListQueuesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListQueuesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieve the tags for a MediaConvert resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/tags/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("GET", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add tags to a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/2017-08-29/tags";
 
         let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
@@ -6868,28 +7168,34 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Remove tags from a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/tags/{arn}", arn = input.arn);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -6898,28 +7204,35 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modify one of your existing job templates.</p>
-    async fn update_job_template(
+    fn update_job_template(
         &self,
         input: UpdateJobTemplateRequest,
-    ) -> Result<UpdateJobTemplateResponse, RusotoError<UpdateJobTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<UpdateJobTemplateResponse, RusotoError<UpdateJobTemplateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/jobTemplates/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -6928,28 +7241,34 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateJobTemplateResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateJobTemplateResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateJobTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateJobTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modify one of your existing presets.</p>
-    async fn update_preset(
+    fn update_preset(
         &self,
         input: UpdatePresetRequest,
-    ) -> Result<UpdatePresetResponse, RusotoError<UpdatePresetError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdatePresetResponse, RusotoError<UpdatePresetError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/presets/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -6958,28 +7277,34 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePresetResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdatePresetResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePresetError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdatePresetError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Modify one of your existing queues.</p>
-    async fn update_queue(
+    fn update_queue(
         &self,
         input: UpdateQueueRequest,
-    ) -> Result<UpdateQueueResponse, RusotoError<UpdateQueueError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateQueueResponse, RusotoError<UpdateQueueError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/2017-08-29/queues/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
@@ -6988,20 +7313,20 @@ impl MediaConvert for MediaConvertClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateQueueResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateQueueResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateQueueError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateQueueError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

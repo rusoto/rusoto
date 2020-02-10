@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>Access log settings, including the access log format and access log destination ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -9762,696 +9763,1199 @@ impl fmt::Display for UpdateVpcLinkError {
 }
 impl Error for UpdateVpcLinkError {}
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
-#[async_trait]
 pub trait ApiGateway {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    async fn create_api_key(
+    fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
-    ) -> Result<ApiKey, RusotoError<CreateApiKeyError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<ApiKey, RusotoError<CreateApiKeyError>>> + Send + 'static>,
+    >;
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
-    async fn create_authorizer(
+    fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
-    ) -> Result<Authorizer, RusotoError<CreateAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizer, RusotoError<CreateAuthorizerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
-    async fn create_base_path_mapping(
+    fn create_base_path_mapping(
         &self,
         input: CreateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, RusotoError<CreateBasePathMappingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMapping, RusotoError<CreateBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
-    async fn create_deployment(
+    fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<CreateDeploymentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<CreateDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn create_documentation_part(
+    fn create_documentation_part(
         &self,
         input: CreateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, RusotoError<CreateDocumentationPartError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DocumentationPart, RusotoError<CreateDocumentationPartError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
-    async fn create_documentation_version(
+    fn create_documentation_version(
         &self,
         input: CreateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, RusotoError<CreateDocumentationVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersion,
+                        RusotoError<CreateDocumentationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new domain name.</p>
-    async fn create_domain_name(
+    fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
-    ) -> Result<DomainName, RusotoError<CreateDomainNameError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainName, RusotoError<CreateDomainNameError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    async fn create_model(
+    fn create_model(
         &self,
         input: CreateModelRequest,
-    ) -> Result<Model, RusotoError<CreateModelError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Model, RusotoError<CreateModelError>>> + Send + 'static>>;
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
-    async fn create_request_validator(
+    fn create_request_validator(
         &self,
         input: CreateRequestValidatorRequest,
-    ) -> Result<RequestValidator, RusotoError<CreateRequestValidatorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidator, RusotoError<CreateRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a <a>Resource</a> resource.</p>
-    async fn create_resource(
+    fn create_resource(
         &self,
         input: CreateResourceRequest,
-    ) -> Result<Resource, RusotoError<CreateResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Resource, RusotoError<CreateResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
-    async fn create_rest_api(
+    fn create_rest_api(
         &self,
         input: CreateRestApiRequest,
-    ) -> Result<RestApi, RusotoError<CreateRestApiError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApi, RusotoError<CreateRestApiError>>> + Send + 'static>,
+    >;
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    async fn create_stage(
+    fn create_stage(
         &self,
         input: CreateStageRequest,
-    ) -> Result<Stage, RusotoError<CreateStageError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Stage, RusotoError<CreateStageError>>> + Send + 'static>>;
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
-    async fn create_usage_plan(
+    fn create_usage_plan(
         &self,
         input: CreateUsagePlanRequest,
-    ) -> Result<UsagePlan, RusotoError<CreateUsagePlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlan, RusotoError<CreateUsagePlanError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
-    async fn create_usage_plan_key(
+    fn create_usage_plan_key(
         &self,
         input: CreateUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, RusotoError<CreateUsagePlanKeyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlanKey, RusotoError<CreateUsagePlanKeyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-    async fn create_vpc_link(
+    fn create_vpc_link(
         &self,
         input: CreateVpcLinkRequest,
-    ) -> Result<VpcLink, RusotoError<CreateVpcLinkError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<VpcLink, RusotoError<CreateVpcLinkError>>> + Send + 'static>,
+    >;
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    async fn delete_api_key(
+    fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
-    ) -> Result<(), RusotoError<DeleteApiKeyError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteApiKeyError>>> + Send + 'static>>;
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
-    async fn delete_authorizer(
+    fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
-    ) -> Result<(), RusotoError<DeleteAuthorizerError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteAuthorizerError>>> + Send + 'static>,
+    >;
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
-    async fn delete_base_path_mapping(
+    fn delete_base_path_mapping(
         &self,
         input: DeleteBasePathMappingRequest,
-    ) -> Result<(), RusotoError<DeleteBasePathMappingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
-    async fn delete_client_certificate(
+    fn delete_client_certificate(
         &self,
         input: DeleteClientCertificateRequest,
-    ) -> Result<(), RusotoError<DeleteClientCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteClientCertificateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
-    async fn delete_deployment(
+    fn delete_deployment(
         &self,
         input: DeleteDeploymentRequest,
-    ) -> Result<(), RusotoError<DeleteDeploymentError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteDeploymentError>>> + Send + 'static>,
+    >;
 
-    async fn delete_documentation_part(
+    fn delete_documentation_part(
         &self,
         input: DeleteDocumentationPartRequest,
-    ) -> Result<(), RusotoError<DeleteDocumentationPartError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteDocumentationPartError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn delete_documentation_version(
+    fn delete_documentation_version(
         &self,
         input: DeleteDocumentationVersionRequest,
-    ) -> Result<(), RusotoError<DeleteDocumentationVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteDocumentationVersionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
-    async fn delete_domain_name(
+    fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
-    ) -> Result<(), RusotoError<DeleteDomainNameError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteDomainNameError>>> + Send + 'static>,
+    >;
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
-    async fn delete_gateway_response(
+    fn delete_gateway_response(
         &self,
         input: DeleteGatewayResponseRequest,
-    ) -> Result<(), RusotoError<DeleteGatewayResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents a delete integration.</p>
-    async fn delete_integration(
+    fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
-    ) -> Result<(), RusotoError<DeleteIntegrationError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteIntegrationError>>> + Send + 'static>,
+    >;
 
     /// <p>Represents a delete integration response.</p>
-    async fn delete_integration_response(
+    fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
-    ) -> Result<(), RusotoError<DeleteIntegrationResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteIntegrationResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    async fn delete_method(
+    fn delete_method(
         &self,
         input: DeleteMethodRequest,
-    ) -> Result<(), RusotoError<DeleteMethodError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteMethodError>>> + Send + 'static>>;
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
-    async fn delete_method_response(
+    fn delete_method_response(
         &self,
         input: DeleteMethodResponseRequest,
-    ) -> Result<(), RusotoError<DeleteMethodResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a model.</p>
-    async fn delete_model(
+    fn delete_model(
         &self,
         input: DeleteModelRequest,
-    ) -> Result<(), RusotoError<DeleteModelError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteModelError>>> + Send + 'static>>;
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    async fn delete_request_validator(
+    fn delete_request_validator(
         &self,
         input: DeleteRequestValidatorRequest,
-    ) -> Result<(), RusotoError<DeleteRequestValidatorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
-    async fn delete_resource(
+    fn delete_resource(
         &self,
         input: DeleteResourceRequest,
-    ) -> Result<(), RusotoError<DeleteResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteResourceError>>> + Send + 'static>>;
 
     /// <p>Deletes the specified API.</p>
-    async fn delete_rest_api(
+    fn delete_rest_api(
         &self,
         input: DeleteRestApiRequest,
-    ) -> Result<(), RusotoError<DeleteRestApiError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRestApiError>>> + Send + 'static>>;
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    async fn delete_stage(
+    fn delete_stage(
         &self,
         input: DeleteStageRequest,
-    ) -> Result<(), RusotoError<DeleteStageError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteStageError>>> + Send + 'static>>;
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
-    async fn delete_usage_plan(
+    fn delete_usage_plan(
         &self,
         input: DeleteUsagePlanRequest,
-    ) -> Result<(), RusotoError<DeleteUsagePlanError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteUsagePlanError>>> + Send + 'static>>;
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
-    async fn delete_usage_plan_key(
+    fn delete_usage_plan_key(
         &self,
         input: DeleteUsagePlanKeyRequest,
-    ) -> Result<(), RusotoError<DeleteUsagePlanKeyError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteUsagePlanKeyError>>> + Send + 'static>,
+    >;
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    async fn delete_vpc_link(
+    fn delete_vpc_link(
         &self,
         input: DeleteVpcLinkRequest,
-    ) -> Result<(), RusotoError<DeleteVpcLinkError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteVpcLinkError>>> + Send + 'static>>;
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
-    async fn flush_stage_authorizers_cache(
+    fn flush_stage_authorizers_cache(
         &self,
         input: FlushStageAuthorizersCacheRequest,
-    ) -> Result<(), RusotoError<FlushStageAuthorizersCacheError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<FlushStageAuthorizersCacheError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Flushes a stage's cache.</p>
-    async fn flush_stage_cache(
+    fn flush_stage_cache(
         &self,
         input: FlushStageCacheRequest,
-    ) -> Result<(), RusotoError<FlushStageCacheError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<FlushStageCacheError>>> + Send + 'static>>;
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
-    async fn generate_client_certificate(
+    fn generate_client_certificate(
         &self,
         input: GenerateClientCertificateRequest,
-    ) -> Result<ClientCertificate, RusotoError<GenerateClientCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ClientCertificate, RusotoError<GenerateClientCertificateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
-    async fn get_account(&self) -> Result<Account, RusotoError<GetAccountError>>;
+    fn get_account(
+        &self,
+    ) -> Pin<Box<dyn Future<Output = Result<Account, RusotoError<GetAccountError>>> + Send + 'static>>;
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    async fn get_api_key(
+    fn get_api_key(
         &self,
         input: GetApiKeyRequest,
-    ) -> Result<ApiKey, RusotoError<GetApiKeyError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<ApiKey, RusotoError<GetApiKeyError>>> + Send + 'static>>;
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    async fn get_api_keys(
+    fn get_api_keys(
         &self,
         input: GetApiKeysRequest,
-    ) -> Result<ApiKeys, RusotoError<GetApiKeysError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<ApiKeys, RusotoError<GetApiKeysError>>> + Send + 'static>>;
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
-    async fn get_authorizer(
+    fn get_authorizer(
         &self,
         input: GetAuthorizerRequest,
-    ) -> Result<Authorizer, RusotoError<GetAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizer, RusotoError<GetAuthorizerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
-    async fn get_authorizers(
+    fn get_authorizers(
         &self,
         input: GetAuthorizersRequest,
-    ) -> Result<Authorizers, RusotoError<GetAuthorizersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizers, RusotoError<GetAuthorizersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
-    async fn get_base_path_mapping(
+    fn get_base_path_mapping(
         &self,
         input: GetBasePathMappingRequest,
-    ) -> Result<BasePathMapping, RusotoError<GetBasePathMappingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMapping, RusotoError<GetBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
-    async fn get_base_path_mappings(
+    fn get_base_path_mappings(
         &self,
         input: GetBasePathMappingsRequest,
-    ) -> Result<BasePathMappings, RusotoError<GetBasePathMappingsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMappings, RusotoError<GetBasePathMappingsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
-    async fn get_client_certificate(
+    fn get_client_certificate(
         &self,
         input: GetClientCertificateRequest,
-    ) -> Result<ClientCertificate, RusotoError<GetClientCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ClientCertificate, RusotoError<GetClientCertificateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
-    async fn get_client_certificates(
+    fn get_client_certificates(
         &self,
         input: GetClientCertificatesRequest,
-    ) -> Result<ClientCertificates, RusotoError<GetClientCertificatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ClientCertificates, RusotoError<GetClientCertificatesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
-    async fn get_deployment(
+    fn get_deployment(
         &self,
         input: GetDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<GetDeploymentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<GetDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
-    async fn get_deployments(
+    fn get_deployments(
         &self,
         input: GetDeploymentsRequest,
-    ) -> Result<Deployments, RusotoError<GetDeploymentsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployments, RusotoError<GetDeploymentsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn get_documentation_part(
+    fn get_documentation_part(
         &self,
         input: GetDocumentationPartRequest,
-    ) -> Result<DocumentationPart, RusotoError<GetDocumentationPartError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DocumentationPart, RusotoError<GetDocumentationPartError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn get_documentation_parts(
+    fn get_documentation_parts(
         &self,
         input: GetDocumentationPartsRequest,
-    ) -> Result<DocumentationParts, RusotoError<GetDocumentationPartsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DocumentationParts, RusotoError<GetDocumentationPartsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn get_documentation_version(
+    fn get_documentation_version(
         &self,
         input: GetDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, RusotoError<GetDocumentationVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersion,
+                        RusotoError<GetDocumentationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
-    async fn get_documentation_versions(
+    fn get_documentation_versions(
         &self,
         input: GetDocumentationVersionsRequest,
-    ) -> Result<DocumentationVersions, RusotoError<GetDocumentationVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersions,
+                        RusotoError<GetDocumentationVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
-    async fn get_domain_name(
+    fn get_domain_name(
         &self,
         input: GetDomainNameRequest,
-    ) -> Result<DomainName, RusotoError<GetDomainNameError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainName, RusotoError<GetDomainNameError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
-    async fn get_domain_names(
+    fn get_domain_names(
         &self,
         input: GetDomainNamesRequest,
-    ) -> Result<DomainNames, RusotoError<GetDomainNamesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainNames, RusotoError<GetDomainNamesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    async fn get_export(
+    fn get_export(
         &self,
         input: GetExportRequest,
-    ) -> Result<ExportResponse, RusotoError<GetExportError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ExportResponse, RusotoError<GetExportError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-    async fn get_gateway_response(
+    fn get_gateway_response(
         &self,
         input: GetGatewayResponseRequest,
-    ) -> Result<GatewayResponse, RusotoError<GetGatewayResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponse, RusotoError<GetGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
-    async fn get_gateway_responses(
+    fn get_gateway_responses(
         &self,
         input: GetGatewayResponsesRequest,
-    ) -> Result<GatewayResponses, RusotoError<GetGatewayResponsesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponses, RusotoError<GetGatewayResponsesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get the integration settings.</p>
-    async fn get_integration(
+    fn get_integration(
         &self,
         input: GetIntegrationRequest,
-    ) -> Result<Integration, RusotoError<GetIntegrationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Integration, RusotoError<GetIntegrationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents a get integration response.</p>
-    async fn get_integration_response(
+    fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, RusotoError<GetIntegrationResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<IntegrationResponse, RusotoError<GetIntegrationResponseError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    async fn get_method(
+    fn get_method(
         &self,
         input: GetMethodRequest,
-    ) -> Result<Method, RusotoError<GetMethodError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Method, RusotoError<GetMethodError>>> + Send + 'static>>;
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
-    async fn get_method_response(
+    fn get_method_response(
         &self,
         input: GetMethodResponseRequest,
-    ) -> Result<MethodResponse, RusotoError<GetMethodResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<MethodResponse, RusotoError<GetMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    async fn get_model(&self, input: GetModelRequest) -> Result<Model, RusotoError<GetModelError>>;
+    fn get_model(
+        &self,
+        input: GetModelRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Model, RusotoError<GetModelError>>> + Send + 'static>>;
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
-    async fn get_model_template(
+    fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
-    ) -> Result<Template, RusotoError<GetModelTemplateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Template, RusotoError<GetModelTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    async fn get_models(
+    fn get_models(
         &self,
         input: GetModelsRequest,
-    ) -> Result<Models, RusotoError<GetModelsError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Models, RusotoError<GetModelsError>>> + Send + 'static>>;
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    async fn get_request_validator(
+    fn get_request_validator(
         &self,
         input: GetRequestValidatorRequest,
-    ) -> Result<RequestValidator, RusotoError<GetRequestValidatorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidator, RusotoError<GetRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
-    async fn get_request_validators(
+    fn get_request_validators(
         &self,
         input: GetRequestValidatorsRequest,
-    ) -> Result<RequestValidators, RusotoError<GetRequestValidatorsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidators, RusotoError<GetRequestValidatorsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists information about a resource.</p>
-    async fn get_resource(
+    fn get_resource(
         &self,
         input: GetResourceRequest,
-    ) -> Result<Resource, RusotoError<GetResourceError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<Resource, RusotoError<GetResourceError>>> + Send + 'static>,
+    >;
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
-    async fn get_resources(
+    fn get_resources(
         &self,
         input: GetResourcesRequest,
-    ) -> Result<Resources, RusotoError<GetResourcesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Resources, RusotoError<GetResourcesError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    async fn get_rest_api(
+    fn get_rest_api(
         &self,
         input: GetRestApiRequest,
-    ) -> Result<RestApi, RusotoError<GetRestApiError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<RestApi, RusotoError<GetRestApiError>>> + Send + 'static>>;
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    async fn get_rest_apis(
+    fn get_rest_apis(
         &self,
         input: GetRestApisRequest,
-    ) -> Result<RestApis, RusotoError<GetRestApisError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApis, RusotoError<GetRestApisError>>> + Send + 'static>,
+    >;
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    async fn get_sdk(&self, input: GetSdkRequest) -> Result<SdkResponse, RusotoError<GetSdkError>>;
+    fn get_sdk(
+        &self,
+        input: GetSdkRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<SdkResponse, RusotoError<GetSdkError>>> + Send + 'static>>;
 
-    async fn get_sdk_type(
+    fn get_sdk_type(
         &self,
         input: GetSdkTypeRequest,
-    ) -> Result<SdkType, RusotoError<GetSdkTypeError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<SdkType, RusotoError<GetSdkTypeError>>> + Send + 'static>>;
 
-    async fn get_sdk_types(
+    fn get_sdk_types(
         &self,
         input: GetSdkTypesRequest,
-    ) -> Result<SdkTypes, RusotoError<GetSdkTypesError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<SdkTypes, RusotoError<GetSdkTypesError>>> + Send + 'static>,
+    >;
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    async fn get_stage(&self, input: GetStageRequest) -> Result<Stage, RusotoError<GetStageError>>;
+    fn get_stage(
+        &self,
+        input: GetStageRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Stage, RusotoError<GetStageError>>> + Send + 'static>>;
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    async fn get_stages(
+    fn get_stages(
         &self,
         input: GetStagesRequest,
-    ) -> Result<Stages, RusotoError<GetStagesError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Stages, RusotoError<GetStagesError>>> + Send + 'static>>;
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-    async fn get_tags(&self, input: GetTagsRequest) -> Result<Tags, RusotoError<GetTagsError>>;
+    fn get_tags(
+        &self,
+        input: GetTagsRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Tags, RusotoError<GetTagsError>>> + Send + 'static>>;
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>>;
+    fn get_usage(
+        &self,
+        input: GetUsageRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Usage, RusotoError<GetUsageError>>> + Send + 'static>>;
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
-    async fn get_usage_plan(
+    fn get_usage_plan(
         &self,
         input: GetUsagePlanRequest,
-    ) -> Result<UsagePlan, RusotoError<GetUsagePlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlan, RusotoError<GetUsagePlanError>>> + Send + 'static,
+        >,
+    >;
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
-    async fn get_usage_plan_key(
+    fn get_usage_plan_key(
         &self,
         input: GetUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, RusotoError<GetUsagePlanKeyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlanKey, RusotoError<GetUsagePlanKeyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
-    async fn get_usage_plan_keys(
+    fn get_usage_plan_keys(
         &self,
         input: GetUsagePlanKeysRequest,
-    ) -> Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets all the usage plans of the caller's account.</p>
-    async fn get_usage_plans(
+    fn get_usage_plans(
         &self,
         input: GetUsagePlansRequest,
-    ) -> Result<UsagePlans, RusotoError<GetUsagePlansError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlans, RusotoError<GetUsagePlansError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    async fn get_vpc_link(
+    fn get_vpc_link(
         &self,
         input: GetVpcLinkRequest,
-    ) -> Result<VpcLink, RusotoError<GetVpcLinkError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<VpcLink, RusotoError<GetVpcLinkError>>> + Send + 'static>>;
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    async fn get_vpc_links(
+    fn get_vpc_links(
         &self,
         input: GetVpcLinksRequest,
-    ) -> Result<VpcLinks, RusotoError<GetVpcLinksError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<VpcLinks, RusotoError<GetVpcLinksError>>> + Send + 'static>,
+    >;
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
-    async fn import_api_keys(
+    fn import_api_keys(
         &self,
         input: ImportApiKeysRequest,
-    ) -> Result<ApiKeyIds, RusotoError<ImportApiKeysError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ApiKeyIds, RusotoError<ImportApiKeysError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn import_documentation_parts(
+    fn import_documentation_parts(
         &self,
         input: ImportDocumentationPartsRequest,
-    ) -> Result<DocumentationPartIds, RusotoError<ImportDocumentationPartsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationPartIds,
+                        RusotoError<ImportDocumentationPartsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
-    async fn import_rest_api(
+    fn import_rest_api(
         &self,
         input: ImportRestApiRequest,
-    ) -> Result<RestApi, RusotoError<ImportRestApiError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApi, RusotoError<ImportRestApiError>>> + Send + 'static>,
+    >;
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
-    async fn put_gateway_response(
+    fn put_gateway_response(
         &self,
         input: PutGatewayResponseRequest,
-    ) -> Result<GatewayResponse, RusotoError<PutGatewayResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponse, RusotoError<PutGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Sets up a method's integration.</p>
-    async fn put_integration(
+    fn put_integration(
         &self,
         input: PutIntegrationRequest,
-    ) -> Result<Integration, RusotoError<PutIntegrationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Integration, RusotoError<PutIntegrationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents a put integration.</p>
-    async fn put_integration_response(
+    fn put_integration_response(
         &self,
         input: PutIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, RusotoError<PutIntegrationResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<IntegrationResponse, RusotoError<PutIntegrationResponseError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    async fn put_method(
+    fn put_method(
         &self,
         input: PutMethodRequest,
-    ) -> Result<Method, RusotoError<PutMethodError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Method, RusotoError<PutMethodError>>> + Send + 'static>>;
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
-    async fn put_method_response(
+    fn put_method_response(
         &self,
         input: PutMethodResponseRequest,
-    ) -> Result<MethodResponse, RusotoError<PutMethodResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<MethodResponse, RusotoError<PutMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    async fn put_rest_api(
+    fn put_rest_api(
         &self,
         input: PutRestApiRequest,
-    ) -> Result<RestApi, RusotoError<PutRestApiError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<RestApi, RusotoError<PutRestApiError>>> + Send + 'static>>;
 
     /// <p>Adds or updates a tag on a given resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>;
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
-    async fn test_invoke_authorizer(
+    fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        TestInvokeAuthorizerResponse,
+                        RusotoError<TestInvokeAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
-    async fn test_invoke_method(
+    fn test_invoke_method(
         &self,
         input: TestInvokeMethodRequest,
-    ) -> Result<TestInvokeMethodResponse, RusotoError<TestInvokeMethodError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TestInvokeMethodResponse, RusotoError<TestInvokeMethodError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a tag from a given resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>;
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
-    async fn update_account(
+    fn update_account(
         &self,
         input: UpdateAccountRequest,
-    ) -> Result<Account, RusotoError<UpdateAccountError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<Account, RusotoError<UpdateAccountError>>> + Send + 'static>,
+    >;
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    async fn update_api_key(
+    fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
-    ) -> Result<ApiKey, RusotoError<UpdateApiKeyError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<ApiKey, RusotoError<UpdateApiKeyError>>> + Send + 'static>,
+    >;
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
-    async fn update_authorizer(
+    fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
-    ) -> Result<Authorizer, RusotoError<UpdateAuthorizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizer, RusotoError<UpdateAuthorizerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
-    async fn update_base_path_mapping(
+    fn update_base_path_mapping(
         &self,
         input: UpdateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, RusotoError<UpdateBasePathMappingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMapping, RusotoError<UpdateBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
-    async fn update_client_certificate(
+    fn update_client_certificate(
         &self,
         input: UpdateClientCertificateRequest,
-    ) -> Result<ClientCertificate, RusotoError<UpdateClientCertificateError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ClientCertificate, RusotoError<UpdateClientCertificateError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
-    async fn update_deployment(
+    fn update_deployment(
         &self,
         input: UpdateDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<UpdateDeploymentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<UpdateDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
-    async fn update_documentation_part(
+    fn update_documentation_part(
         &self,
         input: UpdateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, RusotoError<UpdateDocumentationPartError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DocumentationPart, RusotoError<UpdateDocumentationPartError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
-    async fn update_documentation_version(
+    fn update_documentation_version(
         &self,
         input: UpdateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, RusotoError<UpdateDocumentationVersionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersion,
+                        RusotoError<UpdateDocumentationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
-    async fn update_domain_name(
+    fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
-    ) -> Result<DomainName, RusotoError<UpdateDomainNameError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainName, RusotoError<UpdateDomainNameError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-    async fn update_gateway_response(
+    fn update_gateway_response(
         &self,
         input: UpdateGatewayResponseRequest,
-    ) -> Result<GatewayResponse, RusotoError<UpdateGatewayResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponse, RusotoError<UpdateGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents an update integration.</p>
-    async fn update_integration(
+    fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> Result<Integration, RusotoError<UpdateIntegrationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Integration, RusotoError<UpdateIntegrationError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Represents an update integration response.</p>
-    async fn update_integration_response(
+    fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, RusotoError<UpdateIntegrationResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        IntegrationResponse,
+                        RusotoError<UpdateIntegrationResponseError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    async fn update_method(
+    fn update_method(
         &self,
         input: UpdateMethodRequest,
-    ) -> Result<Method, RusotoError<UpdateMethodError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<Method, RusotoError<UpdateMethodError>>> + Send + 'static>,
+    >;
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
-    async fn update_method_response(
+    fn update_method_response(
         &self,
         input: UpdateMethodResponseRequest,
-    ) -> Result<MethodResponse, RusotoError<UpdateMethodResponseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<MethodResponse, RusotoError<UpdateMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about a model.</p>
-    async fn update_model(
+    fn update_model(
         &self,
         input: UpdateModelRequest,
-    ) -> Result<Model, RusotoError<UpdateModelError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Model, RusotoError<UpdateModelError>>> + Send + 'static>>;
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    async fn update_request_validator(
+    fn update_request_validator(
         &self,
         input: UpdateRequestValidatorRequest,
-    ) -> Result<RequestValidator, RusotoError<UpdateRequestValidatorError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidator, RusotoError<UpdateRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
-    async fn update_resource(
+    fn update_resource(
         &self,
         input: UpdateResourceRequest,
-    ) -> Result<Resource, RusotoError<UpdateResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Resource, RusotoError<UpdateResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Changes information about the specified API.</p>
-    async fn update_rest_api(
+    fn update_rest_api(
         &self,
         input: UpdateRestApiRequest,
-    ) -> Result<RestApi, RusotoError<UpdateRestApiError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApi, RusotoError<UpdateRestApiError>>> + Send + 'static>,
+    >;
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    async fn update_stage(
+    fn update_stage(
         &self,
         input: UpdateStageRequest,
-    ) -> Result<Stage, RusotoError<UpdateStageError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Stage, RusotoError<UpdateStageError>>> + Send + 'static>>;
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    async fn update_usage(
+    fn update_usage(
         &self,
         input: UpdateUsageRequest,
-    ) -> Result<Usage, RusotoError<UpdateUsageError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Usage, RusotoError<UpdateUsageError>>> + Send + 'static>>;
 
     /// <p>Updates a usage plan of a given plan Id.</p>
-    async fn update_usage_plan(
+    fn update_usage_plan(
         &self,
         input: UpdateUsagePlanRequest,
-    ) -> Result<UsagePlan, RusotoError<UpdateUsagePlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlan, RusotoError<UpdateUsagePlanError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-    async fn update_vpc_link(
+    fn update_vpc_link(
         &self,
         input: UpdateVpcLinkRequest,
-    ) -> Result<VpcLink, RusotoError<UpdateVpcLinkError>>;
+    ) -> Pin<
+        Box<dyn Future<Output = Result<VpcLink, RusotoError<UpdateVpcLinkError>>> + Send + 'static>,
+    >;
 }
 /// A client for the Amazon API Gateway API.
 #[derive(Clone)]
@@ -10491,13 +10995,14 @@ impl ApiGatewayClient {
     }
 }
 
-#[async_trait]
 impl ApiGateway for ApiGatewayClient {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    async fn create_api_key(
+    fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
-    ) -> Result<ApiKey, RusotoError<CreateApiKeyError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<ApiKey, RusotoError<CreateApiKeyError>>> + Send + 'static>,
+    > {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10506,27 +11011,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
-    async fn create_authorizer(
+    fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
-    ) -> Result<Authorizer, RusotoError<CreateAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizer, RusotoError<CreateAuthorizerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
             restapi_id = input.rest_api_id
@@ -10538,28 +11050,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
-    async fn create_base_path_mapping(
+    fn create_base_path_mapping(
         &self,
         input: CreateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, RusotoError<CreateBasePathMappingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMapping, RusotoError<CreateBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
             domain_name = input.domain_name
@@ -10571,28 +11089,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BasePathMapping, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBasePathMappingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateBasePathMappingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
-    async fn create_deployment(
+    fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<CreateDeploymentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<CreateDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
             restapi_id = input.rest_api_id
@@ -10604,27 +11128,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn create_documentation_part(
+    fn create_documentation_part(
         &self,
         input: CreateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, RusotoError<CreateDocumentationPartError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DocumentationPart, RusotoError<CreateDocumentationPartError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -10636,27 +11167,37 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationPart, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationPart, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDocumentationPartError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDocumentationPartError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn create_documentation_version(
+    fn create_documentation_version(
         &self,
         input: CreateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, RusotoError<CreateDocumentationVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersion,
+                        RusotoError<CreateDocumentationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
             restapi_id = input.rest_api_id
@@ -10668,28 +11209,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationVersion, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationVersion, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDocumentationVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDocumentationVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new domain name.</p>
-    async fn create_domain_name(
+    fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
-    ) -> Result<DomainName, RusotoError<CreateDomainNameError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainName, RusotoError<CreateDomainNameError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10698,28 +11245,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDomainNameError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDomainNameError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    async fn create_model(
+    fn create_model(
         &self,
         input: CreateModelRequest,
-    ) -> Result<Model, RusotoError<CreateModelError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Model, RusotoError<CreateModelError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -10731,27 +11279,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
-    async fn create_request_validator(
+    fn create_request_validator(
         &self,
         input: CreateRequestValidatorRequest,
-    ) -> Result<RequestValidator, RusotoError<CreateRequestValidatorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidator, RusotoError<CreateRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
             restapi_id = input.rest_api_id
@@ -10763,28 +11318,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RequestValidator, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RequestValidator, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRequestValidatorError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRequestValidatorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a <a>Resource</a> resource.</p>
-    async fn create_resource(
+    fn create_resource(
         &self,
         input: CreateResourceRequest,
-    ) -> Result<Resource, RusotoError<CreateResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Resource, RusotoError<CreateResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{parent_id}",
             parent_id = input.parent_id,
@@ -10797,28 +11358,30 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
-    async fn create_rest_api(
+    fn create_rest_api(
         &self,
         input: CreateRestApiRequest,
-    ) -> Result<RestApi, RusotoError<CreateRestApiError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApi, RusotoError<CreateRestApiError>>> + Send + 'static>,
+    > {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10827,28 +11390,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRestApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateRestApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    async fn create_stage(
+    fn create_stage(
         &self,
         input: CreateStageRequest,
-    ) -> Result<Stage, RusotoError<CreateStageError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Stage, RusotoError<CreateStageError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -10860,27 +11424,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateStageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateStageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
-    async fn create_usage_plan(
+    fn create_usage_plan(
         &self,
         input: CreateUsagePlanRequest,
-    ) -> Result<UsagePlan, RusotoError<CreateUsagePlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlan, RusotoError<CreateUsagePlanError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10889,28 +11460,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUsagePlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateUsagePlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
-    async fn create_usage_plan_key(
+    fn create_usage_plan_key(
         &self,
         input: CreateUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, RusotoError<CreateUsagePlanKeyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlanKey, RusotoError<CreateUsagePlanKeyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
             usageplan_id = input.usage_plan_id
@@ -10922,28 +11499,30 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKey, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UsagePlanKey, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUsagePlanKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateUsagePlanKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-    async fn create_vpc_link(
+    fn create_vpc_link(
         &self,
         input: CreateVpcLinkRequest,
-    ) -> Result<VpcLink, RusotoError<CreateVpcLinkError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<VpcLink, RusotoError<CreateVpcLinkError>>> + Send + 'static>,
+    > {
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -10952,54 +11531,57 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVpcLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateVpcLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    async fn delete_api_key(
+    fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
-    ) -> Result<(), RusotoError<DeleteApiKeyError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteApiKeyError>>> + Send + 'static>>
+    {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
-    async fn delete_authorizer(
+    fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
-    ) -> Result<(), RusotoError<DeleteAuthorizerError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteAuthorizerError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -11009,27 +11591,33 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
-    async fn delete_base_path_mapping(
+    fn delete_base_path_mapping(
         &self,
         input: DeleteBasePathMappingRequest,
-    ) -> Result<(), RusotoError<DeleteBasePathMappingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -11039,27 +11627,33 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBasePathMappingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteBasePathMappingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
-    async fn delete_client_certificate(
+    fn delete_client_certificate(
         &self,
         input: DeleteClientCertificateRequest,
-    ) -> Result<(), RusotoError<DeleteClientCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteClientCertificateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -11068,27 +11662,29 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteClientCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteClientCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
-    async fn delete_deployment(
+    fn delete_deployment(
         &self,
         input: DeleteDeploymentRequest,
-    ) -> Result<(), RusotoError<DeleteDeploymentError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteDeploymentError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -11098,26 +11694,32 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn delete_documentation_part(
+    fn delete_documentation_part(
         &self,
         input: DeleteDocumentationPartRequest,
-    ) -> Result<(), RusotoError<DeleteDocumentationPartError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteDocumentationPartError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -11127,26 +11729,32 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentationPartError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDocumentationPartError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn delete_documentation_version(
+    fn delete_documentation_version(
         &self,
         input: DeleteDocumentationVersionRequest,
-    ) -> Result<(), RusotoError<DeleteDocumentationVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteDocumentationVersionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -11156,27 +11764,29 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentationVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDocumentationVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
-    async fn delete_domain_name(
+    fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
-    ) -> Result<(), RusotoError<DeleteDomainNameError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteDomainNameError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -11185,27 +11795,33 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDomainNameError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDomainNameError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
-    async fn delete_gateway_response(
+    fn delete_gateway_response(
         &self,
         input: DeleteGatewayResponseRequest,
-    ) -> Result<(), RusotoError<DeleteGatewayResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -11215,27 +11831,29 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGatewayResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteGatewayResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a delete integration.</p>
-    async fn delete_integration(
+    fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
-    ) -> Result<(), RusotoError<DeleteIntegrationError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteIntegrationError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -11246,53 +11864,60 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteIntegrationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteIntegrationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a delete integration response.</p>
-    async fn delete_integration_response(
+    fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
-    ) -> Result<(), RusotoError<DeleteIntegrationResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteIntegrationResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteIntegrationResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteIntegrationResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    async fn delete_method(
+    fn delete_method(
         &self,
         input: DeleteMethodRequest,
-    ) -> Result<(), RusotoError<DeleteMethodError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteMethodError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -11303,53 +11928,60 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMethodError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMethodError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
-    async fn delete_method_response(
+    fn delete_method_response(
         &self,
         input: DeleteMethodResponseRequest,
-    ) -> Result<(), RusotoError<DeleteMethodResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMethodResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteMethodResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a model.</p>
-    async fn delete_model(
+    fn delete_model(
         &self,
         input: DeleteModelRequest,
-    ) -> Result<(), RusotoError<DeleteModelError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteModelError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -11359,27 +11991,33 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    async fn delete_request_validator(
+    fn delete_request_validator(
         &self,
         input: DeleteRequestValidatorRequest,
-    ) -> Result<(), RusotoError<DeleteRequestValidatorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<DeleteRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -11389,27 +12027,28 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRequestValidatorError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRequestValidatorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
-    async fn delete_resource(
+    fn delete_resource(
         &self,
         input: DeleteResourceRequest,
-    ) -> Result<(), RusotoError<DeleteResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -11419,53 +12058,55 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes the specified API.</p>
-    async fn delete_rest_api(
+    fn delete_rest_api(
         &self,
         input: DeleteRestApiRequest,
-    ) -> Result<(), RusotoError<DeleteRestApiError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteRestApiError>>> + Send + 'static>>
+    {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRestApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteRestApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    async fn delete_stage(
+    fn delete_stage(
         &self,
         input: DeleteStageRequest,
-    ) -> Result<(), RusotoError<DeleteStageError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteStageError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -11475,27 +12116,28 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteStageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteStageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
-    async fn delete_usage_plan(
+    fn delete_usage_plan(
         &self,
         input: DeleteUsagePlanRequest,
-    ) -> Result<(), RusotoError<DeleteUsagePlanError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteUsagePlanError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -11504,27 +12146,29 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUsagePlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUsagePlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
-    async fn delete_usage_plan_key(
+    fn delete_usage_plan_key(
         &self,
         input: DeleteUsagePlanKeyRequest,
-    ) -> Result<(), RusotoError<DeleteUsagePlanKeyError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<(), RusotoError<DeleteUsagePlanKeyError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
             key_id = input.key_id,
@@ -11534,53 +12178,60 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUsagePlanKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteUsagePlanKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    async fn delete_vpc_link(
+    fn delete_vpc_link(
         &self,
         input: DeleteVpcLinkRequest,
-    ) -> Result<(), RusotoError<DeleteVpcLinkError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteVpcLinkError>>> + Send + 'static>>
+    {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVpcLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteVpcLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
-    async fn flush_stage_authorizers_cache(
+    fn flush_stage_authorizers_cache(
         &self,
         input: FlushStageAuthorizersCacheRequest,
-    ) -> Result<(), RusotoError<FlushStageAuthorizersCacheError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<(), RusotoError<FlushStageAuthorizersCacheError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/authorizers",
             restapi_id = input.rest_api_id,
@@ -11590,27 +12241,28 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(FlushStageAuthorizersCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(FlushStageAuthorizersCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Flushes a stage's cache.</p>
-    async fn flush_stage_cache(
+    fn flush_stage_cache(
         &self,
         input: FlushStageCacheRequest,
-    ) -> Result<(), RusotoError<FlushStageCacheError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<FlushStageCacheError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/data",
             restapi_id = input.rest_api_id,
@@ -11620,27 +12272,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 202 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(FlushStageCacheError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(FlushStageCacheError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
-    async fn generate_client_certificate(
+    fn generate_client_certificate(
         &self,
         input: GenerateClientCertificateRequest,
-    ) -> Result<ClientCertificate, RusotoError<GenerateClientCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ClientCertificate, RusotoError<GenerateClientCertificateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -11649,52 +12308,56 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClientCertificate, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ClientCertificate, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GenerateClientCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GenerateClientCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
-    async fn get_account(&self) -> Result<Account, RusotoError<GetAccountError>> {
+    fn get_account(
+        &self,
+    ) -> Pin<Box<dyn Future<Output = Result<Account, RusotoError<GetAccountError>>> + Send + 'static>>
+    {
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAccountError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAccountError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    async fn get_api_key(
+    fn get_api_key(
         &self,
         input: GetApiKeyRequest,
-    ) -> Result<ApiKey, RusotoError<GetApiKeyError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<ApiKey, RusotoError<GetApiKeyError>>> + Send + 'static>>
+    {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -11706,27 +12369,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    async fn get_api_keys(
+    fn get_api_keys(
         &self,
         input: GetApiKeysRequest,
-    ) -> Result<ApiKeys, RusotoError<GetApiKeysError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<ApiKeys, RusotoError<GetApiKeysError>>> + Send + 'static>>
+    {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -11750,28 +12415,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ApiKeys, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<ApiKeys, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApiKeysError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetApiKeysError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
-    async fn get_authorizer(
+    fn get_authorizer(
         &self,
         input: GetAuthorizerRequest,
-    ) -> Result<Authorizer, RusotoError<GetAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizer, RusotoError<GetAuthorizerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -11781,28 +12452,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
-    async fn get_authorizers(
+    fn get_authorizers(
         &self,
         input: GetAuthorizersRequest,
-    ) -> Result<Authorizers, RusotoError<GetAuthorizersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizers, RusotoError<GetAuthorizersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
             restapi_id = input.rest_api_id
@@ -11820,28 +12497,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Authorizers, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Authorizers, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAuthorizersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAuthorizersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
-    async fn get_base_path_mapping(
+    fn get_base_path_mapping(
         &self,
         input: GetBasePathMappingRequest,
-    ) -> Result<BasePathMapping, RusotoError<GetBasePathMappingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMapping, RusotoError<GetBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -11851,28 +12534,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BasePathMapping, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBasePathMappingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBasePathMappingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
-    async fn get_base_path_mappings(
+    fn get_base_path_mappings(
         &self,
         input: GetBasePathMappingsRequest,
-    ) -> Result<BasePathMappings, RusotoError<GetBasePathMappingsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMappings, RusotoError<GetBasePathMappingsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
             domain_name = input.domain_name
@@ -11890,28 +12579,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<BasePathMappings, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BasePathMappings, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBasePathMappingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBasePathMappingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
-    async fn get_client_certificate(
+    fn get_client_certificate(
         &self,
         input: GetClientCertificateRequest,
-    ) -> Result<ClientCertificate, RusotoError<GetClientCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ClientCertificate, RusotoError<GetClientCertificateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -11920,28 +12615,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClientCertificate, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ClientCertificate, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetClientCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetClientCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
-    async fn get_client_certificates(
+    fn get_client_certificates(
         &self,
         input: GetClientCertificatesRequest,
-    ) -> Result<ClientCertificates, RusotoError<GetClientCertificatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ClientCertificates, RusotoError<GetClientCertificatesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -11956,28 +12657,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClientCertificates, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ClientCertificates, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetClientCertificatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetClientCertificatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
-    async fn get_deployment(
+    fn get_deployment(
         &self,
         input: GetDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<GetDeploymentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<GetDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -11995,28 +12702,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
-    async fn get_deployments(
+    fn get_deployments(
         &self,
         input: GetDeploymentsRequest,
-    ) -> Result<Deployments, RusotoError<GetDeploymentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployments, RusotoError<GetDeploymentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
             restapi_id = input.rest_api_id
@@ -12034,27 +12747,33 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDeploymentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn get_documentation_part(
+    fn get_documentation_part(
         &self,
         input: GetDocumentationPartRequest,
-    ) -> Result<DocumentationPart, RusotoError<GetDocumentationPartError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DocumentationPart, RusotoError<GetDocumentationPartError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -12064,27 +12783,33 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationPart, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationPart, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentationPartError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentationPartError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn get_documentation_parts(
+    fn get_documentation_parts(
         &self,
         input: GetDocumentationPartsRequest,
-    ) -> Result<DocumentationParts, RusotoError<GetDocumentationPartsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DocumentationParts, RusotoError<GetDocumentationPartsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -12114,27 +12839,37 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationParts, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationParts, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentationPartsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentationPartsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn get_documentation_version(
+    fn get_documentation_version(
         &self,
         input: GetDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, RusotoError<GetDocumentationVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersion,
+                        RusotoError<GetDocumentationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -12144,27 +12879,37 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationVersion, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationVersion, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentationVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentationVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn get_documentation_versions(
+    fn get_documentation_versions(
         &self,
         input: GetDocumentationVersionsRequest,
-    ) -> Result<DocumentationVersions, RusotoError<GetDocumentationVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersions,
+                        RusotoError<GetDocumentationVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
             restapi_id = input.rest_api_id
@@ -12182,28 +12927,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationVersions, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationVersions, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentationVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDocumentationVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
-    async fn get_domain_name(
+    fn get_domain_name(
         &self,
         input: GetDomainNameRequest,
-    ) -> Result<DomainName, RusotoError<GetDomainNameError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainName, RusotoError<GetDomainNameError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -12212,28 +12963,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDomainNameError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDomainNameError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
-    async fn get_domain_names(
+    fn get_domain_names(
         &self,
         input: GetDomainNamesRequest,
-    ) -> Result<DomainNames, RusotoError<GetDomainNamesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainNames, RusotoError<GetDomainNamesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12248,28 +13005,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DomainNames, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<DomainNames, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDomainNamesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDomainNamesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    async fn get_export(
+    fn get_export(
         &self,
         input: GetExportRequest,
-    ) -> Result<ExportResponse, RusotoError<GetExportError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ExportResponse, RusotoError<GetExportError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
             export_type = input.export_type,
@@ -12291,38 +13054,44 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = ExportResponse::default();
-            result.body = Some(response.body);
+                let mut result = ExportResponse::default();
+                result.body = Some(response.body);
 
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                    let value = content_disposition.to_owned();
+                    result.content_disposition = Some(value)
+                };
+                if let Some(content_type) = response.headers.get("Content-Type") {
+                    let value = content_type.to_owned();
+                    result.content_type = Some(value)
+                };
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetExportError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetExportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-    async fn get_gateway_response(
+    fn get_gateway_response(
         &self,
         input: GetGatewayResponseRequest,
-    ) -> Result<GatewayResponse, RusotoError<GetGatewayResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponse, RusotoError<GetGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -12332,28 +13101,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGatewayResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetGatewayResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
-    async fn get_gateway_responses(
+    fn get_gateway_responses(
         &self,
         input: GetGatewayResponsesRequest,
-    ) -> Result<GatewayResponses, RusotoError<GetGatewayResponsesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponses, RusotoError<GetGatewayResponsesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses",
             restapi_id = input.rest_api_id
@@ -12371,28 +13146,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GatewayResponses, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GatewayResponses, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGatewayResponsesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetGatewayResponsesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get the integration settings.</p>
-    async fn get_integration(
+    fn get_integration(
         &self,
         input: GetIntegrationRequest,
-    ) -> Result<Integration, RusotoError<GetIntegrationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Integration, RusotoError<GetIntegrationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -12403,55 +13184,63 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetIntegrationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetIntegrationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a get integration response.</p>
-    async fn get_integration_response(
+    fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, RusotoError<GetIntegrationResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<IntegrationResponse, RusotoError<GetIntegrationResponseError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<IntegrationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<IntegrationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetIntegrationResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetIntegrationResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    async fn get_method(
+    fn get_method(
         &self,
         input: GetMethodRequest,
-    ) -> Result<Method, RusotoError<GetMethodError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Method, RusotoError<GetMethodError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -12462,51 +13251,62 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMethodError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMethodError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
-    async fn get_method_response(
+    fn get_method_response(
         &self,
         input: GetMethodResponseRequest,
-    ) -> Result<MethodResponse, RusotoError<GetMethodResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<MethodResponse, RusotoError<GetMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<MethodResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMethodResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetMethodResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    async fn get_model(&self, input: GetModelRequest) -> Result<Model, RusotoError<GetModelError>> {
+    fn get_model(
+        &self,
+        input: GetModelRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Model, RusotoError<GetModelError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -12522,27 +13322,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
-    async fn get_model_template(
+    fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
-    ) -> Result<Template, RusotoError<GetModelTemplateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Template, RusotoError<GetModelTemplateError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}/default_template",
             model_name = input.model_name,
@@ -12552,28 +13359,29 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Template, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Template, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelTemplateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetModelTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    async fn get_models(
+    fn get_models(
         &self,
         input: GetModelsRequest,
-    ) -> Result<Models, RusotoError<GetModelsError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Models, RusotoError<GetModelsError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -12591,27 +13399,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Models, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Models, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetModelsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    async fn get_request_validator(
+    fn get_request_validator(
         &self,
         input: GetRequestValidatorRequest,
-    ) -> Result<RequestValidator, RusotoError<GetRequestValidatorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidator, RusotoError<GetRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -12621,28 +13436,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RequestValidator, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RequestValidator, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRequestValidatorError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRequestValidatorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
-    async fn get_request_validators(
+    fn get_request_validators(
         &self,
         input: GetRequestValidatorsRequest,
-    ) -> Result<RequestValidators, RusotoError<GetRequestValidatorsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidators, RusotoError<GetRequestValidatorsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
             restapi_id = input.rest_api_id
@@ -12660,28 +13481,30 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RequestValidators, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RequestValidators, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRequestValidatorsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRequestValidatorsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists information about a resource.</p>
-    async fn get_resource(
+    fn get_resource(
         &self,
         input: GetResourceRequest,
-    ) -> Result<Resource, RusotoError<GetResourceError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<Resource, RusotoError<GetResourceError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -12699,28 +13522,32 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
-    async fn get_resources(
+    fn get_resources(
         &self,
         input: GetResourcesRequest,
-    ) -> Result<Resources, RusotoError<GetResourcesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Resources, RusotoError<GetResourcesError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources",
             restapi_id = input.rest_api_id
@@ -12743,55 +13570,58 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Resources, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Resources, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourcesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetResourcesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    async fn get_rest_api(
+    fn get_rest_api(
         &self,
         input: GetRestApiRequest,
-    ) -> Result<RestApi, RusotoError<GetRestApiError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<RestApi, RusotoError<GetRestApiError>>> + Send + 'static>>
+    {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRestApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRestApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    async fn get_rest_apis(
+    fn get_rest_apis(
         &self,
         input: GetRestApisRequest,
-    ) -> Result<RestApis, RusotoError<GetRestApisError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApis, RusotoError<GetRestApisError>>> + Send + 'static>,
+    > {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12806,25 +13636,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<RestApis, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<RestApis, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRestApisError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRestApisError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    async fn get_sdk(&self, input: GetSdkRequest) -> Result<SdkResponse, RusotoError<GetSdkError>> {
+    fn get_sdk(
+        &self,
+        input: GetSdkRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<SdkResponse, RusotoError<GetSdkError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
             restapi_id = input.rest_api_id,
@@ -12843,63 +13677,66 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
-            let mut result = SdkResponse::default();
-            result.body = Some(response.body);
+                let mut result = SdkResponse::default();
+                result.body = Some(response.body);
 
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                    let value = content_disposition.to_owned();
+                    result.content_disposition = Some(value)
+                };
+                if let Some(content_type) = response.headers.get("Content-Type") {
+                    let value = content_type.to_owned();
+                    result.content_type = Some(value)
+                };
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSdkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSdkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn get_sdk_type(
+    fn get_sdk_type(
         &self,
         input: GetSdkTypeRequest,
-    ) -> Result<SdkType, RusotoError<GetSdkTypeError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<SdkType, RusotoError<GetSdkTypeError>>> + Send + 'static>>
+    {
         let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = input.id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<SdkType, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<SdkType, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSdkTypeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSdkTypeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn get_sdk_types(
+    fn get_sdk_types(
         &self,
         input: GetSdkTypesRequest,
-    ) -> Result<SdkTypes, RusotoError<GetSdkTypesError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<SdkTypes, RusotoError<GetSdkTypesError>>> + Send + 'static>,
+    > {
         let request_uri = "/sdktypes";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -12914,25 +13751,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<SdkTypes, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<SdkTypes, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSdkTypesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetSdkTypesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    async fn get_stage(&self, input: GetStageRequest) -> Result<Stage, RusotoError<GetStageError>> {
+    fn get_stage(
+        &self,
+        input: GetStageRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Stage, RusotoError<GetStageError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -12942,27 +13783,29 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetStageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetStageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    async fn get_stages(
+    fn get_stages(
         &self,
         input: GetStagesRequest,
-    ) -> Result<Stages, RusotoError<GetStagesError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Stages, RusotoError<GetStagesError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -12977,24 +13820,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Stages, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Stages, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetStagesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetStagesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-    async fn get_tags(&self, input: GetTagsRequest) -> Result<Tags, RusotoError<GetTagsError>> {
+    fn get_tags(
+        &self,
+        input: GetTagsRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Tags, RusotoError<GetTagsError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13009,24 +13857,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Tags, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Tags, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTagsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetTagsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>> {
+    fn get_usage(
+        &self,
+        input: GetUsageRequest,
+    ) -> Pin<Box<dyn Future<Output = Result<Usage, RusotoError<GetUsageError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
             usageplan_id = input.usage_plan_id
@@ -13049,27 +13902,32 @@ impl ApiGateway for ApiGatewayClient {
         params.put("startDate", &input.start_date);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUsageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUsageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
-    async fn get_usage_plan(
+    fn get_usage_plan(
         &self,
         input: GetUsagePlanRequest,
-    ) -> Result<UsagePlan, RusotoError<GetUsagePlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlan, RusotoError<GetUsagePlanError>>> + Send + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -13078,28 +13936,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUsagePlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUsagePlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
-    async fn get_usage_plan_key(
+    fn get_usage_plan_key(
         &self,
         input: GetUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, RusotoError<GetUsagePlanKeyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlanKey, RusotoError<GetUsagePlanKeyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
             key_id = input.key_id,
@@ -13109,28 +13973,34 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKey, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 200 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UsagePlanKey, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUsagePlanKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUsagePlanKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
-    async fn get_usage_plan_keys(
+    fn get_usage_plan_keys(
         &self,
         input: GetUsagePlanKeysRequest,
-    ) -> Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlanKeys, RusotoError<GetUsagePlanKeysError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
             usageplan_id = input.usage_plan_id
@@ -13151,28 +14021,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKeys, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UsagePlanKeys, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUsagePlanKeysError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUsagePlanKeysError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets all the usage plans of the caller's account.</p>
-    async fn get_usage_plans(
+    fn get_usage_plans(
         &self,
         input: GetUsagePlansRequest,
-    ) -> Result<UsagePlans, RusotoError<GetUsagePlansError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlans, RusotoError<GetUsagePlansError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13190,55 +14066,58 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlans, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<UsagePlans, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUsagePlansError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetUsagePlansError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    async fn get_vpc_link(
+    fn get_vpc_link(
         &self,
         input: GetVpcLinkRequest,
-    ) -> Result<VpcLink, RusotoError<GetVpcLinkError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<VpcLink, RusotoError<GetVpcLinkError>>> + Send + 'static>>
+    {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVpcLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetVpcLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    async fn get_vpc_links(
+    fn get_vpc_links(
         &self,
         input: GetVpcLinksRequest,
-    ) -> Result<VpcLinks, RusotoError<GetVpcLinksError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<VpcLinks, RusotoError<GetVpcLinksError>>> + Send + 'static>,
+    > {
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -13253,28 +14132,34 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<VpcLinks, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<VpcLinks, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVpcLinksError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetVpcLinksError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
-    async fn import_api_keys(
+    fn import_api_keys(
         &self,
         input: ImportApiKeysRequest,
-    ) -> Result<ApiKeyIds, RusotoError<ImportApiKeysError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ApiKeyIds, RusotoError<ImportApiKeysError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -13291,27 +14176,37 @@ impl ApiGateway for ApiGatewayClient {
         params.put("mode", "import");
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<ApiKeyIds, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<ApiKeyIds, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportApiKeysError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ImportApiKeysError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn import_documentation_parts(
+    fn import_documentation_parts(
         &self,
         input: ImportDocumentationPartsRequest,
-    ) -> Result<DocumentationPartIds, RusotoError<ImportDocumentationPartsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationPartIds,
+                        RusotoError<ImportDocumentationPartsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -13332,28 +14227,30 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationPartIds, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationPartIds, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportDocumentationPartsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ImportDocumentationPartsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
-    async fn import_rest_api(
+    fn import_rest_api(
         &self,
         input: ImportRestApiRequest,
-    ) -> Result<RestApi, RusotoError<ImportRestApiError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApi, RusotoError<ImportRestApiError>>> + Send + 'static>,
+    > {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -13374,28 +14271,34 @@ impl ApiGateway for ApiGatewayClient {
         params.put("mode", "import");
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportRestApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ImportRestApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
-    async fn put_gateway_response(
+    fn put_gateway_response(
         &self,
         input: PutGatewayResponseRequest,
-    ) -> Result<GatewayResponse, RusotoError<PutGatewayResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponse, RusotoError<PutGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -13408,28 +14311,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutGatewayResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutGatewayResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Sets up a method's integration.</p>
-    async fn put_integration(
+    fn put_integration(
         &self,
         input: PutIntegrationRequest,
-    ) -> Result<Integration, RusotoError<PutIntegrationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Integration, RusotoError<PutIntegrationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -13443,28 +14352,35 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutIntegrationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutIntegrationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents a put integration.</p>
-    async fn put_integration_response(
+    fn put_integration_response(
         &self,
         input: PutIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, RusotoError<PutIntegrationResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<IntegrationResponse, RusotoError<PutIntegrationResponseError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13473,28 +14389,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<IntegrationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<IntegrationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutIntegrationResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutIntegrationResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    async fn put_method(
+    fn put_method(
         &self,
         input: PutMethodRequest,
-    ) -> Result<Method, RusotoError<PutMethodError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Method, RusotoError<PutMethodError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -13508,27 +14425,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutMethodError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutMethodError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
-    async fn put_method_response(
+    fn put_method_response(
         &self,
         input: PutMethodResponseRequest,
-    ) -> Result<MethodResponse, RusotoError<PutMethodResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<MethodResponse, RusotoError<PutMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13537,28 +14461,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<MethodResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutMethodResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutMethodResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    async fn put_rest_api(
+    fn put_rest_api(
         &self,
         input: PutRestApiRequest,
-    ) -> Result<RestApi, RusotoError<PutRestApiError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<RestApi, RusotoError<PutRestApiError>>> + Send + 'static>>
+    {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13581,28 +14506,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRestApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutRestApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds or updates a tag on a given resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<(), RusotoError<TagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<TagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -13611,27 +14537,37 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
-    async fn test_invoke_authorizer(
+    fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, RusotoError<TestInvokeAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        TestInvokeAuthorizerResponse,
+                        RusotoError<TestInvokeAuthorizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -13644,28 +14580,35 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestInvokeAuthorizerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TestInvokeAuthorizerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TestInvokeAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TestInvokeAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
-    async fn test_invoke_method(
+    fn test_invoke_method(
         &self,
         input: TestInvokeMethodRequest,
-    ) -> Result<TestInvokeMethodResponse, RusotoError<TestInvokeMethodError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<TestInvokeMethodResponse, RusotoError<TestInvokeMethodError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -13679,28 +14622,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestInvokeMethodResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TestInvokeMethodResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TestInvokeMethodError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TestInvokeMethodError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a tag from a given resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<(), RusotoError<UntagResourceError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<UntagResourceError>>> + Send + 'static>>
+    {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -13712,27 +14656,29 @@ impl ApiGateway for ApiGatewayClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 204 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
-    async fn update_account(
+    fn update_account(
         &self,
         input: UpdateAccountRequest,
-    ) -> Result<Account, RusotoError<UpdateAccountError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<Account, RusotoError<UpdateAccountError>>> + Send + 'static>,
+    > {
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -13741,28 +14687,30 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAccountError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAccountError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    async fn update_api_key(
+    fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
-    ) -> Result<ApiKey, RusotoError<UpdateApiKeyError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<ApiKey, RusotoError<UpdateApiKeyError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -13771,27 +14719,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApiKeyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateApiKeyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
-    async fn update_authorizer(
+    fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
-    ) -> Result<Authorizer, RusotoError<UpdateAuthorizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Authorizer, RusotoError<UpdateAuthorizerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -13804,28 +14759,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAuthorizerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateAuthorizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
-    async fn update_base_path_mapping(
+    fn update_base_path_mapping(
         &self,
         input: UpdateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, RusotoError<UpdateBasePathMappingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<BasePathMapping, RusotoError<UpdateBasePathMappingError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -13838,28 +14799,35 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BasePathMapping, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateBasePathMappingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateBasePathMappingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
-    async fn update_client_certificate(
+    fn update_client_certificate(
         &self,
         input: UpdateClientCertificateRequest,
-    ) -> Result<ClientCertificate, RusotoError<UpdateClientCertificateError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ClientCertificate, RusotoError<UpdateClientCertificateError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -13871,28 +14839,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClientCertificate, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ClientCertificate, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateClientCertificateError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateClientCertificateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
-    async fn update_deployment(
+    fn update_deployment(
         &self,
         input: UpdateDeploymentRequest,
-    ) -> Result<Deployment, RusotoError<UpdateDeploymentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Deployment, RusotoError<UpdateDeploymentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -13905,27 +14879,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeploymentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDeploymentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn update_documentation_part(
+    fn update_documentation_part(
         &self,
         input: UpdateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, RusotoError<UpdateDocumentationPartError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DocumentationPart, RusotoError<UpdateDocumentationPartError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -13938,27 +14919,37 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationPart, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationPart, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentationPartError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDocumentationPartError::from_response(response))
+            }
         }
+        .boxed()
     }
 
-    async fn update_documentation_version(
+    fn update_documentation_version(
         &self,
         input: UpdateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, RusotoError<UpdateDocumentationVersionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DocumentationVersion,
+                        RusotoError<UpdateDocumentationVersionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -13971,28 +14962,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DocumentationVersion, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DocumentationVersion, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentationVersionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDocumentationVersionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
-    async fn update_domain_name(
+    fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
-    ) -> Result<DomainName, RusotoError<UpdateDomainNameError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DomainName, RusotoError<UpdateDomainNameError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -14004,28 +15001,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDomainNameError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDomainNameError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-    async fn update_gateway_response(
+    fn update_gateway_response(
         &self,
         input: UpdateGatewayResponseRequest,
-    ) -> Result<GatewayResponse, RusotoError<UpdateGatewayResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GatewayResponse, RusotoError<UpdateGatewayResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -14038,28 +15041,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GatewayResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGatewayResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateGatewayResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents an update integration.</p>
-    async fn update_integration(
+    fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> Result<Integration, RusotoError<UpdateIntegrationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Integration, RusotoError<UpdateIntegrationError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -14073,28 +15082,38 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateIntegrationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateIntegrationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Represents an update integration response.</p>
-    async fn update_integration_response(
+    fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, RusotoError<UpdateIntegrationResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        IntegrationResponse,
+                        RusotoError<UpdateIntegrationResponseError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14103,28 +15122,30 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<IntegrationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<IntegrationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateIntegrationResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateIntegrationResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    async fn update_method(
+    fn update_method(
         &self,
         input: UpdateMethodRequest,
-    ) -> Result<Method, RusotoError<UpdateMethodError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<Method, RusotoError<UpdateMethodError>>> + Send + 'static>,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -14138,27 +15159,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMethodError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMethodError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
-    async fn update_method_response(
+    fn update_method_response(
         &self,
         input: UpdateMethodResponseRequest,
-    ) -> Result<MethodResponse, RusotoError<UpdateMethodResponseError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<MethodResponse, RusotoError<UpdateMethodResponseError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14167,28 +15195,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.as_u16() == 201 {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<MethodResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMethodResponseError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateMethodResponseError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about a model.</p>
-    async fn update_model(
+    fn update_model(
         &self,
         input: UpdateModelRequest,
-    ) -> Result<Model, RusotoError<UpdateModelError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Model, RusotoError<UpdateModelError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -14201,27 +15230,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateModelError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateModelError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-    async fn update_request_validator(
+    fn update_request_validator(
         &self,
         input: UpdateRequestValidatorRequest,
-    ) -> Result<RequestValidator, RusotoError<UpdateRequestValidatorError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RequestValidator, RusotoError<UpdateRequestValidatorError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -14234,28 +15270,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RequestValidator, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RequestValidator, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRequestValidatorError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRequestValidatorError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
-    async fn update_resource(
+    fn update_resource(
         &self,
         input: UpdateResourceRequest,
-    ) -> Result<Resource, RusotoError<UpdateResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Resource, RusotoError<UpdateResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -14268,28 +15310,30 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about the specified API.</p>
-    async fn update_rest_api(
+    fn update_rest_api(
         &self,
         input: UpdateRestApiRequest,
-    ) -> Result<RestApi, RusotoError<UpdateRestApiError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RestApi, RusotoError<UpdateRestApiError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14298,28 +15342,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRestApiError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateRestApiError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    async fn update_stage(
+    fn update_stage(
         &self,
         input: UpdateStageRequest,
-    ) -> Result<Stage, RusotoError<UpdateStageError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Stage, RusotoError<UpdateStageError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -14332,27 +15377,29 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateStageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateStageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    async fn update_usage(
+    fn update_usage(
         &self,
         input: UpdateUsageRequest,
-    ) -> Result<Usage, RusotoError<UpdateUsageError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Usage, RusotoError<UpdateUsageError>>> + Send + 'static>>
+    {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}/usage",
             key_id = input.key_id,
@@ -14365,27 +15412,34 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUsageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateUsageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates a usage plan of a given plan Id.</p>
-    async fn update_usage_plan(
+    fn update_usage_plan(
         &self,
         input: UpdateUsagePlanRequest,
-    ) -> Result<UsagePlan, RusotoError<UpdateUsagePlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UsagePlan, RusotoError<UpdateUsagePlanError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -14397,28 +15451,30 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUsagePlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateUsagePlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-    async fn update_vpc_link(
+    fn update_vpc_link(
         &self,
         input: UpdateVpcLinkRequest,
-    ) -> Result<VpcLink, RusotoError<UpdateVpcLinkError>> {
+    ) -> Pin<
+        Box<dyn Future<Output = Result<VpcLink, RusotoError<UpdateVpcLinkError>>> + Send + 'static>,
+    > {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -14427,20 +15483,20 @@ impl ApiGateway for ApiGatewayClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result =
-                proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result =
+                    proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVpcLinkError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateVpcLinkError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

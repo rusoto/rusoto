@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSavingsPlanRequest {
@@ -935,61 +936,123 @@ impl fmt::Display for UntagResourceError {
 }
 impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the AWSSavingsPlans API. AWSSavingsPlans clients implement this trait.
-#[async_trait]
 pub trait SavingsPlans {
     /// <p>Creates a Savings Plan.</p>
-    async fn create_savings_plan(
+    fn create_savings_plan(
         &self,
         input: CreateSavingsPlanRequest,
-    ) -> Result<CreateSavingsPlanResponse, RusotoError<CreateSavingsPlanError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateSavingsPlanResponse, RusotoError<CreateSavingsPlanError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the specified Savings Plans rates.</p>
-    async fn describe_savings_plan_rates(
+    fn describe_savings_plan_rates(
         &self,
         input: DescribeSavingsPlanRatesRequest,
-    ) -> Result<DescribeSavingsPlanRatesResponse, RusotoError<DescribeSavingsPlanRatesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlanRatesResponse,
+                        RusotoError<DescribeSavingsPlanRatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the specified Savings Plans.</p>
-    async fn describe_savings_plans(
+    fn describe_savings_plans(
         &self,
         input: DescribeSavingsPlansRequest,
-    ) -> Result<DescribeSavingsPlansResponse, RusotoError<DescribeSavingsPlansError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlansResponse,
+                        RusotoError<DescribeSavingsPlansError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Describes the specified Savings Plans offering rates.</p>
-    async fn describe_savings_plans_offering_rates(
+    fn describe_savings_plans_offering_rates(
         &self,
         input: DescribeSavingsPlansOfferingRatesRequest,
-    ) -> Result<
-        DescribeSavingsPlansOfferingRatesResponse,
-        RusotoError<DescribeSavingsPlansOfferingRatesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlansOfferingRatesResponse,
+                        RusotoError<DescribeSavingsPlansOfferingRatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Describes the specified Savings Plans offerings.</p>
-    async fn describe_savings_plans_offerings(
+    fn describe_savings_plans_offerings(
         &self,
         input: DescribeSavingsPlansOfferingsRequest,
-    ) -> Result<
-        DescribeSavingsPlansOfferingsResponse,
-        RusotoError<DescribeSavingsPlansOfferingsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlansOfferingsResponse,
+                        RusotoError<DescribeSavingsPlansOfferingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Lists the tags for the specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds the specified tags to the specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes the specified tags from the specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWSSavingsPlans API.
 #[derive(Clone)]
@@ -1029,13 +1092,19 @@ impl SavingsPlansClient {
     }
 }
 
-#[async_trait]
 impl SavingsPlans for SavingsPlansClient {
     /// <p>Creates a Savings Plan.</p>
-    async fn create_savings_plan(
+    fn create_savings_plan(
         &self,
         input: CreateSavingsPlanRequest,
-    ) -> Result<CreateSavingsPlanResponse, RusotoError<CreateSavingsPlanError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateSavingsPlanResponse, RusotoError<CreateSavingsPlanError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CreateSavingsPlan";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1044,28 +1113,38 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSavingsPlanResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateSavingsPlanResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSavingsPlanError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateSavingsPlanError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified Savings Plans rates.</p>
-    async fn describe_savings_plan_rates(
+    fn describe_savings_plan_rates(
         &self,
         input: DescribeSavingsPlanRatesRequest,
-    ) -> Result<DescribeSavingsPlanRatesResponse, RusotoError<DescribeSavingsPlanRatesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlanRatesResponse,
+                        RusotoError<DescribeSavingsPlanRatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DescribeSavingsPlanRates";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1074,28 +1153,38 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSavingsPlanRatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSavingsPlanRatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSavingsPlanRatesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSavingsPlanRatesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified Savings Plans.</p>
-    async fn describe_savings_plans(
+    fn describe_savings_plans(
         &self,
         input: DescribeSavingsPlansRequest,
-    ) -> Result<DescribeSavingsPlansResponse, RusotoError<DescribeSavingsPlansError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlansResponse,
+                        RusotoError<DescribeSavingsPlansError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DescribeSavingsPlans";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1104,30 +1193,37 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSavingsPlansResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSavingsPlansResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSavingsPlansError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSavingsPlansError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified Savings Plans offering rates.</p>
-    async fn describe_savings_plans_offering_rates(
+    fn describe_savings_plans_offering_rates(
         &self,
         input: DescribeSavingsPlansOfferingRatesRequest,
-    ) -> Result<
-        DescribeSavingsPlansOfferingRatesResponse,
-        RusotoError<DescribeSavingsPlansOfferingRatesError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlansOfferingRatesResponse,
+                        RusotoError<DescribeSavingsPlansOfferingRatesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/DescribeSavingsPlansOfferingRates";
 
@@ -1137,32 +1233,39 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSavingsPlansOfferingRatesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSavingsPlansOfferingRatesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSavingsPlansOfferingRatesError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSavingsPlansOfferingRatesError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Describes the specified Savings Plans offerings.</p>
-    async fn describe_savings_plans_offerings(
+    fn describe_savings_plans_offerings(
         &self,
         input: DescribeSavingsPlansOfferingsRequest,
-    ) -> Result<
-        DescribeSavingsPlansOfferingsResponse,
-        RusotoError<DescribeSavingsPlansOfferingsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSavingsPlansOfferingsResponse,
+                        RusotoError<DescribeSavingsPlansOfferingsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/DescribeSavingsPlansOfferings";
 
@@ -1172,28 +1275,38 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSavingsPlansOfferingsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSavingsPlansOfferingsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSavingsPlansOfferingsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSavingsPlansOfferingsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the tags for the specified resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListTagsForResource";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1202,28 +1315,34 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds the specified tags to the specified resource.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/TagResource";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1232,28 +1351,34 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes the specified tags from the specified resource.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/UntagResource";
 
         let mut request = SignedRequest::new("POST", "savingsplans", &self.region, &request_uri);
@@ -1262,20 +1387,20 @@ impl SavingsPlans for SavingsPlansClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

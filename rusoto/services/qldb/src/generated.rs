@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLedgerRequest {
@@ -1036,100 +1037,197 @@ impl fmt::Display for UpdateLedgerError {
 }
 impl Error for UpdateLedgerError {}
 /// Trait representing the capabilities of the QLDB API. QLDB clients implement this trait.
-#[async_trait]
 pub trait Qldb {
     /// <p>Creates a new ledger in your AWS account.</p>
-    async fn create_ledger(
+    fn create_ledger(
         &self,
         input: CreateLedgerRequest,
-    ) -> Result<CreateLedgerResponse, RusotoError<CreateLedgerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateLedgerResponse, RusotoError<CreateLedgerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
-    async fn delete_ledger(
+    fn delete_ledger(
         &self,
         input: DeleteLedgerRequest,
-    ) -> Result<(), RusotoError<DeleteLedgerError>>;
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteLedgerError>>> + Send + 'static>>;
 
     /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
-    async fn describe_journal_s3_export(
+    fn describe_journal_s3_export(
         &self,
         input: DescribeJournalS3ExportRequest,
-    ) -> Result<DescribeJournalS3ExportResponse, RusotoError<DescribeJournalS3ExportError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeJournalS3ExportResponse,
+                        RusotoError<DescribeJournalS3ExportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns information about a ledger, including its state and when it was created.</p>
-    async fn describe_ledger(
+    fn describe_ledger(
         &self,
         input: DescribeLedgerRequest,
-    ) -> Result<DescribeLedgerResponse, RusotoError<DescribeLedgerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeLedgerResponse, RusotoError<DescribeLedgerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Exports journal contents within a date and time range from a ledger into a specified Amazon Simple Storage Service (Amazon S3) bucket. The data is written as files in Amazon Ion format.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>You can initiate up to two concurrent journal export requests for each ledger. Beyond this limit, journal export requests throw <code>LimitExceededException</code>.</p>
-    async fn export_journal_to_s3(
+    fn export_journal_to_s3(
         &self,
         input: ExportJournalToS3Request,
-    ) -> Result<ExportJournalToS3Response, RusotoError<ExportJournalToS3Error>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ExportJournalToS3Response, RusotoError<ExportJournalToS3Error>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a journal block object at a specified address in a ledger. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
-    async fn get_block(
+    fn get_block(
         &self,
         input: GetBlockRequest,
-    ) -> Result<GetBlockResponse, RusotoError<GetBlockError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetBlockResponse, RusotoError<GetBlockError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the digest of a ledger at the latest committed block in the journal. The response includes a 256-bit hash value and a block address.</p>
-    async fn get_digest(
+    fn get_digest(
         &self,
         input: GetDigestRequest,
-    ) -> Result<GetDigestResponse, RusotoError<GetDigestError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDigestResponse, RusotoError<GetDigestError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a revision data object for a specified document ID and block address. Also returns a proof of the specified revision for verification if <code>DigestTipAddress</code> is provided.</p>
-    async fn get_revision(
+    fn get_revision(
         &self,
         input: GetRevisionRequest,
-    ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRevisionResponse, RusotoError<GetRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p>
-    async fn list_journal_s3_exports(
+    fn list_journal_s3_exports(
         &self,
         input: ListJournalS3ExportsRequest,
-    ) -> Result<ListJournalS3ExportsResponse, RusotoError<ListJournalS3ExportsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJournalS3ExportsResponse,
+                        RusotoError<ListJournalS3ExportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p>
-    async fn list_journal_s3_exports_for_ledger(
+    fn list_journal_s3_exports_for_ledger(
         &self,
         input: ListJournalS3ExportsForLedgerRequest,
-    ) -> Result<
-        ListJournalS3ExportsForLedgerResponse,
-        RusotoError<ListJournalS3ExportsForLedgerError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJournalS3ExportsForLedgerResponse,
+                        RusotoError<ListJournalS3ExportsForLedgerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns an array of ledger summaries that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of 100 items and is paginated so that you can retrieve all the items by calling <code>ListLedgers</code> multiple times.</p>
-    async fn list_ledgers(
+    fn list_ledgers(
         &self,
         input: ListLedgersRequest,
-    ) -> Result<ListLedgersResponse, RusotoError<ListLedgersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListLedgersResponse, RusotoError<ListLedgersError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns all tags for a specified Amazon QLDB resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Adds one or more tags to a specified Amazon QLDB resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, your request fails and returns an error.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes one or more tags from a specified Amazon QLDB resource. You can specify up to 50 tag keys to remove.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates properties on a ledger.</p>
-    async fn update_ledger(
+    fn update_ledger(
         &self,
         input: UpdateLedgerRequest,
-    ) -> Result<UpdateLedgerResponse, RusotoError<UpdateLedgerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateLedgerResponse, RusotoError<UpdateLedgerError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the QLDB API.
 #[derive(Clone)]
@@ -1169,13 +1267,18 @@ impl QldbClient {
     }
 }
 
-#[async_trait]
 impl Qldb for QldbClient {
     /// <p>Creates a new ledger in your AWS account.</p>
-    async fn create_ledger(
+    fn create_ledger(
         &self,
         input: CreateLedgerRequest,
-    ) -> Result<CreateLedgerResponse, RusotoError<CreateLedgerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateLedgerResponse, RusotoError<CreateLedgerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ledgers";
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1184,54 +1287,65 @@ impl Qldb for QldbClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLedgerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateLedgerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLedgerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateLedgerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
-    async fn delete_ledger(
+    fn delete_ledger(
         &self,
         input: DeleteLedgerRequest,
-    ) -> Result<(), RusotoError<DeleteLedgerError>> {
+    ) -> Pin<Box<dyn Future<Output = Result<(), RusotoError<DeleteLedgerError>>> + Send + 'static>>
+    {
         let request_uri = format!("/ledgers/{name}", name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "qldb", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = ::std::mem::drop(response);
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = ::std::mem::drop(response);
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLedgerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteLedgerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
-    async fn describe_journal_s3_export(
+    fn describe_journal_s3_export(
         &self,
         input: DescribeJournalS3ExportRequest,
-    ) -> Result<DescribeJournalS3ExportResponse, RusotoError<DescribeJournalS3ExportError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeJournalS3ExportResponse,
+                        RusotoError<DescribeJournalS3ExportError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!(
             "/ledgers/{name}/journal-s3-exports/{export_id}",
             export_id = input.export_id,
@@ -1241,55 +1355,68 @@ impl Qldb for QldbClient {
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeJournalS3ExportResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeJournalS3ExportResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeJournalS3ExportError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeJournalS3ExportError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns information about a ledger, including its state and when it was created.</p>
-    async fn describe_ledger(
+    fn describe_ledger(
         &self,
         input: DescribeLedgerRequest,
-    ) -> Result<DescribeLedgerResponse, RusotoError<DescribeLedgerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DescribeLedgerResponse, RusotoError<DescribeLedgerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/ledgers/{name}", name = input.name);
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLedgerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeLedgerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLedgerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeLedgerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Exports journal contents within a date and time range from a ledger into a specified Amazon Simple Storage Service (Amazon S3) bucket. The data is written as files in Amazon Ion format.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>You can initiate up to two concurrent journal export requests for each ledger. Beyond this limit, journal export requests throw <code>LimitExceededException</code>.</p>
-    async fn export_journal_to_s3(
+    fn export_journal_to_s3(
         &self,
         input: ExportJournalToS3Request,
-    ) -> Result<ExportJournalToS3Response, RusotoError<ExportJournalToS3Error>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ExportJournalToS3Response, RusotoError<ExportJournalToS3Error>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/ledgers/{name}/journal-s3-exports", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1298,28 +1425,34 @@ impl Qldb for QldbClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ExportJournalToS3Response, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ExportJournalToS3Response, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ExportJournalToS3Error::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ExportJournalToS3Error::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a journal block object at a specified address in a ledger. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
-    async fn get_block(
+    fn get_block(
         &self,
         input: GetBlockRequest,
-    ) -> Result<GetBlockResponse, RusotoError<GetBlockError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetBlockResponse, RusotoError<GetBlockError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/ledgers/{name}/block", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1328,55 +1461,67 @@ impl Qldb for QldbClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBlockResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetBlockResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlockError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetBlockError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the digest of a ledger at the latest committed block in the journal. The response includes a 256-bit hash value and a block address.</p>
-    async fn get_digest(
+    fn get_digest(
         &self,
         input: GetDigestRequest,
-    ) -> Result<GetDigestResponse, RusotoError<GetDigestError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetDigestResponse, RusotoError<GetDigestError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/ledgers/{name}/digest", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDigestResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDigestResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDigestError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDigestError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a revision data object for a specified document ID and block address. Also returns a proof of the specified revision for verification if <code>DigestTipAddress</code> is provided.</p>
-    async fn get_revision(
+    fn get_revision(
         &self,
         input: GetRevisionRequest,
-    ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetRevisionResponse, RusotoError<GetRevisionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/ledgers/{name}/revision", name = input.name);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1385,28 +1530,38 @@ impl Qldb for QldbClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRevisionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRevisionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRevisionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRevisionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p>
-    async fn list_journal_s3_exports(
+    fn list_journal_s3_exports(
         &self,
         input: ListJournalS3ExportsRequest,
-    ) -> Result<ListJournalS3ExportsResponse, RusotoError<ListJournalS3ExportsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJournalS3ExportsResponse,
+                        RusotoError<ListJournalS3ExportsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/journal-s3-exports";
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -1421,30 +1576,37 @@ impl Qldb for QldbClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJournalS3ExportsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJournalS3ExportsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJournalS3ExportsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJournalS3ExportsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p>
-    async fn list_journal_s3_exports_for_ledger(
+    fn list_journal_s3_exports_for_ledger(
         &self,
         input: ListJournalS3ExportsForLedgerRequest,
-    ) -> Result<
-        ListJournalS3ExportsForLedgerResponse,
-        RusotoError<ListJournalS3ExportsForLedgerError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListJournalS3ExportsForLedgerResponse,
+                        RusotoError<ListJournalS3ExportsForLedgerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = format!("/ledgers/{name}/journal-s3-exports", name = input.name);
 
@@ -1460,28 +1622,34 @@ impl Qldb for QldbClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListJournalS3ExportsForLedgerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListJournalS3ExportsForLedgerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJournalS3ExportsForLedgerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListJournalS3ExportsForLedgerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns an array of ledger summaries that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of 100 items and is paginated so that you can retrieve all the items by calling <code>ListLedgers</code> multiple times.</p>
-    async fn list_ledgers(
+    fn list_ledgers(
         &self,
         input: ListLedgersRequest,
-    ) -> Result<ListLedgersResponse, RusotoError<ListLedgersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListLedgersResponse, RusotoError<ListLedgersError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ledgers";
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
@@ -1496,55 +1664,71 @@ impl Qldb for QldbClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListLedgersResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListLedgersResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLedgersError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListLedgersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns all tags for a specified Amazon QLDB resource.</p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Adds one or more tags to a specified Amazon QLDB resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, your request fails and returns an error.</p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
@@ -1553,28 +1737,34 @@ impl Qldb for QldbClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes one or more tags from a specified Amazon QLDB resource. You can specify up to 50 tag keys to remove.</p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "qldb", &self.region, &request_uri);
@@ -1586,28 +1776,34 @@ impl Qldb for QldbClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates properties on a ledger.</p>
-    async fn update_ledger(
+    fn update_ledger(
         &self,
         input: UpdateLedgerRequest,
-    ) -> Result<UpdateLedgerResponse, RusotoError<UpdateLedgerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateLedgerResponse, RusotoError<UpdateLedgerError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/ledgers/{name}", name = input.name);
 
         let mut request = SignedRequest::new("PATCH", "qldb", &self.region, &request_uri);
@@ -1616,20 +1812,20 @@ impl Qldb for QldbClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLedgerResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateLedgerResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateLedgerError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateLedgerError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

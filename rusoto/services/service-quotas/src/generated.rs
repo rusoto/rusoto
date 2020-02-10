@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceQuotaTemplateRequest {}
@@ -2040,130 +2041,248 @@ impl fmt::Display for RequestServiceQuotaIncreaseError {
 }
 impl Error for RequestServiceQuotaIncreaseError {}
 /// Trait representing the capabilities of the Service Quotas API. Service Quotas clients implement this trait.
-#[async_trait]
 pub trait ServiceQuotas {
     /// <p>Associates the Service Quotas template with your organization so that when new accounts are created in your organization, the template submits increase requests for the specified service quotas. Use the Service Quotas template to request an increase for any adjustable quota value. After you define the Service Quotas template, use this operation to associate, or enable, the template. </p>
-    async fn associate_service_quota_template(
+    fn associate_service_quota_template(
         &self,
-    ) -> Result<
-        AssociateServiceQuotaTemplateResponse,
-        RusotoError<AssociateServiceQuotaTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateServiceQuotaTemplateResponse,
+                        RusotoError<AssociateServiceQuotaTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Removes a service quota increase request from the Service Quotas template. </p>
-    async fn delete_service_quota_increase_request_from_template(
+    fn delete_service_quota_increase_request_from_template(
         &self,
         input: DeleteServiceQuotaIncreaseRequestFromTemplateRequest,
-    ) -> Result<
-        DeleteServiceQuotaIncreaseRequestFromTemplateResponse,
-        RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteServiceQuotaIncreaseRequestFromTemplateResponse,
+                        RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Disables the Service Quotas template. Once the template is disabled, it does not request quota increases for new accounts in your organization. Disabling the quota template does not apply the quota increase requests from the template. </p> <p> <b>Related operations</b> </p> <ul> <li> <p>To enable the quota template, call <a>AssociateServiceQuotaTemplate</a>. </p> </li> <li> <p>To delete a specific service quota from the template, use <a>DeleteServiceQuotaIncreaseRequestFromTemplate</a>.</p> </li> </ul></p>
-    async fn disassociate_service_quota_template(
+    fn disassociate_service_quota_template(
         &self,
-    ) -> Result<
-        DisassociateServiceQuotaTemplateResponse,
-        RusotoError<DisassociateServiceQuotaTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateServiceQuotaTemplateResponse,
+                        RusotoError<DisassociateServiceQuotaTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves the default service quotas values. The Value returned for each quota is the AWS default value, even if the quotas have been increased.. </p>
-    async fn get_aws_default_service_quota(
+    fn get_aws_default_service_quota(
         &self,
         input: GetAWSDefaultServiceQuotaRequest,
-    ) -> Result<GetAWSDefaultServiceQuotaResponse, RusotoError<GetAWSDefaultServiceQuotaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAWSDefaultServiceQuotaResponse,
+                        RusotoError<GetAWSDefaultServiceQuotaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Retrieves the <code>ServiceQuotaTemplateAssociationStatus</code> value from the service. Use this action to determine if the Service Quota template is associated, or enabled. </p>
-    async fn get_association_for_service_quota_template(
+    fn get_association_for_service_quota_template(
         &self,
-    ) -> Result<
-        GetAssociationForServiceQuotaTemplateResponse,
-        RusotoError<GetAssociationForServiceQuotaTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAssociationForServiceQuotaTemplateResponse,
+                        RusotoError<GetAssociationForServiceQuotaTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves the details for a particular increase request. </p>
-    async fn get_requested_service_quota_change(
+    fn get_requested_service_quota_change(
         &self,
         input: GetRequestedServiceQuotaChangeRequest,
-    ) -> Result<
-        GetRequestedServiceQuotaChangeResponse,
-        RusotoError<GetRequestedServiceQuotaChangeError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRequestedServiceQuotaChangeResponse,
+                        RusotoError<GetRequestedServiceQuotaChangeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns the details for the specified service quota. This operation provides a different Value than the <code>GetAWSDefaultServiceQuota</code> operation. This operation returns the applied value for each quota. <code>GetAWSDefaultServiceQuota</code> returns the default AWS value for each quota. </p>
-    async fn get_service_quota(
+    fn get_service_quota(
         &self,
         input: GetServiceQuotaRequest,
-    ) -> Result<GetServiceQuotaResponse, RusotoError<GetServiceQuotaError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetServiceQuotaResponse, RusotoError<GetServiceQuotaError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the details of the service quota increase request in your template.</p>
-    async fn get_service_quota_increase_request_from_template(
+    fn get_service_quota_increase_request_from_template(
         &self,
         input: GetServiceQuotaIncreaseRequestFromTemplateRequest,
-    ) -> Result<
-        GetServiceQuotaIncreaseRequestFromTemplateResponse,
-        RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetServiceQuotaIncreaseRequestFromTemplateResponse,
+                        RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Lists all default service quotas for the specified AWS service or all AWS services. ListAWSDefaultServiceQuotas is similar to <a>ListServiceQuotas</a> except for the Value object. The Value object returned by <code>ListAWSDefaultServiceQuotas</code> is the default value assigned by AWS. This request returns a list of all service quotas for the specified service. The listing of each you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
-    async fn list_aws_default_service_quotas(
+    fn list_aws_default_service_quotas(
         &self,
         input: ListAWSDefaultServiceQuotasRequest,
-    ) -> Result<ListAWSDefaultServiceQuotasResponse, RusotoError<ListAWSDefaultServiceQuotasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAWSDefaultServiceQuotasResponse,
+                        RusotoError<ListAWSDefaultServiceQuotasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Requests a list of the changes to quotas for a service.</p>
-    async fn list_requested_service_quota_change_history(
+    fn list_requested_service_quota_change_history(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryRequest,
-    ) -> Result<
-        ListRequestedServiceQuotaChangeHistoryResponse,
-        RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRequestedServiceQuotaChangeHistoryResponse,
+                        RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Requests a list of the changes to specific service quotas. This command provides additional granularity over the <code>ListRequestedServiceQuotaChangeHistory</code> command. Once a quota change request has reached <code>CASE_CLOSED, APPROVED,</code> or <code>DENIED</code>, the history has been kept for 90 days.</p>
-    async fn list_requested_service_quota_change_history_by_quota(
+    fn list_requested_service_quota_change_history_by_quota(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
-    ) -> Result<
-        ListRequestedServiceQuotaChangeHistoryByQuotaResponse,
-        RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRequestedServiceQuotaChangeHistoryByQuotaResponse,
+                        RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Returns a list of the quota increase requests in the template. </p>
-    async fn list_service_quota_increase_requests_in_template(
+    fn list_service_quota_increase_requests_in_template(
         &self,
         input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
-    ) -> Result<
-        ListServiceQuotaIncreaseRequestsInTemplateResponse,
-        RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListServiceQuotaIncreaseRequestsInTemplateResponse,
+                        RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p><p>Lists all service quotas for the specified AWS service. This request returns a list of the service quotas for the specified service. you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
-    async fn list_service_quotas(
+    fn list_service_quotas(
         &self,
         input: ListServiceQuotasRequest,
-    ) -> Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the AWS services available in Service Quotas. Not all AWS services are available in Service Quotas. To list the see the list of the service quotas for a specific service, use <a>ListServiceQuotas</a>.</p>
-    async fn list_services(
+    fn list_services(
         &self,
         input: ListServicesRequest,
-    ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListServicesResponse, RusotoError<ListServicesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Defines and adds a quota to the service quota template. To add a quota to the template, you must provide the <code>ServiceCode</code>, <code>QuotaCode</code>, <code>AwsRegion</code>, and <code>DesiredValue</code>. Once you add a quota to the template, use <a>ListServiceQuotaIncreaseRequestsInTemplate</a> to see the list of quotas in the template.</p>
-    async fn put_service_quota_increase_request_into_template(
+    fn put_service_quota_increase_request_into_template(
         &self,
         input: PutServiceQuotaIncreaseRequestIntoTemplateRequest,
-    ) -> Result<
-        PutServiceQuotaIncreaseRequestIntoTemplateResponse,
-        RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutServiceQuotaIncreaseRequestIntoTemplateResponse,
+                        RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Retrieves the details of a service quota increase request. The response to this command provides the details in the <a>RequestedServiceQuotaChange</a> object. </p>
-    async fn request_service_quota_increase(
+    fn request_service_quota_increase(
         &self,
         input: RequestServiceQuotaIncreaseRequest,
-    ) -> Result<RequestServiceQuotaIncreaseResponse, RusotoError<RequestServiceQuotaIncreaseError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RequestServiceQuotaIncreaseResponse,
+                        RusotoError<RequestServiceQuotaIncreaseError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Service Quotas API.
 #[derive(Clone)]
@@ -2203,14 +2322,20 @@ impl ServiceQuotasClient {
     }
 }
 
-#[async_trait]
 impl ServiceQuotas for ServiceQuotasClient {
     /// <p>Associates the Service Quotas template with your organization so that when new accounts are created in your organization, the template submits increase requests for the specified service quotas. Use the Service Quotas template to request an increase for any adjustable quota value. After you define the Service Quotas template, use this operation to associate, or enable, the template. </p>
-    async fn associate_service_quota_template(
+    fn associate_service_quota_template(
         &self,
-    ) -> Result<
-        AssociateServiceQuotaTemplateResponse,
-        RusotoError<AssociateServiceQuotaTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        AssociateServiceQuotaTemplateResponse,
+                        RusotoError<AssociateServiceQuotaTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2221,29 +2346,36 @@ impl ServiceQuotas for ServiceQuotasClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateServiceQuotaTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateServiceQuotaTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<AssociateServiceQuotaTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(AssociateServiceQuotaTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a service quota increase request from the Service Quotas template. </p>
-    async fn delete_service_quota_increase_request_from_template(
+    fn delete_service_quota_increase_request_from_template(
         &self,
         input: DeleteServiceQuotaIncreaseRequestFromTemplateRequest,
-    ) -> Result<
-        DeleteServiceQuotaIncreaseRequestFromTemplateResponse,
-        RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteServiceQuotaIncreaseRequestFromTemplateResponse,
+                        RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2255,28 +2387,35 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteServiceQuotaIncreaseRequestFromTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteServiceQuotaIncreaseRequestFromTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteServiceQuotaIncreaseRequestFromTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteServiceQuotaIncreaseRequestFromTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Disables the Service Quotas template. Once the template is disabled, it does not request quota increases for new accounts in your organization. Disabling the quota template does not apply the quota increase requests from the template. </p> <p> <b>Related operations</b> </p> <ul> <li> <p>To enable the quota template, call <a>AssociateServiceQuotaTemplate</a>. </p> </li> <li> <p>To delete a specific service quota from the template, use <a>DeleteServiceQuotaIncreaseRequestFromTemplate</a>.</p> </li> </ul></p>
-    async fn disassociate_service_quota_template(
+    fn disassociate_service_quota_template(
         &self,
-    ) -> Result<
-        DisassociateServiceQuotaTemplateResponse,
-        RusotoError<DisassociateServiceQuotaTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DisassociateServiceQuotaTemplateResponse,
+                        RusotoError<DisassociateServiceQuotaTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2287,30 +2426,39 @@ impl ServiceQuotas for ServiceQuotasClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateServiceQuotaTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateServiceQuotaTemplateError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DisassociateServiceQuotaTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DisassociateServiceQuotaTemplateError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the default service quotas values. The Value returned for each quota is the AWS default value, even if the quotas have been increased.. </p>
-    async fn get_aws_default_service_quota(
+    fn get_aws_default_service_quota(
         &self,
         input: GetAWSDefaultServiceQuotaRequest,
-    ) -> Result<GetAWSDefaultServiceQuotaResponse, RusotoError<GetAWSDefaultServiceQuotaError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAWSDefaultServiceQuotaResponse,
+                        RusotoError<GetAWSDefaultServiceQuotaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2321,28 +2469,35 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAWSDefaultServiceQuotaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAWSDefaultServiceQuotaError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAWSDefaultServiceQuotaResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAWSDefaultServiceQuotaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the <code>ServiceQuotaTemplateAssociationStatus</code> value from the service. Use this action to determine if the Service Quota template is associated, or enabled. </p>
-    async fn get_association_for_service_quota_template(
+    fn get_association_for_service_quota_template(
         &self,
-    ) -> Result<
-        GetAssociationForServiceQuotaTemplateResponse,
-        RusotoError<GetAssociationForServiceQuotaTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetAssociationForServiceQuotaTemplateResponse,
+                        RusotoError<GetAssociationForServiceQuotaTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2353,31 +2508,38 @@ impl ServiceQuotas for ServiceQuotasClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAssociationForServiceQuotaTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAssociationForServiceQuotaTemplateError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetAssociationForServiceQuotaTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetAssociationForServiceQuotaTemplateError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the details for a particular increase request. </p>
-    async fn get_requested_service_quota_change(
+    fn get_requested_service_quota_change(
         &self,
         input: GetRequestedServiceQuotaChangeRequest,
-    ) -> Result<
-        GetRequestedServiceQuotaChangeResponse,
-        RusotoError<GetRequestedServiceQuotaChangeError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRequestedServiceQuotaChangeResponse,
+                        RusotoError<GetRequestedServiceQuotaChangeError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2389,27 +2551,33 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRequestedServiceQuotaChangeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRequestedServiceQuotaChangeError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRequestedServiceQuotaChangeResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRequestedServiceQuotaChangeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the details for the specified service quota. This operation provides a different Value than the <code>GetAWSDefaultServiceQuota</code> operation. This operation returns the applied value for each quota. <code>GetAWSDefaultServiceQuota</code> returns the default AWS value for each quota. </p>
-    async fn get_service_quota(
+    fn get_service_quota(
         &self,
         input: GetServiceQuotaRequest,
-    ) -> Result<GetServiceQuotaResponse, RusotoError<GetServiceQuotaError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetServiceQuotaResponse, RusotoError<GetServiceQuotaError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2417,28 +2585,36 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServiceQuotaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceQuotaError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetServiceQuotaResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetServiceQuotaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the details of the service quota increase request in your template.</p>
-    async fn get_service_quota_increase_request_from_template(
+    fn get_service_quota_increase_request_from_template(
         &self,
         input: GetServiceQuotaIncreaseRequestFromTemplateRequest,
-    ) -> Result<
-        GetServiceQuotaIncreaseRequestFromTemplateResponse,
-        RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetServiceQuotaIncreaseRequestFromTemplateResponse,
+                        RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2450,28 +2626,37 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetServiceQuotaIncreaseRequestFromTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceQuotaIncreaseRequestFromTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetServiceQuotaIncreaseRequestFromTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetServiceQuotaIncreaseRequestFromTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists all default service quotas for the specified AWS service or all AWS services. ListAWSDefaultServiceQuotas is similar to <a>ListServiceQuotas</a> except for the Value object. The Value object returned by <code>ListAWSDefaultServiceQuotas</code> is the default value assigned by AWS. This request returns a list of all service quotas for the specified service. The listing of each you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
-    async fn list_aws_default_service_quotas(
+    fn list_aws_default_service_quotas(
         &self,
         input: ListAWSDefaultServiceQuotasRequest,
-    ) -> Result<ListAWSDefaultServiceQuotasResponse, RusotoError<ListAWSDefaultServiceQuotasError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListAWSDefaultServiceQuotasResponse,
+                        RusotoError<ListAWSDefaultServiceQuotasError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2482,29 +2667,36 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAWSDefaultServiceQuotasResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAWSDefaultServiceQuotasError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListAWSDefaultServiceQuotasResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListAWSDefaultServiceQuotasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Requests a list of the changes to quotas for a service.</p>
-    async fn list_requested_service_quota_change_history(
+    fn list_requested_service_quota_change_history(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryRequest,
-    ) -> Result<
-        ListRequestedServiceQuotaChangeHistoryResponse,
-        RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRequestedServiceQuotaChangeHistoryResponse,
+                        RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2516,31 +2708,38 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRequestedServiceQuotaChangeHistoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRequestedServiceQuotaChangeHistoryError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRequestedServiceQuotaChangeHistoryResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRequestedServiceQuotaChangeHistoryError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Requests a list of the changes to specific service quotas. This command provides additional granularity over the <code>ListRequestedServiceQuotaChangeHistory</code> command. Once a quota change request has reached <code>CASE_CLOSED, APPROVED,</code> or <code>DENIED</code>, the history has been kept for 90 days.</p>
-    async fn list_requested_service_quota_change_history_by_quota(
+    fn list_requested_service_quota_change_history_by_quota(
         &self,
         input: ListRequestedServiceQuotaChangeHistoryByQuotaRequest,
-    ) -> Result<
-        ListRequestedServiceQuotaChangeHistoryByQuotaResponse,
-        RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListRequestedServiceQuotaChangeHistoryByQuotaResponse,
+                        RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2552,29 +2751,36 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRequestedServiceQuotaChangeHistoryByQuotaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRequestedServiceQuotaChangeHistoryByQuotaError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListRequestedServiceQuotaChangeHistoryByQuotaResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListRequestedServiceQuotaChangeHistoryByQuotaError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of the quota increase requests in the template. </p>
-    async fn list_service_quota_increase_requests_in_template(
+    fn list_service_quota_increase_requests_in_template(
         &self,
         input: ListServiceQuotaIncreaseRequestsInTemplateRequest,
-    ) -> Result<
-        ListServiceQuotaIncreaseRequestsInTemplateResponse,
-        RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListServiceQuotaIncreaseRequestsInTemplateResponse,
+                        RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2586,27 +2792,34 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListServiceQuotaIncreaseRequestsInTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServiceQuotaIncreaseRequestsInTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListServiceQuotaIncreaseRequestsInTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListServiceQuotaIncreaseRequestsInTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Lists all service quotas for the specified AWS service. This request returns a list of the service quotas for the specified service. you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
-    async fn list_service_quotas(
+    fn list_service_quotas(
         &self,
         input: ListServiceQuotasRequest,
-    ) -> Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2614,27 +2827,33 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListServiceQuotasResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServiceQuotasError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListServiceQuotasResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListServiceQuotasError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the AWS services available in Service Quotas. Not all AWS services are available in Service Quotas. To list the see the list of the service quotas for a specific service, use <a>ListServiceQuotas</a>.</p>
-    async fn list_services(
+    fn list_services(
         &self,
         input: ListServicesRequest,
-    ) -> Result<ListServicesResponse, RusotoError<ListServicesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListServicesResponse, RusotoError<ListServicesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2642,28 +2861,36 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServicesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListServicesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListServicesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Defines and adds a quota to the service quota template. To add a quota to the template, you must provide the <code>ServiceCode</code>, <code>QuotaCode</code>, <code>AwsRegion</code>, and <code>DesiredValue</code>. Once you add a quota to the template, use <a>ListServiceQuotaIncreaseRequestsInTemplate</a> to see the list of quotas in the template.</p>
-    async fn put_service_quota_increase_request_into_template(
+    fn put_service_quota_increase_request_into_template(
         &self,
         input: PutServiceQuotaIncreaseRequestIntoTemplateRequest,
-    ) -> Result<
-        PutServiceQuotaIncreaseRequestIntoTemplateResponse,
-        RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutServiceQuotaIncreaseRequestIntoTemplateResponse,
+                        RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
@@ -2675,28 +2902,37 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutServiceQuotaIncreaseRequestIntoTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutServiceQuotaIncreaseRequestIntoTemplateError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutServiceQuotaIncreaseRequestIntoTemplateResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(PutServiceQuotaIncreaseRequestIntoTemplateError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Retrieves the details of a service quota increase request. The response to this command provides the details in the <a>RequestedServiceQuotaChange</a> object. </p>
-    async fn request_service_quota_increase(
+    fn request_service_quota_increase(
         &self,
         input: RequestServiceQuotaIncreaseRequest,
-    ) -> Result<RequestServiceQuotaIncreaseResponse, RusotoError<RequestServiceQuotaIncreaseError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        RequestServiceQuotaIncreaseResponse,
+                        RusotoError<RequestServiceQuotaIncreaseError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2707,19 +2943,19 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RequestServiceQuotaIncreaseResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RequestServiceQuotaIncreaseError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RequestServiceQuotaIncreaseResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(RequestServiceQuotaIncreaseError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

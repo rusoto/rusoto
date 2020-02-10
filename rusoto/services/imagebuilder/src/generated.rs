@@ -13,18 +13,19 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p> Details of an EC2 AMI. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5442,285 +5443,609 @@ impl fmt::Display for UpdateInfrastructureConfigurationError {
 }
 impl Error for UpdateInfrastructureConfigurationError {}
 /// Trait representing the capabilities of the imagebuilder API. imagebuilder clients implement this trait.
-#[async_trait]
 pub trait ImageBuilder {
     /// <p>CancelImageCreation cancels the creation of Image. This operation may only be used on images in a non-terminal state.</p>
-    async fn cancel_image_creation(
+    fn cancel_image_creation(
         &self,
         input: CancelImageCreationRequest,
-    ) -> Result<CancelImageCreationResponse, RusotoError<CancelImageCreationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelImageCreationResponse,
+                        RusotoError<CancelImageCreationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new component that can be used to build, validate, test and assess your image.</p>
-    async fn create_component(
+    fn create_component(
         &self,
         input: CreateComponentRequest,
-    ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateComponentResponse, RusotoError<CreateComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
-    async fn create_distribution_configuration(
+    fn create_distribution_configuration(
         &self,
         input: CreateDistributionConfigurationRequest,
-    ) -> Result<
-        CreateDistributionConfigurationResponse,
-        RusotoError<CreateDistributionConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDistributionConfigurationResponse,
+                        RusotoError<CreateDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. </p>
-    async fn create_image(
+    fn create_image(
         &self,
         input: CreateImageRequest,
-    ) -> Result<CreateImageResponse, RusotoError<CreateImageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateImageResponse, RusotoError<CreateImageError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
-    async fn create_image_pipeline(
+    fn create_image_pipeline(
         &self,
         input: CreateImagePipelineRequest,
-    ) -> Result<CreateImagePipelineResponse, RusotoError<CreateImagePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateImagePipelineResponse,
+                        RusotoError<CreateImagePipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Creates a new image recipe. Image Recipes defines how images are configured, tested and assessed. </p>
-    async fn create_image_recipe(
+    fn create_image_recipe(
         &self,
         input: CreateImageRecipeRequest,
-    ) -> Result<CreateImageRecipeResponse, RusotoError<CreateImageRecipeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateImageRecipeResponse, RusotoError<CreateImageRecipeError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
-    async fn create_infrastructure_configuration(
+    fn create_infrastructure_configuration(
         &self,
         input: CreateInfrastructureConfigurationRequest,
-    ) -> Result<
-        CreateInfrastructureConfigurationResponse,
-        RusotoError<CreateInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateInfrastructureConfigurationResponse,
+                        RusotoError<CreateInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Deletes a component build version. </p>
-    async fn delete_component(
+    fn delete_component(
         &self,
         input: DeleteComponentRequest,
-    ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes a distribution configuration. </p>
-    async fn delete_distribution_configuration(
+    fn delete_distribution_configuration(
         &self,
         input: DeleteDistributionConfigurationRequest,
-    ) -> Result<
-        DeleteDistributionConfigurationResponse,
-        RusotoError<DeleteDistributionConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDistributionConfigurationResponse,
+                        RusotoError<DeleteDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Deletes an image. </p>
-    async fn delete_image(
+    fn delete_image(
         &self,
         input: DeleteImageRequest,
-    ) -> Result<DeleteImageResponse, RusotoError<DeleteImageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteImageResponse, RusotoError<DeleteImageError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes an image pipeline. </p>
-    async fn delete_image_pipeline(
+    fn delete_image_pipeline(
         &self,
         input: DeleteImagePipelineRequest,
-    ) -> Result<DeleteImagePipelineResponse, RusotoError<DeleteImagePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteImagePipelineResponse,
+                        RusotoError<DeleteImagePipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes an image recipe. </p>
-    async fn delete_image_recipe(
+    fn delete_image_recipe(
         &self,
         input: DeleteImageRecipeRequest,
-    ) -> Result<DeleteImageRecipeResponse, RusotoError<DeleteImageRecipeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteImageRecipeResponse, RusotoError<DeleteImageRecipeError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Deletes an infrastructure configuration. </p>
-    async fn delete_infrastructure_configuration(
+    fn delete_infrastructure_configuration(
         &self,
         input: DeleteInfrastructureConfigurationRequest,
-    ) -> Result<
-        DeleteInfrastructureConfigurationResponse,
-        RusotoError<DeleteInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteInfrastructureConfigurationResponse,
+                        RusotoError<DeleteInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Gets a component object. </p>
-    async fn get_component(
+    fn get_component(
         &self,
         input: GetComponentRequest,
-    ) -> Result<GetComponentResponse, RusotoError<GetComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetComponentResponse, RusotoError<GetComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a component policy. </p>
-    async fn get_component_policy(
+    fn get_component_policy(
         &self,
         input: GetComponentPolicyRequest,
-    ) -> Result<GetComponentPolicyResponse, RusotoError<GetComponentPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetComponentPolicyResponse,
+                        RusotoError<GetComponentPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a distribution configuration. </p>
-    async fn get_distribution_configuration(
+    fn get_distribution_configuration(
         &self,
         input: GetDistributionConfigurationRequest,
-    ) -> Result<GetDistributionConfigurationResponse, RusotoError<GetDistributionConfigurationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDistributionConfigurationResponse,
+                        RusotoError<GetDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets an image. </p>
-    async fn get_image(
+    fn get_image(
         &self,
         input: GetImageRequest,
-    ) -> Result<GetImageResponse, RusotoError<GetImageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetImageResponse, RusotoError<GetImageError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets an image pipeline. </p>
-    async fn get_image_pipeline(
+    fn get_image_pipeline(
         &self,
         input: GetImagePipelineRequest,
-    ) -> Result<GetImagePipelineResponse, RusotoError<GetImagePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetImagePipelineResponse, RusotoError<GetImagePipelineError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets an image policy. </p>
-    async fn get_image_policy(
+    fn get_image_policy(
         &self,
         input: GetImagePolicyRequest,
-    ) -> Result<GetImagePolicyResponse, RusotoError<GetImagePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetImagePolicyResponse, RusotoError<GetImagePolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets an image recipe. </p>
-    async fn get_image_recipe(
+    fn get_image_recipe(
         &self,
         input: GetImageRecipeRequest,
-    ) -> Result<GetImageRecipeResponse, RusotoError<GetImageRecipeError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetImageRecipeResponse, RusotoError<GetImageRecipeError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets an image recipe policy. </p>
-    async fn get_image_recipe_policy(
+    fn get_image_recipe_policy(
         &self,
         input: GetImageRecipePolicyRequest,
-    ) -> Result<GetImageRecipePolicyResponse, RusotoError<GetImageRecipePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetImageRecipePolicyResponse,
+                        RusotoError<GetImageRecipePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Gets a infrastructure configuration. </p>
-    async fn get_infrastructure_configuration(
+    fn get_infrastructure_configuration(
         &self,
         input: GetInfrastructureConfigurationRequest,
-    ) -> Result<
-        GetInfrastructureConfigurationResponse,
-        RusotoError<GetInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInfrastructureConfigurationResponse,
+                        RusotoError<GetInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Imports a component and transforms its data into a component document. </p>
-    async fn import_component(
+    fn import_component(
         &self,
         input: ImportComponentRequest,
-    ) -> Result<ImportComponentResponse, RusotoError<ImportComponentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ImportComponentResponse, RusotoError<ImportComponentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns the list of component build versions for the specified semantic version. </p>
-    async fn list_component_build_versions(
+    fn list_component_build_versions(
         &self,
         input: ListComponentBuildVersionsRequest,
-    ) -> Result<ListComponentBuildVersionsResponse, RusotoError<ListComponentBuildVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListComponentBuildVersionsResponse,
+                        RusotoError<ListComponentBuildVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns the list of component build versions for the specified semantic version. </p>
-    async fn list_components(
+    fn list_components(
         &self,
         input: ListComponentsRequest,
-    ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>>;
-
-    /// <p> Returns a list of distribution configurations. </p>
-    async fn list_distribution_configurations(
-        &self,
-        input: ListDistributionConfigurationsRequest,
-    ) -> Result<
-        ListDistributionConfigurationsResponse,
-        RusotoError<ListDistributionConfigurationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListComponentsResponse, RusotoError<ListComponentsError>>>
+                + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Returns a list of distribution configurations. </p>
-    async fn list_image_build_versions(
+    fn list_distribution_configurations(
+        &self,
+        input: ListDistributionConfigurationsRequest,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDistributionConfigurationsResponse,
+                        RusotoError<ListDistributionConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
+
+    /// <p> Returns a list of distribution configurations. </p>
+    fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
-    ) -> Result<ListImageBuildVersionsResponse, RusotoError<ListImageBuildVersionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListImageBuildVersionsResponse,
+                        RusotoError<ListImageBuildVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of images created by the specified pipeline. </p>
-    async fn list_image_pipeline_images(
+    fn list_image_pipeline_images(
         &self,
         input: ListImagePipelineImagesRequest,
-    ) -> Result<ListImagePipelineImagesResponse, RusotoError<ListImagePipelineImagesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListImagePipelineImagesResponse,
+                        RusotoError<ListImagePipelineImagesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns a list of image pipelines. </p>
-    async fn list_image_pipelines(
+    fn list_image_pipelines(
         &self,
         input: ListImagePipelinesRequest,
-    ) -> Result<ListImagePipelinesResponse, RusotoError<ListImagePipelinesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListImagePipelinesResponse,
+                        RusotoError<ListImagePipelinesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of image recipes. </p>
-    async fn list_image_recipes(
+    fn list_image_recipes(
         &self,
         input: ListImageRecipesRequest,
-    ) -> Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns the list of image build versions for the specified semantic version. </p>
-    async fn list_images(
+    fn list_images(
         &self,
         input: ListImagesRequest,
-    ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListImagesResponse, RusotoError<ListImagesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Returns a list of infrastructure configurations. </p>
-    async fn list_infrastructure_configurations(
+    fn list_infrastructure_configurations(
         &self,
         input: ListInfrastructureConfigurationsRequest,
-    ) -> Result<
-        ListInfrastructureConfigurationsResponse,
-        RusotoError<ListInfrastructureConfigurationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInfrastructureConfigurationsResponse,
+                        RusotoError<ListInfrastructureConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Returns the list of tags for the specified resource. </p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Applies a policy to a component. </p>
-    async fn put_component_policy(
+    fn put_component_policy(
         &self,
         input: PutComponentPolicyRequest,
-    ) -> Result<PutComponentPolicyResponse, RusotoError<PutComponentPolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutComponentPolicyResponse,
+                        RusotoError<PutComponentPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Applies a policy to an image. </p>
-    async fn put_image_policy(
+    fn put_image_policy(
         &self,
         input: PutImagePolicyRequest,
-    ) -> Result<PutImagePolicyResponse, RusotoError<PutImagePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutImagePolicyResponse, RusotoError<PutImagePolicyError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Applies a policy to an image recipe. </p>
-    async fn put_image_recipe_policy(
+    fn put_image_recipe_policy(
         &self,
         input: PutImageRecipePolicyRequest,
-    ) -> Result<PutImageRecipePolicyResponse, RusotoError<PutImageRecipePolicyError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutImageRecipePolicyResponse,
+                        RusotoError<PutImageRecipePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Manually triggers a pipeline to create an image. </p>
-    async fn start_image_pipeline_execution(
+    fn start_image_pipeline_execution(
         &self,
         input: StartImagePipelineExecutionRequest,
-    ) -> Result<StartImagePipelineExecutionResponse, RusotoError<StartImagePipelineExecutionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartImagePipelineExecutionResponse,
+                        RusotoError<StartImagePipelineExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Adds a tag to a resource. </p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Removes a tag from a resource. </p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
-    async fn update_distribution_configuration(
+    fn update_distribution_configuration(
         &self,
         input: UpdateDistributionConfigurationRequest,
-    ) -> Result<
-        UpdateDistributionConfigurationResponse,
-        RusotoError<UpdateDistributionConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDistributionConfigurationResponse,
+                        RusotoError<UpdateDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p> Updates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
-    async fn update_image_pipeline(
+    fn update_image_pipeline(
         &self,
         input: UpdateImagePipelineRequest,
-    ) -> Result<UpdateImagePipelineResponse, RusotoError<UpdateImagePipelineError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateImagePipelineResponse,
+                        RusotoError<UpdateImagePipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
-    async fn update_infrastructure_configuration(
+    fn update_infrastructure_configuration(
         &self,
         input: UpdateInfrastructureConfigurationRequest,
-    ) -> Result<
-        UpdateInfrastructureConfigurationResponse,
-        RusotoError<UpdateInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateInfrastructureConfigurationResponse,
+                        RusotoError<UpdateInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 }
 /// A client for the imagebuilder API.
@@ -5761,13 +6086,22 @@ impl ImageBuilderClient {
     }
 }
 
-#[async_trait]
 impl ImageBuilder for ImageBuilderClient {
     /// <p>CancelImageCreation cancels the creation of Image. This operation may only be used on images in a non-terminal state.</p>
-    async fn cancel_image_creation(
+    fn cancel_image_creation(
         &self,
         input: CancelImageCreationRequest,
-    ) -> Result<CancelImageCreationResponse, RusotoError<CancelImageCreationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CancelImageCreationResponse,
+                        RusotoError<CancelImageCreationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CancelImageCreation";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -5776,28 +6110,34 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelImageCreationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CancelImageCreationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelImageCreationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CancelImageCreationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new component that can be used to build, validate, test and assess your image.</p>
-    async fn create_component(
+    fn create_component(
         &self,
         input: CreateComponentRequest,
-    ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateComponentResponse, RusotoError<CreateComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CreateComponent";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -5806,30 +6146,37 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateComponentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateComponentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateComponentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
-    async fn create_distribution_configuration(
+    fn create_distribution_configuration(
         &self,
         input: CreateDistributionConfigurationRequest,
-    ) -> Result<
-        CreateDistributionConfigurationResponse,
-        RusotoError<CreateDistributionConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDistributionConfigurationResponse,
+                        RusotoError<CreateDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/CreateDistributionConfiguration";
 
@@ -5839,30 +6186,36 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDistributionConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDistributionConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDistributionConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDistributionConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. </p>
-    async fn create_image(
+    fn create_image(
         &self,
         input: CreateImageRequest,
-    ) -> Result<CreateImageResponse, RusotoError<CreateImageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateImageResponse, RusotoError<CreateImageError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CreateImage";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -5871,28 +6224,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateImageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateImageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateImageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateImageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
-    async fn create_image_pipeline(
+    fn create_image_pipeline(
         &self,
         input: CreateImagePipelineRequest,
-    ) -> Result<CreateImagePipelineResponse, RusotoError<CreateImagePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateImagePipelineResponse,
+                        RusotoError<CreateImagePipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CreateImagePipeline";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -5901,28 +6264,35 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateImagePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateImagePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateImagePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateImagePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Creates a new image recipe. Image Recipes defines how images are configured, tested and assessed. </p>
-    async fn create_image_recipe(
+    fn create_image_recipe(
         &self,
         input: CreateImageRecipeRequest,
-    ) -> Result<CreateImageRecipeResponse, RusotoError<CreateImageRecipeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<CreateImageRecipeResponse, RusotoError<CreateImageRecipeError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/CreateImageRecipe";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -5931,30 +6301,37 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateImageRecipeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateImageRecipeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateImageRecipeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateImageRecipeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
-    async fn create_infrastructure_configuration(
+    fn create_infrastructure_configuration(
         &self,
         input: CreateInfrastructureConfigurationRequest,
-    ) -> Result<
-        CreateInfrastructureConfigurationResponse,
-        RusotoError<CreateInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateInfrastructureConfigurationResponse,
+                        RusotoError<CreateInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/CreateInfrastructureConfiguration";
 
@@ -5964,30 +6341,36 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInfrastructureConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateInfrastructureConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInfrastructureConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateInfrastructureConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes a component build version. </p>
-    async fn delete_component(
+    fn delete_component(
         &self,
         input: DeleteComponentRequest,
-    ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteComponentResponse, RusotoError<DeleteComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DeleteComponent";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -6000,30 +6383,37 @@ impl ImageBuilder for ImageBuilderClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteComponentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteComponentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteComponentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes a distribution configuration. </p>
-    async fn delete_distribution_configuration(
+    fn delete_distribution_configuration(
         &self,
         input: DeleteDistributionConfigurationRequest,
-    ) -> Result<
-        DeleteDistributionConfigurationResponse,
-        RusotoError<DeleteDistributionConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDistributionConfigurationResponse,
+                        RusotoError<DeleteDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/DeleteDistributionConfiguration";
 
@@ -6037,30 +6427,36 @@ impl ImageBuilder for ImageBuilderClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDistributionConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDistributionConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDistributionConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDistributionConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes an image. </p>
-    async fn delete_image(
+    fn delete_image(
         &self,
         input: DeleteImageRequest,
-    ) -> Result<DeleteImageResponse, RusotoError<DeleteImageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteImageResponse, RusotoError<DeleteImageError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DeleteImage";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -6070,28 +6466,38 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imageBuildVersionArn", &input.image_build_version_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteImageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteImageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteImageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteImageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes an image pipeline. </p>
-    async fn delete_image_pipeline(
+    fn delete_image_pipeline(
         &self,
         input: DeleteImagePipelineRequest,
-    ) -> Result<DeleteImagePipelineResponse, RusotoError<DeleteImagePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteImagePipelineResponse,
+                        RusotoError<DeleteImagePipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DeleteImagePipeline";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -6101,28 +6507,35 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imagePipelineArn", &input.image_pipeline_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteImagePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteImagePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteImagePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteImagePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes an image recipe. </p>
-    async fn delete_image_recipe(
+    fn delete_image_recipe(
         &self,
         input: DeleteImageRecipeRequest,
-    ) -> Result<DeleteImageRecipeResponse, RusotoError<DeleteImageRecipeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DeleteImageRecipeResponse, RusotoError<DeleteImageRecipeError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/DeleteImageRecipe";
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -6132,30 +6545,37 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imageRecipeArn", &input.image_recipe_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteImageRecipeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteImageRecipeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteImageRecipeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteImageRecipeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Deletes an infrastructure configuration. </p>
-    async fn delete_infrastructure_configuration(
+    fn delete_infrastructure_configuration(
         &self,
         input: DeleteInfrastructureConfigurationRequest,
-    ) -> Result<
-        DeleteInfrastructureConfigurationResponse,
-        RusotoError<DeleteInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteInfrastructureConfigurationResponse,
+                        RusotoError<DeleteInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/DeleteInfrastructureConfiguration";
 
@@ -6169,30 +6589,36 @@ impl ImageBuilder for ImageBuilderClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInfrastructureConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteInfrastructureConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInfrastructureConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteInfrastructureConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a component object. </p>
-    async fn get_component(
+    fn get_component(
         &self,
         input: GetComponentRequest,
-    ) -> Result<GetComponentResponse, RusotoError<GetComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetComponentResponse, RusotoError<GetComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetComponent";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6205,28 +6631,38 @@ impl ImageBuilder for ImageBuilderClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComponentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetComponentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComponentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a component policy. </p>
-    async fn get_component_policy(
+    fn get_component_policy(
         &self,
         input: GetComponentPolicyRequest,
-    ) -> Result<GetComponentPolicyResponse, RusotoError<GetComponentPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetComponentPolicyResponse,
+                        RusotoError<GetComponentPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetComponentPolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6236,29 +6672,38 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("componentArn", &input.component_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComponentPolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetComponentPolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComponentPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetComponentPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a distribution configuration. </p>
-    async fn get_distribution_configuration(
+    fn get_distribution_configuration(
         &self,
         input: GetDistributionConfigurationRequest,
-    ) -> Result<GetDistributionConfigurationResponse, RusotoError<GetDistributionConfigurationError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetDistributionConfigurationResponse,
+                        RusotoError<GetDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetDistributionConfiguration";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6271,28 +6716,34 @@ impl ImageBuilder for ImageBuilderClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDistributionConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetDistributionConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDistributionConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetDistributionConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets an image. </p>
-    async fn get_image(
+    fn get_image(
         &self,
         input: GetImageRequest,
-    ) -> Result<GetImageResponse, RusotoError<GetImageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetImageResponse, RusotoError<GetImageError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetImage";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6302,28 +6753,35 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imageBuildVersionArn", &input.image_build_version_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetImageResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetImageResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetImageError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetImageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets an image pipeline. </p>
-    async fn get_image_pipeline(
+    fn get_image_pipeline(
         &self,
         input: GetImagePipelineRequest,
-    ) -> Result<GetImagePipelineResponse, RusotoError<GetImagePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<GetImagePipelineResponse, RusotoError<GetImagePipelineError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetImagePipeline";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6333,28 +6791,34 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imagePipelineArn", &input.image_pipeline_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetImagePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetImagePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetImagePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetImagePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets an image policy. </p>
-    async fn get_image_policy(
+    fn get_image_policy(
         &self,
         input: GetImagePolicyRequest,
-    ) -> Result<GetImagePolicyResponse, RusotoError<GetImagePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetImagePolicyResponse, RusotoError<GetImagePolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetImagePolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6364,28 +6828,34 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imageArn", &input.image_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetImagePolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetImagePolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetImagePolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetImagePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets an image recipe. </p>
-    async fn get_image_recipe(
+    fn get_image_recipe(
         &self,
         input: GetImageRecipeRequest,
-    ) -> Result<GetImageRecipeResponse, RusotoError<GetImageRecipeError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetImageRecipeResponse, RusotoError<GetImageRecipeError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetImageRecipe";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6395,28 +6865,38 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imageRecipeArn", &input.image_recipe_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetImageRecipeResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetImageRecipeResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetImageRecipeError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetImageRecipeError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets an image recipe policy. </p>
-    async fn get_image_recipe_policy(
+    fn get_image_recipe_policy(
         &self,
         input: GetImageRecipePolicyRequest,
-    ) -> Result<GetImageRecipePolicyResponse, RusotoError<GetImageRecipePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetImageRecipePolicyResponse,
+                        RusotoError<GetImageRecipePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/GetImageRecipePolicy";
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
@@ -6426,30 +6906,37 @@ impl ImageBuilder for ImageBuilderClient {
         params.put("imageRecipeArn", &input.image_recipe_arn);
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetImageRecipePolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetImageRecipePolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetImageRecipePolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetImageRecipePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Gets a infrastructure configuration. </p>
-    async fn get_infrastructure_configuration(
+    fn get_infrastructure_configuration(
         &self,
         input: GetInfrastructureConfigurationRequest,
-    ) -> Result<
-        GetInfrastructureConfigurationResponse,
-        RusotoError<GetInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetInfrastructureConfigurationResponse,
+                        RusotoError<GetInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/GetInfrastructureConfiguration";
 
@@ -6463,28 +6950,34 @@ impl ImageBuilder for ImageBuilderClient {
         );
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInfrastructureConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetInfrastructureConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInfrastructureConfigurationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetInfrastructureConfigurationError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Imports a component and transforms its data into a component document. </p>
-    async fn import_component(
+    fn import_component(
         &self,
         input: ImportComponentRequest,
-    ) -> Result<ImportComponentResponse, RusotoError<ImportComponentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ImportComponentResponse, RusotoError<ImportComponentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ImportComponent";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6493,29 +6986,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportComponentResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ImportComponentResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportComponentError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ImportComponentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns the list of component build versions for the specified semantic version. </p>
-    async fn list_component_build_versions(
+    fn list_component_build_versions(
         &self,
         input: ListComponentBuildVersionsRequest,
-    ) -> Result<ListComponentBuildVersionsResponse, RusotoError<ListComponentBuildVersionsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListComponentBuildVersionsResponse,
+                        RusotoError<ListComponentBuildVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListComponentBuildVersions";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6524,28 +7026,34 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListComponentBuildVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListComponentBuildVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComponentBuildVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListComponentBuildVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns the list of component build versions for the specified semantic version. </p>
-    async fn list_components(
+    fn list_components(
         &self,
         input: ListComponentsRequest,
-    ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListComponentsResponse, RusotoError<ListComponentsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListComponents";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6554,30 +7062,37 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListComponentsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListComponentsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComponentsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListComponentsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of distribution configurations. </p>
-    async fn list_distribution_configurations(
+    fn list_distribution_configurations(
         &self,
         input: ListDistributionConfigurationsRequest,
-    ) -> Result<
-        ListDistributionConfigurationsResponse,
-        RusotoError<ListDistributionConfigurationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDistributionConfigurationsResponse,
+                        RusotoError<ListDistributionConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/ListDistributionConfigurations";
 
@@ -6587,28 +7102,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDistributionConfigurationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDistributionConfigurationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDistributionConfigurationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDistributionConfigurationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of distribution configurations. </p>
-    async fn list_image_build_versions(
+    fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
-    ) -> Result<ListImageBuildVersionsResponse, RusotoError<ListImageBuildVersionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListImageBuildVersionsResponse,
+                        RusotoError<ListImageBuildVersionsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListImageBuildVersions";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6617,28 +7142,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListImageBuildVersionsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListImageBuildVersionsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListImageBuildVersionsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListImageBuildVersionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of images created by the specified pipeline. </p>
-    async fn list_image_pipeline_images(
+    fn list_image_pipeline_images(
         &self,
         input: ListImagePipelineImagesRequest,
-    ) -> Result<ListImagePipelineImagesResponse, RusotoError<ListImagePipelineImagesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListImagePipelineImagesResponse,
+                        RusotoError<ListImagePipelineImagesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListImagePipelineImages";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6647,28 +7182,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListImagePipelineImagesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListImagePipelineImagesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListImagePipelineImagesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListImagePipelineImagesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns a list of image pipelines. </p>
-    async fn list_image_pipelines(
+    fn list_image_pipelines(
         &self,
         input: ListImagePipelinesRequest,
-    ) -> Result<ListImagePipelinesResponse, RusotoError<ListImagePipelinesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListImagePipelinesResponse,
+                        RusotoError<ListImagePipelinesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListImagePipelines";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6677,28 +7222,35 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListImagePipelinesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListImagePipelinesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListImagePipelinesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListImagePipelinesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of image recipes. </p>
-    async fn list_image_recipes(
+    fn list_image_recipes(
         &self,
         input: ListImageRecipesRequest,
-    ) -> Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListImageRecipes";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6707,28 +7259,34 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListImageRecipesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListImageRecipesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListImageRecipesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListImageRecipesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns the list of image build versions for the specified semantic version. </p>
-    async fn list_images(
+    fn list_images(
         &self,
         input: ListImagesRequest,
-    ) -> Result<ListImagesResponse, RusotoError<ListImagesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListImagesResponse, RusotoError<ListImagesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/ListImages";
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6737,30 +7295,37 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListImagesResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListImagesResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListImagesError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListImagesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns a list of infrastructure configurations. </p>
-    async fn list_infrastructure_configurations(
+    fn list_infrastructure_configurations(
         &self,
         input: ListInfrastructureConfigurationsRequest,
-    ) -> Result<
-        ListInfrastructureConfigurationsResponse,
-        RusotoError<ListInfrastructureConfigurationsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListInfrastructureConfigurationsResponse,
+                        RusotoError<ListInfrastructureConfigurationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/ListInfrastructureConfigurations";
 
@@ -6770,57 +7335,77 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInfrastructureConfigurationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListInfrastructureConfigurationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInfrastructureConfigurationsError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListInfrastructureConfigurationsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Returns the list of tags for the specified resource. </p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "imagebuilder", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Applies a policy to a component. </p>
-    async fn put_component_policy(
+    fn put_component_policy(
         &self,
         input: PutComponentPolicyRequest,
-    ) -> Result<PutComponentPolicyResponse, RusotoError<PutComponentPolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutComponentPolicyResponse,
+                        RusotoError<PutComponentPolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/PutComponentPolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6829,28 +7414,34 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutComponentPolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutComponentPolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutComponentPolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutComponentPolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Applies a policy to an image. </p>
-    async fn put_image_policy(
+    fn put_image_policy(
         &self,
         input: PutImagePolicyRequest,
-    ) -> Result<PutImagePolicyResponse, RusotoError<PutImagePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<PutImagePolicyResponse, RusotoError<PutImagePolicyError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/PutImagePolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6859,28 +7450,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutImagePolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutImagePolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutImagePolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutImagePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Applies a policy to an image recipe. </p>
-    async fn put_image_recipe_policy(
+    fn put_image_recipe_policy(
         &self,
         input: PutImageRecipePolicyRequest,
-    ) -> Result<PutImageRecipePolicyResponse, RusotoError<PutImageRecipePolicyError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        PutImageRecipePolicyResponse,
+                        RusotoError<PutImageRecipePolicyError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/PutImageRecipePolicy";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6889,29 +7490,38 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutImageRecipePolicyResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<PutImageRecipePolicyResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(PutImageRecipePolicyError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(PutImageRecipePolicyError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Manually triggers a pipeline to create an image. </p>
-    async fn start_image_pipeline_execution(
+    fn start_image_pipeline_execution(
         &self,
         input: StartImagePipelineExecutionRequest,
-    ) -> Result<StartImagePipelineExecutionResponse, RusotoError<StartImagePipelineExecutionError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartImagePipelineExecutionResponse,
+                        RusotoError<StartImagePipelineExecutionError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/StartImagePipelineExecution";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -6920,28 +7530,34 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartImagePipelineExecutionResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartImagePipelineExecutionResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartImagePipelineExecutionError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartImagePipelineExecutionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Adds a tag to a resource. </p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
@@ -6950,28 +7566,34 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<TagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<TagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Removes a tag from a resource. </p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "imagebuilder", &self.region, &request_uri);
@@ -6983,30 +7605,37 @@ impl ImageBuilder for ImageBuilderClient {
         }
         request.set_params(params);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UntagResourceResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
-    async fn update_distribution_configuration(
+    fn update_distribution_configuration(
         &self,
         input: UpdateDistributionConfigurationRequest,
-    ) -> Result<
-        UpdateDistributionConfigurationResponse,
-        RusotoError<UpdateDistributionConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateDistributionConfigurationResponse,
+                        RusotoError<UpdateDistributionConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/UpdateDistributionConfiguration";
 
@@ -7016,30 +7645,40 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDistributionConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateDistributionConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDistributionConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateDistributionConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p> Updates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
-    async fn update_image_pipeline(
+    fn update_image_pipeline(
         &self,
         input: UpdateImagePipelineRequest,
-    ) -> Result<UpdateImagePipelineResponse, RusotoError<UpdateImagePipelineError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateImagePipelineResponse,
+                        RusotoError<UpdateImagePipelineError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/UpdateImagePipeline";
 
         let mut request = SignedRequest::new("PUT", "imagebuilder", &self.region, &request_uri);
@@ -7048,30 +7687,37 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateImagePipelineResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateImagePipelineResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateImagePipelineError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateImagePipelineError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
-    async fn update_infrastructure_configuration(
+    fn update_infrastructure_configuration(
         &self,
         input: UpdateInfrastructureConfigurationRequest,
-    ) -> Result<
-        UpdateInfrastructureConfigurationResponse,
-        RusotoError<UpdateInfrastructureConfigurationError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        UpdateInfrastructureConfigurationResponse,
+                        RusotoError<UpdateInfrastructureConfigurationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let request_uri = "/UpdateInfrastructureConfiguration";
 
@@ -7081,22 +7727,22 @@ impl ImageBuilder for ImageBuilderClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInfrastructureConfigurationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateInfrastructureConfigurationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInfrastructureConfigurationError::from_response(
-                response,
-            ))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateInfrastructureConfigurationError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 }

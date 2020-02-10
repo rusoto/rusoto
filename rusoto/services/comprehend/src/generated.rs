@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5516,343 +5517,774 @@ impl fmt::Display for UpdateEndpointError {
 }
 impl Error for UpdateEndpointError {}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
-#[async_trait]
 pub trait Comprehend {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
-    async fn batch_detect_dominant_language(
+    fn batch_detect_dominant_language(
         &self,
         input: BatchDetectDominantLanguageRequest,
-    ) -> Result<BatchDetectDominantLanguageResponse, RusotoError<BatchDetectDominantLanguageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectDominantLanguageResponse,
+                        RusotoError<BatchDetectDominantLanguageError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
-    async fn batch_detect_entities(
+    fn batch_detect_entities(
         &self,
         input: BatchDetectEntitiesRequest,
-    ) -> Result<BatchDetectEntitiesResponse, RusotoError<BatchDetectEntitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectEntitiesResponse,
+                        RusotoError<BatchDetectEntitiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Detects the key noun phrases found in a batch of documents.</p>
-    async fn batch_detect_key_phrases(
+    fn batch_detect_key_phrases(
         &self,
         input: BatchDetectKeyPhrasesRequest,
-    ) -> Result<BatchDetectKeyPhrasesResponse, RusotoError<BatchDetectKeyPhrasesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectKeyPhrasesResponse,
+                        RusotoError<BatchDetectKeyPhrasesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
-    async fn batch_detect_sentiment(
+    fn batch_detect_sentiment(
         &self,
         input: BatchDetectSentimentRequest,
-    ) -> Result<BatchDetectSentimentResponse, RusotoError<BatchDetectSentimentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectSentimentResponse,
+                        RusotoError<BatchDetectSentimentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
-    async fn batch_detect_syntax(
+    fn batch_detect_syntax(
         &self,
         input: BatchDetectSyntaxRequest,
-    ) -> Result<BatchDetectSyntaxResponse, RusotoError<BatchDetectSyntaxError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchDetectSyntaxResponse, RusotoError<BatchDetectSyntaxError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
-    async fn classify_document(
+    fn classify_document(
         &self,
         input: ClassifyDocumentRequest,
-    ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
-    async fn create_document_classifier(
+    fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
-    ) -> Result<CreateDocumentClassifierResponse, RusotoError<CreateDocumentClassifierError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDocumentClassifierResponse,
+                        RusotoError<CreateDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
-    async fn create_endpoint(
+    fn create_endpoint(
         &self,
         input: CreateEndpointRequest,
-    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateEndpointResponse, RusotoError<CreateEndpointError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
-    async fn create_entity_recognizer(
+    fn create_entity_recognizer(
         &self,
         input: CreateEntityRecognizerRequest,
-    ) -> Result<CreateEntityRecognizerResponse, RusotoError<CreateEntityRecognizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateEntityRecognizerResponse,
+                        RusotoError<CreateEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
-    async fn delete_document_classifier(
+    fn delete_document_classifier(
         &self,
         input: DeleteDocumentClassifierRequest,
-    ) -> Result<DeleteDocumentClassifierResponse, RusotoError<DeleteDocumentClassifierError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDocumentClassifierResponse,
+                        RusotoError<DeleteDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
-    async fn delete_endpoint(
+    fn delete_endpoint(
         &self,
         input: DeleteEndpointRequest,
-    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
-    async fn delete_entity_recognizer(
+    fn delete_entity_recognizer(
         &self,
         input: DeleteEntityRecognizerRequest,
-    ) -> Result<DeleteEntityRecognizerResponse, RusotoError<DeleteEntityRecognizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteEntityRecognizerResponse,
+                        RusotoError<DeleteEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
-    async fn describe_document_classification_job(
+    fn describe_document_classification_job(
         &self,
         input: DescribeDocumentClassificationJobRequest,
-    ) -> Result<
-        DescribeDocumentClassificationJobResponse,
-        RusotoError<DescribeDocumentClassificationJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentClassificationJobResponse,
+                        RusotoError<DescribeDocumentClassificationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets the properties associated with a document classifier.</p>
-    async fn describe_document_classifier(
+    fn describe_document_classifier(
         &self,
         input: DescribeDocumentClassifierRequest,
-    ) -> Result<DescribeDocumentClassifierResponse, RusotoError<DescribeDocumentClassifierError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentClassifierResponse,
+                        RusotoError<DescribeDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_dominant_language_detection_job(
+    fn describe_dominant_language_detection_job(
         &self,
         input: DescribeDominantLanguageDetectionJobRequest,
-    ) -> Result<
-        DescribeDominantLanguageDetectionJobResponse,
-        RusotoError<DescribeDominantLanguageDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDominantLanguageDetectionJobResponse,
+                        RusotoError<DescribeDominantLanguageDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
-    async fn describe_endpoint(
+    fn describe_endpoint(
         &self,
         input: DescribeEndpointRequest,
-    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_entities_detection_job(
+    fn describe_entities_detection_job(
         &self,
         input: DescribeEntitiesDetectionJobRequest,
-    ) -> Result<DescribeEntitiesDetectionJobResponse, RusotoError<DescribeEntitiesDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEntitiesDetectionJobResponse,
+                        RusotoError<DescribeEntitiesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
-    async fn describe_entity_recognizer(
+    fn describe_entity_recognizer(
         &self,
         input: DescribeEntityRecognizerRequest,
-    ) -> Result<DescribeEntityRecognizerResponse, RusotoError<DescribeEntityRecognizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEntityRecognizerResponse,
+                        RusotoError<DescribeEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_key_phrases_detection_job(
+    fn describe_key_phrases_detection_job(
         &self,
         input: DescribeKeyPhrasesDetectionJobRequest,
-    ) -> Result<
-        DescribeKeyPhrasesDetectionJobResponse,
-        RusotoError<DescribeKeyPhrasesDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeKeyPhrasesDetectionJobResponse,
+                        RusotoError<DescribeKeyPhrasesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_sentiment_detection_job(
+    fn describe_sentiment_detection_job(
         &self,
         input: DescribeSentimentDetectionJobRequest,
-    ) -> Result<
-        DescribeSentimentDetectionJobResponse,
-        RusotoError<DescribeSentimentDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSentimentDetectionJobResponse,
+                        RusotoError<DescribeSentimentDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_topics_detection_job(
+    fn describe_topics_detection_job(
         &self,
         input: DescribeTopicsDetectionJobRequest,
-    ) -> Result<DescribeTopicsDetectionJobResponse, RusotoError<DescribeTopicsDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTopicsDetectionJobResponse,
+                        RusotoError<DescribeTopicsDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
-    async fn detect_dominant_language(
+    fn detect_dominant_language(
         &self,
         input: DetectDominantLanguageRequest,
-    ) -> Result<DetectDominantLanguageResponse, RusotoError<DetectDominantLanguageError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetectDominantLanguageResponse,
+                        RusotoError<DetectDominantLanguageError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
-    async fn detect_entities(
+    fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Detects the key noun phrases found in the text. </p>
-    async fn detect_key_phrases(
+    fn detect_key_phrases(
         &self,
         input: DetectKeyPhrasesRequest,
-    ) -> Result<DetectKeyPhrasesResponse, RusotoError<DetectKeyPhrasesError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DetectKeyPhrasesResponse, RusotoError<DetectKeyPhrasesError>>,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
-    async fn detect_sentiment(
+    fn detect_sentiment(
         &self,
         input: DetectSentimentRequest,
-    ) -> Result<DetectSentimentResponse, RusotoError<DetectSentimentError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectSentimentResponse, RusotoError<DetectSentimentError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
-    async fn detect_syntax(
+    fn detect_syntax(
         &self,
         input: DetectSyntaxRequest,
-    ) -> Result<DetectSyntaxResponse, RusotoError<DetectSyntaxError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectSyntaxResponse, RusotoError<DetectSyntaxError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
-    async fn list_document_classification_jobs(
+    fn list_document_classification_jobs(
         &self,
         input: ListDocumentClassificationJobsRequest,
-    ) -> Result<
-        ListDocumentClassificationJobsResponse,
-        RusotoError<ListDocumentClassificationJobsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDocumentClassificationJobsResponse,
+                        RusotoError<ListDocumentClassificationJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets a list of the document classifiers that you have created.</p>
-    async fn list_document_classifiers(
+    fn list_document_classifiers(
         &self,
         input: ListDocumentClassifiersRequest,
-    ) -> Result<ListDocumentClassifiersResponse, RusotoError<ListDocumentClassifiersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDocumentClassifiersResponse,
+                        RusotoError<ListDocumentClassifiersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
-    async fn list_dominant_language_detection_jobs(
+    fn list_dominant_language_detection_jobs(
         &self,
         input: ListDominantLanguageDetectionJobsRequest,
-    ) -> Result<
-        ListDominantLanguageDetectionJobsResponse,
-        RusotoError<ListDominantLanguageDetectionJobsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDominantLanguageDetectionJobsResponse,
+                        RusotoError<ListDominantLanguageDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Gets a list of all existing endpoints that you've created.</p>
-    async fn list_endpoints(
+    fn list_endpoints(
         &self,
         input: ListEndpointsRequest,
-    ) -> Result<ListEndpointsResponse, RusotoError<ListEndpointsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEndpointsResponse, RusotoError<ListEndpointsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
-    async fn list_entities_detection_jobs(
+    fn list_entities_detection_jobs(
         &self,
         input: ListEntitiesDetectionJobsRequest,
-    ) -> Result<ListEntitiesDetectionJobsResponse, RusotoError<ListEntitiesDetectionJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEntitiesDetectionJobsResponse,
+                        RusotoError<ListEntitiesDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
-    async fn list_entity_recognizers(
+    fn list_entity_recognizers(
         &self,
         input: ListEntityRecognizersRequest,
-    ) -> Result<ListEntityRecognizersResponse, RusotoError<ListEntityRecognizersError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEntityRecognizersResponse,
+                        RusotoError<ListEntityRecognizersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
-    async fn list_key_phrases_detection_jobs(
+    fn list_key_phrases_detection_jobs(
         &self,
         input: ListKeyPhrasesDetectionJobsRequest,
-    ) -> Result<ListKeyPhrasesDetectionJobsResponse, RusotoError<ListKeyPhrasesDetectionJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListKeyPhrasesDetectionJobsResponse,
+                        RusotoError<ListKeyPhrasesDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
-    async fn list_sentiment_detection_jobs(
+    fn list_sentiment_detection_jobs(
         &self,
         input: ListSentimentDetectionJobsRequest,
-    ) -> Result<ListSentimentDetectionJobsResponse, RusotoError<ListSentimentDetectionJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSentimentDetectionJobsResponse,
+                        RusotoError<ListSentimentDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
-    async fn list_topics_detection_jobs(
+    fn list_topics_detection_jobs(
         &self,
         input: ListTopicsDetectionJobsRequest,
-    ) -> Result<ListTopicsDetectionJobsResponse, RusotoError<ListTopicsDetectionJobsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTopicsDetectionJobsResponse,
+                        RusotoError<ListTopicsDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
-    async fn start_document_classification_job(
+    fn start_document_classification_job(
         &self,
         input: StartDocumentClassificationJobRequest,
-    ) -> Result<
-        StartDocumentClassificationJobResponse,
-        RusotoError<StartDocumentClassificationJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDocumentClassificationJobResponse,
+                        RusotoError<StartDocumentClassificationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
-    async fn start_dominant_language_detection_job(
+    fn start_dominant_language_detection_job(
         &self,
         input: StartDominantLanguageDetectionJobRequest,
-    ) -> Result<
-        StartDominantLanguageDetectionJobResponse,
-        RusotoError<StartDominantLanguageDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDominantLanguageDetectionJobResponse,
+                        RusotoError<StartDominantLanguageDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
-    async fn start_entities_detection_job(
+    fn start_entities_detection_job(
         &self,
         input: StartEntitiesDetectionJobRequest,
-    ) -> Result<StartEntitiesDetectionJobResponse, RusotoError<StartEntitiesDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartEntitiesDetectionJobResponse,
+                        RusotoError<StartEntitiesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
-    async fn start_key_phrases_detection_job(
+    fn start_key_phrases_detection_job(
         &self,
         input: StartKeyPhrasesDetectionJobRequest,
-    ) -> Result<StartKeyPhrasesDetectionJobResponse, RusotoError<StartKeyPhrasesDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartKeyPhrasesDetectionJobResponse,
+                        RusotoError<StartKeyPhrasesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
-    async fn start_sentiment_detection_job(
+    fn start_sentiment_detection_job(
         &self,
         input: StartSentimentDetectionJobRequest,
-    ) -> Result<StartSentimentDetectionJobResponse, RusotoError<StartSentimentDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartSentimentDetectionJobResponse,
+                        RusotoError<StartSentimentDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
-    async fn start_topics_detection_job(
+    fn start_topics_detection_job(
         &self,
         input: StartTopicsDetectionJobRequest,
-    ) -> Result<StartTopicsDetectionJobResponse, RusotoError<StartTopicsDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTopicsDetectionJobResponse,
+                        RusotoError<StartTopicsDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_dominant_language_detection_job(
+    fn stop_dominant_language_detection_job(
         &self,
         input: StopDominantLanguageDetectionJobRequest,
-    ) -> Result<
-        StopDominantLanguageDetectionJobResponse,
-        RusotoError<StopDominantLanguageDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopDominantLanguageDetectionJobResponse,
+                        RusotoError<StopDominantLanguageDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_entities_detection_job(
+    fn stop_entities_detection_job(
         &self,
         input: StopEntitiesDetectionJobRequest,
-    ) -> Result<StopEntitiesDetectionJobResponse, RusotoError<StopEntitiesDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopEntitiesDetectionJobResponse,
+                        RusotoError<StopEntitiesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_key_phrases_detection_job(
+    fn stop_key_phrases_detection_job(
         &self,
         input: StopKeyPhrasesDetectionJobRequest,
-    ) -> Result<StopKeyPhrasesDetectionJobResponse, RusotoError<StopKeyPhrasesDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopKeyPhrasesDetectionJobResponse,
+                        RusotoError<StopKeyPhrasesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_sentiment_detection_job(
+    fn stop_sentiment_detection_job(
         &self,
         input: StopSentimentDetectionJobRequest,
-    ) -> Result<StopSentimentDetectionJobResponse, RusotoError<StopSentimentDetectionJobError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopSentimentDetectionJobResponse,
+                        RusotoError<StopSentimentDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
-    async fn stop_training_document_classifier(
+    fn stop_training_document_classifier(
         &self,
         input: StopTrainingDocumentClassifierRequest,
-    ) -> Result<
-        StopTrainingDocumentClassifierResponse,
-        RusotoError<StopTrainingDocumentClassifierError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopTrainingDocumentClassifierResponse,
+                        RusotoError<StopTrainingDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     >;
 
     /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
-    async fn stop_training_entity_recognizer(
+    fn stop_training_entity_recognizer(
         &self,
         input: StopTrainingEntityRecognizerRequest,
-    ) -> Result<StopTrainingEntityRecognizerResponse, RusotoError<StopTrainingEntityRecognizerError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopTrainingEntityRecognizerResponse,
+                        RusotoError<StopTrainingEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Updates information about the specified endpoint.</p>
-    async fn update_endpoint(
+    fn update_endpoint(
         &self,
         input: UpdateEndpointRequest,
-    ) -> Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Comprehend API.
 #[derive(Clone)]
@@ -5892,14 +6324,22 @@ impl ComprehendClient {
     }
 }
 
-#[async_trait]
 impl Comprehend for ComprehendClient {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
-    async fn batch_detect_dominant_language(
+    fn batch_detect_dominant_language(
         &self,
         input: BatchDetectDominantLanguageRequest,
-    ) -> Result<BatchDetectDominantLanguageResponse, RusotoError<BatchDetectDominantLanguageError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectDominantLanguageResponse,
+                        RusotoError<BatchDetectDominantLanguageError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5910,27 +6350,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectDominantLanguageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectDominantLanguageError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDetectDominantLanguageResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDetectDominantLanguageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
-    async fn batch_detect_entities(
+    fn batch_detect_entities(
         &self,
         input: BatchDetectEntitiesRequest,
-    ) -> Result<BatchDetectEntitiesResponse, RusotoError<BatchDetectEntitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectEntitiesResponse,
+                        RusotoError<BatchDetectEntitiesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5938,27 +6388,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectEntitiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDetectEntitiesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDetectEntitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Detects the key noun phrases found in a batch of documents.</p>
-    async fn batch_detect_key_phrases(
+    fn batch_detect_key_phrases(
         &self,
         input: BatchDetectKeyPhrasesRequest,
-    ) -> Result<BatchDetectKeyPhrasesResponse, RusotoError<BatchDetectKeyPhrasesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectKeyPhrasesResponse,
+                        RusotoError<BatchDetectKeyPhrasesError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5966,27 +6426,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectKeyPhrasesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectKeyPhrasesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDetectKeyPhrasesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDetectKeyPhrasesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
-    async fn batch_detect_sentiment(
+    fn batch_detect_sentiment(
         &self,
         input: BatchDetectSentimentRequest,
-    ) -> Result<BatchDetectSentimentResponse, RusotoError<BatchDetectSentimentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        BatchDetectSentimentResponse,
+                        RusotoError<BatchDetectSentimentError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5994,27 +6464,34 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectSentimentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectSentimentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDetectSentimentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDetectSentimentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
-    async fn batch_detect_syntax(
+    fn batch_detect_syntax(
         &self,
         input: BatchDetectSyntaxRequest,
-    ) -> Result<BatchDetectSyntaxResponse, RusotoError<BatchDetectSyntaxError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<BatchDetectSyntaxResponse, RusotoError<BatchDetectSyntaxError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6022,27 +6499,34 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectSyntaxResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectSyntaxError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<BatchDetectSyntaxResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(BatchDetectSyntaxError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
-    async fn classify_document(
+    fn classify_document(
         &self,
         input: ClassifyDocumentRequest,
-    ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6050,27 +6534,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClassifyDocumentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ClassifyDocumentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ClassifyDocumentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ClassifyDocumentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
-    async fn create_document_classifier(
+    fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
-    ) -> Result<CreateDocumentClassifierResponse, RusotoError<CreateDocumentClassifierError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateDocumentClassifierResponse,
+                        RusotoError<CreateDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6081,27 +6575,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDocumentClassifierError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateDocumentClassifierResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateDocumentClassifierError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
-    async fn create_endpoint(
+    fn create_endpoint(
         &self,
         input: CreateEndpointRequest,
-    ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateEndpointResponse, RusotoError<CreateEndpointError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6109,26 +6609,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
-    async fn create_entity_recognizer(
+    fn create_entity_recognizer(
         &self,
         input: CreateEntityRecognizerRequest,
-    ) -> Result<CreateEntityRecognizerResponse, RusotoError<CreateEntityRecognizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        CreateEntityRecognizerResponse,
+                        RusotoError<CreateEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6136,27 +6647,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEntityRecognizerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateEntityRecognizerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateEntityRecognizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
-    async fn delete_document_classifier(
+    fn delete_document_classifier(
         &self,
         input: DeleteDocumentClassifierRequest,
-    ) -> Result<DeleteDocumentClassifierResponse, RusotoError<DeleteDocumentClassifierError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteDocumentClassifierResponse,
+                        RusotoError<DeleteDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6167,27 +6688,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentClassifierError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteDocumentClassifierResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteDocumentClassifierError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
-    async fn delete_endpoint(
+    fn delete_endpoint(
         &self,
         input: DeleteEndpointRequest,
-    ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6195,26 +6722,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
-    async fn delete_entity_recognizer(
+    fn delete_entity_recognizer(
         &self,
         input: DeleteEntityRecognizerRequest,
-    ) -> Result<DeleteEntityRecognizerResponse, RusotoError<DeleteEntityRecognizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DeleteEntityRecognizerResponse,
+                        RusotoError<DeleteEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6222,29 +6760,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEntityRecognizerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteEntityRecognizerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteEntityRecognizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
-    async fn describe_document_classification_job(
+    fn describe_document_classification_job(
         &self,
         input: DescribeDocumentClassificationJobRequest,
-    ) -> Result<
-        DescribeDocumentClassificationJobResponse,
-        RusotoError<DescribeDocumentClassificationJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentClassificationJobResponse,
+                        RusotoError<DescribeDocumentClassificationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6256,30 +6801,39 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentClassificationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentClassificationJobError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDocumentClassificationJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDocumentClassificationJobError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a document classifier.</p>
-    async fn describe_document_classifier(
+    fn describe_document_classifier(
         &self,
         input: DescribeDocumentClassifierRequest,
-    ) -> Result<DescribeDocumentClassifierResponse, RusotoError<DescribeDocumentClassifierError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDocumentClassifierResponse,
+                        RusotoError<DescribeDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6290,29 +6844,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentClassifierError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDocumentClassifierResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDocumentClassifierError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_dominant_language_detection_job(
+    fn describe_dominant_language_detection_job(
         &self,
         input: DescribeDominantLanguageDetectionJobRequest,
-    ) -> Result<
-        DescribeDominantLanguageDetectionJobResponse,
-        RusotoError<DescribeDominantLanguageDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeDominantLanguageDetectionJobResponse,
+                        RusotoError<DescribeDominantLanguageDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6324,29 +6885,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDominantLanguageDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDominantLanguageDetectionJobError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeDominantLanguageDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeDominantLanguageDetectionJobError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
-    async fn describe_endpoint(
+    fn describe_endpoint(
         &self,
         input: DescribeEndpointRequest,
-    ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6354,28 +6922,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_entities_detection_job(
+    fn describe_entities_detection_job(
         &self,
         input: DescribeEntitiesDetectionJobRequest,
-    ) -> Result<DescribeEntitiesDetectionJobResponse, RusotoError<DescribeEntitiesDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEntitiesDetectionJobResponse,
+                        RusotoError<DescribeEntitiesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6386,27 +6963,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntitiesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntitiesDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEntitiesDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEntitiesDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
-    async fn describe_entity_recognizer(
+    fn describe_entity_recognizer(
         &self,
         input: DescribeEntityRecognizerRequest,
-    ) -> Result<DescribeEntityRecognizerResponse, RusotoError<DescribeEntityRecognizerError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeEntityRecognizerResponse,
+                        RusotoError<DescribeEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6417,29 +7004,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntityRecognizerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeEntityRecognizerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeEntityRecognizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_key_phrases_detection_job(
+    fn describe_key_phrases_detection_job(
         &self,
         input: DescribeKeyPhrasesDetectionJobRequest,
-    ) -> Result<
-        DescribeKeyPhrasesDetectionJobResponse,
-        RusotoError<DescribeKeyPhrasesDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeKeyPhrasesDetectionJobResponse,
+                        RusotoError<DescribeKeyPhrasesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6451,29 +7045,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeKeyPhrasesDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeKeyPhrasesDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_sentiment_detection_job(
+    fn describe_sentiment_detection_job(
         &self,
         input: DescribeSentimentDetectionJobRequest,
-    ) -> Result<
-        DescribeSentimentDetectionJobResponse,
-        RusotoError<DescribeSentimentDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeSentimentDetectionJobResponse,
+                        RusotoError<DescribeSentimentDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6485,28 +7086,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSentimentDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSentimentDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeSentimentDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeSentimentDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
-    async fn describe_topics_detection_job(
+    fn describe_topics_detection_job(
         &self,
         input: DescribeTopicsDetectionJobRequest,
-    ) -> Result<DescribeTopicsDetectionJobResponse, RusotoError<DescribeTopicsDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DescribeTopicsDetectionJobResponse,
+                        RusotoError<DescribeTopicsDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6517,27 +7127,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTopicsDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTopicsDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DescribeTopicsDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DescribeTopicsDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
-    async fn detect_dominant_language(
+    fn detect_dominant_language(
         &self,
         input: DetectDominantLanguageRequest,
-    ) -> Result<DetectDominantLanguageResponse, RusotoError<DetectDominantLanguageError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        DetectDominantLanguageResponse,
+                        RusotoError<DetectDominantLanguageError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6545,27 +7165,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetectDominantLanguageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectDominantLanguageError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectDominantLanguageResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectDominantLanguageError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
-    async fn detect_entities(
+    fn detect_entities(
         &self,
         input: DetectEntitiesRequest,
-    ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6573,26 +7199,34 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectEntitiesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectEntitiesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectEntitiesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Detects the key noun phrases found in the text. </p>
-    async fn detect_key_phrases(
+    fn detect_key_phrases(
         &self,
         input: DetectKeyPhrasesRequest,
-    ) -> Result<DetectKeyPhrasesResponse, RusotoError<DetectKeyPhrasesError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<DetectKeyPhrasesResponse, RusotoError<DetectKeyPhrasesError>>,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6600,27 +7234,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetectKeyPhrasesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectKeyPhrasesError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectKeyPhrasesResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectKeyPhrasesError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
-    async fn detect_sentiment(
+    fn detect_sentiment(
         &self,
         input: DetectSentimentRequest,
-    ) -> Result<DetectSentimentResponse, RusotoError<DetectSentimentError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectSentimentResponse, RusotoError<DetectSentimentError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6628,26 +7268,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectSentimentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectSentimentError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectSentimentResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectSentimentError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
-    async fn detect_syntax(
+    fn detect_syntax(
         &self,
         input: DetectSyntaxRequest,
-    ) -> Result<DetectSyntaxResponse, RusotoError<DetectSyntaxError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DetectSyntaxResponse, RusotoError<DetectSyntaxError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6655,28 +7302,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectSyntaxResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectSyntaxError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DetectSyntaxResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DetectSyntaxError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
-    async fn list_document_classification_jobs(
+    fn list_document_classification_jobs(
         &self,
         input: ListDocumentClassificationJobsRequest,
-    ) -> Result<
-        ListDocumentClassificationJobsResponse,
-        RusotoError<ListDocumentClassificationJobsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDocumentClassificationJobsResponse,
+                        RusotoError<ListDocumentClassificationJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6688,27 +7343,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDocumentClassificationJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentClassificationJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDocumentClassificationJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDocumentClassificationJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the document classifiers that you have created.</p>
-    async fn list_document_classifiers(
+    fn list_document_classifiers(
         &self,
         input: ListDocumentClassifiersRequest,
-    ) -> Result<ListDocumentClassifiersResponse, RusotoError<ListDocumentClassifiersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDocumentClassifiersResponse,
+                        RusotoError<ListDocumentClassifiersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6719,29 +7384,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDocumentClassifiersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentClassifiersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDocumentClassifiersResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDocumentClassifiersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
-    async fn list_dominant_language_detection_jobs(
+    fn list_dominant_language_detection_jobs(
         &self,
         input: ListDominantLanguageDetectionJobsRequest,
-    ) -> Result<
-        ListDominantLanguageDetectionJobsResponse,
-        RusotoError<ListDominantLanguageDetectionJobsError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListDominantLanguageDetectionJobsResponse,
+                        RusotoError<ListDominantLanguageDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6753,29 +7425,35 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDominantLanguageDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDominantLanguageDetectionJobsError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListDominantLanguageDetectionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListDominantLanguageDetectionJobsError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of all existing endpoints that you've created.</p>
-    async fn list_endpoints(
+    fn list_endpoints(
         &self,
         input: ListEndpointsRequest,
-    ) -> Result<ListEndpointsResponse, RusotoError<ListEndpointsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListEndpointsResponse, RusotoError<ListEndpointsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6783,27 +7461,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListEndpointsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEndpointsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEndpointsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEndpointsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
-    async fn list_entities_detection_jobs(
+    fn list_entities_detection_jobs(
         &self,
         input: ListEntitiesDetectionJobsRequest,
-    ) -> Result<ListEntitiesDetectionJobsResponse, RusotoError<ListEntitiesDetectionJobsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEntitiesDetectionJobsResponse,
+                        RusotoError<ListEntitiesDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6814,27 +7502,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntitiesDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntitiesDetectionJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEntitiesDetectionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEntitiesDetectionJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
-    async fn list_entity_recognizers(
+    fn list_entity_recognizers(
         &self,
         input: ListEntityRecognizersRequest,
-    ) -> Result<ListEntityRecognizersResponse, RusotoError<ListEntityRecognizersError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListEntityRecognizersResponse,
+                        RusotoError<ListEntityRecognizersError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6842,28 +7540,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntityRecognizersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntityRecognizersError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListEntityRecognizersResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListEntityRecognizersError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
-    async fn list_key_phrases_detection_jobs(
+    fn list_key_phrases_detection_jobs(
         &self,
         input: ListKeyPhrasesDetectionJobsRequest,
-    ) -> Result<ListKeyPhrasesDetectionJobsResponse, RusotoError<ListKeyPhrasesDetectionJobsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListKeyPhrasesDetectionJobsResponse,
+                        RusotoError<ListKeyPhrasesDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6874,28 +7581,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListKeyPhrasesDetectionJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListKeyPhrasesDetectionJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
-    async fn list_sentiment_detection_jobs(
+    fn list_sentiment_detection_jobs(
         &self,
         input: ListSentimentDetectionJobsRequest,
-    ) -> Result<ListSentimentDetectionJobsResponse, RusotoError<ListSentimentDetectionJobsError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListSentimentDetectionJobsResponse,
+                        RusotoError<ListSentimentDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6906,27 +7622,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSentimentDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSentimentDetectionJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListSentimentDetectionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListSentimentDetectionJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
-    async fn list_tags_for_resource(
+    fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTagsForResourceResponse,
+                        RusotoError<ListTagsForResourceError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6934,27 +7660,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTagsForResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTagsForResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
-    async fn list_topics_detection_jobs(
+    fn list_topics_detection_jobs(
         &self,
         input: ListTopicsDetectionJobsRequest,
-    ) -> Result<ListTopicsDetectionJobsResponse, RusotoError<ListTopicsDetectionJobsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        ListTopicsDetectionJobsResponse,
+                        RusotoError<ListTopicsDetectionJobsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6965,29 +7701,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTopicsDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTopicsDetectionJobsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListTopicsDetectionJobsResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListTopicsDetectionJobsError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
-    async fn start_document_classification_job(
+    fn start_document_classification_job(
         &self,
         input: StartDocumentClassificationJobRequest,
-    ) -> Result<
-        StartDocumentClassificationJobResponse,
-        RusotoError<StartDocumentClassificationJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDocumentClassificationJobResponse,
+                        RusotoError<StartDocumentClassificationJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -6999,29 +7742,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDocumentClassificationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDocumentClassificationJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartDocumentClassificationJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartDocumentClassificationJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
-    async fn start_dominant_language_detection_job(
+    fn start_dominant_language_detection_job(
         &self,
         input: StartDominantLanguageDetectionJobRequest,
-    ) -> Result<
-        StartDominantLanguageDetectionJobResponse,
-        RusotoError<StartDominantLanguageDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDominantLanguageDetectionJobResponse,
+                        RusotoError<StartDominantLanguageDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -7033,30 +7783,39 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDominantLanguageDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDominantLanguageDetectionJobError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartDominantLanguageDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartDominantLanguageDetectionJobError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
-    async fn start_entities_detection_job(
+    fn start_entities_detection_job(
         &self,
         input: StartEntitiesDetectionJobRequest,
-    ) -> Result<StartEntitiesDetectionJobResponse, RusotoError<StartEntitiesDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartEntitiesDetectionJobResponse,
+                        RusotoError<StartEntitiesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7067,28 +7826,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartEntitiesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartEntitiesDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartEntitiesDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartEntitiesDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
-    async fn start_key_phrases_detection_job(
+    fn start_key_phrases_detection_job(
         &self,
         input: StartKeyPhrasesDetectionJobRequest,
-    ) -> Result<StartKeyPhrasesDetectionJobResponse, RusotoError<StartKeyPhrasesDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartKeyPhrasesDetectionJobResponse,
+                        RusotoError<StartKeyPhrasesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7099,28 +7867,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartKeyPhrasesDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartKeyPhrasesDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
-    async fn start_sentiment_detection_job(
+    fn start_sentiment_detection_job(
         &self,
         input: StartSentimentDetectionJobRequest,
-    ) -> Result<StartSentimentDetectionJobResponse, RusotoError<StartSentimentDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartSentimentDetectionJobResponse,
+                        RusotoError<StartSentimentDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7131,27 +7908,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSentimentDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSentimentDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartSentimentDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartSentimentDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
-    async fn start_topics_detection_job(
+    fn start_topics_detection_job(
         &self,
         input: StartTopicsDetectionJobRequest,
-    ) -> Result<StartTopicsDetectionJobResponse, RusotoError<StartTopicsDetectionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartTopicsDetectionJobResponse,
+                        RusotoError<StartTopicsDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7162,29 +7949,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTopicsDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTopicsDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartTopicsDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StartTopicsDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_dominant_language_detection_job(
+    fn stop_dominant_language_detection_job(
         &self,
         input: StopDominantLanguageDetectionJobRequest,
-    ) -> Result<
-        StopDominantLanguageDetectionJobResponse,
-        RusotoError<StopDominantLanguageDetectionJobError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopDominantLanguageDetectionJobResponse,
+                        RusotoError<StopDominantLanguageDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -7196,29 +7990,39 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopDominantLanguageDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDominantLanguageDetectionJobError::from_response(
-                response,
-            ))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopDominantLanguageDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopDominantLanguageDetectionJobError::from_response(
+                    response,
+                ))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_entities_detection_job(
+    fn stop_entities_detection_job(
         &self,
         input: StopEntitiesDetectionJobRequest,
-    ) -> Result<StopEntitiesDetectionJobResponse, RusotoError<StopEntitiesDetectionJobError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopEntitiesDetectionJobResponse,
+                        RusotoError<StopEntitiesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7229,28 +8033,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopEntitiesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopEntitiesDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopEntitiesDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopEntitiesDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_key_phrases_detection_job(
+    fn stop_key_phrases_detection_job(
         &self,
         input: StopKeyPhrasesDetectionJobRequest,
-    ) -> Result<StopKeyPhrasesDetectionJobResponse, RusotoError<StopKeyPhrasesDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopKeyPhrasesDetectionJobResponse,
+                        RusotoError<StopKeyPhrasesDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7261,28 +8074,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopKeyPhrasesDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopKeyPhrasesDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    async fn stop_sentiment_detection_job(
+    fn stop_sentiment_detection_job(
         &self,
         input: StopSentimentDetectionJobRequest,
-    ) -> Result<StopSentimentDetectionJobResponse, RusotoError<StopSentimentDetectionJobError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopSentimentDetectionJobResponse,
+                        RusotoError<StopSentimentDetectionJobError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7293,29 +8115,36 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopSentimentDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopSentimentDetectionJobError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopSentimentDetectionJobResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopSentimentDetectionJobError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
-    async fn stop_training_document_classifier(
+    fn stop_training_document_classifier(
         &self,
         input: StopTrainingDocumentClassifierRequest,
-    ) -> Result<
-        StopTrainingDocumentClassifierResponse,
-        RusotoError<StopTrainingDocumentClassifierError>,
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopTrainingDocumentClassifierResponse,
+                        RusotoError<StopTrainingDocumentClassifierError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
     > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
@@ -7327,28 +8156,37 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopTrainingDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTrainingDocumentClassifierError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopTrainingDocumentClassifierResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopTrainingDocumentClassifierError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
-    async fn stop_training_entity_recognizer(
+    fn stop_training_entity_recognizer(
         &self,
         input: StopTrainingEntityRecognizerRequest,
-    ) -> Result<StopTrainingEntityRecognizerResponse, RusotoError<StopTrainingEntityRecognizerError>>
-    {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StopTrainingEntityRecognizerResponse,
+                        RusotoError<StopTrainingEntityRecognizerError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7359,27 +8197,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopTrainingEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTrainingEntityRecognizerError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StopTrainingEntityRecognizerResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(StopTrainingEntityRecognizerError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
-    async fn tag_resource(
+    fn tag_resource(
         &self,
         input: TagResourceRequest,
-    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<TagResourceResponse, RusotoError<TagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7387,26 +8231,32 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(TagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
-    async fn untag_resource(
+    fn untag_resource(
         &self,
         input: UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UntagResourceResponse, RusotoError<UntagResourceError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7414,26 +8264,33 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UntagResourceResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UntagResourceError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Updates information about the specified endpoint.</p>
-    async fn update_endpoint(
+    fn update_endpoint(
         &self,
         input: UpdateEndpointRequest,
-    ) -> Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7441,18 +8298,19 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEndpointError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<UpdateEndpointResponse, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(UpdateEndpointError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

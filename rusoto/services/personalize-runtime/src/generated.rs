@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPersonalizedRankingRequest {
@@ -169,19 +170,38 @@ impl fmt::Display for GetRecommendationsError {
 }
 impl Error for GetRecommendationsError {}
 /// Trait representing the capabilities of the Amazon Personalize Runtime API. Amazon Personalize Runtime clients implement this trait.
-#[async_trait]
 pub trait PersonalizeRuntime {
     /// <p><p>Re-ranks a list of recommended items for the given user. The first item in the list is deemed the most likely item to be of interest to the user.</p> <note> <p>The solution backing the campaign must have been created using a recipe of type PERSONALIZED_RANKING.</p> </note></p>
-    async fn get_personalized_ranking(
+    fn get_personalized_ranking(
         &self,
         input: GetPersonalizedRankingRequest,
-    ) -> Result<GetPersonalizedRankingResponse, RusotoError<GetPersonalizedRankingError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetPersonalizedRankingResponse,
+                        RusotoError<GetPersonalizedRankingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 
     /// <p><p>Returns a list of recommended items. The required input depends on the recipe type used to create the solution backing the campaign, as follows:</p> <ul> <li> <p>RELATED<em>ITEMS - <code>itemId</code> required, <code>userId</code> not used</p> </li> <li> <p>USER</em>PERSONALIZATION - <code>itemId</code> optional, <code>userId</code> required</p> </li> </ul> <note> <p>Campaigns that are backed by a solution created using a recipe of type PERSONALIZED_RANKING use the API.</p> </note></p>
-    async fn get_recommendations(
+    fn get_recommendations(
         &self,
         input: GetRecommendationsRequest,
-    ) -> Result<GetRecommendationsResponse, RusotoError<GetRecommendationsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRecommendationsResponse,
+                        RusotoError<GetRecommendationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the Amazon Personalize Runtime API.
 #[derive(Clone)]
@@ -221,13 +241,22 @@ impl PersonalizeRuntimeClient {
     }
 }
 
-#[async_trait]
 impl PersonalizeRuntime for PersonalizeRuntimeClient {
     /// <p><p>Re-ranks a list of recommended items for the given user. The first item in the list is deemed the most likely item to be of interest to the user.</p> <note> <p>The solution backing the campaign must have been created using a recipe of type PERSONALIZED_RANKING.</p> </note></p>
-    async fn get_personalized_ranking(
+    fn get_personalized_ranking(
         &self,
         input: GetPersonalizedRankingRequest,
-    ) -> Result<GetPersonalizedRankingResponse, RusotoError<GetPersonalizedRankingError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetPersonalizedRankingResponse,
+                        RusotoError<GetPersonalizedRankingError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/personalize-ranking";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -237,28 +266,38 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPersonalizedRankingResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetPersonalizedRankingResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPersonalizedRankingError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetPersonalizedRankingError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p><p>Returns a list of recommended items. The required input depends on the recipe type used to create the solution backing the campaign, as follows:</p> <ul> <li> <p>RELATED<em>ITEMS - <code>itemId</code> required, <code>userId</code> not used</p> </li> <li> <p>USER</em>PERSONALIZATION - <code>itemId</code> optional, <code>userId</code> required</p> </li> </ul> <note> <p>Campaigns that are backed by a solution created using a recipe of type PERSONALIZED_RANKING use the API.</p> </note></p>
-    async fn get_recommendations(
+    fn get_recommendations(
         &self,
         input: GetRecommendationsRequest,
-    ) -> Result<GetRecommendationsResponse, RusotoError<GetRecommendationsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        GetRecommendationsResponse,
+                        RusotoError<GetRecommendationsError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/recommendations";
 
         let mut request = SignedRequest::new("POST", "personalize", &self.region, &request_uri);
@@ -268,20 +307,20 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRecommendationsResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<GetRecommendationsResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRecommendationsError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(GetRecommendationsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

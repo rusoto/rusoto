@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTokenRequest {
@@ -372,25 +373,46 @@ impl fmt::Display for StartDeviceAuthorizationError {
 }
 impl Error for StartDeviceAuthorizationError {}
 /// Trait representing the capabilities of the SSO OIDC API. SSO OIDC clients implement this trait.
-#[async_trait]
 pub trait SsoOidc {
     /// <p>Creates and returns an access token for the authorized client. The access token issued will be used to fetch short-term credentials for the assigned roles in the AWS account.</p>
-    async fn create_token(
+    fn create_token(
         &self,
         input: CreateTokenRequest,
-    ) -> Result<CreateTokenResponse, RusotoError<CreateTokenError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTokenResponse, RusotoError<CreateTokenError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Registers a client with AWS SSO. This allows clients to initiate device authorization. The output should be persisted for reuse through many authentication requests.</p>
-    async fn register_client(
+    fn register_client(
         &self,
         input: RegisterClientRequest,
-    ) -> Result<RegisterClientResponse, RusotoError<RegisterClientError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterClientResponse, RusotoError<RegisterClientError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Initiates device authorization by requesting a pair of verification codes from the authorization service.</p>
-    async fn start_device_authorization(
+    fn start_device_authorization(
         &self,
         input: StartDeviceAuthorizationRequest,
-    ) -> Result<StartDeviceAuthorizationResponse, RusotoError<StartDeviceAuthorizationError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDeviceAuthorizationResponse,
+                        RusotoError<StartDeviceAuthorizationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the SSO OIDC API.
 #[derive(Clone)]
@@ -430,13 +452,18 @@ impl SsoOidcClient {
     }
 }
 
-#[async_trait]
 impl SsoOidc for SsoOidcClient {
     /// <p>Creates and returns an access token for the authorized client. The access token issued will be used to fetch short-term credentials for the assigned roles in the AWS account.</p>
-    async fn create_token(
+    fn create_token(
         &self,
         input: CreateTokenRequest,
-    ) -> Result<CreateTokenResponse, RusotoError<CreateTokenError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateTokenResponse, RusotoError<CreateTokenError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/token";
 
         let mut request = SignedRequest::new("POST", "awsssooidc", &self.region, &request_uri);
@@ -446,28 +473,34 @@ impl SsoOidc for SsoOidcClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTokenResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateTokenResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTokenError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateTokenError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Registers a client with AWS SSO. This allows clients to initiate device authorization. The output should be persisted for reuse through many authentication requests.</p>
-    async fn register_client(
+    fn register_client(
         &self,
         input: RegisterClientRequest,
-    ) -> Result<RegisterClientResponse, RusotoError<RegisterClientError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<RegisterClientResponse, RusotoError<RegisterClientError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/client/register";
 
         let mut request = SignedRequest::new("POST", "awsssooidc", &self.region, &request_uri);
@@ -477,28 +510,38 @@ impl SsoOidc for SsoOidcClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterClientResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<RegisterClientResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterClientError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(RegisterClientError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Initiates device authorization by requesting a pair of verification codes from the authorization service.</p>
-    async fn start_device_authorization(
+    fn start_device_authorization(
         &self,
         input: StartDeviceAuthorizationRequest,
-    ) -> Result<StartDeviceAuthorizationResponse, RusotoError<StartDeviceAuthorizationError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<
+                    Output = Result<
+                        StartDeviceAuthorizationResponse,
+                        RusotoError<StartDeviceAuthorizationError>,
+                    >,
+                > + Send
+                + 'static,
+        >,
+    > {
         let request_uri = "/device_authorization";
 
         let mut request = SignedRequest::new("POST", "awsssooidc", &self.region, &request_uri);
@@ -508,20 +551,20 @@ impl SsoOidc for SsoOidcClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDeviceAuthorizationResponse, _>()?;
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let result = proto::json::ResponsePayload::new(&response)
+                    .deserialize::<StartDeviceAuthorizationResponse, _>()?;
 
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDeviceAuthorizationError::from_response(response))
+                Ok(result)
+            } else {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                Err(StartDeviceAuthorizationError::from_response(response))
+            }
         }
+        .boxed()
     }
 }

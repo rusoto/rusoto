@@ -13,17 +13,18 @@
 use std::error::Error;
 use std::fmt;
 
-use async_trait::async_trait;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use futures::prelude::*;
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+use std::pin::Pin;
 /// <p>The configuration that allows a service such as CodePipeline to connect to a third-party code repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -241,31 +242,54 @@ impl fmt::Display for ListConnectionsError {
 }
 impl Error for ListConnectionsError {}
 /// Trait representing the capabilities of the AWS CodeStar connections API. AWS CodeStar connections clients implement this trait.
-#[async_trait]
 pub trait CodeStarConnections {
     /// <p>Creates a connection that can then be given to other AWS services like CodePipeline so that it can access third-party code repositories. The connection is in pending status until the third-party connection handshake is completed from the console.</p>
-    async fn create_connection(
+    fn create_connection(
         &self,
         input: CreateConnectionInput,
-    ) -> Result<CreateConnectionOutput, RusotoError<CreateConnectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateConnectionOutput, RusotoError<CreateConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>The connection to be deleted.</p>
-    async fn delete_connection(
+    fn delete_connection(
         &self,
         input: DeleteConnectionInput,
-    ) -> Result<DeleteConnectionOutput, RusotoError<DeleteConnectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteConnectionOutput, RusotoError<DeleteConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Returns the connection ARN and details such as status, owner, and provider type.</p>
-    async fn get_connection(
+    fn get_connection(
         &self,
         input: GetConnectionInput,
-    ) -> Result<GetConnectionOutput, RusotoError<GetConnectionError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetConnectionOutput, RusotoError<GetConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 
     /// <p>Lists the connections associated with your account.</p>
-    async fn list_connections(
+    fn list_connections(
         &self,
         input: ListConnectionsInput,
-    ) -> Result<ListConnectionsOutput, RusotoError<ListConnectionsError>>;
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListConnectionsOutput, RusotoError<ListConnectionsError>>>
+                + Send
+                + 'static,
+        >,
+    >;
 }
 /// A client for the AWS CodeStar connections API.
 #[derive(Clone)]
@@ -305,13 +329,18 @@ impl CodeStarConnectionsClient {
     }
 }
 
-#[async_trait]
 impl CodeStarConnections for CodeStarConnectionsClient {
     /// <p>Creates a connection that can then be given to other AWS services like CodePipeline so that it can access third-party code repositories. The connection is in pending status until the third-party connection handshake is completed from the console.</p>
-    async fn create_connection(
+    fn create_connection(
         &self,
         input: CreateConnectionInput,
-    ) -> Result<CreateConnectionOutput, RusotoError<CreateConnectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<CreateConnectionOutput, RusotoError<CreateConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -322,26 +351,33 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConnectionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<CreateConnectionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(CreateConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>The connection to be deleted.</p>
-    async fn delete_connection(
+    fn delete_connection(
         &self,
         input: DeleteConnectionInput,
-    ) -> Result<DeleteConnectionOutput, RusotoError<DeleteConnectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<DeleteConnectionOutput, RusotoError<DeleteConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -352,26 +388,33 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConnectionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<DeleteConnectionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(DeleteConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Returns the connection ARN and details such as status, owner, and provider type.</p>
-    async fn get_connection(
+    fn get_connection(
         &self,
         input: GetConnectionInput,
-    ) -> Result<GetConnectionOutput, RusotoError<GetConnectionError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<GetConnectionOutput, RusotoError<GetConnectionError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -382,26 +425,32 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(GetConnectionError::from_response(response))
+            }
         }
+        .boxed()
     }
 
     /// <p>Lists the connections associated with your account.</p>
-    async fn list_connections(
+    fn list_connections(
         &self,
         input: ListConnectionsInput,
-    ) -> Result<ListConnectionsOutput, RusotoError<ListConnectionsError>> {
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<ListConnectionsOutput, RusotoError<ListConnectionsError>>>
+                + Send
+                + 'static,
+        >,
+    > {
         let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -412,18 +461,19 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListConnectionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConnectionsError::from_response(response))
+        let fut = self.client.sign_and_dispatch(request);
+        async move {
+            let mut response = fut.await.map_err(RusotoError::from)?;
+            if response.status.is_success() {
+                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response)
+                    .deserialize::<ListConnectionsOutput, _>()
+            } else {
+                let try_response = response.buffer().await;
+                let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                Err(ListConnectionsError::from_response(response))
+            }
         }
+        .boxed()
     }
 }
