@@ -134,7 +134,6 @@ where
         use std::error::Error;
         use std::fmt;
 
-        use async_trait::async_trait;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
@@ -163,7 +162,6 @@ where
     // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
              "/// Trait representing the capabilities of the {service_name} API. {service_name} clients implement this trait.
-        #[async_trait]
         pub trait {trait_name} {{
         ",
              trait_name = service.service_type_name(),
@@ -211,7 +209,6 @@ where
             }}
         }}
 
-        #[async_trait]
         impl {trait_name} for {type_name} {{
         ",
         service_name = service.name(),

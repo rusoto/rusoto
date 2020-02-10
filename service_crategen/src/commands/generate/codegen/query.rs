@@ -45,14 +45,16 @@ impl GenerateProtocol for QueryGenerator {
                     params.put(\"Version\", \"{api_version}\");
                     {serialize_input}
                     {set_input_params}
+                    let fut = self.client.sign_and_dispatch(request);
+                    async move {{
+                        let mut response = fut.await.map_err(RusotoError::from)?;
+                        if !response.status.is_success() {{
+                            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                            return Err({error_type}::from_response(response));
+                        }}
 
-                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
-                    if !response.status.is_success() {{
-                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                        return Err({error_type}::from_response(response));
-                    }}
-
-                    {parse_payload}
+                        {parse_payload}
+                    }}.boxed()
                 }}
                 ",
                      api_version = service.api_version(),
@@ -74,8 +76,10 @@ impl GenerateProtocol for QueryGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         writeln!(writer,
                  "use std::str::FromStr;
+            use std::pin::Pin;
             use xml::EventReader;
             use xml::reader::ParserConfig;
+            use futures::prelude::*;
             use rusoto_core::param::{{Params, ServiceParams}};
             use rusoto_core::signature::SignedRequest;
             use rusoto_core::proto::xml::util::{{Next, Peek, XmlParseError, XmlResponse}};
@@ -485,7 +489,7 @@ fn generate_method_signature(
 ) -> String {
     if operation.input.is_some() {
         format!(
-            "async fn {operation_name}(&self, input: {input_type}) -> Result<{output_type}, RusotoError<{error_type}>>",
+            "fn {operation_name}(&self, input: {input_type}) -> Pin<Box<dyn Future<Output = Result<{output_type}, RusotoError<{error_type}>>> + Send + 'static>>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -493,7 +497,7 @@ fn generate_method_signature(
         )
     } else {
         format!(
-            "async fn {operation_name}(&self) -> Result<{output_type}, RusotoError<{error_type}>>",
+            "fn {operation_name}(&self) -> Pin<Box<dyn Future<Output = Result<{output_type}, RusotoError<{error_type}>>> + Send + 'static>>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
             error_type = error_type_name(service, operation_name),

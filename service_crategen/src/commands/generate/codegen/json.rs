@@ -20,7 +20,7 @@ impl GenerateProtocol for JsonGenerator {
                 writer,
                 "
                 {documentation}
-                {method_signature} -> Result<{output_type}, RusotoError<{error_type}>>;
+                {method_signature} -> Pin<Box<dyn Future<Output = Result<{output_type}, RusotoError<{error_type}>>> + Send + 'static>>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                 method_signature = generate_method_signature(service, operation),
@@ -38,21 +38,24 @@ impl GenerateProtocol for JsonGenerator {
             writeln!(writer,
                      "
                 {documentation}
-                {method_signature} -> Result<{output_type}, RusotoError<{error_type}>> {{
+                {method_signature} -> Pin<Box<dyn Future<Output = Result<{output_type}, RusotoError<{error_type}>>> + Send + 'static>> {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", &self.region, \"{request_uri}\");
                     {modify_endpoint_prefix}
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
-                    if response.status.is_success() {{
-                        {ok_response}
-                    }} else {{
-                        let try_response = response.buffer().await;
-                        let response = try_response.map_err(RusotoError::HttpDispatch)?;
-                        Err({error_type}::from_response(response))
-                    }}
+                    let fut = self.client.sign_and_dispatch(request);
+                    async move {{
+                        let mut response = fut.await.map_err(RusotoError::from)?;
+                        if response.status.is_success() {{
+                            {ok_response}
+                        }} else {{
+                            let try_response = response.buffer().await;
+                            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                            Err({error_type}::from_response(response))
+                        }}
+                    }}.boxed()
                 }}
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
@@ -76,7 +79,9 @@ impl GenerateProtocol for JsonGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let res = writeln!(
             writer,
-            "use rusoto_core::proto;
+            "use std::pin::Pin;
+        use futures::prelude::*;
+        use rusoto_core::proto;
         use rusoto_core::signature::SignedRequest;
         #[allow(unused_imports)]
         use serde::{{Deserialize, Serialize}};"
@@ -121,13 +126,13 @@ fn generate_method_signature(service: &Service<'_>, operation: &Operation) -> St
             .unwrap_or(false)
     {
         format!(
-            "async fn {method_name}(&self, input: {input_type}) ",
+            "fn {method_name}(&self, input: {input_type}) ",
             input_type = operation.input_shape(),
             method_name = operation.name.to_snake_case()
         )
     } else {
         format!(
-            "async fn {method_name}(&self) ",
+            "fn {method_name}(&self) ",
             method_name = operation.name.to_snake_case()
         )
     }

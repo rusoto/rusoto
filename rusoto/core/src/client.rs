@@ -1,3 +1,4 @@
+use std::pin::Pin;
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
@@ -8,7 +9,7 @@ use crate::encoding::ContentEncoding;
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use crate::signature::SignedRequest;
 
-use async_trait::async_trait;
+use futures::prelude::*;
 use lazy_static::lazy_static;
 use tokio::time;
 
@@ -99,11 +100,11 @@ impl Client {
     }
 
     /// Fetch credentials, sign the request and dispatch it.
-    pub async fn sign_and_dispatch(
+    pub fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Result<HttpResponse, SignAndDispatchError> {
-        self.inner.sign_and_dispatch(request, None).await
+    ) -> impl Future<Output = Result<HttpResponse, SignAndDispatchError>> + Send + 'static {
+        self.inner.sign_and_dispatch(request, None)
     }
 }
 
@@ -116,13 +117,12 @@ pub enum SignAndDispatchError {
     Dispatch(HttpDispatchError),
 }
 
-#[async_trait]
 trait SignAndDispatch {
-    async fn sign_and_dispatch(
+    fn sign_and_dispatch(
         &self,
         request: SignedRequest,
         timeout: Option<Duration>,
-    ) -> Result<HttpResponse, SignAndDispatchError>;
+    ) -> Pin<Box<dyn Future<Output = Result<HttpResponse, SignAndDispatchError>> + Send + 'static>>;
 }
 
 struct ClientInner<P, D> {
@@ -177,18 +177,18 @@ where
         .map_err(SignAndDispatchError::Dispatch)
 }
 
-#[async_trait]
 impl<P, D> SignAndDispatch for ClientInner<P, D>
 where
     P: ProvideAwsCredentials + Send + Sync + 'static,
     D: DispatchSignedRequest + Send + Sync + 'static,
 {
-    async fn sign_and_dispatch(
+    fn sign_and_dispatch(
         &self,
         request: SignedRequest,
         timeout: Option<Duration>,
-    ) -> Result<HttpResponse, SignAndDispatchError> {
-        sign_and_dispatch(self.clone(), request, timeout).await
+    ) -> Pin<Box<dyn Future<Output = Result<HttpResponse, SignAndDispatchError>> + Send + 'static>>
+    {
+        sign_and_dispatch(self.clone(), request, timeout).boxed()
     }
 }
 
