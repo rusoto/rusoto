@@ -19,7 +19,8 @@
             <a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
             <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
             <img src="https://tokei.rs/b1/github/rusoto/rusoto"></img>
-	    <a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
+            <a href="https://deps.rs/repo/github/rusoto/rusoto" title="Dependency Status"><img src="https://deps.rs/repo/github/rusoto/rusoto/status.svg" alt="dependency-status-badge"></img></a>
+            <a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
         </td>
     </tr>
 </table>
