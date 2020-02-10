@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(Please put changes here)
+- Change response future lifetimes to `'static`
 
 ## [0.43.0-beta.0] - 2020-02-07
 
