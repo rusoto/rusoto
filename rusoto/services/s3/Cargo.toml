@@ -15,7 +15,6 @@ exclude = ["test_resources/*"]
 [build-dependencies]
 
 [dependencies]
-async-trait = "0.1"
 bytes = "0.5"
 xml-rs = "0.8"
 
