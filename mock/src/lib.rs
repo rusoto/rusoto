@@ -184,3 +184,70 @@ impl ReadMockResponse for MockResponseReader {
         mock_response
     }
 }
+
+/// Returns sequential mock API responses consuming a collection of MockRequestDispatch
+///
+///
+/// ```rust
+/// extern crate rusoto_mock;
+/// // extern crate rusoto_s3;
+///
+/// use rusoto_mock::{MockCredentialsProvider, MockRequestDispatcher, MockResponseReader, MultipleMockRequestDispatcher};
+///
+/// fn main() {
+///    // let s3 = rusoto_s3::S3Client::new_with(
+///    //   MultipleMockRequestDispatcher(vec![
+///    //      MockRequestDispatcher::default().with_body(
+///    //          MockResponseReader::read_response("test-data", "s3-response-first.json")
+///    //      ),
+///    //      MockRequestDispatcher::default().with_body(
+///    //          MockResponseReader::read_response("test-data", "s3-response-second.json")
+///    //      ),
+///    //   ]),
+///    //   MockCredentialsProvider,
+///    //   Default::default()
+///    // );
+/// }
+/// ```
+pub struct MultipleMockRequestDispatcher<I>
+where
+    I: Iterator<Item = MockRequestDispatcher>,
+{
+    iterator: I,
+}
+
+impl<I> MultipleMockRequestDispatcher<I>
+where
+    I: Iterator<Item = MockRequestDispatcher>,
+{
+    /// Constructs a new MultipleMockRequestDispatcher with a collection of MockRequestDispatch as input
+    pub fn new<C>(collection: C) -> MultipleMockRequestDispatcher<I>
+    where
+        C: IntoIterator<Item = MockRequestDispatcher>,
+        C: IntoIterator<IntoIter = I>,
+    {
+        MultipleMockRequestDispatcher {
+            iterator: collection.into_iter(),
+        }
+    }
+}
+
+impl<I> DispatchSignedRequest for MultipleMockRequestDispatcher<I>
+where
+    I: Iterator<Item = MockRequestDispatcher>,
+{
+    type Future = FutureResult<HttpResponse, HttpDispatchError>;
+
+    fn dispatch(&self, request: SignedRequest, _timeout: Option<Duration>) -> Self::Future {
+        unsafe {
+            let self_ptr: *const Self = self;
+            let mut_self_ptr: *mut Self = self_ptr as *mut Self;
+
+            (*mut_self_ptr)
+                .iterator
+                .next()
+                .unwrap()
+                .dispatch(request, _timeout)
+        }
+    }
+}

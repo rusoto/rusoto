@@ -516,3 +516,29 @@ fn test_parse_no_such_bucket_error() {
         err
     );
 }
+
+#[test]
+fn test_multiple_mock() {
+    let mock = MultipleMockRequestDispatcher::new(vec![
+        MockRequestDispatcher::with_status(200)
+            .with_body("")
+            .with_header("x-amz-expiration", "foo1")
+            .with_header("x-amz-restore", "bar1"),
+        MockRequestDispatcher::with_status(200)
+            .with_body("")
+            .with_header("x-amz-expiration", "foo2")
+            .with_header("x-amz-restore", "bar2"),
+    ]);
+
+    let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+
+    let mut request = HeadObjectRequest::default();
+    let mut result = client.head_object(request).sync().unwrap();
+    assert_eq!(result.expiration, Some("foo1".to_string()));
+    assert_eq!(result.restore, Some("bar1".to_string()));
+
+    request = HeadObjectRequest::default();
+    result = client.head_object(request).sync().unwrap();
+    assert_eq!(result.expiration, Some("foo2".to_string()));
+    assert_eq!(result.restore, Some("bar2".to_string()));
+}

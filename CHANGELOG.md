@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-(Please put changes here)
+- Add `MultipleMockRequestDispatcher` to permit mocking multiple requests to the same client.
 
 ## [0.42.0] - 2019-11-18
 
