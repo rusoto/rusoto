@@ -183,3 +183,51 @@ impl ReadMockResponse for MockResponseReader {
         mock_response
     }
 }
+
+/// Returns sequential mock API responses consuming a collection of MockRequestDispatch
+pub struct MultipleMockRequestDispatcher<I>
+where
+    I: Iterator<Item = MockRequestDispatcher>,
+{
+    iterator: I,
+}
+
+impl<I> MultipleMockRequestDispatcher<I>
+where
+    I: Iterator<Item = MockRequestDispatcher>,
+{
+    /// Constructs a new MultipleMockRequestDispatcher with a collection of MockRequestDispatch as input
+    pub fn new<C>(collection: C) -> MultipleMockRequestDispatcher<I>
+    where
+        C: IntoIterator<Item = MockRequestDispatcher>,
+        C: IntoIterator<IntoIter = I>,
+    {
+        MultipleMockRequestDispatcher {
+            iterator: collection.into_iter(),
+        }
+    }
+}
+
+impl<I> DispatchSignedRequest for MultipleMockRequestDispatcher<I>
+where
+    I: Iterator<Item = MockRequestDispatcher>,
+{
+    //type Future = FutureResult<HttpResponse, HttpDispatchError>;
+
+    fn dispatch(
+        &self,
+        request: SignedRequest,
+        _timeout: Option<Duration>,
+    ) -> rusoto_core::request::DispatchSignedRequestFuture {
+        unsafe {
+            let self_ptr: *const Self = self;
+            let mut_self_ptr: *mut Self = self_ptr as *mut Self;
+
+            (*mut_self_ptr)
+                .iterator
+                .next()
+                .unwrap()
+                .dispatch(request, _timeout)
+        }
+    }
+}
