@@ -220,10 +220,7 @@ where
         _timeout: Option<Duration>,
     ) -> rusoto_core::request::DispatchSignedRequestFuture {
         unsafe {
-            let self_ptr: *const Self = self;
-            let mut_self_ptr: *mut Self = self_ptr as *mut Self;
-
-            (*mut_self_ptr)
+            (*(self as *const Self as *mut Self))
                 .iterator
                 .next()
                 .unwrap()
