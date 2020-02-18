@@ -212,13 +212,12 @@ impl<I> DispatchSignedRequest for MultipleMockRequestDispatcher<I>
 where
     I: Iterator<Item = MockRequestDispatcher>,
 {
-    //type Future = FutureResult<HttpResponse, HttpDispatchError>;
-
     fn dispatch(
         &self,
         request: SignedRequest,
         _timeout: Option<Duration>,
     ) -> rusoto_core::request::DispatchSignedRequestFuture {
+        // Unsafe code required to increment iterator due to non-mutable &self
         unsafe {
             (*(self as *const Self as *mut Self))
                 .iterator
