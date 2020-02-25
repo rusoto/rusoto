@@ -108,7 +108,7 @@ impl ProvideAwsCredentials for WebIdentityProvider {
         let mut req = AssumeRoleWithWebIdentityRequest::default();
 
         req.role_arn = self.role_arn.resolve()?;
-        req.web_identity_token = self.web_identity_token.resolve()?.to_string();
+        req.web_identity_token = self.web_identity_token.resolve()?.as_ref().to_string();
         req.role_session_name = self.role_session_name.resolve()?;
 
         let assume_role = sts.assume_role_with_web_identity(req).await;
