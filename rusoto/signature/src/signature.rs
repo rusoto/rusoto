@@ -28,7 +28,7 @@ use log::{debug, log_enabled, Level::Debug};
 use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 use sha2::{Digest, Sha256};
-use time::{Date, PrimitiveDateTime};
+use time::{Date, OffsetDateTime};
 
 use crate::credential::AwsCredentials;
 use crate::region::Region;
@@ -274,7 +274,7 @@ impl SignedRequest {
         self.sign(creds);
         let hostname = self.hostname();
 
-        let current_time = PrimitiveDateTime::now();
+        let current_time = OffsetDateTime::now();
         let current_time_fmted = current_time.format("%Y%m%dT%H%M%SZ");
         let current_date = current_time.format("%Y%m%d");
 
@@ -439,7 +439,7 @@ impl SignedRequest {
     /// Authorization header uses AWS4-HMAC-SHA256 for signing.
     pub fn sign_with_plus(&mut self, creds: &AwsCredentials, should_treat_plus_literally: bool) {
         self.complement_with_plus(should_treat_plus_literally);
-        let date = PrimitiveDateTime::now();
+        let date = OffsetDateTime::now();
         self.remove_header("x-amz-date");
         self.add_header("x-amz-date", &date.format("%Y%m%dT%H%M%SZ"));
 
@@ -620,7 +620,7 @@ fn sign_string(
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
 pub fn string_to_sign(
-    date: PrimitiveDateTime,
+    date: OffsetDateTime,
     hashed_canonical_request: &str,
     scope: &str,
 ) -> String {
