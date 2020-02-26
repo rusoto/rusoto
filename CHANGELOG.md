@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.43.0-beta.0] - 2020-02-07
 
+- Add ability to set local agent prepended to the default User-Agent
 - Move to `std::future::Future`, async/.await, and Tokio 0.2
 - Update to botocore 1.14.9
 - Add Discord invite link to README.md and CONTRIBUTING.md

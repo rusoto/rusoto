@@ -213,6 +213,7 @@ impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
     inner: HyperClient<C, Body>,
+    local_agent: Option<String>,
 }
 
 impl HttpClient {
@@ -237,6 +238,12 @@ impl HttpClient {
 
         Ok(Self::from_connector_with_config(connector, config))
     }
+
+    /// Sets a local agent that is prepended to the default HTTP
+    /// `User-Agent` used by Rusoto.
+    pub fn local_agent(&mut self, local_agent: String) {
+        self.local_agent = Some(local_agent)
+    }
 }
 
 impl<C> HttpClient<C>
@@ -246,7 +253,10 @@ where
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
         let inner = HyperClient::builder().build(connector);
-        HttpClient { inner }
+        HttpClient {
+            inner,
+            local_agent: None,
+        }
     }
 
     /// Allows for a custom connector to be used with the HttpClient
@@ -258,13 +268,19 @@ where
             .map(|sz| builder.http1_read_buf_exact_size(sz));
         let inner = builder.build(connector);
 
-        HttpClient { inner }
+        HttpClient {
+            inner,
+            local_agent: None,
+        }
     }
 
     /// Alows for a custom builder and connector to be used with the HttpClient
     pub fn from_builder(builder: HyperBuilder, connector: C) -> Self {
         let inner = builder.build(connector);
-        HttpClient { inner }
+        HttpClient {
+            inner,
+            local_agent: None,
+        }
     }
 }
 
@@ -295,10 +311,11 @@ impl Default for HttpConfig {
     }
 }
 
-async fn http_client_dispatch<C>(
+async fn http_client_dispatch<'a, C>(
     client: HyperClient<C, Body>,
     request: SignedRequest,
     timeout: Option<Duration>,
+    user_agent: HeaderValue,
 ) -> Result<HttpResponse, HttpDispatchError>
 where
     C: Connect + Send + Sync + Clone + 'static,
@@ -342,7 +359,7 @@ where
 
     // Add a default user-agent header if one is not already present.
     if !hyper_headers.contains_key("user-agent") {
-        hyper_headers.insert("user-agent", DEFAULT_USER_AGENT.parse().unwrap());
+        hyper_headers.insert("user-agent", user_agent);
     }
 
     let mut final_uri = format!(
@@ -407,7 +424,14 @@ where
         request: SignedRequest,
         timeout: Option<Duration>,
     ) -> DispatchSignedRequestFuture {
-        http_client_dispatch::<C>(self.inner.clone(), request, timeout).boxed()
+        let user_agent = self
+            .local_agent
+            .as_ref()
+            .map(|agent| format!("{} {}", agent, *DEFAULT_USER_AGENT).parse())
+            .unwrap_or_else(|| DEFAULT_USER_AGENT.parse())
+            .expect("failed to parse user-agent string");
+
+        http_client_dispatch::<C>(self.inner.clone(), request, timeout, user_agent).boxed()
     }
 }
 
