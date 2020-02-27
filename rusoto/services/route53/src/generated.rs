@@ -12004,6 +12004,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12061,6 +12062,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12118,6 +12120,7 @@ impl Route53 for Route53Client {
             resource_type = input.resource_type
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12480,6 +12483,7 @@ impl Route53 for Route53Client {
     {
         let request_uri = format!("/2013-04-01/trafficpolicy/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12540,6 +12544,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12598,6 +12603,7 @@ impl Route53 for Route53Client {
             health_check_id = input.health_check_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -12640,6 +12646,7 @@ impl Route53 for Route53Client {
     ) -> Result<DeleteHostedZoneResponse, RusotoError<DeleteHostedZoneError>> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -12682,6 +12689,7 @@ impl Route53 for Route53Client {
     ) -> Result<DeleteQueryLoggingConfigResponse, RusotoError<DeleteQueryLoggingConfigError>> {
         let request_uri = format!("/2013-04-01/queryloggingconfig/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -12727,6 +12735,7 @@ impl Route53 for Route53Client {
     {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -12775,6 +12784,7 @@ impl Route53 for Route53Client {
             version = input.version
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -12818,6 +12828,7 @@ impl Route53 for Route53Client {
     {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
@@ -12868,6 +12879,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12929,6 +12941,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -12982,6 +12995,7 @@ impl Route53 for Route53Client {
     ) -> Result<GetAccountLimitResponse, RusotoError<GetAccountLimitError>> {
         let request_uri = format!("/2013-04-01/accountlimit/{type}", type = input.type_)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13024,6 +13038,7 @@ impl Route53 for Route53Client {
     ) -> Result<GetChangeResponse, RusotoError<GetChangeError>> {
         let request_uri = format!("/2013-04-01/change/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13159,6 +13174,7 @@ impl Route53 for Route53Client {
             health_check_id = input.health_check_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13246,6 +13262,7 @@ impl Route53 for Route53Client {
             health_check_id = input.health_check_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13295,6 +13312,7 @@ impl Route53 for Route53Client {
             health_check_id = input.health_check_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13339,6 +13357,7 @@ impl Route53 for Route53Client {
     ) -> Result<GetHostedZoneResponse, RusotoError<GetHostedZoneError>> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13418,7 +13437,7 @@ impl Route53 for Route53Client {
         &self,
         input: GetHostedZoneLimitRequest,
     ) -> Result<GetHostedZoneLimitResponse, RusotoError<GetHostedZoneLimitError>> {
-        let request_uri = format!("/2013-04-01/hostedzonelimit/{id}/{type}", id = input.hosted_zone_id, type = input.type_).replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/change/change/", "/change/");
+        let request_uri = format!("/2013-04-01/hostedzonelimit/{id}/{type}", id = input.hosted_zone_id, type = input.type_).replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/hostedzone//hostedzone/", "/hostedzone/").replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
@@ -13460,6 +13479,7 @@ impl Route53 for Route53Client {
     ) -> Result<GetQueryLoggingConfigResponse, RusotoError<GetQueryLoggingConfigError>> {
         let request_uri = format!("/2013-04-01/queryloggingconfig/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13504,6 +13524,7 @@ impl Route53 for Route53Client {
     ) -> Result<GetReusableDelegationSetResponse, RusotoError<GetReusableDelegationSetError>> {
         let request_uri = format!("/2013-04-01/delegationset/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13549,7 +13570,7 @@ impl Route53 for Route53Client {
         GetReusableDelegationSetLimitResponse,
         RusotoError<GetReusableDelegationSetLimitError>,
     > {
-        let request_uri = format!("/2013-04-01/reusabledelegationsetlimit/{id}/{type}", id = input.delegation_set_id, type = input.type_).replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/change/change/", "/change/");
+        let request_uri = format!("/2013-04-01/reusabledelegationsetlimit/{id}/{type}", id = input.delegation_set_id, type = input.type_).replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/hostedzone//hostedzone/", "/hostedzone/").replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
@@ -13597,6 +13618,7 @@ impl Route53 for Route53Client {
             version = input.version
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13639,6 +13661,7 @@ impl Route53 for Route53Client {
     ) -> Result<GetTrafficPolicyInstanceResponse, RusotoError<GetTrafficPolicyInstanceError>> {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -13995,6 +14018,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14110,6 +14134,7 @@ impl Route53 for Route53Client {
             resource_type = input.resource_type
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14155,6 +14180,7 @@ impl Route53 for Route53Client {
             resource_type = input.resource_type
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -14440,6 +14466,7 @@ impl Route53 for Route53Client {
     {
         let request_uri = format!("/2013-04-01/trafficpolicies/{id}/versions", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14499,6 +14526,7 @@ impl Route53 for Route53Client {
             id = input.hosted_zone_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
@@ -14611,6 +14639,7 @@ impl Route53 for Route53Client {
             health_check_id = input.health_check_id
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -14662,6 +14691,7 @@ impl Route53 for Route53Client {
     ) -> Result<UpdateHostedZoneCommentResponse, RusotoError<UpdateHostedZoneCommentError>> {
         let request_uri = format!("/2013-04-01/hostedzone/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -14720,6 +14750,7 @@ impl Route53 for Route53Client {
             version = input.version
         )
         .replace("/hostedzone/hostedzone/", "/hostedzone/")
+        .replace("/hostedzone//hostedzone/", "/hostedzone/")
         .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
@@ -14774,6 +14805,7 @@ impl Route53 for Route53Client {
     {
         let request_uri = format!("/2013-04-01/trafficpolicyinstance/{id}", id = input.id)
             .replace("/hostedzone/hostedzone/", "/hostedzone/")
+            .replace("/hostedzone//hostedzone/", "/hostedzone/")
             .replace("/change/change/", "/change/");
 
         let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);

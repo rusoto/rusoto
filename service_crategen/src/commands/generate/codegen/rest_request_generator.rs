@@ -111,7 +111,7 @@ pub fn generate_uri_formatter(
             // See https://github.com/rusoto/rusoto/issues/997 .
             let replace_em = match service.name().to_ascii_lowercase().as_ref() {
                 "route 53" => {
-                    ".replace(\"/hostedzone/hostedzone/\", \"/hostedzone/\").replace(\"/change/change/\", \"/change/\")"
+                    ".replace(\"/hostedzone/hostedzone/\", \"/hostedzone/\").replace(\"/hostedzone//hostedzone/\", \"/hostedzone/\").replace(\"/change/change/\", \"/change/\")"
                 }
                 _ => ""
             };
