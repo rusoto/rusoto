@@ -619,11 +619,7 @@ fn sign_string(
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
-pub fn string_to_sign(
-    date: OffsetDateTime,
-    hashed_canonical_request: &str,
-    scope: &str,
-) -> String {
+pub fn string_to_sign(date: OffsetDateTime, hashed_canonical_request: &str, scope: &str) -> String {
     format!(
         "AWS4-HMAC-SHA256\n{}\n{}\n{}",
         date.format("%Y%m%dT%H%M%SZ"),
@@ -825,7 +821,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
             Region::CnNorth1 | Region::CnNorthwest1 => {
                 format!("s3.{}.amazonaws.com.cn", region.name())
             }
-            _ => format!("s3-{}.amazonaws.com", region.name()),
+            _ => format!("s3.{}.amazonaws.com", region.name()),
         },
         "route53" => match *region {
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),

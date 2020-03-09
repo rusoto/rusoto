@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(Please put changes here)
+- Changed default s3 signature from s3-{}.amazonaws.com to s3.{}.amazonaws.com
 
 ## [0.43.0-beta.0] - 2020-02-07
 
