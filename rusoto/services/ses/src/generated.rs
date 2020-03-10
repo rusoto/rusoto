@@ -2128,12 +2128,12 @@ impl DkimAttributesDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityDkimAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         end_element(tag_name, stack)?;
@@ -3831,12 +3831,12 @@ impl MailFromDomainAttributesDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityMailFromDomainAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         end_element(tag_name, stack)?;
@@ -4004,12 +4004,12 @@ impl NotificationAttributesDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityNotificationAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         end_element(tag_name, stack)?;
@@ -4049,12 +4049,12 @@ impl PolicyMapDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = PolicyNameDeserializer::deserialize("key", stack)?;
             let value = PolicyDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         end_element(tag_name, stack)?;
@@ -6830,12 +6830,12 @@ impl VerificationAttributesDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityVerificationAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         end_element(tag_name, stack)?;

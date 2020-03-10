@@ -661,12 +661,12 @@ impl DatapointValueMapDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = ExtendedStatisticDeserializer::deserialize("key", stack)?;
             let value = DatapointValueDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         end_element(tag_name, stack)?;
