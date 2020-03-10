@@ -312,19 +312,25 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         .location_name
         .as_ref()
         .map(String::as_ref)
-        .unwrap_or_else(|| "entry");
+        .unwrap_or_else(|| "");
+
+    // if location_name does not exist, use tag_name
+    let entry_location = match entry_location {
+        "" => "tag_name".to_string(),
+        _ => format!("\"{}\"", entry_location),
+    };
 
     // the core of the map parser is the same whether or not it's flattened
     let entries_parser = format!(
         "
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == \"{entry_location}\" {{
-            start_element(\"{entry_location}\", stack)?;
+        while peek_at_name(stack)? == {entry_location} {{
+            start_element({entry_location}, stack)?;
             let key = {key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack)?;
             let value = {value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack)?;
             obj.insert(key, value);
-            end_element(\"{entry_location}\", stack)?;
+            end_element({entry_location}, stack)?;
         }}
         ",
         key_tag_name = key.tag_name(),
