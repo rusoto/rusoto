@@ -1283,12 +1283,12 @@ impl MapStringToStringDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == tag_name {
-            start_element(tag_name, stack)?;
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
             let key = StringDeserializer::deserialize("key", stack)?;
             let value = StringDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element(tag_name, stack)?;
+            end_element("entry", stack)?;
         }
 
         end_element(tag_name, stack)?;
@@ -1940,12 +1940,12 @@ impl SubscriptionAttributesMapDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == tag_name {
-            start_element(tag_name, stack)?;
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
             let key = AttributeNameDeserializer::deserialize("key", stack)?;
             let value = AttributeValueDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element(tag_name, stack)?;
+            end_element("entry", stack)?;
         }
 
         end_element(tag_name, stack)?;
@@ -2181,12 +2181,12 @@ impl TopicAttributesMapDeserializer {
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == tag_name {
-            start_element(tag_name, stack)?;
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
             let key = AttributeNameDeserializer::deserialize("key", stack)?;
             let value = AttributeValueDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element(tag_name, stack)?;
+            end_element("entry", stack)?;
         }
 
         end_element(tag_name, stack)?;

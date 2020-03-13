@@ -238,7 +238,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
     }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape, service),
-        ShapeType::Map => generate_map_deserializer(shape),
+
         ShapeType::Structure => generate_struct_deserializer(name, service, shape),
 
         // All policies returned by the IAM APIs are URI-encoded, and
@@ -314,9 +314,12 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         .map(String::as_ref)
         .unwrap_or_else(|| "");
 
-    // if location_name does not exist, use tag_name
     let entry_location = match entry_location {
-        "" => "tag_name".to_string(),
+        "" => match shape.flattened {
+            // if flatten, use tag_name
+            Some(true) => "tag_name".to_string(),
+            _ => format!("\"entry\""),
+        }
         _ => format!("\"{}\"", entry_location),
     };
 
