@@ -23,6 +23,26 @@ jobs:
       displayName: 'print rust version'
     - script: make unit_test
       displayName: 'Run unit tests'
+
+- job: 'integration_tests_linux'
+  displayName: 'Integration test check on Linux'
+  pool:
+    vmImage: 'Ubuntu-18.04'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install stable
+        rustup default stable
+      displayName: 'Install Rust stable'
+    - script: rustc --version
+      displayName: 'print rust version'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
     - script: make credential_integration_test
