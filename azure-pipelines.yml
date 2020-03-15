@@ -21,7 +21,7 @@ jobs:
       displayName: 'Install Rust stable'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: make unit_test
+    - script: make unit_test_no_doctests
       displayName: 'Run unit tests'
 
 - job: 'integration_tests_linux'
@@ -67,7 +67,7 @@ jobs:
       displayName: 'Install Rust stable'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: make rustls_unit_test
+    - script: make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_linux_beta'
@@ -89,7 +89,7 @@ jobs:
       displayName: 'Install Rust beta'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: RUST_VERSION=beta make unit_test
+    - script: RUST_VERSION=beta make unit_test_no_doctests
       displayName: 'Run unit tests'
 
 - job: 'rustls_unit_tests_linux_beta'
@@ -111,7 +111,7 @@ jobs:
       displayName: 'Install Rust beta'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: RUST_VERSION=beta make rustls_unit_test
+    - script: RUST_VERSION=beta make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_linux_nightly'
@@ -178,7 +178,7 @@ jobs:
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: make unit_test
+    - script: make unit_test_no_doctests
       displayName: 'Run unit tests'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
@@ -198,7 +198,7 @@ jobs:
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: make rustls_unit_test
+    - script: make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_osx_beta'
@@ -217,7 +217,7 @@ jobs:
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: RUST_VERSION=beta make unit_test
+    - script: RUST_VERSION=beta make unit_test_no_doctests
       displayName: 'Run unit tests'
     - script: RUST_VERSION=beta make check_integration_test
       displayName: 'Cargo check integration tests'
@@ -238,7 +238,7 @@ jobs:
       displayName: 'Install Rust'
     - script: rustc --version
       displayName: 'print rust version'
-    - script: RUST_VERSION=beta make rustls_unit_test
+    - script: RUST_VERSION=beta make rustls_unit_test_no_doctests
       displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_osx_nightly'
