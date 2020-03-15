@@ -9,8 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.43.0-beta.2] - 2020-03-16
 
+- Fix minimum version of hyper
+- Fix `PrimitiveDateTime` deprecation error
 - Update to dirs 2.0
+- Bump base64 to 0.12 and hyper-rustls to 0.20
+- Fix `serialize_structs` and `deserialize_structs`
+- Fix JWT serialization in `WebIdentityProvider`
 - Add ability to set local agent prepended to the default User-Agent
+- Fix invalid signature for Route 53 `resource_record_sets` methods
+- Improve `Display` impl for `RusotoError::Unknown`
+- Fix hang in XML deserialization for flattened shapes
+- Remove obsolete `RusotoFuture` and fix docs generation on nightly
+- Fix `credential_process`, again
 
 ## [0.43.0-beta.1] - 2020-02-07
 
