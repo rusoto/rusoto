@@ -588,6 +588,11 @@ mod tests {
         let creds = result.ok().unwrap();
         assert_eq!(creds.aws_access_key_id(), "baz_access_key");
         assert_eq!(creds.aws_secret_access_key(), "baz_secret_key");
+        assert_eq!(
+            creds.token().as_ref().expect("session token not parsed"),
+            "baz_session_token"
+        );
+        assert!(creds.expires_at().is_some());
         env::remove_var(AWS_CONFIG_FILE);
     }
 
