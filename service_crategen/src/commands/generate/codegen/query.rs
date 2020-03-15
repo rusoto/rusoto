@@ -82,6 +82,10 @@ impl GenerateProtocol for QueryGenerator {
             use rusoto_core::proto::xml::util::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
             use rusoto_core::proto::xml::error::*;
             use serde_urlencoded;
+            #[cfg(feature = \"serialize_structs\")]
+            use serde::Serialize;
+            #[cfg(feature = \"deserialize_structs\")]
+            use serde::Deserialize;
             ")
     }
 
