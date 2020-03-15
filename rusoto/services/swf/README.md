@@ -23,7 +23,7 @@ To use `rusoto_swf` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_swf = "0.43.0-beta.1"
+rusoto_swf = "0.43.0-beta.2"
 ```
 
 ## Crate Features

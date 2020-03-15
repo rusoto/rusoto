@@ -23,7 +23,7 @@ To use `rusoto_frauddetector` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_frauddetector = "0.43.0-beta.1"
+rusoto_frauddetector = "0.43.0-beta.2"
 ```
 
 ## Crate Features

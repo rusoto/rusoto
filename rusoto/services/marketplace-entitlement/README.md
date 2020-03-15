@@ -23,7 +23,7 @@ To use `rusoto_marketplace_entitlement` in your application, add it as a depende
 
 ```toml
 [dependencies]
-rusoto_marketplace_entitlement = "0.43.0-beta.1"
+rusoto_marketplace_entitlement = "0.43.0-beta.2"
 ```
 
 ## Crate Features

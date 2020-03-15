@@ -23,7 +23,7 @@ To use `rusoto_machinelearning` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_machinelearning = "0.43.0-beta.1"
+rusoto_machinelearning = "0.43.0-beta.2"
 ```
 
 ## Crate Features

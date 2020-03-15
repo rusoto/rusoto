@@ -23,7 +23,7 @@ To use `rusoto_dynamodbstreams` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_dynamodbstreams = "0.43.0-beta.1"
+rusoto_dynamodbstreams = "0.43.0-beta.2"
 ```
 
 ## Crate Features

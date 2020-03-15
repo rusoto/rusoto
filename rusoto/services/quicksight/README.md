@@ -23,7 +23,7 @@ To use `rusoto_quicksight` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_quicksight = "0.43.0-beta.1"
+rusoto_quicksight = "0.43.0-beta.2"
 ```
 
 ## Crate Features

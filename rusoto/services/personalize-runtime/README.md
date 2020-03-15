@@ -23,7 +23,7 @@ To use `rusoto_personalize_runtime` in your application, add it as a dependency 
 
 ```toml
 [dependencies]
-rusoto_personalize_runtime = "0.43.0-beta.1"
+rusoto_personalize_runtime = "0.43.0-beta.2"
 ```
 
 ## Crate Features

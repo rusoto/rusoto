@@ -4,7 +4,7 @@ license = "MIT"
 name = "rusoto_helpers"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto_helpers"
-version = "0.43.0-beta.1"
+version = "0.43.0-beta.2"
 edition = "2018"
 
 [dependencies]

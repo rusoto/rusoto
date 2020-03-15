@@ -23,7 +23,7 @@ To use `rusoto_iotevents_data` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_iotevents_data = "0.43.0-beta.1"
+rusoto_iotevents_data = "0.43.0-beta.2"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_resource_groups` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_resource_groups = "0.43.0-beta.1"
+rusoto_resource_groups = "0.43.0-beta.2"
 ```
 
 ## Crate Features
