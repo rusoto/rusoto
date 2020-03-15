@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.43.0-beta.2] - 2020-03-16
 
 - Update to dirs 2.0
+- Add ability to set local agent prepended to the default User-Agent
 
 ## [0.43.0-beta.1] - 2020-02-07
 
