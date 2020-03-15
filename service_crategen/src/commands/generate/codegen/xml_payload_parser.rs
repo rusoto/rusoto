@@ -238,7 +238,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
     }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape, service),
-
+        ShapeType::Map => generate_map_deserializer(shape),
         ShapeType::Structure => generate_struct_deserializer(name, service, shape),
 
         // All policies returned by the IAM APIs are URI-encoded, and
