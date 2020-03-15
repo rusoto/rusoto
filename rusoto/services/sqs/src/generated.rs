@@ -1163,12 +1163,12 @@ impl MessageBodyAttributeMapDeserializer {
     ) -> Result<::std::collections::HashMap<String, MessageAttributeValue>, XmlParseError> {
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while peek_at_name(stack)? == tag_name {
+            start_element(tag_name, stack)?;
             let key = StringDeserializer::deserialize("Name", stack)?;
             let value = MessageAttributeValueDeserializer::deserialize("Value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            end_element(tag_name, stack)?;
         }
 
         Ok(obj)

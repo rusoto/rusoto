@@ -179,3 +179,69 @@ async fn test_parse_queue_does_not_exist_error() {
         err
     );
 }
+
+#[tokio::test]
+async fn should_deserialize_map_parameters_in_response_body() {
+    let mock = MockRequestDispatcher::with_status(200)
+        .with_body(
+            r#"<?xml version="1.0" encoding="UTF-8"?>
+        <ReceiveMessageResponse>
+            <ReceiveMessageResult>
+            <Message>
+                <MessageId>
+                    5fea7756-0ea4-451a-a703-a558b933e274
+                </MessageId>
+                <ReceiptHandle>
+                    MbZj6wDWli+JvwwJaBV+3dcjk2YW2vA3+STFFljTM8tJJg6HRG6PYSasuWXPJB+Cw
+                    Lj1FjgXUv1uSj1gUPAWV66FU/WeR4mq2OKpEGYWbnLmpRCJVAyeMjeU5ZBdtcQ+QE
+                    auMZc8ZRv37sIW2iJKq3M9MFx1YvV11A2x/KSbkJ0=
+                </ReceiptHandle>
+                <MD5OfBody>
+                    fafb00f5732ab283681e124bf8747ed1
+                </MD5OfBody>
+                <Body>This is a test message</Body>
+                <MessageAttribute>
+                    <Name>test_attribute_name</Name>
+                    <Value>
+                        <DataType>String</DataType>
+                        <StringValue>test_attribute_value</StringValue>
+                    </Value>
+                </MessageAttribute>
+            </Message>
+            </ReceiveMessageResult>
+            <ResponseMetadata>
+            <RequestId>
+                b6633655-283d-45b4-aee4-4e84e0ae6afa
+            </RequestId>
+            </ResponseMetadata>
+        </ReceiveMessageResponse>"#,
+        );
+
+    let request = ReceiveMessageRequest {
+        queue_url: "foo".to_owned(),
+        ..Default::default()
+    };
+
+    let client = SqsClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    let result = client.receive_message(request).await;
+    assert!(result.is_ok());
+
+    let mut messages = result.unwrap().messages.unwrap();
+    assert_eq!(1, messages.len());
+
+    let message = messages.pop().unwrap();
+    let mut message_attributes = HashMap::new();
+    message_attributes.insert(
+        "test_attribute_name".to_owned(),
+        MessageAttributeValue {
+            string_value: Some("test_attribute_value".to_owned()),
+            data_type: "String".to_owned(),
+            ..Default::default()
+        },
+    );
+
+    assert_eq!(
+        message_attributes,
+        message.message_attributes.unwrap(),
+    );
+}
