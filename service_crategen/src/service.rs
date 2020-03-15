@@ -106,7 +106,10 @@ impl<'b> Service<'b> {
             | "Amazon CloudSearch Domain"
             | "AWS Mobile"
             | "AWS IoT Data Plane"
-            | "Amazon SageMaker Runtime" => false,
+            | "Amazon SageMaker Runtime"
+            | "Amazon WorkMail Message Flow"
+            | "SSO"
+            | "Amazon EBS" => false,
             _ => true,
         }
     }
