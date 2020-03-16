@@ -821,11 +821,10 @@ fn build_hostname(service: &str, region: &Region) -> String {
         },
         "s3" => match *region {
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
-            Region::UsEast1 => "s3.amazonaws.com".to_string(),
             Region::CnNorth1 | Region::CnNorthwest1 => {
                 format!("s3.{}.amazonaws.com.cn", region.name())
             }
-            _ => format!("s3-{}.amazonaws.com", region.name()),
+            _ => format!("s3.{}.amazonaws.com", region.name()),
         },
         "route53" => match *region {
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),

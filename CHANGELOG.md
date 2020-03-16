@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix hang in XML deserialization for flattened shapes
 - Remove obsolete `RusotoFuture` and fix docs generation on nightly
 - Fix `credential_process`, again
+- Change non-China S3 domains to `s3.{region}.amazonaws.com`
 
 ## [0.43.0-beta.1] - 2020-02-07
 
