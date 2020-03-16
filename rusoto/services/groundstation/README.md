@@ -23,7 +23,7 @@ To use `rusoto_groundstation` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_groundstation = "0.43.0-beta.2"
+rusoto_groundstation = "0.43.0"
 ```
 
 ## Crate Features

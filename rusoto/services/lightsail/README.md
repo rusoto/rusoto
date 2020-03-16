@@ -23,7 +23,7 @@ To use `rusoto_lightsail` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_lightsail = "0.43.0-beta.2"
+rusoto_lightsail = "0.43.0"
 ```
 
 ## Crate Features

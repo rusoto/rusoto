@@ -23,7 +23,7 @@ To use `rusoto_signer` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_signer = "0.43.0-beta.2"
+rusoto_signer = "0.43.0"
 ```
 
 ## Crate Features

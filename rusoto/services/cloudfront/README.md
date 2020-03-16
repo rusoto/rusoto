@@ -23,7 +23,7 @@ To use `rusoto_cloudfront` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_cloudfront = "0.43.0-beta.2"
+rusoto_cloudfront = "0.43.0"
 ```
 
 ## Crate Features

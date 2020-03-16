@@ -23,7 +23,7 @@ To use `rusoto_managedblockchain` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_managedblockchain = "0.43.0-beta.2"
+rusoto_managedblockchain = "0.43.0"
 ```
 
 ## Crate Features

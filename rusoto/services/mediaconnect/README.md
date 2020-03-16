@@ -23,7 +23,7 @@ To use `rusoto_mediaconnect` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_mediaconnect = "0.43.0-beta.2"
+rusoto_mediaconnect = "0.43.0"
 ```
 
 ## Crate Features

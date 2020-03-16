@@ -23,7 +23,7 @@ To use `rusoto_workdocs` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_workdocs = "0.43.0-beta.2"
+rusoto_workdocs = "0.43.0"
 ```
 
 ## Crate Features

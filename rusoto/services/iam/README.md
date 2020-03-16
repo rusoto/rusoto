@@ -23,7 +23,7 @@ To use `rusoto_iam` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_iam = "0.43.0-beta.2"
+rusoto_iam = "0.43.0"
 ```
 
 ## Crate Features

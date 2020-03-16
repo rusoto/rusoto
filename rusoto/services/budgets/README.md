@@ -23,7 +23,7 @@ To use `rusoto_budgets` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_budgets = "0.43.0-beta.2"
+rusoto_budgets = "0.43.0"
 ```
 
 ## Crate Features

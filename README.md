@@ -45,9 +45,9 @@ For example, to include only S3 and SQS:
 
 ```toml
 [dependencies]
-rusoto_core = "0.43.0-beta.2"
-rusoto_sqs = "0.43.0-beta.2"
-rusoto_s3 = "0.43.0-beta.2"
+rusoto_core = "0.43.0"
+rusoto_sqs = "0.43.0"
+rusoto_s3 = "0.43.0"
 ```
 
 ## Migration notes

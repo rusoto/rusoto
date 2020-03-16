@@ -23,7 +23,7 @@ To use `rusoto_kendra` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_kendra = "0.43.0-beta.2"
+rusoto_kendra = "0.43.0"
 ```
 
 ## Crate Features

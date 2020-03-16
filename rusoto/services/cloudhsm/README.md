@@ -23,7 +23,7 @@ To use `rusoto_cloudhsm` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_cloudhsm = "0.43.0-beta.2"
+rusoto_cloudhsm = "0.43.0"
 ```
 
 ## Crate Features
