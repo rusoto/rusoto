@@ -23,7 +23,7 @@ To use `rusoto_elastic_inference` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_elastic_inference = "0.43.0-beta.2"
+rusoto_elastic_inference = "0.43.0"
 ```
 
 ## Crate Features

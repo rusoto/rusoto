@@ -32,6 +32,9 @@ pub struct Metadata {
     pub homepage: Option<String>,
     pub edition: String,
     pub exclude: Option<Vec<String>>,
+    #[serde(serialize_with = "toml::ser::tables_last")]
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    pub metadata: BTreeMap<String, toml::Value>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

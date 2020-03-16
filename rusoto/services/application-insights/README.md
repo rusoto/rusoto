@@ -23,7 +23,7 @@ To use `rusoto_application_insights` in your application, add it as a dependency
 
 ```toml
 [dependencies]
-rusoto_application_insights = "0.43.0-beta.2"
+rusoto_application_insights = "0.43.0"
 ```
 
 ## Crate Features

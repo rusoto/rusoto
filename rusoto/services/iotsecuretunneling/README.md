@@ -23,7 +23,7 @@ To use `rusoto_iotsecuretunneling` in your application, add it as a dependency i
 
 ```toml
 [dependencies]
-rusoto_iotsecuretunneling = "0.43.0-beta.2"
+rusoto_iotsecuretunneling = "0.43.0"
 ```
 
 ## Crate Features

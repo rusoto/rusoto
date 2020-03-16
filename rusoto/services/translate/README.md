@@ -23,7 +23,7 @@ To use `rusoto_translate` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_translate = "0.43.0-beta.2"
+rusoto_translate = "0.43.0"
 ```
 
 ## Crate Features

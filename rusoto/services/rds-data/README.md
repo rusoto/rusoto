@@ -23,7 +23,7 @@ To use `rusoto_rds_data` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_rds_data = "0.43.0-beta.2"
+rusoto_rds_data = "0.43.0"
 ```
 
 ## Crate Features

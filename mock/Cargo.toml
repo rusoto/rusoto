@@ -11,7 +11,7 @@ keywords = ["AWS", "Amazon", "mock", "testing"]
 license = "MIT"
 name = "rusoto_mock"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.43.0-beta.2"
+version = "0.43.0"
 homepage = "https://www.rusoto.org/"
 categories = [
   "development-tools::testing"
@@ -32,7 +32,7 @@ serde_json = "1.0"
 
 [dependencies.rusoto_core]
 path = "../rusoto/core"
-version = "0.43.0-beta.2"
+version = "0.43.0"
 default_features = false
 
 [features]
@@ -41,3 +41,6 @@ unstable = []
 rustls = ["rusoto_core/rustls"]
 native-tls = ["rusoto_core/native-tls"]
 default = ["native-tls"]
+
+[package.metadata.docs.rs]
+targets = []

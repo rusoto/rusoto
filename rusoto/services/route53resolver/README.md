@@ -23,7 +23,7 @@ To use `rusoto_route53resolver` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_route53resolver = "0.43.0-beta.2"
+rusoto_route53resolver = "0.43.0"
 ```
 
 ## Crate Features

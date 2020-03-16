@@ -23,7 +23,7 @@ To use `rusoto_compute_optimizer` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_compute_optimizer = "0.43.0-beta.2"
+rusoto_compute_optimizer = "0.43.0"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_autoscaling` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_autoscaling = "0.43.0-beta.2"
+rusoto_autoscaling = "0.43.0"
 ```
 
 ## Crate Features

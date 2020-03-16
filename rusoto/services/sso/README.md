@@ -23,7 +23,7 @@ To use `rusoto_sso` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_sso = "0.43.0-beta.2"
+rusoto_sso = "0.43.0"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_transfer` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_transfer = "0.43.0-beta.2"
+rusoto_transfer = "0.43.0"
 ```
 
 ## Crate Features

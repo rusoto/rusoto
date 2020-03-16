@@ -137,7 +137,11 @@ pub fn generate_services(
                 version: service_config.version.clone(),
                 homepage: Some("https://www.rusoto.org/".into()),
                 edition: "2018".into(),
-                exclude: Some(vec!["test_resources/*".into()])
+                exclude: Some(vec!["test_resources/*".into()]),
+                metadata: toml::toml! {
+                    [docs.rs]
+                    targets = []
+                }.try_into().unwrap(),
             },
             features: Some(features),
             dependencies: service_dependencies,

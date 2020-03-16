@@ -23,7 +23,7 @@ To use `rusoto_pricing` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_pricing = "0.43.0-beta.2"
+rusoto_pricing = "0.43.0"
 ```
 
 ## Crate Features
