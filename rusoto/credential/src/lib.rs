@@ -68,7 +68,7 @@ pub struct AwsCredentials {
     key: String,
     #[serde(rename = "SecretAccessKey")]
     secret: String,
-    #[serde(rename = "Token")]
+    #[serde(rename = "SessionToken", alias = "Token")]
     token: Option<String>,
     #[serde(rename = "Expiration")]
     expires_at: Option<DateTime<Utc>>,
@@ -536,6 +536,7 @@ mod tests {
             credentials.aws_secret_access_key(),
             "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         );
+        assert!(credentials.token().is_some());
 
         assert_eq!(
             credentials.expires_at().expect(""),

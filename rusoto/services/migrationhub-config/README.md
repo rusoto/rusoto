@@ -23,7 +23,7 @@ To use `rusoto_migrationhub_config` in your application, add it as a dependency 
 
 ```toml
 [dependencies]
-rusoto_migrationhub_config = "0.43.0-beta.1"
+rusoto_migrationhub_config = "0.43.0-beta.2"
 ```
 
 ## Crate Features

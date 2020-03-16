@@ -23,7 +23,7 @@ To use `rusoto_elasticache` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_elasticache = "0.43.0-beta.1"
+rusoto_elasticache = "0.43.0-beta.2"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_dynamodb` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_dynamodb = "0.43.0-beta.1"
+rusoto_dynamodb = "0.43.0-beta.2"
 ```
 
 ## Crate Features

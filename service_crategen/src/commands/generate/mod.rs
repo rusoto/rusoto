@@ -89,10 +89,18 @@ pub fn generate_services(
         features.insert("native-tls".into(), vec!["rusoto_core/native-tls".into()]);
         features.insert("rustls".into(), vec!["rusoto_core/rustls".into()]);
 
-        let serialize_feature_dependencies = vec!["bytes/serde".into()];
+        let mut serialize_feature_dependencies = vec!["bytes/serde".into()];
 
         let service_dependencies = service.get_dependencies();
         let service_dev_dependencies = service.get_dev_dependencies();
+
+        for (name, dep_obj) in service_dependencies.iter() {
+            if let cargo::Dependency::Extended { optional: Some(is_optional), .. } = dep_obj {
+                if *is_optional && (name == "serde" || name == "serde_derive") {
+                    serialize_feature_dependencies.push(name.into());
+                }
+            }
+        }
 
         features.insert("serialize_structs".into(), serialize_feature_dependencies.clone());
         features.insert("deserialize_structs".into(), serialize_feature_dependencies.clone());

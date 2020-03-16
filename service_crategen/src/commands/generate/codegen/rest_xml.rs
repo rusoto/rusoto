@@ -96,6 +96,10 @@ impl GenerateProtocol for RestXmlGenerator {
             use rusoto_core::proto::xml::error::*;
             use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::proto::xml::util::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements};
+            #[cfg(feature = \"serialize_structs\")]
+            use serde::Serialize;
+            #[cfg(feature = \"deserialize_structs\")]
+            use serde::Deserialize;
             "
             .to_owned();
 

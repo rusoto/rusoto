@@ -6,9 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 (Please put changes here)
-- Update to dirs 2.0
 
-## [0.43.0-beta.0] - 2020-02-07
+## [0.43.0-beta.2] - 2020-03-16
+
+- Fix minimum version of hyper
+- Fix `PrimitiveDateTime` deprecation error
+- Update to dirs 2.0
+- Bump base64 to 0.12 and hyper-rustls to 0.20
+- Fix `serialize_structs` and `deserialize_structs`
+- Fix JWT serialization in `WebIdentityProvider`
+- Add ability to set local agent prepended to the default User-Agent
+- Fix invalid signature for Route 53 `resource_record_sets` methods
+- Improve `Display` impl for `RusotoError::Unknown`
+- Fix hang in XML deserialization for flattened shapes
+- Remove obsolete `RusotoFuture` and fix docs generation on nightly
+- Fix `credential_process`, again
+
+## [0.43.0-beta.1] - 2020-02-07
 
 - Move to `std::future::Future`, async/.await, and Tokio 0.2
 - Update to botocore 1.14.9
@@ -338,8 +352,9 @@ such as an S3 key returned in `list_objects_v2`
 - Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
 
-[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0-beta.0...HEAD
-[0.43.0-beta.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.42.0...rusoto-v0.43.0-beta.0
+[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0-beta.2...HEAD
+[0.43.0-beta.2]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0-beta.1...rusoto-v0.43.0-beta.2
+[0.43.0-beta.1]: https://github.com/rusoto/rusoto/compare/rusoto-v0.42.0...rusoto-v0.43.0-beta.1
 [0.42.0]: https://github.com/rusoto/rusoto/compare/credentials-v0.41.1...rusoto-v0.42.0
 [0.41.1]: https://github.com/rusoto/rusoto/compare/rusoto-v0.41.0...credentials-v0.41.1
 [0.41.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.40.0...rusoto-v0.41.0

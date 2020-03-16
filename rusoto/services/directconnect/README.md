@@ -23,7 +23,7 @@ To use `rusoto_directconnect` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_directconnect = "0.43.0-beta.1"
+rusoto_directconnect = "0.43.0-beta.2"
 ```
 
 ## Crate Features

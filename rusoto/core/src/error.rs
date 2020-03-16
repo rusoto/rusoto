@@ -30,6 +30,9 @@ pub enum RusotoError<E> {
 /// Result carrying a generic `RusotoError`.
 pub type RusotoResult<T, E> = Result<T, RusotoError<E>>;
 
+/// Header used by AWS on responses to identify the request
+pub const AWS_REQUEST_ID_HEADER: &str = "x-amzn-requestid";
+
 impl<E> From<XmlParseError> for RusotoError<E> {
     fn from(err: XmlParseError) -> Self {
         let XmlParseError(message) = err;
@@ -78,7 +81,12 @@ impl<E: Error + 'static> fmt::Display for RusotoError<E> {
             RusotoError::Credentials(ref err) => write!(f, "{}", err),
             RusotoError::HttpDispatch(ref dispatch_error) => write!(f, "{}", dispatch_error),
             RusotoError::ParseError(ref cause) => write!(f, "{}", cause),
-            RusotoError::Unknown(ref cause) => write!(f, "{}", cause.body_as_str()),
+            RusotoError::Unknown(ref cause) => write!(
+                f,
+                "Request ID: {:?} Body: {}",
+                cause.headers.get(AWS_REQUEST_ID_HEADER),
+                cause.body_as_str()
+            ),
             RusotoError::Blocking => write!(f, "Failed to run blocking future"),
         }
     }

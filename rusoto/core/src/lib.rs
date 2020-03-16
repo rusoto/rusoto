@@ -26,7 +26,6 @@ use hyper_tls as tls;
 
 mod client;
 mod error;
-mod future;
 mod stream;
 
 pub mod param;
@@ -46,7 +45,6 @@ pub mod proto;
 pub mod serialization;
 
 pub use crate::error::{RusotoError, RusotoResult};
-pub use crate::future::RusotoFuture;
 pub use crate::region::Region;
 pub use crate::request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};
 pub use crate::stream::ByteStream;

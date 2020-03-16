@@ -27,6 +27,10 @@ use rusoto_core::proto::xml::util::{
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
 use rusoto_core::signature::SignedRequest;
+#[cfg(feature = "deserialize_structs")]
+use serde::Deserialize;
+#[cfg(feature = "serialize_structs")]
+use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;

@@ -9,7 +9,7 @@ authors = [
 description = "Generates crates for AWS services for the rusoto project"
 name = "service_crategen"
 license = "MIT"
-version = "0.43.0-beta.1"
+version = "0.43.0-beta.2"
 edition = "2018"
 
 [dependencies]

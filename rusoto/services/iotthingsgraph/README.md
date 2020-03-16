@@ -23,7 +23,7 @@ To use `rusoto_iotthingsgraph` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_iotthingsgraph = "0.43.0-beta.1"
+rusoto_iotthingsgraph = "0.43.0-beta.2"
 ```
 
 ## Crate Features

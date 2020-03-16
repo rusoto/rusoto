@@ -23,7 +23,7 @@ To use `rusoto_resourcegroupstaggingapi` in your application, add it as a depend
 
 ```toml
 [dependencies]
-rusoto_resourcegroupstaggingapi = "0.43.0-beta.1"
+rusoto_resourcegroupstaggingapi = "0.43.0-beta.2"
 ```
 
 ## Crate Features

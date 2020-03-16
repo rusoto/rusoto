@@ -24,7 +24,6 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-use serde_json;
 /// <p>Provides information about your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]

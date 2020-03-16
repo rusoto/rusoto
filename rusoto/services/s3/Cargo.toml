@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_s3"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.43.0-beta.1"
+version = "0.43.0-beta.2"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -23,7 +23,7 @@ xml-rs = "0.8"
 version = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.43.0-beta.1"
+version = "0.43.0-beta.2"
 path = "../../core"
 default-features = false
 
@@ -39,13 +39,13 @@ optional = true
 tokio = "0.2"
 
 [dev-dependencies.rusoto_mock]
-version = "0.43.0-beta.1"
+version = "0.43.0-beta.2"
 path = "../../../mock"
 default-features = false
 
 [features]
 default = ["native-tls"]
-deserialize_structs = ["bytes/serde"]
+deserialize_structs = ["bytes/serde", "serde", "serde_derive"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
-serialize_structs = ["bytes/serde"]
+serialize_structs = ["bytes/serde", "serde", "serde_derive"]
