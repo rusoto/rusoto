@@ -69,3 +69,6 @@ nightly-testing = ["rusoto_credential/nightly-testing"]
 native-tls = ["hyper-tls"]
 rustls = ["hyper-rustls"]
 unstable = []
+
+[package.metadata.docs.rs]
+targets = []

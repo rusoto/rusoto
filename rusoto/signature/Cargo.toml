@@ -48,3 +48,5 @@ path = "../credential"
 serde_json = "1"
 serde_test = "1"
 
+[package.metadata.docs.rs]
+targets = []

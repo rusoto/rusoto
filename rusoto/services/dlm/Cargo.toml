@@ -11,6 +11,8 @@ version = "0.43.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
+[package.metadata.docs.rs]
+targets = []
 
 [build-dependencies]
 

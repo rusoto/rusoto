@@ -41,3 +41,6 @@ unstable = []
 rustls = ["rusoto_core/rustls"]
 native-tls = ["rusoto_core/native-tls"]
 default = ["native-tls"]
+
+[package.metadata.docs.rs]
+targets = []
