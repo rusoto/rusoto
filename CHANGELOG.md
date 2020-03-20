@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.43.0] - 2020-03-15
 
+- Fix `Time::now()` deprecation warning
 - Fix minimum version of hyper
 - Fix `PrimitiveDateTime` deprecation error
 - Update to dirs 2.0
