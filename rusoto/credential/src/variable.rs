@@ -144,8 +144,7 @@ where
         let tmp = key.as_ref().to_os_string();
         Self::dynamic(move || match var(&tmp) {
             Ok(ref v) if !v.trim().is_empty() => Ok(Some(T::from(v.trim().to_string()))),
-            Ok(_) => Ok(None),
-            Err(VarError::NotPresent) => Ok(None),
+            Ok(_) | Err(VarError::NotPresent) => Ok(None),
             Err(e) => Err(E::from(e)),
         })
     }
