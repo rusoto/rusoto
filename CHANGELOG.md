@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 (Please put changes here)
 
-- Fix `rusoto_sts::WebIdentityProvider::from_k8s_env` not allowing AWS_ROLE_SESSION_NAME env var being optional.
+- Fix `rusoto_sts::WebIdentityProvider::from_k8s_env` always require AWS_ROLE_SESSION_NAME env var which should be optional.
 
 ## [0.43.0] - 2020-03-15
 
