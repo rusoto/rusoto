@@ -30,12 +30,12 @@ pub struct WebIdentityProvider {
     /// associated with the user who is using your application. That way, the temporary security credentials
     /// that your application will use are associated with that user. This session name is included as part
     /// of the ARN and assumed role ID in the AssumedRoleUser response element.
-    pub role_session_name: Variable<Option<String>, CredentialsError>,
+    pub role_session_name: Option<Variable<Option<String>, CredentialsError>>,
 }
 
 impl WebIdentityProvider {
     /// Create new WebIdentityProvider by explicitly passing its configuration.
-    pub fn new<A, B, C>(web_identity_token: A, role_arn: B, role_session_name: C) -> Self
+    pub fn new<A, B, C>(web_identity_token: A, role_arn: B, role_session_name: Option<C>) -> Self
     where
         A: Into<Variable<Secret, CredentialsError>>,
         B: Into<Variable<String, CredentialsError>>,
@@ -44,7 +44,7 @@ impl WebIdentityProvider {
         Self {
             web_identity_token: web_identity_token.into(),
             role_arn: role_arn.into(),
-            role_session_name: role_session_name.into(),
+            role_session_name: role_session_name.map(|v| v.into()),
         }
     }
 
@@ -73,7 +73,7 @@ impl WebIdentityProvider {
         Self::new(
             Variable::dynamic(move || Variable::from_text_file(token_file.resolve()?).resolve()),
             role,
-            session_name,
+            Some(session_name),
         )
     }
 
@@ -107,8 +107,11 @@ impl ProvideAwsCredentials for WebIdentityProvider {
 
         req.role_arn = self.role_arn.resolve()?;
         req.web_identity_token = self.web_identity_token.resolve()?.as_ref().to_string();
-        req.role_session_name = match self.role_session_name.resolve()? {
-            Some(session_name) => session_name,
+        req.role_session_name = match self.role_session_name {
+            Some(ref role_session_name) => match role_session_name.resolve()? {
+                Some(session_name) => session_name,
+                None => Self::create_session_name(),
+            },
             None => Self::create_session_name(),
         };
 
@@ -134,7 +137,7 @@ mod tests {
 
     #[test]
     fn api_ergonomy() {
-        WebIdentityProvider::new(Secret::from("".to_string()), "", Some("".to_string()));
+        WebIdentityProvider::new(Secret::from("".to_string()), "", Some(Some("".to_string())));
     }
 
     #[test]
