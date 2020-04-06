@@ -6336,21 +6336,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = AddTagsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = AddTagsOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6540,24 +6526,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = CreateAppCookieStickinessPolicyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateAppCookieStickinessPolicyOutputDeserializer::deserialize(
-                "CreateAppCookieStickinessPolicyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = CreateAppCookieStickinessPolicyOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6592,24 +6561,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = CreateLBCookieStickinessPolicyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateLBCookieStickinessPolicyOutputDeserializer::deserialize(
-                "CreateLBCookieStickinessPolicyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = CreateLBCookieStickinessPolicyOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6691,24 +6643,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = CreateLoadBalancerListenerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateLoadBalancerListenerOutputDeserializer::deserialize(
-                "CreateLoadBalancerListenersResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = CreateLoadBalancerListenerOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6740,24 +6675,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = CreateLoadBalancerPolicyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateLoadBalancerPolicyOutputDeserializer::deserialize(
-                "CreateLoadBalancerPolicyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = CreateLoadBalancerPolicyOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6789,24 +6707,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteAccessPointOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteAccessPointOutputDeserializer::deserialize(
-                "DeleteLoadBalancerResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteAccessPointOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6839,24 +6740,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteLoadBalancerListenerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteLoadBalancerListenerOutputDeserializer::deserialize(
-                "DeleteLoadBalancerListenersResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteLoadBalancerListenerOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6888,24 +6772,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteLoadBalancerPolicyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteLoadBalancerPolicyOutputDeserializer::deserialize(
-                "DeleteLoadBalancerPolicyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteLoadBalancerPolicyOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7595,21 +7462,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = RemoveTagsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = RemoveTagsOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7646,24 +7499,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = SetLoadBalancerListenerSSLCertificateOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SetLoadBalancerListenerSSLCertificateOutputDeserializer::deserialize(
-                "SetLoadBalancerListenerSSLCertificateResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = SetLoadBalancerListenerSSLCertificateOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7700,24 +7536,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = SetLoadBalancerPoliciesForBackendServerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SetLoadBalancerPoliciesForBackendServerOutputDeserializer::deserialize(
-                "SetLoadBalancerPoliciesForBackendServerResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = SetLoadBalancerPoliciesForBackendServerOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7754,24 +7573,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = SetLoadBalancerPoliciesOfListenerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SetLoadBalancerPoliciesOfListenerOutputDeserializer::deserialize(
-                "SetLoadBalancerPoliciesOfListenerResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = SetLoadBalancerPoliciesOfListenerOutput::default();
         // parse non-payload
         Ok(result)
     }

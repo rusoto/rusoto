@@ -10528,24 +10528,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = AttachLoadBalancerTargetGroupsResultType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
-                "AttachLoadBalancerTargetGroupsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = AttachLoadBalancerTargetGroupsResultType::default();
         // parse non-payload
         Ok(result)
     }
@@ -10577,24 +10560,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = AttachLoadBalancersResultType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AttachLoadBalancersResultTypeDeserializer::deserialize(
-                "AttachLoadBalancersResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = AttachLoadBalancersResultType::default();
         // parse non-payload
         Ok(result)
     }
@@ -10730,24 +10696,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = CompleteLifecycleActionAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CompleteLifecycleActionAnswerDeserializer::deserialize(
-                "CompleteLifecycleActionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = CompleteLifecycleActionAnswer::default();
         // parse non-payload
         Ok(result)
     }
@@ -10919,24 +10868,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteLifecycleHookAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteLifecycleHookAnswerDeserializer::deserialize(
-                "DeleteLifecycleHookResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteLifecycleHookAnswer::default();
         // parse non-payload
         Ok(result)
     }
@@ -12020,24 +11952,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DetachLoadBalancerTargetGroupsResultType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
-                "DetachLoadBalancerTargetGroupsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DetachLoadBalancerTargetGroupsResultType::default();
         // parse non-payload
         Ok(result)
     }
@@ -12069,24 +11984,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DetachLoadBalancersResultType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetachLoadBalancersResultTypeDeserializer::deserialize(
-                "DetachLoadBalancersResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DetachLoadBalancersResultType::default();
         // parse non-payload
         Ok(result)
     }
@@ -12294,24 +12192,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = PutLifecycleHookAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PutLifecycleHookAnswerDeserializer::deserialize(
-                "PutLifecycleHookResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = PutLifecycleHookAnswer::default();
         // parse non-payload
         Ok(result)
     }
@@ -12448,24 +12329,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = RecordLifecycleActionHeartbeatAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize(
-                "RecordLifecycleActionHeartbeatResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = RecordLifecycleActionHeartbeatAnswer::default();
         // parse non-payload
         Ok(result)
     }
@@ -12581,24 +12445,7 @@ impl Autoscaling for AutoscalingClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = SetInstanceProtectionAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SetInstanceProtectionAnswerDeserializer::deserialize(
-                "SetInstanceProtectionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = SetInstanceProtectionAnswer::default();
         // parse non-payload
         Ok(result)
     }

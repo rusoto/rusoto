@@ -6356,24 +6356,7 @@ impl CloudWatch for CloudWatchClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteAnomalyDetectorOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteAnomalyDetectorOutputDeserializer::deserialize(
-                "DeleteAnomalyDetectorResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteAnomalyDetectorOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -6405,24 +6388,7 @@ impl CloudWatch for CloudWatchClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteDashboardsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteDashboardsOutputDeserializer::deserialize(
-                "DeleteDashboardsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteDashboardsOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7282,24 +7248,7 @@ impl CloudWatch for CloudWatchClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = PutAnomalyDetectorOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PutAnomalyDetectorOutputDeserializer::deserialize(
-                "PutAnomalyDetectorResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = PutAnomalyDetectorOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7377,22 +7326,7 @@ impl CloudWatch for CloudWatchClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = PutInsightRuleOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                PutInsightRuleOutputDeserializer::deserialize("PutInsightRuleResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = PutInsightRuleOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7508,21 +7442,7 @@ impl CloudWatch for CloudWatchClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = TagResourceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = TagResourceOutputDeserializer::deserialize("TagResourceResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = TagResourceOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -7554,22 +7474,7 @@ impl CloudWatch for CloudWatchClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = UntagResourceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                UntagResourceOutputDeserializer::deserialize("UntagResourceResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = UntagResourceOutput::default();
         // parse non-payload
         Ok(result)
     }

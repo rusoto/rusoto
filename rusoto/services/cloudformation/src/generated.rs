@@ -12059,24 +12059,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = ContinueUpdateRollbackOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ContinueUpdateRollbackOutputDeserializer::deserialize(
-                "ContinueUpdateRollbackResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = ContinueUpdateRollbackOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -12299,24 +12282,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteChangeSetOutputDeserializer::deserialize(
-                "DeleteChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteChangeSetOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -12425,22 +12391,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DeleteStackSetOutputDeserializer::deserialize("DeleteStackSetResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteStackSetOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -12472,22 +12423,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeregisterTypeOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DeregisterTypeOutputDeserializer::deserialize("DeregisterTypeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeregisterTypeOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -13353,24 +13289,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = ExecuteChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ExecuteChangeSetOutputDeserializer::deserialize(
-                "ExecuteChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = ExecuteChangeSetOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -14117,24 +14036,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = RecordHandlerProgressOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RecordHandlerProgressOutputDeserializer::deserialize(
-                "RecordHandlerProgressResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = RecordHandlerProgressOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -14240,24 +14142,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = SetTypeDefaultVersionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SetTypeDefaultVersionOutputDeserializer::deserialize(
-                "SetTypeDefaultVersionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = SetTypeDefaultVersionOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -14317,24 +14202,7 @@ impl CloudFormation for CloudFormationClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = StopStackSetOperationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = StopStackSetOperationOutputDeserializer::deserialize(
-                "StopStackSetOperationResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = StopStackSetOperationOutput::default();
         // parse non-payload
         Ok(result)
     }
