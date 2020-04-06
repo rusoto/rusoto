@@ -65,6 +65,7 @@ pub fn generate_response_parser(
     // the entire payload is set as one of the struct members, and not parsed
     match output_shape.payload {
         None => xml_body_parser(
+            &output_shape,
             &mutated_shape_name,
             result_wrapper,
             mutable_result,
@@ -93,6 +94,7 @@ pub fn generate_response_parser(
                         )
                     }
                 _ => xml_body_parser(
+                    &output_shape,
                     &mutated_shape_name,
                     result_wrapper,
                     mutable_result,
@@ -150,6 +152,7 @@ fn payload_body_parser(
 }
 
 fn xml_body_parser(
+    shape: &Shape,
     output_shape: &str,
     result_wrapper: &Option<String>,
     mutable_result: bool,
@@ -161,26 +164,23 @@ fn xml_body_parser(
         "let result;"
     };
 
-    let deserialize = match *result_wrapper {
-        Some(ref tag_name) => format!(
-            "start_element(&actual_tag_name, &mut stack)?;
+    let xml_deserialize = if needs_xml_deserializer(shape) {
+        let deserialize = match *result_wrapper {
+            Some(ref tag_name) => format!(
+                "start_element(&actual_tag_name, &mut stack)?;
                      result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack)?;
                      skip_tree(&mut stack);
                      end_element(&actual_tag_name, &mut stack)?;",
-            output_shape = output_shape,
-            tag_name = tag_name
-        ),
-        None => format!(
-            "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
-            output_shape = output_shape
-        ),
-    };
-
-    format!(
-        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        {let_result}
-
-        if xml_response.body.is_empty() {{
+                output_shape = output_shape,
+                tag_name = tag_name
+            ),
+            None => format!(
+                "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
+                output_shape = output_shape
+            ),
+        };
+        format!(
+        "if xml_response.body.is_empty() {{
             result = {output_shape}::default();
         }} else {{
             let reader = EventReader::new_with_config(
@@ -191,12 +191,26 @@ fn xml_body_parser(
             let _start_document = stack.next();
             let actual_tag_name = peek_at_name(&mut stack)?;
             {deserialize}
-        }}
+        }}",
+        output_shape = output_shape,
+        deserialize = deserialize,
+        )
+    } else {
+        format!(
+        "result = {output_shape}::default();",
+        output_shape = output_shape,
+        )
+    };
+
+    format!(
+        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        {let_result}
+
+        {xml_deserialize}
         {parse_non_payload} // parse non-payload
         Ok(result)",
         let_result = let_result,
-        output_shape = output_shape,
-        deserialize = deserialize,
+        xml_deserialize = xml_deserialize,
         parse_non_payload = parse_non_payload
     )
 }
@@ -425,15 +439,8 @@ fn generate_struct_deserializer(name: &str, service: &Service<'_>, shape: &Shape
         );
     }
 
-    let mut needs_xml_deserializer = false;
-
     // don't generate an xml deserializer if we don't need to
-    for (_, member) in shape.members.as_ref().unwrap().iter() {
-        match member.location.as_ref().map(String::as_ref) {
-            Some("header") | Some("headers") => {}
-            _ => needs_xml_deserializer = true,
-        }
-    }
+    let needs_xml_deserializer = needs_xml_deserializer(shape);
 
     if !needs_xml_deserializer || shape.members.as_ref().unwrap().is_empty() {
         return format!(
@@ -461,6 +468,19 @@ fn generate_struct_deserializer(name: &str, service: &Service<'_>, shape: &Shape
         name = name,
         struct_field_deserializers = generate_struct_field_deserializers(service, shape),
     )
+}
+
+pub fn needs_xml_deserializer(shape: &Shape) -> bool {
+    if shape.members.is_none() {
+        return false;
+    }
+    for (_, member) in shape.members.as_ref().unwrap().iter() {
+        match member.location.as_ref().map(String::as_ref) {
+            Some("header") | Some("headers") => {}
+            _ => return true,
+        }
+    }
+    false
 }
 
 fn generate_struct_field_deserializers(service: &Service<'_>, shape: &Shape) -> String {
