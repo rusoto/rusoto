@@ -30,6 +30,16 @@ version = "0.43.0"
 path = "../../core"
 default-features = false
 
+[dependencies.rusoto_credential]
+version = "0.43.0"
+path = "../../credential"
+default-features = false
+
+[dependencies.rusoto_signature]
+version = "0.43.0"
+path = "../../signature"
+default-features = false
+
 [dependencies.serde]
 version = "1.0.2"
 optional = true
