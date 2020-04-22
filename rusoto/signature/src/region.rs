@@ -107,6 +107,9 @@ pub enum Region {
     /// Region that covers North-Western  part of China
     CnNorthwest1,
 
+    /// Region that covers southern part Africa
+    AfSouth1,
+
     /// Specifies a custom region, such as a local Ceph target
     Custom {
         /// Name of the endpoint (e.g. `"eu-east-2"`).
@@ -154,6 +157,7 @@ impl Region {
             Region::UsGovWest1 => "us-gov-west-1",
             Region::CnNorth1 => "cn-north-1",
             Region::CnNorthwest1 => "cn-northwest-1",
+            Region::AfSouth1 => "af-south-1",
             Region::Custom { ref name, .. } => name,
         }
     }
@@ -252,6 +256,7 @@ impl FromStr for Region {
             "us-gov-west-1" | "usgovwest1" => Ok(Region::UsGovWest1),
             "cn-north-1" | "cnnorth1" => Ok(Region::CnNorth1),
             "cn-northwest-1" | "cnnorthwest1" => Ok(Region::CnNorthwest1),
+            "af-south-1"| "afsouth1" => Ok(Region::AfSouth1),
             s => Err(ParseRegionError::new(s)),
         }
     }
@@ -325,6 +330,7 @@ mod tests {
         assert_eq!("us-gov-west-1".parse(), Ok(Region::UsGovWest1));
         assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
         assert_eq!("cn-northwest-1".parse(), Ok(Region::CnNorthwest1));
+        assert_eq!("af-south-1".parse(), Ok(Region::AfSouth1));
     }
 
     #[test]
@@ -351,7 +357,8 @@ mod tests {
         assert_tokens(&Region::UsGovEast1, &tokens_for_region("us-gov-east-1"));
         assert_tokens(&Region::UsGovWest1, &tokens_for_region("us-gov-west-1"));
         assert_tokens(&Region::CnNorth1, &tokens_for_region("cn-north-1"));
-        assert_tokens(&Region::CnNorthwest1, &tokens_for_region("cn-northwest-1"))
+        assert_tokens(&Region::CnNorthwest1, &tokens_for_region("cn-northwest-1"));
+        assert_tokens(&Region::AfSouth1, &tokens_for_region("af-south-1"));
     }
 
     fn tokens_for_region(name: &'static str) -> [Token; 4] {
