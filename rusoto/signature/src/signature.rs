@@ -274,7 +274,7 @@ impl SignedRequest {
         self.sign(creds);
         let hostname = self.hostname();
 
-        let current_time = OffsetDateTime::now();
+        let current_time = OffsetDateTime::now_utc();
         let current_time_fmted = current_time.format("%Y%m%dT%H%M%SZ");
         let current_date = current_time.format("%Y%m%d");
 
@@ -439,7 +439,7 @@ impl SignedRequest {
     /// Authorization header uses AWS4-HMAC-SHA256 for signing.
     pub fn sign_with_plus(&mut self, creds: &AwsCredentials, should_treat_plus_literally: bool) {
         self.complement_with_plus(should_treat_plus_literally);
-        let date = OffsetDateTime::now();
+        let date = OffsetDateTime::now_utc();
         self.remove_header("x-amz-date");
         self.add_header("x-amz-date", &date.format("%Y%m%dT%H%M%SZ"));
 
