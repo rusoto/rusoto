@@ -71,7 +71,7 @@ impl ProfileProvider {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
     }
 
-    /// Attempts to resolve a region value associated with the current profile from
+    /// Attempts to resolve a region value associated with the current default profile from
     /// `~/.aws/config` or the file associated with the `AWS_CONFIG_FILE` environment variable.
     /// As these fields do not require a region field to be defined, an `Option` type is returned
     ///
@@ -86,6 +86,19 @@ impl ProfileProvider {
                     .map(std::borrow::ToOwned::to_owned)
             })
         })
+    }
+
+    /// Attempts to resolve the region value associated with the current `ProfileProvider`s
+    /// config file path (`ProfileProvider.file_path`) and profile (`ProfileProvider.profile`).
+    /// As these fields do not require a region field to be defined, an `Option` type is returned
+    pub fn region_from_profile(&self) -> Result<Option<String>, CredentialsError> {
+        Ok(
+            parse_config_file(&self.file_path).and_then(|config| {
+                config
+                    .get(&self.profile)
+                    .and_then(|props| props.get(REGION))
+                    .map(std::borrow::ToOwned::to_owned)
+            }))
     }
 
     /// Default config file location:
@@ -707,4 +720,33 @@ mod tests {
             ProfileProvider::default_profile_location()
         );
     }
+
+    #[test]
+    fn region_from_profile() {
+        let provider = ProfileProvider::with_configuration(
+            "tests/sample-data/multiple_profile_config",
+            "foo",
+        );
+        let maybe_region = provider.region_from_profile().unwrap();
+
+        assert_eq!(
+            maybe_region,
+            Some("us-east-3".to_string())
+        );
+    }
+
+    #[test]
+    fn region_from_profile_missing_profile() {
+        let provider = ProfileProvider::with_configuration(
+            "tests/sample-data/multiple_profile_config",
+            "foobar",
+        );
+        let maybe_region = provider.region_from_profile().unwrap();
+
+        assert_eq!(
+            maybe_region,
+            None
+        );
+    }
+
 }
