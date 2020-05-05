@@ -5,7 +5,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Fix incorrect encoding of Session Token when pre-signing URLs
 - Always encode + in query strings
 - Added a Cognito credential provider
 - Add `MultipleMockRequestDispatcher` to permit mocking multiple requests using the same client
@@ -50,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove deprecated `Error::description` implementations
 - Add features `serialize_structs` and `deserialize_structs`
 - Implement Clone on various Credential structs.
+- Fix incorrect encoding of Session Token when pre-signing URLs
 - Add IoT Secure Tunneling service
 - Fix Directory Service integration tests
 - Update to time 0.2.x
