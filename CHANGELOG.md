@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `MultipleMockRequestDispatcher` to permit mocking multiple requests using the same client
 - Fix `rusoto_sts::WebIdentityProvider::from_k8s_env` always requiring `AWS_ROLE_SESSION_NAME` env var which should be optional
 - Omit generating XML-deseralization code for actions without a response body
+- Fix OffsetDateTime::now() deprecation warning
 
 ## [0.43.0] - 2020-03-15
 
