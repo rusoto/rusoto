@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix incorrect encoding of Session Token when pre-signing URLs
 - Always encode + in query strings
 - Added a Cognito credential provider
+- Add `MultipleMockRequestDispatcher` to permit mocking multiple requests using the same client
 
 ## [0.43.0] - 2020-03-15
 
