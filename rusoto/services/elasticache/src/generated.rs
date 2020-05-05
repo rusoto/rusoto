@@ -60,9 +60,10 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AllowedNodeGroupIdDeserializer;
 impl AllowedNodeGroupIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -81,9 +82,10 @@ pub struct AllowedNodeTypeModificationsMessage {
     pub scale_up_modifications: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct AllowedNodeTypeModificationsMessageDeserializer;
 impl AllowedNodeTypeModificationsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -110,9 +112,10 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct AuthTokenUpdateStatusDeserializer;
 impl AuthTokenUpdateStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -163,9 +166,10 @@ pub struct AuthorizeCacheSecurityGroupIngressResult {
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
+#[allow(dead_code)]
 struct AuthorizeCacheSecurityGroupIngressResultDeserializer;
 impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -189,9 +193,10 @@ impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct AutomaticFailoverStatusDeserializer;
 impl AutomaticFailoverStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -208,9 +213,10 @@ pub struct AvailabilityZone {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -226,9 +232,10 @@ impl AvailabilityZoneDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AvailabilityZonesListDeserializer;
 impl AvailabilityZonesListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -337,9 +344,10 @@ impl BatchStopUpdateActionMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -348,9 +356,10 @@ impl BooleanDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -416,9 +425,10 @@ pub struct CacheCluster {
     pub transit_encryption_enabled: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct CacheClusterDeserializer;
 impl CacheClusterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -594,9 +604,10 @@ impl CacheClusterIdListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -624,9 +635,10 @@ pub struct CacheClusterMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheClusterMessageDeserializer;
 impl CacheClusterMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -663,9 +675,10 @@ pub struct CacheEngineVersion {
     pub engine_version: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheEngineVersionDeserializer;
 impl CacheEngineVersionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -703,9 +716,10 @@ impl CacheEngineVersionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CacheEngineVersionListDeserializer;
 impl CacheEngineVersionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -733,9 +747,10 @@ pub struct CacheEngineVersionMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheEngineVersionMessageDeserializer;
 impl CacheEngineVersionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -783,9 +798,10 @@ pub struct CacheNode {
     pub source_cache_node_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheNodeDeserializer;
 impl CacheNodeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -831,9 +847,10 @@ impl CacheNodeDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CacheNodeIdsListDeserializer;
 impl CacheNodeIdsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -860,9 +877,10 @@ impl CacheNodeIdsListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct CacheNodeListDeserializer;
 impl CacheNodeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -901,9 +919,10 @@ pub struct CacheNodeTypeSpecificParameter {
     pub source: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheNodeTypeSpecificParameterDeserializer;
 impl CacheNodeTypeSpecificParameterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -960,9 +979,10 @@ impl CacheNodeTypeSpecificParameterDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CacheNodeTypeSpecificParametersListDeserializer;
 impl CacheNodeTypeSpecificParametersListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -990,9 +1010,10 @@ pub struct CacheNodeTypeSpecificValue {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheNodeTypeSpecificValueDeserializer;
 impl CacheNodeTypeSpecificValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1016,9 +1037,10 @@ impl CacheNodeTypeSpecificValueDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CacheNodeTypeSpecificValueListDeserializer;
 impl CacheNodeTypeSpecificValueListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1058,9 +1080,10 @@ pub struct CacheNodeUpdateStatus {
     pub node_update_status_modified_date: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheNodeUpdateStatusDeserializer;
 impl CacheNodeUpdateStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1116,9 +1139,10 @@ impl CacheNodeUpdateStatusDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CacheNodeUpdateStatusListDeserializer;
 impl CacheNodeUpdateStatusListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1148,9 +1172,10 @@ pub struct CacheParameterGroup {
     pub description: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheParameterGroupDeserializer;
 impl CacheParameterGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1190,9 +1215,10 @@ pub struct CacheParameterGroupDetails {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+#[allow(dead_code)]
 struct CacheParameterGroupDetailsDeserializer;
 impl CacheParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1227,9 +1253,10 @@ impl CacheParameterGroupDetailsDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CacheParameterGroupListDeserializer;
 impl CacheParameterGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1255,9 +1282,10 @@ pub struct CacheParameterGroupNameMessage {
     pub cache_parameter_group_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheParameterGroupNameMessageDeserializer;
 impl CacheParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1292,9 +1320,10 @@ pub struct CacheParameterGroupStatus {
     pub parameter_apply_status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheParameterGroupStatusDeserializer;
 impl CacheParameterGroupStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1341,9 +1370,10 @@ pub struct CacheParameterGroupsMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheParameterGroupsMessageDeserializer;
 impl CacheParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1385,9 +1415,10 @@ pub struct CacheSecurityGroup {
     pub owner_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheSecurityGroupDeserializer;
 impl CacheSecurityGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1427,9 +1458,10 @@ pub struct CacheSecurityGroupMembership {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheSecurityGroupMembershipDeserializer;
 impl CacheSecurityGroupMembershipDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1455,9 +1487,10 @@ impl CacheSecurityGroupMembershipDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CacheSecurityGroupMembershipListDeserializer;
 impl CacheSecurityGroupMembershipListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1485,9 +1518,10 @@ pub struct CacheSecurityGroupMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheSecurityGroupMessageDeserializer;
 impl CacheSecurityGroupMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1527,9 +1561,10 @@ impl CacheSecurityGroupNameListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct CacheSecurityGroupsDeserializer;
 impl CacheSecurityGroupsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1561,9 +1596,10 @@ pub struct CacheSubnetGroup {
     pub vpc_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheSubnetGroupDeserializer;
 impl CacheSubnetGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1606,9 +1642,10 @@ pub struct CacheSubnetGroupMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CacheSubnetGroupMessageDeserializer;
 impl CacheSubnetGroupMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1633,9 +1670,10 @@ impl CacheSubnetGroupMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CacheSubnetGroupsDeserializer;
 impl CacheSubnetGroupsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1653,9 +1691,10 @@ impl CacheSubnetGroupsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1664,9 +1703,10 @@ impl ChangeTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ClusterIdListDeserializer;
 impl ClusterIdListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1715,9 +1755,10 @@ pub struct CompleteMigrationResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct CompleteMigrationResponseDeserializer;
 impl CompleteMigrationResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1822,9 +1863,10 @@ pub struct CopySnapshotResult {
     pub snapshot: Option<Snapshot>,
 }
 
+#[allow(dead_code)]
 struct CopySnapshotResultDeserializer;
 impl CopySnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2017,9 +2059,10 @@ pub struct CreateCacheClusterResult {
     pub cache_cluster: Option<CacheCluster>,
 }
 
+#[allow(dead_code)]
 struct CreateCacheClusterResultDeserializer;
 impl CreateCacheClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2081,9 +2124,10 @@ pub struct CreateCacheParameterGroupResult {
     pub cache_parameter_group: Option<CacheParameterGroup>,
 }
 
+#[allow(dead_code)]
 struct CreateCacheParameterGroupResultDeserializer;
 impl CreateCacheParameterGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2140,9 +2184,10 @@ pub struct CreateCacheSecurityGroupResult {
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
+#[allow(dead_code)]
 struct CreateCacheSecurityGroupResultDeserializer;
 impl CreateCacheSecurityGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2209,9 +2254,10 @@ pub struct CreateCacheSubnetGroupResult {
     pub cache_subnet_group: Option<CacheSubnetGroup>,
 }
 
+#[allow(dead_code)]
 struct CreateCacheSubnetGroupResultDeserializer;
 impl CreateCacheSubnetGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2455,9 +2501,10 @@ pub struct CreateReplicationGroupResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct CreateReplicationGroupResultDeserializer;
 impl CreateReplicationGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2522,9 +2569,10 @@ pub struct CreateSnapshotResult {
     pub snapshot: Option<Snapshot>,
 }
 
+#[allow(dead_code)]
 struct CreateSnapshotResultDeserializer;
 impl CreateSnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2637,9 +2685,10 @@ pub struct DecreaseReplicaCountResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct DecreaseReplicaCountResultDeserializer;
 impl DecreaseReplicaCountResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2700,9 +2749,10 @@ pub struct DeleteCacheClusterResult {
     pub cache_cluster: Option<CacheCluster>,
 }
 
+#[allow(dead_code)]
 struct DeleteCacheClusterResultDeserializer;
 impl DeleteCacheClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2843,9 +2893,10 @@ pub struct DeleteReplicationGroupResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct DeleteReplicationGroupResultDeserializer;
 impl DeleteReplicationGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2895,9 +2946,10 @@ pub struct DeleteSnapshotResult {
     pub snapshot: Option<Snapshot>,
 }
 
+#[allow(dead_code)]
 struct DeleteSnapshotResultDeserializer;
 impl DeleteSnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3197,9 +3249,10 @@ pub struct DescribeEngineDefaultParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
+#[allow(dead_code)]
 struct DescribeEngineDefaultParametersResultDeserializer;
 impl DescribeEngineDefaultParametersResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3483,9 +3536,10 @@ pub struct DescribeSnapshotsListMessage {
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
+#[allow(dead_code)]
 struct DescribeSnapshotsListMessageDeserializer;
 impl DescribeSnapshotsListMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3656,9 +3710,10 @@ impl DescribeUpdateActionsMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct DoubleDeserializer;
 impl DoubleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3679,9 +3734,10 @@ pub struct EC2SecurityGroup {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EC2SecurityGroupDeserializer;
 impl EC2SecurityGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3709,9 +3765,10 @@ impl EC2SecurityGroupDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3739,9 +3796,10 @@ pub struct Endpoint {
     pub port: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct EndpointDeserializer;
 impl EndpointDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3774,9 +3832,10 @@ pub struct EngineDefaults {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+#[allow(dead_code)]
 struct EngineDefaultsDeserializer;
 impl EngineDefaultsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3827,9 +3886,10 @@ pub struct Event {
     pub source_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventDeserializer;
 impl EventDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
         deserialize_elements::<_, Event, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -3853,9 +3913,10 @@ impl EventDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EventListDeserializer;
 impl EventListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3880,9 +3941,10 @@ pub struct EventsMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventsMessageDeserializer;
 impl EventsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3952,9 +4014,10 @@ pub struct IncreaseReplicaCountResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct IncreaseReplicaCountResultDeserializer;
 impl IncreaseReplicaCountResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3977,9 +4040,10 @@ impl IncreaseReplicaCountResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3988,9 +4052,10 @@ impl IntegerDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -4217,9 +4282,10 @@ pub struct ModifyCacheClusterResult {
     pub cache_cluster: Option<CacheCluster>,
 }
 
+#[allow(dead_code)]
 struct ModifyCacheClusterResultDeserializer;
 impl ModifyCacheClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4320,9 +4386,10 @@ pub struct ModifyCacheSubnetGroupResult {
     pub cache_subnet_group: Option<CacheSubnetGroup>,
 }
 
+#[allow(dead_code)]
 struct ModifyCacheSubnetGroupResultDeserializer;
 impl ModifyCacheSubnetGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4504,9 +4571,10 @@ pub struct ModifyReplicationGroupResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct ModifyReplicationGroupResultDeserializer;
 impl ModifyReplicationGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4602,9 +4670,10 @@ pub struct ModifyReplicationGroupShardConfigurationResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct ModifyReplicationGroupShardConfigurationResultDeserializer;
 impl ModifyReplicationGroupShardConfigurationResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4645,9 +4714,10 @@ pub struct NodeGroup {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct NodeGroupDeserializer;
 impl NodeGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4700,9 +4770,10 @@ pub struct NodeGroupConfiguration {
     pub slots: Option<String>,
 }
 
+#[allow(dead_code)]
 struct NodeGroupConfigurationDeserializer;
 impl NodeGroupConfigurationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4790,9 +4861,10 @@ impl NodeGroupConfigurationListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct NodeGroupListDeserializer;
 impl NodeGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4823,9 +4895,10 @@ pub struct NodeGroupMember {
     pub read_endpoint: Option<Endpoint>,
 }
 
+#[allow(dead_code)]
 struct NodeGroupMemberDeserializer;
 impl NodeGroupMemberDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4859,9 +4932,10 @@ impl NodeGroupMemberDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct NodeGroupMemberListDeserializer;
 impl NodeGroupMemberListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4903,9 +4977,10 @@ pub struct NodeGroupMemberUpdateStatus {
     pub node_update_status_modified_date: Option<String>,
 }
 
+#[allow(dead_code)]
 struct NodeGroupMemberUpdateStatusDeserializer;
 impl NodeGroupMemberUpdateStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4968,9 +5043,10 @@ impl NodeGroupMemberUpdateStatusDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct NodeGroupMemberUpdateStatusListDeserializer;
 impl NodeGroupMemberUpdateStatusListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4998,9 +5074,10 @@ pub struct NodeGroupUpdateStatus {
     pub node_group_member_update_status: Option<Vec<NodeGroupMemberUpdateStatus>>,
 }
 
+#[allow(dead_code)]
 struct NodeGroupUpdateStatusDeserializer;
 impl NodeGroupUpdateStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5025,9 +5102,10 @@ impl NodeGroupUpdateStatusDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct NodeGroupUpdateStatusListDeserializer;
 impl NodeGroupUpdateStatusListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5088,9 +5166,10 @@ pub struct NodeSnapshot {
     pub snapshot_create_time: Option<String>,
 }
 
+#[allow(dead_code)]
 struct NodeSnapshotDeserializer;
 impl NodeSnapshotDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5137,9 +5216,10 @@ impl NodeSnapshotDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct NodeSnapshotListDeserializer;
 impl NodeSnapshotListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5157,9 +5237,10 @@ impl NodeSnapshotListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct NodeTypeListDeserializer;
 impl NodeTypeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5174,9 +5255,10 @@ impl NodeTypeListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct NodeUpdateInitiatedByDeserializer;
 impl NodeUpdateInitiatedByDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5185,9 +5267,10 @@ impl NodeUpdateInitiatedByDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NodeUpdateStatusDeserializer;
 impl NodeUpdateStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5206,9 +5289,10 @@ pub struct NotificationConfiguration {
     pub topic_status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct NotificationConfigurationDeserializer;
 impl NotificationConfigurationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5256,9 +5340,10 @@ pub struct Parameter {
     pub source: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ParameterDeserializer;
 impl ParameterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5345,9 +5430,10 @@ impl ParameterNameValueListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5362,9 +5448,10 @@ impl ParametersListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PendingAutomaticFailoverStatusDeserializer;
 impl PendingAutomaticFailoverStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5389,9 +5476,10 @@ pub struct PendingModifiedValues {
     pub num_cache_nodes: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct PendingModifiedValuesDeserializer;
 impl PendingModifiedValuesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5455,9 +5543,10 @@ pub struct ProcessedUpdateAction {
     pub update_action_status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ProcessedUpdateActionDeserializer;
 impl ProcessedUpdateActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5490,9 +5579,10 @@ impl ProcessedUpdateActionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ProcessedUpdateActionListDeserializer;
 impl ProcessedUpdateActionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5553,9 +5643,10 @@ pub struct PurchaseReservedCacheNodesOfferingResult {
     pub reserved_cache_node: Option<ReservedCacheNode>,
 }
 
+#[allow(dead_code)]
 struct PurchaseReservedCacheNodesOfferingResultDeserializer;
 impl PurchaseReservedCacheNodesOfferingResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5615,9 +5706,10 @@ pub struct RebootCacheClusterResult {
     pub cache_cluster: Option<CacheCluster>,
 }
 
+#[allow(dead_code)]
 struct RebootCacheClusterResultDeserializer;
 impl RebootCacheClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5650,9 +5742,10 @@ pub struct RecurringCharge {
     pub recurring_charge_frequency: Option<String>,
 }
 
+#[allow(dead_code)]
 struct RecurringChargeDeserializer;
 impl RecurringChargeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5677,9 +5770,10 @@ impl RecurringChargeDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5786,9 +5880,10 @@ pub struct ReplicationGroup {
     pub transit_encryption_enabled: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct ReplicationGroupDeserializer;
 impl ReplicationGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5909,9 +6004,10 @@ impl ReplicationGroupIdListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ReplicationGroupListDeserializer;
 impl ReplicationGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5939,9 +6035,10 @@ pub struct ReplicationGroupMessage {
     pub replication_groups: Option<Vec<ReplicationGroup>>,
 }
 
+#[allow(dead_code)]
 struct ReplicationGroupMessageDeserializer;
 impl ReplicationGroupMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5983,9 +6080,10 @@ pub struct ReplicationGroupPendingModifiedValues {
     pub resharding: Option<ReshardingStatus>,
 }
 
+#[allow(dead_code)]
 struct ReplicationGroupPendingModifiedValuesDeserializer;
 impl ReplicationGroupPendingModifiedValuesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6058,9 +6156,10 @@ pub struct ReservedCacheNode {
     pub usage_price: Option<f64>,
 }
 
+#[allow(dead_code)]
 struct ReservedCacheNodeDeserializer;
 impl ReservedCacheNodeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6127,9 +6226,10 @@ impl ReservedCacheNodeDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ReservedCacheNodeListDeserializer;
 impl ReservedCacheNodeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6157,9 +6257,10 @@ pub struct ReservedCacheNodeMessage {
     pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
 }
 
+#[allow(dead_code)]
 struct ReservedCacheNodeMessageDeserializer;
 impl ReservedCacheNodeMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6209,9 +6310,10 @@ pub struct ReservedCacheNodesOffering {
     pub usage_price: Option<f64>,
 }
 
+#[allow(dead_code)]
 struct ReservedCacheNodesOfferingDeserializer;
 impl ReservedCacheNodesOfferingDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6266,9 +6368,10 @@ impl ReservedCacheNodesOfferingDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ReservedCacheNodesOfferingListDeserializer;
 impl ReservedCacheNodesOfferingListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6296,9 +6399,10 @@ pub struct ReservedCacheNodesOfferingMessage {
     pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
 }
 
+#[allow(dead_code)]
 struct ReservedCacheNodesOfferingMessageDeserializer;
 impl ReservedCacheNodesOfferingMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6415,9 +6519,10 @@ pub struct ReshardingStatus {
     pub slot_migration: Option<SlotMigration>,
 }
 
+#[allow(dead_code)]
 struct ReshardingStatusDeserializer;
 impl ReshardingStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6478,9 +6583,10 @@ pub struct RevokeCacheSecurityGroupIngressResult {
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
+#[allow(dead_code)]
 struct RevokeCacheSecurityGroupIngressResultDeserializer;
 impl RevokeCacheSecurityGroupIngressResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6526,9 +6632,10 @@ pub struct SecurityGroupMembership {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SecurityGroupMembershipDeserializer;
 impl SecurityGroupMembershipDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6552,9 +6659,10 @@ impl SecurityGroupMembershipDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct SecurityGroupMembershipListDeserializer;
 impl SecurityGroupMembershipListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6601,9 +6709,10 @@ pub struct ServiceUpdate {
     pub service_update_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ServiceUpdateDeserializer;
 impl ServiceUpdateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6684,9 +6793,10 @@ impl ServiceUpdateDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ServiceUpdateListDeserializer;
 impl ServiceUpdateListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6704,9 +6814,10 @@ impl ServiceUpdateListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ServiceUpdateSeverityDeserializer;
 impl ServiceUpdateSeverityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6715,9 +6826,10 @@ impl ServiceUpdateSeverityDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ServiceUpdateStatusDeserializer;
 impl ServiceUpdateStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6738,9 +6850,10 @@ impl ServiceUpdateStatusListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ServiceUpdateTypeDeserializer;
 impl ServiceUpdateTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6758,9 +6871,10 @@ pub struct ServiceUpdatesMessage {
     pub service_updates: Option<Vec<ServiceUpdate>>,
 }
 
+#[allow(dead_code)]
 struct ServiceUpdatesMessageDeserializer;
 impl ServiceUpdatesMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6781,9 +6895,10 @@ impl ServiceUpdatesMessageDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SlaMetDeserializer;
 impl SlaMetDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6800,9 +6915,10 @@ pub struct SlotMigration {
     pub progress_percentage: Option<f64>,
 }
 
+#[allow(dead_code)]
 struct SlotMigrationDeserializer;
 impl SlotMigrationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6877,9 +6993,10 @@ pub struct Snapshot {
     pub vpc_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SnapshotDeserializer;
 impl SnapshotDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7025,9 +7142,10 @@ impl SnapshotArnsListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7042,9 +7160,10 @@ impl SnapshotListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7089,9 +7208,10 @@ pub struct StartMigrationResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct StartMigrationResponseDeserializer;
 impl StartMigrationResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7110,9 +7230,10 @@ impl StartMigrationResponseDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7131,9 +7252,10 @@ pub struct Subnet {
     pub subnet_identifier: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SubnetDeserializer;
 impl SubnetDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -7165,9 +7287,10 @@ impl SubnetIdentifierListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7182,9 +7305,10 @@ impl SubnetListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TStampDeserializer;
 impl TStampDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7204,9 +7328,10 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -7241,9 +7366,10 @@ impl TagSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7278,9 +7404,10 @@ pub struct TagListMessage {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+#[allow(dead_code)]
 struct TagListMessageDeserializer;
 impl TagListMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7330,9 +7457,10 @@ pub struct TestFailoverResult {
     pub replication_group: Option<ReplicationGroup>,
 }
 
+#[allow(dead_code)]
 struct TestFailoverResultDeserializer;
 impl TestFailoverResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7395,9 +7523,10 @@ pub struct UnprocessedUpdateAction {
     pub service_update_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct UnprocessedUpdateActionDeserializer;
 impl UnprocessedUpdateActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7435,9 +7564,10 @@ impl UnprocessedUpdateActionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct UnprocessedUpdateActionListDeserializer;
 impl UnprocessedUpdateActionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7495,9 +7625,10 @@ pub struct UpdateAction {
     pub update_action_status_modified_date: Option<String>,
 }
 
+#[allow(dead_code)]
 struct UpdateActionDeserializer;
 impl UpdateActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7606,9 +7737,10 @@ impl UpdateActionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct UpdateActionListDeserializer;
 impl UpdateActionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7635,9 +7767,10 @@ pub struct UpdateActionResultsMessage {
     pub unprocessed_update_actions: Option<Vec<UnprocessedUpdateAction>>,
 }
 
+#[allow(dead_code)]
 struct UpdateActionResultsMessageDeserializer;
 impl UpdateActionResultsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7670,9 +7803,10 @@ impl UpdateActionResultsMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct UpdateActionStatusDeserializer;
 impl UpdateActionStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7702,9 +7836,10 @@ pub struct UpdateActionsMessage {
     pub update_actions: Option<Vec<UpdateAction>>,
 }
 
+#[allow(dead_code)]
 struct UpdateActionsMessageDeserializer;
 impl UpdateActionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,

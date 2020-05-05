@@ -6,9 +6,10 @@ use crate::Service;
 
 pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Service<'_>) -> String {
     format!(
-        "struct {name}Deserializer;
+        "#[allow(dead_code)]
+            struct {name}Deserializer;
             impl {name}Deserializer {{
-                #[allow(unused_variables)]
+                #[allow(dead_code, unused_variables)]
                 fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T)
                 -> Result<{ty}, XmlParseError> {{
                     {deserializer_body}
