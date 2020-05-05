@@ -19463,19 +19463,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = AbortMultipartUploadOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = AbortMultipartUploadOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
             result.request_charged = Some(value)
@@ -19906,18 +19894,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = CreateBucketOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = CreateBucketOutput::default();
         if let Some(location) = response.headers.get("Location") {
             let value = location.to_owned();
             result.location = Some(value)
@@ -20496,18 +20473,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteObjectOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteObjectOutput::default();
         if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
             let value = delete_marker.to_owned();
             result.delete_marker = Some(value.parse::<bool>().unwrap())
@@ -20553,19 +20519,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteObjectTaggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteObjectTaggingOutput::default();
         if let Some(version_id) = response.headers.get("x-amz-version-id") {
             let value = version_id.to_owned();
             result.version_id = Some(value)
@@ -22233,18 +22187,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = HeadObjectOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = HeadObjectOutput::default();
         if let Some(accept_ranges) = response.headers.get("accept-ranges") {
             let value = accept_ranges.to_owned();
             result.accept_ranges = Some(value)
@@ -23784,18 +23727,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = PutObjectOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = PutObjectOutput::default();
         if let Some(e_tag) = response.headers.get("ETag") {
             let value = e_tag.to_owned();
             result.e_tag = Some(value)
@@ -23918,18 +23850,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = PutObjectAclOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = PutObjectAclOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
             result.request_charged = Some(value)
@@ -23985,19 +23906,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = PutObjectLegalHoldOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                PutObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = PutObjectLegalHoldOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
             result.request_charged = Some(value)
@@ -24055,21 +23964,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = PutObjectLockConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = PutObjectLockConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        result = PutObjectLockConfigurationOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
             result.request_charged = Some(value)
@@ -24132,19 +24027,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = PutObjectRetentionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                PutObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = PutObjectRetentionOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
             result.request_charged = Some(value)
@@ -24188,18 +24071,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = PutObjectTaggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = PutObjectTaggingOutput::default();
         if let Some(version_id) = response.headers.get("x-amz-version-id") {
             let value = version_id.to_owned();
             result.version_id = Some(value)
@@ -24289,18 +24161,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = RestoreObjectOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = RestoreObjectOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
             result.request_charged = Some(value)
@@ -24448,18 +24309,7 @@ impl S3 for S3Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = UploadPartOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = UploadPartOutput::default();
         if let Some(e_tag) = response.headers.get("ETag") {
             let value = e_tag.to_owned();
             result.e_tag = Some(value)

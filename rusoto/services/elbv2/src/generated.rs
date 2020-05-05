@@ -9165,21 +9165,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = AddTagsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = AddTagsOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -9402,22 +9388,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteListenerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DeleteListenerOutputDeserializer::deserialize("DeleteListenerResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteListenerOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -9449,24 +9420,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteLoadBalancerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteLoadBalancerOutputDeserializer::deserialize(
-                "DeleteLoadBalancerResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteLoadBalancerOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -9498,21 +9452,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteRuleOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteRuleOutputDeserializer::deserialize("DeleteRuleResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteRuleOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -9544,24 +9484,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteTargetGroupOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteTargetGroupOutputDeserializer::deserialize(
-                "DeleteTargetGroupResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteTargetGroupOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -9593,24 +9516,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = DeregisterTargetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeregisterTargetsOutputDeserializer::deserialize(
-                "DeregisterTargetsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = DeregisterTargetsOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -10423,24 +10329,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = RegisterTargetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RegisterTargetsOutputDeserializer::deserialize(
-                "RegisterTargetsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = RegisterTargetsOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -10473,24 +10362,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = RemoveListenerCertificatesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RemoveListenerCertificatesOutputDeserializer::deserialize(
-                "RemoveListenerCertificatesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = RemoveListenerCertificatesOutput::default();
         // parse non-payload
         Ok(result)
     }
@@ -10522,21 +10394,7 @@ impl Elb for ElbClient {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
 
-        if xml_response.body.is_empty() {
-            result = RemoveTagsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
+        result = RemoveTagsOutput::default();
         // parse non-payload
         Ok(result)
     }
