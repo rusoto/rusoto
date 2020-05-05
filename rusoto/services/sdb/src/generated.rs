@@ -1859,9 +1859,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(DomainMetadataError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DomainMetadataResult::default();
         } else {
@@ -1906,9 +1905,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(GetAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAttributesResult::default();
         } else {
@@ -1953,9 +1951,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(ListDomainsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDomainsResult::default();
         } else {
@@ -2024,9 +2021,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(SelectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SelectResult::default();
         } else {

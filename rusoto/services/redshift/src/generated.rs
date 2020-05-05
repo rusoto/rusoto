@@ -18517,9 +18517,8 @@ impl Redshift for RedshiftClient {
             return Err(AcceptReservedNodeExchangeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AcceptReservedNodeExchangeOutputMessage::default();
         } else {
@@ -18571,9 +18570,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AuthorizeClusterSecurityGroupIngressResult::default();
         } else {
@@ -18620,9 +18618,8 @@ impl Redshift for RedshiftClient {
             return Err(AuthorizeSnapshotAccessError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AuthorizeSnapshotAccessResult::default();
         } else {
@@ -18670,9 +18667,8 @@ impl Redshift for RedshiftClient {
             return Err(BatchDeleteClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = BatchDeleteClusterSnapshotsResult::default();
         } else {
@@ -18722,9 +18718,8 @@ impl Redshift for RedshiftClient {
             return Err(BatchModifyClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = BatchModifyClusterSnapshotsOutputMessage::default();
         } else {
@@ -18771,9 +18766,8 @@ impl Redshift for RedshiftClient {
             return Err(CancelResizeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ResizeProgressMessage::default();
         } else {
@@ -18818,9 +18812,8 @@ impl Redshift for RedshiftClient {
             return Err(CopyClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyClusterSnapshotResult::default();
         } else {
@@ -18867,9 +18860,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateClusterResult::default();
         } else {
@@ -18915,9 +18907,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateClusterParameterGroupResult::default();
         } else {
@@ -18965,9 +18956,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateClusterSecurityGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateClusterSecurityGroupResult::default();
         } else {
@@ -19014,9 +19004,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateClusterSnapshotResult::default();
         } else {
@@ -19063,9 +19052,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateClusterSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateClusterSubnetGroupResult::default();
         } else {
@@ -19112,9 +19100,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateEventSubscriptionResult::default();
         } else {
@@ -19162,9 +19149,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateHsmClientCertificateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateHsmClientCertificateResult::default();
         } else {
@@ -19211,9 +19197,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateHsmConfigurationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateHsmConfigurationResult::default();
         } else {
@@ -19260,9 +19245,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateScheduledActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ScheduledAction::default();
         } else {
@@ -19309,9 +19293,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateSnapshotCopyGrantError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateSnapshotCopyGrantResult::default();
         } else {
@@ -19358,9 +19341,8 @@ impl Redshift for RedshiftClient {
             return Err(CreateSnapshotScheduleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SnapshotSchedule::default();
         } else {
@@ -19435,9 +19417,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteClusterResult::default();
         } else {
@@ -19538,9 +19519,8 @@ impl Redshift for RedshiftClient {
             return Err(DeleteClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteClusterSnapshotResult::default();
         } else {
@@ -19811,9 +19791,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeAccountAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AccountAttributeList::default();
         } else {
@@ -19860,9 +19839,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterDbRevisionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterDbRevisionsMessage::default();
         } else {
@@ -19910,9 +19888,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterParameterGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterParameterGroupsMessage::default();
         } else {
@@ -19959,9 +19936,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterParameterGroupDetails::default();
         } else {
@@ -20008,9 +19984,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterSecurityGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterSecurityGroupMessage::default();
         } else {
@@ -20057,9 +20032,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SnapshotMessage::default();
         } else {
@@ -20106,9 +20080,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterSubnetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterSubnetGroupMessage::default();
         } else {
@@ -20155,9 +20128,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterTracksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TrackListMessage::default();
         } else {
@@ -20204,9 +20176,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClusterVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterVersionsMessage::default();
         } else {
@@ -20253,9 +20224,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClustersMessage::default();
         } else {
@@ -20305,9 +20275,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDefaultClusterParametersResult::default();
         } else {
@@ -20354,9 +20323,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeEventCategoriesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventCategoriesMessage::default();
         } else {
@@ -20403,9 +20371,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeEventSubscriptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventSubscriptionsMessage::default();
         } else {
@@ -20452,9 +20419,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventsMessage::default();
         } else {
@@ -20498,9 +20464,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeHsmClientCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = HsmClientCertificateMessage::default();
         } else {
@@ -20547,9 +20512,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeHsmConfigurationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = HsmConfigurationMessage::default();
         } else {
@@ -20596,9 +20560,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeLoggingStatusError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = LoggingStatus::default();
         } else {
@@ -20646,9 +20609,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = NodeConfigurationOptionsMessage::default();
         } else {
@@ -20698,9 +20660,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OrderableClusterOptionsMessage::default();
         } else {
@@ -20747,9 +20708,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeReservedNodeOfferingsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReservedNodeOfferingsMessage::default();
         } else {
@@ -20796,9 +20756,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeReservedNodesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReservedNodesMessage::default();
         } else {
@@ -20845,9 +20804,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeResizeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ResizeProgressMessage::default();
         } else {
@@ -20892,9 +20850,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeScheduledActionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ScheduledActionsMessage::default();
         } else {
@@ -20941,9 +20898,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeSnapshotCopyGrantsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SnapshotCopyGrantMessage::default();
         } else {
@@ -20991,9 +20947,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeSnapshotSchedulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeSnapshotSchedulesOutputMessage::default();
         } else {
@@ -21039,9 +20994,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeStorageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CustomerStorageMessage::default();
         } else {
@@ -21088,9 +21042,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeTableRestoreStatusError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TableRestoreStatusMessage::default();
         } else {
@@ -21137,9 +21090,8 @@ impl Redshift for RedshiftClient {
             return Err(DescribeTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TaggedResourceListMessage::default();
         } else {
@@ -21186,9 +21138,8 @@ impl Redshift for RedshiftClient {
             return Err(DisableLoggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = LoggingStatus::default();
         } else {
@@ -21232,9 +21183,8 @@ impl Redshift for RedshiftClient {
             return Err(DisableSnapshotCopyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DisableSnapshotCopyResult::default();
         } else {
@@ -21281,9 +21231,8 @@ impl Redshift for RedshiftClient {
             return Err(EnableLoggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = LoggingStatus::default();
         } else {
@@ -21327,9 +21276,8 @@ impl Redshift for RedshiftClient {
             return Err(EnableSnapshotCopyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnableSnapshotCopyResult::default();
         } else {
@@ -21376,9 +21324,8 @@ impl Redshift for RedshiftClient {
             return Err(GetClusterCredentialsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterCredentials::default();
         } else {
@@ -21430,9 +21377,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetReservedNodeExchangeOfferingsOutputMessage::default();
         } else {
@@ -21479,9 +21425,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyClusterResult::default();
         } else {
@@ -21526,9 +21471,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterDbRevisionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyClusterDbRevisionResult::default();
         } else {
@@ -21575,9 +21519,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterIamRolesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyClusterIamRolesResult::default();
         } else {
@@ -21624,9 +21567,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterMaintenanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyClusterMaintenanceResult::default();
         } else {
@@ -21674,9 +21616,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterParameterGroupNameMessage::default();
         } else {
@@ -21723,9 +21664,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyClusterSnapshotResult::default();
         } else {
@@ -21800,9 +21740,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyClusterSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyClusterSubnetGroupResult::default();
         } else {
@@ -21849,9 +21788,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyEventSubscriptionResult::default();
         } else {
@@ -21898,9 +21836,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifyScheduledActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ScheduledAction::default();
         } else {
@@ -21952,9 +21889,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifySnapshotCopyRetentionPeriodResult::default();
         } else {
@@ -22001,9 +21937,8 @@ impl Redshift for RedshiftClient {
             return Err(ModifySnapshotScheduleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SnapshotSchedule::default();
         } else {
@@ -22051,9 +21986,8 @@ impl Redshift for RedshiftClient {
             return Err(PurchaseReservedNodeOfferingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PurchaseReservedNodeOfferingResult::default();
         } else {
@@ -22100,9 +22034,8 @@ impl Redshift for RedshiftClient {
             return Err(RebootClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RebootClusterResult::default();
         } else {
@@ -22148,9 +22081,8 @@ impl Redshift for RedshiftClient {
             return Err(ResetClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ClusterParameterGroupNameMessage::default();
         } else {
@@ -22197,9 +22129,8 @@ impl Redshift for RedshiftClient {
             return Err(ResizeClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ResizeClusterResult::default();
         } else {
@@ -22245,9 +22176,8 @@ impl Redshift for RedshiftClient {
             return Err(RestoreFromClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreFromClusterSnapshotResult::default();
         } else {
@@ -22299,9 +22229,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreTableFromClusterSnapshotResult::default();
         } else {
@@ -22353,9 +22282,8 @@ impl Redshift for RedshiftClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RevokeClusterSecurityGroupIngressResult::default();
         } else {
@@ -22402,9 +22330,8 @@ impl Redshift for RedshiftClient {
             return Err(RevokeSnapshotAccessError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RevokeSnapshotAccessResult::default();
         } else {
@@ -22451,9 +22378,8 @@ impl Redshift for RedshiftClient {
             return Err(RotateEncryptionKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RotateEncryptionKeyResult::default();
         } else {

@@ -12222,9 +12222,8 @@ impl Route53 for Route53Client {
             return Err(AssociateVPCWithHostedZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssociateVPCWithHostedZoneResponse::default();
         } else {
@@ -12280,9 +12279,8 @@ impl Route53 for Route53Client {
             return Err(ChangeResourceRecordSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ChangeResourceRecordSetsResponse::default();
         } else {
@@ -12338,9 +12336,7 @@ impl Route53 for Route53Client {
             return Err(ChangeTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = ChangeTagsForResourceResponse::default();
         // parse non-payload
         Ok(result)
@@ -12375,9 +12371,8 @@ impl Route53 for Route53Client {
             return Err(CreateHealthCheckError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateHealthCheckResponse::default();
         } else {
@@ -12425,9 +12420,8 @@ impl Route53 for Route53Client {
             return Err(CreateHostedZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateHostedZoneResponse::default();
         } else {
@@ -12475,9 +12469,8 @@ impl Route53 for Route53Client {
             return Err(CreateQueryLoggingConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateQueryLoggingConfigResponse::default();
         } else {
@@ -12528,9 +12521,8 @@ impl Route53 for Route53Client {
             return Err(CreateReusableDelegationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateReusableDelegationSetResponse::default();
         } else {
@@ -12580,9 +12572,8 @@ impl Route53 for Route53Client {
             return Err(CreateTrafficPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateTrafficPolicyResponse::default();
         } else {
@@ -12631,9 +12622,8 @@ impl Route53 for Route53Client {
             return Err(CreateTrafficPolicyInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateTrafficPolicyInstanceResponse::default();
         } else {
@@ -12687,9 +12677,8 @@ impl Route53 for Route53Client {
             return Err(CreateTrafficPolicyVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateTrafficPolicyVersionResponse::default();
         } else {
@@ -12750,9 +12739,8 @@ impl Route53 for Route53Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateVPCAssociationAuthorizationResponse::default();
         } else {
@@ -12798,9 +12786,7 @@ impl Route53 for Route53Client {
             return Err(DeleteHealthCheckError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteHealthCheckResponse::default();
         // parse non-payload
         Ok(result)
@@ -12829,9 +12815,8 @@ impl Route53 for Route53Client {
             return Err(DeleteHostedZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteHostedZoneResponse::default();
         } else {
@@ -12872,9 +12857,7 @@ impl Route53 for Route53Client {
             return Err(DeleteQueryLoggingConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteQueryLoggingConfigResponse::default();
         // parse non-payload
         Ok(result)
@@ -12904,9 +12887,7 @@ impl Route53 for Route53Client {
             return Err(DeleteReusableDelegationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteReusableDelegationSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -12939,9 +12920,7 @@ impl Route53 for Route53Client {
             return Err(DeleteTrafficPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteTrafficPolicyResponse::default();
         // parse non-payload
         Ok(result)
@@ -12971,9 +12950,7 @@ impl Route53 for Route53Client {
             return Err(DeleteTrafficPolicyInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteTrafficPolicyInstanceResponse::default();
         // parse non-payload
         Ok(result)
@@ -13019,9 +12996,7 @@ impl Route53 for Route53Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteVPCAssociationAuthorizationResponse::default();
         // parse non-payload
         Ok(result)
@@ -13065,9 +13040,8 @@ impl Route53 for Route53Client {
             return Err(DisassociateVPCFromHostedZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DisassociateVPCFromHostedZoneResponse::default();
         } else {
@@ -13110,9 +13084,8 @@ impl Route53 for Route53Client {
             return Err(GetAccountLimitError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccountLimitResponse::default();
         } else {
@@ -13153,9 +13126,8 @@ impl Route53 for Route53Client {
             return Err(GetChangeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetChangeResponse::default();
         } else {
@@ -13192,9 +13164,8 @@ impl Route53 for Route53Client {
             return Err(GetCheckerIpRangesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCheckerIpRangesResponse::default();
         } else {
@@ -13244,9 +13215,8 @@ impl Route53 for Route53Client {
             return Err(GetGeoLocationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetGeoLocationResponse::default();
         } else {
@@ -13289,9 +13259,8 @@ impl Route53 for Route53Client {
             return Err(GetHealthCheckError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHealthCheckResponse::default();
         } else {
@@ -13328,9 +13297,8 @@ impl Route53 for Route53Client {
             return Err(GetHealthCheckCountError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHealthCheckCountResponse::default();
         } else {
@@ -13379,9 +13347,8 @@ impl Route53 for Route53Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHealthCheckLastFailureReasonResponse::default();
         } else {
@@ -13427,9 +13394,8 @@ impl Route53 for Route53Client {
             return Err(GetHealthCheckStatusError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHealthCheckStatusResponse::default();
         } else {
@@ -13472,9 +13438,8 @@ impl Route53 for Route53Client {
             return Err(GetHostedZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHostedZoneResponse::default();
         } else {
@@ -13511,9 +13476,8 @@ impl Route53 for Route53Client {
             return Err(GetHostedZoneCountError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHostedZoneCountResponse::default();
         } else {
@@ -13551,9 +13515,8 @@ impl Route53 for Route53Client {
             return Err(GetHostedZoneLimitError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetHostedZoneLimitResponse::default();
         } else {
@@ -13594,9 +13557,8 @@ impl Route53 for Route53Client {
             return Err(GetQueryLoggingConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetQueryLoggingConfigResponse::default();
         } else {
@@ -13639,9 +13601,8 @@ impl Route53 for Route53Client {
             return Err(GetReusableDelegationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetReusableDelegationSetResponse::default();
         } else {
@@ -13684,9 +13645,8 @@ impl Route53 for Route53Client {
             return Err(GetReusableDelegationSetLimitError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetReusableDelegationSetLimitResponse::default();
         } else {
@@ -13733,9 +13693,8 @@ impl Route53 for Route53Client {
             return Err(GetTrafficPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTrafficPolicyResponse::default();
         } else {
@@ -13776,9 +13735,8 @@ impl Route53 for Route53Client {
             return Err(GetTrafficPolicyInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTrafficPolicyInstanceResponse::default();
         } else {
@@ -13821,9 +13779,8 @@ impl Route53 for Route53Client {
             return Err(GetTrafficPolicyInstanceCountError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTrafficPolicyInstanceCountResponse::default();
         } else {
@@ -13878,9 +13835,8 @@ impl Route53 for Route53Client {
             return Err(ListGeoLocationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListGeoLocationsResponse::default();
         } else {
@@ -13927,9 +13883,8 @@ impl Route53 for Route53Client {
             return Err(ListHealthChecksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListHealthChecksResponse::default();
         } else {
@@ -13979,9 +13934,8 @@ impl Route53 for Route53Client {
             return Err(ListHostedZonesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListHostedZonesResponse::default();
         } else {
@@ -14031,9 +13985,8 @@ impl Route53 for Route53Client {
             return Err(ListHostedZonesByNameError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListHostedZonesByNameResponse::default();
         } else {
@@ -14085,9 +14038,8 @@ impl Route53 for Route53Client {
             return Err(ListQueryLoggingConfigsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListQueryLoggingConfigsResponse::default();
         } else {
@@ -14148,9 +14100,8 @@ impl Route53 for Route53Client {
             return Err(ListResourceRecordSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListResourceRecordSetsResponse::default();
         } else {
@@ -14200,9 +14151,8 @@ impl Route53 for Route53Client {
             return Err(ListReusableDelegationSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListReusableDelegationSetsResponse::default();
         } else {
@@ -14249,9 +14199,8 @@ impl Route53 for Route53Client {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTagsForResourceResponse::default();
         } else {
@@ -14304,9 +14253,8 @@ impl Route53 for Route53Client {
             return Err(ListTagsForResourcesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTagsForResourcesResponse::default();
         } else {
@@ -14355,9 +14303,8 @@ impl Route53 for Route53Client {
             return Err(ListTrafficPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTrafficPoliciesResponse::default();
         } else {
@@ -14411,9 +14358,8 @@ impl Route53 for Route53Client {
             return Err(ListTrafficPolicyInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTrafficPolicyInstancesResponse::default();
         } else {
@@ -14471,9 +14417,8 @@ impl Route53 for Route53Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
         } else {
@@ -14535,9 +14480,8 @@ impl Route53 for Route53Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTrafficPolicyInstancesByPolicyResponse::default();
         } else {
@@ -14590,9 +14534,8 @@ impl Route53 for Route53Client {
             return Err(ListTrafficPolicyVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTrafficPolicyVersionsResponse::default();
         } else {
@@ -14652,9 +14595,8 @@ impl Route53 for Route53Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListVPCAssociationAuthorizationsResponse::default();
         } else {
@@ -14709,9 +14651,8 @@ impl Route53 for Route53Client {
             return Err(TestDNSAnswerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TestDNSAnswerResponse::default();
         } else {
@@ -14763,9 +14704,8 @@ impl Route53 for Route53Client {
             return Err(UpdateHealthCheckError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateHealthCheckResponse::default();
         } else {
@@ -14815,9 +14755,8 @@ impl Route53 for Route53Client {
             return Err(UpdateHostedZoneCommentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateHostedZoneCommentResponse::default();
         } else {
@@ -14874,9 +14813,8 @@ impl Route53 for Route53Client {
             return Err(UpdateTrafficPolicyCommentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateTrafficPolicyCommentResponse::default();
         } else {
@@ -14929,9 +14867,8 @@ impl Route53 for Route53Client {
             return Err(UpdateTrafficPolicyInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateTrafficPolicyInstanceResponse::default();
         } else {

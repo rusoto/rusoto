@@ -29753,9 +29753,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AddSourceIdentifierToSubscriptionResult::default();
         } else {
@@ -29831,9 +29830,8 @@ impl Rds for RdsClient {
             return Err(ApplyPendingMaintenanceActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplyPendingMaintenanceActionResult::default();
         } else {
@@ -29885,9 +29883,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AuthorizeDBSecurityGroupIngressResult::default();
         } else {
@@ -29934,9 +29931,8 @@ impl Rds for RdsClient {
             return Err(BacktrackDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterBacktrack::default();
         } else {
@@ -29983,9 +29979,8 @@ impl Rds for RdsClient {
             return Err(CancelExportTaskError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ExportTask::default();
         } else {
@@ -30030,9 +30025,8 @@ impl Rds for RdsClient {
             return Err(CopyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterParameterGroupResult::default();
         } else {
@@ -30079,9 +30073,8 @@ impl Rds for RdsClient {
             return Err(CopyDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterSnapshotResult::default();
         } else {
@@ -30128,9 +30121,8 @@ impl Rds for RdsClient {
             return Err(CopyDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBParameterGroupResult::default();
         } else {
@@ -30177,9 +30169,8 @@ impl Rds for RdsClient {
             return Err(CopyDBSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBSnapshotResult::default();
         } else {
@@ -30224,9 +30215,8 @@ impl Rds for RdsClient {
             return Err(CopyOptionGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyOptionGroupResult::default();
         } else {
@@ -30274,9 +30264,8 @@ impl Rds for RdsClient {
             return Err(CreateCustomAvailabilityZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateCustomAvailabilityZoneResult::default();
         } else {
@@ -30323,9 +30312,8 @@ impl Rds for RdsClient {
             return Err(CreateDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterResult::default();
         } else {
@@ -30372,9 +30360,8 @@ impl Rds for RdsClient {
             return Err(CreateDBClusterEndpointError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterEndpoint::default();
         } else {
@@ -30422,9 +30409,8 @@ impl Rds for RdsClient {
             return Err(CreateDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterParameterGroupResult::default();
         } else {
@@ -30471,9 +30457,8 @@ impl Rds for RdsClient {
             return Err(CreateDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterSnapshotResult::default();
         } else {
@@ -30520,9 +30505,8 @@ impl Rds for RdsClient {
             return Err(CreateDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBInstanceResult::default();
         } else {
@@ -30570,9 +30554,8 @@ impl Rds for RdsClient {
             return Err(CreateDBInstanceReadReplicaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBInstanceReadReplicaResult::default();
         } else {
@@ -30619,9 +30602,8 @@ impl Rds for RdsClient {
             return Err(CreateDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBParameterGroupResult::default();
         } else {
@@ -30668,9 +30650,8 @@ impl Rds for RdsClient {
             return Err(CreateDBProxyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBProxyResponse::default();
         } else {
@@ -30715,9 +30696,8 @@ impl Rds for RdsClient {
             return Err(CreateDBSecurityGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBSecurityGroupResult::default();
         } else {
@@ -30764,9 +30744,8 @@ impl Rds for RdsClient {
             return Err(CreateDBSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBSnapshotResult::default();
         } else {
@@ -30813,9 +30792,8 @@ impl Rds for RdsClient {
             return Err(CreateDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBSubnetGroupResult::default();
         } else {
@@ -30862,9 +30840,8 @@ impl Rds for RdsClient {
             return Err(CreateEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateEventSubscriptionResult::default();
         } else {
@@ -30911,9 +30888,8 @@ impl Rds for RdsClient {
             return Err(CreateGlobalClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateGlobalClusterResult::default();
         } else {
@@ -30960,9 +30936,8 @@ impl Rds for RdsClient {
             return Err(CreateOptionGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateOptionGroupResult::default();
         } else {
@@ -31010,9 +30985,8 @@ impl Rds for RdsClient {
             return Err(DeleteCustomAvailabilityZoneError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteCustomAvailabilityZoneResult::default();
         } else {
@@ -31059,9 +31033,8 @@ impl Rds for RdsClient {
             return Err(DeleteDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterResult::default();
         } else {
@@ -31108,9 +31081,8 @@ impl Rds for RdsClient {
             return Err(DeleteDBClusterEndpointError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterEndpoint::default();
         } else {
@@ -31185,9 +31157,8 @@ impl Rds for RdsClient {
             return Err(DeleteDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterSnapshotResult::default();
         } else {
@@ -31234,9 +31205,8 @@ impl Rds for RdsClient {
             return Err(DeleteDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBInstanceResult::default();
         } else {
@@ -31288,9 +31258,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBInstanceAutomatedBackupResult::default();
         } else {
@@ -31365,9 +31334,8 @@ impl Rds for RdsClient {
             return Err(DeleteDBProxyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBProxyResponse::default();
         } else {
@@ -31440,9 +31408,8 @@ impl Rds for RdsClient {
             return Err(DeleteDBSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBSnapshotResult::default();
         } else {
@@ -31517,9 +31484,8 @@ impl Rds for RdsClient {
             return Err(DeleteEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteEventSubscriptionResult::default();
         } else {
@@ -31566,9 +31532,8 @@ impl Rds for RdsClient {
             return Err(DeleteGlobalClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteGlobalClusterResult::default();
         } else {
@@ -31615,9 +31580,8 @@ impl Rds for RdsClient {
             return Err(DeleteInstallationMediaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = InstallationMedia::default();
         } else {
@@ -31692,9 +31656,7 @@ impl Rds for RdsClient {
             return Err(DeregisterDBProxyTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeregisterDBProxyTargetsResponse::default();
         // parse non-payload
         Ok(result)
@@ -31724,9 +31686,8 @@ impl Rds for RdsClient {
             return Err(DescribeAccountAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AccountAttributesMessage::default();
         } else {
@@ -31773,9 +31734,8 @@ impl Rds for RdsClient {
             return Err(DescribeCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CertificateMessage::default();
         } else {
@@ -31825,9 +31785,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CustomAvailabilityZoneMessage::default();
         } else {
@@ -31874,9 +31833,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBClusterBacktracksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterBacktrackMessage::default();
         } else {
@@ -31923,9 +31881,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBClusterEndpointsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterEndpointMessage::default();
         } else {
@@ -31975,9 +31932,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupsMessage::default();
         } else {
@@ -32024,9 +31980,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBClusterParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupDetails::default();
         } else {
@@ -32078,9 +32033,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBClusterSnapshotAttributesResult::default();
         } else {
@@ -32127,9 +32081,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterSnapshotMessage::default();
         } else {
@@ -32176,9 +32129,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterMessage::default();
         } else {
@@ -32223,9 +32175,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBEngineVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBEngineVersionMessage::default();
         } else {
@@ -32277,9 +32228,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBInstanceAutomatedBackupMessage::default();
         } else {
@@ -32326,9 +32276,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBInstanceMessage::default();
         } else {
@@ -32375,9 +32324,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBLogFilesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBLogFilesResponse::default();
         } else {
@@ -32424,9 +32372,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBParameterGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupsMessage::default();
         } else {
@@ -32473,9 +32420,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupDetails::default();
         } else {
@@ -32522,9 +32468,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBProxiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBProxiesResponse::default();
         } else {
@@ -32572,9 +32517,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBProxyTargetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBProxyTargetGroupsResponse::default();
         } else {
@@ -32621,9 +32565,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBProxyTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBProxyTargetsResponse::default();
         } else {
@@ -32670,9 +32613,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBSecurityGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBSecurityGroupMessage::default();
         } else {
@@ -32720,9 +32662,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBSnapshotAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBSnapshotAttributesResult::default();
         } else {
@@ -32769,9 +32710,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBSnapshotMessage::default();
         } else {
@@ -32818,9 +32758,8 @@ impl Rds for RdsClient {
             return Err(DescribeDBSubnetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBSubnetGroupMessage::default();
         } else {
@@ -32872,9 +32811,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultClusterParametersResult::default();
         } else {
@@ -32926,9 +32864,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultParametersResult::default();
         } else {
@@ -32975,9 +32912,8 @@ impl Rds for RdsClient {
             return Err(DescribeEventCategoriesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventCategoriesMessage::default();
         } else {
@@ -33024,9 +32960,8 @@ impl Rds for RdsClient {
             return Err(DescribeEventSubscriptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventSubscriptionsMessage::default();
         } else {
@@ -33073,9 +33008,8 @@ impl Rds for RdsClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventsMessage::default();
         } else {
@@ -33119,9 +33053,8 @@ impl Rds for RdsClient {
             return Err(DescribeExportTasksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ExportTasksMessage::default();
         } else {
@@ -33168,9 +33101,8 @@ impl Rds for RdsClient {
             return Err(DescribeGlobalClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GlobalClustersMessage::default();
         } else {
@@ -33217,9 +33149,8 @@ impl Rds for RdsClient {
             return Err(DescribeInstallationMediaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = InstallationMediaMessage::default();
         } else {
@@ -33266,9 +33197,8 @@ impl Rds for RdsClient {
             return Err(DescribeOptionGroupOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OptionGroupOptionsMessage::default();
         } else {
@@ -33315,9 +33245,8 @@ impl Rds for RdsClient {
             return Err(DescribeOptionGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OptionGroups::default();
         } else {
@@ -33367,9 +33296,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OrderableDBInstanceOptionsMessage::default();
         } else {
@@ -33419,9 +33347,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PendingMaintenanceActionsMessage::default();
         } else {
@@ -33468,9 +33395,8 @@ impl Rds for RdsClient {
             return Err(DescribeReservedDBInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReservedDBInstanceMessage::default();
         } else {
@@ -33522,9 +33448,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReservedDBInstancesOfferingMessage::default();
         } else {
@@ -33571,9 +33496,8 @@ impl Rds for RdsClient {
             return Err(DescribeSourceRegionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SourceRegionMessage::default();
         } else {
@@ -33625,9 +33549,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeValidDBInstanceModificationsResult::default();
         } else {
@@ -33674,9 +33597,8 @@ impl Rds for RdsClient {
             return Err(DownloadDBLogFilePortionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DownloadDBLogFilePortionDetails::default();
         } else {
@@ -33723,9 +33645,8 @@ impl Rds for RdsClient {
             return Err(FailoverDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = FailoverDBClusterResult::default();
         } else {
@@ -33772,9 +33693,8 @@ impl Rds for RdsClient {
             return Err(ImportInstallationMediaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = InstallationMedia::default();
         } else {
@@ -33821,9 +33741,8 @@ impl Rds for RdsClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -33868,9 +33787,8 @@ impl Rds for RdsClient {
             return Err(ModifyCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyCertificatesResult::default();
         } else {
@@ -33917,9 +33835,8 @@ impl Rds for RdsClient {
             return Err(ModifyCurrentDBClusterCapacityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterCapacityInfo::default();
         } else {
@@ -33966,9 +33883,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterResult::default();
         } else {
@@ -34015,9 +33931,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBClusterEndpointError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterEndpoint::default();
         } else {
@@ -34065,9 +33980,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -34119,9 +34033,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterSnapshotAttributeResult::default();
         } else {
@@ -34168,9 +34081,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBInstanceResult::default();
         } else {
@@ -34217,9 +34129,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupNameMessage::default();
         } else {
@@ -34266,9 +34177,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBProxyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBProxyResponse::default();
         } else {
@@ -34313,9 +34223,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBProxyTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBProxyTargetGroupResponse::default();
         } else {
@@ -34362,9 +34271,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBSnapshotResult::default();
         } else {
@@ -34411,9 +34319,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBSnapshotAttributeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBSnapshotAttributeResult::default();
         } else {
@@ -34460,9 +34367,8 @@ impl Rds for RdsClient {
             return Err(ModifyDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBSubnetGroupResult::default();
         } else {
@@ -34509,9 +34415,8 @@ impl Rds for RdsClient {
             return Err(ModifyEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyEventSubscriptionResult::default();
         } else {
@@ -34558,9 +34463,8 @@ impl Rds for RdsClient {
             return Err(ModifyGlobalClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyGlobalClusterResult::default();
         } else {
@@ -34607,9 +34511,8 @@ impl Rds for RdsClient {
             return Err(ModifyOptionGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyOptionGroupResult::default();
         } else {
@@ -34656,9 +34559,8 @@ impl Rds for RdsClient {
             return Err(PromoteReadReplicaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PromoteReadReplicaResult::default();
         } else {
@@ -34706,9 +34608,8 @@ impl Rds for RdsClient {
             return Err(PromoteReadReplicaDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PromoteReadReplicaDBClusterResult::default();
         } else {
@@ -34760,9 +34661,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PurchaseReservedDBInstancesOfferingResult::default();
         } else {
@@ -34809,9 +34709,8 @@ impl Rds for RdsClient {
             return Err(RebootDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RebootDBInstanceResult::default();
         } else {
@@ -34858,9 +34757,8 @@ impl Rds for RdsClient {
             return Err(RegisterDBProxyTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RegisterDBProxyTargetsResponse::default();
         } else {
@@ -34907,9 +34805,8 @@ impl Rds for RdsClient {
             return Err(RemoveFromGlobalClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RemoveFromGlobalClusterResult::default();
         } else {
@@ -35017,9 +34914,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RemoveSourceIdentifierFromSubscriptionResult::default();
         } else {
@@ -35095,9 +34991,8 @@ impl Rds for RdsClient {
             return Err(ResetDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -35144,9 +35039,8 @@ impl Rds for RdsClient {
             return Err(ResetDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupNameMessage::default();
         } else {
@@ -35193,9 +35087,8 @@ impl Rds for RdsClient {
             return Err(RestoreDBClusterFromS3Error::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterFromS3Result::default();
         } else {
@@ -35243,9 +35136,8 @@ impl Rds for RdsClient {
             return Err(RestoreDBClusterFromSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterFromSnapshotResult::default();
         } else {
@@ -35293,9 +35185,8 @@ impl Rds for RdsClient {
             return Err(RestoreDBClusterToPointInTimeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterToPointInTimeResult::default();
         } else {
@@ -35347,9 +35238,8 @@ impl Rds for RdsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBInstanceFromDBSnapshotResult::default();
         } else {
@@ -35396,9 +35286,8 @@ impl Rds for RdsClient {
             return Err(RestoreDBInstanceFromS3Error::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBInstanceFromS3Result::default();
         } else {
@@ -35448,9 +35337,8 @@ impl Rds for RdsClient {
             return Err(RestoreDBInstanceToPointInTimeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBInstanceToPointInTimeResult::default();
         } else {
@@ -35498,9 +35386,8 @@ impl Rds for RdsClient {
             return Err(RevokeDBSecurityGroupIngressError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RevokeDBSecurityGroupIngressResult::default();
         } else {
@@ -35547,9 +35434,8 @@ impl Rds for RdsClient {
             return Err(StartActivityStreamError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StartActivityStreamResponse::default();
         } else {
@@ -35596,9 +35482,8 @@ impl Rds for RdsClient {
             return Err(StartDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StartDBClusterResult::default();
         } else {
@@ -35643,9 +35528,8 @@ impl Rds for RdsClient {
             return Err(StartDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StartDBInstanceResult::default();
         } else {
@@ -35692,9 +35576,8 @@ impl Rds for RdsClient {
             return Err(StartExportTaskError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ExportTask::default();
         } else {
@@ -35738,9 +35621,8 @@ impl Rds for RdsClient {
             return Err(StopActivityStreamError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StopActivityStreamResponse::default();
         } else {
@@ -35787,9 +35669,8 @@ impl Rds for RdsClient {
             return Err(StopDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StopDBClusterResult::default();
         } else {
@@ -35834,9 +35715,8 @@ impl Rds for RdsClient {
             return Err(StopDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StopDBInstanceResult::default();
         } else {

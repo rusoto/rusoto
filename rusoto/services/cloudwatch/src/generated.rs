@@ -6481,9 +6481,7 @@ impl CloudWatch for CloudWatchClient {
             return Err(DeleteAnomalyDetectorError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteAnomalyDetectorOutput::default();
         // parse non-payload
         Ok(result)
@@ -6513,9 +6511,7 @@ impl CloudWatch for CloudWatchClient {
             return Err(DeleteDashboardsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteDashboardsOutput::default();
         // parse non-payload
         Ok(result)
@@ -6545,9 +6541,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DeleteInsightRulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteInsightRulesOutput::default();
         } else {
@@ -6594,9 +6589,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DescribeAlarmHistoryError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAlarmHistoryOutput::default();
         } else {
@@ -6643,9 +6637,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DescribeAlarmsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAlarmsOutput::default();
         } else {
@@ -6690,9 +6683,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DescribeAlarmsForMetricError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAlarmsForMetricOutput::default();
         } else {
@@ -6739,9 +6731,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DescribeAnomalyDetectorsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAnomalyDetectorsOutput::default();
         } else {
@@ -6788,9 +6779,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DescribeInsightRulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeInsightRulesOutput::default();
         } else {
@@ -6865,9 +6855,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(DisableInsightRulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DisableInsightRulesOutput::default();
         } else {
@@ -6942,9 +6931,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(EnableInsightRulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnableInsightRulesOutput::default();
         } else {
@@ -6991,9 +6979,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(GetDashboardError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetDashboardOutput::default();
         } else {
@@ -7037,9 +7024,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(GetInsightRuleReportError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetInsightRuleReportOutput::default();
         } else {
@@ -7086,9 +7072,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(GetMetricDataError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetMetricDataOutput::default();
         } else {
@@ -7133,9 +7118,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(GetMetricStatisticsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetMetricStatisticsOutput::default();
         } else {
@@ -7182,9 +7166,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(GetMetricWidgetImageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetMetricWidgetImageOutput::default();
         } else {
@@ -7231,9 +7214,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(ListDashboardsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDashboardsOutput::default();
         } else {
@@ -7278,9 +7260,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(ListMetricsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListMetricsOutput::default();
         } else {
@@ -7324,9 +7305,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTagsForResourceOutput::default();
         } else {
@@ -7373,9 +7353,7 @@ impl CloudWatch for CloudWatchClient {
             return Err(PutAnomalyDetectorError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutAnomalyDetectorOutput::default();
         // parse non-payload
         Ok(result)
@@ -7405,9 +7383,8 @@ impl CloudWatch for CloudWatchClient {
             return Err(PutDashboardError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PutDashboardOutput::default();
         } else {
@@ -7451,9 +7428,7 @@ impl CloudWatch for CloudWatchClient {
             return Err(PutInsightRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutInsightRuleOutput::default();
         // parse non-payload
         Ok(result)
@@ -7567,9 +7542,7 @@ impl CloudWatch for CloudWatchClient {
             return Err(TagResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = TagResourceOutput::default();
         // parse non-payload
         Ok(result)
@@ -7599,9 +7572,7 @@ impl CloudWatch for CloudWatchClient {
             return Err(UntagResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UntagResourceOutput::default();
         // parse non-payload
         Ok(result)

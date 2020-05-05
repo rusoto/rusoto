@@ -19756,9 +19756,7 @@ impl S3 for S3Client {
             return Err(AbortMultipartUploadError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = AbortMultipartUploadOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
@@ -19805,9 +19803,8 @@ impl S3 for S3Client {
             return Err(CompleteMultipartUploadError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CompleteMultipartUploadOutput::default();
         } else {
@@ -20059,9 +20056,8 @@ impl S3 for S3Client {
             return Err(CopyObjectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyObjectOutput::default();
         } else {
@@ -20187,9 +20183,7 @@ impl S3 for S3Client {
             return Err(CreateBucketError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = CreateBucketOutput::default();
         if let Some(location) = response.headers.get("Location") {
             let value = location.to_owned();
@@ -20351,9 +20345,8 @@ impl S3 for S3Client {
             return Err(CreateMultipartUploadError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateMultipartUploadOutput::default();
         } else {
@@ -20766,9 +20759,7 @@ impl S3 for S3Client {
             return Err(DeleteObjectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteObjectOutput::default();
         if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
             let value = delete_marker.to_owned();
@@ -20812,9 +20803,7 @@ impl S3 for S3Client {
             return Err(DeleteObjectTaggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = DeleteObjectTaggingOutput::default();
         if let Some(version_id) = response.headers.get("x-amz-version-id") {
             let value = version_id.to_owned();
@@ -20865,9 +20854,8 @@ impl S3 for S3Client {
             return Err(DeleteObjectsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteObjectsOutput::default();
         } else {
@@ -20944,9 +20932,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketAccelerateConfigurationOutput::default();
         } else {
@@ -20990,9 +20977,8 @@ impl S3 for S3Client {
             return Err(GetBucketAclError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketAclOutput::default();
         } else {
@@ -21039,9 +21025,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketAnalyticsConfigurationOutput::default();
         } else {
@@ -21085,9 +21070,8 @@ impl S3 for S3Client {
             return Err(GetBucketCorsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketCorsOutput::default();
         } else {
@@ -21128,9 +21112,8 @@ impl S3 for S3Client {
             return Err(GetBucketEncryptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketEncryptionOutput::default();
         } else {
@@ -21178,9 +21161,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketInventoryConfigurationOutput::default();
         } else {
@@ -21224,9 +21206,8 @@ impl S3 for S3Client {
             return Err(GetBucketLifecycleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketLifecycleOutput::default();
         } else {
@@ -21273,9 +21254,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketLifecycleConfigurationOutput::default();
         } else {
@@ -21319,9 +21299,8 @@ impl S3 for S3Client {
             return Err(GetBucketLocationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketLocationOutput::default();
         } else {
@@ -21363,9 +21342,8 @@ impl S3 for S3Client {
             return Err(GetBucketLoggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketLoggingOutput::default();
         } else {
@@ -21408,9 +21386,8 @@ impl S3 for S3Client {
             return Err(GetBucketMetricsConfigurationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketMetricsConfigurationOutput::default();
         } else {
@@ -21454,9 +21431,8 @@ impl S3 for S3Client {
             return Err(GetBucketNotificationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = NotificationConfigurationDeprecated::default();
         } else {
@@ -21503,9 +21479,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = NotificationConfiguration::default();
         } else {
@@ -21578,9 +21553,8 @@ impl S3 for S3Client {
             return Err(GetBucketPolicyStatusError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketPolicyStatusOutput::default();
         } else {
@@ -21622,9 +21596,8 @@ impl S3 for S3Client {
             return Err(GetBucketReplicationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketReplicationOutput::default();
         } else {
@@ -21666,9 +21639,8 @@ impl S3 for S3Client {
             return Err(GetBucketRequestPaymentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketRequestPaymentOutput::default();
         } else {
@@ -21712,9 +21684,8 @@ impl S3 for S3Client {
             return Err(GetBucketTaggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketTaggingOutput::default();
         } else {
@@ -21755,9 +21726,8 @@ impl S3 for S3Client {
             return Err(GetBucketVersioningError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketVersioningOutput::default();
         } else {
@@ -21799,9 +21769,8 @@ impl S3 for S3Client {
             return Err(GetBucketWebsiteError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetBucketWebsiteOutput::default();
         } else {
@@ -22085,9 +22054,8 @@ impl S3 for S3Client {
             return Err(GetObjectAclError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetObjectAclOutput::default();
         } else {
@@ -22137,9 +22105,8 @@ impl S3 for S3Client {
             return Err(GetObjectLegalHoldError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetObjectLegalHoldOutput::default();
         } else {
@@ -22182,9 +22149,8 @@ impl S3 for S3Client {
             return Err(GetObjectLockConfigurationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetObjectLockConfigurationOutput::default();
         } else {
@@ -22234,9 +22200,8 @@ impl S3 for S3Client {
             return Err(GetObjectRetentionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetObjectRetentionOutput::default();
         } else {
@@ -22281,9 +22246,8 @@ impl S3 for S3Client {
             return Err(GetObjectTaggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetObjectTaggingOutput::default();
         } else {
@@ -22363,9 +22327,8 @@ impl S3 for S3Client {
             return Err(GetPublicAccessBlockError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetPublicAccessBlockOutput::default();
         } else {
@@ -22480,9 +22443,7 @@ impl S3 for S3Client {
             return Err(HeadObjectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = HeadObjectOutput::default();
         if let Some(accept_ranges) = response.headers.get("accept-ranges") {
             let value = accept_ranges.to_owned();
@@ -22652,9 +22613,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListBucketAnalyticsConfigurationsOutput::default();
         } else {
@@ -22706,9 +22666,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListBucketInventoryConfigurationsOutput::default();
         } else {
@@ -22760,9 +22719,8 @@ impl S3 for S3Client {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListBucketMetricsConfigurationsOutput::default();
         } else {
@@ -22799,9 +22757,8 @@ impl S3 for S3Client {
             return Err(ListBucketsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListBucketsOutput::default();
         } else {
@@ -22860,9 +22817,8 @@ impl S3 for S3Client {
             return Err(ListMultipartUploadsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListMultipartUploadsOutput::default();
         } else {
@@ -22922,9 +22878,8 @@ impl S3 for S3Client {
             return Err(ListObjectVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListObjectVersionsOutput::default();
         } else {
@@ -22983,9 +22938,8 @@ impl S3 for S3Client {
             return Err(ListObjectsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListObjectsOutput::default();
         } else {
@@ -23050,9 +23004,8 @@ impl S3 for S3Client {
             return Err(ListObjectsV2Error::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListObjectsV2Output::default();
         } else {
@@ -23102,9 +23055,8 @@ impl S3 for S3Client {
             return Err(ListPartsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPartsOutput::default();
         } else {
@@ -24020,9 +23972,7 @@ impl S3 for S3Client {
             return Err(PutObjectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = PutObjectOutput::default();
         if let Some(e_tag) = response.headers.get("ETag") {
             let value = e_tag.to_owned();
@@ -24143,9 +24093,7 @@ impl S3 for S3Client {
             return Err(PutObjectAclError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = PutObjectAclOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
@@ -24199,9 +24147,7 @@ impl S3 for S3Client {
             return Err(PutObjectLegalHoldError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = PutObjectLegalHoldOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
@@ -24257,9 +24203,7 @@ impl S3 for S3Client {
             return Err(PutObjectLockConfigurationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = PutObjectLockConfigurationOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
@@ -24320,9 +24264,7 @@ impl S3 for S3Client {
             return Err(PutObjectRetentionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = PutObjectRetentionOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
@@ -24364,9 +24306,7 @@ impl S3 for S3Client {
             return Err(PutObjectTaggingError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = PutObjectTaggingOutput::default();
         if let Some(version_id) = response.headers.get("x-amz-version-id") {
             let value = version_id.to_owned();
@@ -24454,9 +24394,7 @@ impl S3 for S3Client {
             return Err(RestoreObjectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = RestoreObjectOutput::default();
         if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
             let value = request_charged.to_owned();
@@ -24522,9 +24460,8 @@ impl S3 for S3Client {
             return Err(SelectObjectContentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SelectObjectContentOutput::default();
         } else {
@@ -24602,9 +24539,7 @@ impl S3 for S3Client {
             return Err(UploadPartError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
         result = UploadPartOutput::default();
         if let Some(e_tag) = response.headers.get("ETag") {
             let value = e_tag.to_owned();
@@ -24748,9 +24683,8 @@ impl S3 for S3Client {
             return Err(UploadPartCopyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UploadPartCopyOutput::default();
         } else {

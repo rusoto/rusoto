@@ -21358,9 +21358,8 @@ impl Iam for IamClient {
             return Err(CreateAccessKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateAccessKeyResponse::default();
         } else {
@@ -21435,9 +21434,8 @@ impl Iam for IamClient {
             return Err(CreateGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateGroupResponse::default();
         } else {
@@ -21481,9 +21479,8 @@ impl Iam for IamClient {
             return Err(CreateInstanceProfileError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateInstanceProfileResponse::default();
         } else {
@@ -21530,9 +21527,8 @@ impl Iam for IamClient {
             return Err(CreateLoginProfileError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateLoginProfileResponse::default();
         } else {
@@ -21580,9 +21576,8 @@ impl Iam for IamClient {
             return Err(CreateOpenIDConnectProviderError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateOpenIDConnectProviderResponse::default();
         } else {
@@ -21629,9 +21624,8 @@ impl Iam for IamClient {
             return Err(CreatePolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreatePolicyResponse::default();
         } else {
@@ -21676,9 +21670,8 @@ impl Iam for IamClient {
             return Err(CreatePolicyVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreatePolicyVersionResponse::default();
         } else {
@@ -21725,9 +21718,8 @@ impl Iam for IamClient {
             return Err(CreateRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateRoleResponse::default();
         } else {
@@ -21771,9 +21763,8 @@ impl Iam for IamClient {
             return Err(CreateSAMLProviderError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateSAMLProviderResponse::default();
         } else {
@@ -21820,9 +21811,8 @@ impl Iam for IamClient {
             return Err(CreateServiceLinkedRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateServiceLinkedRoleResponse::default();
         } else {
@@ -21874,9 +21864,8 @@ impl Iam for IamClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateServiceSpecificCredentialResponse::default();
         } else {
@@ -21923,9 +21912,8 @@ impl Iam for IamClient {
             return Err(CreateUserError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateUserResponse::default();
         } else {
@@ -21969,9 +21957,8 @@ impl Iam for IamClient {
             return Err(CreateVirtualMFADeviceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateVirtualMFADeviceResponse::default();
         } else {
@@ -22493,9 +22480,8 @@ impl Iam for IamClient {
             return Err(DeleteServiceLinkedRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteServiceLinkedRoleResponse::default();
         } else {
@@ -22823,9 +22809,8 @@ impl Iam for IamClient {
             return Err(GenerateCredentialReportError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GenerateCredentialReportResponse::default();
         } else {
@@ -22877,9 +22862,8 @@ impl Iam for IamClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GenerateOrganizationsAccessReportResponse::default();
         } else {
@@ -22931,9 +22915,8 @@ impl Iam for IamClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GenerateServiceLastAccessedDetailsResponse::default();
         } else {
@@ -22980,9 +22963,8 @@ impl Iam for IamClient {
             return Err(GetAccessKeyLastUsedError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccessKeyLastUsedResponse::default();
         } else {
@@ -23032,9 +23014,8 @@ impl Iam for IamClient {
             return Err(GetAccountAuthorizationDetailsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccountAuthorizationDetailsResponse::default();
         } else {
@@ -23080,9 +23061,8 @@ impl Iam for IamClient {
             return Err(GetAccountPasswordPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccountPasswordPolicyResponse::default();
         } else {
@@ -23128,9 +23108,8 @@ impl Iam for IamClient {
             return Err(GetAccountSummaryError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccountSummaryResponse::default();
         } else {
@@ -23178,9 +23157,8 @@ impl Iam for IamClient {
             return Err(GetContextKeysForCustomPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetContextKeysForPolicyResponse::default();
         } else {
@@ -23230,9 +23208,8 @@ impl Iam for IamClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetContextKeysForPolicyResponse::default();
         } else {
@@ -23278,9 +23255,8 @@ impl Iam for IamClient {
             return Err(GetCredentialReportError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCredentialReportResponse::default();
         } else {
@@ -23327,9 +23303,8 @@ impl Iam for IamClient {
             return Err(GetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetGroupResponse::default();
         } else {
@@ -23373,9 +23348,8 @@ impl Iam for IamClient {
             return Err(GetGroupPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetGroupPolicyResponse::default();
         } else {
@@ -23422,9 +23396,8 @@ impl Iam for IamClient {
             return Err(GetInstanceProfileError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetInstanceProfileResponse::default();
         } else {
@@ -23471,9 +23444,8 @@ impl Iam for IamClient {
             return Err(GetLoginProfileError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetLoginProfileResponse::default();
         } else {
@@ -23520,9 +23492,8 @@ impl Iam for IamClient {
             return Err(GetOpenIDConnectProviderError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetOpenIDConnectProviderResponse::default();
         } else {
@@ -23570,9 +23541,8 @@ impl Iam for IamClient {
             return Err(GetOrganizationsAccessReportError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetOrganizationsAccessReportResponse::default();
         } else {
@@ -23619,9 +23589,8 @@ impl Iam for IamClient {
             return Err(GetPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetPolicyResponse::default();
         } else {
@@ -23665,9 +23634,8 @@ impl Iam for IamClient {
             return Err(GetPolicyVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetPolicyVersionResponse::default();
         } else {
@@ -23714,9 +23682,8 @@ impl Iam for IamClient {
             return Err(GetRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetRoleResponse::default();
         } else {
@@ -23760,9 +23727,8 @@ impl Iam for IamClient {
             return Err(GetRolePolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetRolePolicyResponse::default();
         } else {
@@ -23807,9 +23773,8 @@ impl Iam for IamClient {
             return Err(GetSAMLProviderError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSAMLProviderResponse::default();
         } else {
@@ -23856,9 +23821,8 @@ impl Iam for IamClient {
             return Err(GetSSHPublicKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSSHPublicKeyResponse::default();
         } else {
@@ -23905,9 +23869,8 @@ impl Iam for IamClient {
             return Err(GetServerCertificateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetServerCertificateResponse::default();
         } else {
@@ -23957,9 +23920,8 @@ impl Iam for IamClient {
             return Err(GetServiceLastAccessedDetailsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetServiceLastAccessedDetailsResponse::default();
         } else {
@@ -24013,9 +23975,8 @@ impl Iam for IamClient {
             return Err(GetServiceLastAccessedDetailsWithEntitiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetServiceLastAccessedDetailsWithEntitiesResponse::default();
         } else {
@@ -24067,9 +24028,8 @@ impl Iam for IamClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetServiceLinkedRoleDeletionStatusResponse::default();
         } else {
@@ -24116,9 +24076,8 @@ impl Iam for IamClient {
             return Err(GetUserError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetUserResponse::default();
         } else {
@@ -24162,9 +24121,8 @@ impl Iam for IamClient {
             return Err(GetUserPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetUserPolicyResponse::default();
         } else {
@@ -24209,9 +24167,8 @@ impl Iam for IamClient {
             return Err(ListAccessKeysError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAccessKeysResponse::default();
         } else {
@@ -24258,9 +24215,8 @@ impl Iam for IamClient {
             return Err(ListAccountAliasesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAccountAliasesResponse::default();
         } else {
@@ -24308,9 +24264,8 @@ impl Iam for IamClient {
             return Err(ListAttachedGroupPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAttachedGroupPoliciesResponse::default();
         } else {
@@ -24357,9 +24312,8 @@ impl Iam for IamClient {
             return Err(ListAttachedRolePoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAttachedRolePoliciesResponse::default();
         } else {
@@ -24406,9 +24360,8 @@ impl Iam for IamClient {
             return Err(ListAttachedUserPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAttachedUserPoliciesResponse::default();
         } else {
@@ -24455,9 +24408,8 @@ impl Iam for IamClient {
             return Err(ListEntitiesForPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListEntitiesForPolicyResponse::default();
         } else {
@@ -24504,9 +24456,8 @@ impl Iam for IamClient {
             return Err(ListGroupPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListGroupPoliciesResponse::default();
         } else {
@@ -24553,9 +24504,8 @@ impl Iam for IamClient {
             return Err(ListGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListGroupsResponse::default();
         } else {
@@ -24599,9 +24549,8 @@ impl Iam for IamClient {
             return Err(ListGroupsForUserError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListGroupsForUserResponse::default();
         } else {
@@ -24648,9 +24597,8 @@ impl Iam for IamClient {
             return Err(ListInstanceProfilesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListInstanceProfilesResponse::default();
         } else {
@@ -24698,9 +24646,8 @@ impl Iam for IamClient {
             return Err(ListInstanceProfilesForRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListInstanceProfilesForRoleResponse::default();
         } else {
@@ -24747,9 +24694,8 @@ impl Iam for IamClient {
             return Err(ListMFADevicesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListMFADevicesResponse::default();
         } else {
@@ -24797,9 +24743,8 @@ impl Iam for IamClient {
             return Err(ListOpenIDConnectProvidersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListOpenIDConnectProvidersResponse::default();
         } else {
@@ -24846,9 +24791,8 @@ impl Iam for IamClient {
             return Err(ListPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPoliciesResponse::default();
         } else {
@@ -24898,9 +24842,8 @@ impl Iam for IamClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPoliciesGrantingServiceAccessResponse::default();
         } else {
@@ -24947,9 +24890,8 @@ impl Iam for IamClient {
             return Err(ListPolicyVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPolicyVersionsResponse::default();
         } else {
@@ -24996,9 +24938,8 @@ impl Iam for IamClient {
             return Err(ListRolePoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListRolePoliciesResponse::default();
         } else {
@@ -25045,9 +24986,8 @@ impl Iam for IamClient {
             return Err(ListRoleTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListRoleTagsResponse::default();
         } else {
@@ -25092,9 +25032,8 @@ impl Iam for IamClient {
             return Err(ListRolesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListRolesResponse::default();
         } else {
@@ -25138,9 +25077,8 @@ impl Iam for IamClient {
             return Err(ListSAMLProvidersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListSAMLProvidersResponse::default();
         } else {
@@ -25187,9 +25125,8 @@ impl Iam for IamClient {
             return Err(ListSSHPublicKeysError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListSSHPublicKeysResponse::default();
         } else {
@@ -25236,9 +25173,8 @@ impl Iam for IamClient {
             return Err(ListServerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListServerCertificatesResponse::default();
         } else {
@@ -25288,9 +25224,8 @@ impl Iam for IamClient {
             return Err(ListServiceSpecificCredentialsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListServiceSpecificCredentialsResponse::default();
         } else {
@@ -25337,9 +25272,8 @@ impl Iam for IamClient {
             return Err(ListSigningCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListSigningCertificatesResponse::default();
         } else {
@@ -25386,9 +25320,8 @@ impl Iam for IamClient {
             return Err(ListUserPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListUserPoliciesResponse::default();
         } else {
@@ -25435,9 +25368,8 @@ impl Iam for IamClient {
             return Err(ListUserTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListUserTagsResponse::default();
         } else {
@@ -25482,9 +25414,8 @@ impl Iam for IamClient {
             return Err(ListUsersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListUsersResponse::default();
         } else {
@@ -25528,9 +25459,8 @@ impl Iam for IamClient {
             return Err(ListVirtualMFADevicesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListVirtualMFADevicesResponse::default();
         } else {
@@ -25810,9 +25740,8 @@ impl Iam for IamClient {
             return Err(ResetServiceSpecificCredentialError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ResetServiceSpecificCredentialResponse::default();
         } else {
@@ -25945,9 +25874,8 @@ impl Iam for IamClient {
             return Err(SimulateCustomPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SimulatePolicyResponse::default();
         } else {
@@ -25994,9 +25922,8 @@ impl Iam for IamClient {
             return Err(SimulatePrincipalPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SimulatePolicyResponse::default();
         } else {
@@ -26313,9 +26240,7 @@ impl Iam for IamClient {
             return Err(UpdateRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateRoleResponse::default();
         // parse non-payload
         Ok(result)
@@ -26345,9 +26270,8 @@ impl Iam for IamClient {
             return Err(UpdateRoleDescriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateRoleDescriptionResponse::default();
         } else {
@@ -26394,9 +26318,8 @@ impl Iam for IamClient {
             return Err(UpdateSAMLProviderError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateSAMLProviderResponse::default();
         } else {
@@ -26585,9 +26508,8 @@ impl Iam for IamClient {
             return Err(UploadSSHPublicKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UploadSSHPublicKeyResponse::default();
         } else {
@@ -26634,9 +26556,8 @@ impl Iam for IamClient {
             return Err(UploadServerCertificateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UploadServerCertificateResponse::default();
         } else {
@@ -26683,9 +26604,8 @@ impl Iam for IamClient {
             return Err(UploadSigningCertificateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UploadSigningCertificateResponse::default();
         } else {

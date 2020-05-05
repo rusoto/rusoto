@@ -1708,9 +1708,8 @@ impl Sts for StsClient {
             return Err(AssumeRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssumeRoleResponse::default();
         } else {
@@ -1754,9 +1753,8 @@ impl Sts for StsClient {
             return Err(AssumeRoleWithSAMLError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssumeRoleWithSAMLResponse::default();
         } else {
@@ -1804,9 +1802,8 @@ impl Sts for StsClient {
             return Err(AssumeRoleWithWebIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssumeRoleWithWebIdentityResponse::default();
         } else {
@@ -1854,9 +1851,8 @@ impl Sts for StsClient {
             return Err(DecodeAuthorizationMessageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DecodeAuthorizationMessageResponse::default();
         } else {
@@ -1903,9 +1899,8 @@ impl Sts for StsClient {
             return Err(GetAccessKeyInfoError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccessKeyInfoResponse::default();
         } else {
@@ -1952,9 +1947,8 @@ impl Sts for StsClient {
             return Err(GetCallerIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCallerIdentityResponse::default();
         } else {
@@ -2001,9 +1995,8 @@ impl Sts for StsClient {
             return Err(GetFederationTokenError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetFederationTokenResponse::default();
         } else {
@@ -2050,9 +2043,8 @@ impl Sts for StsClient {
             return Err(GetSessionTokenError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSessionTokenResponse::default();
         } else {

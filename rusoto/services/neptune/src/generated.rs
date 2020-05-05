@@ -13268,9 +13268,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AddSourceIdentifierToSubscriptionResult::default();
         } else {
@@ -13346,9 +13345,8 @@ impl Neptune for NeptuneClient {
             return Err(ApplyPendingMaintenanceActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplyPendingMaintenanceActionResult::default();
         } else {
@@ -13396,9 +13394,8 @@ impl Neptune for NeptuneClient {
             return Err(CopyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterParameterGroupResult::default();
         } else {
@@ -13445,9 +13442,8 @@ impl Neptune for NeptuneClient {
             return Err(CopyDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterSnapshotResult::default();
         } else {
@@ -13494,9 +13490,8 @@ impl Neptune for NeptuneClient {
             return Err(CopyDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBParameterGroupResult::default();
         } else {
@@ -13543,9 +13538,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterResult::default();
         } else {
@@ -13593,9 +13587,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterParameterGroupResult::default();
         } else {
@@ -13642,9 +13635,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterSnapshotResult::default();
         } else {
@@ -13691,9 +13683,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBInstanceResult::default();
         } else {
@@ -13740,9 +13731,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBParameterGroupResult::default();
         } else {
@@ -13789,9 +13779,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBSubnetGroupResult::default();
         } else {
@@ -13838,9 +13827,8 @@ impl Neptune for NeptuneClient {
             return Err(CreateEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateEventSubscriptionResult::default();
         } else {
@@ -13887,9 +13875,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterResult::default();
         } else {
@@ -13964,9 +13951,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterSnapshotResult::default();
         } else {
@@ -14013,9 +13999,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBInstanceResult::default();
         } else {
@@ -14118,9 +14103,8 @@ impl Neptune for NeptuneClient {
             return Err(DeleteEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteEventSubscriptionResult::default();
         } else {
@@ -14170,9 +14154,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupsMessage::default();
         } else {
@@ -14219,9 +14202,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBClusterParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupDetails::default();
         } else {
@@ -14273,9 +14255,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBClusterSnapshotAttributesResult::default();
         } else {
@@ -14322,9 +14303,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterSnapshotMessage::default();
         } else {
@@ -14371,9 +14351,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterMessage::default();
         } else {
@@ -14418,9 +14397,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBEngineVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBEngineVersionMessage::default();
         } else {
@@ -14467,9 +14445,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBInstanceMessage::default();
         } else {
@@ -14516,9 +14493,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBParameterGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupsMessage::default();
         } else {
@@ -14565,9 +14541,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupDetails::default();
         } else {
@@ -14614,9 +14589,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeDBSubnetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBSubnetGroupMessage::default();
         } else {
@@ -14668,9 +14642,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultClusterParametersResult::default();
         } else {
@@ -14722,9 +14695,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultParametersResult::default();
         } else {
@@ -14771,9 +14743,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeEventCategoriesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventCategoriesMessage::default();
         } else {
@@ -14820,9 +14791,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeEventSubscriptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventSubscriptionsMessage::default();
         } else {
@@ -14869,9 +14839,8 @@ impl Neptune for NeptuneClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventsMessage::default();
         } else {
@@ -14920,9 +14889,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OrderableDBInstanceOptionsMessage::default();
         } else {
@@ -14972,9 +14940,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PendingMaintenanceActionsMessage::default();
         } else {
@@ -15026,9 +14993,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeValidDBInstanceModificationsResult::default();
         } else {
@@ -15075,9 +15041,8 @@ impl Neptune for NeptuneClient {
             return Err(FailoverDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = FailoverDBClusterResult::default();
         } else {
@@ -15124,9 +15089,8 @@ impl Neptune for NeptuneClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -15171,9 +15135,8 @@ impl Neptune for NeptuneClient {
             return Err(ModifyDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterResult::default();
         } else {
@@ -15221,9 +15184,8 @@ impl Neptune for NeptuneClient {
             return Err(ModifyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -15275,9 +15237,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterSnapshotAttributeResult::default();
         } else {
@@ -15324,9 +15285,8 @@ impl Neptune for NeptuneClient {
             return Err(ModifyDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBInstanceResult::default();
         } else {
@@ -15373,9 +15333,8 @@ impl Neptune for NeptuneClient {
             return Err(ModifyDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupNameMessage::default();
         } else {
@@ -15422,9 +15381,8 @@ impl Neptune for NeptuneClient {
             return Err(ModifyDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBSubnetGroupResult::default();
         } else {
@@ -15471,9 +15429,8 @@ impl Neptune for NeptuneClient {
             return Err(ModifyEventSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyEventSubscriptionResult::default();
         } else {
@@ -15521,9 +15478,8 @@ impl Neptune for NeptuneClient {
             return Err(PromoteReadReplicaDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PromoteReadReplicaDBClusterResult::default();
         } else {
@@ -15570,9 +15526,8 @@ impl Neptune for NeptuneClient {
             return Err(RebootDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RebootDBInstanceResult::default();
         } else {
@@ -15652,9 +15607,8 @@ impl Neptune for NeptuneClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RemoveSourceIdentifierFromSubscriptionResult::default();
         } else {
@@ -15730,9 +15684,8 @@ impl Neptune for NeptuneClient {
             return Err(ResetDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -15779,9 +15732,8 @@ impl Neptune for NeptuneClient {
             return Err(ResetDBParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBParameterGroupNameMessage::default();
         } else {
@@ -15829,9 +15781,8 @@ impl Neptune for NeptuneClient {
             return Err(RestoreDBClusterFromSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterFromSnapshotResult::default();
         } else {
@@ -15879,9 +15830,8 @@ impl Neptune for NeptuneClient {
             return Err(RestoreDBClusterToPointInTimeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterToPointInTimeResult::default();
         } else {

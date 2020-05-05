@@ -6452,9 +6452,7 @@ impl Elb for ElbClient {
             return Err(AddTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = AddTagsOutput::default();
         // parse non-payload
         Ok(result)
@@ -6489,9 +6487,8 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplySecurityGroupsToLoadBalancerOutput::default();
         } else {
@@ -6539,9 +6536,8 @@ impl Elb for ElbClient {
             return Err(AttachLoadBalancerToSubnetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AttachLoadBalancerToSubnetsOutput::default();
         } else {
@@ -6588,9 +6584,8 @@ impl Elb for ElbClient {
             return Err(ConfigureHealthCheckError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigureHealthCheckOutput::default();
         } else {
@@ -6642,9 +6637,7 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateAppCookieStickinessPolicyOutput::default();
         // parse non-payload
         Ok(result)
@@ -6677,9 +6670,7 @@ impl Elb for ElbClient {
             return Err(CreateLBCookieStickinessPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateLBCookieStickinessPolicyOutput::default();
         // parse non-payload
         Ok(result)
@@ -6709,9 +6700,8 @@ impl Elb for ElbClient {
             return Err(CreateLoadBalancerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateAccessPointOutput::default();
         } else {
@@ -6759,9 +6749,7 @@ impl Elb for ElbClient {
             return Err(CreateLoadBalancerListenersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateLoadBalancerListenerOutput::default();
         // parse non-payload
         Ok(result)
@@ -6791,9 +6779,7 @@ impl Elb for ElbClient {
             return Err(CreateLoadBalancerPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateLoadBalancerPolicyOutput::default();
         // parse non-payload
         Ok(result)
@@ -6823,9 +6809,7 @@ impl Elb for ElbClient {
             return Err(DeleteLoadBalancerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteAccessPointOutput::default();
         // parse non-payload
         Ok(result)
@@ -6856,9 +6840,7 @@ impl Elb for ElbClient {
             return Err(DeleteLoadBalancerListenersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteLoadBalancerListenerOutput::default();
         // parse non-payload
         Ok(result)
@@ -6888,9 +6870,7 @@ impl Elb for ElbClient {
             return Err(DeleteLoadBalancerPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteLoadBalancerPolicyOutput::default();
         // parse non-payload
         Ok(result)
@@ -6923,9 +6903,8 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeregisterEndPointsOutput::default();
         } else {
@@ -6972,9 +6951,8 @@ impl Elb for ElbClient {
             return Err(DescribeAccountLimitsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountLimitsOutput::default();
         } else {
@@ -7021,9 +6999,8 @@ impl Elb for ElbClient {
             return Err(DescribeInstanceHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEndPointStateOutput::default();
         } else {
@@ -7073,9 +7050,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancerAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancerAttributesOutput::default();
         } else {
@@ -7123,9 +7099,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancerPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancerPoliciesOutput::default();
         } else {
@@ -7177,9 +7152,8 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancerPolicyTypesOutput::default();
         } else {
@@ -7226,9 +7200,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccessPointsOutput::default();
         } else {
@@ -7275,9 +7248,8 @@ impl Elb for ElbClient {
             return Err(DescribeTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTagsOutput::default();
         } else {
@@ -7322,9 +7294,8 @@ impl Elb for ElbClient {
             return Err(DetachLoadBalancerFromSubnetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DetachLoadBalancerFromSubnetsOutput::default();
         } else {
@@ -7376,9 +7347,8 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RemoveAvailabilityZonesOutput::default();
         } else {
@@ -7428,9 +7398,8 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AddAvailabilityZonesOutput::default();
         } else {
@@ -7478,9 +7447,8 @@ impl Elb for ElbClient {
             return Err(ModifyLoadBalancerAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyLoadBalancerAttributesOutput::default();
         } else {
@@ -7529,9 +7497,8 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RegisterEndPointsOutput::default();
         } else {
@@ -7578,9 +7545,7 @@ impl Elb for ElbClient {
             return Err(RemoveTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RemoveTagsOutput::default();
         // parse non-payload
         Ok(result)
@@ -7615,9 +7580,7 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetLoadBalancerListenerSSLCertificateOutput::default();
         // parse non-payload
         Ok(result)
@@ -7652,9 +7615,7 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetLoadBalancerPoliciesForBackendServerOutput::default();
         // parse non-payload
         Ok(result)
@@ -7689,9 +7650,7 @@ impl Elb for ElbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetLoadBalancerPoliciesOfListenerOutput::default();
         // parse non-payload
         Ok(result)

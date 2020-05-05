@@ -11252,9 +11252,7 @@ impl Ses for SesClient {
             return Err(CloneReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CloneReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11284,9 +11282,7 @@ impl Ses for SesClient {
             return Err(CreateConfigurationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateConfigurationSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11321,9 +11317,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateConfigurationSetEventDestinationResponse::default();
         // parse non-payload
         Ok(result)
@@ -11358,9 +11352,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateConfigurationSetTrackingOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -11420,9 +11412,7 @@ impl Ses for SesClient {
             return Err(CreateReceiptFilterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateReceiptFilterResponse::default();
         // parse non-payload
         Ok(result)
@@ -11452,9 +11442,7 @@ impl Ses for SesClient {
             return Err(CreateReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateReceiptRuleResponse::default();
         // parse non-payload
         Ok(result)
@@ -11484,9 +11472,7 @@ impl Ses for SesClient {
             return Err(CreateReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11516,9 +11502,7 @@ impl Ses for SesClient {
             return Err(CreateTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateTemplateResponse::default();
         // parse non-payload
         Ok(result)
@@ -11548,9 +11532,7 @@ impl Ses for SesClient {
             return Err(DeleteConfigurationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteConfigurationSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11585,9 +11567,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteConfigurationSetEventDestinationResponse::default();
         // parse non-payload
         Ok(result)
@@ -11622,9 +11602,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteConfigurationSetTrackingOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -11684,9 +11662,7 @@ impl Ses for SesClient {
             return Err(DeleteIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteIdentityResponse::default();
         // parse non-payload
         Ok(result)
@@ -11716,9 +11692,7 @@ impl Ses for SesClient {
             return Err(DeleteIdentityPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteIdentityPolicyResponse::default();
         // parse non-payload
         Ok(result)
@@ -11748,9 +11722,7 @@ impl Ses for SesClient {
             return Err(DeleteReceiptFilterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteReceiptFilterResponse::default();
         // parse non-payload
         Ok(result)
@@ -11780,9 +11752,7 @@ impl Ses for SesClient {
             return Err(DeleteReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteReceiptRuleResponse::default();
         // parse non-payload
         Ok(result)
@@ -11812,9 +11782,7 @@ impl Ses for SesClient {
             return Err(DeleteReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11844,9 +11812,7 @@ impl Ses for SesClient {
             return Err(DeleteTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteTemplateResponse::default();
         // parse non-payload
         Ok(result)
@@ -11905,9 +11871,8 @@ impl Ses for SesClient {
             return Err(DescribeActiveReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeActiveReceiptRuleSetResponse::default();
         } else {
@@ -11954,9 +11919,8 @@ impl Ses for SesClient {
             return Err(DescribeConfigurationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeConfigurationSetResponse::default();
         } else {
@@ -12003,9 +11967,8 @@ impl Ses for SesClient {
             return Err(DescribeReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeReceiptRuleResponse::default();
         } else {
@@ -12052,9 +12015,8 @@ impl Ses for SesClient {
             return Err(DescribeReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeReceiptRuleSetResponse::default();
         } else {
@@ -12100,9 +12062,8 @@ impl Ses for SesClient {
             return Err(GetAccountSendingEnabledError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccountSendingEnabledResponse::default();
         } else {
@@ -12154,9 +12115,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCustomVerificationEmailTemplateResponse::default();
         } else {
@@ -12204,9 +12164,8 @@ impl Ses for SesClient {
             return Err(GetIdentityDkimAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityDkimAttributesResponse::default();
         } else {
@@ -12258,9 +12217,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityMailFromDomainAttributesResponse::default();
         } else {
@@ -12312,9 +12270,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityNotificationAttributesResponse::default();
         } else {
@@ -12361,9 +12318,8 @@ impl Ses for SesClient {
             return Err(GetIdentityPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityPoliciesResponse::default();
         } else {
@@ -12415,9 +12371,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityVerificationAttributesResponse::default();
         } else {
@@ -12461,9 +12416,8 @@ impl Ses for SesClient {
             return Err(GetSendQuotaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSendQuotaResponse::default();
         } else {
@@ -12507,9 +12461,8 @@ impl Ses for SesClient {
             return Err(GetSendStatisticsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSendStatisticsResponse::default();
         } else {
@@ -12556,9 +12509,8 @@ impl Ses for SesClient {
             return Err(GetTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTemplateResponse::default();
         } else {
@@ -12602,9 +12554,8 @@ impl Ses for SesClient {
             return Err(ListConfigurationSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListConfigurationSetsResponse::default();
         } else {
@@ -12656,9 +12607,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListCustomVerificationEmailTemplatesResponse::default();
         } else {
@@ -12705,9 +12655,8 @@ impl Ses for SesClient {
             return Err(ListIdentitiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListIdentitiesResponse::default();
         } else {
@@ -12754,9 +12703,8 @@ impl Ses for SesClient {
             return Err(ListIdentityPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListIdentityPoliciesResponse::default();
         } else {
@@ -12803,9 +12751,8 @@ impl Ses for SesClient {
             return Err(ListReceiptFiltersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListReceiptFiltersResponse::default();
         } else {
@@ -12852,9 +12799,8 @@ impl Ses for SesClient {
             return Err(ListReceiptRuleSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListReceiptRuleSetsResponse::default();
         } else {
@@ -12901,9 +12847,8 @@ impl Ses for SesClient {
             return Err(ListTemplatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTemplatesResponse::default();
         } else {
@@ -12948,9 +12893,8 @@ impl Ses for SesClient {
             return Err(ListVerifiedEmailAddressesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListVerifiedEmailAddressesResponse::default();
         } else {
@@ -13002,9 +12946,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutConfigurationSetDeliveryOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -13034,9 +12976,7 @@ impl Ses for SesClient {
             return Err(PutIdentityPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutIdentityPolicyResponse::default();
         // parse non-payload
         Ok(result)
@@ -13066,9 +13006,7 @@ impl Ses for SesClient {
             return Err(ReorderReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = ReorderReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -13098,9 +13036,8 @@ impl Ses for SesClient {
             return Err(SendBounceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendBounceResponse::default();
         } else {
@@ -13144,9 +13081,8 @@ impl Ses for SesClient {
             return Err(SendBulkTemplatedEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendBulkTemplatedEmailResponse::default();
         } else {
@@ -13194,9 +13130,8 @@ impl Ses for SesClient {
             return Err(SendCustomVerificationEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendCustomVerificationEmailResponse::default();
         } else {
@@ -13243,9 +13178,8 @@ impl Ses for SesClient {
             return Err(SendEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendEmailResponse::default();
         } else {
@@ -13289,9 +13223,8 @@ impl Ses for SesClient {
             return Err(SendRawEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendRawEmailResponse::default();
         } else {
@@ -13336,9 +13269,8 @@ impl Ses for SesClient {
             return Err(SendTemplatedEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendTemplatedEmailResponse::default();
         } else {
@@ -13385,9 +13317,7 @@ impl Ses for SesClient {
             return Err(SetActiveReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetActiveReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -13417,9 +13347,7 @@ impl Ses for SesClient {
             return Err(SetIdentityDkimEnabledError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityDkimEnabledResponse::default();
         // parse non-payload
         Ok(result)
@@ -13454,9 +13382,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityFeedbackForwardingEnabledResponse::default();
         // parse non-payload
         Ok(result)
@@ -13493,9 +13419,7 @@ impl Ses for SesClient {
             return Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityHeadersInNotificationsEnabledResponse::default();
         // parse non-payload
         Ok(result)
@@ -13526,9 +13450,7 @@ impl Ses for SesClient {
             return Err(SetIdentityMailFromDomainError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityMailFromDomainResponse::default();
         // parse non-payload
         Ok(result)
@@ -13559,9 +13481,7 @@ impl Ses for SesClient {
             return Err(SetIdentityNotificationTopicError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityNotificationTopicResponse::default();
         // parse non-payload
         Ok(result)
@@ -13591,9 +13511,7 @@ impl Ses for SesClient {
             return Err(SetReceiptRulePositionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetReceiptRulePositionResponse::default();
         // parse non-payload
         Ok(result)
@@ -13623,9 +13541,8 @@ impl Ses for SesClient {
             return Err(TestRenderTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TestRenderTemplateResponse::default();
         } else {
@@ -13705,9 +13622,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateConfigurationSetEventDestinationResponse::default();
         // parse non-payload
         Ok(result)
@@ -13806,9 +13721,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateConfigurationSetTrackingOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -13868,9 +13781,7 @@ impl Ses for SesClient {
             return Err(UpdateReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateReceiptRuleResponse::default();
         // parse non-payload
         Ok(result)
@@ -13900,9 +13811,7 @@ impl Ses for SesClient {
             return Err(UpdateTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateTemplateResponse::default();
         // parse non-payload
         Ok(result)
@@ -13932,9 +13841,8 @@ impl Ses for SesClient {
             return Err(VerifyDomainDkimError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = VerifyDomainDkimResponse::default();
         } else {
@@ -13981,9 +13889,8 @@ impl Ses for SesClient {
             return Err(VerifyDomainIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = VerifyDomainIdentityResponse::default();
         } else {
@@ -14058,9 +13965,7 @@ impl Ses for SesClient {
             return Err(VerifyEmailIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = VerifyEmailIdentityResponse::default();
         // parse non-payload
         Ok(result)

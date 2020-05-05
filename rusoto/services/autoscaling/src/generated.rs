@@ -10685,9 +10685,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(AttachLoadBalancerTargetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = AttachLoadBalancerTargetGroupsResultType::default();
         // parse non-payload
         Ok(result)
@@ -10717,9 +10715,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(AttachLoadBalancersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = AttachLoadBalancersResultType::default();
         // parse non-payload
         Ok(result)
@@ -10750,9 +10746,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(BatchDeleteScheduledActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = BatchDeleteScheduledActionAnswer::default();
         } else {
@@ -10804,9 +10799,8 @@ impl Autoscaling for AutoscalingClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = BatchPutScheduledUpdateGroupActionAnswer::default();
         } else {
@@ -10853,9 +10847,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(CompleteLifecycleActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CompleteLifecycleActionAnswer::default();
         // parse non-payload
         Ok(result)
@@ -11025,9 +11017,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(DeleteLifecycleHookError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteLifecycleHookAnswer::default();
         // parse non-payload
         Ok(result)
@@ -11167,9 +11157,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeAccountLimitsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountLimitsAnswer::default();
         } else {
@@ -11215,9 +11204,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeAdjustmentTypesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAdjustmentTypesAnswer::default();
         } else {
@@ -11264,9 +11252,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeAutoScalingGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AutoScalingGroupsType::default();
         } else {
@@ -11313,9 +11300,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeAutoScalingInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AutoScalingInstancesType::default();
         } else {
@@ -11366,9 +11352,8 @@ impl Autoscaling for AutoscalingClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAutoScalingNotificationTypesAnswer::default();
         } else {
@@ -11415,9 +11400,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeLaunchConfigurationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = LaunchConfigurationsType::default();
         } else {
@@ -11464,9 +11448,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeLifecycleHookTypesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLifecycleHookTypesAnswer::default();
         } else {
@@ -11513,9 +11496,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeLifecycleHooksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLifecycleHooksAnswer::default();
         } else {
@@ -11567,9 +11549,8 @@ impl Autoscaling for AutoscalingClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancerTargetGroupsResponse::default();
         } else {
@@ -11616,9 +11597,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeLoadBalancersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancersResponse::default();
         } else {
@@ -11665,9 +11645,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeMetricCollectionTypesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeMetricCollectionTypesAnswer::default();
         } else {
@@ -11719,9 +11698,8 @@ impl Autoscaling for AutoscalingClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeNotificationConfigurationsAnswer::default();
         } else {
@@ -11768,9 +11746,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribePoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PoliciesType::default();
         } else {
@@ -11814,9 +11791,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeScalingActivitiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ActivitiesType::default();
         } else {
@@ -11862,9 +11838,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeScalingProcessTypesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ProcessesType::default();
         } else {
@@ -11911,9 +11886,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeScheduledActionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ScheduledActionsType::default();
         } else {
@@ -11960,9 +11934,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagsType::default();
         } else {
@@ -12008,9 +11981,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DescribeTerminationPolicyTypesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTerminationPolicyTypesAnswer::default();
         } else {
@@ -12057,9 +12029,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(DetachInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DetachInstancesAnswer::default();
         } else {
@@ -12109,9 +12080,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(DetachLoadBalancerTargetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DetachLoadBalancerTargetGroupsResultType::default();
         // parse non-payload
         Ok(result)
@@ -12141,9 +12110,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(DetachLoadBalancersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DetachLoadBalancersResultType::default();
         // parse non-payload
         Ok(result)
@@ -12229,9 +12196,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(EnterStandbyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnterStandbyAnswer::default();
         } else {
@@ -12303,9 +12269,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(ExitStandbyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ExitStandbyAnswer::default();
         } else {
@@ -12349,9 +12314,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(PutLifecycleHookError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutLifecycleHookAnswer::default();
         // parse non-payload
         Ok(result)
@@ -12409,9 +12372,8 @@ impl Autoscaling for AutoscalingClient {
             return Err(PutScalingPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PolicyARNType::default();
         } else {
@@ -12486,9 +12448,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(RecordLifecycleActionHeartbeatError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RecordLifecycleActionHeartbeatAnswer::default();
         // parse non-payload
         Ok(result)
@@ -12602,9 +12562,7 @@ impl Autoscaling for AutoscalingClient {
             return Err(SetInstanceProtectionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetInstanceProtectionAnswer::default();
         // parse non-payload
         Ok(result)
@@ -12664,9 +12622,8 @@ impl Autoscaling for AutoscalingClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ActivityType::default();
         } else {

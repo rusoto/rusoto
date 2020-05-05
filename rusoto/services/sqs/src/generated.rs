@@ -3328,9 +3328,8 @@ impl Sqs for SqsClient {
             return Err(ChangeMessageVisibilityBatchError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ChangeMessageVisibilityBatchResult::default();
         } else {
@@ -3377,9 +3376,8 @@ impl Sqs for SqsClient {
             return Err(CreateQueueError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateQueueResult::default();
         } else {
@@ -3451,9 +3449,8 @@ impl Sqs for SqsClient {
             return Err(DeleteMessageBatchError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteMessageBatchResult::default();
         } else {
@@ -3528,9 +3525,8 @@ impl Sqs for SqsClient {
             return Err(GetQueueAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetQueueAttributesResult::default();
         } else {
@@ -3577,9 +3573,8 @@ impl Sqs for SqsClient {
             return Err(GetQueueUrlError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetQueueUrlResult::default();
         } else {
@@ -3624,9 +3619,8 @@ impl Sqs for SqsClient {
             return Err(ListDeadLetterSourceQueuesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDeadLetterSourceQueuesResult::default();
         } else {
@@ -3673,9 +3667,8 @@ impl Sqs for SqsClient {
             return Err(ListQueueTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListQueueTagsResult::default();
         } else {
@@ -3720,9 +3713,8 @@ impl Sqs for SqsClient {
             return Err(ListQueuesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListQueuesResult::default();
         } else {
@@ -3794,9 +3786,8 @@ impl Sqs for SqsClient {
             return Err(ReceiveMessageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReceiveMessageResult::default();
         } else {
@@ -3869,9 +3860,8 @@ impl Sqs for SqsClient {
             return Err(SendMessageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendMessageResult::default();
         } else {
@@ -3915,9 +3905,8 @@ impl Sqs for SqsClient {
             return Err(SendMessageBatchError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendMessageBatchResult::default();
         } else {

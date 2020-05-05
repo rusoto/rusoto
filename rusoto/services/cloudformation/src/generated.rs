@@ -12303,9 +12303,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(ContinueUpdateRollbackError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = ContinueUpdateRollbackOutput::default();
         // parse non-payload
         Ok(result)
@@ -12335,9 +12333,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(CreateChangeSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateChangeSetOutput::default();
         } else {
@@ -12384,9 +12381,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(CreateStackError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStackOutput::default();
         } else {
@@ -12430,9 +12426,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(CreateStackInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStackInstancesOutput::default();
         } else {
@@ -12479,9 +12474,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(CreateStackSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStackSetOutput::default();
         } else {
@@ -12526,9 +12520,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(DeleteChangeSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteChangeSetOutput::default();
         // parse non-payload
         Ok(result)
@@ -12586,9 +12578,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DeleteStackInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteStackInstancesOutput::default();
         } else {
@@ -12635,9 +12626,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(DeleteStackSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteStackSetOutput::default();
         // parse non-payload
         Ok(result)
@@ -12667,9 +12656,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(DeregisterTypeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeregisterTypeOutput::default();
         // parse non-payload
         Ok(result)
@@ -12699,9 +12686,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeAccountLimitsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountLimitsOutput::default();
         } else {
@@ -12748,9 +12734,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeChangeSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeChangeSetOutput::default();
         } else {
@@ -12802,9 +12787,8 @@ impl CloudFormation for CloudFormationClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackDriftDetectionStatusOutput::default();
         } else {
@@ -12851,9 +12835,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackEventsOutput::default();
         } else {
@@ -12900,9 +12883,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackInstanceOutput::default();
         } else {
@@ -12949,9 +12931,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackResourceOutput::default();
         } else {
@@ -12999,9 +12980,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackResourceDriftsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackResourceDriftsOutput::default();
         } else {
@@ -13048,9 +13028,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackResourcesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackResourcesOutput::default();
         } else {
@@ -13097,9 +13076,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackSetOutput::default();
         } else {
@@ -13146,9 +13124,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStackSetOperationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStackSetOperationOutput::default();
         } else {
@@ -13195,9 +13172,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeStacksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeStacksOutput::default();
         } else {
@@ -13242,9 +13218,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeTypeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTypeOutput::default();
         } else {
@@ -13288,9 +13263,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DescribeTypeRegistrationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTypeRegistrationOutput::default();
         } else {
@@ -13337,9 +13311,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DetectStackDriftError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DetectStackDriftOutput::default();
         } else {
@@ -13386,9 +13359,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DetectStackResourceDriftError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DetectStackResourceDriftOutput::default();
         } else {
@@ -13435,9 +13407,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(DetectStackSetDriftError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DetectStackSetDriftOutput::default();
         } else {
@@ -13484,9 +13455,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(EstimateTemplateCostError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EstimateTemplateCostOutput::default();
         } else {
@@ -13533,9 +13503,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(ExecuteChangeSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = ExecuteChangeSetOutput::default();
         // parse non-payload
         Ok(result)
@@ -13565,9 +13533,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(GetStackPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetStackPolicyOutput::default();
         } else {
@@ -13612,9 +13579,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(GetTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTemplateOutput::default();
         } else {
@@ -13658,9 +13624,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(GetTemplateSummaryError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTemplateSummaryOutput::default();
         } else {
@@ -13707,9 +13672,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListChangeSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListChangeSetsOutput::default();
         } else {
@@ -13754,9 +13718,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListExportsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListExportsOutput::default();
         } else {
@@ -13800,9 +13763,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListImportsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListImportsOutput::default();
         } else {
@@ -13846,9 +13808,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListStackInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStackInstancesOutput::default();
         } else {
@@ -13895,9 +13856,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListStackResourcesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStackResourcesOutput::default();
         } else {
@@ -13945,9 +13905,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListStackSetOperationResultsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStackSetOperationResultsOutput::default();
         } else {
@@ -13994,9 +13953,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListStackSetOperationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStackSetOperationsOutput::default();
         } else {
@@ -14043,9 +14001,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListStackSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStackSetsOutput::default();
         } else {
@@ -14090,9 +14047,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListStacksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStacksOutput::default();
         } else {
@@ -14136,9 +14092,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListTypeRegistrationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTypeRegistrationsOutput::default();
         } else {
@@ -14185,9 +14140,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListTypeVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTypeVersionsOutput::default();
         } else {
@@ -14234,9 +14188,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ListTypesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTypesOutput::default();
         } else {
@@ -14280,9 +14233,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(RecordHandlerProgressError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RecordHandlerProgressOutput::default();
         // parse non-payload
         Ok(result)
@@ -14312,9 +14263,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(RegisterTypeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RegisterTypeOutput::default();
         } else {
@@ -14386,9 +14336,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(SetTypeDefaultVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetTypeDefaultVersionOutput::default();
         // parse non-payload
         Ok(result)
@@ -14446,9 +14394,7 @@ impl CloudFormation for CloudFormationClient {
             return Err(StopStackSetOperationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = StopStackSetOperationOutput::default();
         // parse non-payload
         Ok(result)
@@ -14478,9 +14424,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(UpdateStackError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateStackOutput::default();
         } else {
@@ -14524,9 +14469,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(UpdateStackInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateStackInstancesOutput::default();
         } else {
@@ -14573,9 +14517,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(UpdateStackSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateStackSetOutput::default();
         } else {
@@ -14621,9 +14564,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(UpdateTerminationProtectionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateTerminationProtectionOutput::default();
         } else {
@@ -14670,9 +14612,8 @@ impl CloudFormation for CloudFormationClient {
             return Err(ValidateTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ValidateTemplateOutput::default();
         } else {

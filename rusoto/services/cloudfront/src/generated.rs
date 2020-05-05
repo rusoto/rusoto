@@ -12664,9 +12664,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateCloudFrontOriginAccessIdentityResult::default();
         } else {
@@ -12721,9 +12720,8 @@ impl CloudFront for CloudFrontClient {
             return Err(CreateDistributionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDistributionResult::default();
         } else {
@@ -12780,9 +12778,8 @@ impl CloudFront for CloudFrontClient {
             return Err(CreateDistributionWithTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDistributionWithTagsResult::default();
         } else {
@@ -12842,9 +12839,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateFieldLevelEncryptionConfigResult::default();
         } else {
@@ -12904,9 +12900,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateFieldLevelEncryptionProfileResult::default();
         } else {
@@ -12964,9 +12959,8 @@ impl CloudFront for CloudFrontClient {
             return Err(CreateInvalidationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateInvalidationResult::default();
         } else {
@@ -13015,9 +13009,8 @@ impl CloudFront for CloudFrontClient {
             return Err(CreatePublicKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreatePublicKeyResult::default();
         } else {
@@ -13070,9 +13063,8 @@ impl CloudFront for CloudFrontClient {
             return Err(CreateStreamingDistributionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStreamingDistributionResult::default();
         } else {
@@ -13135,9 +13127,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStreamingDistributionWithTagsResult::default();
         } else {
@@ -13372,9 +13363,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCloudFrontOriginAccessIdentityResult::default();
         } else {
@@ -13425,9 +13415,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCloudFrontOriginAccessIdentityConfigResult::default();
         } else {
@@ -13470,9 +13459,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetDistributionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetDistributionResult::default();
         } else {
@@ -13512,9 +13500,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetDistributionConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetDistributionConfigResult::default();
         } else {
@@ -13555,9 +13542,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetFieldLevelEncryptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetFieldLevelEncryptionResult::default();
         } else {
@@ -13604,9 +13590,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetFieldLevelEncryptionConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetFieldLevelEncryptionConfigResult::default();
         } else {
@@ -13655,9 +13640,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetFieldLevelEncryptionProfileError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetFieldLevelEncryptionProfileResult::default();
         } else {
@@ -13708,9 +13692,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetFieldLevelEncryptionProfileConfigResult::default();
         } else {
@@ -13757,9 +13740,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetInvalidationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetInvalidationResult::default();
         } else {
@@ -13796,9 +13778,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetPublicKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetPublicKeyResult::default();
         } else {
@@ -13838,9 +13819,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetPublicKeyConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetPublicKeyConfigResult::default();
         } else {
@@ -13881,9 +13861,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetStreamingDistributionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetStreamingDistributionResult::default();
         } else {
@@ -13932,9 +13911,8 @@ impl CloudFront for CloudFrontClient {
             return Err(GetStreamingDistributionConfigError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetStreamingDistributionConfigResult::default();
         } else {
@@ -13991,9 +13969,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListCloudFrontOriginAccessIdentitiesResult::default();
         } else {
@@ -14042,9 +14019,8 @@ impl CloudFront for CloudFrontClient {
             return Err(ListDistributionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDistributionsResult::default();
         } else {
@@ -14095,9 +14071,8 @@ impl CloudFront for CloudFrontClient {
             return Err(ListDistributionsByWebACLIdError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDistributionsByWebACLIdResult::default();
         } else {
@@ -14151,9 +14126,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListFieldLevelEncryptionConfigsResult::default();
         } else {
@@ -14207,9 +14181,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListFieldLevelEncryptionProfilesResult::default();
         } else {
@@ -14261,9 +14234,8 @@ impl CloudFront for CloudFrontClient {
             return Err(ListInvalidationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListInvalidationsResult::default();
         } else {
@@ -14310,9 +14282,8 @@ impl CloudFront for CloudFrontClient {
             return Err(ListPublicKeysError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPublicKeysResult::default();
         } else {
@@ -14359,9 +14330,8 @@ impl CloudFront for CloudFrontClient {
             return Err(ListStreamingDistributionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListStreamingDistributionsResult::default();
         } else {
@@ -14405,9 +14375,8 @@ impl CloudFront for CloudFrontClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTagsForResourceResult::default();
         } else {
@@ -14529,9 +14498,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateCloudFrontOriginAccessIdentityResult::default();
         } else {
@@ -14586,9 +14554,8 @@ impl CloudFront for CloudFrontClient {
             return Err(UpdateDistributionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateDistributionResult::default();
         } else {
@@ -14649,9 +14616,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateFieldLevelEncryptionConfigResult::default();
         } else {
@@ -14714,9 +14680,8 @@ impl CloudFront for CloudFrontClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateFieldLevelEncryptionProfileResult::default();
         } else {
@@ -14771,9 +14736,8 @@ impl CloudFront for CloudFrontClient {
             return Err(UpdatePublicKeyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdatePublicKeyResult::default();
         } else {
@@ -14829,9 +14793,8 @@ impl CloudFront for CloudFrontClient {
             return Err(UpdateStreamingDistributionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateStreamingDistributionResult::default();
         } else {

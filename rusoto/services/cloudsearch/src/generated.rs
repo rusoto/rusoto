@@ -6212,9 +6212,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(BuildSuggestersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = BuildSuggestersResponse::default();
         } else {
@@ -6261,9 +6260,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(CreateDomainError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDomainResponse::default();
         } else {
@@ -6308,9 +6306,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DefineAnalysisSchemeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DefineAnalysisSchemeResponse::default();
         } else {
@@ -6357,9 +6354,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DefineExpressionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DefineExpressionResponse::default();
         } else {
@@ -6406,9 +6402,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DefineIndexFieldError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DefineIndexFieldResponse::default();
         } else {
@@ -6455,9 +6450,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DefineSuggesterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DefineSuggesterResponse::default();
         } else {
@@ -6504,9 +6498,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DeleteAnalysisSchemeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteAnalysisSchemeResponse::default();
         } else {
@@ -6553,9 +6546,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DeleteDomainError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDomainResponse::default();
         } else {
@@ -6600,9 +6592,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DeleteExpressionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteExpressionResponse::default();
         } else {
@@ -6649,9 +6640,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DeleteIndexFieldError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteIndexFieldResponse::default();
         } else {
@@ -6698,9 +6688,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DeleteSuggesterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteSuggesterResponse::default();
         } else {
@@ -6747,9 +6736,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeAnalysisSchemesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAnalysisSchemesResponse::default();
         } else {
@@ -6797,9 +6785,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeAvailabilityOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAvailabilityOptionsResponse::default();
         } else {
@@ -6849,9 +6836,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeDomainEndpointOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDomainEndpointOptionsResponse::default();
         } else {
@@ -6898,9 +6884,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeDomainsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDomainsResponse::default();
         } else {
@@ -6947,9 +6932,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeExpressionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeExpressionsResponse::default();
         } else {
@@ -6996,9 +6980,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeIndexFieldsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeIndexFieldsResponse::default();
         } else {
@@ -7046,9 +7029,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeScalingParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeScalingParametersResponse::default();
         } else {
@@ -7098,9 +7080,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeServiceAccessPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeServiceAccessPoliciesResponse::default();
         } else {
@@ -7147,9 +7128,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(DescribeSuggestersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeSuggestersResponse::default();
         } else {
@@ -7196,9 +7176,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(IndexDocumentsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = IndexDocumentsResponse::default();
         } else {
@@ -7244,9 +7223,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(ListDomainNamesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDomainNamesResponse::default();
         } else {
@@ -7294,9 +7272,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(UpdateAvailabilityOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateAvailabilityOptionsResponse::default();
         } else {
@@ -7344,9 +7321,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(UpdateDomainEndpointOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateDomainEndpointOptionsResponse::default();
         } else {
@@ -7393,9 +7369,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(UpdateScalingParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateScalingParametersResponse::default();
         } else {
@@ -7443,9 +7418,8 @@ impl CloudSearch for CloudSearchClient {
             return Err(UpdateServiceAccessPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateServiceAccessPoliciesResponse::default();
         } else {

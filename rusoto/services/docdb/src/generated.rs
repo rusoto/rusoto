@@ -9449,9 +9449,8 @@ impl Docdb for DocdbClient {
             return Err(ApplyPendingMaintenanceActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplyPendingMaintenanceActionResult::default();
         } else {
@@ -9499,9 +9498,8 @@ impl Docdb for DocdbClient {
             return Err(CopyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterParameterGroupResult::default();
         } else {
@@ -9548,9 +9546,8 @@ impl Docdb for DocdbClient {
             return Err(CopyDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterSnapshotResult::default();
         } else {
@@ -9597,9 +9594,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterResult::default();
         } else {
@@ -9647,9 +9643,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterParameterGroupResult::default();
         } else {
@@ -9696,9 +9691,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterSnapshotResult::default();
         } else {
@@ -9745,9 +9739,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBInstanceResult::default();
         } else {
@@ -9794,9 +9787,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBSubnetGroupResult::default();
         } else {
@@ -9843,9 +9835,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterResult::default();
         } else {
@@ -9920,9 +9911,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterSnapshotResult::default();
         } else {
@@ -9969,9 +9959,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBInstanceResult::default();
         } else {
@@ -10046,9 +10035,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CertificateMessage::default();
         } else {
@@ -10098,9 +10086,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupsMessage::default();
         } else {
@@ -10147,9 +10134,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBClusterParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupDetails::default();
         } else {
@@ -10201,9 +10187,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBClusterSnapshotAttributesResult::default();
         } else {
@@ -10250,9 +10235,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterSnapshotMessage::default();
         } else {
@@ -10299,9 +10283,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterMessage::default();
         } else {
@@ -10346,9 +10329,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBEngineVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBEngineVersionMessage::default();
         } else {
@@ -10395,9 +10377,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBInstanceMessage::default();
         } else {
@@ -10444,9 +10425,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBSubnetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBSubnetGroupMessage::default();
         } else {
@@ -10498,9 +10478,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultClusterParametersResult::default();
         } else {
@@ -10547,9 +10526,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeEventCategoriesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventCategoriesMessage::default();
         } else {
@@ -10596,9 +10574,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventsMessage::default();
         } else {
@@ -10647,9 +10624,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OrderableDBInstanceOptionsMessage::default();
         } else {
@@ -10699,9 +10675,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PendingMaintenanceActionsMessage::default();
         } else {
@@ -10748,9 +10723,8 @@ impl Docdb for DocdbClient {
             return Err(FailoverDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = FailoverDBClusterResult::default();
         } else {
@@ -10797,9 +10771,8 @@ impl Docdb for DocdbClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -10844,9 +10817,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterResult::default();
         } else {
@@ -10894,9 +10866,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -10948,9 +10919,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterSnapshotAttributeResult::default();
         } else {
@@ -10997,9 +10967,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBInstanceResult::default();
         } else {
@@ -11046,9 +11015,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBSubnetGroupResult::default();
         } else {
@@ -11095,9 +11063,8 @@ impl Docdb for DocdbClient {
             return Err(RebootDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RebootDBInstanceResult::default();
         } else {
@@ -11173,9 +11140,8 @@ impl Docdb for DocdbClient {
             return Err(ResetDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -11223,9 +11189,8 @@ impl Docdb for DocdbClient {
             return Err(RestoreDBClusterFromSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterFromSnapshotResult::default();
         } else {
@@ -11273,9 +11238,8 @@ impl Docdb for DocdbClient {
             return Err(RestoreDBClusterToPointInTimeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterToPointInTimeResult::default();
         } else {
@@ -11322,9 +11286,8 @@ impl Docdb for DocdbClient {
             return Err(StartDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StartDBClusterResult::default();
         } else {
@@ -11369,9 +11332,8 @@ impl Docdb for DocdbClient {
             return Err(StopDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StopDBClusterResult::default();
         } else {

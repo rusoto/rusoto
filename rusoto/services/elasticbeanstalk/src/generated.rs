@@ -10267,9 +10267,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ApplyEnvironmentManagedActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplyEnvironmentManagedActionResult::default();
         } else {
@@ -10316,9 +10315,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CheckDNSAvailabilityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CheckDNSAvailabilityResultMessage::default();
         } else {
@@ -10365,9 +10363,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ComposeEnvironmentsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescriptionsMessage::default();
         } else {
@@ -10414,9 +10411,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateApplicationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationDescriptionMessage::default();
         } else {
@@ -10464,9 +10460,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateApplicationVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationVersionDescriptionMessage::default();
         } else {
@@ -10514,9 +10509,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateConfigurationTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsDescription::default();
         } else {
@@ -10563,9 +10557,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateEnvironmentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescription::default();
         } else {
@@ -10612,9 +10605,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreatePlatformVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreatePlatformVersionResult::default();
         } else {
@@ -10660,9 +10652,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateStorageLocationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStorageLocationResultMessage::default();
         } else {
@@ -10821,9 +10812,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DeletePlatformVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeletePlatformVersionResult::default();
         } else {
@@ -10869,9 +10859,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeAccountAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountAttributesResult::default();
         } else {
@@ -10919,9 +10908,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeApplicationVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationVersionDescriptionsMessage::default();
         } else {
@@ -10968,9 +10956,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeApplicationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationDescriptionsMessage::default();
         } else {
@@ -11018,9 +11005,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeConfigurationOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationOptionsDescription::default();
         } else {
@@ -11068,9 +11054,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeConfigurationSettingsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsDescriptions::default();
         } else {
@@ -11117,9 +11102,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEnvironmentHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEnvironmentHealthResult::default();
         } else {
@@ -11175,9 +11159,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEnvironmentManagedActionHistoryResult::default();
         } else {
@@ -11229,9 +11212,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEnvironmentManagedActionsResult::default();
         } else {
@@ -11281,9 +11263,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEnvironmentResourcesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentResourceDescriptionsMessage::default();
         } else {
@@ -11330,9 +11311,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEnvironmentsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescriptionsMessage::default();
         } else {
@@ -11379,9 +11359,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventDescriptionsMessage::default();
         } else {
@@ -11428,9 +11407,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeInstancesHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeInstancesHealthResult::default();
         } else {
@@ -11477,9 +11455,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribePlatformVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribePlatformVersionResult::default();
         } else {
@@ -11528,9 +11505,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ListAvailableSolutionStacksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAvailableSolutionStacksResultMessage::default();
         } else {
@@ -11577,9 +11553,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ListPlatformVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPlatformVersionsResult::default();
         } else {
@@ -11626,9 +11601,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ResourceTagsDescriptionMessage::default();
         } else {
@@ -11760,9 +11734,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(RetrieveEnvironmentInfoError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RetrieveEnvironmentInfoResultMessage::default();
         } else {
@@ -11837,9 +11810,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(TerminateEnvironmentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescription::default();
         } else {
@@ -11886,9 +11858,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateApplicationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationDescriptionMessage::default();
         } else {
@@ -11940,9 +11911,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationResourceLifecycleDescriptionMessage::default();
         } else {
@@ -11990,9 +11960,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateApplicationVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationVersionDescriptionMessage::default();
         } else {
@@ -12040,9 +12009,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateConfigurationTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsDescription::default();
         } else {
@@ -12089,9 +12057,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateEnvironmentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescription::default();
         } else {
@@ -12169,9 +12136,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ValidateConfigurationSettingsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsValidationMessages::default();
         } else {

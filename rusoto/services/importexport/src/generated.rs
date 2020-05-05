@@ -1683,9 +1683,8 @@ impl ImportExport for ImportExportClient {
             return Err(CancelJobError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CancelJobOutput::default();
         } else {
@@ -1734,9 +1733,8 @@ impl ImportExport for ImportExportClient {
             return Err(CreateJobError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateJobOutput::default();
         } else {
@@ -1785,9 +1783,8 @@ impl ImportExport for ImportExportClient {
             return Err(GetShippingLabelError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetShippingLabelOutput::default();
         } else {
@@ -1839,9 +1836,8 @@ impl ImportExport for ImportExportClient {
             return Err(GetStatusError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetStatusOutput::default();
         } else {
@@ -1886,9 +1882,8 @@ impl ImportExport for ImportExportClient {
             return Err(ListJobsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListJobsOutput::default();
         } else {
@@ -1937,9 +1932,8 @@ impl ImportExport for ImportExportClient {
             return Err(UpdateJobError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateJobOutput::default();
         } else {

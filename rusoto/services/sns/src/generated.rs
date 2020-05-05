@@ -5184,9 +5184,8 @@ impl Sns for SnsClient {
             return Err(CheckIfPhoneNumberIsOptedOutError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CheckIfPhoneNumberIsOptedOutResponse::default();
         } else {
@@ -5233,9 +5232,8 @@ impl Sns for SnsClient {
             return Err(ConfirmSubscriptionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfirmSubscriptionResponse::default();
         } else {
@@ -5283,9 +5281,8 @@ impl Sns for SnsClient {
             return Err(CreatePlatformApplicationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreatePlatformApplicationResponse::default();
         } else {
@@ -5332,9 +5329,8 @@ impl Sns for SnsClient {
             return Err(CreatePlatformEndpointError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateEndpointResponse::default();
         } else {
@@ -5381,9 +5377,8 @@ impl Sns for SnsClient {
             return Err(CreateTopicError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateTopicResponse::default();
         } else {
@@ -5511,9 +5506,8 @@ impl Sns for SnsClient {
             return Err(GetEndpointAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetEndpointAttributesResponse::default();
         } else {
@@ -5565,9 +5559,8 @@ impl Sns for SnsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetPlatformApplicationAttributesResponse::default();
         } else {
@@ -5614,9 +5607,8 @@ impl Sns for SnsClient {
             return Err(GetSMSAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSMSAttributesResponse::default();
         } else {
@@ -5664,9 +5656,8 @@ impl Sns for SnsClient {
             return Err(GetSubscriptionAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSubscriptionAttributesResponse::default();
         } else {
@@ -5713,9 +5704,8 @@ impl Sns for SnsClient {
             return Err(GetTopicAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTopicAttributesResponse::default();
         } else {
@@ -5767,9 +5757,8 @@ impl Sns for SnsClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListEndpointsByPlatformApplicationResponse::default();
         } else {
@@ -5816,9 +5805,8 @@ impl Sns for SnsClient {
             return Err(ListPhoneNumbersOptedOutError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPhoneNumbersOptedOutResponse::default();
         } else {
@@ -5865,9 +5853,8 @@ impl Sns for SnsClient {
             return Err(ListPlatformApplicationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPlatformApplicationsResponse::default();
         } else {
@@ -5914,9 +5901,8 @@ impl Sns for SnsClient {
             return Err(ListSubscriptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListSubscriptionsResponse::default();
         } else {
@@ -5963,9 +5949,8 @@ impl Sns for SnsClient {
             return Err(ListSubscriptionsByTopicError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListSubscriptionsByTopicResponse::default();
         } else {
@@ -6012,9 +5997,8 @@ impl Sns for SnsClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTagsForResourceResponse::default();
         } else {
@@ -6061,9 +6045,8 @@ impl Sns for SnsClient {
             return Err(ListTopicsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTopicsResponse::default();
         } else {
@@ -6107,9 +6090,7 @@ impl Sns for SnsClient {
             return Err(OptInPhoneNumberError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = OptInPhoneNumberResponse::default();
         // parse non-payload
         Ok(result)
@@ -6139,9 +6120,8 @@ impl Sns for SnsClient {
             return Err(PublishError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PublishResponse::default();
         } else {
@@ -6271,9 +6251,7 @@ impl Sns for SnsClient {
             return Err(SetSMSAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetSMSAttributesResponse::default();
         // parse non-payload
         Ok(result)
@@ -6359,9 +6337,8 @@ impl Sns for SnsClient {
             return Err(SubscribeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SubscribeResponse::default();
         } else {
@@ -6405,9 +6382,7 @@ impl Sns for SnsClient {
             return Err(TagResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = TagResourceResponse::default();
         // parse non-payload
         Ok(result)
@@ -6465,9 +6440,7 @@ impl Sns for SnsClient {
             return Err(UntagResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UntagResourceResponse::default();
         // parse non-payload
         Ok(result)

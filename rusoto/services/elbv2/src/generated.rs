@@ -9299,9 +9299,8 @@ impl Elb for ElbClient {
             return Err(AddListenerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AddListenerCertificatesOutput::default();
         } else {
@@ -9348,9 +9347,7 @@ impl Elb for ElbClient {
             return Err(AddTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = AddTagsOutput::default();
         // parse non-payload
         Ok(result)
@@ -9380,9 +9377,8 @@ impl Elb for ElbClient {
             return Err(CreateListenerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateListenerOutput::default();
         } else {
@@ -9427,9 +9423,8 @@ impl Elb for ElbClient {
             return Err(CreateLoadBalancerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateLoadBalancerOutput::default();
         } else {
@@ -9476,9 +9471,8 @@ impl Elb for ElbClient {
             return Err(CreateRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateRuleOutput::default();
         } else {
@@ -9522,9 +9516,8 @@ impl Elb for ElbClient {
             return Err(CreateTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateTargetGroupOutput::default();
         } else {
@@ -9571,9 +9564,7 @@ impl Elb for ElbClient {
             return Err(DeleteListenerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteListenerOutput::default();
         // parse non-payload
         Ok(result)
@@ -9603,9 +9594,7 @@ impl Elb for ElbClient {
             return Err(DeleteLoadBalancerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteLoadBalancerOutput::default();
         // parse non-payload
         Ok(result)
@@ -9635,9 +9624,7 @@ impl Elb for ElbClient {
             return Err(DeleteRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteRuleOutput::default();
         // parse non-payload
         Ok(result)
@@ -9667,9 +9654,7 @@ impl Elb for ElbClient {
             return Err(DeleteTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteTargetGroupOutput::default();
         // parse non-payload
         Ok(result)
@@ -9699,9 +9684,7 @@ impl Elb for ElbClient {
             return Err(DeregisterTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeregisterTargetsOutput::default();
         // parse non-payload
         Ok(result)
@@ -9731,9 +9714,8 @@ impl Elb for ElbClient {
             return Err(DescribeAccountLimitsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountLimitsOutput::default();
         } else {
@@ -9781,9 +9763,8 @@ impl Elb for ElbClient {
             return Err(DescribeListenerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeListenerCertificatesOutput::default();
         } else {
@@ -9830,9 +9811,8 @@ impl Elb for ElbClient {
             return Err(DescribeListenersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeListenersOutput::default();
         } else {
@@ -9882,9 +9862,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancerAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancerAttributesOutput::default();
         } else {
@@ -9931,9 +9910,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancersOutput::default();
         } else {
@@ -9980,9 +9958,8 @@ impl Elb for ElbClient {
             return Err(DescribeRulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeRulesOutput::default();
         } else {
@@ -10027,9 +10004,8 @@ impl Elb for ElbClient {
             return Err(DescribeSSLPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeSSLPoliciesOutput::default();
         } else {
@@ -10076,9 +10052,8 @@ impl Elb for ElbClient {
             return Err(DescribeTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTagsOutput::default();
         } else {
@@ -10123,9 +10098,8 @@ impl Elb for ElbClient {
             return Err(DescribeTargetGroupAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTargetGroupAttributesOutput::default();
         } else {
@@ -10172,9 +10146,8 @@ impl Elb for ElbClient {
             return Err(DescribeTargetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTargetGroupsOutput::default();
         } else {
@@ -10221,9 +10194,8 @@ impl Elb for ElbClient {
             return Err(DescribeTargetHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTargetHealthOutput::default();
         } else {
@@ -10270,9 +10242,8 @@ impl Elb for ElbClient {
             return Err(ModifyListenerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyListenerOutput::default();
         } else {
@@ -10318,9 +10289,8 @@ impl Elb for ElbClient {
             return Err(ModifyLoadBalancerAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyLoadBalancerAttributesOutput::default();
         } else {
@@ -10367,9 +10337,8 @@ impl Elb for ElbClient {
             return Err(ModifyRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyRuleOutput::default();
         } else {
@@ -10413,9 +10382,8 @@ impl Elb for ElbClient {
             return Err(ModifyTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyTargetGroupOutput::default();
         } else {
@@ -10463,9 +10431,8 @@ impl Elb for ElbClient {
             return Err(ModifyTargetGroupAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyTargetGroupAttributesOutput::default();
         } else {
@@ -10512,9 +10479,7 @@ impl Elb for ElbClient {
             return Err(RegisterTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RegisterTargetsOutput::default();
         // parse non-payload
         Ok(result)
@@ -10545,9 +10510,7 @@ impl Elb for ElbClient {
             return Err(RemoveListenerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RemoveListenerCertificatesOutput::default();
         // parse non-payload
         Ok(result)
@@ -10577,9 +10540,7 @@ impl Elb for ElbClient {
             return Err(RemoveTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RemoveTagsOutput::default();
         // parse non-payload
         Ok(result)
@@ -10609,9 +10570,8 @@ impl Elb for ElbClient {
             return Err(SetIpAddressTypeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetIpAddressTypeOutput::default();
         } else {
@@ -10658,9 +10618,8 @@ impl Elb for ElbClient {
             return Err(SetRulePrioritiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetRulePrioritiesOutput::default();
         } else {
@@ -10707,9 +10666,8 @@ impl Elb for ElbClient {
             return Err(SetSecurityGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetSecurityGroupsOutput::default();
         } else {
@@ -10756,9 +10714,8 @@ impl Elb for ElbClient {
             return Err(SetSubnetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetSubnetsOutput::default();
         } else {

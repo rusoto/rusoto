@@ -12382,9 +12382,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(AddTagsToResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -12434,9 +12433,8 @@ impl ElastiCache for ElastiCacheClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AuthorizeCacheSecurityGroupIngressResult::default();
         } else {
@@ -12483,9 +12481,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(BatchApplyUpdateActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateActionResultsMessage::default();
         } else {
@@ -12532,9 +12529,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(BatchStopUpdateActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateActionResultsMessage::default();
         } else {
@@ -12581,9 +12577,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CompleteMigrationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CompleteMigrationResponse::default();
         } else {
@@ -12630,9 +12625,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CopySnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopySnapshotResult::default();
         } else {
@@ -12676,9 +12670,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CreateCacheClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateCacheClusterResult::default();
         } else {
@@ -12725,9 +12718,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CreateCacheParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateCacheParameterGroupResult::default();
         } else {
@@ -12774,9 +12766,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CreateCacheSecurityGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateCacheSecurityGroupResult::default();
         } else {
@@ -12823,9 +12814,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CreateCacheSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateCacheSubnetGroupResult::default();
         } else {
@@ -12872,9 +12862,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CreateReplicationGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateReplicationGroupResult::default();
         } else {
@@ -12921,9 +12910,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(CreateSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateSnapshotResult::default();
         } else {
@@ -12968,9 +12956,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DecreaseReplicaCountError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DecreaseReplicaCountResult::default();
         } else {
@@ -13017,9 +13004,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DeleteCacheClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteCacheClusterResult::default();
         } else {
@@ -13150,9 +13136,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DeleteReplicationGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteReplicationGroupResult::default();
         } else {
@@ -13199,9 +13184,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DeleteSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteSnapshotResult::default();
         } else {
@@ -13246,9 +13230,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeCacheClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheClusterMessage::default();
         } else {
@@ -13295,9 +13278,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeCacheEngineVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheEngineVersionMessage::default();
         } else {
@@ -13344,9 +13326,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeCacheParameterGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheParameterGroupsMessage::default();
         } else {
@@ -13393,9 +13374,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeCacheParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheParameterGroupDetails::default();
         } else {
@@ -13442,9 +13422,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeCacheSecurityGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheSecurityGroupMessage::default();
         } else {
@@ -13491,9 +13470,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeCacheSubnetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheSubnetGroupMessage::default();
         } else {
@@ -13545,9 +13523,8 @@ impl ElastiCache for ElastiCacheClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultParametersResult::default();
         } else {
@@ -13594,9 +13571,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventsMessage::default();
         } else {
@@ -13640,9 +13616,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeReplicationGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReplicationGroupMessage::default();
         } else {
@@ -13689,9 +13664,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeReservedCacheNodesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReservedCacheNodeMessage::default();
         } else {
@@ -13743,9 +13717,8 @@ impl ElastiCache for ElastiCacheClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReservedCacheNodesOfferingMessage::default();
         } else {
@@ -13792,9 +13765,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeServiceUpdatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ServiceUpdatesMessage::default();
         } else {
@@ -13841,9 +13813,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeSnapshotsListMessage::default();
         } else {
@@ -13890,9 +13861,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(DescribeUpdateActionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = UpdateActionsMessage::default();
         } else {
@@ -13939,9 +13909,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(IncreaseReplicaCountError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = IncreaseReplicaCountResult::default();
         } else {
@@ -13993,9 +13962,8 @@ impl ElastiCache for ElastiCacheClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AllowedNodeTypeModificationsMessage::default();
         } else {
@@ -14042,9 +14010,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -14089,9 +14056,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ModifyCacheClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyCacheClusterResult::default();
         } else {
@@ -14138,9 +14104,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ModifyCacheParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheParameterGroupNameMessage::default();
         } else {
@@ -14187,9 +14152,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ModifyCacheSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyCacheSubnetGroupResult::default();
         } else {
@@ -14236,9 +14200,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ModifyReplicationGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyReplicationGroupResult::default();
         } else {
@@ -14292,9 +14255,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ModifyReplicationGroupShardConfigurationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyReplicationGroupShardConfigurationResult::default();
         } else {
@@ -14346,9 +14308,8 @@ impl ElastiCache for ElastiCacheClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PurchaseReservedCacheNodesOfferingResult::default();
         } else {
@@ -14395,9 +14356,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(RebootCacheClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RebootCacheClusterResult::default();
         } else {
@@ -14444,9 +14404,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(RemoveTagsFromResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -14493,9 +14452,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(ResetCacheParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CacheParameterGroupNameMessage::default();
         } else {
@@ -14547,9 +14505,8 @@ impl ElastiCache for ElastiCacheClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RevokeCacheSecurityGroupIngressResult::default();
         } else {
@@ -14596,9 +14553,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(StartMigrationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StartMigrationResponse::default();
         } else {
@@ -14645,9 +14601,8 @@ impl ElastiCache for ElastiCacheClient {
             return Err(TestFailoverError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TestFailoverResult::default();
         } else {

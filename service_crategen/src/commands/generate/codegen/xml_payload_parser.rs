@@ -181,7 +181,8 @@ fn xml_body_parser(
             ),
         };
         format!(
-        "if xml_response.body.is_empty() {{
+        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {{
             result = {output_shape}::default();
         }} else {{
             let reader = EventReader::new_with_config(
@@ -204,9 +205,7 @@ fn xml_body_parser(
     };
 
     format!(
-        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        {let_result}
-
+        "{let_result}
         {xml_deserialize}
         {parse_non_payload} // parse non-payload
         Ok(result)",
