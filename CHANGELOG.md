@@ -5,7 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(Please put changes here)
+- Fix incorrect encoding of Session Token when pre-signing URLs
+- Always encode + in query strings
 
 ## [0.43.0] - 2020-03-15
 
@@ -43,7 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove deprecated `Error::description` implementations
 - Add features `serialize_structs` and `deserialize_structs`
 - Implement Clone on various Credential structs.
-- Fix incorrect encoding of Session Token when pre-signing URLs
 - Add IoT Secure Tunneling service
 - Fix Directory Service integration tests
 - Update to time 0.2.x
