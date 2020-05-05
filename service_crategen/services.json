@@ -249,6 +249,9 @@
     "version": "0.43.0",
     "coreVersion": "0.43.0",
     "protocolVersion": "2014-06-30",
+    "customDependencies": {
+      "chrono": "0.4.0"
+    },
     "baseTypeName": "CognitoIdentity"
   },
   "cognito-idp": {
