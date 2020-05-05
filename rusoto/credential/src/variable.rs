@@ -134,6 +134,22 @@ where
     }
 }
 
+impl<T, E> Variable<Option<T>, E>
+where
+    T: From<String> + 'static,
+    E: From<VarError> + 'static,
+{
+    /// Variable which dynamically resolves to the value of a given environment variable.
+    pub fn from_env_var_optional<K: AsRef<std::ffi::OsStr>>(key: K) -> Self {
+        let tmp = key.as_ref().to_os_string();
+        Self::dynamic(move || match var(&tmp) {
+            Ok(ref v) if !v.trim().is_empty() => Ok(Some(T::from(v.trim().to_string()))),
+            Ok(_) | Err(VarError::NotPresent) => Ok(None),
+            Err(e) => Err(E::from(e)),
+        })
+    }
+}
+
 impl<T, E> Variable<T, E>
 where
     T: From<String> + 'static,

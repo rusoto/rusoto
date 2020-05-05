@@ -30,7 +30,7 @@ pub struct WebIdentityProvider {
     /// associated with the user who is using your application. That way, the temporary security credentials
     /// that your application will use are associated with that user. This session name is included as part
     /// of the ARN and assumed role ID in the AssumedRoleUser response element.
-    pub role_session_name: Variable<String, CredentialsError>,
+    pub role_session_name: Option<Variable<Option<String>, CredentialsError>>,
 }
 
 impl WebIdentityProvider {
@@ -39,14 +39,12 @@ impl WebIdentityProvider {
     where
         A: Into<Variable<Secret, CredentialsError>>,
         B: Into<Variable<String, CredentialsError>>,
-        C: Into<Variable<String, CredentialsError>>,
+        C: Into<Variable<Option<String>, CredentialsError>>,
     {
         Self {
             web_identity_token: web_identity_token.into(),
             role_arn: role_arn.into(),
-            role_session_name: role_session_name
-                .map(|v| v.into())
-                .unwrap_or_else(|| Variable::with_value(Self::create_session_name())),
+            role_session_name: role_session_name.map(|v| v.into()),
         }
     }
 
@@ -62,7 +60,7 @@ impl WebIdentityProvider {
         Self::_from_k8s_env(
             Variable::from_env_var(AWS_WEB_IDENTITY_TOKEN_FILE),
             Variable::from_env_var(AWS_ROLE_ARN),
-            Some(Variable::from_env_var(AWS_ROLE_SESSION_NAME)),
+            Variable::from_env_var_optional(AWS_ROLE_SESSION_NAME),
         )
     }
 
@@ -70,12 +68,12 @@ impl WebIdentityProvider {
     pub(crate) fn _from_k8s_env(
         token_file: Variable<String, CredentialsError>,
         role: Variable<String, CredentialsError>,
-        session_name: Option<Variable<String, CredentialsError>>,
+        session_name: Variable<Option<String>, CredentialsError>,
     ) -> Self {
         Self::new(
             Variable::dynamic(move || Variable::from_text_file(token_file.resolve()?).resolve()),
             role,
-            session_name,
+            Some(session_name),
         )
     }
 
@@ -109,7 +107,13 @@ impl ProvideAwsCredentials for WebIdentityProvider {
 
         req.role_arn = self.role_arn.resolve()?;
         req.web_identity_token = self.web_identity_token.resolve()?.as_ref().to_string();
-        req.role_session_name = self.role_session_name.resolve()?;
+        req.role_session_name = match self.role_session_name {
+            Some(ref role_session_name) => match role_session_name.resolve()? {
+                Some(session_name) => session_name,
+                None => Self::create_session_name(),
+            },
+            None => Self::create_session_name(),
+        };
 
         let assume_role = sts.assume_role_with_web_identity(req).await;
         match assume_role {
@@ -133,7 +137,7 @@ mod tests {
 
     #[test]
     fn api_ergonomy() {
-        WebIdentityProvider::new(Secret::from("".to_string()), "", Some("".to_string()));
+        WebIdentityProvider::new(Secret::from("".to_string()), "", Some(Some("".to_string())));
     }
 
     #[test]
@@ -148,7 +152,7 @@ mod tests {
         let p = WebIdentityProvider::_from_k8s_env(
             Variable::with_value(file.path().to_string_lossy().to_string()),
             Variable::with_value(ROLE_ARN.to_string()),
-            Some(Variable::with_value(SESSION_NAME.to_string())),
+            Variable::with_value(SESSION_NAME.to_string()),
         );
         let token = p.load_token()?;
         assert_eq!(token.as_ref(), TOKEN_VALUE);

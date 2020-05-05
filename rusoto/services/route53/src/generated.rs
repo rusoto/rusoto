@@ -12151,21 +12151,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = ChangeTagsForResourceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ChangeTagsForResourceResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        result = ChangeTagsForResourceResponse::default();
         // parse non-payload
         Ok(result)
     }
@@ -12625,19 +12611,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteHealthCheckResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                DeleteHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteHealthCheckResponse::default();
         // parse non-payload
         Ok(result)
     }
@@ -12711,21 +12685,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteQueryLoggingConfigResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteQueryLoggingConfigResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        result = DeleteQueryLoggingConfigResponse::default();
         // parse non-payload
         Ok(result)
     }
@@ -12757,21 +12717,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteReusableDelegationSetResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteReusableDelegationSetResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        result = DeleteReusableDelegationSetResponse::default();
         // parse non-payload
         Ok(result)
     }
@@ -12806,19 +12752,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteTrafficPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        result = DeleteTrafficPolicyResponse::default();
         // parse non-payload
         Ok(result)
     }
@@ -12850,21 +12784,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteTrafficPolicyInstanceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        result = DeleteTrafficPolicyInstanceResponse::default();
         // parse non-payload
         Ok(result)
     }
@@ -12912,21 +12832,7 @@ impl Route53 for Route53Client {
         let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result;
 
-        if xml_response.body.is_empty() {
-            result = DeleteVPCAssociationAuthorizationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        result = DeleteVPCAssociationAuthorizationResponse::default();
         // parse non-payload
         Ok(result)
     }
