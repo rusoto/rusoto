@@ -47,9 +47,10 @@ pub struct AddHeaderAction {
     pub header_value: String,
 }
 
+#[allow(dead_code)]
 struct AddHeaderActionDeserializer;
 impl AddHeaderActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -83,9 +84,10 @@ impl AddHeaderActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AddressDeserializer;
 impl AddressDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -94,9 +96,10 @@ impl AddressDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AddressListDeserializer;
 impl AddressListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -123,9 +126,10 @@ impl AddressListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AmazonResourceNameDeserializer;
 impl AmazonResourceNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -134,9 +138,10 @@ impl AmazonResourceNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -190,9 +195,10 @@ pub struct BounceAction {
     pub topic_arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct BounceActionDeserializer;
 impl BounceActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -251,9 +257,10 @@ impl BounceActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct BounceMessageDeserializer;
 impl BounceMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -262,9 +269,10 @@ impl BounceMessageDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BounceSmtpReplyCodeDeserializer;
 impl BounceSmtpReplyCodeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -273,9 +281,10 @@ impl BounceSmtpReplyCodeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BounceStatusCodeDeserializer;
 impl BounceStatusCodeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -399,9 +408,10 @@ pub struct BulkEmailDestinationStatus {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct BulkEmailDestinationStatusDeserializer;
 impl BulkEmailDestinationStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -429,9 +439,10 @@ impl BulkEmailDestinationStatusDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct BulkEmailDestinationStatusListDeserializer;
 impl BulkEmailDestinationStatusListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -448,9 +459,10 @@ impl BulkEmailDestinationStatusListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct BulkEmailStatusDeserializer;
 impl BulkEmailStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -459,9 +471,10 @@ impl BulkEmailStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CidrDeserializer;
 impl CidrDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -502,9 +515,10 @@ impl CloneReceiptRuleSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloneReceiptRuleSetResponse {}
 
+#[allow(dead_code)]
 struct CloneReceiptRuleSetResponseDeserializer;
 impl CloneReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -527,9 +541,10 @@ pub struct CloudWatchDestination {
     pub dimension_configurations: Vec<CloudWatchDimensionConfiguration>,
 }
 
+#[allow(dead_code)]
 struct CloudWatchDestinationDeserializer;
 impl CloudWatchDestinationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -581,9 +596,10 @@ pub struct CloudWatchDimensionConfiguration {
     pub dimension_value_source: String,
 }
 
+#[allow(dead_code)]
 struct CloudWatchDimensionConfigurationDeserializer;
 impl CloudWatchDimensionConfigurationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -642,9 +658,10 @@ impl CloudWatchDimensionConfigurationSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct CloudWatchDimensionConfigurationsDeserializer;
 impl CloudWatchDimensionConfigurationsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -682,9 +699,10 @@ pub struct ConfigurationSet {
     pub name: String,
 }
 
+#[allow(dead_code)]
 struct ConfigurationSetDeserializer;
 impl ConfigurationSetDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -725,9 +743,10 @@ impl ConfigurationSetAttributeListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ConfigurationSetNameDeserializer;
 impl ConfigurationSetNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -736,9 +755,10 @@ impl ConfigurationSetNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationSetsDeserializer;
 impl ConfigurationSetsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -779,9 +799,10 @@ impl ContentSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct CounterDeserializer;
 impl CounterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -830,9 +851,10 @@ impl CreateConfigurationSetEventDestinationRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateConfigurationSetEventDestinationResponse {}
 
+#[allow(dead_code)]
 struct CreateConfigurationSetEventDestinationResponseDeserializer;
 impl CreateConfigurationSetEventDestinationResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -876,9 +898,10 @@ impl CreateConfigurationSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
 
+#[allow(dead_code)]
 struct CreateConfigurationSetResponseDeserializer;
 impl CreateConfigurationSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -931,9 +954,10 @@ impl CreateConfigurationSetTrackingOptionsRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateConfigurationSetTrackingOptionsResponse {}
 
+#[allow(dead_code)]
 struct CreateConfigurationSetTrackingOptionsResponseDeserializer;
 impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1028,9 +1052,10 @@ impl CreateReceiptFilterRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReceiptFilterResponse {}
 
+#[allow(dead_code)]
 struct CreateReceiptFilterResponseDeserializer;
 impl CreateReceiptFilterResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1078,9 +1103,10 @@ impl CreateReceiptRuleRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReceiptRuleResponse {}
 
+#[allow(dead_code)]
 struct CreateReceiptRuleResponseDeserializer;
 impl CreateReceiptRuleResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1120,9 +1146,10 @@ impl CreateReceiptRuleSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateReceiptRuleSetResponse {}
 
+#[allow(dead_code)]
 struct CreateReceiptRuleSetResponseDeserializer;
 impl CreateReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1161,9 +1188,10 @@ impl CreateTemplateRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateTemplateResponse {}
 
+#[allow(dead_code)]
 struct CreateTemplateResponseDeserializer;
 impl CreateTemplateResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1177,9 +1205,10 @@ impl CreateTemplateResponseDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1188,9 +1217,10 @@ impl CustomMailFromStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CustomRedirectDomainDeserializer;
 impl CustomRedirectDomainDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1215,9 +1245,10 @@ pub struct CustomVerificationEmailTemplate {
     pub template_subject: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CustomVerificationEmailTemplateDeserializer;
 impl CustomVerificationEmailTemplateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1264,9 +1295,10 @@ impl CustomVerificationEmailTemplateDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CustomVerificationEmailTemplatesDeserializer;
 impl CustomVerificationEmailTemplatesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1283,9 +1315,10 @@ impl CustomVerificationEmailTemplatesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DefaultDimensionValueDeserializer;
 impl DefaultDimensionValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1333,9 +1366,10 @@ impl DeleteConfigurationSetEventDestinationRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteConfigurationSetEventDestinationResponse {}
 
+#[allow(dead_code)]
 struct DeleteConfigurationSetEventDestinationResponseDeserializer;
 impl DeleteConfigurationSetEventDestinationResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1378,9 +1412,10 @@ impl DeleteConfigurationSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
 
+#[allow(dead_code)]
 struct DeleteConfigurationSetResponseDeserializer;
 impl DeleteConfigurationSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1427,9 +1462,10 @@ impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteConfigurationSetTrackingOptionsResponse {}
 
+#[allow(dead_code)]
 struct DeleteConfigurationSetTrackingOptionsResponseDeserializer;
 impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1497,9 +1533,10 @@ impl DeleteIdentityPolicyRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteIdentityPolicyResponse {}
 
+#[allow(dead_code)]
 struct DeleteIdentityPolicyResponseDeserializer;
 impl DeleteIdentityPolicyResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1539,9 +1576,10 @@ impl DeleteIdentityRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteIdentityResponse {}
 
+#[allow(dead_code)]
 struct DeleteIdentityResponseDeserializer;
 impl DeleteIdentityResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1581,9 +1619,10 @@ impl DeleteReceiptFilterRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReceiptFilterResponse {}
 
+#[allow(dead_code)]
 struct DeleteReceiptFilterResponseDeserializer;
 impl DeleteReceiptFilterResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1626,9 +1665,10 @@ impl DeleteReceiptRuleRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReceiptRuleResponse {}
 
+#[allow(dead_code)]
 struct DeleteReceiptRuleResponseDeserializer;
 impl DeleteReceiptRuleResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1668,9 +1708,10 @@ impl DeleteReceiptRuleSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteReceiptRuleSetResponse {}
 
+#[allow(dead_code)]
 struct DeleteReceiptRuleSetResponseDeserializer;
 impl DeleteReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1709,9 +1750,10 @@ impl DeleteTemplateRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTemplateResponse {}
 
+#[allow(dead_code)]
 struct DeleteTemplateResponseDeserializer;
 impl DeleteTemplateResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1755,9 +1797,10 @@ pub struct DeliveryOptions {
     pub tls_policy: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DeliveryOptionsDeserializer;
 impl DeliveryOptionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1815,9 +1858,10 @@ pub struct DescribeActiveReceiptRuleSetResponse {
     pub rules: Option<Vec<ReceiptRule>>,
 }
 
+#[allow(dead_code)]
 struct DescribeActiveReceiptRuleSetResponseDeserializer;
 impl DescribeActiveReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1892,9 +1936,10 @@ pub struct DescribeConfigurationSetResponse {
     pub tracking_options: Option<TrackingOptions>,
 }
 
+#[allow(dead_code)]
 struct DescribeConfigurationSetResponseDeserializer;
 impl DescribeConfigurationSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1972,9 +2017,10 @@ pub struct DescribeReceiptRuleResponse {
     pub rule: Option<ReceiptRule>,
 }
 
+#[allow(dead_code)]
 struct DescribeReceiptRuleResponseDeserializer;
 impl DescribeReceiptRuleResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2025,9 +2071,10 @@ pub struct DescribeReceiptRuleSetResponse {
     pub rules: Option<Vec<ReceiptRule>>,
 }
 
+#[allow(dead_code)]
 struct DescribeReceiptRuleSetResponseDeserializer;
 impl DescribeReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2099,9 +2146,10 @@ impl DestinationSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2110,9 +2158,10 @@ impl DimensionNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2121,9 +2170,10 @@ impl DimensionValueSourceDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct DkimAttributesDeserializer;
 impl DkimAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2144,9 +2194,10 @@ impl DkimAttributesDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EnabledDeserializer;
 impl EnabledDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -2155,9 +2206,10 @@ impl EnabledDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SesErrorDeserializer;
 impl SesErrorDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2185,9 +2237,10 @@ pub struct EventDestination {
     pub sns_destination: Option<SNSDestination>,
 }
 
+#[allow(dead_code)]
 struct EventDestinationDeserializer;
 impl EventDestinationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2276,9 +2329,10 @@ impl EventDestinationSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct EventDestinationNameDeserializer;
 impl EventDestinationNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2287,9 +2341,10 @@ impl EventDestinationNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EventDestinationsDeserializer;
 impl EventDestinationsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2304,9 +2359,10 @@ impl EventDestinationsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2315,9 +2371,10 @@ impl EventTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EventTypesDeserializer;
 impl EventTypesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2379,9 +2436,10 @@ impl ExtensionFieldListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct FailureRedirectionURLDeserializer;
 impl FailureRedirectionURLDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2390,9 +2448,10 @@ impl FailureRedirectionURLDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct FromAddressDeserializer;
 impl FromAddressDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2409,9 +2468,10 @@ pub struct GetAccountSendingEnabledResponse {
     pub enabled: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct GetAccountSendingEnabledResponseDeserializer;
 impl GetAccountSendingEnabledResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2470,9 +2530,10 @@ pub struct GetCustomVerificationEmailTemplateResponse {
     pub template_subject: Option<String>,
 }
 
+#[allow(dead_code)]
 struct GetCustomVerificationEmailTemplateResponseDeserializer;
 impl GetCustomVerificationEmailTemplateResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2558,9 +2619,10 @@ pub struct GetIdentityDkimAttributesResponse {
     pub dkim_attributes: ::std::collections::HashMap<String, IdentityDkimAttributes>,
 }
 
+#[allow(dead_code)]
 struct GetIdentityDkimAttributesResponseDeserializer;
 impl GetIdentityDkimAttributesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2619,9 +2681,10 @@ pub struct GetIdentityMailFromDomainAttributesResponse {
         ::std::collections::HashMap<String, IdentityMailFromDomainAttributes>,
 }
 
+#[allow(dead_code)]
 struct GetIdentityMailFromDomainAttributesResponseDeserializer;
 impl GetIdentityMailFromDomainAttributesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2679,9 +2742,10 @@ pub struct GetIdentityNotificationAttributesResponse {
         ::std::collections::HashMap<String, IdentityNotificationAttributes>,
 }
 
+#[allow(dead_code)]
 struct GetIdentityNotificationAttributesResponseDeserializer;
 impl GetIdentityNotificationAttributesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2741,9 +2805,10 @@ pub struct GetIdentityPoliciesResponse {
     pub policies: ::std::collections::HashMap<String, String>,
 }
 
+#[allow(dead_code)]
 struct GetIdentityPoliciesResponseDeserializer;
 impl GetIdentityPoliciesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2797,9 +2862,10 @@ pub struct GetIdentityVerificationAttributesResponse {
         ::std::collections::HashMap<String, IdentityVerificationAttributes>,
 }
 
+#[allow(dead_code)]
 struct GetIdentityVerificationAttributesResponseDeserializer;
 impl GetIdentityVerificationAttributesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2835,9 +2901,10 @@ pub struct GetSendQuotaResponse {
     pub sent_last_24_hours: Option<f64>,
 }
 
+#[allow(dead_code)]
 struct GetSendQuotaResponseDeserializer;
 impl GetSendQuotaResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2874,9 +2941,10 @@ pub struct GetSendStatisticsResponse {
     pub send_data_points: Option<Vec<SendDataPoint>>,
 }
 
+#[allow(dead_code)]
 struct GetSendStatisticsResponseDeserializer;
 impl GetSendStatisticsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2924,9 +2992,10 @@ pub struct GetTemplateResponse {
     pub template: Option<Template>,
 }
 
+#[allow(dead_code)]
 struct GetTemplateResponseDeserializer;
 impl GetTemplateResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2942,9 +3011,10 @@ impl GetTemplateResponseDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct HeaderNameDeserializer;
 impl HeaderNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2953,9 +3023,10 @@ impl HeaderNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct HeaderValueDeserializer;
 impl HeaderValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2964,9 +3035,10 @@ impl HeaderValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct HtmlPartDeserializer;
 impl HtmlPartDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2975,9 +3047,10 @@ impl HtmlPartDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct IdentityDeserializer;
 impl IdentityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2998,9 +3071,10 @@ pub struct IdentityDkimAttributes {
     pub dkim_verification_status: String,
 }
 
+#[allow(dead_code)]
 struct IdentityDkimAttributesDeserializer;
 impl IdentityDkimAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3027,9 +3101,10 @@ impl IdentityDkimAttributesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct IdentityListDeserializer;
 impl IdentityListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3068,9 +3143,10 @@ pub struct IdentityMailFromDomainAttributes {
     pub mail_from_domain_status: String,
 }
 
+#[allow(dead_code)]
 struct IdentityMailFromDomainAttributesDeserializer;
 impl IdentityMailFromDomainAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3124,9 +3200,10 @@ pub struct IdentityNotificationAttributes {
     pub headers_in_delivery_notifications_enabled: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct IdentityNotificationAttributesDeserializer;
 impl IdentityNotificationAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3190,9 +3267,10 @@ pub struct IdentityVerificationAttributes {
     pub verification_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct IdentityVerificationAttributesDeserializer;
 impl IdentityVerificationAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3221,9 +3299,10 @@ impl IdentityVerificationAttributesDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3243,9 +3322,10 @@ pub struct KinesisFirehoseDestination {
     pub iam_role_arn: String,
 }
 
+#[allow(dead_code)]
 struct KinesisFirehoseDestinationDeserializer;
 impl KinesisFirehoseDestinationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3303,9 +3383,10 @@ pub struct LambdaAction {
     pub topic_arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LambdaActionDeserializer;
 impl LambdaActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3353,9 +3434,10 @@ impl LambdaActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct LastFreshStartDeserializer;
 impl LastFreshStartDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3402,9 +3484,10 @@ pub struct ListConfigurationSetsResponse {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ListConfigurationSetsResponseDeserializer;
 impl ListConfigurationSetsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3472,9 +3555,10 @@ pub struct ListCustomVerificationEmailTemplatesResponse {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ListCustomVerificationEmailTemplatesResponseDeserializer;
 impl ListCustomVerificationEmailTemplatesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3546,9 +3630,10 @@ pub struct ListIdentitiesResponse {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ListIdentitiesResponseDeserializer;
 impl ListIdentitiesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3597,9 +3682,10 @@ pub struct ListIdentityPoliciesResponse {
     pub policy_names: Vec<String>,
 }
 
+#[allow(dead_code)]
 struct ListIdentityPoliciesResponseDeserializer;
 impl ListIdentityPoliciesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3647,9 +3733,10 @@ pub struct ListReceiptFiltersResponse {
     pub filters: Option<Vec<ReceiptFilter>>,
 }
 
+#[allow(dead_code)]
 struct ListReceiptFiltersResponseDeserializer;
 impl ListReceiptFiltersResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3704,9 +3791,10 @@ pub struct ListReceiptRuleSetsResponse {
     pub rule_sets: Option<Vec<ReceiptRuleSetMetadata>>,
 }
 
+#[allow(dead_code)]
 struct ListReceiptRuleSetsResponseDeserializer;
 impl ListReceiptRuleSetsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3768,9 +3856,10 @@ pub struct ListTemplatesResponse {
     pub templates_metadata: Option<Vec<TemplateMetadata>>,
 }
 
+#[allow(dead_code)]
 struct ListTemplatesResponseDeserializer;
 impl ListTemplatesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3799,9 +3888,10 @@ pub struct ListVerifiedEmailAddressesResponse {
     pub verified_email_addresses: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct ListVerifiedEmailAddressesResponseDeserializer;
 impl ListVerifiedEmailAddressesResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3823,9 +3913,10 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct MailFromDomainAttributesDeserializer;
 impl MailFromDomainAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3847,9 +3938,10 @@ impl MailFromDomainAttributesDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct MailFromDomainNameDeserializer;
 impl MailFromDomainNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3858,9 +3950,10 @@ impl MailFromDomainNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct Max24HourSendDeserializer;
 impl Max24HourSendDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3869,9 +3962,10 @@ impl Max24HourSendDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct MaxSendRateDeserializer;
 impl MaxSendRateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3939,9 +4033,10 @@ impl MessageDsnSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct MessageIdDeserializer;
 impl MessageIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3985,9 +4080,10 @@ impl MessageTagListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3996,9 +4092,10 @@ impl NextTokenDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NotificationAttributesDeserializer;
 impl NotificationAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4020,9 +4117,10 @@ impl NotificationAttributesDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NotificationTopicDeserializer;
 impl NotificationTopicDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4031,9 +4129,10 @@ impl NotificationTopicDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PolicyDeserializer;
 impl PolicyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4042,9 +4141,10 @@ impl PolicyDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PolicyMapDeserializer;
 impl PolicyMapDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4065,9 +4165,10 @@ impl PolicyMapDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4076,9 +4177,10 @@ impl PolicyNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PolicyNameListDeserializer;
 impl PolicyNameListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4143,9 +4245,10 @@ impl PutConfigurationSetDeliveryOptionsRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutConfigurationSetDeliveryOptionsResponse {}
 
+#[allow(dead_code)]
 struct PutConfigurationSetDeliveryOptionsResponseDeserializer;
 impl PutConfigurationSetDeliveryOptionsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4191,9 +4294,10 @@ impl PutIdentityPolicyRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutIdentityPolicyResponse {}
 
+#[allow(dead_code)]
 struct PutIdentityPolicyResponseDeserializer;
 impl PutIdentityPolicyResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4252,9 +4356,10 @@ pub struct ReceiptAction {
     pub workmail_action: Option<WorkmailAction>,
 }
 
+#[allow(dead_code)]
 struct ReceiptActionDeserializer;
 impl ReceiptActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4363,9 +4468,10 @@ impl ReceiptActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ReceiptActionsListDeserializer;
 impl ReceiptActionsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4403,9 +4509,10 @@ pub struct ReceiptFilter {
     pub name: String,
 }
 
+#[allow(dead_code)]
 struct ReceiptFilterDeserializer;
 impl ReceiptFilterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4443,9 +4550,10 @@ impl ReceiptFilterSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ReceiptFilterListDeserializer;
 impl ReceiptFilterListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4460,9 +4568,10 @@ impl ReceiptFilterListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ReceiptFilterNameDeserializer;
 impl ReceiptFilterNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4471,9 +4580,10 @@ impl ReceiptFilterNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4493,9 +4603,10 @@ pub struct ReceiptIpFilter {
     pub policy: String,
 }
 
+#[allow(dead_code)]
 struct ReceiptIpFilterDeserializer;
 impl ReceiptIpFilterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4548,9 +4659,10 @@ pub struct ReceiptRule {
     pub tls_policy: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ReceiptRuleDeserializer;
 impl ReceiptRuleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4623,9 +4735,10 @@ impl ReceiptRuleSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ReceiptRuleNameDeserializer;
 impl ReceiptRuleNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4656,9 +4769,10 @@ pub struct ReceiptRuleSetMetadata {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ReceiptRuleSetMetadataDeserializer;
 impl ReceiptRuleSetMetadataDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4680,9 +4794,10 @@ impl ReceiptRuleSetMetadataDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ReceiptRuleSetNameDeserializer;
 impl ReceiptRuleSetNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4691,9 +4806,10 @@ impl ReceiptRuleSetNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ReceiptRuleSetsListsDeserializer;
 impl ReceiptRuleSetsListsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4710,9 +4826,10 @@ impl ReceiptRuleSetsListsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ReceiptRulesListDeserializer;
 impl ReceiptRulesListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4727,9 +4844,10 @@ impl ReceiptRulesListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct RecipientDeserializer;
 impl RecipientDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4791,9 +4909,10 @@ impl RecipientDsnFieldsSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RecipientsListDeserializer;
 impl RecipientsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4820,9 +4939,10 @@ impl RecipientsListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RenderedTemplateDeserializer;
 impl RenderedTemplateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4864,9 +4984,10 @@ impl ReorderReceiptRuleSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReorderReceiptRuleSetResponse {}
 
+#[allow(dead_code)]
 struct ReorderReceiptRuleSetResponseDeserializer;
 impl ReorderReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4892,9 +5013,10 @@ pub struct ReputationOptions {
     pub sending_enabled: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct ReputationOptionsDeserializer;
 impl ReputationOptionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4938,9 +5060,10 @@ pub struct S3Action {
     pub topic_arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct S3ActionDeserializer;
 impl S3ActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4996,9 +5119,10 @@ impl S3ActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5007,9 +5131,10 @@ impl S3BucketNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct S3KeyPrefixDeserializer;
 impl S3KeyPrefixDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5029,9 +5154,10 @@ pub struct SNSAction {
     pub topic_arn: String,
 }
 
+#[allow(dead_code)]
 struct SNSActionDeserializer;
 impl SNSActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5069,9 +5195,10 @@ impl SNSActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SNSActionEncodingDeserializer;
 impl SNSActionEncodingDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5089,9 +5216,10 @@ pub struct SNSDestination {
     pub topic_arn: String,
 }
 
+#[allow(dead_code)]
 struct SNSDestinationDeserializer;
 impl SNSDestinationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5182,9 +5310,10 @@ pub struct SendBounceResponse {
     pub message_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SendBounceResponseDeserializer;
 impl SendBounceResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5292,9 +5421,10 @@ pub struct SendBulkTemplatedEmailResponse {
     pub status: Vec<BulkEmailDestinationStatus>,
 }
 
+#[allow(dead_code)]
 struct SendBulkTemplatedEmailResponseDeserializer;
 impl SendBulkTemplatedEmailResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5357,9 +5487,10 @@ pub struct SendCustomVerificationEmailResponse {
     pub message_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SendCustomVerificationEmailResponseDeserializer;
 impl SendCustomVerificationEmailResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5396,9 +5527,10 @@ pub struct SendDataPoint {
     pub timestamp: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SendDataPointDeserializer;
 impl SendDataPointDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5427,9 +5559,10 @@ impl SendDataPointDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SendDataPointListDeserializer;
 impl SendDataPointListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5524,9 +5657,10 @@ pub struct SendEmailResponse {
     pub message_id: String,
 }
 
+#[allow(dead_code)]
 struct SendEmailResponseDeserializer;
 impl SendEmailResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5621,9 +5755,10 @@ pub struct SendRawEmailResponse {
     pub message_id: String,
 }
 
+#[allow(dead_code)]
 struct SendRawEmailResponseDeserializer;
 impl SendRawEmailResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5726,9 +5861,10 @@ pub struct SendTemplatedEmailResponse {
     pub message_id: String,
 }
 
+#[allow(dead_code)]
 struct SendTemplatedEmailResponseDeserializer;
 impl SendTemplatedEmailResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5748,9 +5884,10 @@ impl SendTemplatedEmailResponseDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct SentLast24HoursDeserializer;
 impl SentLast24HoursDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5787,9 +5924,10 @@ impl SetActiveReceiptRuleSetRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetActiveReceiptRuleSetResponse {}
 
+#[allow(dead_code)]
 struct SetActiveReceiptRuleSetResponseDeserializer;
 impl SetActiveReceiptRuleSetResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5832,9 +5970,10 @@ impl SetIdentityDkimEnabledRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityDkimEnabledResponse {}
 
+#[allow(dead_code)]
 struct SetIdentityDkimEnabledResponseDeserializer;
 impl SetIdentityDkimEnabledResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5884,9 +6023,10 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityFeedbackForwardingEnabledResponse {}
 
+#[allow(dead_code)]
 struct SetIdentityFeedbackForwardingEnabledResponseDeserializer;
 impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5939,9 +6079,10 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityHeadersInNotificationsEnabledResponse {}
 
+#[allow(dead_code)]
 struct SetIdentityHeadersInNotificationsEnabledResponseDeserializer;
 impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5994,9 +6135,10 @@ impl SetIdentityMailFromDomainRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityMailFromDomainResponse {}
 
+#[allow(dead_code)]
 struct SetIdentityMailFromDomainResponseDeserializer;
 impl SetIdentityMailFromDomainResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6047,9 +6189,10 @@ impl SetIdentityNotificationTopicRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIdentityNotificationTopicResponse {}
 
+#[allow(dead_code)]
 struct SetIdentityNotificationTopicResponseDeserializer;
 impl SetIdentityNotificationTopicResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6097,9 +6240,10 @@ impl SetReceiptRulePositionRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetReceiptRulePositionResponse {}
 
+#[allow(dead_code)]
 struct SetReceiptRulePositionResponseDeserializer;
 impl SetReceiptRulePositionResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6124,9 +6268,10 @@ pub struct StopAction {
     pub topic_arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct StopActionDeserializer;
 impl StopActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6164,9 +6309,10 @@ impl StopActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct StopScopeDeserializer;
 impl StopScopeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6175,9 +6321,10 @@ impl StopScopeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SubjectDeserializer;
 impl SubjectDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6186,9 +6333,10 @@ impl SubjectDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SubjectPartDeserializer;
 impl SubjectPartDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6197,9 +6345,10 @@ impl SubjectPartDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SuccessRedirectionURLDeserializer;
 impl SuccessRedirectionURLDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6223,9 +6372,10 @@ pub struct Template {
     pub text_part: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TemplateDeserializer;
 impl TemplateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6275,9 +6425,10 @@ impl TemplateSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TemplateContentDeserializer;
 impl TemplateContentDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6296,9 +6447,10 @@ pub struct TemplateMetadata {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TemplateMetadataDeserializer;
 impl TemplateMetadataDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6320,9 +6472,10 @@ impl TemplateMetadataDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TemplateMetadataListDeserializer;
 impl TemplateMetadataListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6337,9 +6490,10 @@ impl TemplateMetadataListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TemplateNameDeserializer;
 impl TemplateNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6378,9 +6532,10 @@ pub struct TestRenderTemplateResponse {
     pub rendered_template: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TestRenderTemplateResponseDeserializer;
 impl TestRenderTemplateResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6403,9 +6558,10 @@ impl TestRenderTemplateResponseDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct TextPartDeserializer;
 impl TextPartDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6414,9 +6570,10 @@ impl TextPartDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TimestampDeserializer;
 impl TimestampDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6425,9 +6582,10 @@ impl TimestampDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6445,9 +6603,10 @@ pub struct TrackingOptions {
     pub custom_redirect_domain: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TrackingOptionsDeserializer;
 impl TrackingOptionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6549,9 +6708,10 @@ impl UpdateConfigurationSetEventDestinationRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
 
+#[allow(dead_code)]
 struct UpdateConfigurationSetEventDestinationResponseDeserializer;
 impl UpdateConfigurationSetEventDestinationResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6666,9 +6826,10 @@ impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateConfigurationSetTrackingOptionsResponse {}
 
+#[allow(dead_code)]
 struct UpdateConfigurationSetTrackingOptionsResponseDeserializer;
 impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6767,9 +6928,10 @@ impl UpdateReceiptRuleRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateReceiptRuleResponse {}
 
+#[allow(dead_code)]
 struct UpdateReceiptRuleResponseDeserializer;
 impl UpdateReceiptRuleResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6806,9 +6968,10 @@ impl UpdateTemplateRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTemplateResponse {}
 
+#[allow(dead_code)]
 struct UpdateTemplateResponseDeserializer;
 impl UpdateTemplateResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6822,9 +6985,10 @@ impl UpdateTemplateResponseDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct VerificationAttributesDeserializer;
 impl VerificationAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6846,9 +7010,10 @@ impl VerificationAttributesDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6857,9 +7022,10 @@ impl VerificationStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct VerificationTokenDeserializer;
 impl VerificationTokenDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6868,9 +7034,10 @@ impl VerificationTokenDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct VerificationTokenListDeserializer;
 impl VerificationTokenListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6914,9 +7081,10 @@ pub struct VerifyDomainDkimResponse {
     pub dkim_tokens: Vec<String>,
 }
 
+#[allow(dead_code)]
 struct VerifyDomainDkimResponseDeserializer;
 impl VerifyDomainDkimResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6969,9 +7137,10 @@ pub struct VerifyDomainIdentityResponse {
     pub verification_token: String,
 }
 
+#[allow(dead_code)]
 struct VerifyDomainIdentityResponseDeserializer;
 impl VerifyDomainIdentityResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7039,9 +7208,10 @@ impl VerifyEmailIdentityRequestSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VerifyEmailIdentityResponse {}
 
+#[allow(dead_code)]
 struct VerifyEmailIdentityResponseDeserializer;
 impl VerifyEmailIdentityResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7066,9 +7236,10 @@ pub struct WorkmailAction {
     pub topic_arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct WorkmailActionDeserializer;
 impl WorkmailActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -11081,9 +11252,7 @@ impl Ses for SesClient {
             return Err(CloneReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CloneReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11113,9 +11282,7 @@ impl Ses for SesClient {
             return Err(CreateConfigurationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateConfigurationSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11150,9 +11317,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateConfigurationSetEventDestinationResponse::default();
         // parse non-payload
         Ok(result)
@@ -11187,9 +11352,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateConfigurationSetTrackingOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -11249,9 +11412,7 @@ impl Ses for SesClient {
             return Err(CreateReceiptFilterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateReceiptFilterResponse::default();
         // parse non-payload
         Ok(result)
@@ -11281,9 +11442,7 @@ impl Ses for SesClient {
             return Err(CreateReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateReceiptRuleResponse::default();
         // parse non-payload
         Ok(result)
@@ -11313,9 +11472,7 @@ impl Ses for SesClient {
             return Err(CreateReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11345,9 +11502,7 @@ impl Ses for SesClient {
             return Err(CreateTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = CreateTemplateResponse::default();
         // parse non-payload
         Ok(result)
@@ -11377,9 +11532,7 @@ impl Ses for SesClient {
             return Err(DeleteConfigurationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteConfigurationSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11414,9 +11567,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteConfigurationSetEventDestinationResponse::default();
         // parse non-payload
         Ok(result)
@@ -11451,9 +11602,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteConfigurationSetTrackingOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -11513,9 +11662,7 @@ impl Ses for SesClient {
             return Err(DeleteIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteIdentityResponse::default();
         // parse non-payload
         Ok(result)
@@ -11545,9 +11692,7 @@ impl Ses for SesClient {
             return Err(DeleteIdentityPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteIdentityPolicyResponse::default();
         // parse non-payload
         Ok(result)
@@ -11577,9 +11722,7 @@ impl Ses for SesClient {
             return Err(DeleteReceiptFilterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteReceiptFilterResponse::default();
         // parse non-payload
         Ok(result)
@@ -11609,9 +11752,7 @@ impl Ses for SesClient {
             return Err(DeleteReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteReceiptRuleResponse::default();
         // parse non-payload
         Ok(result)
@@ -11641,9 +11782,7 @@ impl Ses for SesClient {
             return Err(DeleteReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -11673,9 +11812,7 @@ impl Ses for SesClient {
             return Err(DeleteTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteTemplateResponse::default();
         // parse non-payload
         Ok(result)
@@ -11734,9 +11871,8 @@ impl Ses for SesClient {
             return Err(DescribeActiveReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeActiveReceiptRuleSetResponse::default();
         } else {
@@ -11783,9 +11919,8 @@ impl Ses for SesClient {
             return Err(DescribeConfigurationSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeConfigurationSetResponse::default();
         } else {
@@ -11832,9 +11967,8 @@ impl Ses for SesClient {
             return Err(DescribeReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeReceiptRuleResponse::default();
         } else {
@@ -11881,9 +12015,8 @@ impl Ses for SesClient {
             return Err(DescribeReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeReceiptRuleSetResponse::default();
         } else {
@@ -11929,9 +12062,8 @@ impl Ses for SesClient {
             return Err(GetAccountSendingEnabledError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccountSendingEnabledResponse::default();
         } else {
@@ -11983,9 +12115,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCustomVerificationEmailTemplateResponse::default();
         } else {
@@ -12033,9 +12164,8 @@ impl Ses for SesClient {
             return Err(GetIdentityDkimAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityDkimAttributesResponse::default();
         } else {
@@ -12087,9 +12217,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityMailFromDomainAttributesResponse::default();
         } else {
@@ -12141,9 +12270,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityNotificationAttributesResponse::default();
         } else {
@@ -12190,9 +12318,8 @@ impl Ses for SesClient {
             return Err(GetIdentityPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityPoliciesResponse::default();
         } else {
@@ -12244,9 +12371,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetIdentityVerificationAttributesResponse::default();
         } else {
@@ -12290,9 +12416,8 @@ impl Ses for SesClient {
             return Err(GetSendQuotaError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSendQuotaResponse::default();
         } else {
@@ -12336,9 +12461,8 @@ impl Ses for SesClient {
             return Err(GetSendStatisticsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSendStatisticsResponse::default();
         } else {
@@ -12385,9 +12509,8 @@ impl Ses for SesClient {
             return Err(GetTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetTemplateResponse::default();
         } else {
@@ -12431,9 +12554,8 @@ impl Ses for SesClient {
             return Err(ListConfigurationSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListConfigurationSetsResponse::default();
         } else {
@@ -12485,9 +12607,8 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListCustomVerificationEmailTemplatesResponse::default();
         } else {
@@ -12534,9 +12655,8 @@ impl Ses for SesClient {
             return Err(ListIdentitiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListIdentitiesResponse::default();
         } else {
@@ -12583,9 +12703,8 @@ impl Ses for SesClient {
             return Err(ListIdentityPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListIdentityPoliciesResponse::default();
         } else {
@@ -12632,9 +12751,8 @@ impl Ses for SesClient {
             return Err(ListReceiptFiltersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListReceiptFiltersResponse::default();
         } else {
@@ -12681,9 +12799,8 @@ impl Ses for SesClient {
             return Err(ListReceiptRuleSetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListReceiptRuleSetsResponse::default();
         } else {
@@ -12730,9 +12847,8 @@ impl Ses for SesClient {
             return Err(ListTemplatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListTemplatesResponse::default();
         } else {
@@ -12777,9 +12893,8 @@ impl Ses for SesClient {
             return Err(ListVerifiedEmailAddressesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListVerifiedEmailAddressesResponse::default();
         } else {
@@ -12831,9 +12946,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutConfigurationSetDeliveryOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -12863,9 +12976,7 @@ impl Ses for SesClient {
             return Err(PutIdentityPolicyError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = PutIdentityPolicyResponse::default();
         // parse non-payload
         Ok(result)
@@ -12895,9 +13006,7 @@ impl Ses for SesClient {
             return Err(ReorderReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = ReorderReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -12927,9 +13036,8 @@ impl Ses for SesClient {
             return Err(SendBounceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendBounceResponse::default();
         } else {
@@ -12973,9 +13081,8 @@ impl Ses for SesClient {
             return Err(SendBulkTemplatedEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendBulkTemplatedEmailResponse::default();
         } else {
@@ -13023,9 +13130,8 @@ impl Ses for SesClient {
             return Err(SendCustomVerificationEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendCustomVerificationEmailResponse::default();
         } else {
@@ -13072,9 +13178,8 @@ impl Ses for SesClient {
             return Err(SendEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendEmailResponse::default();
         } else {
@@ -13118,9 +13223,8 @@ impl Ses for SesClient {
             return Err(SendRawEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendRawEmailResponse::default();
         } else {
@@ -13165,9 +13269,8 @@ impl Ses for SesClient {
             return Err(SendTemplatedEmailError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendTemplatedEmailResponse::default();
         } else {
@@ -13214,9 +13317,7 @@ impl Ses for SesClient {
             return Err(SetActiveReceiptRuleSetError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetActiveReceiptRuleSetResponse::default();
         // parse non-payload
         Ok(result)
@@ -13246,9 +13347,7 @@ impl Ses for SesClient {
             return Err(SetIdentityDkimEnabledError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityDkimEnabledResponse::default();
         // parse non-payload
         Ok(result)
@@ -13283,9 +13382,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityFeedbackForwardingEnabledResponse::default();
         // parse non-payload
         Ok(result)
@@ -13322,9 +13419,7 @@ impl Ses for SesClient {
             return Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityHeadersInNotificationsEnabledResponse::default();
         // parse non-payload
         Ok(result)
@@ -13355,9 +13450,7 @@ impl Ses for SesClient {
             return Err(SetIdentityMailFromDomainError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityMailFromDomainResponse::default();
         // parse non-payload
         Ok(result)
@@ -13388,9 +13481,7 @@ impl Ses for SesClient {
             return Err(SetIdentityNotificationTopicError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetIdentityNotificationTopicResponse::default();
         // parse non-payload
         Ok(result)
@@ -13420,9 +13511,7 @@ impl Ses for SesClient {
             return Err(SetReceiptRulePositionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = SetReceiptRulePositionResponse::default();
         // parse non-payload
         Ok(result)
@@ -13452,9 +13541,8 @@ impl Ses for SesClient {
             return Err(TestRenderTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TestRenderTemplateResponse::default();
         } else {
@@ -13534,9 +13622,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateConfigurationSetEventDestinationResponse::default();
         // parse non-payload
         Ok(result)
@@ -13635,9 +13721,7 @@ impl Ses for SesClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateConfigurationSetTrackingOptionsResponse::default();
         // parse non-payload
         Ok(result)
@@ -13697,9 +13781,7 @@ impl Ses for SesClient {
             return Err(UpdateReceiptRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateReceiptRuleResponse::default();
         // parse non-payload
         Ok(result)
@@ -13729,9 +13811,7 @@ impl Ses for SesClient {
             return Err(UpdateTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = UpdateTemplateResponse::default();
         // parse non-payload
         Ok(result)
@@ -13761,9 +13841,8 @@ impl Ses for SesClient {
             return Err(VerifyDomainDkimError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = VerifyDomainDkimResponse::default();
         } else {
@@ -13810,9 +13889,8 @@ impl Ses for SesClient {
             return Err(VerifyDomainIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = VerifyDomainIdentityResponse::default();
         } else {
@@ -13887,9 +13965,7 @@ impl Ses for SesClient {
             return Err(VerifyEmailIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = VerifyEmailIdentityResponse::default();
         // parse non-payload
         Ok(result)

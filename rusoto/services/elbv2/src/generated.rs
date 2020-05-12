@@ -59,9 +59,10 @@ pub struct Action {
     pub type_: String,
 }
 
+#[allow(dead_code)]
 struct ActionDeserializer;
 impl ActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Action, XmlParseError> {
         deserialize_elements::<_, Action, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -171,9 +172,10 @@ impl ActionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ActionOrderDeserializer;
 impl ActionOrderDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -182,9 +184,10 @@ impl ActionOrderDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ActionTypeEnumDeserializer;
 impl ActionTypeEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -193,9 +196,10 @@ impl ActionTypeEnumDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ActionsDeserializer;
 impl ActionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -256,9 +260,10 @@ pub struct AddListenerCertificatesOutput {
     pub certificates: Option<Vec<Certificate>>,
 }
 
+#[allow(dead_code)]
 struct AddListenerCertificatesOutputDeserializer;
 impl AddListenerCertificatesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -311,9 +316,10 @@ impl AddTagsInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AddTagsOutput {}
 
+#[allow(dead_code)]
 struct AddTagsOutputDeserializer;
 impl AddTagsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -327,9 +333,10 @@ impl AddTagsOutputDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AllocationIdDeserializer;
 impl AllocationIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -338,9 +345,10 @@ impl AllocationIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer;
 impl AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -384,9 +392,10 @@ impl AuthenticateCognitoActionAuthenticationRequestExtraParamsSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AuthenticateCognitoActionAuthenticationRequestParamNameDeserializer;
 impl AuthenticateCognitoActionAuthenticationRequestParamNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -395,9 +404,10 @@ impl AuthenticateCognitoActionAuthenticationRequestParamNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer;
 impl AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -406,9 +416,10 @@ impl AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionConditionalBehaviorEnumDeserializer;
 impl AuthenticateCognitoActionConditionalBehaviorEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -440,9 +451,10 @@ pub struct AuthenticateCognitoActionConfig {
     pub user_pool_domain: String,
 }
 
+#[allow(dead_code)]
 struct AuthenticateCognitoActionConfigDeserializer;
 impl AuthenticateCognitoActionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -551,9 +563,10 @@ impl AuthenticateCognitoActionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AuthenticateCognitoActionScopeDeserializer;
 impl AuthenticateCognitoActionScopeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -562,9 +575,10 @@ impl AuthenticateCognitoActionScopeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionSessionCookieNameDeserializer;
 impl AuthenticateCognitoActionSessionCookieNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -573,9 +587,10 @@ impl AuthenticateCognitoActionSessionCookieNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionSessionTimeoutDeserializer;
 impl AuthenticateCognitoActionSessionTimeoutDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -584,9 +599,10 @@ impl AuthenticateCognitoActionSessionTimeoutDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionUserPoolArnDeserializer;
 impl AuthenticateCognitoActionUserPoolArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -595,9 +611,10 @@ impl AuthenticateCognitoActionUserPoolArnDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionUserPoolClientIdDeserializer;
 impl AuthenticateCognitoActionUserPoolClientIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -606,9 +623,10 @@ impl AuthenticateCognitoActionUserPoolClientIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateCognitoActionUserPoolDomainDeserializer;
 impl AuthenticateCognitoActionUserPoolDomainDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -617,9 +635,10 @@ impl AuthenticateCognitoActionUserPoolDomainDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionAuthenticationRequestExtraParamsDeserializer;
 impl AuthenticateOidcActionAuthenticationRequestExtraParamsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -663,9 +682,10 @@ impl AuthenticateOidcActionAuthenticationRequestExtraParamsSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AuthenticateOidcActionAuthenticationRequestParamNameDeserializer;
 impl AuthenticateOidcActionAuthenticationRequestParamNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -674,9 +694,10 @@ impl AuthenticateOidcActionAuthenticationRequestParamNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionAuthenticationRequestParamValueDeserializer;
 impl AuthenticateOidcActionAuthenticationRequestParamValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -685,9 +706,10 @@ impl AuthenticateOidcActionAuthenticationRequestParamValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionAuthorizationEndpointDeserializer;
 impl AuthenticateOidcActionAuthorizationEndpointDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -696,9 +718,10 @@ impl AuthenticateOidcActionAuthorizationEndpointDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionClientIdDeserializer;
 impl AuthenticateOidcActionClientIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -707,9 +730,10 @@ impl AuthenticateOidcActionClientIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionClientSecretDeserializer;
 impl AuthenticateOidcActionClientSecretDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -718,9 +742,10 @@ impl AuthenticateOidcActionClientSecretDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionConditionalBehaviorEnumDeserializer;
 impl AuthenticateOidcActionConditionalBehaviorEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -760,9 +785,10 @@ pub struct AuthenticateOidcActionConfig {
     pub user_info_endpoint: String,
 }
 
+#[allow(dead_code)]
 struct AuthenticateOidcActionConfigDeserializer;
 impl AuthenticateOidcActionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -914,9 +940,10 @@ impl AuthenticateOidcActionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AuthenticateOidcActionIssuerDeserializer;
 impl AuthenticateOidcActionIssuerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -925,9 +952,10 @@ impl AuthenticateOidcActionIssuerDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionScopeDeserializer;
 impl AuthenticateOidcActionScopeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -936,9 +964,10 @@ impl AuthenticateOidcActionScopeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionSessionCookieNameDeserializer;
 impl AuthenticateOidcActionSessionCookieNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -947,9 +976,10 @@ impl AuthenticateOidcActionSessionCookieNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionSessionTimeoutDeserializer;
 impl AuthenticateOidcActionSessionTimeoutDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -958,9 +988,10 @@ impl AuthenticateOidcActionSessionTimeoutDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionTokenEndpointDeserializer;
 impl AuthenticateOidcActionTokenEndpointDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -969,9 +1000,10 @@ impl AuthenticateOidcActionTokenEndpointDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionUseExistingClientSecretDeserializer;
 impl AuthenticateOidcActionUseExistingClientSecretDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -980,9 +1012,10 @@ impl AuthenticateOidcActionUseExistingClientSecretDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AuthenticateOidcActionUserInfoEndpointDeserializer;
 impl AuthenticateOidcActionUserInfoEndpointDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1003,9 +1036,10 @@ pub struct AvailabilityZone {
     pub zone_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1032,9 +1066,10 @@ impl AvailabilityZoneDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1049,9 +1084,10 @@ impl AvailabilityZonesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CanonicalHostedZoneIdDeserializer;
 impl CanonicalHostedZoneIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1071,9 +1107,10 @@ pub struct Certificate {
     pub is_default: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct CertificateDeserializer;
 impl CertificateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1114,9 +1151,10 @@ impl CertificateSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct CertificateArnDeserializer;
 impl CertificateArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1125,9 +1163,10 @@ impl CertificateArnDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CertificateListDeserializer;
 impl CertificateListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1164,9 +1203,10 @@ pub struct Cipher {
     pub priority: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct CipherDeserializer;
 impl CipherDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Cipher, XmlParseError> {
         deserialize_elements::<_, Cipher, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -1183,9 +1223,10 @@ impl CipherDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CipherNameDeserializer;
 impl CipherNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1194,9 +1235,10 @@ impl CipherNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CipherPriorityDeserializer;
 impl CipherPriorityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -1205,9 +1247,10 @@ impl CipherPriorityDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CiphersDeserializer;
 impl CiphersDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1222,9 +1265,10 @@ impl CiphersDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ConditionFieldNameDeserializer;
 impl ConditionFieldNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1290,9 +1334,10 @@ pub struct CreateListenerOutput {
     pub listeners: Option<Vec<Listener>>,
 }
 
+#[allow(dead_code)]
 struct CreateListenerOutputDeserializer;
 impl CreateListenerOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1380,9 +1425,10 @@ pub struct CreateLoadBalancerOutput {
     pub load_balancers: Option<Vec<LoadBalancer>>,
 }
 
+#[allow(dead_code)]
 struct CreateLoadBalancerOutputDeserializer;
 impl CreateLoadBalancerOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1444,9 +1490,10 @@ pub struct CreateRuleOutput {
     pub rules: Option<Vec<Rule>>,
 }
 
+#[allow(dead_code)]
 struct CreateRuleOutputDeserializer;
 impl CreateRuleOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1571,9 +1618,10 @@ pub struct CreateTargetGroupOutput {
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
+#[allow(dead_code)]
 struct CreateTargetGroupOutputDeserializer;
 impl CreateTargetGroupOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1595,9 +1643,10 @@ impl CreateTargetGroupOutputDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CreatedTimeDeserializer;
 impl CreatedTimeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1606,9 +1655,10 @@ impl CreatedTimeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct DNSNameDeserializer;
 impl DNSNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1617,9 +1667,10 @@ impl DNSNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct DefaultDeserializer;
 impl DefaultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -1652,9 +1703,10 @@ impl DeleteListenerInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteListenerOutput {}
 
+#[allow(dead_code)]
 struct DeleteListenerOutputDeserializer;
 impl DeleteListenerOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1695,9 +1747,10 @@ impl DeleteLoadBalancerInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteLoadBalancerOutput {}
 
+#[allow(dead_code)]
 struct DeleteLoadBalancerOutputDeserializer;
 impl DeleteLoadBalancerOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1735,9 +1788,10 @@ impl DeleteRuleInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteRuleOutput {}
 
+#[allow(dead_code)]
 struct DeleteRuleOutputDeserializer;
 impl DeleteRuleOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1778,9 +1832,10 @@ impl DeleteTargetGroupInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteTargetGroupOutput {}
 
+#[allow(dead_code)]
 struct DeleteTargetGroupOutputDeserializer;
 impl DeleteTargetGroupOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1828,9 +1883,10 @@ impl DeregisterTargetsInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeregisterTargetsOutput {}
 
+#[allow(dead_code)]
 struct DeregisterTargetsOutputDeserializer;
 impl DeregisterTargetsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1880,9 +1936,10 @@ pub struct DescribeAccountLimitsOutput {
     pub next_marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeAccountLimitsOutputDeserializer;
 impl DescribeAccountLimitsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1947,9 +2004,10 @@ pub struct DescribeListenerCertificatesOutput {
     pub next_marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeListenerCertificatesOutputDeserializer;
 impl DescribeListenerCertificatesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2025,9 +2083,10 @@ pub struct DescribeListenersOutput {
     pub next_marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeListenersOutputDeserializer;
 impl DescribeListenersOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2083,9 +2142,10 @@ pub struct DescribeLoadBalancerAttributesOutput {
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
+#[allow(dead_code)]
 struct DescribeLoadBalancerAttributesOutputDeserializer;
 impl DescribeLoadBalancerAttributesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2161,9 +2221,10 @@ pub struct DescribeLoadBalancersOutput {
     pub next_marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeLoadBalancersOutputDeserializer;
 impl DescribeLoadBalancersOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2239,9 +2300,10 @@ pub struct DescribeRulesOutput {
     pub rules: Option<Vec<Rule>>,
 }
 
+#[allow(dead_code)]
 struct DescribeRulesOutputDeserializer;
 impl DescribeRulesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2307,9 +2369,10 @@ pub struct DescribeSSLPoliciesOutput {
     pub ssl_policies: Option<Vec<SslPolicy>>,
 }
 
+#[allow(dead_code)]
 struct DescribeSSLPoliciesOutputDeserializer;
 impl DescribeSSLPoliciesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2366,9 +2429,10 @@ pub struct DescribeTagsOutput {
     pub tag_descriptions: Option<Vec<TagDescription>>,
 }
 
+#[allow(dead_code)]
 struct DescribeTagsOutputDeserializer;
 impl DescribeTagsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2416,9 +2480,10 @@ pub struct DescribeTargetGroupAttributesOutput {
     pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
+#[allow(dead_code)]
 struct DescribeTargetGroupAttributesOutputDeserializer;
 impl DescribeTargetGroupAttributesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2499,9 +2564,10 @@ pub struct DescribeTargetGroupsOutput {
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
+#[allow(dead_code)]
 struct DescribeTargetGroupsOutputDeserializer;
 impl DescribeTargetGroupsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2566,9 +2632,10 @@ pub struct DescribeTargetHealthOutput {
     pub target_health_descriptions: Option<Vec<TargetHealthDescription>>,
 }
 
+#[allow(dead_code)]
 struct DescribeTargetHealthOutputDeserializer;
 impl DescribeTargetHealthOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2593,9 +2660,10 @@ impl DescribeTargetHealthOutputDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2617,9 +2685,10 @@ pub struct FixedResponseActionConfig {
     pub status_code: String,
 }
 
+#[allow(dead_code)]
 struct FixedResponseActionConfigDeserializer;
 impl FixedResponseActionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2676,9 +2745,10 @@ impl FixedResponseActionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct FixedResponseActionContentTypeDeserializer;
 impl FixedResponseActionContentTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2687,9 +2757,10 @@ impl FixedResponseActionContentTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct FixedResponseActionMessageDeserializer;
 impl FixedResponseActionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2698,9 +2769,10 @@ impl FixedResponseActionMessageDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct FixedResponseActionStatusCodeDeserializer;
 impl FixedResponseActionStatusCodeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2720,9 +2792,10 @@ pub struct ForwardActionConfig {
     pub target_groups: Option<Vec<TargetGroupTuple>>,
 }
 
+#[allow(dead_code)]
 struct ForwardActionConfigDeserializer;
 impl ForwardActionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2774,9 +2847,10 @@ impl ForwardActionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct HealthCheckEnabledDeserializer;
 impl HealthCheckEnabledDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -2785,9 +2859,10 @@ impl HealthCheckEnabledDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct HealthCheckIntervalSecondsDeserializer;
 impl HealthCheckIntervalSecondsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -2796,9 +2871,10 @@ impl HealthCheckIntervalSecondsDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct HealthCheckPortDeserializer;
 impl HealthCheckPortDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2807,9 +2883,10 @@ impl HealthCheckPortDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct HealthCheckThresholdCountDeserializer;
 impl HealthCheckThresholdCountDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -2818,9 +2895,10 @@ impl HealthCheckThresholdCountDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct HealthCheckTimeoutSecondsDeserializer;
 impl HealthCheckTimeoutSecondsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -2838,9 +2916,10 @@ pub struct HostHeaderConditionConfig {
     pub values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct HostHeaderConditionConfigDeserializer;
 impl HostHeaderConditionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2882,9 +2961,10 @@ impl HostHeaderConditionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct HttpCodeDeserializer;
 impl HttpCodeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2904,9 +2984,10 @@ pub struct HttpHeaderConditionConfig {
     pub values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct HttpHeaderConditionConfigDeserializer;
 impl HttpHeaderConditionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2958,9 +3039,10 @@ impl HttpHeaderConditionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct HttpHeaderConditionNameDeserializer;
 impl HttpHeaderConditionNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2978,9 +3060,10 @@ pub struct HttpRequestMethodConditionConfig {
     pub values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct HttpRequestMethodConditionConfigDeserializer;
 impl HttpRequestMethodConditionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3022,9 +3105,10 @@ impl HttpRequestMethodConditionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct IpAddressDeserializer;
 impl IpAddressDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3033,9 +3117,10 @@ impl IpAddressDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct IpAddressTypeDeserializer;
 impl IpAddressTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3044,9 +3129,10 @@ impl IpAddressTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct IsDefaultDeserializer;
 impl IsDefaultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3065,9 +3151,10 @@ pub struct Limit {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LimitDeserializer;
 impl LimitDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Limit, XmlParseError> {
         deserialize_elements::<_, Limit, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -3083,9 +3170,10 @@ impl LimitDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LimitsDeserializer;
 impl LimitsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3100,9 +3188,10 @@ impl LimitsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ListOfStringDeserializer;
 impl ListOfStringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3149,9 +3238,10 @@ pub struct Listener {
     pub ssl_policy: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ListenerDeserializer;
 impl ListenerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3194,9 +3284,10 @@ impl ListenerDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ListenerArnDeserializer;
 impl ListenerArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3217,9 +3308,10 @@ impl ListenerArnsSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ListenersDeserializer;
 impl ListenersDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3264,9 +3356,10 @@ pub struct LoadBalancer {
     pub vpc_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LoadBalancerDeserializer;
 impl LoadBalancerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3349,9 +3442,10 @@ pub struct LoadBalancerAddress {
     pub private_i_pv_4_address: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LoadBalancerAddressDeserializer;
 impl LoadBalancerAddressDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3379,9 +3473,10 @@ impl LoadBalancerAddressDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerAddressesDeserializer;
 impl LoadBalancerAddressesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3398,9 +3493,10 @@ impl LoadBalancerAddressesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerArnDeserializer;
 impl LoadBalancerArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3409,9 +3505,10 @@ impl LoadBalancerArnDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerArnsDeserializer;
 impl LoadBalancerArnsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3449,9 +3546,10 @@ pub struct LoadBalancerAttribute {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LoadBalancerAttributeDeserializer;
 impl LoadBalancerAttributeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3493,9 +3591,10 @@ impl LoadBalancerAttributeSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct LoadBalancerAttributeKeyDeserializer;
 impl LoadBalancerAttributeKeyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3504,9 +3603,10 @@ impl LoadBalancerAttributeKeyDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerAttributeValueDeserializer;
 impl LoadBalancerAttributeValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3515,9 +3615,10 @@ impl LoadBalancerAttributeValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerAttributesDeserializer;
 impl LoadBalancerAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3546,9 +3647,10 @@ impl LoadBalancerAttributesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct LoadBalancerNameDeserializer;
 impl LoadBalancerNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3569,9 +3671,10 @@ impl LoadBalancerNamesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct LoadBalancerSchemeEnumDeserializer;
 impl LoadBalancerSchemeEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3590,9 +3693,10 @@ pub struct LoadBalancerState {
     pub reason: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LoadBalancerStateDeserializer;
 impl LoadBalancerStateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3613,9 +3717,10 @@ impl LoadBalancerStateDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerStateEnumDeserializer;
 impl LoadBalancerStateEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3624,9 +3729,10 @@ impl LoadBalancerStateEnumDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerTypeEnumDeserializer;
 impl LoadBalancerTypeEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3635,9 +3741,10 @@ impl LoadBalancerTypeEnumDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct LoadBalancersDeserializer;
 impl LoadBalancersDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3652,9 +3759,10 @@ impl LoadBalancersDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct MarkerDeserializer;
 impl MarkerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3672,9 +3780,10 @@ pub struct Matcher {
     pub http_code: String,
 }
 
+#[allow(dead_code)]
 struct MatcherDeserializer;
 impl MatcherDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3704,9 +3813,10 @@ impl MatcherSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct MaxDeserializer;
 impl MaxDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3775,9 +3885,10 @@ pub struct ModifyListenerOutput {
     pub listeners: Option<Vec<Listener>>,
 }
 
+#[allow(dead_code)]
 struct ModifyListenerOutputDeserializer;
 impl ModifyListenerOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3832,9 +3943,10 @@ pub struct ModifyLoadBalancerAttributesOutput {
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
+#[allow(dead_code)]
 struct ModifyLoadBalancerAttributesOutputDeserializer;
 impl ModifyLoadBalancerAttributesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3897,9 +4009,10 @@ pub struct ModifyRuleOutput {
     pub rules: Option<Vec<Rule>>,
 }
 
+#[allow(dead_code)]
 struct ModifyRuleOutputDeserializer;
 impl ModifyRuleOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3954,9 +4067,10 @@ pub struct ModifyTargetGroupAttributesOutput {
     pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
+#[allow(dead_code)]
 struct ModifyTargetGroupAttributesOutputDeserializer;
 impl ModifyTargetGroupAttributesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4068,9 +4182,10 @@ pub struct ModifyTargetGroupOutput {
     pub target_groups: Option<Vec<TargetGroup>>,
 }
 
+#[allow(dead_code)]
 struct ModifyTargetGroupOutputDeserializer;
 impl ModifyTargetGroupOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4092,9 +4207,10 @@ impl ModifyTargetGroupOutputDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct NameDeserializer;
 impl NameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4103,9 +4219,10 @@ impl NameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PathDeserializer;
 impl PathDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4123,9 +4240,10 @@ pub struct PathPatternConditionConfig {
     pub values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct PathPatternConditionConfigDeserializer;
 impl PathPatternConditionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4167,9 +4285,10 @@ impl PathPatternConditionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct PortDeserializer;
 impl PortDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -4178,9 +4297,10 @@ impl PortDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PrivateIPv4AddressDeserializer;
 impl PrivateIPv4AddressDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4189,9 +4309,10 @@ impl PrivateIPv4AddressDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4209,9 +4330,10 @@ pub struct QueryStringConditionConfig {
     pub values: Option<Vec<QueryStringKeyValuePair>>,
 }
 
+#[allow(dead_code)]
 struct QueryStringConditionConfigDeserializer;
 impl QueryStringConditionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4264,9 +4386,10 @@ pub struct QueryStringKeyValuePair {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct QueryStringKeyValuePairDeserializer;
 impl QueryStringKeyValuePairDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4308,9 +4431,10 @@ impl QueryStringKeyValuePairSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct QueryStringKeyValuePairListDeserializer;
 impl QueryStringKeyValuePairListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4358,9 +4482,10 @@ pub struct RedirectActionConfig {
     pub status_code: String,
 }
 
+#[allow(dead_code)]
 struct RedirectActionConfigDeserializer;
 impl RedirectActionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4425,9 +4550,10 @@ impl RedirectActionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RedirectActionHostDeserializer;
 impl RedirectActionHostDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4436,9 +4562,10 @@ impl RedirectActionHostDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RedirectActionPathDeserializer;
 impl RedirectActionPathDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4447,9 +4574,10 @@ impl RedirectActionPathDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RedirectActionPortDeserializer;
 impl RedirectActionPortDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4458,9 +4586,10 @@ impl RedirectActionPortDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RedirectActionProtocolDeserializer;
 impl RedirectActionProtocolDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4469,9 +4598,10 @@ impl RedirectActionProtocolDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RedirectActionQueryDeserializer;
 impl RedirectActionQueryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4480,9 +4610,10 @@ impl RedirectActionQueryDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RedirectActionStatusCodeEnumDeserializer;
 impl RedirectActionStatusCodeEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4525,9 +4656,10 @@ impl RegisterTargetsInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RegisterTargetsOutput {}
 
+#[allow(dead_code)]
 struct RegisterTargetsOutputDeserializer;
 impl RegisterTargetsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4572,9 +4704,10 @@ impl RemoveListenerCertificatesInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveListenerCertificatesOutput {}
 
+#[allow(dead_code)]
 struct RemoveListenerCertificatesOutputDeserializer;
 impl RemoveListenerCertificatesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4619,9 +4752,10 @@ impl RemoveTagsInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
+#[allow(dead_code)]
 struct RemoveTagsOutputDeserializer;
 impl RemoveTagsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4635,9 +4769,10 @@ impl RemoveTagsOutputDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ResourceArnDeserializer;
 impl ResourceArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4674,9 +4809,10 @@ pub struct Rule {
     pub rule_arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct RuleDeserializer;
 impl RuleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Rule, XmlParseError> {
         deserialize_elements::<_, Rule, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -4705,9 +4841,10 @@ impl RuleDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct RuleArnDeserializer;
 impl RuleArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4751,9 +4888,10 @@ pub struct RuleCondition {
     pub values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct RuleConditionDeserializer;
 impl RuleConditionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4880,9 +5018,10 @@ impl RuleConditionSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RuleConditionListDeserializer;
 impl RuleConditionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4948,9 +5087,10 @@ impl RulePriorityPairSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RulesDeserializer;
 impl RulesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4965,9 +5105,10 @@ impl RulesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SecurityGroupIdDeserializer;
 impl SecurityGroupIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4976,9 +5117,10 @@ impl SecurityGroupIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SecurityGroupsDeserializer;
 impl SecurityGroupsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5041,9 +5183,10 @@ pub struct SetIpAddressTypeOutput {
     pub ip_address_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SetIpAddressTypeOutputDeserializer;
 impl SetIpAddressTypeOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5093,9 +5236,10 @@ pub struct SetRulePrioritiesOutput {
     pub rules: Option<Vec<Rule>>,
 }
 
+#[allow(dead_code)]
 struct SetRulePrioritiesOutputDeserializer;
 impl SetRulePrioritiesOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5154,9 +5298,10 @@ pub struct SetSecurityGroupsOutput {
     pub security_group_ids: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct SetSecurityGroupsOutputDeserializer;
 impl SetSecurityGroupsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5222,9 +5367,10 @@ pub struct SetSubnetsOutput {
     pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
+#[allow(dead_code)]
 struct SetSubnetsOutputDeserializer;
 impl SetSubnetsOutputDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5251,9 +5397,10 @@ pub struct SourceIpConditionConfig {
     pub values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct SourceIpConditionConfigDeserializer;
 impl SourceIpConditionConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5295,9 +5442,10 @@ impl SourceIpConditionConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SslPoliciesDeserializer;
 impl SslPoliciesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5324,9 +5472,10 @@ pub struct SslPolicy {
     pub ssl_protocols: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct SslPolicyDeserializer;
 impl SslPolicyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5352,9 +5501,10 @@ impl SslPolicyDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SslPolicyNameDeserializer;
 impl SslPolicyNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5375,9 +5525,10 @@ impl SslPolicyNamesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5386,9 +5537,10 @@ impl SslProtocolDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SslProtocolsDeserializer;
 impl SslProtocolsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5403,9 +5555,10 @@ impl SslProtocolsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct StateReasonDeserializer;
 impl StateReasonDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5414,9 +5567,10 @@ impl StateReasonDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5425,9 +5579,10 @@ impl StringDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct StringValueDeserializer;
 impl StringValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5436,9 +5591,10 @@ impl StringValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SubnetIdDeserializer;
 impl SubnetIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5513,9 +5669,10 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -5558,9 +5715,10 @@ pub struct TagDescription {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[allow(dead_code)]
 struct TagDescriptionDeserializer;
 impl TagDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5582,9 +5740,10 @@ impl TagDescriptionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TagDescriptionsDeserializer;
 impl TagDescriptionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5599,9 +5758,10 @@ impl TagDescriptionsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5622,9 +5782,10 @@ impl TagKeysSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5651,9 +5812,10 @@ impl TagListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5675,9 +5837,10 @@ pub struct TargetDescription {
     pub port: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct TargetDescriptionDeserializer;
 impl TargetDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5771,9 +5934,10 @@ pub struct TargetGroup {
     pub vpc_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TargetGroupDeserializer;
 impl TargetGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5871,9 +6035,10 @@ impl TargetGroupDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TargetGroupArnDeserializer;
 impl TargetGroupArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5905,9 +6070,10 @@ pub struct TargetGroupAttribute {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TargetGroupAttributeDeserializer;
 impl TargetGroupAttributeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5949,9 +6115,10 @@ impl TargetGroupAttributeSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TargetGroupAttributeKeyDeserializer;
 impl TargetGroupAttributeKeyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5960,9 +6127,10 @@ impl TargetGroupAttributeKeyDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetGroupAttributeValueDeserializer;
 impl TargetGroupAttributeValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5971,9 +6139,10 @@ impl TargetGroupAttributeValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetGroupAttributesDeserializer;
 impl TargetGroupAttributesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6002,9 +6171,10 @@ impl TargetGroupAttributesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TargetGroupListDeserializer;
 impl TargetGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6031,9 +6201,10 @@ impl TargetGroupListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TargetGroupNameDeserializer;
 impl TargetGroupNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6065,9 +6236,10 @@ pub struct TargetGroupStickinessConfig {
     pub enabled: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct TargetGroupStickinessConfigDeserializer;
 impl TargetGroupStickinessConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6116,9 +6288,10 @@ impl TargetGroupStickinessConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TargetGroupStickinessDurationSecondsDeserializer;
 impl TargetGroupStickinessDurationSecondsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -6127,9 +6300,10 @@ impl TargetGroupStickinessDurationSecondsDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetGroupStickinessEnabledDeserializer;
 impl TargetGroupStickinessEnabledDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -6149,9 +6323,10 @@ pub struct TargetGroupTuple {
     pub weight: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct TargetGroupTupleDeserializer;
 impl TargetGroupTupleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6192,9 +6367,10 @@ impl TargetGroupTupleSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TargetGroupWeightDeserializer;
 impl TargetGroupWeightDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -6203,9 +6379,10 @@ impl TargetGroupWeightDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetGroupsDeserializer;
 impl TargetGroupsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6232,9 +6409,10 @@ pub struct TargetHealth {
     pub state: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TargetHealthDeserializer;
 impl TargetHealthDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6273,9 +6451,10 @@ pub struct TargetHealthDescription {
     pub target_health: Option<TargetHealth>,
 }
 
+#[allow(dead_code)]
 struct TargetHealthDescriptionDeserializer;
 impl TargetHealthDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6308,9 +6487,10 @@ impl TargetHealthDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct TargetHealthDescriptionsDeserializer;
 impl TargetHealthDescriptionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6327,9 +6507,10 @@ impl TargetHealthDescriptionsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TargetHealthReasonEnumDeserializer;
 impl TargetHealthReasonEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6338,9 +6519,10 @@ impl TargetHealthReasonEnumDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetHealthStateEnumDeserializer;
 impl TargetHealthStateEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6349,9 +6531,10 @@ impl TargetHealthStateEnumDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetIdDeserializer;
 impl TargetIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6360,9 +6543,10 @@ impl TargetIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TargetTypeEnumDeserializer;
 impl TargetTypeEnumDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6371,9 +6555,10 @@ impl TargetTypeEnumDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct VpcIdDeserializer;
 impl VpcIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6382,9 +6567,10 @@ impl VpcIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ZoneNameDeserializer;
 impl ZoneNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -9113,9 +9299,8 @@ impl Elb for ElbClient {
             return Err(AddListenerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AddListenerCertificatesOutput::default();
         } else {
@@ -9162,9 +9347,7 @@ impl Elb for ElbClient {
             return Err(AddTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = AddTagsOutput::default();
         // parse non-payload
         Ok(result)
@@ -9194,9 +9377,8 @@ impl Elb for ElbClient {
             return Err(CreateListenerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateListenerOutput::default();
         } else {
@@ -9241,9 +9423,8 @@ impl Elb for ElbClient {
             return Err(CreateLoadBalancerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateLoadBalancerOutput::default();
         } else {
@@ -9290,9 +9471,8 @@ impl Elb for ElbClient {
             return Err(CreateRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateRuleOutput::default();
         } else {
@@ -9336,9 +9516,8 @@ impl Elb for ElbClient {
             return Err(CreateTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateTargetGroupOutput::default();
         } else {
@@ -9385,9 +9564,7 @@ impl Elb for ElbClient {
             return Err(DeleteListenerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteListenerOutput::default();
         // parse non-payload
         Ok(result)
@@ -9417,9 +9594,7 @@ impl Elb for ElbClient {
             return Err(DeleteLoadBalancerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteLoadBalancerOutput::default();
         // parse non-payload
         Ok(result)
@@ -9449,9 +9624,7 @@ impl Elb for ElbClient {
             return Err(DeleteRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteRuleOutput::default();
         // parse non-payload
         Ok(result)
@@ -9481,9 +9654,7 @@ impl Elb for ElbClient {
             return Err(DeleteTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeleteTargetGroupOutput::default();
         // parse non-payload
         Ok(result)
@@ -9513,9 +9684,7 @@ impl Elb for ElbClient {
             return Err(DeregisterTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = DeregisterTargetsOutput::default();
         // parse non-payload
         Ok(result)
@@ -9545,9 +9714,8 @@ impl Elb for ElbClient {
             return Err(DescribeAccountLimitsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountLimitsOutput::default();
         } else {
@@ -9595,9 +9763,8 @@ impl Elb for ElbClient {
             return Err(DescribeListenerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeListenerCertificatesOutput::default();
         } else {
@@ -9644,9 +9811,8 @@ impl Elb for ElbClient {
             return Err(DescribeListenersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeListenersOutput::default();
         } else {
@@ -9696,9 +9862,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancerAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancerAttributesOutput::default();
         } else {
@@ -9745,9 +9910,8 @@ impl Elb for ElbClient {
             return Err(DescribeLoadBalancersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeLoadBalancersOutput::default();
         } else {
@@ -9794,9 +9958,8 @@ impl Elb for ElbClient {
             return Err(DescribeRulesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeRulesOutput::default();
         } else {
@@ -9841,9 +10004,8 @@ impl Elb for ElbClient {
             return Err(DescribeSSLPoliciesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeSSLPoliciesOutput::default();
         } else {
@@ -9890,9 +10052,8 @@ impl Elb for ElbClient {
             return Err(DescribeTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTagsOutput::default();
         } else {
@@ -9937,9 +10098,8 @@ impl Elb for ElbClient {
             return Err(DescribeTargetGroupAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTargetGroupAttributesOutput::default();
         } else {
@@ -9986,9 +10146,8 @@ impl Elb for ElbClient {
             return Err(DescribeTargetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTargetGroupsOutput::default();
         } else {
@@ -10035,9 +10194,8 @@ impl Elb for ElbClient {
             return Err(DescribeTargetHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeTargetHealthOutput::default();
         } else {
@@ -10084,9 +10242,8 @@ impl Elb for ElbClient {
             return Err(ModifyListenerError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyListenerOutput::default();
         } else {
@@ -10132,9 +10289,8 @@ impl Elb for ElbClient {
             return Err(ModifyLoadBalancerAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyLoadBalancerAttributesOutput::default();
         } else {
@@ -10181,9 +10337,8 @@ impl Elb for ElbClient {
             return Err(ModifyRuleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyRuleOutput::default();
         } else {
@@ -10227,9 +10382,8 @@ impl Elb for ElbClient {
             return Err(ModifyTargetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyTargetGroupOutput::default();
         } else {
@@ -10277,9 +10431,8 @@ impl Elb for ElbClient {
             return Err(ModifyTargetGroupAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyTargetGroupAttributesOutput::default();
         } else {
@@ -10326,9 +10479,7 @@ impl Elb for ElbClient {
             return Err(RegisterTargetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RegisterTargetsOutput::default();
         // parse non-payload
         Ok(result)
@@ -10359,9 +10510,7 @@ impl Elb for ElbClient {
             return Err(RemoveListenerCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RemoveListenerCertificatesOutput::default();
         // parse non-payload
         Ok(result)
@@ -10391,9 +10540,7 @@ impl Elb for ElbClient {
             return Err(RemoveTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
         result = RemoveTagsOutput::default();
         // parse non-payload
         Ok(result)
@@ -10423,9 +10570,8 @@ impl Elb for ElbClient {
             return Err(SetIpAddressTypeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetIpAddressTypeOutput::default();
         } else {
@@ -10472,9 +10618,8 @@ impl Elb for ElbClient {
             return Err(SetRulePrioritiesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetRulePrioritiesOutput::default();
         } else {
@@ -10521,9 +10666,8 @@ impl Elb for ElbClient {
             return Err(SetSecurityGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetSecurityGroupsOutput::default();
         } else {
@@ -10570,9 +10714,8 @@ impl Elb for ElbClient {
             return Err(SetSubnetsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SetSubnetsOutput::default();
         } else {

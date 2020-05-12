@@ -51,9 +51,10 @@ pub struct Attribute {
     pub value: String,
 }
 
+#[allow(dead_code)]
 struct AttributeDeserializer;
 impl AttributeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -111,9 +112,10 @@ impl AttributeSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AttributeListDeserializer;
 impl AttributeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -373,9 +375,10 @@ pub struct DomainMetadataResult {
     pub timestamp: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct DomainMetadataResultDeserializer;
 impl DomainMetadataResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -422,9 +425,10 @@ impl DomainMetadataResultDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DomainNameListDeserializer;
 impl DomainNameListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -493,9 +497,10 @@ pub struct GetAttributesResult {
     pub attributes: Option<Vec<Attribute>>,
 }
 
+#[allow(dead_code)]
 struct GetAttributesResultDeserializer;
 impl GetAttributesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -513,9 +518,10 @@ impl GetAttributesResultDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -536,9 +542,10 @@ pub struct Item {
     pub name: String,
 }
 
+#[allow(dead_code)]
 struct ItemDeserializer;
 impl ItemDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Item, XmlParseError> {
         deserialize_elements::<_, Item, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -561,9 +568,10 @@ impl ItemDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ItemListDeserializer;
 impl ItemListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -624,9 +632,10 @@ pub struct ListDomainsResult {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ListDomainsResultDeserializer;
 impl ListDomainsResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -647,9 +656,10 @@ impl ListDomainsResultDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LongDeserializer;
 impl LongDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -818,9 +828,10 @@ pub struct SelectResult {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SelectResultDeserializer;
 impl SelectResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -841,9 +852,10 @@ impl SelectResultDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1847,9 +1859,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(DomainMetadataError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DomainMetadataResult::default();
         } else {
@@ -1894,9 +1905,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(GetAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAttributesResult::default();
         } else {
@@ -1941,9 +1951,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(ListDomainsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDomainsResult::default();
         } else {
@@ -2012,9 +2021,8 @@ impl SimpleDb for SimpleDbClient {
             return Err(SelectError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SelectResult::default();
         } else {

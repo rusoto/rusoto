@@ -36,9 +36,10 @@ use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::EventReader;
 
+#[allow(dead_code)]
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -47,9 +48,10 @@ impl AccessKeyIdTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -58,9 +60,10 @@ impl AccessKeySecretTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct AccountTypeDeserializer;
 impl AccountTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -69,9 +72,10 @@ impl AccountTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -166,9 +170,10 @@ pub struct AssumeRoleResponse {
     pub packed_policy_size: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct AssumeRoleResponseDeserializer;
 impl AssumeRoleResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -267,9 +272,10 @@ pub struct AssumeRoleWithSAMLResponse {
     pub subject_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct AssumeRoleWithSAMLResponseDeserializer;
 impl AssumeRoleWithSAMLResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -396,9 +402,10 @@ pub struct AssumeRoleWithWebIdentityResponse {
     pub subject_from_web_identity_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct AssumeRoleWithWebIdentityResponseDeserializer;
 impl AssumeRoleWithWebIdentityResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -445,9 +452,10 @@ impl AssumeRoleWithWebIdentityResponseDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct AssumedRoleIdTypeDeserializer;
 impl AssumedRoleIdTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -466,9 +474,10 @@ pub struct AssumedRoleUser {
     pub assumed_role_id: String,
 }
 
+#[allow(dead_code)]
 struct AssumedRoleUserDeserializer;
 impl AssumedRoleUserDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -488,9 +497,10 @@ impl AssumedRoleUserDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AudienceDeserializer;
 impl AudienceDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -513,9 +523,10 @@ pub struct Credentials {
     pub session_token: String,
 }
 
+#[allow(dead_code)]
 struct CredentialsDeserializer;
 impl CredentialsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -542,9 +553,10 @@ impl CredentialsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DateTypeDeserializer;
 impl DateTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -584,9 +596,10 @@ pub struct DecodeAuthorizationMessageResponse {
     pub decoded_message: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DecodeAuthorizationMessageResponseDeserializer;
 impl DecodeAuthorizationMessageResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -609,9 +622,10 @@ impl DecodeAuthorizationMessageResponseDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DecodedMessageTypeDeserializer;
 impl DecodedMessageTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -620,9 +634,10 @@ impl DecodedMessageTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct FederatedIdTypeDeserializer;
 impl FederatedIdTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -641,9 +656,10 @@ pub struct FederatedUser {
     pub federated_user_id: String,
 }
 
+#[allow(dead_code)]
 struct FederatedUserDeserializer;
 impl FederatedUserDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -690,9 +706,10 @@ pub struct GetAccessKeyInfoResponse {
     pub account: Option<String>,
 }
 
+#[allow(dead_code)]
 struct GetAccessKeyInfoResponseDeserializer;
 impl GetAccessKeyInfoResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -739,9 +756,10 @@ pub struct GetCallerIdentityResponse {
     pub user_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct GetCallerIdentityResponseDeserializer;
 impl GetCallerIdentityResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -823,9 +841,10 @@ pub struct GetFederationTokenResponse {
     pub packed_policy_size: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct GetFederationTokenResponseDeserializer;
 impl GetFederationTokenResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -899,9 +918,10 @@ pub struct GetSessionTokenResponse {
     pub credentials: Option<Credentials>,
 }
 
+#[allow(dead_code)]
 struct GetSessionTokenResponseDeserializer;
 impl GetSessionTokenResponseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -922,9 +942,10 @@ impl GetSessionTokenResponseDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct IssuerDeserializer;
 impl IssuerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -933,9 +954,10 @@ impl IssuerDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NameQualifierDeserializer;
 impl NameQualifierDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -944,9 +966,10 @@ impl NameQualifierDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NonNegativeIntegerTypeDeserializer;
 impl NonNegativeIntegerTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -990,9 +1013,10 @@ impl PolicyDescriptorTypeSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SubjectDeserializer;
 impl SubjectDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1001,9 +1025,10 @@ impl SubjectDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SubjectTypeDeserializer;
 impl SubjectTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1058,9 +1083,10 @@ impl TagListTypeSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TokenTypeDeserializer;
 impl TokenTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1069,9 +1095,10 @@ impl TokenTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct UserIdTypeDeserializer;
 impl UserIdTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1080,9 +1107,10 @@ impl UserIdTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct WebIdentitySubjectTypeDeserializer;
 impl WebIdentitySubjectTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1680,9 +1708,8 @@ impl Sts for StsClient {
             return Err(AssumeRoleError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssumeRoleResponse::default();
         } else {
@@ -1726,9 +1753,8 @@ impl Sts for StsClient {
             return Err(AssumeRoleWithSAMLError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssumeRoleWithSAMLResponse::default();
         } else {
@@ -1776,9 +1802,8 @@ impl Sts for StsClient {
             return Err(AssumeRoleWithWebIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = AssumeRoleWithWebIdentityResponse::default();
         } else {
@@ -1826,9 +1851,8 @@ impl Sts for StsClient {
             return Err(DecodeAuthorizationMessageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DecodeAuthorizationMessageResponse::default();
         } else {
@@ -1875,9 +1899,8 @@ impl Sts for StsClient {
             return Err(GetAccessKeyInfoError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetAccessKeyInfoResponse::default();
         } else {
@@ -1924,9 +1947,8 @@ impl Sts for StsClient {
             return Err(GetCallerIdentityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetCallerIdentityResponse::default();
         } else {
@@ -1973,9 +1995,8 @@ impl Sts for StsClient {
             return Err(GetFederationTokenError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetFederationTokenResponse::default();
         } else {
@@ -2022,9 +2043,8 @@ impl Sts for StsClient {
             return Err(GetSessionTokenError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetSessionTokenResponse::default();
         } else {
