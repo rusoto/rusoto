@@ -150,6 +150,7 @@ where
     P: ProvideAwsCredentials + Send + Sync + 'static,
     D: DispatchSignedRequest + Send + Sync + 'static,
 {
+    client.content_encoding.encode(&mut request);
     if let Some(provider) = client.credentials_provider {
         let credentials = if let Some(to) = timeout {
             time::timeout(to, provider.credentials())
