@@ -1,5 +1,5 @@
 use crate::custom::credential::NewAwsCredsForStsCreds;
-use crate::{AssumeRoleWithWebIdentityRequest, Sts, StsClient};
+use crate::{AssumeRoleWithWebIdentityRequest, Sts, StsClient, PolicyDescriptorType};
 use rusoto_core::credential::{
     AwsCredentials, CredentialsError, ProvideAwsCredentials, Secret, Variable,
 };
@@ -31,6 +31,14 @@ pub struct WebIdentityProvider {
     /// that your application will use are associated with that user. This session name is included as part
     /// of the ARN and assumed role ID in the AssumedRoleUser response element.
     pub role_session_name: Variable<String, CredentialsError>,
+
+    /// The duration, in seconds, of the role session.
+    /// The value can range from 900 seconds (15 minutes) up to the maximum session duration setting for the role.
+    pub duration_seconds: Option<i64>,
+    /// An IAM policy in JSON format that you want to use as an inline session policy.
+    pub policy: Option<String>,
+    /// The Amazon Resource Names (ARNs) of the IAM managed policies that you want to use as managed session policies.
+    pub policy_arns: Option<Vec<PolicyDescriptorType>>,
 }
 
 impl WebIdentityProvider {
@@ -47,6 +55,9 @@ impl WebIdentityProvider {
             role_session_name: role_session_name
                 .map(|v| v.into())
                 .unwrap_or_else(|| Variable::with_value(Self::create_session_name())),
+            duration_seconds: None,
+            policy: None,
+            policy_arns: None
         }
     }
 
@@ -110,6 +121,9 @@ impl ProvideAwsCredentials for WebIdentityProvider {
         req.role_arn = self.role_arn.resolve()?;
         req.web_identity_token = self.web_identity_token.resolve()?.as_ref().to_string();
         req.role_session_name = self.role_session_name.resolve()?;
+        req.policy = self.policy.to_owned();
+        req.duration_seconds = self.duration_seconds.to_owned();
+        req.policy_arns = self.policy_arns.to_owned();
 
         let assume_role = sts.assume_role_with_web_identity(req).await;
         match assume_role {
