@@ -163,12 +163,12 @@ where
         }
         .map_err(SignAndDispatchError::Credentials)?;
         if credentials.is_anonymous() {
-            request.complement_with_plus(true);
+            request.complement();
         } else {
-            request.sign_with_plus(&credentials, true);
+            request.sign(&credentials);
         }
     } else {
-        request.complement_with_plus(true);
+        request.complement();
     }
     client
         .dispatcher

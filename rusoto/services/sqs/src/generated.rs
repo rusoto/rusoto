@@ -121,9 +121,10 @@ pub struct BatchResultErrorEntry {
     pub sender_fault: bool,
 }
 
+#[allow(dead_code)]
 struct BatchResultErrorEntryDeserializer;
 impl BatchResultErrorEntryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -148,9 +149,10 @@ impl BatchResultErrorEntryDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct BatchResultErrorEntryListDeserializer;
 impl BatchResultErrorEntryListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -177,9 +179,10 @@ impl BatchResultErrorEntryListDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BinaryDeserializer;
 impl BinaryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -191,9 +194,10 @@ impl BinaryDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BinaryListDeserializer;
 impl BinaryListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -220,9 +224,10 @@ impl BinaryListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -316,9 +321,10 @@ pub struct ChangeMessageVisibilityBatchResult {
     pub successful: Vec<ChangeMessageVisibilityBatchResultEntry>,
 }
 
+#[allow(dead_code)]
 struct ChangeMessageVisibilityBatchResultDeserializer;
 impl ChangeMessageVisibilityBatchResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -358,9 +364,10 @@ pub struct ChangeMessageVisibilityBatchResultEntry {
     pub id: String,
 }
 
+#[allow(dead_code)]
 struct ChangeMessageVisibilityBatchResultEntryDeserializer;
 impl ChangeMessageVisibilityBatchResultEntryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -380,9 +387,10 @@ impl ChangeMessageVisibilityBatchResultEntryDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ChangeMessageVisibilityBatchResultEntryListDeserializer;
 impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -486,9 +494,10 @@ pub struct CreateQueueResult {
     pub queue_url: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CreateQueueResultDeserializer;
 impl CreateQueueResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -580,9 +589,10 @@ pub struct DeleteMessageBatchResult {
     pub successful: Vec<DeleteMessageBatchResultEntry>,
 }
 
+#[allow(dead_code)]
 struct DeleteMessageBatchResultDeserializer;
 impl DeleteMessageBatchResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -622,9 +632,10 @@ pub struct DeleteMessageBatchResultEntry {
     pub id: String,
 }
 
+#[allow(dead_code)]
 struct DeleteMessageBatchResultEntryDeserializer;
 impl DeleteMessageBatchResultEntryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -644,9 +655,10 @@ impl DeleteMessageBatchResultEntryDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DeleteMessageBatchResultEntryListDeserializer;
 impl DeleteMessageBatchResultEntryListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -759,9 +771,10 @@ pub struct GetQueueAttributesResult {
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[allow(dead_code)]
 struct GetQueueAttributesResultDeserializer;
 impl GetQueueAttributesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -821,9 +834,10 @@ pub struct GetQueueUrlResult {
     pub queue_url: Option<String>,
 }
 
+#[allow(dead_code)]
 struct GetQueueUrlResultDeserializer;
 impl GetQueueUrlResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -868,9 +882,10 @@ pub struct ListDeadLetterSourceQueuesResult {
     pub queue_urls: Vec<String>,
 }
 
+#[allow(dead_code)]
 struct ListDeadLetterSourceQueuesResultDeserializer;
 impl ListDeadLetterSourceQueuesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -918,9 +933,10 @@ pub struct ListQueueTagsResult {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[allow(dead_code)]
 struct ListQueueTagsResultDeserializer;
 impl ListQueueTagsResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -967,9 +983,10 @@ pub struct ListQueuesResult {
     pub queue_urls: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct ListQueuesResultDeserializer;
 impl ListQueuesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1007,9 +1024,10 @@ pub struct Message {
     pub receipt_handle: Option<String>,
 }
 
+#[allow(dead_code)]
 struct MessageDeserializer;
 impl MessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1083,9 +1101,10 @@ pub struct MessageAttributeValue {
     pub string_value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct MessageAttributeValueDeserializer;
 impl MessageAttributeValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1154,9 +1173,10 @@ impl MessageAttributeValueSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct MessageBodyAttributeMapDeserializer;
 impl MessageBodyAttributeMapDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1215,9 +1235,10 @@ impl MessageBodySystemAttributeMapSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct MessageListDeserializer;
 impl MessageListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1242,9 +1263,10 @@ impl MessageListDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct MessageSystemAttributeMapDeserializer;
 impl MessageSystemAttributeMapDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1262,9 +1284,10 @@ impl MessageSystemAttributeMapDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct MessageSystemAttributeNameDeserializer;
 impl MessageSystemAttributeNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1346,9 +1369,10 @@ impl PurgeQueueRequestSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct QueueAttributeMapDeserializer;
 impl QueueAttributeMapDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1383,9 +1407,10 @@ impl QueueAttributeMapSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct QueueAttributeNameDeserializer;
 impl QueueAttributeNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1394,9 +1419,10 @@ impl QueueAttributeNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct QueueUrlListDeserializer;
 impl QueueUrlListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1494,9 +1520,10 @@ pub struct ReceiveMessageResult {
     pub messages: Option<Vec<Message>>,
 }
 
+#[allow(dead_code)]
 struct ReceiveMessageResultDeserializer;
 impl ReceiveMessageResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1648,9 +1675,10 @@ pub struct SendMessageBatchResult {
     pub successful: Vec<SendMessageBatchResultEntry>,
 }
 
+#[allow(dead_code)]
 struct SendMessageBatchResultDeserializer;
 impl SendMessageBatchResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1696,9 +1724,10 @@ pub struct SendMessageBatchResultEntry {
     pub sequence_number: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SendMessageBatchResultEntryDeserializer;
 impl SendMessageBatchResultEntryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1740,9 +1769,10 @@ impl SendMessageBatchResultEntryDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct SendMessageBatchResultEntryListDeserializer;
 impl SendMessageBatchResultEntryListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1846,9 +1876,10 @@ pub struct SendMessageResult {
     pub sequence_number: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SendMessageResultDeserializer;
 impl SendMessageResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1912,9 +1943,10 @@ impl SetQueueAttributesRequestSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1923,9 +1955,10 @@ impl StringDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct StringListDeserializer;
 impl StringListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1952,9 +1985,10 @@ impl StringListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1975,9 +2009,10 @@ impl TagKeyListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagMapDeserializer;
 impl TagMapDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2035,9 +2070,10 @@ impl TagQueueRequestSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3292,9 +3328,8 @@ impl Sqs for SqsClient {
             return Err(ChangeMessageVisibilityBatchError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ChangeMessageVisibilityBatchResult::default();
         } else {
@@ -3341,9 +3376,8 @@ impl Sqs for SqsClient {
             return Err(CreateQueueError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateQueueResult::default();
         } else {
@@ -3415,9 +3449,8 @@ impl Sqs for SqsClient {
             return Err(DeleteMessageBatchError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteMessageBatchResult::default();
         } else {
@@ -3492,9 +3525,8 @@ impl Sqs for SqsClient {
             return Err(GetQueueAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetQueueAttributesResult::default();
         } else {
@@ -3541,9 +3573,8 @@ impl Sqs for SqsClient {
             return Err(GetQueueUrlError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = GetQueueUrlResult::default();
         } else {
@@ -3588,9 +3619,8 @@ impl Sqs for SqsClient {
             return Err(ListDeadLetterSourceQueuesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListDeadLetterSourceQueuesResult::default();
         } else {
@@ -3637,9 +3667,8 @@ impl Sqs for SqsClient {
             return Err(ListQueueTagsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListQueueTagsResult::default();
         } else {
@@ -3684,9 +3713,8 @@ impl Sqs for SqsClient {
             return Err(ListQueuesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListQueuesResult::default();
         } else {
@@ -3758,9 +3786,8 @@ impl Sqs for SqsClient {
             return Err(ReceiveMessageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ReceiveMessageResult::default();
         } else {
@@ -3833,9 +3860,8 @@ impl Sqs for SqsClient {
             return Err(SendMessageError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendMessageResult::default();
         } else {
@@ -3879,9 +3905,8 @@ impl Sqs for SqsClient {
             return Err(SendMessageBatchError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = SendMessageBatchResult::default();
         } else {

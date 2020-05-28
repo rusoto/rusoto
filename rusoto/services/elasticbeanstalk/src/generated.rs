@@ -36,9 +36,10 @@ use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::EventReader;
 
+#[allow(dead_code)]
 struct ARNDeserializer;
 impl ARNDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -75,9 +76,10 @@ impl AbortEnvironmentUpdateMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct AbortableOperationInProgressDeserializer;
 impl AbortableOperationInProgressDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -86,9 +88,10 @@ impl AbortableOperationInProgressDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ActionHistoryStatusDeserializer;
 impl ActionHistoryStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -97,9 +100,10 @@ impl ActionHistoryStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ActionStatusDeserializer;
 impl ActionStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -108,9 +112,10 @@ impl ActionStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ActionTypeDeserializer;
 impl ActionTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -119,9 +124,10 @@ impl ActionTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ApplicationArnDeserializer;
 impl ApplicationArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -152,9 +158,10 @@ pub struct ApplicationDescription {
     pub versions: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct ApplicationDescriptionDeserializer;
 impl ApplicationDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -211,9 +218,10 @@ impl ApplicationDescriptionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ApplicationDescriptionListDeserializer;
 impl ApplicationDescriptionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -238,9 +246,10 @@ pub struct ApplicationDescriptionMessage {
     pub application: Option<ApplicationDescription>,
 }
 
+#[allow(dead_code)]
 struct ApplicationDescriptionMessageDeserializer;
 impl ApplicationDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -271,9 +280,10 @@ pub struct ApplicationDescriptionsMessage {
     pub applications: Option<Vec<ApplicationDescription>>,
 }
 
+#[allow(dead_code)]
 struct ApplicationDescriptionsMessageDeserializer;
 impl ApplicationDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -312,9 +322,10 @@ pub struct ApplicationMetrics {
     pub status_codes: Option<StatusCodes>,
 }
 
+#[allow(dead_code)]
 struct ApplicationMetricsDeserializer;
 impl ApplicationMetricsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -344,9 +355,10 @@ impl ApplicationMetricsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ApplicationNameDeserializer;
 impl ApplicationNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -378,9 +390,10 @@ pub struct ApplicationResourceLifecycleConfig {
     pub version_lifecycle_config: Option<ApplicationVersionLifecycleConfig>,
 }
 
+#[allow(dead_code)]
 struct ApplicationResourceLifecycleConfigDeserializer;
 impl ApplicationResourceLifecycleConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -440,9 +453,10 @@ pub struct ApplicationResourceLifecycleDescriptionMessage {
     pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
 }
 
+#[allow(dead_code)]
 struct ApplicationResourceLifecycleDescriptionMessageDeserializer;
 impl ApplicationResourceLifecycleDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -472,9 +486,10 @@ impl ApplicationResourceLifecycleDescriptionMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ApplicationVersionArnDeserializer;
 impl ApplicationVersionArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -509,9 +524,10 @@ pub struct ApplicationVersionDescription {
     pub version_label: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ApplicationVersionDescriptionDeserializer;
 impl ApplicationVersionDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -578,9 +594,10 @@ impl ApplicationVersionDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ApplicationVersionDescriptionListDeserializer;
 impl ApplicationVersionDescriptionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -605,9 +622,10 @@ pub struct ApplicationVersionDescriptionMessage {
     pub application_version: Option<ApplicationVersionDescription>,
 }
 
+#[allow(dead_code)]
 struct ApplicationVersionDescriptionMessageDeserializer;
 impl ApplicationVersionDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -641,9 +659,10 @@ pub struct ApplicationVersionDescriptionsMessage {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ApplicationVersionDescriptionsMessageDeserializer;
 impl ApplicationVersionDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -682,9 +701,10 @@ pub struct ApplicationVersionLifecycleConfig {
     pub max_count_rule: Option<MaxCountRule>,
 }
 
+#[allow(dead_code)]
 struct ApplicationVersionLifecycleConfigDeserializer;
 impl ApplicationVersionLifecycleConfigDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -738,9 +758,10 @@ impl ApplicationVersionLifecycleConfigSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ApplicationVersionStatusDeserializer;
 impl ApplicationVersionStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -794,9 +815,10 @@ pub struct ApplyEnvironmentManagedActionResult {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ApplyEnvironmentManagedActionResultDeserializer;
 impl ApplyEnvironmentManagedActionResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -835,9 +857,10 @@ pub struct AutoScalingGroup {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct AutoScalingGroupDeserializer;
 impl AutoScalingGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -853,9 +876,10 @@ impl AutoScalingGroupDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AutoScalingGroupListDeserializer;
 impl AutoScalingGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -870,9 +894,10 @@ impl AutoScalingGroupListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AvailableSolutionStackDetailsListDeserializer;
 impl AvailableSolutionStackDetailsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -889,9 +914,10 @@ impl AvailableSolutionStackDetailsListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AvailableSolutionStackNamesListDeserializer;
 impl AvailableSolutionStackNamesListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -906,9 +932,10 @@ impl AvailableSolutionStackNamesListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct BoxedBooleanDeserializer;
 impl BoxedBooleanDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -917,9 +944,10 @@ impl BoxedBooleanDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BoxedIntDeserializer;
 impl BoxedIntDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -978,9 +1006,10 @@ pub struct Builder {
     pub arn: Option<String>,
 }
 
+#[allow(dead_code)]
 struct BuilderDeserializer;
 impl BuilderDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1018,9 +1047,10 @@ pub struct CPUUtilization {
     pub user: Option<f64>,
 }
 
+#[allow(dead_code)]
 struct CPUUtilizationDeserializer;
 impl CPUUtilizationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1060,9 +1090,10 @@ impl CPUUtilizationDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CauseDeserializer;
 impl CauseDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1071,9 +1102,10 @@ impl CauseDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct CausesDeserializer;
 impl CausesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1119,9 +1151,10 @@ pub struct CheckDNSAvailabilityResultMessage {
     pub fully_qualified_cname: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CheckDNSAvailabilityResultMessageDeserializer;
 impl CheckDNSAvailabilityResultMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1150,9 +1183,10 @@ impl CheckDNSAvailabilityResultMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CnameAvailabilityDeserializer;
 impl CnameAvailabilityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -1198,9 +1232,10 @@ impl ComposeEnvironmentsMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ConfigurationDeploymentStatusDeserializer;
 impl ConfigurationDeploymentStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1209,9 +1244,10 @@ impl ConfigurationDeploymentStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionDefaultValueDeserializer;
 impl ConfigurationOptionDefaultValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1248,9 +1284,10 @@ pub struct ConfigurationOptionDescription {
     pub value_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ConfigurationOptionDescriptionDeserializer;
 impl ConfigurationOptionDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1334,9 +1371,10 @@ impl ConfigurationOptionDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionDescriptionsListDeserializer;
 impl ConfigurationOptionDescriptionsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1353,9 +1391,10 @@ impl ConfigurationOptionDescriptionsListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionNameDeserializer;
 impl ConfigurationOptionNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1364,9 +1403,10 @@ impl ConfigurationOptionNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionPossibleValueDeserializer;
 impl ConfigurationOptionPossibleValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1375,9 +1415,10 @@ impl ConfigurationOptionPossibleValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionPossibleValuesDeserializer;
 impl ConfigurationOptionPossibleValuesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1409,9 +1450,10 @@ pub struct ConfigurationOptionSetting {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ConfigurationOptionSettingDeserializer;
 impl ConfigurationOptionSettingDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1476,9 +1518,10 @@ impl ConfigurationOptionSettingSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ConfigurationOptionSettingsListDeserializer;
 impl ConfigurationOptionSettingsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1507,9 +1550,10 @@ impl ConfigurationOptionSettingsListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ConfigurationOptionSeverityDeserializer;
 impl ConfigurationOptionSeverityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1518,9 +1562,10 @@ impl ConfigurationOptionSeverityDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionValueDeserializer;
 impl ConfigurationOptionValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1529,9 +1574,10 @@ impl ConfigurationOptionValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationOptionValueTypeDeserializer;
 impl ConfigurationOptionValueTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1552,9 +1598,10 @@ pub struct ConfigurationOptionsDescription {
     pub solution_stack_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ConfigurationOptionsDescriptionDeserializer;
 impl ConfigurationOptionsDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1614,9 +1661,10 @@ pub struct ConfigurationSettingsDescription {
     pub template_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ConfigurationSettingsDescriptionDeserializer;
 impl ConfigurationSettingsDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1689,9 +1737,10 @@ impl ConfigurationSettingsDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ConfigurationSettingsDescriptionListDeserializer;
 impl ConfigurationSettingsDescriptionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1716,9 +1765,10 @@ pub struct ConfigurationSettingsDescriptions {
     pub configuration_settings: Option<Vec<ConfigurationSettingsDescription>>,
 }
 
+#[allow(dead_code)]
 struct ConfigurationSettingsDescriptionsDeserializer;
 impl ConfigurationSettingsDescriptionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1751,9 +1801,10 @@ pub struct ConfigurationSettingsValidationMessages {
     pub messages: Option<Vec<ValidationMessage>>,
 }
 
+#[allow(dead_code)]
 struct ConfigurationSettingsValidationMessagesDeserializer;
 impl ConfigurationSettingsValidationMessagesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1775,9 +1826,10 @@ impl ConfigurationSettingsValidationMessagesDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ConfigurationTemplateNameDeserializer;
 impl ConfigurationTemplateNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -1786,9 +1838,10 @@ impl ConfigurationTemplateNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ConfigurationTemplateNamesListDeserializer;
 impl ConfigurationTemplateNamesListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2153,9 +2206,10 @@ pub struct CreatePlatformVersionResult {
     pub platform_summary: Option<PlatformSummary>,
 }
 
+#[allow(dead_code)]
 struct CreatePlatformVersionResultDeserializer;
 impl CreatePlatformVersionResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2189,9 +2243,10 @@ pub struct CreateStorageLocationResultMessage {
     pub s3_bucket: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CreateStorageLocationResultMessageDeserializer;
 impl CreateStorageLocationResultMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2211,9 +2266,10 @@ impl CreateStorageLocationResultMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2232,9 +2288,10 @@ pub struct CustomAmi {
     pub virtualization_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CustomAmiDeserializer;
 impl CustomAmiDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2256,9 +2313,10 @@ impl CustomAmiDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CustomAmiListDeserializer;
 impl CustomAmiListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2273,9 +2331,10 @@ impl CustomAmiListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DNSCnameDeserializer;
 impl DNSCnameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2434,9 +2493,10 @@ pub struct DeletePlatformVersionResult {
     pub platform_summary: Option<PlatformSummary>,
 }
 
+#[allow(dead_code)]
 struct DeletePlatformVersionResultDeserializer;
 impl DeletePlatformVersionResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2473,9 +2533,10 @@ pub struct Deployment {
     pub version_label: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DeploymentDeserializer;
 impl DeploymentDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2507,9 +2568,10 @@ impl DeploymentDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DeploymentTimestampDeserializer;
 impl DeploymentTimestampDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -2525,9 +2587,10 @@ pub struct DescribeAccountAttributesResult {
     pub resource_quotas: Option<ResourceQuotas>,
 }
 
+#[allow(dead_code)]
 struct DescribeAccountAttributesResultDeserializer;
 impl DescribeAccountAttributesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2764,9 +2827,10 @@ pub struct DescribeEnvironmentHealthResult {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeEnvironmentHealthResultDeserializer;
 impl DescribeEnvironmentHealthResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2875,9 +2939,10 @@ pub struct DescribeEnvironmentManagedActionHistoryResult {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeEnvironmentManagedActionHistoryResultDeserializer;
 impl DescribeEnvironmentManagedActionHistoryResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2946,9 +3011,10 @@ pub struct DescribeEnvironmentManagedActionsResult {
     pub managed_actions: Option<Vec<ManagedAction>>,
 }
 
+#[allow(dead_code)]
 struct DescribeEnvironmentManagedActionsResultDeserializer;
 impl DescribeEnvironmentManagedActionsResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3199,9 +3265,10 @@ pub struct DescribeInstancesHealthResult {
     pub refreshed_at: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DescribeInstancesHealthResultDeserializer;
 impl DescribeInstancesHealthResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3263,9 +3330,10 @@ pub struct DescribePlatformVersionResult {
     pub platform_description: Option<PlatformDescription>,
 }
 
+#[allow(dead_code)]
 struct DescribePlatformVersionResultDeserializer;
 impl DescribePlatformVersionResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3289,9 +3357,10 @@ impl DescribePlatformVersionResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3300,9 +3369,10 @@ impl DescriptionDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct Ec2InstanceIdDeserializer;
 impl Ec2InstanceIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3311,9 +3381,10 @@ impl Ec2InstanceIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EndpointURLDeserializer;
 impl EndpointURLDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3322,9 +3393,10 @@ impl EndpointURLDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EnvironmentArnDeserializer;
 impl EnvironmentArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3379,9 +3451,10 @@ pub struct EnvironmentDescription {
     pub version_label: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentDescriptionDeserializer;
 impl EnvironmentDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3492,9 +3565,10 @@ impl EnvironmentDescriptionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EnvironmentDescriptionsListDeserializer;
 impl EnvironmentDescriptionsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3521,9 +3595,10 @@ pub struct EnvironmentDescriptionsMessage {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentDescriptionsMessageDeserializer;
 impl EnvironmentDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3551,9 +3626,10 @@ impl EnvironmentDescriptionsMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct EnvironmentHealthDeserializer;
 impl EnvironmentHealthDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3574,9 +3650,10 @@ impl EnvironmentHealthAttributesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct EnvironmentHealthStatusDeserializer;
 impl EnvironmentHealthStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3585,9 +3662,10 @@ impl EnvironmentHealthStatusDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EnvironmentIdDeserializer;
 impl EnvironmentIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3622,9 +3700,10 @@ pub struct EnvironmentInfoDescription {
     pub sample_timestamp: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentInfoDescriptionDeserializer;
 impl EnvironmentInfoDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3661,9 +3740,10 @@ impl EnvironmentInfoDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct EnvironmentInfoDescriptionListDeserializer;
 impl EnvironmentInfoDescriptionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3680,9 +3760,10 @@ impl EnvironmentInfoDescriptionListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EnvironmentInfoTypeDeserializer;
 impl EnvironmentInfoTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3701,9 +3782,10 @@ pub struct EnvironmentLink {
     pub link_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentLinkDeserializer;
 impl EnvironmentLinkDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3723,9 +3805,10 @@ impl EnvironmentLinkDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EnvironmentLinksDeserializer;
 impl EnvironmentLinksDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3740,9 +3823,10 @@ impl EnvironmentLinksDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EnvironmentNameDeserializer;
 impl EnvironmentNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3785,9 +3869,10 @@ pub struct EnvironmentResourceDescription {
     pub triggers: Option<Vec<Trigger>>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentResourceDescriptionDeserializer;
 impl EnvironmentResourceDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3859,9 +3944,10 @@ pub struct EnvironmentResourceDescriptionsMessage {
     pub environment_resources: Option<EnvironmentResourceDescription>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentResourceDescriptionsMessageDeserializer;
 impl EnvironmentResourceDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3893,9 +3979,10 @@ pub struct EnvironmentResourcesDescription {
     pub load_balancer: Option<LoadBalancerDescription>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentResourcesDescriptionDeserializer;
 impl EnvironmentResourcesDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3918,9 +4005,10 @@ impl EnvironmentResourcesDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct EnvironmentStatusDeserializer;
 impl EnvironmentStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -3942,9 +4030,10 @@ pub struct EnvironmentTier {
     pub version: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EnvironmentTierDeserializer;
 impl EnvironmentTierDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3988,9 +4077,10 @@ impl EnvironmentTierSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct EventDateDeserializer;
 impl EventDateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4023,9 +4113,10 @@ pub struct EventDescription {
     pub version_label: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventDescriptionDeserializer;
 impl EventDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4078,9 +4169,10 @@ impl EventDescriptionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EventDescriptionListDeserializer;
 impl EventDescriptionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4105,9 +4197,10 @@ pub struct EventDescriptionsMessage {
     pub next_token: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventDescriptionsMessageDeserializer;
 impl EventDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4132,9 +4225,10 @@ impl EventDescriptionsMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct EventMessageDeserializer;
 impl EventMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4143,9 +4237,10 @@ impl EventMessageDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct EventSeverityDeserializer;
 impl EventSeverityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4154,9 +4249,10 @@ impl EventSeverityDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct FailureTypeDeserializer;
 impl FailureTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4165,9 +4261,10 @@ impl FailureTypeDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct FileTypeExtensionDeserializer;
 impl FileTypeExtensionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4176,9 +4273,10 @@ impl FileTypeExtensionDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ImageIdDeserializer;
 impl ImageIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4195,9 +4293,10 @@ pub struct Instance {
     pub id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct InstanceDeserializer;
 impl InstanceDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4213,9 +4312,10 @@ impl InstanceDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct InstanceHealthListDeserializer;
 impl InstanceHealthListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4254,9 +4354,10 @@ pub struct InstanceHealthSummary {
     pub warning: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct InstanceHealthSummaryDeserializer;
 impl InstanceHealthSummaryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4294,9 +4395,10 @@ impl InstanceHealthSummaryDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct InstanceIdDeserializer;
 impl InstanceIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4305,9 +4407,10 @@ impl InstanceIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct InstanceListDeserializer;
 impl InstanceListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4334,9 +4437,10 @@ impl InstancesHealthAttributesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -4367,9 +4471,10 @@ pub struct Latency {
     pub p999: Option<f64>,
 }
 
+#[allow(dead_code)]
 struct LatencyDeserializer;
 impl LatencyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4414,9 +4519,10 @@ pub struct LaunchConfiguration {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LaunchConfigurationDeserializer;
 impl LaunchConfigurationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4432,9 +4538,10 @@ impl LaunchConfigurationDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LaunchConfigurationListDeserializer;
 impl LaunchConfigurationListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4459,9 +4566,10 @@ pub struct LaunchTemplate {
     pub id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LaunchTemplateDeserializer;
 impl LaunchTemplateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4477,9 +4585,10 @@ impl LaunchTemplateDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LaunchTemplateListDeserializer;
 impl LaunchTemplateListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4494,9 +4603,10 @@ impl LaunchTemplateListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LaunchedAtDeserializer;
 impl LaunchedAtDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4515,9 +4625,10 @@ pub struct ListAvailableSolutionStacksResultMessage {
     pub solution_stacks: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct ListAvailableSolutionStacksResultMessageDeserializer;
 impl ListAvailableSolutionStacksResultMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4595,9 +4706,10 @@ pub struct ListPlatformVersionsResult {
     pub platform_summary_list: Option<Vec<PlatformSummary>>,
 }
 
+#[allow(dead_code)]
 struct ListPlatformVersionsResultDeserializer;
 impl ListPlatformVersionsResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4655,9 +4767,10 @@ pub struct Listener {
     pub protocol: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ListenerDeserializer;
 impl ListenerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4676,9 +4789,10 @@ impl ListenerDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LoadAverageDeserializer;
 impl LoadAverageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4693,9 +4807,10 @@ impl LoadAverageDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LoadAverageValueDeserializer;
 impl LoadAverageValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -4712,9 +4827,10 @@ pub struct LoadBalancer {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LoadBalancerDeserializer;
 impl LoadBalancerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4742,9 +4858,10 @@ pub struct LoadBalancerDescription {
     pub load_balancer_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct LoadBalancerDescriptionDeserializer;
 impl LoadBalancerDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4776,9 +4893,10 @@ impl LoadBalancerDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerListDeserializer;
 impl LoadBalancerListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4793,9 +4911,10 @@ impl LoadBalancerListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct LoadBalancerListenersDescriptionDeserializer;
 impl LoadBalancerListenersDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4810,9 +4929,10 @@ impl LoadBalancerListenersDescriptionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct MaintainerDeserializer;
 impl MaintainerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -4837,9 +4957,10 @@ pub struct ManagedAction {
     pub window_start_time: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ManagedActionDeserializer;
 impl ManagedActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4894,9 +5015,10 @@ pub struct ManagedActionHistoryItem {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ManagedActionHistoryItemDeserializer;
 impl ManagedActionHistoryItemDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4947,9 +5069,10 @@ impl ManagedActionHistoryItemDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct ManagedActionHistoryItemsDeserializer;
 impl ManagedActionHistoryItemsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4966,9 +5089,10 @@ impl ManagedActionHistoryItemsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ManagedActionsDeserializer;
 impl ManagedActionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4996,9 +5120,10 @@ pub struct MaxAgeRule {
     pub max_age_in_days: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct MaxAgeRuleDeserializer;
 impl MaxAgeRuleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5057,9 +5182,10 @@ pub struct MaxCountRule {
     pub max_count: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct MaxCountRuleDeserializer;
 impl MaxCountRuleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5104,9 +5230,10 @@ impl MaxCountRuleSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct MessageDeserializer;
 impl MessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5115,9 +5242,10 @@ impl MessageDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5126,9 +5254,10 @@ impl NextTokenDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NullableDoubleDeserializer;
 impl NullableDoubleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5137,9 +5266,10 @@ impl NullableDoubleDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NullableIntegerDeserializer;
 impl NullableIntegerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5148,9 +5278,10 @@ impl NullableIntegerDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct NullableLongDeserializer;
 impl NullableLongDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5159,9 +5290,10 @@ impl NullableLongDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct OperatingSystemNameDeserializer;
 impl OperatingSystemNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5170,9 +5302,10 @@ impl OperatingSystemNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct OperatingSystemVersionDeserializer;
 impl OperatingSystemVersionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5181,9 +5314,10 @@ impl OperatingSystemVersionDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct OptionNamespaceDeserializer;
 impl OptionNamespaceDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5192,9 +5326,10 @@ impl OptionNamespaceDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct OptionRestrictionMaxLengthDeserializer;
 impl OptionRestrictionMaxLengthDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5203,9 +5338,10 @@ impl OptionRestrictionMaxLengthDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct OptionRestrictionMaxValueDeserializer;
 impl OptionRestrictionMaxValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5214,9 +5350,10 @@ impl OptionRestrictionMaxValueDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct OptionRestrictionMinValueDeserializer;
 impl OptionRestrictionMinValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5235,9 +5372,10 @@ pub struct OptionRestrictionRegex {
     pub pattern: Option<String>,
 }
 
+#[allow(dead_code)]
 struct OptionRestrictionRegexDeserializer;
 impl OptionRestrictionRegexDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5300,9 +5438,10 @@ impl OptionsSpecifierListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct PlatformArnDeserializer;
 impl PlatformArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5311,9 +5450,10 @@ impl PlatformArnDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PlatformCategoryDeserializer;
 impl PlatformCategoryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5364,9 +5504,10 @@ pub struct PlatformDescription {
     pub supported_tier_list: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct PlatformDescriptionDeserializer;
 impl PlatformDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5545,9 +5686,10 @@ pub struct PlatformFramework {
     pub version: Option<String>,
 }
 
+#[allow(dead_code)]
 struct PlatformFrameworkDeserializer;
 impl PlatformFrameworkDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5566,9 +5708,10 @@ impl PlatformFrameworkDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PlatformFrameworksDeserializer;
 impl PlatformFrameworksDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5583,9 +5726,10 @@ impl PlatformFrameworksDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PlatformNameDeserializer;
 impl PlatformNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5594,9 +5738,10 @@ impl PlatformNameDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct PlatformOwnerDeserializer;
 impl PlatformOwnerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5615,9 +5760,10 @@ pub struct PlatformProgrammingLanguage {
     pub version: Option<String>,
 }
 
+#[allow(dead_code)]
 struct PlatformProgrammingLanguageDeserializer;
 impl PlatformProgrammingLanguageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5640,9 +5786,10 @@ impl PlatformProgrammingLanguageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct PlatformProgrammingLanguagesDeserializer;
 impl PlatformProgrammingLanguagesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5659,9 +5806,10 @@ impl PlatformProgrammingLanguagesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PlatformStatusDeserializer;
 impl PlatformStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5692,9 +5840,10 @@ pub struct PlatformSummary {
     pub supported_tier_list: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct PlatformSummaryDeserializer;
 impl PlatformSummaryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5752,9 +5901,10 @@ impl PlatformSummaryDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PlatformSummaryListDeserializer;
 impl PlatformSummaryListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5769,9 +5919,10 @@ impl PlatformSummaryListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PlatformVersionDeserializer;
 impl PlatformVersionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5790,9 +5941,10 @@ pub struct Queue {
     pub url: Option<String>,
 }
 
+#[allow(dead_code)]
 struct QueueDeserializer;
 impl QueueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Queue, XmlParseError> {
         deserialize_elements::<_, Queue, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -5808,9 +5960,10 @@ impl QueueDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct QueueListDeserializer;
 impl QueueListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5853,9 +6006,10 @@ impl RebuildEnvironmentMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RefreshedAtDeserializer;
 impl RefreshedAtDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5864,9 +6018,10 @@ impl RefreshedAtDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RegexLabelDeserializer;
 impl RegexLabelDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5875,9 +6030,10 @@ impl RegexLabelDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RegexPatternDeserializer;
 impl RegexPatternDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5886,9 +6042,10 @@ impl RegexPatternDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct RequestCountDeserializer;
 impl RequestCountDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -5928,9 +6085,10 @@ impl RequestEnvironmentInfoMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct RequestIdDeserializer;
 impl RequestIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5939,9 +6097,10 @@ impl RequestIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ResourceArnDeserializer;
 impl ResourceArnDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5950,9 +6109,10 @@ impl ResourceArnDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5961,9 +6121,10 @@ impl ResourceIdDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5980,9 +6141,10 @@ pub struct ResourceQuota {
     pub maximum: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct ResourceQuotaDeserializer;
 impl ResourceQuotaDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6014,9 +6176,10 @@ pub struct ResourceQuotas {
     pub environment_quota: Option<ResourceQuota>,
 }
 
+#[allow(dead_code)]
 struct ResourceQuotasDeserializer;
 impl ResourceQuotasDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6069,9 +6232,10 @@ pub struct ResourceTagsDescriptionMessage {
     pub resource_tags: Option<Vec<Tag>>,
 }
 
+#[allow(dead_code)]
 struct ResourceTagsDescriptionMessageDeserializer;
 impl ResourceTagsDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6164,9 +6328,10 @@ pub struct RetrieveEnvironmentInfoResultMessage {
     pub environment_info: Option<Vec<EnvironmentInfoDescription>>,
 }
 
+#[allow(dead_code)]
 struct RetrieveEnvironmentInfoResultMessageDeserializer;
 impl RetrieveEnvironmentInfoResultMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6191,9 +6356,10 @@ impl RetrieveEnvironmentInfoResultMessageDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct S3BucketDeserializer;
 impl S3BucketDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6202,9 +6368,10 @@ impl S3BucketDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct S3KeyDeserializer;
 impl S3KeyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6224,9 +6391,10 @@ pub struct S3Location {
     pub s3_key: Option<String>,
 }
 
+#[allow(dead_code)]
 struct S3LocationDeserializer;
 impl S3LocationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6264,9 +6432,10 @@ impl S3LocationSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SampleTimestampDeserializer;
 impl SampleTimestampDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6301,9 +6470,10 @@ pub struct SingleInstanceHealth {
     pub system: Option<SystemStatus>,
 }
 
+#[allow(dead_code)]
 struct SingleInstanceHealthDeserializer;
 impl SingleInstanceHealthDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6367,9 +6537,10 @@ pub struct SolutionStackDescription {
     pub solution_stack_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SolutionStackDescriptionDeserializer;
 impl SolutionStackDescriptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6400,9 +6571,10 @@ impl SolutionStackDescriptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct SolutionStackFileTypeListDeserializer;
 impl SolutionStackFileTypeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6417,9 +6589,10 @@ impl SolutionStackFileTypeListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SolutionStackNameDeserializer;
 impl SolutionStackNameDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6441,9 +6614,10 @@ pub struct SourceBuildInformation {
     pub source_type: String,
 }
 
+#[allow(dead_code)]
 struct SourceBuildInformationDeserializer;
 impl SourceBuildInformationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6517,9 +6691,10 @@ impl SourceConfigurationSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SourceLocationDeserializer;
 impl SourceLocationDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6528,9 +6703,10 @@ impl SourceLocationDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SourceRepositoryDeserializer;
 impl SourceRepositoryDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6539,9 +6715,10 @@ impl SourceRepositoryDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6564,9 +6741,10 @@ pub struct StatusCodes {
     pub status_5xx: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct StatusCodesDeserializer;
 impl StatusCodesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6603,9 +6781,10 @@ impl StatusCodesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6614,9 +6793,10 @@ impl StringDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SupportedAddonDeserializer;
 impl SupportedAddonDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6625,9 +6805,10 @@ impl SupportedAddonDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SupportedAddonListDeserializer;
 impl SupportedAddonListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6642,9 +6823,10 @@ impl SupportedAddonListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct SupportedTierDeserializer;
 impl SupportedTierDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6653,9 +6835,10 @@ impl SupportedTierDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct SupportedTierListDeserializer;
 impl SupportedTierListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6730,9 +6913,10 @@ pub struct SystemStatus {
     pub load_average: Option<Vec<f64>>,
 }
 
+#[allow(dead_code)]
 struct SystemStatusDeserializer;
 impl SystemStatusDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6767,9 +6951,10 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -6804,9 +6989,10 @@ impl TagSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6827,9 +7013,10 @@ impl TagKeyListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6856,9 +7043,10 @@ impl TagListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagValueDeserializer;
 impl TagValueDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6917,9 +7105,10 @@ impl TerminateEnvironmentMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TimestampDeserializer;
 impl TimestampDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6928,9 +7117,10 @@ impl TimestampDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct TokenDeserializer;
 impl TokenDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -6947,9 +7137,10 @@ pub struct Trigger {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TriggerDeserializer;
 impl TriggerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -6965,9 +7156,10 @@ impl TriggerDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TriggerListDeserializer;
 impl TriggerListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7123,9 +7315,10 @@ impl UpdateConfigurationTemplateMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct UpdateDateDeserializer;
 impl UpdateDateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7262,9 +7455,10 @@ impl UpdateTagsForResourceMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct UserDefinedOptionDeserializer;
 impl UserDefinedOptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -7328,9 +7522,10 @@ pub struct ValidationMessage {
     pub severity: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ValidationMessageDeserializer;
 impl ValidationMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7365,9 +7560,10 @@ impl ValidationMessageDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ValidationMessageStringDeserializer;
 impl ValidationMessageStringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7376,9 +7572,10 @@ impl ValidationMessageStringDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct ValidationMessagesListDeserializer;
 impl ValidationMessagesListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7393,9 +7590,10 @@ impl ValidationMessagesListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ValidationSeverityDeserializer;
 impl ValidationSeverityDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7404,9 +7602,10 @@ impl ValidationSeverityDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct VersionLabelDeserializer;
 impl VersionLabelDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -7427,9 +7626,10 @@ impl VersionLabelsSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct VersionLabelsListDeserializer;
 impl VersionLabelsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -7456,9 +7656,10 @@ impl VersionLabelsListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct VirtualizationTypeDeserializer;
 impl VirtualizationTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -10066,9 +10267,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ApplyEnvironmentManagedActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplyEnvironmentManagedActionResult::default();
         } else {
@@ -10115,9 +10315,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CheckDNSAvailabilityError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CheckDNSAvailabilityResultMessage::default();
         } else {
@@ -10164,9 +10363,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ComposeEnvironmentsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescriptionsMessage::default();
         } else {
@@ -10213,9 +10411,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateApplicationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationDescriptionMessage::default();
         } else {
@@ -10263,9 +10460,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateApplicationVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationVersionDescriptionMessage::default();
         } else {
@@ -10313,9 +10509,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateConfigurationTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsDescription::default();
         } else {
@@ -10362,9 +10557,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateEnvironmentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescription::default();
         } else {
@@ -10411,9 +10605,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreatePlatformVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreatePlatformVersionResult::default();
         } else {
@@ -10459,9 +10652,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(CreateStorageLocationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateStorageLocationResultMessage::default();
         } else {
@@ -10620,9 +10812,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DeletePlatformVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeletePlatformVersionResult::default();
         } else {
@@ -10668,9 +10859,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeAccountAttributesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeAccountAttributesResult::default();
         } else {
@@ -10718,9 +10908,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeApplicationVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationVersionDescriptionsMessage::default();
         } else {
@@ -10767,9 +10956,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeApplicationsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationDescriptionsMessage::default();
         } else {
@@ -10817,9 +11005,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeConfigurationOptionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationOptionsDescription::default();
         } else {
@@ -10867,9 +11054,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeConfigurationSettingsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsDescriptions::default();
         } else {
@@ -10916,9 +11102,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEnvironmentHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEnvironmentHealthResult::default();
         } else {
@@ -10974,9 +11159,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEnvironmentManagedActionHistoryResult::default();
         } else {
@@ -11028,9 +11212,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEnvironmentManagedActionsResult::default();
         } else {
@@ -11080,9 +11263,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEnvironmentResourcesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentResourceDescriptionsMessage::default();
         } else {
@@ -11129,9 +11311,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEnvironmentsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescriptionsMessage::default();
         } else {
@@ -11178,9 +11359,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventDescriptionsMessage::default();
         } else {
@@ -11227,9 +11407,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribeInstancesHealthError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeInstancesHealthResult::default();
         } else {
@@ -11276,9 +11455,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(DescribePlatformVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribePlatformVersionResult::default();
         } else {
@@ -11327,9 +11505,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ListAvailableSolutionStacksError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListAvailableSolutionStacksResultMessage::default();
         } else {
@@ -11376,9 +11553,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ListPlatformVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ListPlatformVersionsResult::default();
         } else {
@@ -11425,9 +11601,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ResourceTagsDescriptionMessage::default();
         } else {
@@ -11559,9 +11734,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(RetrieveEnvironmentInfoError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RetrieveEnvironmentInfoResultMessage::default();
         } else {
@@ -11636,9 +11810,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(TerminateEnvironmentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescription::default();
         } else {
@@ -11685,9 +11858,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateApplicationError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationDescriptionMessage::default();
         } else {
@@ -11739,9 +11911,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationResourceLifecycleDescriptionMessage::default();
         } else {
@@ -11789,9 +11960,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateApplicationVersionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplicationVersionDescriptionMessage::default();
         } else {
@@ -11839,9 +12009,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateConfigurationTemplateError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsDescription::default();
         } else {
@@ -11888,9 +12057,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(UpdateEnvironmentError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EnvironmentDescription::default();
         } else {
@@ -11968,9 +12136,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             return Err(ValidateConfigurationSettingsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ConfigurationSettingsValidationMessages::default();
         } else {

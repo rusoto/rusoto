@@ -60,9 +60,10 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -107,9 +108,10 @@ pub struct ApplyPendingMaintenanceActionResult {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
 
+#[allow(dead_code)]
 struct ApplyPendingMaintenanceActionResultDeserializer;
 impl ApplyPendingMaintenanceActionResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -133,9 +135,10 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct AttributeValueListDeserializer;
 impl AttributeValueListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -170,9 +173,10 @@ pub struct AvailabilityZone {
     pub name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -188,9 +192,10 @@ impl AvailabilityZoneDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -208,9 +213,10 @@ impl AvailabilityZoneListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -237,9 +243,10 @@ impl AvailabilityZonesSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct BooleanDeserializer;
 impl BooleanDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -248,9 +255,10 @@ impl BooleanDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
@@ -277,9 +285,10 @@ pub struct Certificate {
     pub valid_till: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CertificateDeserializer;
 impl CertificateDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -315,9 +324,10 @@ impl CertificateDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct CertificateListDeserializer;
 impl CertificateListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -341,9 +351,10 @@ pub struct CertificateMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct CertificateMessageDeserializer;
 impl CertificateMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -447,9 +458,10 @@ pub struct CopyDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
 
+#[allow(dead_code)]
 struct CopyDBClusterParameterGroupResultDeserializer;
 impl CopyDBClusterParameterGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -529,9 +541,10 @@ pub struct CopyDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
+#[allow(dead_code)]
 struct CopyDBClusterSnapshotResultDeserializer;
 impl CopyDBClusterSnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -731,9 +744,10 @@ pub struct CreateDBClusterParameterGroupResult {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
 
+#[allow(dead_code)]
 struct CreateDBClusterParameterGroupResultDeserializer;
 impl CreateDBClusterParameterGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -763,9 +777,10 @@ pub struct CreateDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct CreateDBClusterResultDeserializer;
 impl CreateDBClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -822,9 +837,10 @@ pub struct CreateDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
+#[allow(dead_code)]
 struct CreateDBClusterSnapshotResultDeserializer;
 impl CreateDBClusterSnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -923,9 +939,10 @@ pub struct CreateDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
 
+#[allow(dead_code)]
 struct CreateDBInstanceResultDeserializer;
 impl CreateDBInstanceResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -990,9 +1007,10 @@ pub struct CreateDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
 
+#[allow(dead_code)]
 struct CreateDBSubnetGroupResultDeserializer;
 impl CreateDBSubnetGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1079,9 +1097,10 @@ pub struct DBCluster {
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
+#[allow(dead_code)]
 struct DBClusterDeserializer;
 impl DBClusterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1233,9 +1252,10 @@ impl DBClusterDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBClusterListDeserializer;
 impl DBClusterListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1264,9 +1284,10 @@ pub struct DBClusterMember {
     pub promotion_tier: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct DBClusterMemberDeserializer;
 impl DBClusterMemberDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1301,9 +1322,10 @@ impl DBClusterMemberDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBClusterMemberListDeserializer;
 impl DBClusterMemberListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1331,9 +1353,10 @@ pub struct DBClusterMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterMessageDeserializer;
 impl DBClusterMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1368,9 +1391,10 @@ pub struct DBClusterParameterGroup {
     pub description: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterParameterGroupDeserializer;
 impl DBClusterParameterGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1418,9 +1442,10 @@ pub struct DBClusterParameterGroupDetails {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+#[allow(dead_code)]
 struct DBClusterParameterGroupDetailsDeserializer;
 impl DBClusterParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1445,9 +1470,10 @@ impl DBClusterParameterGroupDetailsDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DBClusterParameterGroupListDeserializer;
 impl DBClusterParameterGroupListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1473,9 +1499,10 @@ pub struct DBClusterParameterGroupNameMessage {
     pub db_cluster_parameter_group_name: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterParameterGroupNameMessageDeserializer;
 impl DBClusterParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1507,9 +1534,10 @@ pub struct DBClusterParameterGroupsMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterParameterGroupsMessageDeserializer;
 impl DBClusterParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1547,9 +1575,10 @@ pub struct DBClusterRole {
     pub status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterRoleDeserializer;
 impl DBClusterRoleDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1568,9 +1597,10 @@ impl DBClusterRoleDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBClusterRolesDeserializer;
 impl DBClusterRolesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1628,9 +1658,10 @@ pub struct DBClusterSnapshot {
     pub vpc_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterSnapshotDeserializer;
 impl DBClusterSnapshotDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1727,9 +1758,10 @@ pub struct DBClusterSnapshotAttribute {
     pub attribute_values: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct DBClusterSnapshotAttributeDeserializer;
 impl DBClusterSnapshotAttributeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1755,9 +1787,10 @@ impl DBClusterSnapshotAttributeDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DBClusterSnapshotAttributeListDeserializer;
 impl DBClusterSnapshotAttributeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1785,9 +1818,10 @@ pub struct DBClusterSnapshotAttributesResult {
     pub db_cluster_snapshot_identifier: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterSnapshotAttributesResultDeserializer;
 impl DBClusterSnapshotAttributesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1818,9 +1852,10 @@ impl DBClusterSnapshotAttributesResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct DBClusterSnapshotListDeserializer;
 impl DBClusterSnapshotListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1848,9 +1883,10 @@ pub struct DBClusterSnapshotMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBClusterSnapshotMessageDeserializer;
 impl DBClusterSnapshotMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1900,9 +1936,10 @@ pub struct DBEngineVersion {
     pub valid_upgrade_target: Option<Vec<UpgradeTarget>>,
 }
 
+#[allow(dead_code)]
 struct DBEngineVersionDeserializer;
 impl DBEngineVersionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1960,9 +1997,10 @@ impl DBEngineVersionDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBEngineVersionListDeserializer;
 impl DBEngineVersionListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -1990,9 +2028,10 @@ pub struct DBEngineVersionMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBEngineVersionMessageDeserializer;
 impl DBEngineVersionMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2071,9 +2110,10 @@ pub struct DBInstance {
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
+#[allow(dead_code)]
 struct DBInstanceDeserializer;
 impl DBInstanceDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2223,9 +2263,10 @@ impl DBInstanceDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBInstanceListDeserializer;
 impl DBInstanceListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2250,9 +2291,10 @@ pub struct DBInstanceMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBInstanceMessageDeserializer;
 impl DBInstanceMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2287,9 +2329,10 @@ pub struct DBInstanceStatusInfo {
     pub status_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBInstanceStatusInfoDeserializer;
 impl DBInstanceStatusInfoDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2314,9 +2357,10 @@ impl DBInstanceStatusInfoDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBInstanceStatusInfoListDeserializer;
 impl DBInstanceStatusInfoListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2352,9 +2396,10 @@ pub struct DBSubnetGroup {
     pub vpc_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBSubnetGroupDeserializer;
 impl DBSubnetGroupDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2403,9 +2448,10 @@ pub struct DBSubnetGroupMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct DBSubnetGroupMessageDeserializer;
 impl DBSubnetGroupMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2426,9 +2472,10 @@ impl DBSubnetGroupMessageDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct DBSubnetGroupsDeserializer;
 impl DBSubnetGroupsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2513,9 +2560,10 @@ pub struct DeleteDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct DeleteDBClusterResultDeserializer;
 impl DeleteDBClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2561,9 +2609,10 @@ pub struct DeleteDBClusterSnapshotResult {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
+#[allow(dead_code)]
 struct DeleteDBClusterSnapshotResultDeserializer;
 impl DeleteDBClusterSnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2616,9 +2665,10 @@ pub struct DeleteDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
 
+#[allow(dead_code)]
 struct DeleteDBInstanceResultDeserializer;
 impl DeleteDBInstanceResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -2830,9 +2880,10 @@ pub struct DescribeDBClusterSnapshotAttributesResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
 
+#[allow(dead_code)]
 struct DescribeDBClusterSnapshotAttributesResultDeserializer;
 impl DescribeDBClusterSnapshotAttributesResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3185,9 +3236,10 @@ pub struct DescribeEngineDefaultClusterParametersResult {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
+#[allow(dead_code)]
 struct DescribeEngineDefaultClusterParametersResultDeserializer;
 impl DescribeEngineDefaultClusterParametersResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3427,9 +3479,10 @@ pub struct Endpoint {
     pub port: Option<i64>,
 }
 
+#[allow(dead_code)]
 struct EndpointDeserializer;
 impl EndpointDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3464,9 +3517,10 @@ pub struct EngineDefaults {
     pub parameters: Option<Vec<Parameter>>,
 }
 
+#[allow(dead_code)]
 struct EngineDefaultsDeserializer;
 impl EngineDefaultsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3511,9 +3565,10 @@ pub struct Event {
     pub source_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventDeserializer;
 impl EventDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
         deserialize_elements::<_, Event, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -3545,9 +3600,10 @@ impl EventDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EventCategoriesListDeserializer;
 impl EventCategoriesListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3584,9 +3640,10 @@ pub struct EventCategoriesMap {
     pub source_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventCategoriesMapDeserializer;
 impl EventCategoriesMapDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3607,9 +3664,10 @@ impl EventCategoriesMapDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EventCategoriesMapListDeserializer;
 impl EventCategoriesMapListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3635,9 +3693,10 @@ pub struct EventCategoriesMessage {
     pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
 }
 
+#[allow(dead_code)]
 struct EventCategoriesMessageDeserializer;
 impl EventCategoriesMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3658,9 +3717,10 @@ impl EventCategoriesMessageDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct EventListDeserializer;
 impl EventListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3685,9 +3745,10 @@ pub struct EventsMessage {
     pub marker: Option<String>,
 }
 
+#[allow(dead_code)]
 struct EventsMessageDeserializer;
 impl EventsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3748,9 +3809,10 @@ pub struct FailoverDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct FailoverDBClusterResultDeserializer;
 impl FailoverDBClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -3821,9 +3883,10 @@ impl FilterValueListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3832,9 +3895,10 @@ impl IntegerDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
@@ -3885,9 +3949,10 @@ impl ListTagsForResourceMessageSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct LogTypeListDeserializer;
 impl LogTypeListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4058,9 +4123,10 @@ pub struct ModifyDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct ModifyDBClusterResultDeserializer;
 impl ModifyDBClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4130,9 +4196,10 @@ pub struct ModifyDBClusterSnapshotAttributeResult {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
 
+#[allow(dead_code)]
 struct ModifyDBClusterSnapshotAttributeResultDeserializer;
 impl ModifyDBClusterSnapshotAttributeResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4233,9 +4300,10 @@ pub struct ModifyDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
 
+#[allow(dead_code)]
 struct ModifyDBInstanceResultDeserializer;
 impl ModifyDBInstanceResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4297,9 +4365,10 @@ pub struct ModifyDBSubnetGroupResult {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
 
+#[allow(dead_code)]
 struct ModifyDBSubnetGroupResultDeserializer;
 impl ModifyDBSubnetGroupResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4340,9 +4409,10 @@ pub struct OrderableDBInstanceOption {
     pub vpc: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct OrderableDBInstanceOptionDeserializer;
 impl OrderableDBInstanceOptionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4385,9 +4455,10 @@ impl OrderableDBInstanceOptionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct OrderableDBInstanceOptionsListDeserializer;
 impl OrderableDBInstanceOptionsListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4415,9 +4486,10 @@ pub struct OrderableDBInstanceOptionsMessage {
     pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
 }
 
+#[allow(dead_code)]
 struct OrderableDBInstanceOptionsMessageDeserializer;
 impl OrderableDBInstanceOptionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4472,9 +4544,10 @@ pub struct Parameter {
     pub source: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ParameterDeserializer;
 impl ParameterDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4571,9 +4644,10 @@ impl ParameterSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4610,9 +4684,10 @@ pub struct PendingCloudwatchLogsExports {
     pub log_types_to_enable: Option<Vec<String>>,
 }
 
+#[allow(dead_code)]
 struct PendingCloudwatchLogsExportsDeserializer;
 impl PendingCloudwatchLogsExportsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4657,9 +4732,10 @@ pub struct PendingMaintenanceAction {
     pub opt_in_status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct PendingMaintenanceActionDeserializer;
 impl PendingMaintenanceActionDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4701,9 +4777,10 @@ impl PendingMaintenanceActionDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct PendingMaintenanceActionDetailsDeserializer;
 impl PendingMaintenanceActionDetailsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4721,9 +4798,10 @@ impl PendingMaintenanceActionDetailsDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct PendingMaintenanceActionsDeserializer;
 impl PendingMaintenanceActionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4751,9 +4829,10 @@ pub struct PendingMaintenanceActionsMessage {
     pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
 }
 
+#[allow(dead_code)]
 struct PendingMaintenanceActionsMessageDeserializer;
 impl PendingMaintenanceActionsMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4815,9 +4894,10 @@ pub struct PendingModifiedValues {
     pub storage_type: Option<String>,
 }
 
+#[allow(dead_code)]
 struct PendingModifiedValuesDeserializer;
 impl PendingModifiedValuesDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -4931,9 +5011,10 @@ pub struct RebootDBInstanceResult {
     pub db_instance: Option<DBInstance>,
 }
 
+#[allow(dead_code)]
 struct RebootDBInstanceResultDeserializer;
 impl RebootDBInstanceResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5022,9 +5103,10 @@ pub struct ResourcePendingMaintenanceActions {
     pub resource_identifier: Option<String>,
 }
 
+#[allow(dead_code)]
 struct ResourcePendingMaintenanceActionsDeserializer;
 impl ResourcePendingMaintenanceActionsDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5151,9 +5233,10 @@ pub struct RestoreDBClusterFromSnapshotResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct RestoreDBClusterFromSnapshotResultDeserializer;
 impl RestoreDBClusterFromSnapshotResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5266,9 +5349,10 @@ pub struct RestoreDBClusterToPointInTimeResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct RestoreDBClusterToPointInTimeResultDeserializer;
 impl RestoreDBClusterToPointInTimeResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5289,9 +5373,10 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5329,9 +5414,10 @@ pub struct StartDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct StartDBClusterResultDeserializer;
 impl StartDBClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5376,9 +5462,10 @@ pub struct StopDBClusterResult {
     pub db_cluster: Option<DBCluster>,
 }
 
+#[allow(dead_code)]
 struct StopDBClusterResultDeserializer;
 impl StopDBClusterResultDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5394,9 +5481,10 @@ impl StopDBClusterResultDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5417,9 +5505,10 @@ pub struct Subnet {
     pub subnet_status: Option<String>,
 }
 
+#[allow(dead_code)]
 struct SubnetDeserializer;
 impl SubnetDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -5455,9 +5544,10 @@ impl SubnetIdentifierListSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5472,9 +5562,10 @@ impl SubnetListDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct TStampDeserializer;
 impl TStampDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
@@ -5494,9 +5585,10 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+#[allow(dead_code)]
 struct TagDeserializer;
 impl TagDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
@@ -5531,9 +5623,10 @@ impl TagSerializer {
     }
 }
 
+#[allow(dead_code)]
 struct TagListDeserializer;
 impl TagListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5568,9 +5661,10 @@ pub struct TagListMessage {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+#[allow(dead_code)]
 struct TagListMessageDeserializer;
 impl TagListMessageDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5604,9 +5698,10 @@ pub struct UpgradeTarget {
     pub is_major_version_upgrade: Option<bool>,
 }
 
+#[allow(dead_code)]
 struct UpgradeTargetDeserializer;
 impl UpgradeTargetDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5639,9 +5734,10 @@ impl UpgradeTargetDeserializer {
         })
     }
 }
+#[allow(dead_code)]
 struct ValidUpgradeTargetListDeserializer;
 impl ValidUpgradeTargetListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5681,9 +5777,10 @@ pub struct VpcSecurityGroupMembership {
     pub vpc_security_group_id: Option<String>,
 }
 
+#[allow(dead_code)]
 struct VpcSecurityGroupMembershipDeserializer;
 impl VpcSecurityGroupMembershipDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -5709,9 +5806,10 @@ impl VpcSecurityGroupMembershipDeserializer {
         )
     }
 }
+#[allow(dead_code)]
 struct VpcSecurityGroupMembershipListDeserializer;
 impl VpcSecurityGroupMembershipListDeserializer {
-    #[allow(unused_variables)]
+    #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
@@ -9351,9 +9449,8 @@ impl Docdb for DocdbClient {
             return Err(ApplyPendingMaintenanceActionError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ApplyPendingMaintenanceActionResult::default();
         } else {
@@ -9401,9 +9498,8 @@ impl Docdb for DocdbClient {
             return Err(CopyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterParameterGroupResult::default();
         } else {
@@ -9450,9 +9546,8 @@ impl Docdb for DocdbClient {
             return Err(CopyDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CopyDBClusterSnapshotResult::default();
         } else {
@@ -9499,9 +9594,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterResult::default();
         } else {
@@ -9549,9 +9643,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterParameterGroupResult::default();
         } else {
@@ -9598,9 +9691,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBClusterSnapshotResult::default();
         } else {
@@ -9647,9 +9739,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBInstanceResult::default();
         } else {
@@ -9696,9 +9787,8 @@ impl Docdb for DocdbClient {
             return Err(CreateDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CreateDBSubnetGroupResult::default();
         } else {
@@ -9745,9 +9835,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterResult::default();
         } else {
@@ -9822,9 +9911,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBClusterSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBClusterSnapshotResult::default();
         } else {
@@ -9871,9 +9959,8 @@ impl Docdb for DocdbClient {
             return Err(DeleteDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DeleteDBInstanceResult::default();
         } else {
@@ -9948,9 +10035,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeCertificatesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = CertificateMessage::default();
         } else {
@@ -10000,9 +10086,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupsMessage::default();
         } else {
@@ -10049,9 +10134,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBClusterParametersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupDetails::default();
         } else {
@@ -10103,9 +10187,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeDBClusterSnapshotAttributesResult::default();
         } else {
@@ -10152,9 +10235,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBClusterSnapshotsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterSnapshotMessage::default();
         } else {
@@ -10201,9 +10283,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBClustersError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterMessage::default();
         } else {
@@ -10248,9 +10329,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBEngineVersionsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBEngineVersionMessage::default();
         } else {
@@ -10297,9 +10377,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBInstancesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBInstanceMessage::default();
         } else {
@@ -10346,9 +10425,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeDBSubnetGroupsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBSubnetGroupMessage::default();
         } else {
@@ -10400,9 +10478,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DescribeEngineDefaultClusterParametersResult::default();
         } else {
@@ -10449,9 +10526,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeEventCategoriesError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventCategoriesMessage::default();
         } else {
@@ -10498,9 +10574,8 @@ impl Docdb for DocdbClient {
             return Err(DescribeEventsError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = EventsMessage::default();
         } else {
@@ -10549,9 +10624,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = OrderableDBInstanceOptionsMessage::default();
         } else {
@@ -10601,9 +10675,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = PendingMaintenanceActionsMessage::default();
         } else {
@@ -10650,9 +10723,8 @@ impl Docdb for DocdbClient {
             return Err(FailoverDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = FailoverDBClusterResult::default();
         } else {
@@ -10699,9 +10771,8 @@ impl Docdb for DocdbClient {
             return Err(ListTagsForResourceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = TagListMessage::default();
         } else {
@@ -10746,9 +10817,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterResult::default();
         } else {
@@ -10796,9 +10866,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -10850,9 +10919,8 @@ impl Docdb for DocdbClient {
             ));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBClusterSnapshotAttributeResult::default();
         } else {
@@ -10899,9 +10967,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBInstanceResult::default();
         } else {
@@ -10948,9 +11015,8 @@ impl Docdb for DocdbClient {
             return Err(ModifyDBSubnetGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = ModifyDBSubnetGroupResult::default();
         } else {
@@ -10997,9 +11063,8 @@ impl Docdb for DocdbClient {
             return Err(RebootDBInstanceError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RebootDBInstanceResult::default();
         } else {
@@ -11075,9 +11140,8 @@ impl Docdb for DocdbClient {
             return Err(ResetDBClusterParameterGroupError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = DBClusterParameterGroupNameMessage::default();
         } else {
@@ -11125,9 +11189,8 @@ impl Docdb for DocdbClient {
             return Err(RestoreDBClusterFromSnapshotError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterFromSnapshotResult::default();
         } else {
@@ -11175,9 +11238,8 @@ impl Docdb for DocdbClient {
             return Err(RestoreDBClusterToPointInTimeError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = RestoreDBClusterToPointInTimeResult::default();
         } else {
@@ -11224,9 +11286,8 @@ impl Docdb for DocdbClient {
             return Err(StartDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StartDBClusterResult::default();
         } else {
@@ -11271,9 +11332,8 @@ impl Docdb for DocdbClient {
             return Err(StopDBClusterError::from_response(response));
         }
 
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let result;
-
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {
             result = StopDBClusterResult::default();
         } else {
