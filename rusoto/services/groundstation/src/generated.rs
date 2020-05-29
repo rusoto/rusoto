@@ -25,8 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>Information about how AWS Ground Station should configure an
-/// antenna for downlink during a contact.</p>
+/// <p>Information about how AWS Ground Station should configure an antenna for downlink during a contact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AntennaDownlinkConfig {
     /// <p>Object that describes a spectral <code>Config</code>.</p>
@@ -108,10 +107,7 @@ pub struct ConfigListItem {
     pub name: Option<String>,
 }
 
-/// <p>Object containing the parameters for a <code>Config</code>.</p>
-///
-/// <pre><code>     &lt;p&gt;See the subtype definitions for what each type of &lt;code&gt;Config&lt;/code&gt; contains.&lt;/p&gt;
-/// </code></pre>
+/// <p>Object containing the parameters of a <code>Config</code>.</p> <p>See the subtype definitions for what each type of <code>Config</code> contains.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConfigTypeData {
     /// <p>Information about how AWS Ground Station should configure an antenna for downlink during a contact.</p>
@@ -134,10 +130,7 @@ pub struct ConfigTypeData {
     #[serde(rename = "trackingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracking_config: Option<TrackingConfig>,
-    /// <p>Information about an uplink echo <code>Config</code>.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Parameters from the &lt;code&gt;AntennaUplinkConfig&lt;/code&gt;, corresponding to the specified &lt;code&gt;AntennaUplinkConfigArn&lt;/code&gt;, are used when this &lt;code&gt;UplinkEchoConfig&lt;/code&gt; is used in a contact.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Information about an uplink echo <code>Config</code>.</p> <p>Parameters from the <code>AntennaUplinkConfig</code>, corresponding to the specified <code>AntennaUplinkConfigArn</code>, are used when this <code>UplinkEchoConfig</code> is used in a contact.</p>
     #[serde(rename = "uplinkEchoConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_echo_config: Option<UplinkEchoConfig>,
@@ -183,6 +176,10 @@ pub struct ContactData {
     #[serde(rename = "prePassStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_pass_start_time: Option<f64>,
+    /// <p>Region of a contact.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
     /// <p>ARN of a satellite.</p>
     #[serde(rename = "satelliteArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -248,8 +245,7 @@ pub struct CreateMissionProfileRequest {
     #[serde(rename = "contactPrePassDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_pre_pass_duration_seconds: Option<i64>,
-    /// <p>A list of lists of ARNs. Each list of ARNs is an edge, with a from <code>Config</code> and a to
-    /// <code>Config</code>.</p>
+    /// <p>A list of lists of ARNs. Each list of ARNs is an edge, with a <i>from</i> <code>Config</code> and a <i>to</i> <code>Config</code>.</p>
     #[serde(rename = "dataflowEdges")]
     pub dataflow_edges: Vec<Vec<String>>,
     /// <p>Smallest amount of time in seconds that you’d like to see for an available contact. AWS Ground Station will not present you with contacts shorter than this duration.</p>
@@ -290,13 +286,17 @@ pub struct DataflowEndpointConfig {
     /// <p>Name of a dataflow endpoint.</p>
     #[serde(rename = "dataflowEndpointName")]
     pub dataflow_endpoint_name: String,
+    /// <p>Region of a dataflow endpoint.</p>
+    #[serde(rename = "dataflowEndpointRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataflow_endpoint_region: Option<String>,
 }
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataflowEndpointGroupIdResponse {
-    /// <p>ID of a dataflow endpoint group.</p>
+    /// <p>UUID of a dataflow endpoint group.</p>
     #[serde(rename = "dataflowEndpointGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataflow_endpoint_group_id: Option<String>,
@@ -340,7 +340,7 @@ pub struct DeleteConfigRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataflowEndpointGroupRequest {
-    /// <p>ID of a dataflow endpoint group.</p>
+    /// <p>UUID of a dataflow endpoint group.</p>
     #[serde(rename = "dataflowEndpointGroupId")]
     pub dataflow_endpoint_group_id: String,
 }
@@ -411,6 +411,10 @@ pub struct DescribeContactResponse {
     #[serde(rename = "prePassStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_pass_start_time: Option<f64>,
+    /// <p>Region of a contact.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
     /// <p>ARN of a satellite.</p>
     #[serde(rename = "satelliteArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -499,8 +503,7 @@ pub struct GetConfigRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigResponse {
-    /// <p>ARN of a <code>Config</code>
-    /// </p>
+    /// <p>ARN of a <code>Config</code> </p>
     #[serde(rename = "configArn")]
     pub config_arn: String,
     /// <p>Data elements in a <code>Config</code>.</p>
@@ -612,8 +615,7 @@ pub struct GetMissionProfileResponse {
     #[serde(rename = "contactPrePassDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_pre_pass_duration_seconds: Option<i64>,
-    /// <p>A list of lists of ARNs. Each list of ARNs is an edge, with a from <code>Config</code> and a to
-    /// <code>Config</code>.</p>
+    /// <p>A list of lists of ARNs. Each list of ARNs is an edge, with a <i>from</i> <code>Config</code> and a <i>to</i> <code>Config</code>.</p>
     #[serde(rename = "dataflowEdges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataflow_edges: Option<Vec<Vec<String>>>,
@@ -625,7 +627,7 @@ pub struct GetMissionProfileResponse {
     #[serde(rename = "missionProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mission_profile_arn: Option<String>,
-    /// <p>ID of a mission profile.</p>
+    /// <p>UUID of a mission profile.</p>
     #[serde(rename = "missionProfileId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mission_profile_id: Option<String>,
@@ -660,14 +662,10 @@ pub struct GetSatelliteRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSatelliteResponse {
-    /// <p>When a satellite was created.</p>
-    #[serde(rename = "dateCreated")]
+    /// <p>A list of ground stations to which the satellite is on-boarded.</p>
+    #[serde(rename = "groundStations")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub date_created: Option<f64>,
-    /// <p>When a satellite was last updated.</p>
-    #[serde(rename = "lastUpdated")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_updated: Option<f64>,
+    pub ground_stations: Option<Vec<String>>,
     /// <p>NORAD satellite ID number.</p>
     #[serde(rename = "noradSatelliteID")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -680,17 +678,13 @@ pub struct GetSatelliteResponse {
     #[serde(rename = "satelliteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub satellite_id: Option<String>,
-    /// <p>Tags assigned to a satellite.</p>
-    #[serde(rename = "tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Information about the ground station data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroundStationData {
-    /// <p>ID of a ground station.</p>
+    /// <p>UUID of a ground station.</p>
     #[serde(rename = "groundStationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ground_station_id: Option<String>,
@@ -821,6 +815,10 @@ pub struct ListGroundStationsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Satellite ID to retrieve on-boarded ground stations.</p>
+    #[serde(rename = "satelliteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub satellite_id: Option<String>,
 }
 
 /// <p><p/></p>
@@ -855,7 +853,7 @@ pub struct ListMissionProfilesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMissionProfilesResponse {
-    /// <p>List of mission profiles</p>
+    /// <p>List of mission profiles.</p>
     #[serde(rename = "missionProfileList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mission_profile_list: Option<Vec<MissionProfileListItem>>,
@@ -916,7 +914,7 @@ pub struct ListTagsForResourceResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MissionProfileIdResponse {
-    /// <p>ID of a mission profile.</p>
+    /// <p>UUID of a mission profile.</p>
     #[serde(rename = "missionProfileId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mission_profile_id: Option<String>,
@@ -930,7 +928,7 @@ pub struct MissionProfileListItem {
     #[serde(rename = "missionProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mission_profile_arn: Option<String>,
-    /// <p>ID of a mission profile.</p>
+    /// <p>UUID of a mission profile.</p>
     #[serde(rename = "missionProfileId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mission_profile_id: Option<String>,
@@ -973,6 +971,10 @@ pub struct ReserveContactRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SatelliteListItem {
+    /// <p>A list of ground stations to which the satellite is on-boarded.</p>
+    #[serde(rename = "groundStations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ground_stations: Option<Vec<String>>,
     /// <p>NORAD satellite ID number.</p>
     #[serde(rename = "noradSatelliteID")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -981,7 +983,7 @@ pub struct SatelliteListItem {
     #[serde(rename = "satelliteArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub satellite_arn: Option<String>,
-    /// <p>ID of a satellite.</p>
+    /// <p>UUID of a satellite.</p>
     #[serde(rename = "satelliteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub satellite_id: Option<String>,
@@ -1036,8 +1038,7 @@ pub struct TagResourceRequest {
     pub resource_arn: String,
     /// <p>Tags assigned to a resource.</p>
     #[serde(rename = "tags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tags: Option<::std::collections::HashMap<String, String>>,
+    pub tags: ::std::collections::HashMap<String, String>,
 }
 
 /// <p><p/></p>
@@ -1045,8 +1046,7 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-/// <p>Object that determines whether tracking should be used during a contact
-/// executed with this <code>Config</code> in the mission profile.</p>
+/// <p>Object that determines whether tracking should be used during a contact executed with this <code>Config</code> in the mission profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackingConfig {
     /// <p>Current setting for autotrack.</p>
@@ -1075,7 +1075,7 @@ pub struct UntagResourceResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigRequest {
-    /// <p>Parameters for a <code>Config</code>.</p>
+    /// <p>Parameters of a <code>Config</code>.</p>
     #[serde(rename = "configData")]
     pub config_data: ConfigTypeData,
     /// <p>UUID of a <code>Config</code>.</p>
@@ -1101,8 +1101,7 @@ pub struct UpdateMissionProfileRequest {
     #[serde(rename = "contactPrePassDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_pre_pass_duration_seconds: Option<i64>,
-    /// <p>A list of lists of ARNs. Each list of ARNs is an edge, with a from <code>Config</code> and a to
-    /// <code>Config</code>.</p>
+    /// <p>A list of lists of ARNs. Each list of ARNs is an edge, with a <i>from</i> <code>Config</code> and a <i>to</i> <code>Config</code>.</p>
     #[serde(rename = "dataflowEdges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataflow_edges: Option<Vec<Vec<String>>>,
@@ -1110,7 +1109,7 @@ pub struct UpdateMissionProfileRequest {
     #[serde(rename = "minimumViableContactDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_viable_contact_duration_seconds: Option<i64>,
-    /// <p>ID of a mission profile.</p>
+    /// <p>UUID of a mission profile.</p>
     #[serde(rename = "missionProfileId")]
     pub mission_profile_id: String,
     /// <p>Name of a mission profile.</p>
@@ -1123,12 +1122,7 @@ pub struct UpdateMissionProfileRequest {
     pub tracking_config_arn: Option<String>,
 }
 
-/// <p>Information about an uplink echo <code>Config</code>.</p>
-///
-/// <pre><code>     &lt;p&gt;Parameters from the &lt;code&gt;AntennaUplinkConfig&lt;/code&gt;, corresponding to the
-/// specified &lt;code&gt;AntennaUplinkConfigArn&lt;/code&gt;, are used when this &lt;code&gt;UplinkEchoConfig&lt;/code&gt;
-/// is used in a contact.&lt;/p&gt;
-/// </code></pre>
+/// <p>Information about an uplink echo <code>Config</code>.</p> <p>Parameters from the <code>AntennaUplinkConfig</code>, corresponding to the specified <code>AntennaUplinkConfigArn</code>, are used when this <code>UplinkEchoConfig</code> is used in a contact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UplinkEchoConfig {
     /// <p>ARN of an uplink <code>Config</code>.</p>
@@ -1200,6 +1194,8 @@ pub enum CreateConfigError {
     Dependency(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
+    /// <p>Account limits for this resource have been exceeded.</p>
+    ResourceLimitExceeded(String),
     /// <p>Resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -1213,6 +1209,9 @@ impl CreateConfigError {
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateConfigError::InvalidParameter(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateConfigError::ResourceLimitExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateConfigError::ResourceNotFound(err.msg))
@@ -1230,6 +1229,7 @@ impl fmt::Display for CreateConfigError {
         match *self {
             CreateConfigError::Dependency(ref cause) => write!(f, "{}", cause),
             CreateConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateConfigError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2258,33 +2258,19 @@ pub trait GroundStation {
         input: CancelContactRequest,
     ) -> Result<ContactIdResponse, RusotoError<CancelContactError>>;
 
-    /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Only one type of &lt;code&gt;configData&lt;/code&gt; can be specified.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p> <p>Only one type of <code>configData</code> can be specified.</p>
     async fn create_config(
         &self,
         input: CreateConfigRequest,
     ) -> Result<ConfigIdResponse, RusotoError<CreateConfigError>>;
 
-    /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;The &lt;code&gt;name&lt;/code&gt; field in each endpoint is used in your mission profile &lt;code&gt;DataflowEndpointConfig&lt;/code&gt;
-    /// to specify which endpoints to use during a contact.&lt;/p&gt;
-    /// &lt;p&gt;When a contact uses multiple &lt;code&gt;DataflowEndpointConfig&lt;/code&gt; objects, each &lt;code&gt;Config&lt;/code&gt;
-    /// must match a &lt;code&gt;DataflowEndpoint&lt;/code&gt; in the same group.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p> <p>The <code>name</code> field in each endpoint is used in your mission profile <code>DataflowEndpointConfig</code> to specify which endpoints to use during a contact.</p> <p>When a contact uses multiple <code>DataflowEndpointConfig</code> objects, each <code>Config</code> must match a <code>DataflowEndpoint</code> in the same group.</p>
     async fn create_dataflow_endpoint_group(
         &self,
         input: CreateDataflowEndpointGroupRequest,
     ) -> Result<DataflowEndpointGroupIdResponse, RusotoError<CreateDataflowEndpointGroupError>>;
 
-    /// <p>Creates a mission profile.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;
-    /// &lt;code&gt;dataflowEdges&lt;/code&gt; is a list of lists of strings. Each lower level list of strings
-    /// has two elements: a &lt;i&gt;from ARN&lt;/i&gt; and a &lt;i&gt;to ARN&lt;/i&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a mission profile.</p> <p> <code>dataflowEdges</code> is a list of lists of strings. Each lower level list of strings has two elements: a <i>from</i> ARN and a <i>to</i> ARN.</p>
     async fn create_mission_profile(
         &self,
         input: CreateMissionProfileRequest,
@@ -2314,10 +2300,7 @@ pub trait GroundStation {
         input: DescribeContactRequest,
     ) -> Result<DescribeContactResponse, RusotoError<DescribeContactError>>;
 
-    /// <p>Returns <code>Config</code> information.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Only one &lt;code&gt;Config&lt;/code&gt; response can be returned.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Returns <code>Config</code> information.</p> <p>Only one <code>Config</code> response can be returned.</p>
     async fn get_config(
         &self,
         input: GetConfigRequest,
@@ -2353,12 +2336,7 @@ pub trait GroundStation {
         input: ListConfigsRequest,
     ) -> Result<ListConfigsResponse, RusotoError<ListConfigsError>>;
 
-    /// <p>Returns a list of contacts.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;If &lt;code&gt;statusList&lt;/code&gt; contains AVAILABLE, the request must include
-    /// &lt;code&gt;groundstation&lt;/code&gt;, &lt;code&gt;missionprofileArn&lt;/code&gt;, and &lt;code&gt;satelliteArn&lt;/code&gt;.
-    /// &lt;/p&gt;
-    /// </code></pre>
+    /// <p>Returns a list of contacts.</p> <p>If <code>statusList</code> contains AVAILABLE, the request must include <code>groundStation</code>, <code>missionprofileArn</code>, and <code>satelliteArn</code>. </p>
     async fn list_contacts(
         &self,
         input: ListContactsRequest,
@@ -2388,7 +2366,7 @@ pub trait GroundStation {
         input: ListSatellitesRequest,
     ) -> Result<ListSatellitesResponse, RusotoError<ListSatellitesError>>;
 
-    /// <p>Returns a list of tags or a specified resource.</p>
+    /// <p>Returns a list of tags for a specified resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2412,21 +2390,13 @@ pub trait GroundStation {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p>Updates the <code>Config</code> used when scheduling contacts.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Updating a &lt;code&gt;Config&lt;/code&gt; will not update the execution parameters
-    /// for existing future contacts scheduled with this &lt;code&gt;Config&lt;/code&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Updates the <code>Config</code> used when scheduling contacts.</p> <p>Updating a <code>Config</code> will not update the execution parameters for existing future contacts scheduled with this <code>Config</code>.</p>
     async fn update_config(
         &self,
         input: UpdateConfigRequest,
     ) -> Result<ConfigIdResponse, RusotoError<UpdateConfigError>>;
 
-    /// <p>Updates a mission profile.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Updating a mission profile will not update the execution parameters
-    /// for existing future contacts.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Updates a mission profile.</p> <p>Updating a mission profile will not update the execution parameters for existing future contacts.</p>
     async fn update_mission_profile(
         &self,
         input: UpdateMissionProfileRequest,
@@ -2499,10 +2469,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Only one type of &lt;code&gt;configData&lt;/code&gt; can be specified.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p> <p>Only one type of <code>configData</code> can be specified.</p>
     async fn create_config(
         &self,
         input: CreateConfigRequest,
@@ -2532,13 +2499,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;The &lt;code&gt;name&lt;/code&gt; field in each endpoint is used in your mission profile &lt;code&gt;DataflowEndpointConfig&lt;/code&gt;
-    /// to specify which endpoints to use during a contact.&lt;/p&gt;
-    /// &lt;p&gt;When a contact uses multiple &lt;code&gt;DataflowEndpointConfig&lt;/code&gt; objects, each &lt;code&gt;Config&lt;/code&gt;
-    /// must match a &lt;code&gt;DataflowEndpoint&lt;/code&gt; in the same group.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p> <p>The <code>name</code> field in each endpoint is used in your mission profile <code>DataflowEndpointConfig</code> to specify which endpoints to use during a contact.</p> <p>When a contact uses multiple <code>DataflowEndpointConfig</code> objects, each <code>Config</code> must match a <code>DataflowEndpoint</code> in the same group.</p>
     async fn create_dataflow_endpoint_group(
         &self,
         input: CreateDataflowEndpointGroupRequest,
@@ -2569,12 +2530,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Creates a mission profile.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;
-    /// &lt;code&gt;dataflowEdges&lt;/code&gt; is a list of lists of strings. Each lower level list of strings
-    /// has two elements: a &lt;i&gt;from ARN&lt;/i&gt; and a &lt;i&gt;to ARN&lt;/i&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Creates a mission profile.</p> <p> <code>dataflowEdges</code> is a list of lists of strings. Each lower level list of strings has two elements: a <i>from</i> ARN and a <i>to</i> ARN.</p>
     async fn create_mission_profile(
         &self,
         input: CreateMissionProfileRequest,
@@ -2723,10 +2679,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Returns <code>Config</code> information.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Only one &lt;code&gt;Config&lt;/code&gt; response can be returned.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Returns <code>Config</code> information.</p> <p>Only one <code>Config</code> response can be returned.</p>
     async fn get_config(
         &self,
         input: GetConfigRequest,
@@ -2913,12 +2866,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Returns a list of contacts.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;If &lt;code&gt;statusList&lt;/code&gt; contains AVAILABLE, the request must include
-    /// &lt;code&gt;groundstation&lt;/code&gt;, &lt;code&gt;missionprofileArn&lt;/code&gt;, and &lt;code&gt;satelliteArn&lt;/code&gt;.
-    /// &lt;/p&gt;
-    /// </code></pre>
+    /// <p>Returns a list of contacts.</p> <p>If <code>statusList</code> contains AVAILABLE, the request must include <code>groundStation</code>, <code>missionprofileArn</code>, and <code>satelliteArn</code>. </p>
     async fn list_contacts(
         &self,
         input: ListContactsRequest,
@@ -3001,6 +2949,9 @@ impl GroundStation for GroundStationClient {
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.satellite_id {
+            params.put("satelliteId", x);
         }
         request.set_params(params);
 
@@ -3093,7 +3044,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Returns a list of tags or a specified resource.</p>
+    /// <p>Returns a list of tags for a specified resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3213,11 +3164,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Updates the <code>Config</code> used when scheduling contacts.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Updating a &lt;code&gt;Config&lt;/code&gt; will not update the execution parameters
-    /// for existing future contacts scheduled with this &lt;code&gt;Config&lt;/code&gt;.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Updates the <code>Config</code> used when scheduling contacts.</p> <p>Updating a <code>Config</code> will not update the execution parameters for existing future contacts scheduled with this <code>Config</code>.</p>
     async fn update_config(
         &self,
         input: UpdateConfigRequest,
@@ -3251,11 +3198,7 @@ impl GroundStation for GroundStationClient {
         }
     }
 
-    /// <p>Updates a mission profile.</p>
-    ///
-    /// <pre><code>     &lt;p&gt;Updating a mission profile will not update the execution parameters
-    /// for existing future contacts.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>Updates a mission profile.</p> <p>Updating a mission profile will not update the execution parameters for existing future contacts.</p>
     async fn update_mission_profile(
         &self,
         input: UpdateMissionProfileRequest,

@@ -314,7 +314,7 @@ pub struct ListNamedQueriesInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the workgroup from which the named queries are being returned.</p>
+    /// <p>The name of the workgroup from which the named queries are returned. If a workgroup is not specified, the saved queries for the primary workgroup are returned.</p>
     #[serde(rename = "WorkGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_group: Option<String>,
@@ -344,7 +344,7 @@ pub struct ListQueryExecutionsInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the workgroup from which queries are being returned.</p>
+    /// <p>The name of the workgroup from which queries are returned. If a workgroup is not specified, a list of available query execution IDs for the queries in the primary workgroup is returned.</p>
     #[serde(rename = "WorkGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_group: Option<String>,
@@ -469,7 +469,7 @@ pub struct QueryExecution {
     #[serde(rename = "StatementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statement_type: Option<String>,
-    /// <p>The amount of data scanned during the query execution and the amount of time that it took to execute, and the type of statement that was run.</p>
+    /// <p>Query execution statistics, such as the amount of data scanned, the amount of time that the query took to process, and the type of statement that was run.</p>
     #[serde(rename = "Statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<QueryExecutionStatistics>,
@@ -534,7 +534,7 @@ pub struct QueryExecutionStatus {
     #[serde(rename = "CompletionDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date_time: Option<f64>,
-    /// <p>The state of query execution. <code>QUEUED</code> state is listed but is not used by Athena and is reserved for future use. <code>RUNNING</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>SUCCEEDED</code> indicates that the query completed without errors. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that a user input interrupted query execution. </p>
+    /// <p>The state of query execution. <code>QUEUED</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>RUNNING</code> indicates that the query is in execution phase. <code>SUCCEEDED</code> indicates that the query completed without errors. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that a user input interrupted query execution. </p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -1644,13 +1644,13 @@ pub trait Athena {
         input: GetWorkGroupInput,
     ) -> Result<GetWorkGroupOutput, RusotoError<GetWorkGroupError>>;
 
-    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
     ) -> Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>;
 
-    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,
@@ -2010,7 +2010,7 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
@@ -2037,7 +2037,7 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,

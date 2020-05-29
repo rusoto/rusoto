@@ -76,6 +76,41 @@ pub struct Backend {
     pub virtual_service: Option<VirtualServiceBackend>,
 }
 
+/// <p>An object that represents the default properties for a backend.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BackendDefaults {
+    /// <p>A reference to an object that represents a client policy.</p>
+    #[serde(rename = "clientPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_policy: Option<ClientPolicy>,
+}
+
+/// <p>An object that represents a client policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClientPolicy {
+    /// <p>A reference to an object that represents a Transport Layer Security (TLS) client policy.</p>
+    #[serde(rename = "tls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls: Option<ClientPolicyTls>,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) client policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClientPolicyTls {
+    /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't
+    /// specified.</p>
+    #[serde(rename = "enforce")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce: Option<bool>,
+    /// <p>One or more ports that the policy is enforced for.</p>
+    #[serde(rename = "ports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ports: Option<Vec<i64>>,
+    /// <p>A reference to an object that represents a TLS validation context.</p>
+    #[serde(rename = "validation")]
+    pub validation: TlsValidationContext,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
@@ -119,6 +154,12 @@ pub struct CreateRouteInput {
     /// <p>The name of the service mesh to create the route in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
+    /// the account that you specify must share the mesh with your account before you can create
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name to use for the route.</p>
     #[serde(rename = "routeName")]
     pub route_name: String,
@@ -132,7 +173,8 @@ pub struct CreateRouteInput {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<TagRef>>,
-    /// <p>The name of the virtual router in which to create the route.</p>
+    /// <p>The name of the virtual router in which to create the route. If the virtual router is in
+    /// a shared mesh, then you must be the owner of the virtual router resource.</p>
     #[serde(rename = "virtualRouterName")]
     pub virtual_router_name: String,
 }
@@ -156,6 +198,12 @@ pub struct CreateVirtualNodeInput {
     /// <p>The name of the service mesh to create the virtual node in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
+    /// the account that you specify must share the mesh with your account before you can create
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The virtual node specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualNodeSpec,
@@ -190,6 +238,12 @@ pub struct CreateVirtualRouterInput {
     /// <p>The name of the service mesh to create the virtual router in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
+    /// the account that you specify must share the mesh with your account before you can create
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The virtual router specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualRouterSpec,
@@ -224,6 +278,12 @@ pub struct CreateVirtualServiceInput {
     /// <p>The name of the service mesh to create the virtual service in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
+    /// the account that you specify must share the mesh with your account before you can create
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The virtual service specification to apply.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualServiceSpec,
@@ -269,6 +329,11 @@ pub struct DeleteRouteInput {
     /// <p>The name of the service mesh to delete the route in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the route to delete.</p>
     #[serde(rename = "routeName")]
     pub route_name: String,
@@ -291,6 +356,11 @@ pub struct DeleteVirtualNodeInput {
     /// <p>The name of the service mesh to delete the virtual node in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the virtual node to delete.</p>
     #[serde(rename = "virtualNodeName")]
     pub virtual_node_name: String,
@@ -310,6 +380,11 @@ pub struct DeleteVirtualRouterInput {
     /// <p>The name of the service mesh to delete the virtual router in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the virtual router to delete.</p>
     #[serde(rename = "virtualRouterName")]
     pub virtual_router_name: String,
@@ -329,6 +404,11 @@ pub struct DeleteVirtualServiceInput {
     /// <p>The name of the service mesh to delete the virtual service in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the virtual service to delete.</p>
     #[serde(rename = "virtualServiceName")]
     pub virtual_service_name: String,
@@ -348,6 +428,11 @@ pub struct DescribeMeshInput {
     /// <p>The name of the service mesh to describe.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -364,6 +449,11 @@ pub struct DescribeRouteInput {
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the route to describe.</p>
     #[serde(rename = "routeName")]
     pub route_name: String,
@@ -386,6 +476,11 @@ pub struct DescribeVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the virtual node to describe.</p>
     #[serde(rename = "virtualNodeName")]
     pub virtual_node_name: String,
@@ -405,6 +500,11 @@ pub struct DescribeVirtualRouterInput {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the virtual router to describe.</p>
     #[serde(rename = "virtualRouterName")]
     pub virtual_router_name: String,
@@ -424,6 +524,11 @@ pub struct DescribeVirtualServiceInput {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the virtual service to describe.</p>
     #[serde(rename = "virtualServiceName")]
     pub virtual_service_name: String,
@@ -535,7 +640,7 @@ pub struct GrpcRetryPolicy {
     pub tcp_retry_events: Option<Vec<String>>,
 }
 
-/// <p>An object that represents a GRPC route type.</p>
+/// <p>An object that represents a gRPC route type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GrpcRoute {
     /// <p>An object that represents the action to take if a match is determined.</p>
@@ -565,7 +670,8 @@ pub struct GrpcRouteMatch {
     #[serde(rename = "metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<Vec<GrpcRouteMetadata>>,
-    /// <p>The method name to match from the request. If you specify a name, you must also specify a <code>serviceName</code>.</p>
+    /// <p>The method name to match from the request. If you specify a name, you must also specify
+    /// a <code>serviceName</code>.</p>
     #[serde(rename = "methodName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_name: Option<String>,
@@ -652,8 +758,8 @@ pub struct HealthCheckPolicy {
     /// <p>The time period in milliseconds between each health check execution.</p>
     #[serde(rename = "intervalMillis")]
     pub interval_millis: i64,
-    /// <p>The destination path for the health check request. This is required only if the
-    /// specified protocol is HTTP. If the protocol is TCP, this parameter is ignored.</p>
+    /// <p>The destination path for the health check request. This value is only used if the
+    /// specified protocol is HTTP or HTTP/2. For any other protocol, this value is ignored.</p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
@@ -662,7 +768,9 @@ pub struct HealthCheckPolicy {
     #[serde(rename = "port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>The protocol for the health check request.</p>
+    /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your
+    /// service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health
+    /// Checking Protocol</a>.</p>
     #[serde(rename = "protocol")]
     pub protocol: String,
     /// <p>The amount of time to wait when receiving a response from the health check, in
@@ -717,7 +825,7 @@ pub struct HttpRetryPolicy {
     pub tcp_retry_events: Option<Vec<String>>,
 }
 
-/// <p>An object that represents an HTTP or HTTP2 route type.</p>
+/// <p>An object that represents an HTTP or HTTP/2 route type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRoute {
     /// <p>An object that represents the action to take if a match is determined.</p>
@@ -756,8 +864,8 @@ pub struct HttpRouteHeader {
     pub name: String,
 }
 
-/// <p>An object that represents the requirements for a route to match HTTP requests for a virtual
-/// router.</p>
+/// <p>An object that represents the requirements for a route to match HTTP requests for a
+/// virtual router.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRouteMatch {
     /// <p>An object that represents the client request headers to match on.</p>
@@ -843,6 +951,11 @@ pub struct ListRoutesInput {
     /// <p>The name of the service mesh to list routes in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
     /// <code>ListRoutes</code> request where <code>limit</code> was used and the results
     /// exceeded the value of that parameter. Pagination continues from the end of the previous
@@ -928,6 +1041,11 @@ pub struct ListVirtualNodesInput {
     /// <p>The name of the service mesh to list virtual nodes in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
     /// <code>ListVirtualNodes</code> request where <code>limit</code> was used and the results
     /// exceeded the value of that parameter. Pagination continues from the end of the previous
@@ -969,6 +1087,11 @@ pub struct ListVirtualRoutersInput {
     /// <p>The name of the service mesh to list virtual routers in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
     /// <code>ListVirtualRouters</code> request where <code>limit</code> was used and the
     /// results exceeded the value of that parameter. Pagination continues from the end of the
@@ -1010,6 +1133,11 @@ pub struct ListVirtualServicesInput {
     /// <p>The name of the service mesh to list virtual services in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The <code>nextToken</code> value returned from a previous paginated
     /// <code>ListVirtualServices</code> request where <code>limit</code> was used and the
     /// results exceeded the value of that parameter. Pagination continues from the end of the
@@ -1044,6 +1172,74 @@ pub struct Listener {
     /// <p>The port mapping information for the listener.</p>
     #[serde(rename = "portMapping")]
     pub port_mapping: PortMapping,
+    /// <p>A reference to an object that represents the Transport Layer Security (TLS) properties for a listener.</p>
+    #[serde(rename = "tls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls: Option<ListenerTls>,
+}
+
+/// <p>An object that represents the Transport Layer Security (TLS) properties for a listener.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ListenerTls {
+    /// <p>A reference to an object that represents a listener's TLS certificate.</p>
+    #[serde(rename = "certificate")]
+    pub certificate: ListenerTlsCertificate,
+    /// <p>Specify one of the following modes.</p>
+    ///
+    /// <pre><code>     &lt;ul&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b/&gt;STRICT – Listener only accepts connections with TLS
+    /// enabled. &lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b/&gt;PERMISSIVE – Listener accepts connections with or
+    /// without TLS enabled.&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b/&gt;DISABLED – Listener only accepts connections without
+    /// TLS. &lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;/ul&gt;
+    /// </code></pre>
+    #[serde(rename = "mode")]
+    pub mode: String,
+}
+
+/// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ListenerTlsAcmCertificate {
+    /// <p>The Amazon Resource Name (ARN) for the certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
+    #[serde(rename = "certificateArn")]
+    pub certificate_arn: String,
+}
+
+/// <p>An object that represents a listener's Transport Layer Security (TLS) certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ListenerTlsCertificate {
+    /// <p>A reference to an object that represents an AWS Certicate Manager (ACM) certificate.</p>
+    #[serde(rename = "acm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acm: Option<ListenerTlsAcmCertificate>,
+    /// <p>A reference to an object that represents a local file certificate.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<ListenerTlsFileCertificate>,
+}
+
+/// <p>An object that represents a local file certificate.
+/// The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ListenerTlsFileCertificate {
+    /// <p>The certificate chain for the certificate.</p>
+    #[serde(rename = "certificateChain")]
+    pub certificate_chain: String,
+    /// <p>The private key for a certificate stored on the file system of the virtual node that the
+    /// proxy is running on.</p>
+    #[serde(rename = "privateKey")]
+    pub private_key: String,
 }
 
 /// <p>An object that represents the logging information for a virtual node.</p>
@@ -1091,9 +1287,23 @@ pub struct MeshRef {
     /// <p>The full Amazon Resource Name (ARN) of the service mesh.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
     /// <p>The name of the service mesh.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
+    #[serde(rename = "version")]
+    pub version: i64,
 }
 
 /// <p>An object that represents the specification of a service mesh.</p>
@@ -1139,6 +1349,14 @@ pub struct ResourceMetadata {
     /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
     /// <p>The unique identifier for the resource.</p>
     #[serde(rename = "uid")]
     pub uid: String,
@@ -1179,12 +1397,26 @@ pub struct RouteRef {
     /// <p>The full Amazon Resource Name (ARN) for the route.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
     /// <p>The name of the route.</p>
     #[serde(rename = "routeName")]
     pub route_name: String,
+    #[serde(rename = "version")]
+    pub version: i64,
     /// <p>The virtual router that the route is associated with.</p>
     #[serde(rename = "virtualRouterName")]
     pub virtual_router_name: String,
@@ -1193,11 +1425,11 @@ pub struct RouteRef {
 /// <p>An object that represents a route specification. Specify one route type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RouteSpec {
-    /// <p>An object that represents the specification of a GRPC route.</p>
+    /// <p>An object that represents the specification of a gRPC route.</p>
     #[serde(rename = "grpcRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grpc_route: Option<GrpcRoute>,
-    /// <p>An object that represents the specification of an HTTP2 route.</p>
+    /// <p>An object that represents the specification of an HTTP/2 route.</p>
     #[serde(rename = "http2Route")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_2_route: Option<HttpRoute>,
@@ -1288,6 +1520,46 @@ pub struct TcpRouteAction {
     pub weighted_targets: Vec<WeightedTarget>,
 }
 
+/// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TlsValidationContext {
+    /// <p>A reference to an object that represents a TLS validation context trust.</p>
+    #[serde(rename = "trust")]
+    pub trust: TlsValidationContextTrust,
+}
+
+/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
+/// certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TlsValidationContextAcmTrust {
+    /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
+    #[serde(rename = "certificateAuthorityArns")]
+    pub certificate_authority_arns: Vec<String>,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TlsValidationContextFileTrust {
+    /// <p>The certificate trust chain for a certificate stored on the file system of the virtual
+    /// node that the proxy is running on.</p>
+    #[serde(rename = "certificateChain")]
+    pub certificate_chain: String,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TlsValidationContextTrust {
+    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
+    /// certificate.</p>
+    #[serde(rename = "acm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acm: Option<TlsValidationContextAcmTrust>,
+    /// <p>An object that represents a TLS validation context trust for a local file.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<TlsValidationContextFileTrust>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -1338,6 +1610,11 @@ pub struct UpdateRouteInput {
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The name of the route to update.</p>
     #[serde(rename = "routeName")]
     pub route_name: String,
@@ -1368,6 +1645,11 @@ pub struct UpdateVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The new virtual node specification to apply. This overwrites the existing data.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualNodeSpec,
@@ -1395,6 +1677,11 @@ pub struct UpdateVirtualRouterInput {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The new virtual router specification to apply. This overwrites the existing data.</p>
     #[serde(rename = "spec")]
     pub spec: VirtualRouterSpec,
@@ -1422,6 +1709,11 @@ pub struct UpdateVirtualServiceInput {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
     /// <p>The new virtual service specification to apply. This overwrites the existing
     /// data.</p>
     #[serde(rename = "spec")]
@@ -1467,9 +1759,23 @@ pub struct VirtualNodeRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual node.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
+    #[serde(rename = "version")]
+    pub version: i64,
     /// <p>The name of the virtual node.</p>
     #[serde(rename = "virtualNodeName")]
     pub virtual_node_name: String,
@@ -1486,12 +1792,16 @@ pub struct VirtualNodeServiceProvider {
 /// <p>An object that represents the specification of a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualNodeSpec {
+    /// <p>A reference to an object that represents the defaults for backends.</p>
+    #[serde(rename = "backendDefaults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_defaults: Option<BackendDefaults>,
     /// <p>The backends that the virtual node is expected to send outbound traffic to.</p>
     #[serde(rename = "backends")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backends: Option<Vec<Backend>>,
-    /// <p>The listeners that the virtual node is expected to receive inbound traffic from.
-    /// You can specify one listener.</p>
+    /// <p>The listener that the virtual node is expected to receive inbound traffic from. You can
+    /// specify one listener.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<Listener>>,
@@ -1500,7 +1810,8 @@ pub struct VirtualNodeSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<Logging>,
     /// <p>The service discovery information for the virtual node. If your virtual node does not
-    /// expect ingress traffic, you can omit this parameter.</p>
+    /// expect ingress traffic, you can omit this parameter. If you specify a
+    /// <code>listener</code>, then you must specify service discovery information.</p>
     #[serde(rename = "serviceDiscovery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_discovery: Option<ServiceDiscovery>,
@@ -1550,9 +1861,23 @@ pub struct VirtualRouterRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual router.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
+    #[serde(rename = "version")]
+    pub version: i64,
     /// <p>The name of the virtual router.</p>
     #[serde(rename = "virtualRouterName")]
     pub virtual_router_name: String,
@@ -1569,8 +1894,8 @@ pub struct VirtualRouterServiceProvider {
 /// <p>An object that represents the specification of a virtual router.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualRouterSpec {
-    /// <p>The listeners that the virtual router is expected to receive inbound traffic from.
-    /// You can specify one listener.</p>
+    /// <p>The listeners that the virtual router is expected to receive inbound traffic from. You
+    /// can specify one listener.</p>
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listeners: Option<Vec<VirtualRouterListener>>,
@@ -1588,6 +1913,10 @@ pub struct VirtualRouterStatus {
 /// <p>An object that represents a virtual service backend for a virtual node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualServiceBackend {
+    /// <p>A reference to an object that represents the client policy for a backend.</p>
+    #[serde(rename = "clientPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_policy: Option<ClientPolicy>,
     /// <p>The name of the virtual service that is acting as a virtual node backend.</p>
     #[serde(rename = "virtualServiceName")]
     pub virtual_service_name: String,
@@ -1633,9 +1962,23 @@ pub struct VirtualServiceRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual service.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
+    #[serde(rename = "version")]
+    pub version: i64,
     /// <p>The name of the virtual service.</p>
     #[serde(rename = "virtualServiceName")]
     pub virtual_service_name: String,
@@ -1660,9 +2003,9 @@ pub struct VirtualServiceStatus {
     pub status: String,
 }
 
-/// <p>An object that represents a target and its relative weight. Traffic is distributed across
-/// targets according to their relative weight. For example, a weighted target with a relative
-/// weight of 50 receives five times as much traffic as one with a relative weight of
+/// <p>An object that represents a target and its relative weight. Traffic is distributed
+/// across targets according to their relative weight. For example, a weighted target with a
+/// relative weight of 50 receives five times as much traffic as one with a relative weight of
 /// 10. The total weight for all targets combined must be less than or equal to 100.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WeightedTarget {
@@ -1687,7 +2030,7 @@ pub enum CreateMeshError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -1764,7 +2107,7 @@ pub enum CreateRouteError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -1841,7 +2184,7 @@ pub enum CreateVirtualNodeError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -1922,7 +2265,7 @@ pub enum CreateVirtualRouterError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -2003,7 +2346,7 @@ pub enum CreateVirtualServiceError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -2373,6 +2716,9 @@ pub enum DeleteVirtualServiceError {
     InternalServerError(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
     NotFound(String),
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
+    ResourceInUse(String),
     /// <p>The request has failed due to a temporary failure of the service.</p>
     ServiceUnavailable(String),
     /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
@@ -2399,6 +2745,9 @@ impl DeleteVirtualServiceError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteVirtualServiceError::NotFound(err.msg))
                 }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteVirtualServiceError::ResourceInUse(err.msg))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteVirtualServiceError::ServiceUnavailable(
                         err.msg,
@@ -2424,6 +2773,7 @@ impl fmt::Display for DeleteVirtualServiceError {
             DeleteVirtualServiceError::Forbidden(ref cause) => write!(f, "{}", cause),
             DeleteVirtualServiceError::InternalServerError(ref cause) => write!(f, "{}", cause),
             DeleteVirtualServiceError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualServiceError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             DeleteVirtualServiceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
             DeleteVirtualServiceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
@@ -3370,7 +3720,7 @@ pub enum UpdateRouteError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -3447,7 +3797,7 @@ pub enum UpdateVirtualNodeError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -3528,7 +3878,7 @@ pub enum UpdateVirtualRouterError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -3609,7 +3959,7 @@ pub enum UpdateVirtualServiceError {
     /// <p>The request processing has failed because of an unknown error, exception, or
     /// failure.</p>
     InternalServerError(String),
-    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html">Service
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
     /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
@@ -3682,12 +4032,13 @@ impl Error for UpdateVirtualServiceError {}
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
 #[async_trait]
 pub trait AppMesh {
-    /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
-    /// the services that reside within it.</p>
+    /// <p>Creates a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;After you create your service mesh, you can create virtual services, virtual nodes,
-    /// virtual routers, and routes to distribute traffic between the applications in your
-    /// mesh.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt; A service mesh is a logical boundary for network traffic between services that are
+    /// represented by resources within the mesh. After you create your service mesh, you can
+    /// create virtual services, virtual nodes, virtual routers, and routes to distribute traffic
+    /// between the applications in your mesh.&lt;/p&gt;
+    /// &lt;p&gt;For more information about service meshes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html&quot;&gt;Service meshes&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_mesh(
         &self,
@@ -3696,13 +4047,9 @@ pub trait AppMesh {
 
     /// <p>Creates a route that is associated with a virtual router.</p>
     ///
-    /// <pre><code>     &lt;p&gt;You can use the &lt;code&gt;prefix&lt;/code&gt; parameter in your route specification for path-based
-    /// routing of requests. For example, if your virtual service name is
-    /// &lt;code&gt;my-service.local&lt;/code&gt; and you want the route to match requests to
-    /// &lt;code&gt;my-service.local/metrics&lt;/code&gt;, your prefix should be
-    /// &lt;code&gt;/metrics&lt;/code&gt;.&lt;/p&gt;
-    /// &lt;p&gt;If your route matches a request, you can distribute traffic to one or more target
-    /// virtual nodes with relative weighting.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt; You can route several different protocols and define a retry policy for a route.
+    /// Traffic can be routed to one or more virtual nodes.&lt;/p&gt;
+    /// &lt;p&gt;For more information about routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/routes.html&quot;&gt;Routes&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_route(
         &self,
@@ -3711,12 +4058,13 @@ pub trait AppMesh {
 
     /// <p>Creates a virtual node within a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
+    /// <pre><code>     &lt;p&gt; A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
     /// service or a Kubernetes deployment. When you create a virtual node, you can specify the
-    /// service discovery information for your task group.&lt;/p&gt;
-    /// &lt;p&gt;Any inbound traffic that your virtual node expects should be specified as a
-    /// &lt;code&gt;listener&lt;/code&gt;. Any outbound traffic that your virtual node expects to reach
-    /// should be specified as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
+    /// service discovery information for your task group, and whether the proxy running in a task
+    /// group will communicate with other proxies using Transport Layer Security (TLS).&lt;/p&gt;
+    /// &lt;p&gt;You define a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual node
+    /// expects. Any virtual service that your virtual node expects to communicate to is specified
+    /// as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
     /// &lt;p&gt;The response metadata for your new virtual node contains the &lt;code&gt;arn&lt;/code&gt; that is
     /// associated with the virtual node. Set this value (either the full ARN or the truncated
     /// resource name: for example, &lt;code&gt;mesh/default/virtualNode/simpleapp&lt;/code&gt;) as the
@@ -3729,6 +4077,7 @@ pub trait AppMesh {
     /// &lt;code&gt;APPMESH_VIRTUAL_NODE_NAME&lt;/code&gt; with the
     /// &lt;code&gt;APPMESH_VIRTUAL_NODE_CLUSTER&lt;/code&gt; environment variable.&lt;/p&gt;
     /// &lt;/note&gt;
+    /// &lt;p&gt;For more information about virtual nodes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html&quot;&gt;Virtual nodes&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_virtual_node(
         &self,
@@ -3737,11 +4086,12 @@ pub trait AppMesh {
 
     /// <p>Creates a virtual router within a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;Any inbound traffic that your virtual router expects should be specified as a
-    /// &lt;code&gt;listener&lt;/code&gt;. &lt;/p&gt;
-    /// &lt;p&gt;Virtual routers handle traffic for one or more virtual services within your mesh. After
-    /// you create your virtual router, create and associate routes for your virtual router that
-    /// direct incoming requests to different virtual nodes.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt;Specify a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual router
+    /// receives. Create a virtual router for each protocol and port that you need to route.
+    /// Virtual routers handle traffic for one or more virtual services within your mesh. After you
+    /// create your virtual router, create and associate routes for your virtual router that direct
+    /// incoming requests to different virtual nodes.&lt;/p&gt;
+    /// &lt;p&gt;For more information about virtual routers, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_routers.html&quot;&gt;Virtual routers&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_virtual_router(
         &self,
@@ -3755,6 +4105,7 @@ pub trait AppMesh {
     /// service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed to the
     /// virtual node or virtual router that is specified as the provider for the virtual
     /// service.&lt;/p&gt;
+    /// &lt;p&gt;For more information about virtual services, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_services.html&quot;&gt;Virtual services&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_virtual_service(
         &self,
@@ -3954,12 +4305,13 @@ impl AppMeshClient {
 
 #[async_trait]
 impl AppMesh for AppMeshClient {
-    /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
-    /// the services that reside within it.</p>
+    /// <p>Creates a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;After you create your service mesh, you can create virtual services, virtual nodes,
-    /// virtual routers, and routes to distribute traffic between the applications in your
-    /// mesh.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt; A service mesh is a logical boundary for network traffic between services that are
+    /// represented by resources within the mesh. After you create your service mesh, you can
+    /// create virtual services, virtual nodes, virtual routers, and routes to distribute traffic
+    /// between the applications in your mesh.&lt;/p&gt;
+    /// &lt;p&gt;For more information about service meshes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html&quot;&gt;Service meshes&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_mesh(
         &self,
@@ -3992,13 +4344,9 @@ impl AppMesh for AppMeshClient {
 
     /// <p>Creates a route that is associated with a virtual router.</p>
     ///
-    /// <pre><code>     &lt;p&gt;You can use the &lt;code&gt;prefix&lt;/code&gt; parameter in your route specification for path-based
-    /// routing of requests. For example, if your virtual service name is
-    /// &lt;code&gt;my-service.local&lt;/code&gt; and you want the route to match requests to
-    /// &lt;code&gt;my-service.local/metrics&lt;/code&gt;, your prefix should be
-    /// &lt;code&gt;/metrics&lt;/code&gt;.&lt;/p&gt;
-    /// &lt;p&gt;If your route matches a request, you can distribute traffic to one or more target
-    /// virtual nodes with relative weighting.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt; You can route several different protocols and define a retry policy for a route.
+    /// Traffic can be routed to one or more virtual nodes.&lt;/p&gt;
+    /// &lt;p&gt;For more information about routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/routes.html&quot;&gt;Routes&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_route(
         &self,
@@ -4015,6 +4363,12 @@ impl AppMesh for AppMeshClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4035,12 +4389,13 @@ impl AppMesh for AppMeshClient {
 
     /// <p>Creates a virtual node within a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
+    /// <pre><code>     &lt;p&gt; A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS
     /// service or a Kubernetes deployment. When you create a virtual node, you can specify the
-    /// service discovery information for your task group.&lt;/p&gt;
-    /// &lt;p&gt;Any inbound traffic that your virtual node expects should be specified as a
-    /// &lt;code&gt;listener&lt;/code&gt;. Any outbound traffic that your virtual node expects to reach
-    /// should be specified as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
+    /// service discovery information for your task group, and whether the proxy running in a task
+    /// group will communicate with other proxies using Transport Layer Security (TLS).&lt;/p&gt;
+    /// &lt;p&gt;You define a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual node
+    /// expects. Any virtual service that your virtual node expects to communicate to is specified
+    /// as a &lt;code&gt;backend&lt;/code&gt;.&lt;/p&gt;
     /// &lt;p&gt;The response metadata for your new virtual node contains the &lt;code&gt;arn&lt;/code&gt; that is
     /// associated with the virtual node. Set this value (either the full ARN or the truncated
     /// resource name: for example, &lt;code&gt;mesh/default/virtualNode/simpleapp&lt;/code&gt;) as the
@@ -4053,6 +4408,7 @@ impl AppMesh for AppMeshClient {
     /// &lt;code&gt;APPMESH_VIRTUAL_NODE_NAME&lt;/code&gt; with the
     /// &lt;code&gt;APPMESH_VIRTUAL_NODE_CLUSTER&lt;/code&gt; environment variable.&lt;/p&gt;
     /// &lt;/note&gt;
+    /// &lt;p&gt;For more information about virtual nodes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html&quot;&gt;Virtual nodes&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_virtual_node(
         &self,
@@ -4068,6 +4424,12 @@ impl AppMesh for AppMeshClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4088,11 +4450,12 @@ impl AppMesh for AppMeshClient {
 
     /// <p>Creates a virtual router within a service mesh.</p>
     ///
-    /// <pre><code>     &lt;p&gt;Any inbound traffic that your virtual router expects should be specified as a
-    /// &lt;code&gt;listener&lt;/code&gt;. &lt;/p&gt;
-    /// &lt;p&gt;Virtual routers handle traffic for one or more virtual services within your mesh. After
-    /// you create your virtual router, create and associate routes for your virtual router that
-    /// direct incoming requests to different virtual nodes.&lt;/p&gt;
+    /// <pre><code>     &lt;p&gt;Specify a &lt;code&gt;listener&lt;/code&gt; for any inbound traffic that your virtual router
+    /// receives. Create a virtual router for each protocol and port that you need to route.
+    /// Virtual routers handle traffic for one or more virtual services within your mesh. After you
+    /// create your virtual router, create and associate routes for your virtual router that direct
+    /// incoming requests to different virtual nodes.&lt;/p&gt;
+    /// &lt;p&gt;For more information about virtual routers, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_routers.html&quot;&gt;Virtual routers&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_virtual_router(
         &self,
@@ -4108,6 +4471,12 @@ impl AppMesh for AppMeshClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4133,6 +4502,7 @@ impl AppMesh for AppMeshClient {
     /// service by its &lt;code&gt;virtualServiceName&lt;/code&gt;, and those requests are routed to the
     /// virtual node or virtual router that is specified as the provider for the virtual
     /// service.&lt;/p&gt;
+    /// &lt;p&gt;For more information about virtual services, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_services.html&quot;&gt;Virtual services&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     async fn create_virtual_service(
         &self,
@@ -4148,6 +4518,12 @@ impl AppMesh for AppMeshClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4212,6 +4588,12 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4246,6 +4628,12 @@ impl AppMesh for AppMeshClient {
 
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4282,6 +4670,12 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4313,6 +4707,12 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4339,6 +4739,12 @@ impl AppMesh for AppMeshClient {
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4372,6 +4778,12 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4402,6 +4814,12 @@ impl AppMesh for AppMeshClient {
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4434,6 +4852,12 @@ impl AppMesh for AppMeshClient {
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4464,6 +4888,12 @@ impl AppMesh for AppMeshClient {
 
         let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4535,6 +4965,9 @@ impl AppMesh for AppMeshClient {
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
+        }
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
@@ -4612,6 +5045,9 @@ impl AppMesh for AppMeshClient {
         if let Some(ref x) = input.limit {
             params.put("limit", x);
         }
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
         }
@@ -4651,6 +5087,9 @@ impl AppMesh for AppMeshClient {
         if let Some(ref x) = input.limit {
             params.put("limit", x);
         }
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
         }
@@ -4689,6 +5128,9 @@ impl AppMesh for AppMeshClient {
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
+        }
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
         }
         if let Some(ref x) = input.next_token {
             params.put("nextToken", x);
@@ -4831,6 +5273,12 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4864,6 +5312,12 @@ impl AppMesh for AppMeshClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client
@@ -4899,6 +5353,12 @@ impl AppMesh for AppMeshClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
         let mut response = self
             .client
             .sign_and_dispatch(request)
@@ -4932,6 +5392,12 @@ impl AppMesh for AppMeshClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
 
         let mut response = self
             .client

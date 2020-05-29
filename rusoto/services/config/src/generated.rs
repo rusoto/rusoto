@@ -520,6 +520,9 @@ pub struct ConfigRuleEvaluationStatus {
     #[serde(rename = "FirstEvaluationStarted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_evaluation_started: Option<bool>,
+    #[serde(rename = "LastDeactivatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_deactivated_time: Option<f64>,
     /// <p>The error code that AWS Config returned when the rule last failed.</p>
     #[serde(rename = "LastErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3432,6 +3435,44 @@ pub struct Scope {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SelectAggregateResourceConfigRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>The SQL query SELECT command. </p>
+    #[serde(rename = "Expression")]
+    pub expression: String,
+    /// <p>The maximum number of query results returned on each page. </p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The nextToken string returned in a previous request that you use to request the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SelectAggregateResourceConfigResponse {
+    /// <p>The nextToken string returned in a previous request that you use to request the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "QueryInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_info: Option<QueryInfo>,
+    /// <p>Returns the results for the SQL query.</p>
+    #[serde(rename = "Results")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub results: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectResourceConfigRequest {
     /// <p>The SQL query <code>SELECT</code> command.</p>
     #[serde(rename = "Expression")]
@@ -4109,6 +4150,8 @@ impl Error for DeletePendingAggregationRequestError {}
 /// Errors returned by DeleteRemediationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteRemediationConfigurationError {
+    /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
+    InsufficientPermissions(String),
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
     /// <p>Remediation action is in progress. You can either cancel execution in AWS Systems Manager or wait and try again later. </p>
@@ -4121,6 +4164,11 @@ impl DeleteRemediationConfigurationError {
     ) -> RusotoError<DeleteRemediationConfigurationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InsufficientPermissionsException" => {
+                    return RusotoError::Service(
+                        DeleteRemediationConfigurationError::InsufficientPermissions(err.msg),
+                    )
+                }
                 "NoSuchRemediationConfigurationException" => {
                     return RusotoError::Service(
                         DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(
@@ -4144,6 +4192,9 @@ impl fmt::Display for DeleteRemediationConfigurationError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteRemediationConfigurationError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -7202,6 +7253,70 @@ impl fmt::Display for PutRetentionConfigurationError {
     }
 }
 impl Error for PutRetentionConfigurationError {}
+/// Errors returned by SelectAggregateResourceConfig
+#[derive(Debug, PartialEq)]
+pub enum SelectAggregateResourceConfigError {
+    /// <p>The syntax of the query is incorrect.</p>
+    InvalidExpression(String),
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+}
+
+impl SelectAggregateResourceConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SelectAggregateResourceConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidExpressionException" => {
+                    return RusotoError::Service(
+                        SelectAggregateResourceConfigError::InvalidExpression(err.msg),
+                    )
+                }
+                "InvalidLimitException" => {
+                    return RusotoError::Service(SelectAggregateResourceConfigError::InvalidLimit(
+                        err.msg,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        SelectAggregateResourceConfigError::InvalidNextToken(err.msg),
+                    )
+                }
+                "NoSuchConfigurationAggregatorException" => {
+                    return RusotoError::Service(
+                        SelectAggregateResourceConfigError::NoSuchConfigurationAggregator(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SelectAggregateResourceConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SelectAggregateResourceConfigError::InvalidExpression(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SelectAggregateResourceConfigError::InvalidLimit(ref cause) => write!(f, "{}", cause),
+            SelectAggregateResourceConfigError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SelectAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for SelectAggregateResourceConfigError {}
 /// Errors returned by SelectResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum SelectResourceConfigError {
@@ -8040,6 +8155,15 @@ pub trait ConfigService {
         &self,
         input: PutRetentionConfigurationRequest,
     ) -> Result<PutRetentionConfigurationResponse, RusotoError<PutRetentionConfigurationError>>;
+
+    /// <p>Accepts a structured query language (SQL) SELECT command and an aggregator to query configuration state of AWS resources across multiple accounts and regions, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
+    async fn select_aggregate_resource_config(
+        &self,
+        input: SelectAggregateResourceConfigRequest,
+    ) -> Result<
+        SelectAggregateResourceConfigResponse,
+        RusotoError<SelectAggregateResourceConfigError>,
+    >;
 
     /// <p>Accepts a structured query language (SQL) <code>SELECT</code> command, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
     async fn select_resource_config(
@@ -10426,6 +10550,40 @@ impl ConfigService for ConfigServiceClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutRetentionConfigurationError::from_response(response))
+        }
+    }
+
+    /// <p>Accepts a structured query language (SQL) SELECT command and an aggregator to query configuration state of AWS resources across multiple accounts and regions, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
+    async fn select_aggregate_resource_config(
+        &self,
+        input: SelectAggregateResourceConfigRequest,
+    ) -> Result<
+        SelectAggregateResourceConfigResponse,
+        RusotoError<SelectAggregateResourceConfigError>,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.SelectAggregateResourceConfig",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SelectAggregateResourceConfigResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SelectAggregateResourceConfigError::from_response(response))
         }
     }
 

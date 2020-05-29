@@ -32,6 +32,10 @@ pub struct Attribute {
     #[serde(rename = "BeginOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub begin_offset: Option<i64>,
+    /// <p> The category of attribute. </p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p> The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
     #[serde(rename = "EndOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -44,6 +48,10 @@ pub struct Attribute {
     #[serde(rename = "RelationshipScore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub relationship_score: Option<f32>,
+    /// <p>The type of relationship between the entity and attribute. Type for the relationship is <code>OVERLAP</code>, indicating that the entity occurred at the same time as the <code>Date_Expression</code>. </p>
+    #[serde(rename = "RelationshipType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationship_type: Option<String>,
     /// <p> The level of confidence that Amazon Comprehend Medical has that the segment of text is correctly recognized as an attribute. </p>
     #[serde(rename = "Score")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -165,6 +173,23 @@ pub struct DescribeEntitiesDetectionV2JobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeICD10CMInferenceJobRequest {
+    /// <p>The identifier that Amazon Comprehend Medical generated for the job. <code>The StartICD10CMInferenceJob</code> operation returns this identifier in its response.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeICD10CMInferenceJobResponse {
+    /// <p>An object that contains the properties associated with a detection job.</p>
+    #[serde(rename = "ComprehendMedicalAsyncJobProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comprehend_medical_async_job_properties: Option<ComprehendMedicalAsyncJobProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePHIDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend Medical generated for the job. The <code>StartPHIDetectionJob</code> operation returns this identifier in its response.</p>
     #[serde(rename = "JobId")]
@@ -174,6 +199,23 @@ pub struct DescribePHIDetectionJobRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePHIDetectionJobResponse {
+    /// <p>An object that contains the properties associated with a detection job.</p>
+    #[serde(rename = "ComprehendMedicalAsyncJobProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comprehend_medical_async_job_properties: Option<ComprehendMedicalAsyncJobProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeRxNormInferenceJobRequest {
+    /// <p>The identifier that Amazon Comprehend Medical generated for the job. The StartRxNormInferenceJob operation returns this identifier in its response.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeRxNormInferenceJobResponse {
     /// <p>An object that contains the properties associated with a detection job.</p>
     #[serde(rename = "ComprehendMedicalAsyncJobProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -463,7 +505,7 @@ pub struct InferRxNormResponse {
     pub pagination_token: Option<String>,
 }
 
-/// <p>The input properties for an entities detection job</p>
+/// <p>The input properties for an entities detection job. This includes the name of the S3 bucket and the path to the files to be analyzed. See <a>batch-manifest</a> for more information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputDataConfig {
     /// <p>The URI of the S3 bucket that contains the input data. The bucket must be in the same region as the API endpoint that you are calling.</p> <p>Each file in the document collection must be less than 40 KB. You can store a maximum of 30 GB in the bucket.</p>
@@ -508,6 +550,37 @@ pub struct ListEntitiesDetectionV2JobsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListICD10CMInferenceJobsRequest {
+    /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<ComprehendMedicalAsyncJobFilter>,
+    /// <p>The maximum number of results to return in each page. The default is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListICD10CMInferenceJobsResponse {
+    /// <p>A list containing the properties of each job that is returned.</p>
+    #[serde(rename = "ComprehendMedicalAsyncJobPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comprehend_medical_async_job_properties_list:
+        Option<Vec<ComprehendMedicalAsyncJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPHIDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -527,6 +600,37 @@ pub struct ListPHIDetectionJobsRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPHIDetectionJobsResponse {
     /// <p>A list containing the properties of each job returned.</p>
+    #[serde(rename = "ComprehendMedicalAsyncJobPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comprehend_medical_async_job_properties_list:
+        Option<Vec<ComprehendMedicalAsyncJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListRxNormInferenceJobsRequest {
+    /// <p>Filters the jobs that are returned. You can filter jobs based on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<ComprehendMedicalAsyncJobFilter>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListRxNormInferenceJobsResponse {
+    /// <p>The maximum number of results to return in each page. The default is 100.</p>
     #[serde(rename = "ComprehendMedicalAsyncJobPropertiesList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comprehend_medical_async_job_properties_list:
@@ -705,6 +809,44 @@ pub struct StartEntitiesDetectionV2JobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartICD10CMInferenceJobRequest {
+    /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend Medical read access to your input data. For more information, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions-med.html#auth-role-permissions-med"> Role-Based Permissions Required for Asynchronous Operations</a>.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>Specifies the format and location of the input data for the job.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: InputDataConfig,
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>An AWS Key Management Service key to encrypt your output files. If you do not specify a key, the files are written in plain text.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+    /// <p>The language of the input documents. All documents must be in the same language.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>Specifies where to send the output files.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: OutputDataConfig,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartICD10CMInferenceJobResponse {
+    /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the <code>StartICD10CMInferenceJob</code> operation.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPHIDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -743,6 +885,44 @@ pub struct StartPHIDetectionJobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartRxNormInferenceJobRequest {
+    /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend Medical generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend Medical read access to your input data. For more information, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions-med.html#auth-role-permissions-med"> Role-Based Permissions Required for Asynchronous Operations</a>.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>Specifies the format and location of the input data for the job.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: InputDataConfig,
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>An AWS Key Management Service key to encrypt your output files. If you do not specify a key, the files are written in plain text.</p>
+    #[serde(rename = "KMSKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key: Option<String>,
+    /// <p>The language of the input documents. All documents must be in the same language.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>Specifies where to send the output files.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: OutputDataConfig,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartRxNormInferenceJobResponse {
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionV2JobRequest {
     /// <p>The identifier of the medical entities job to stop.</p>
     #[serde(rename = "JobId")]
@@ -760,6 +940,23 @@ pub struct StopEntitiesDetectionV2JobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopICD10CMInferenceJobRequest {
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopICD10CMInferenceJobResponse {
+    /// <p>The identifier generated for the job. To get the status of job, use this identifier with the <code>DescribeICD10CMInferenceJob</code> operation.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPHIDetectionJobRequest {
     /// <p>The identifier of the PHI detection job to stop.</p>
     #[serde(rename = "JobId")]
@@ -770,6 +967,23 @@ pub struct StopPHIDetectionJobRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopPHIDetectionJobResponse {
     /// <p>The identifier of the PHI detection job that was stopped.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopRxNormInferenceJobRequest {
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopRxNormInferenceJobResponse {
+    /// <p>The identifier generated for the job. To get the status of job, use this identifier with the <code>DescribeRxNormInferenceJob</code> operation.</p>
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
@@ -869,6 +1083,64 @@ impl fmt::Display for DescribeEntitiesDetectionV2JobError {
     }
 }
 impl Error for DescribeEntitiesDetectionV2JobError {}
+/// Errors returned by DescribeICD10CMInferenceJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeICD10CMInferenceJobError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p>The resource identified by the specified Amazon Resource Name (ARN) was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl DescribeICD10CMInferenceJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeICD10CMInferenceJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeICD10CMInferenceJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeICD10CMInferenceJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeICD10CMInferenceJobError::ResourceNotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeICD10CMInferenceJobError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeICD10CMInferenceJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeICD10CMInferenceJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeICD10CMInferenceJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeICD10CMInferenceJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeICD10CMInferenceJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeICD10CMInferenceJobError {}
 /// Errors returned by DescribePHIDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum DescribePHIDetectionJobError {
@@ -925,6 +1197,64 @@ impl fmt::Display for DescribePHIDetectionJobError {
     }
 }
 impl Error for DescribePHIDetectionJobError {}
+/// Errors returned by DescribeRxNormInferenceJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeRxNormInferenceJobError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p>The resource identified by the specified Amazon Resource Name (ARN) was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl DescribeRxNormInferenceJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeRxNormInferenceJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeRxNormInferenceJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeRxNormInferenceJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeRxNormInferenceJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeRxNormInferenceJobError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeRxNormInferenceJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeRxNormInferenceJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeRxNormInferenceJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeRxNormInferenceJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRxNormInferenceJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeRxNormInferenceJobError {}
 /// Errors returned by DetectEntities
 #[derive(Debug, PartialEq)]
 pub enum DetectEntitiesError {
@@ -1279,6 +1609,54 @@ impl fmt::Display for ListEntitiesDetectionV2JobsError {
     }
 }
 impl Error for ListEntitiesDetectionV2JobsError {}
+/// Errors returned by ListICD10CMInferenceJobs
+#[derive(Debug, PartialEq)]
+pub enum ListICD10CMInferenceJobsError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl ListICD10CMInferenceJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListICD10CMInferenceJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListICD10CMInferenceJobsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListICD10CMInferenceJobsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListICD10CMInferenceJobsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListICD10CMInferenceJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListICD10CMInferenceJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListICD10CMInferenceJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListICD10CMInferenceJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListICD10CMInferenceJobsError {}
 /// Errors returned by ListPHIDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListPHIDetectionJobsError {
@@ -1323,6 +1701,54 @@ impl fmt::Display for ListPHIDetectionJobsError {
     }
 }
 impl Error for ListPHIDetectionJobsError {}
+/// Errors returned by ListRxNormInferenceJobs
+#[derive(Debug, PartialEq)]
+pub enum ListRxNormInferenceJobsError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl ListRxNormInferenceJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRxNormInferenceJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListRxNormInferenceJobsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListRxNormInferenceJobsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListRxNormInferenceJobsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListRxNormInferenceJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListRxNormInferenceJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListRxNormInferenceJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListRxNormInferenceJobsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListRxNormInferenceJobsError {}
 /// Errors returned by StartEntitiesDetectionV2Job
 #[derive(Debug, PartialEq)]
 pub enum StartEntitiesDetectionV2JobError {
@@ -1381,6 +1807,62 @@ impl fmt::Display for StartEntitiesDetectionV2JobError {
     }
 }
 impl Error for StartEntitiesDetectionV2JobError {}
+/// Errors returned by StartICD10CMInferenceJob
+#[derive(Debug, PartialEq)]
+pub enum StartICD10CMInferenceJobError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p>The resource identified by the specified Amazon Resource Name (ARN) was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl StartICD10CMInferenceJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartICD10CMInferenceJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StartICD10CMInferenceJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartICD10CMInferenceJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartICD10CMInferenceJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(StartICD10CMInferenceJobError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartICD10CMInferenceJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartICD10CMInferenceJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartICD10CMInferenceJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartICD10CMInferenceJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartICD10CMInferenceJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartICD10CMInferenceJobError {}
 /// Errors returned by StartPHIDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StartPHIDetectionJobError {
@@ -1433,6 +1915,62 @@ impl fmt::Display for StartPHIDetectionJobError {
     }
 }
 impl Error for StartPHIDetectionJobError {}
+/// Errors returned by StartRxNormInferenceJob
+#[derive(Debug, PartialEq)]
+pub enum StartRxNormInferenceJobError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p>The resource identified by the specified Amazon Resource Name (ARN) was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again. Contact customer support for more information about a service limit increase. </p>
+    TooManyRequests(String),
+}
+
+impl StartRxNormInferenceJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartRxNormInferenceJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StartRxNormInferenceJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartRxNormInferenceJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartRxNormInferenceJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(StartRxNormInferenceJobError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartRxNormInferenceJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartRxNormInferenceJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartRxNormInferenceJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartRxNormInferenceJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartRxNormInferenceJobError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartRxNormInferenceJobError {}
 /// Errors returned by StopEntitiesDetectionV2Job
 #[derive(Debug, PartialEq)]
 pub enum StopEntitiesDetectionV2JobError {
@@ -1483,6 +2021,54 @@ impl fmt::Display for StopEntitiesDetectionV2JobError {
     }
 }
 impl Error for StopEntitiesDetectionV2JobError {}
+/// Errors returned by StopICD10CMInferenceJob
+#[derive(Debug, PartialEq)]
+pub enum StopICD10CMInferenceJobError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p>The resource identified by the specified Amazon Resource Name (ARN) was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+}
+
+impl StopICD10CMInferenceJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopICD10CMInferenceJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StopICD10CMInferenceJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopICD10CMInferenceJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopICD10CMInferenceJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopICD10CMInferenceJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopICD10CMInferenceJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopICD10CMInferenceJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopICD10CMInferenceJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopICD10CMInferenceJobError {}
 /// Errors returned by StopPHIDetectionJob
 #[derive(Debug, PartialEq)]
 pub enum StopPHIDetectionJobError {
@@ -1527,6 +2113,54 @@ impl fmt::Display for StopPHIDetectionJobError {
     }
 }
 impl Error for StopPHIDetectionJobError {}
+/// Errors returned by StopRxNormInferenceJob
+#[derive(Debug, PartialEq)]
+pub enum StopRxNormInferenceJobError {
+    /// <p> An internal server error occurred. Retry your request. </p>
+    InternalServer(String),
+    /// <p> The request that you made is invalid. Check your request to determine why it's invalid and then retry the request.</p>
+    InvalidRequest(String),
+    /// <p>The resource identified by the specified Amazon Resource Name (ARN) was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+}
+
+impl StopRxNormInferenceJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRxNormInferenceJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(StopRxNormInferenceJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopRxNormInferenceJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopRxNormInferenceJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopRxNormInferenceJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopRxNormInferenceJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StopRxNormInferenceJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopRxNormInferenceJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopRxNormInferenceJobError {}
 /// Trait representing the capabilities of the ComprehendMedical API. ComprehendMedical clients implement this trait.
 #[async_trait]
 pub trait ComprehendMedical {
@@ -1539,11 +2173,23 @@ pub trait ComprehendMedical {
         RusotoError<DescribeEntitiesDetectionV2JobError>,
     >;
 
+    /// <p>Gets the properties associated with an InferICD10CM job. Use this operation to get the status of an inference job.</p>
+    async fn describe_icd10cm_inference_job(
+        &self,
+        input: DescribeICD10CMInferenceJobRequest,
+    ) -> Result<DescribeICD10CMInferenceJobResponse, RusotoError<DescribeICD10CMInferenceJobError>>;
+
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
     async fn describe_phi_detection_job(
         &self,
         input: DescribePHIDetectionJobRequest,
     ) -> Result<DescribePHIDetectionJobResponse, RusotoError<DescribePHIDetectionJobError>>;
+
+    /// <p>Gets the properties associated with an InferRxNorm job. Use this operation to get the status of an inference job.</p>
+    async fn describe_rx_norm_inference_job(
+        &self,
+        input: DescribeRxNormInferenceJobRequest,
+    ) -> Result<DescribeRxNormInferenceJobResponse, RusotoError<DescribeRxNormInferenceJobError>>;
 
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
     async fn detect_entities(
@@ -1551,25 +2197,25 @@ pub trait ComprehendMedical {
         input: DetectEntitiesRequest,
     ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>>;
 
-    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
+    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information. Amazon Comprehend Medical only detects medical entities in English language texts.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
     async fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
     ) -> Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>>;
 
-    /// <p> Inspects the clinical text for protected health information (PHI) entities and entity category, location, and confidence score on that information.</p>
+    /// <p> Inspects the clinical text for protected health information (PHI) entities and returns the entity category, location, and confidence score for each entity. Amazon Comprehend Medical only detects entities in English language texts.</p>
     async fn detect_phi(
         &self,
         input: DetectPHIRequest,
     ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>>;
 
-    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
     async fn infer_icd10cm(
         &self,
         input: InferICD10CMRequest,
     ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>;
 
-    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
     async fn infer_rx_norm(
         &self,
         input: InferRxNormRequest,
@@ -1581,11 +2227,23 @@ pub trait ComprehendMedical {
         input: ListEntitiesDetectionV2JobsRequest,
     ) -> Result<ListEntitiesDetectionV2JobsResponse, RusotoError<ListEntitiesDetectionV2JobsError>>;
 
+    /// <p>Gets a list of InferICD10CM jobs that you have submitted.</p>
+    async fn list_icd10cm_inference_jobs(
+        &self,
+        input: ListICD10CMInferenceJobsRequest,
+    ) -> Result<ListICD10CMInferenceJobsResponse, RusotoError<ListICD10CMInferenceJobsError>>;
+
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
     async fn list_phi_detection_jobs(
         &self,
         input: ListPHIDetectionJobsRequest,
     ) -> Result<ListPHIDetectionJobsResponse, RusotoError<ListPHIDetectionJobsError>>;
+
+    /// <p>Gets a list of InferRxNorm jobs that you have submitted.</p>
+    async fn list_rx_norm_inference_jobs(
+        &self,
+        input: ListRxNormInferenceJobsRequest,
+    ) -> Result<ListRxNormInferenceJobsResponse, RusotoError<ListRxNormInferenceJobsError>>;
 
     /// <p>Starts an asynchronous medical entity detection job for a collection of documents. Use the <code>DescribeEntitiesDetectionV2Job</code> operation to track the status of a job.</p>
     async fn start_entities_detection_v2_job(
@@ -1593,11 +2251,23 @@ pub trait ComprehendMedical {
         input: StartEntitiesDetectionV2JobRequest,
     ) -> Result<StartEntitiesDetectionV2JobResponse, RusotoError<StartEntitiesDetectionV2JobError>>;
 
+    /// <p>Starts an asynchronous job to detect medical conditions and link them to the ICD-10-CM ontology. Use the <code>DescribeICD10CMInferenceJob</code> operation to track the status of a job.</p>
+    async fn start_icd10cm_inference_job(
+        &self,
+        input: StartICD10CMInferenceJobRequest,
+    ) -> Result<StartICD10CMInferenceJobResponse, RusotoError<StartICD10CMInferenceJobError>>;
+
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
     async fn start_phi_detection_job(
         &self,
         input: StartPHIDetectionJobRequest,
     ) -> Result<StartPHIDetectionJobResponse, RusotoError<StartPHIDetectionJobError>>;
+
+    /// <p>Starts an asynchronous job to detect medication entities and link them to the RxNorm ontology. Use the <code>DescribeRxNormInferenceJob</code> operation to track the status of a job.</p>
+    async fn start_rx_norm_inference_job(
+        &self,
+        input: StartRxNormInferenceJobRequest,
+    ) -> Result<StartRxNormInferenceJobResponse, RusotoError<StartRxNormInferenceJobError>>;
 
     /// <p>Stops a medical entities detection job in progress.</p>
     async fn stop_entities_detection_v2_job(
@@ -1605,11 +2275,23 @@ pub trait ComprehendMedical {
         input: StopEntitiesDetectionV2JobRequest,
     ) -> Result<StopEntitiesDetectionV2JobResponse, RusotoError<StopEntitiesDetectionV2JobError>>;
 
+    /// <p>Stops an InferICD10CM inference job in progress.</p>
+    async fn stop_icd10cm_inference_job(
+        &self,
+        input: StopICD10CMInferenceJobRequest,
+    ) -> Result<StopICD10CMInferenceJobResponse, RusotoError<StopICD10CMInferenceJobError>>;
+
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
     async fn stop_phi_detection_job(
         &self,
         input: StopPHIDetectionJobRequest,
     ) -> Result<StopPHIDetectionJobResponse, RusotoError<StopPHIDetectionJobError>>;
+
+    /// <p>Stops an InferRxNorm inference job in progress.</p>
+    async fn stop_rx_norm_inference_job(
+        &self,
+        input: StopRxNormInferenceJobRequest,
+    ) -> Result<StopRxNormInferenceJobResponse, RusotoError<StopRxNormInferenceJobError>>;
 }
 /// A client for the ComprehendMedical API.
 #[derive(Clone)]
@@ -1685,6 +2367,38 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
+    /// <p>Gets the properties associated with an InferICD10CM job. Use this operation to get the status of an inference job.</p>
+    async fn describe_icd10cm_inference_job(
+        &self,
+        input: DescribeICD10CMInferenceJobRequest,
+    ) -> Result<DescribeICD10CMInferenceJobResponse, RusotoError<DescribeICD10CMInferenceJobError>>
+    {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.DescribeICD10CMInferenceJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeICD10CMInferenceJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeICD10CMInferenceJobError::from_response(response))
+        }
+    }
+
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
     async fn describe_phi_detection_job(
         &self,
@@ -1716,6 +2430,38 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
+    /// <p>Gets the properties associated with an InferRxNorm job. Use this operation to get the status of an inference job.</p>
+    async fn describe_rx_norm_inference_job(
+        &self,
+        input: DescribeRxNormInferenceJobRequest,
+    ) -> Result<DescribeRxNormInferenceJobResponse, RusotoError<DescribeRxNormInferenceJobError>>
+    {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.DescribeRxNormInferenceJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRxNormInferenceJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRxNormInferenceJobError::from_response(response))
+        }
+    }
+
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
     async fn detect_entities(
         &self,
@@ -1743,7 +2489,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
-    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
+    /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information. Amazon Comprehend Medical only detects medical entities in English language texts.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
     async fn detect_entities_v2(
         &self,
         input: DetectEntitiesV2Request,
@@ -1774,7 +2520,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
-    /// <p> Inspects the clinical text for protected health information (PHI) entities and entity category, location, and confidence score on that information.</p>
+    /// <p> Inspects the clinical text for protected health information (PHI) entities and returns the entity category, location, and confidence score for each entity. Amazon Comprehend Medical only detects entities in English language texts.</p>
     async fn detect_phi(
         &self,
         input: DetectPHIRequest,
@@ -1801,7 +2547,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
-    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control.</p>
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
     async fn infer_icd10cm(
         &self,
         input: InferICD10CMRequest,
@@ -1828,7 +2574,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
-    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine.</p>
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
     async fn infer_rx_norm(
         &self,
         input: InferRxNormRequest,
@@ -1887,6 +2633,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
+    /// <p>Gets a list of InferICD10CM jobs that you have submitted.</p>
+    async fn list_icd10cm_inference_jobs(
+        &self,
+        input: ListICD10CMInferenceJobsRequest,
+    ) -> Result<ListICD10CMInferenceJobsResponse, RusotoError<ListICD10CMInferenceJobsError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.ListICD10CMInferenceJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListICD10CMInferenceJobsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListICD10CMInferenceJobsError::from_response(response))
+        }
+    }
+
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
     async fn list_phi_detection_jobs(
         &self,
@@ -1915,6 +2692,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListPHIDetectionJobsError::from_response(response))
+        }
+    }
+
+    /// <p>Gets a list of InferRxNorm jobs that you have submitted.</p>
+    async fn list_rx_norm_inference_jobs(
+        &self,
+        input: ListRxNormInferenceJobsRequest,
+    ) -> Result<ListRxNormInferenceJobsResponse, RusotoError<ListRxNormInferenceJobsError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.ListRxNormInferenceJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRxNormInferenceJobsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRxNormInferenceJobsError::from_response(response))
         }
     }
 
@@ -1950,6 +2758,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
+    /// <p>Starts an asynchronous job to detect medical conditions and link them to the ICD-10-CM ontology. Use the <code>DescribeICD10CMInferenceJob</code> operation to track the status of a job.</p>
+    async fn start_icd10cm_inference_job(
+        &self,
+        input: StartICD10CMInferenceJobRequest,
+    ) -> Result<StartICD10CMInferenceJobResponse, RusotoError<StartICD10CMInferenceJobError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.StartICD10CMInferenceJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartICD10CMInferenceJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartICD10CMInferenceJobError::from_response(response))
+        }
+    }
+
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
     async fn start_phi_detection_job(
         &self,
@@ -1978,6 +2817,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StartPHIDetectionJobError::from_response(response))
+        }
+    }
+
+    /// <p>Starts an asynchronous job to detect medication entities and link them to the RxNorm ontology. Use the <code>DescribeRxNormInferenceJob</code> operation to track the status of a job.</p>
+    async fn start_rx_norm_inference_job(
+        &self,
+        input: StartRxNormInferenceJobRequest,
+    ) -> Result<StartRxNormInferenceJobResponse, RusotoError<StartRxNormInferenceJobError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.StartRxNormInferenceJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartRxNormInferenceJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartRxNormInferenceJobError::from_response(response))
         }
     }
 
@@ -2013,6 +2883,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
         }
     }
 
+    /// <p>Stops an InferICD10CM inference job in progress.</p>
+    async fn stop_icd10cm_inference_job(
+        &self,
+        input: StopICD10CMInferenceJobRequest,
+    ) -> Result<StopICD10CMInferenceJobResponse, RusotoError<StopICD10CMInferenceJobError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.StopICD10CMInferenceJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopICD10CMInferenceJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopICD10CMInferenceJobError::from_response(response))
+        }
+    }
+
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
     async fn stop_phi_detection_job(
         &self,
@@ -2041,6 +2942,37 @@ impl ComprehendMedical for ComprehendMedicalClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StopPHIDetectionJobError::from_response(response))
+        }
+    }
+
+    /// <p>Stops an InferRxNorm inference job in progress.</p>
+    async fn stop_rx_norm_inference_job(
+        &self,
+        input: StopRxNormInferenceJobRequest,
+    ) -> Result<StopRxNormInferenceJobResponse, RusotoError<StopRxNormInferenceJobError>> {
+        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ComprehendMedical_20181030.StopRxNormInferenceJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopRxNormInferenceJobResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopRxNormInferenceJobError::from_response(response))
         }
     }
 }

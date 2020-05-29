@@ -46,6 +46,19 @@ pub struct BatchDescribeSimulationJobResponse {
     pub unprocessed_jobs: Option<Vec<String>>,
 }
 
+/// <p>Information about the batch policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BatchPolicy {
+    /// <p>The number of active simulation jobs create as part of the batch that can be in an active state at the same time. </p> <p>Active states include: <code>Pending</code>,<code>Preparing</code>, <code>Running</code>, <code>Restarting</code>, <code>RunningFailed</code> and <code>Terminating</code>. All other states are terminal states. </p>
+    #[serde(rename = "maxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<i64>,
+    /// <p>The amount of time, in seconds, to wait for the batch to complete. </p> <p>If a batch times out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), they will be moved to the failed list and the batch status will be <code>Failed</code>. If the pending requests were failing for any other reason, the failed pending requests will be moved to the failed list and the batch status will be <code>TimedOut</code>. </p>
+    #[serde(rename = "timeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_seconds: Option<i64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelDeploymentJobRequest {
@@ -60,6 +73,18 @@ pub struct CancelDeploymentJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelSimulationJobBatchRequest {
+    /// <p>The id of the batch to cancel.</p>
+    #[serde(rename = "batch")]
+    pub batch: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelSimulationJobBatchResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSimulationJobRequest {
     /// <p>The simulation job ARN to cancel.</p>
     #[serde(rename = "job")]
@@ -69,6 +94,25 @@ pub struct CancelSimulationJobRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSimulationJobResponse {}
+
+/// <p>Compute information for the simulation job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Compute {
+    /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. </p>
+    #[serde(rename = "simulationUnitLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simulation_unit_limit: Option<i64>,
+}
+
+/// <p>Compute information for the simulation job</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ComputeResponse {
+    /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. </p>
+    #[serde(rename = "simulationUnitLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simulation_unit_limit: Option<i64>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -172,7 +216,7 @@ pub struct CreateRobotApplicationRequest {
     /// <p>The name of the robot application.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The robot software suite used by the robot application.</p>
+    /// <p>The robot software suite (ROS distribuition) used by the robot application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     pub robot_software_suite: RobotSoftwareSuite,
     /// <p>The sources of the robot application.</p>
@@ -203,7 +247,7 @@ pub struct CreateRobotApplicationResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>The robot software suite used by the robot application.</p>
+    /// <p>The robot software suite (ROS distribution) used by the robot application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -252,7 +296,7 @@ pub struct CreateRobotApplicationVersionResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>The robot software suite used by the robot application.</p>
+    /// <p>The robot software suite (ROS distribution) used by the robot application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -323,7 +367,7 @@ pub struct CreateSimulationApplicationRequest {
     #[serde(rename = "renderingEngine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rendering_engine: Option<RenderingEngine>,
-    /// <p>The robot software suite of the simulation application.</p>
+    /// <p>The robot software suite (ROS distribution) used by the simulation application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     pub robot_software_suite: RobotSoftwareSuite,
     /// <p>The simulation software suite used by the simulation application.</p>
@@ -361,7 +405,7 @@ pub struct CreateSimulationApplicationResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>Information about the robot software suite.</p>
+    /// <p>Information about the robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -418,7 +462,7 @@ pub struct CreateSimulationApplicationVersionResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>Information about the robot software suite.</p>
+    /// <p>Information about the robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -443,7 +487,11 @@ pub struct CreateSimulationJobRequest {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p><p>The data sources for the simulation job.</p> <note> <p>There is a limit of 100 files and a combined size of 25GB for all <code>DataSourceConfig</code> objects. </p> </note></p>
+    /// <p>Compute information for the simulation job.</p>
+    #[serde(rename = "compute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute: Option<Compute>,
+    /// <p><p>Specify data sources to mount read-only files from S3 into your simulation. These files are available under <code>/opt/robomaker/datasources/data<em>source</em>name</code>. </p> <note> <p>There is a limit of 100 files and a combined size of 25GB for all <code>DataSourceConfig</code> objects. </p> </note></p>
     #[serde(rename = "dataSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_sources: Option<Vec<DataSourceConfig>>,
@@ -494,6 +542,10 @@ pub struct CreateSimulationJobResponse {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>Compute information for the simulation job.</p>
+    #[serde(rename = "compute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute: Option<ComputeResponse>,
     /// <p>The data sources for the simulation job.</p>
     #[serde(rename = "dataSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -575,8 +627,7 @@ pub struct DataSource {
 }
 
 /// <p>Information about a data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DataSourceConfig {
     /// <p>The name of the data source.</p>
     #[serde(rename = "name")]
@@ -894,7 +945,7 @@ pub struct DescribeRobotApplicationResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>The robot software suite used by the robot application.</p>
+    /// <p>The robot software suite (ROS distribution) used by the robot application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -1000,7 +1051,7 @@ pub struct DescribeSimulationApplicationResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>Information about the robot software suite.</p>
+    /// <p>Information about the robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -1024,6 +1075,67 @@ pub struct DescribeSimulationApplicationResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeSimulationJobBatchRequest {
+    /// <p>The id of the batch to describe.</p>
+    #[serde(rename = "batch")]
+    pub batch: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeSimulationJobBatchResponse {
+    /// <p>The Amazon Resource Name (ARN) of the batch.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The batch policy.</p>
+    #[serde(rename = "batchPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_policy: Option<BatchPolicy>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the simulation job batch was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A list of created simulation job summaries.</p>
+    #[serde(rename = "createdRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_requests: Option<Vec<SimulationJobSummary>>,
+    /// <p>A list of failed create simulation job requests. The request failed to be created into a simulation job. Failed requests do not have a simulation job ID. </p>
+    #[serde(rename = "failedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_requests: Option<Vec<FailedCreateSimulationJobRequest>>,
+    /// <p>The failure code of the simulation job batch.</p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The reason the simulation job batch failed.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the simulation job batch was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>A list of pending simulation job requests. These requests have not yet been created into simulation jobs.</p>
+    #[serde(rename = "pendingRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_requests: Option<Vec<SimulationJobRequest>>,
+    /// <p><p>The status of the batch.</p> <dl> <dt>Pending</dt> <dd> <p>The simulation job batch request is pending.</p> </dd> <dt>InProgress</dt> <dd> <p>The simulation job batch is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The simulation job batch failed. One or more simulation job requests could not be completed due to an internal failure (like <code>InternalServiceError</code>). See <code>failureCode</code> and <code>failureReason</code> for more information.</p> </dd> <dt>Completed</dt> <dd> <p>The simulation batch job completed. A batch is complete when (1) there are no pending simulation job requests in the batch and none of the failed simulation job requests are due to <code>InternalServiceError</code> and (2) when all created simulation jobs have reached a terminal state (for example, <code>Completed</code> or <code>Failed</code>). </p> </dd> <dt>Canceled</dt> <dd> <p>The simulation batch job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The simulation batch job is being cancelled.</p> </dd> <dt>Completing</dt> <dd> <p>The simulation batch job is completing.</p> </dd> <dt>TimingOut</dt> <dd> <p>The simulation job batch is timing out.</p> <p>If a batch timing out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), the batch status will be <code>Failed</code>. If there are no such failing request, the batch status will be <code>TimedOut</code>. </p> </dd> <dt>TimedOut</dt> <dd> <p>The simulation batch job timed out.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the simulation job batch.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the simulation job to be described.</p>
     #[serde(rename = "job")]
@@ -1041,6 +1153,10 @@ pub struct DescribeSimulationJobResponse {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>Compute information for the simulation job.</p>
+    #[serde(rename = "compute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute: Option<ComputeResponse>,
     /// <p>The data sources for the simulation job.</p>
     #[serde(rename = "dataSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1115,6 +1231,28 @@ pub struct DescribeSimulationJobResponse {
     pub vpc_config: Option<VPCConfigResponse>,
 }
 
+/// <p>Information about a failed create simulation job request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FailedCreateSimulationJobRequest {
+    /// <p>The time, in milliseconds since the epoch, when the simulation job batch failed.</p>
+    #[serde(rename = "failedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_at: Option<f64>,
+    /// <p>The failure code.</p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The failure reason of the simulation job request.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The simulation job request.</p>
+    #[serde(rename = "request")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request: Option<SimulationJobRequest>,
+}
+
 /// <p>Information about a filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1176,6 +1314,10 @@ pub struct LaunchConfig {
     #[serde(rename = "portForwardingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_forwarding_config: Option<PortForwardingConfig>,
+    /// <p>Boolean indicating whether a streaming session will be configured for the application. If <code>True</code>, AWS RoboMaker will configure a connection so you can interact with your application as it is running in the simulation. You must configure and luanch the component. It must have a graphical user interface. </p>
+    #[serde(rename = "streamUI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_ui: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1185,11 +1327,11 @@ pub struct ListDeploymentJobsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of deployment job results returned by <code>ListDeploymentJobs</code> in paginated output. When this parameter is used, <code>ListDeploymentJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListDeploymentJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListDeploymentJobs</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>When this parameter is used, <code>ListDeploymentJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListDeploymentJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 200. If this parameter is not used, then <code>ListDeploymentJobs</code> returns up to 200 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListDeploymentJobs</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListDeploymentJobs</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1215,7 +1357,7 @@ pub struct ListFleetsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of deployment job results returned by <code>ListFleets</code> in paginated output. When this parameter is used, <code>ListFleets</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListFleets</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListFleets</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>When this parameter is used, <code>ListFleets</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListFleets</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 200. If this parameter is not used, then <code>ListFleets</code> returns up to 200 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1245,11 +1387,11 @@ pub struct ListRobotApplicationsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of deployment job results returned by <code>ListRobotApplications</code> in paginated output. When this parameter is used, <code>ListRobotApplications</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListRobotApplications</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListRobotApplications</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>When this parameter is used, <code>ListRobotApplications</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListRobotApplications</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListRobotApplications</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListRobotApplications</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListRobotApplications</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1279,11 +1421,11 @@ pub struct ListRobotsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of deployment job results returned by <code>ListRobots</code> in paginated output. When this parameter is used, <code>ListRobots</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListRobots</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListRobots</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>When this parameter is used, <code>ListRobots</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListRobots</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 200. If this parameter is not used, then <code>ListRobots</code> returns up to 200 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListRobots</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListRobots</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1309,11 +1451,11 @@ pub struct ListSimulationApplicationsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of deployment job results returned by <code>ListSimulationApplications</code> in paginated output. When this parameter is used, <code>ListSimulationApplications</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListSimulationApplications</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListSimulationApplications</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>When this parameter is used, <code>ListSimulationApplications</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListSimulationApplications</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListSimulationApplications</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListSimulationApplications</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListSimulationApplications</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1338,12 +1480,42 @@ pub struct ListSimulationApplicationsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSimulationJobBatchesRequest {
+    /// <p>Optional filters to limit results.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>When this parameter is used, <code>ListSimulationJobBatches</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListSimulationJobBatches</code> request with the returned <code>nextToken</code> value. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListSimulationJobBatches</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSimulationJobBatchesResponse {
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationJobBatches</code> request. When the results of a <code>ListSimulationJobBatches</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of simulation job batch summaries.</p>
+    #[serde(rename = "simulationJobBatchSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simulation_job_batch_summaries: Option<Vec<SimulationJobBatchSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationJobsRequest {
     /// <p>Optional filters to limit results.</p> <p>The filter names <code>status</code> and <code>simulationApplicationName</code> and <code>robotApplicationName</code> are supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters, but they must be for the same named item. For example, if you are looking for items with the status <code>Preparing</code> or the status <code>Running</code>.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of deployment job results returned by <code>ListSimulationJobs</code> in paginated output. When this parameter is used, <code>ListSimulationJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListSimulationJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListSimulationJobs</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>When this parameter is used, <code>ListSimulationJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListSimulationJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>ListSimulationJobs</code> returns up to 1000 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1589,7 +1761,7 @@ pub struct RobotApplicationSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Information about a robot software suite.</p>
+    /// <p>Information about a robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -1633,14 +1805,14 @@ pub struct RobotDeployment {
     pub status: Option<String>,
 }
 
-/// <p>Information about a robot software suite.</p>
+/// <p>Information about a robot software suite (ROS distribution).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RobotSoftwareSuite {
-    /// <p>The name of the robot software suite.</p>
+    /// <p>The name of the robot software suite (ROS distribution).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The version of the robot software suite.</p>
+    /// <p>The version of the robot software suite (ROS distribution).</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -1706,7 +1878,7 @@ pub struct SimulationApplicationSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Information about a robot software suite.</p>
+    /// <p>Information about a robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -1732,6 +1904,10 @@ pub struct SimulationJob {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>Compute information for the simulation job</p>
+    #[serde(rename = "compute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute: Option<ComputeResponse>,
     /// <p>The data sources for the simulation job.</p>
     #[serde(rename = "dataSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1804,6 +1980,89 @@ pub struct SimulationJob {
     #[serde(rename = "vpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VPCConfigResponse>,
+}
+
+/// <p>Information about a simulation job batch.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SimulationJobBatchSummary {
+    /// <p>The Amazon Resource Name (ARN) of the batch.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the simulation job batch was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The number of created simulation job requests.</p>
+    #[serde(rename = "createdRequestCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_request_count: Option<i64>,
+    /// <p>The number of failed simulation job requests.</p>
+    #[serde(rename = "failedRequestCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_request_count: Option<i64>,
+    /// <p>The time, in milliseconds since the epoch, when the simulation job batch was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The number of pending simulation job requests.</p>
+    #[serde(rename = "pendingRequestCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_request_count: Option<i64>,
+    /// <p><p>The status of the simulation job batch.</p> <dl> <dt>Pending</dt> <dd> <p>The simulation job batch request is pending.</p> </dd> <dt>InProgress</dt> <dd> <p>The simulation job batch is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The simulation job batch failed. One or more simulation job requests could not be completed due to an internal failure (like <code>InternalServiceError</code>). See <code>failureCode</code> and <code>failureReason</code> for more information.</p> </dd> <dt>Completed</dt> <dd> <p>The simulation batch job completed. A batch is complete when (1) there are no pending simulation job requests in the batch and none of the failed simulation job requests are due to <code>InternalServiceError</code> and (2) when all created simulation jobs have reached a terminal state (for example, <code>Completed</code> or <code>Failed</code>). </p> </dd> <dt>Canceled</dt> <dd> <p>The simulation batch job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The simulation batch job is being cancelled.</p> </dd> <dt>Completing</dt> <dd> <p>The simulation batch job is completing.</p> </dd> <dt>TimingOut</dt> <dd> <p>The simulation job batch is timing out.</p> <p>If a batch timing out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), the batch status will be <code>Failed</code>. If there are no such failing request, the batch status will be <code>TimedOut</code>. </p> </dd> <dt>TimedOut</dt> <dd> <p>The simulation batch job timed out.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Information about a simulation job request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SimulationJobRequest {
+    /// <p>Compute information for the simulation job</p>
+    #[serde(rename = "compute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute: Option<Compute>,
+    /// <p><p>Specify data sources to mount read-only files from S3 into your simulation. These files are available under <code>/opt/robomaker/datasources/data<em>source</em>name</code>. </p> <note> <p>There is a limit of 100 files and a combined size of 25GB for all <code>DataSourceConfig</code> objects. </p> </note></p>
+    #[serde(rename = "dataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_sources: Option<Vec<DataSourceConfig>>,
+    /// <p><p>The failure behavior the simulation job.</p> <dl> <dt>Continue</dt> <dd> <p>Restart the simulation job in the same host instance.</p> </dd> <dt>Fail</dt> <dd> <p>Stop the simulation job and terminate the instance.</p> </dd> </dl></p>
+    #[serde(rename = "failureBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_behavior: Option<String>,
+    /// <p>The IAM role name that allows the simulation instance to call the AWS APIs that are specified in its associated policies on your behalf. This is how credentials are passed in to your simulation job. </p>
+    #[serde(rename = "iamRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role: Option<String>,
+    #[serde(rename = "loggingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_config: Option<LoggingConfig>,
+    /// <p>The maximum simulation job duration in seconds. The value must be 8 days (691,200 seconds) or less.</p>
+    #[serde(rename = "maxJobDurationInSeconds")]
+    pub max_job_duration_in_seconds: i64,
+    #[serde(rename = "outputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<OutputLocation>,
+    /// <p>The robot applications to use in the simulation job.</p>
+    #[serde(rename = "robotApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub robot_applications: Option<Vec<RobotApplicationConfig>>,
+    /// <p>The simulation applications to use in the simulation job.</p>
+    #[serde(rename = "simulationApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub simulation_applications: Option<Vec<SimulationApplicationConfig>>,
+    /// <p>A map that contains tag keys and tag values that are attached to the simulation job request.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Boolean indicating whether to use default simulation tool applications.</p>
+    #[serde(rename = "useDefaultApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_default_applications: Option<bool>,
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VPCConfig>,
 }
 
 /// <p>Summary information for a simulation job.</p>
@@ -1895,6 +2154,75 @@ pub struct SourceConfig {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartSimulationJobBatchRequest {
+    /// <p>The batch policy.</p>
+    #[serde(rename = "batchPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_policy: Option<BatchPolicy>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>A list of simulation job requests to create in the batch.</p>
+    #[serde(rename = "createSimulationJobRequests")]
+    pub create_simulation_job_requests: Vec<SimulationJobRequest>,
+    /// <p>A map that contains tag keys and tag values that are attached to the deployment job batch.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartSimulationJobBatchResponse {
+    /// <p>The Amazon Resource Name (arn) of the batch.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The batch policy.</p>
+    #[serde(rename = "batchPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_policy: Option<BatchPolicy>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the simulation job batch was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A list of created simulation job request summaries.</p>
+    #[serde(rename = "createdRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_requests: Option<Vec<SimulationJobSummary>>,
+    /// <p>A list of failed simulation job requests. The request failed to be created into a simulation job. Failed requests do not have a simulation job ID. </p>
+    #[serde(rename = "failedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_requests: Option<Vec<FailedCreateSimulationJobRequest>>,
+    /// <p>The failure code if the simulation job batch failed.</p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The reason the simulation job batch failed.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>A list of pending simulation job requests. These requests have not yet been created into simulation jobs.</p>
+    #[serde(rename = "pendingRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_requests: Option<Vec<SimulationJobRequest>>,
+    /// <p><p>The status of the simulation job batch.</p> <dl> <dt>Pending</dt> <dd> <p>The simulation job batch request is pending.</p> </dd> <dt>InProgress</dt> <dd> <p>The simulation job batch is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The simulation job batch failed. One or more simulation job requests could not be completed due to an internal failure (like <code>InternalServiceError</code>). See <code>failureCode</code> and <code>failureReason</code> for more information.</p> </dd> <dt>Completed</dt> <dd> <p>The simulation batch job completed. A batch is complete when (1) there are no pending simulation job requests in the batch and none of the failed simulation job requests are due to <code>InternalServiceError</code> and (2) when all created simulation jobs have reached a terminal state (for example, <code>Completed</code> or <code>Failed</code>). </p> </dd> <dt>Canceled</dt> <dd> <p>The simulation batch job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The simulation batch job is being cancelled.</p> </dd> <dt>Completing</dt> <dd> <p>The simulation batch job is completing.</p> </dd> <dt>TimingOut</dt> <dd> <p>The simulation job batch is timing out.</p> <p>If a batch timing out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), the batch status will be <code>Failed</code>. If there are no such failing request, the batch status will be <code>TimedOut</code>. </p> </dd> <dt>TimedOut</dt> <dd> <p>The simulation batch job timed out.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the deployment job batch.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SyncDeploymentJobRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientRequestToken")]
@@ -1981,7 +2309,7 @@ pub struct UpdateRobotApplicationRequest {
     #[serde(rename = "currentRevisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_revision_id: Option<String>,
-    /// <p>The robot software suite used by the robot application.</p>
+    /// <p>The robot software suite (ROS distribution) used by the robot application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     pub robot_software_suite: RobotSoftwareSuite,
     /// <p>The sources of the robot application.</p>
@@ -2008,7 +2336,7 @@ pub struct UpdateRobotApplicationResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>The robot software suite used by the robot application.</p>
+    /// <p>The robot software suite (ROS distribution) used by the robot application.</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -2036,7 +2364,7 @@ pub struct UpdateSimulationApplicationRequest {
     #[serde(rename = "renderingEngine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rendering_engine: Option<RenderingEngine>,
-    /// <p>Information about the robot software suite.</p>
+    /// <p>Information about the robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     pub robot_software_suite: RobotSoftwareSuite,
     /// <p>The simulation software suite used by the simulation application.</p>
@@ -2070,7 +2398,7 @@ pub struct UpdateSimulationApplicationResponse {
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>Information about the robot software suite.</p>
+    /// <p>Information about the robot software suite (ROS distribution).</p>
     #[serde(rename = "robotSoftwareSuite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub robot_software_suite: Option<RobotSoftwareSuite>,
@@ -2089,8 +2417,7 @@ pub struct UpdateSimulationApplicationResponse {
 }
 
 /// <p>If your simulation job accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and two subnet IDs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VPCConfig {
     /// <p>A boolean indicating whether to assign a public IP address.</p>
     #[serde(rename = "assignPublicIp")]
@@ -2289,6 +2616,60 @@ impl fmt::Display for CancelSimulationJobError {
     }
 }
 impl Error for CancelSimulationJobError {}
+/// Errors returned by CancelSimulationJobBatch
+#[derive(Debug, PartialEq)]
+pub enum CancelSimulationJobBatchError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CancelSimulationJobBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelSimulationJobBatchError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CancelSimulationJobBatchError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CancelSimulationJobBatchError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CancelSimulationJobBatchError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CancelSimulationJobBatchError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelSimulationJobBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelSimulationJobBatchError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CancelSimulationJobBatchError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CancelSimulationJobBatchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelSimulationJobBatchError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelSimulationJobBatchError {}
 /// Errors returned by CreateDeploymentJob
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentJobError {
@@ -3389,6 +3770,56 @@ impl fmt::Display for DescribeSimulationJobError {
     }
 }
 impl Error for DescribeSimulationJobError {}
+/// Errors returned by DescribeSimulationJobBatch
+#[derive(Debug, PartialEq)]
+pub enum DescribeSimulationJobBatchError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeSimulationJobBatchError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeSimulationJobBatchError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeSimulationJobBatchError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeSimulationJobBatchError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeSimulationJobBatchError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeSimulationJobBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeSimulationJobBatchError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeSimulationJobBatchError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeSimulationJobBatchError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeSimulationJobBatchError {}
 /// Errors returned by ListDeploymentJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentJobsError {
@@ -3629,6 +4060,46 @@ impl fmt::Display for ListSimulationApplicationsError {
     }
 }
 impl Error for ListSimulationApplicationsError {}
+/// Errors returned by ListSimulationJobBatches
+#[derive(Debug, PartialEq)]
+pub enum ListSimulationJobBatchesError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+}
+
+impl ListSimulationJobBatchesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSimulationJobBatchesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListSimulationJobBatchesError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListSimulationJobBatchesError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSimulationJobBatchesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSimulationJobBatchesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListSimulationJobBatchesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSimulationJobBatchesError {}
 /// Errors returned by ListSimulationJobs
 #[derive(Debug, PartialEq)]
 pub enum ListSimulationJobsError {
@@ -3835,6 +4306,70 @@ impl fmt::Display for RestartSimulationJobError {
     }
 }
 impl Error for RestartSimulationJobError {}
+/// Errors returned by StartSimulationJobBatch
+#[derive(Debug, PartialEq)]
+pub enum StartSimulationJobBatchError {
+    /// <p>The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical. </p>
+    IdempotentParameterMismatch(String),
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl StartSimulationJobBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSimulationJobBatchError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        StartSimulationJobBatchError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(StartSimulationJobBatchError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartSimulationJobBatchError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartSimulationJobBatchError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartSimulationJobBatchError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartSimulationJobBatchError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartSimulationJobBatchError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartSimulationJobBatchError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartSimulationJobBatchError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartSimulationJobBatchError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartSimulationJobBatchError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartSimulationJobBatchError {}
 /// Errors returned by SyncDeploymentJob
 #[derive(Debug, PartialEq)]
 pub enum SyncDeploymentJobError {
@@ -4152,6 +4687,12 @@ pub trait Robomaker {
         input: CancelSimulationJobRequest,
     ) -> Result<CancelSimulationJobResponse, RusotoError<CancelSimulationJobError>>;
 
+    /// <p>Cancels a simulation job batch. When you cancel a simulation job batch, you are also cancelling all of the active simulation jobs created as part of the batch. </p>
+    async fn cancel_simulation_job_batch(
+        &self,
+        input: CancelSimulationJobBatchRequest,
+    ) -> Result<CancelSimulationJobBatchResponse, RusotoError<CancelSimulationJobBatchError>>;
+
     /// <p><p>Deploys a specific version of a robot application to robots in a fleet.</p> <p>The robot application must have a numbered <code>applicationVersion</code> for consistency reasons. To create a new version, use <code>CreateRobotApplicationVersion</code> or see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/create-robot-application-version.html">Creating a Robot Application Version</a>. </p> <note> <p>After 90 days, deployment jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
     async fn create_deployment_job(
         &self,
@@ -4275,7 +4816,13 @@ pub trait Robomaker {
         input: DescribeSimulationJobRequest,
     ) -> Result<DescribeSimulationJobResponse, RusotoError<DescribeSimulationJobError>>;
 
-    /// <p><p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p> <note> <p> </p> </note></p>
+    /// <p>Describes a simulation job batch.</p>
+    async fn describe_simulation_job_batch(
+        &self,
+        input: DescribeSimulationJobBatchRequest,
+    ) -> Result<DescribeSimulationJobBatchResponse, RusotoError<DescribeSimulationJobBatchError>>;
+
+    /// <p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p>
     async fn list_deployment_jobs(
         &self,
         input: ListDeploymentJobsRequest,
@@ -4305,6 +4852,12 @@ pub trait Robomaker {
         input: ListSimulationApplicationsRequest,
     ) -> Result<ListSimulationApplicationsResponse, RusotoError<ListSimulationApplicationsError>>;
 
+    /// <p>Returns a list simulation job batches. You can optionally provide filters to retrieve specific simulation batch jobs. </p>
+    async fn list_simulation_job_batches(
+        &self,
+        input: ListSimulationJobBatchesRequest,
+    ) -> Result<ListSimulationJobBatchesResponse, RusotoError<ListSimulationJobBatchesError>>;
+
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
     async fn list_simulation_jobs(
         &self,
@@ -4328,6 +4881,12 @@ pub trait Robomaker {
         &self,
         input: RestartSimulationJobRequest,
     ) -> Result<RestartSimulationJobResponse, RusotoError<RestartSimulationJobError>>;
+
+    /// <p>Starts a new simulation job batch. The batch is defined using one or more <code>SimulationJobRequest</code> objects. </p>
+    async fn start_simulation_job_batch(
+        &self,
+        input: StartSimulationJobBatchRequest,
+    ) -> Result<StartSimulationJobBatchResponse, RusotoError<StartSimulationJobBatchError>>;
 
     /// <p>Syncrhonizes robots in a fleet to the latest deployment. This is helpful if robots were added after a deployment.</p>
     async fn sync_deployment_job(
@@ -4487,6 +5046,36 @@ impl Robomaker for RobomakerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelSimulationJobError::from_response(response))
+        }
+    }
+
+    /// <p>Cancels a simulation job batch. When you cancel a simulation job batch, you are also cancelling all of the active simulation jobs created as part of the batch. </p>
+    async fn cancel_simulation_job_batch(
+        &self,
+        input: CancelSimulationJobBatchRequest,
+    ) -> Result<CancelSimulationJobBatchResponse, RusotoError<CancelSimulationJobBatchError>> {
+        let request_uri = "/cancelSimulationJobBatch";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelSimulationJobBatchResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelSimulationJobBatchError::from_response(response))
         }
     }
 
@@ -5073,7 +5662,38 @@ impl Robomaker for RobomakerClient {
         }
     }
 
-    /// <p><p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p> <note> <p> </p> </note></p>
+    /// <p>Describes a simulation job batch.</p>
+    async fn describe_simulation_job_batch(
+        &self,
+        input: DescribeSimulationJobBatchRequest,
+    ) -> Result<DescribeSimulationJobBatchResponse, RusotoError<DescribeSimulationJobBatchError>>
+    {
+        let request_uri = "/describeSimulationJobBatch";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeSimulationJobBatchResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeSimulationJobBatchError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p>
     async fn list_deployment_jobs(
         &self,
         input: ListDeploymentJobsRequest,
@@ -5224,6 +5844,36 @@ impl Robomaker for RobomakerClient {
         }
     }
 
+    /// <p>Returns a list simulation job batches. You can optionally provide filters to retrieve specific simulation batch jobs. </p>
+    async fn list_simulation_job_batches(
+        &self,
+        input: ListSimulationJobBatchesRequest,
+    ) -> Result<ListSimulationJobBatchesResponse, RusotoError<ListSimulationJobBatchesError>> {
+        let request_uri = "/listSimulationJobBatches";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSimulationJobBatchesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSimulationJobBatchesError::from_response(response))
+        }
+    }
+
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
     async fn list_simulation_jobs(
         &self,
@@ -5338,6 +5988,36 @@ impl Robomaker for RobomakerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RestartSimulationJobError::from_response(response))
+        }
+    }
+
+    /// <p>Starts a new simulation job batch. The batch is defined using one or more <code>SimulationJobRequest</code> objects. </p>
+    async fn start_simulation_job_batch(
+        &self,
+        input: StartSimulationJobBatchRequest,
+    ) -> Result<StartSimulationJobBatchResponse, RusotoError<StartSimulationJobBatchError>> {
+        let request_uri = "/startSimulationJobBatch";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartSimulationJobBatchResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartSimulationJobBatchError::from_response(response))
         }
     }
 

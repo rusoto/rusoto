@@ -28,7 +28,7 @@ use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanLoopRequest {
-    /// <p>The name of the human loop you want to delete.</p>
+    /// <p>The name of the human loop that you want to delete.</p>
     #[serde(rename = "HumanLoopName")]
     pub human_loop_name: String,
 }
@@ -40,7 +40,7 @@ pub struct DeleteHumanLoopResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHumanLoopRequest {
-    /// <p>The name of the human loop.</p>
+    /// <p>The name of the human loop that you want information about.</p>
     #[serde(rename = "HumanLoopName")]
     pub human_loop_name: String,
 }
@@ -48,14 +48,14 @@ pub struct DescribeHumanLoopRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHumanLoopResponse {
-    /// <p>The timestamp when Amazon Augmented AI created the human loop.</p>
-    #[serde(rename = "CreationTimestamp")]
-    pub creation_timestamp: f64,
-    /// <p>A failure code denoting a specific type of failure.</p>
+    /// <p>The creation time when Amazon Augmented AI created the human loop.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>A failure code that identifies the type of failure.</p>
     #[serde(rename = "FailureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_code: Option<String>,
-    /// <p>The reason why a human loop has failed. The failure reason is returned when the human loop status is <code>Failed</code>.</p>
+    /// <p>The reason why a human loop failed. The failure reason is returned when the status of the human loop is <code>Failed</code>.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
@@ -65,49 +65,32 @@ pub struct DescribeHumanLoopResponse {
     /// <p>The Amazon Resource Name (ARN) of the human loop.</p>
     #[serde(rename = "HumanLoopArn")]
     pub human_loop_arn: String,
-    /// <p>An object containing information about the human loop input.</p>
-    #[serde(rename = "HumanLoopInput")]
-    pub human_loop_input: HumanLoopInputContent,
-    /// <p>The name of the human loop.</p>
+    /// <p>The name of the human loop. The name must be lowercase, unique within the Region in your account, and can have up to 63 characters. Valid characters: a-z, 0-9, and - (hyphen).</p>
     #[serde(rename = "HumanLoopName")]
     pub human_loop_name: String,
-    /// <p>An object containing information about the output of the human loop.</p>
+    /// <p>An object that contains information about the output of the human loop.</p>
     #[serde(rename = "HumanLoopOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub human_loop_output: Option<HumanLoopOutputContent>,
-    /// <p>The status of the human loop. Valid values:</p>
+    pub human_loop_output: Option<HumanLoopOutput>,
+    /// <p>The status of the human loop. </p>
     #[serde(rename = "HumanLoopStatus")]
     pub human_loop_status: String,
 }
 
-/// <p>Contains information about why a human loop was triggered. If at least one activation reason is evaluated to be true, the human loop is activated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct HumanLoopActivationReason {
-    /// <p>True if the specified conditions were matched to trigger the human loop.</p>
-    #[serde(rename = "ConditionsMatched")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub conditions_matched: Option<bool>,
+/// <p>Attributes of the data specified by the customer. Use these to describe the data to be labeled.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HumanLoopDataAttributes {
+    /// <p>Declares that your content is free of personally identifiable information or adult content.</p> <p>Amazon SageMaker can restrict the Amazon Mechanical Turk workers who can view your task based on this information.</p>
+    #[serde(rename = "ContentClassifiers")]
+    pub content_classifiers: Vec<String>,
 }
 
-/// <p>Information about the corresponding flow definition's human loop activation condition evaluation. Null if <code>StartHumanLoop</code> was invoked directly.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct HumanLoopActivationResults {
-    /// <p>A copy of the human loop activation conditions of the flow definition, augmented with the results of evaluating those conditions on the input provided to the <code>StartHumanLoop</code> operation.</p>
-    #[serde(rename = "HumanLoopActivationConditionsEvaluationResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub human_loop_activation_conditions_evaluation_results: Option<String>,
-    /// <p>An object containing information about why a human loop was triggered.</p>
-    #[serde(rename = "HumanLoopActivationReason")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub human_loop_activation_reason: Option<HumanLoopActivationReason>,
-}
-
-/// <p>An object containing the input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HumanLoopInputContent {
-    /// <p>Serialized input from the human loop.</p>
+/// <p>An object containing the human loop input in JSON format.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct HumanLoopInput {
+    /// <p>Serialized input from the human loop. The input must be a string representation of a file in JSON format.</p>
     #[serde(rename = "InputContent")]
     pub input_content: String,
 }
@@ -115,8 +98,8 @@ pub struct HumanLoopInputContent {
 /// <p>Information about where the human output will be stored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct HumanLoopOutputContent {
-    /// <p>The location of the Amazon S3 object where Amazon Augmented AI stores your human loop output. The output is stored at the following location: <code>s3://S3OutputPath/HumanLoopName/CreationTime/output.json</code>.</p>
+pub struct HumanLoopOutput {
+    /// <p>The location of the Amazon S3 object where Amazon Augmented AI stores your human loop output.</p>
     #[serde(rename = "OutputS3Uri")]
     pub output_s3_uri: String,
 }
@@ -129,11 +112,11 @@ pub struct HumanLoopSummary {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The reason why the human loop failed. A failure reason is returned only when the status of the human loop is <code>Failed</code>.</p>
+    /// <p>The reason why the human loop failed. A failure reason is returned when the status of the human loop is <code>Failed</code>.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the flow definition.</p>
+    /// <p>The Amazon Resource Name (ARN) of the flow definition used to configure the human loop.</p>
     #[serde(rename = "FlowDefinitionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_definition_arn: Option<String>,
@@ -141,41 +124,35 @@ pub struct HumanLoopSummary {
     #[serde(rename = "HumanLoopName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub human_loop_name: Option<String>,
-    /// <p>The status of the human loop. Valid values:</p>
+    /// <p>The status of the human loop. </p>
     #[serde(rename = "HumanLoopStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub human_loop_status: Option<String>,
 }
 
-/// <p>Attributes of the data specified by the customer. Use these to describe the data to be labeled.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct HumanReviewDataAttributes {
-    /// <p>Declares that your content is free of personally identifiable information or adult content. Amazon SageMaker may restrict the Amazon Mechanical Turk workers that can view your task based on this information.</p>
-    #[serde(rename = "ContentClassifiers")]
-    pub content_classifiers: Vec<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHumanLoopsRequest {
-    /// <p>(Optional) The timestamp of the date when you want the human loops to begin. For example, <code>1551000000</code>.</p>
+    /// <p>(Optional) The timestamp of the date when you want the human loops to begin in ISO 8601 format. For example, <code>2020-02-24</code>.</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time_after: Option<f64>,
-    /// <p>(Optional) The timestamp of the date before which you want the human loops to begin. For example, <code>1550000000</code>.</p>
+    /// <p>(Optional) The timestamp of the date before which you want the human loops to begin in ISO 8601 format. For example, <code>2020-02-24</code>.</p>
     #[serde(rename = "CreationTimeBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time_before: Option<f64>,
-    /// <p>The total number of items to return. If the total number of available items is more than the value specified in <code>MaxResults</code>, then a <code>NextToken</code> will be provided in the output that you can use to resume pagination.</p>
+    /// <p>The Amazon Resource Name (ARN) of a flow definition.</p>
+    #[serde(rename = "FlowDefinitionArn")]
+    pub flow_definition_arn: String,
+    /// <p>The total number of items to return. If the total number of available items is more than the value specified in <code>MaxResults</code>, then a <code>NextToken</code> is returned in the output. You can use this token to display the next page of results. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to resume pagination.</p>
+    /// <p>A token to display the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An optional value that specifies whether you want the results sorted in <code>Ascending</code> or <code>Descending</code> order.</p>
+    /// <p>Optional. The order for displaying results. Valid values: <code>Ascending</code> and <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
@@ -184,10 +161,10 @@ pub struct ListHumanLoopsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHumanLoopsResponse {
-    /// <p>An array of objects containing information about the human loops.</p>
+    /// <p>An array of objects that contain information about the human loops.</p>
     #[serde(rename = "HumanLoopSummaries")]
     pub human_loop_summaries: Vec<HumanLoopSummary>,
-    /// <p>A token to resume pagination.</p>
+    /// <p>A token to display the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -196,16 +173,16 @@ pub struct ListHumanLoopsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartHumanLoopRequest {
-    /// <p>Attributes of the data specified by the customer.</p>
+    /// <p>Attributes of the specified data. Use <code>DataAttributes</code> to specify if your data is free of personally identifiable information and/or free of adult content.</p>
     #[serde(rename = "DataAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_attributes: Option<HumanReviewDataAttributes>,
-    /// <p>The Amazon Resource Name (ARN) of the flow definition.</p>
+    pub data_attributes: Option<HumanLoopDataAttributes>,
+    /// <p>The Amazon Resource Name (ARN) of the flow definition associated with this human loop.</p>
     #[serde(rename = "FlowDefinitionArn")]
     pub flow_definition_arn: String,
-    /// <p>An object containing information about the human loop.</p>
+    /// <p>An object that contains information about the human loop.</p>
     #[serde(rename = "HumanLoopInput")]
-    pub human_loop_input: HumanLoopInputContent,
+    pub human_loop_input: HumanLoopInput,
     /// <p>The name of the human loop.</p>
     #[serde(rename = "HumanLoopName")]
     pub human_loop_name: String,
@@ -214,10 +191,6 @@ pub struct StartHumanLoopRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartHumanLoopResponse {
-    /// <p>An object containing information about the human loop activation.</p>
-    #[serde(rename = "HumanLoopActivationResults")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub human_loop_activation_results: Option<HumanLoopActivationResults>,
     /// <p>The Amazon Resource Name (ARN) of the human loop.</p>
     #[serde(rename = "HumanLoopArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -227,7 +200,7 @@ pub struct StartHumanLoopResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopHumanLoopRequest {
-    /// <p>The name of the human loop you want to stop.</p>
+    /// <p>The name of the human loop that you want to stop.</p>
     #[serde(rename = "HumanLoopName")]
     pub human_loop_name: String,
 }
@@ -239,11 +212,11 @@ pub struct StopHumanLoopResponse {}
 /// Errors returned by DeleteHumanLoop
 #[derive(Debug, PartialEq)]
 pub enum DeleteHumanLoopError {
-    /// <p>Your request could not be processed.</p>
+    /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We were unable to find the requested resource.</p>
+    /// <p>We couldn't find the requested resource.</p>
     ResourceNotFound(String),
-    /// <p>Your request has exceeded the allowed amount of requests.</p>
+    /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
 }
 
@@ -281,11 +254,11 @@ impl Error for DeleteHumanLoopError {}
 /// Errors returned by DescribeHumanLoop
 #[derive(Debug, PartialEq)]
 pub enum DescribeHumanLoopError {
-    /// <p>Your request could not be processed.</p>
+    /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We were unable to find the requested resource.</p>
+    /// <p>We couldn't find the requested resource.</p>
     ResourceNotFound(String),
-    /// <p>Your request has exceeded the allowed amount of requests.</p>
+    /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
 }
 
@@ -323,9 +296,11 @@ impl Error for DescribeHumanLoopError {}
 /// Errors returned by ListHumanLoops
 #[derive(Debug, PartialEq)]
 pub enum ListHumanLoopsError {
-    /// <p>Your request could not be processed.</p>
+    /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>Your request has exceeded the allowed amount of requests.</p>
+    /// <p>We couldn't find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
 }
 
@@ -335,6 +310,9 @@ impl ListHumanLoopsError {
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(ListHumanLoopsError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListHumanLoopsError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListHumanLoopsError::Throttling(err.msg))
@@ -351,6 +329,7 @@ impl fmt::Display for ListHumanLoopsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListHumanLoopsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListHumanLoopsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListHumanLoopsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -359,11 +338,13 @@ impl Error for ListHumanLoopsError {}
 /// Errors returned by StartHumanLoop
 #[derive(Debug, PartialEq)]
 pub enum StartHumanLoopError {
-    /// <p>Your request could not be processed.</p>
+    /// <p>Your request has the same name as another active human loop but has different input data. You cannot start two human loops with the same name and different input data.</p>
+    Conflict(String),
+    /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>You have exceeded your service quota. To perform the requested action, remove some of the relevant resources, or request a service quota increase.</p>
+    /// <p>You exceeded your service quota. Delete some resources or request an increase in your service quota.</p>
     ServiceQuotaExceeded(String),
-    /// <p>Your request has exceeded the allowed amount of requests.</p>
+    /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
 }
 
@@ -371,6 +352,9 @@ impl StartHumanLoopError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartHumanLoopError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(StartHumanLoopError::Conflict(err.msg))
+                }
                 "InternalServerException" => {
                     return RusotoError::Service(StartHumanLoopError::InternalServer(err.msg))
                 }
@@ -391,6 +375,7 @@ impl fmt::Display for StartHumanLoopError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            StartHumanLoopError::Conflict(ref cause) => write!(f, "{}", cause),
             StartHumanLoopError::InternalServer(ref cause) => write!(f, "{}", cause),
             StartHumanLoopError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             StartHumanLoopError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -401,11 +386,11 @@ impl Error for StartHumanLoopError {}
 /// Errors returned by StopHumanLoop
 #[derive(Debug, PartialEq)]
 pub enum StopHumanLoopError {
-    /// <p>Your request could not be processed.</p>
+    /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We were unable to find the requested resource.</p>
+    /// <p>We couldn't find the requested resource.</p>
     ResourceNotFound(String),
-    /// <p>Your request has exceeded the allowed amount of requests.</p>
+    /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
 }
 
@@ -455,7 +440,7 @@ pub trait SagemakerA2iRuntime {
         input: DescribeHumanLoopRequest,
     ) -> Result<DescribeHumanLoopResponse, RusotoError<DescribeHumanLoopError>>;
 
-    /// <p>Returns information about human loops, given the specified parameters.</p>
+    /// <p>Returns information about human loops, given the specified parameters. If a human loop was deleted, it will not be included.</p>
     async fn list_human_loops(
         &self,
         input: ListHumanLoopsRequest,
@@ -577,7 +562,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         }
     }
 
-    /// <p>Returns information about human loops, given the specified parameters.</p>
+    /// <p>Returns information about human loops, given the specified parameters. If a human loop was deleted, it will not be included.</p>
     async fn list_human_loops(
         &self,
         input: ListHumanLoopsRequest,
@@ -596,6 +581,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         if let Some(ref x) = input.creation_time_before {
             params.put("CreationTimeBefore", x);
         }
+        params.put("FlowDefinitionArn", &input.flow_definition_arn);
         if let Some(ref x) = input.max_results {
             params.put("MaxResults", x);
         }

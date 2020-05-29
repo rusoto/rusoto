@@ -49,10 +49,13 @@ pub struct AnalyzedResource {
     /// <p>The ARN of the resource that was analyzed.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
+    /// <p>The AWS account ID that owns the resource.</p>
+    #[serde(rename = "resourceOwnerAccount")]
+    pub resource_owner_account: String,
     /// <p>The type of the resource that was analyzed.</p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
-    /// <p>Indicates how the access that generated the finding is granted.</p>
+    /// <p>Indicates how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
     #[serde(rename = "sharedVia")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shared_via: Option<Vec<String>>,
@@ -72,6 +75,9 @@ pub struct AnalyzedResourceSummary {
     /// <p>The ARN of the analyzed resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
+    /// <p>The AWS account ID that owns the resource.</p>
+    #[serde(rename = "resourceOwnerAccount")]
+    pub resource_owner_account: String,
     /// <p>The type of resource that was analyzed.</p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
@@ -98,6 +104,13 @@ pub struct AnalyzerSummary {
     /// <p>The name of the analyzer.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The status of the analyzer. An <code>Active</code> analyzer successfully monitors supported resources and generates new findings. The analyzer is <code>Disabled</code> when a user action, such as removing trusted access for IAM Access Analyzer from AWS Organizations, causes the analyzer to stop generating new findings. The status is <code>Creating</code> when the analyzer creation is in progress and <code>Failed</code> when the analyzer creation has failed. </p>
+    #[serde(rename = "status")]
+    pub status: String,
+    /// <p>The <code>statusReason</code> provides more details about the current status of the analyzer. For example, if the creation for the analyzer fails, a <code>Failed</code> status is displayed. For an analyzer with organization as the type, this failure can be due to an issue with creating the service-linked roles required in the member accounts of the AWS organization.</p>
+    #[serde(rename = "statusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reason: Option<StatusReason>,
     /// <p>The tags added to the analyzer.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,15 +277,45 @@ pub struct Finding {
     #[serde(rename = "resource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource: Option<String>,
+    /// <p>The AWS account ID that owns the resource.</p>
+    #[serde(rename = "resourceOwnerAccount")]
+    pub resource_owner_account: String,
     /// <p>The type of the resource reported in the finding.</p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
+    /// <p>The sources of the finding. This indicates how the access that generated the finding is granted. It is populated for Amazon S3 bucket findings.</p>
+    #[serde(rename = "sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<FindingSource>>,
     /// <p>The current status of the finding.</p>
     #[serde(rename = "status")]
     pub status: String,
     /// <p>The time at which the finding was updated.</p>
     #[serde(rename = "updatedAt")]
     pub updated_at: f64,
+}
+
+/// <p>The source of the finding. This indicates how the access that generated the finding is granted. It is populated for Amazon S3 bucket findings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FindingSource {
+    /// <p>Includes details about how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
+    #[serde(rename = "detail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detail: Option<FindingSourceDetail>,
+    /// <p>Indicates the type of access that generated the finding.</p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
+/// <p>Includes details about how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FindingSourceDetail {
+    /// <p>The ARN of the access point that generated the finding.</p>
+    #[serde(rename = "accessPointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_point_arn: Option<String>,
 }
 
 /// <p>Contains information about a finding.</p>
@@ -311,9 +354,16 @@ pub struct FindingSummary {
     #[serde(rename = "resource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource: Option<String>,
+    /// <p>The AWS account ID that owns the resource.</p>
+    #[serde(rename = "resourceOwnerAccount")]
+    pub resource_owner_account: String,
     /// <p>The type of the resource that the external principal has access to.</p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
+    /// <p>The sources of the finding. This indicates how the access that generated the finding is granted. It is populated for Amazon S3 bucket findings.</p>
+    #[serde(rename = "sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<FindingSource>>,
     /// <p>The status of the finding.</p>
     #[serde(rename = "status")]
     pub status: String,
@@ -592,6 +642,15 @@ pub struct StartResourceScanRequest {
     /// <p>The ARN of the resource to scan.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
+}
+
+/// <p>Provides more details about the current status of the analyzer. For example, if the creation for the analyzer fails, a <code>Failed</code> status is displayed. For an analyzer with organization as the type, this failure can be due to an issue with creating the service-linked roles required in the member accounts of the AWS organization.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StatusReason {
+    /// <p>The reason code for the current status of the analyzer.</p>
+    #[serde(rename = "code")]
+    pub code: String,
 }
 
 /// <p>Adds a tag to the specified resource.</p>

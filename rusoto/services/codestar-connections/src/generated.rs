@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>The configuration that allows a service such as CodePipeline to connect to a third-party code repository.</p>
+/// <p>The AWS::CodeStarConnections::Connection resource can be used to connect external source providers with services like AWS CodePipeline.</p> <p>Note: A connection created through CloudFormation is in `PENDING` status by default. You can make its status `AVAILABLE` by editing the connection in the CodePipeline console.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
@@ -40,7 +40,7 @@ pub struct Connection {
     #[serde(rename = "ConnectionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_status: Option<String>,
-    /// <p>The name of the external provider where your third-party code repository is configured. For Bitbucket, this is the account ID of the owner of the Bitbucket repository.</p>
+    /// <p>The identifier of the external provider where your third-party code repository is configured. For Bitbucket, this is the account ID of the owner of the Bitbucket repository.</p>
     #[serde(rename = "OwnerAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account_id: Option<String>,
@@ -59,6 +59,10 @@ pub struct CreateConnectionInput {
     /// <p>The name of the external provider where your third-party code repository is configured. Currently, the valid provider type is Bitbucket.</p>
     #[serde(rename = "ProviderType")]
     pub provider_type: String,
+    /// <p>The key-value pair to use when tagging the resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -67,6 +71,10 @@ pub struct CreateConnectionOutput {
     /// <p><p>The Amazon Resource Name (ARN) of the connection to be created. The ARN is used as the connection reference when the connection is shared between AWS services.</p> <note> <p>The ARN is never reused if the connection is deleted.</p> </note></p>
     #[serde(rename = "ConnectionArn")]
     pub connection_arn: String,
+    /// <p>Specifies the tags applied to the resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -127,6 +135,64 @@ pub struct ListConnectionsOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceInput {
+    /// <p>The Amazon Resource Name (ARN) of the resource for which you want to get information about tags, if any.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>A list of tag key and value pairs associated with the specified resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>A tag is a key-value pair that is used to manage the resource.</p> <p>This tag is available for use by AWS services that support tags.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The tag's key.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The tag's value.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add or update tags.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags you want to modify or add to the resource.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) of the resource to remove tags from.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of keys for the tags to be removed from the resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceOutput {}
 
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
@@ -240,6 +306,104 @@ impl fmt::Display for ListConnectionsError {
     }
 }
 impl Error for ListConnectionsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Exceeded the maximum limit for connections.</p>
+    LimitExceeded(String),
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(TagResourceError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the AWS CodeStar connections API. AWS CodeStar connections clients implement this trait.
 #[async_trait]
 pub trait CodeStarConnections {
@@ -266,6 +430,24 @@ pub trait CodeStarConnections {
         &self,
         input: ListConnectionsInput,
     ) -> Result<ListConnectionsOutput, RusotoError<ListConnectionsError>>;
+
+    /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from an AWS resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
 }
 /// A client for the AWS CodeStar connections API.
 #[derive(Clone)]
@@ -424,6 +606,97 @@ impl CodeStarConnections for CodeStarConnectionsClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListConnectionsError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.TagResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes tags from an AWS resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.UntagResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 }

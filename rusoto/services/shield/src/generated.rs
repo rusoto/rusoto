@@ -48,6 +48,21 @@ pub struct AssociateDRTRoleRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDRTRoleResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateHealthCheckRequest {
+    /// <p>The Amazon Resource Name (ARN) of the health check to associate with the protection.</p>
+    #[serde(rename = "HealthCheckArn")]
+    pub health_check_arn: String,
+    /// <p>The unique identifier (ID) for the <a>Protection</a> object to add the health check association to. </p>
+    #[serde(rename = "ProtectionId")]
+    pub protection_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateHealthCheckResponse {}
+
 /// <p>The details of a DDoS attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -311,6 +326,21 @@ pub struct DisassociateDRTRoleRequest {}
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDRTRoleResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateHealthCheckRequest {
+    /// <p>The Amazon Resource Name (ARN) of the health check that is associated with the protection.</p>
+    #[serde(rename = "HealthCheckArn")]
+    pub health_check_arn: String,
+    /// <p>The unique identifier (ID) for the <a>Protection</a> object to remove the health check association from. </p>
+    #[serde(rename = "ProtectionId")]
+    pub protection_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateHealthCheckResponse {}
+
 /// <p>Contact information that the DRT can use to contact you during a suspected attack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmergencyContact {
@@ -423,6 +453,10 @@ pub struct Mitigation {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Protection {
+    /// <p>The unique identifier (ID) for the Route 53 health check that's associated with the protection. </p>
+    #[serde(rename = "HealthCheckIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check_ids: Option<Vec<String>>,
     /// <p>The unique identifier (ID) of the protection.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -571,7 +605,7 @@ pub struct UpdateSubscriptionResponse {}
 /// Errors returned by AssociateDRTLogBucket
 #[derive(Debug, PartialEq)]
 pub enum AssociateDRTLogBucketError {
-    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting <code>AssociateDRTRole</code> must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
     AccessDeniedForDependency(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
@@ -659,7 +693,7 @@ impl Error for AssociateDRTLogBucketError {}
 /// Errors returned by AssociateDRTRole
 #[derive(Debug, PartialEq)]
 pub enum AssociateDRTRoleError {
-    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting <code>AssociateDRTRole</code> must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
     AccessDeniedForDependency(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
@@ -718,6 +752,64 @@ impl fmt::Display for AssociateDRTRoleError {
     }
 }
 impl Error for AssociateDRTRoleError {}
+/// Errors returned by AssociateHealthCheck
+#[derive(Debug, PartialEq)]
+pub enum AssociateHealthCheckError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    LimitsExceeded(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl AssociateHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateHealthCheckError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(AssociateHealthCheckError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AssociateHealthCheckError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitsExceededException" => {
+                    return RusotoError::Service(AssociateHealthCheckError::LimitsExceeded(err.msg))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(AssociateHealthCheckError::OptimisticLock(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociateHealthCheckError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateHealthCheckError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateHealthCheckError::InternalError(ref cause) => write!(f, "{}", cause),
+            AssociateHealthCheckError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateHealthCheckError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateHealthCheckError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            AssociateHealthCheckError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateHealthCheckError {}
 /// Errors returned by CreateProtection
 #[derive(Debug, PartialEq)]
 pub enum CreateProtectionError {
@@ -1111,7 +1203,7 @@ impl Error for DescribeSubscriptionError {}
 /// Errors returned by DisassociateDRTLogBucket
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDRTLogBucketError {
-    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting <code>AssociateDRTRole</code> must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
     AccessDeniedForDependency(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
@@ -1234,6 +1326,62 @@ impl fmt::Display for DisassociateDRTRoleError {
     }
 }
 impl Error for DisassociateDRTRoleError {}
+/// Errors returned by DisassociateHealthCheck
+#[derive(Debug, PartialEq)]
+pub enum DisassociateHealthCheckError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DisassociateHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateHealthCheckError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DisassociateHealthCheckError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DisassociateHealthCheckError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(DisassociateHealthCheckError::OptimisticLock(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DisassociateHealthCheckError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateHealthCheckError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateHealthCheckError::InternalError(ref cause) => write!(f, "{}", cause),
+            DisassociateHealthCheckError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisassociateHealthCheckError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            DisassociateHealthCheckError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateHealthCheckError {}
 /// Errors returned by GetSubscriptionState
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionStateError {
@@ -1485,6 +1633,12 @@ pub trait Shield {
         input: AssociateDRTRoleRequest,
     ) -> Result<AssociateDRTRoleResponse, RusotoError<AssociateDRTRoleError>>;
 
+    /// <p>Adds health-based detection to the Shield Advanced protection for a resource. Shield Advanced health-based detection uses the health of your AWS resource to improve responsiveness and accuracy in attack detection and mitigation. </p> <p>You define the health check in Route 53 and then associate it with your Shield Advanced protection. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html#ddos-advanced-health-check-option">Shield Advanced Health-Based Detection</a> in the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF and AWS Shield Developer Guide</a>. </p>
+    async fn associate_health_check(
+        &self,
+        input: AssociateHealthCheckRequest,
+    ) -> Result<AssociateHealthCheckResponse, RusotoError<AssociateHealthCheckError>>;
+
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     async fn create_protection(
         &self,
@@ -1547,6 +1701,12 @@ pub trait Shield {
     async fn disassociate_drt_role(
         &self,
     ) -> Result<DisassociateDRTRoleResponse, RusotoError<DisassociateDRTRoleError>>;
+
+    /// <p>Removes health-based detection from the Shield Advanced protection for a resource. Shield Advanced health-based detection uses the health of your AWS resource to improve responsiveness and accuracy in attack detection and mitigation. </p> <p>You define the health check in Route 53 and then associate or disassociate it with your Shield Advanced protection. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html#ddos-advanced-health-check-option">Shield Advanced Health-Based Detection</a> in the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF and AWS Shield Developer Guide</a>. </p>
+    async fn disassociate_health_check(
+        &self,
+        input: DisassociateHealthCheckRequest,
+    ) -> Result<DisassociateHealthCheckResponse, RusotoError<DisassociateHealthCheckError>>;
 
     /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
     async fn get_subscription_state(
@@ -1673,6 +1833,34 @@ impl Shield for ShieldClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateDRTRoleError::from_response(response))
+        }
+    }
+
+    /// <p>Adds health-based detection to the Shield Advanced protection for a resource. Shield Advanced health-based detection uses the health of your AWS resource to improve responsiveness and accuracy in attack detection and mitigation. </p> <p>You define the health check in Route 53 and then associate it with your Shield Advanced protection. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html#ddos-advanced-health-check-option">Shield Advanced Health-Based Detection</a> in the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF and AWS Shield Developer Guide</a>. </p>
+    async fn associate_health_check(
+        &self,
+        input: AssociateHealthCheckRequest,
+    ) -> Result<AssociateHealthCheckResponse, RusotoError<AssociateHealthCheckError>> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.AssociateHealthCheck");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateHealthCheckResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateHealthCheckError::from_response(response))
         }
     }
 
@@ -1979,6 +2167,34 @@ impl Shield for ShieldClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateDRTRoleError::from_response(response))
+        }
+    }
+
+    /// <p>Removes health-based detection from the Shield Advanced protection for a resource. Shield Advanced health-based detection uses the health of your AWS resource to improve responsiveness and accuracy in attack detection and mitigation. </p> <p>You define the health check in Route 53 and then associate or disassociate it with your Shield Advanced protection. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html#ddos-advanced-health-check-option">Shield Advanced Health-Based Detection</a> in the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF and AWS Shield Developer Guide</a>. </p>
+    async fn disassociate_health_check(
+        &self,
+        input: DisassociateHealthCheckRequest,
+    ) -> Result<DisassociateHealthCheckResponse, RusotoError<DisassociateHealthCheckError>> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.DisassociateHealthCheck");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateHealthCheckResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateHealthCheckError::from_response(response))
         }
     }
 

@@ -169,11 +169,11 @@ pub struct CreateDataRepositoryTaskRequest {
     pub client_request_token: Option<String>,
     #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    /// <p>(Optional) The path or paths on the Amazon FSx file system to use when the data repository task is processed. The default path is the file system root directory.</p>
+    /// <p>(Optional) The path or paths on the Amazon FSx file system to use when the data repository task is processed. The default path is the file system root directory. The paths you provide need to be relative to the mount point of the file system. If the mount point is <code>/mnt/fsx</code> and <code>/mnt/fsx/path1</code> is a directory or file on the file system you want to export, then the path to provide is <code>path1</code>. If a path that you provide isn't valid, the task fails.</p>
     #[serde(rename = "Paths")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub paths: Option<Vec<String>>,
-    /// <p>Defines whether or not Amazon FSx provides a CompletionReport once the task has completed. A CompletionReport provides a detailed report on the files that Amazon FSx processed that meet the criteria specified by the <code>Scope</code> parameter. </p>
+    /// <p>Defines whether or not Amazon FSx provides a CompletionReport once the task has completed. A CompletionReport provides a detailed report on the files that Amazon FSx processed that meet the criteria specified by the <code>Scope</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/task-completion-report.html">Working with Task Completion Reports</a>.</p>
     #[serde(rename = "Report")]
     pub report: CompletionReport,
     #[serde(rename = "Tags")]
@@ -203,11 +203,15 @@ pub struct CreateFileSystemFromBackupRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups apply to all network interfaces. This value isn't returned in later describe requests.</p>
+    /// <p>A list of IDs for the security groups that apply to the specified network interfaces created for file system access. These security groups apply to all network interfaces. This value isn't returned in later DescribeFileSystem requests.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>A list of IDs for the subnets that the file system will be accessible from. Currently, you can specify only one subnet. The file server is also launched in that subnet's Availability Zone.</p>
+    /// <p><p>Sets the storage type for the Windows file system you&#39;re creating from a backup. Valid values are <code>SSD</code> and <code>HDD</code>.</p> <ul> <li> <p>Set to <code>SSD</code> to use solid state drive storage. Supported on all Windows deployment types.</p> </li> <li> <p>Set to <code>HDD</code> to use hard disk drive storage. Supported on <code>SINGLE<em>AZ</em>2</code> and <code>MULTI<em>AZ</em>1</code> Windows file system deployment types. </p> </li> </ul> <p> Default value is <code>SSD</code>. </p> <note> <p>HDD and SSD storage types have different minimum storage capacity requirements. A restored file system&#39;s storage capacity is tied to the file system that was backed up. You can create a file system that uses HDD storage from a backup of a file system that used SSD storage only if the original SSD file system had a storage capacity of at least 2000 GiB. </p> </note></p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
     /// <p>The tags to be applied to the file system at file system creation. The key value of the <code>Name</code> tag appears in the console as the file system name.</p>
@@ -230,10 +234,14 @@ pub struct CreateFileSystemFromBackupResponse {
     pub file_system: Option<FileSystem>,
 }
 
-/// <p>The Lustre configuration for the file system being created. This value is required if <code>FileSystemType</code> is set to <code>LUSTRE</code>.</p>
+/// <p>The Lustre configuration for the file system being created. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFileSystemLustreConfiguration {
+    /// <p>(Optional) Choose <code>SCRATCH_1</code> and <code>SCRATCH_2</code> deployment types when you need temporary storage and shorter-term processing of data. The <code>SCRATCH_2</code> deployment type provides in-transit encryption of data and higher burst throughput capacity than <code>SCRATCH_1</code>.</p> <p>Choose <code>PERSISTENT_1</code> deployment type for longer-term storage and workloads and encryption of data in transit. To learn more about deployment types, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-deployment-types.html"> FSx for Lustre Deployment Options</a>.</p> <p>Encryption of data in-transit is automatically enabled when you access a <code>SCRATCH_2</code> or <code>PERSISTENT_1</code> file system from Amazon EC2 instances that <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data- protection.html">support this feature</a>. (Default = <code>SCRATCH_1</code>) </p> <p>Encryption of data in-transit for <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types is supported when accessed from supported instance types in supported AWS Regions. To learn more, <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html">Encrypting Data in Transit</a>.</p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
     /// <p>(Optional) The path in Amazon S3 where the root of your Amazon FSx file system is exported. The path must use the same Amazon S3 bucket as specified in ImportPath. You can provide an optional prefix to which new and changed data is to be exported from your Amazon FSx for Lustre file system. If an <code>ExportPath</code> value is not provided, Amazon FSx sets a default export path, <code>s3://import-bucket/FSxLustre[creation-timestamp]</code>. The timestamp is in UTC format, for example <code>s3://import-bucket/FSxLustre20181105T222312Z</code>.</p> <p>The Amazon S3 export bucket must be the same as the import bucket specified by <code>ImportPath</code>. If you only specify a bucket name, such as <code>s3://import-bucket</code>, you get a 1:1 mapping of file system objects to S3 bucket objects. This mapping means that the input data in S3 is overwritten on export. If you provide a custom prefix in the export path, such as <code>s3://import-bucket/[custom-optional-prefix]</code>, Amazon FSx exports the contents of your file system to that export prefix in the Amazon S3 bucket.</p>
     #[serde(rename = "ExportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -242,10 +250,14 @@ pub struct CreateFileSystemLustreConfiguration {
     #[serde(rename = "ImportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub import_path: Option<String>,
-    /// <p>(Optional) For files imported from a data repository, this value determines the stripe count and maximum amount of data per file (in MiB) stored on a single physical disk. The maximum number of disks that a single file can be striped across is limited by the total number of disks that make up the file system.</p> <p>The chunk size default is 1,024 MiB (1 GiB) and can go as high as 512,000 MiB (500 GiB). Amazon S3 objects have a maximum size of 5 TB.</p>
+    /// <p>(Optional) For files imported from a data repository, this value determines the stripe count and maximum amount of data per file (in MiB) stored on a single physical disk. The maximum number of disks that a single file can be striped across is limited by the total number of disks that make up the file system.</p> <p>The default chunk size is 1,024 MiB (1 GiB) and can go as high as 512,000 MiB (500 GiB). Amazon S3 objects have a maximum size of 5 TB.</p>
     #[serde(rename = "ImportedFileChunkSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub imported_file_chunk_size: Option<i64>,
+    /// <p> Required for the <code>PERSISTENT_1</code> deployment type, describes the amount of read and write throughput for each 1 tebibyte of storage, in MB/s/TiB. File system throughput capacity is calculated by multiplying ﬁle system storage capacity (TiB) by the PerUnitStorageThroughput (MB/s/TiB). For a 2.4 TiB ﬁle system, provisioning 50 MB/s/TiB of PerUnitStorageThroughput yields 117 MB/s of ﬁle system throughput. You pay for the amount of throughput that you provision. </p> <p>Valid values are 50, 100, 200.</p>
+    #[serde(rename = "PerUnitStorageThroughput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub per_unit_storage_throughput: Option<i64>,
     /// <p>The preferred time to perform weekly maintenance, in the UTC time zone.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -260,7 +272,7 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>The type of Amazon FSx file system to create.</p>
+    /// <p>The type of Amazon FSx file system to create, either <code>WINDOWS</code> or <code>LUSTRE</code>.</p>
     #[serde(rename = "FileSystemType")]
     pub file_system_type: String,
     #[serde(rename = "KmsKeyId")]
@@ -273,17 +285,21 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The storage capacity of the file system being created.</p> <p>For Windows file systems, valid values are 32 GiB - 65,536 GiB.</p> <p>For Lustre file systems, valid values are 1,200, 2,400, 3,600, then continuing in increments of 3600 GiB.</p>
+    /// <p><p>Sets the storage capacity of the file system that you&#39;re creating.</p> <p>For Lustre file systems:</p> <ul> <li> <p>For <code>SCRATCH<em>2</code> and <code>PERSISTENT</em>1</code> deployment types, valid values are 1.2, 2.4, and increments of 2.4 TiB.</p> </li> <li> <p>For <code>SCRATCH_1</code> deployment type, valid values are 1.2, 2.4, and increments of 3.6 TiB.</p> </li> </ul> <p>For Windows file systems:</p> <ul> <li> <p>If <code>StorageType=SSD</code>, valid values are 32 GiB - 65,536 GiB (64 TiB).</p> </li> <li> <p>If <code>StorageType=HDD</code>, valid values are 2000 GiB - 65,536 GiB (64 TiB).</p> </li> </ul></p>
     #[serde(rename = "StorageCapacity")]
     pub storage_capacity: i64,
-    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standy file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
+    /// <p>Sets the storage type for the Amazon FSx for Windows file system you're creating. Valid values are <code>SSD</code> and <code>HDD</code>.</p> <ul> <li> <p>Set to <code>SSD</code> to use solid state drive storage. SSD is supported on all Windows deployment types.</p> </li> <li> <p>Set to <code>HDD</code> to use hard disk drive storage. HDD is supported on <code>SINGLE_AZ_2</code> and <code>MULTI_AZ_1</code> Windows file system deployment types. </p> </li> </ul> <p> Default value is <code>SSD</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/optimize-fsx-tco.html#saz-maz-storage-type"> Storage Type Options</a> in the <i>Amazon FSx for Windows User Guide</i>. </p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
     /// <p>The tags to apply to the file system being created. The key value of the <code>Name</code> tag appears in the console as the file system name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The Microsoft Windows configuration for the file system being created. This value is required if <code>FileSystemType</code> is set to <code>WINDOWS</code>.</p>
+    /// <p>The Microsoft Windows configuration for the file system being created. </p>
     #[serde(rename = "WindowsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub windows_configuration: Option<CreateFileSystemWindowsConfiguration>,
@@ -311,7 +327,7 @@ pub struct CreateFileSystemWindowsConfiguration {
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
-    /// <p>A boolean flag indicating whether tags for the file system should be copied to backups. This value defaults to false. If it's set to true, all tags for the file system are copied to all automatic and user-initiated backups where the user doesn't specify tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups.</p>
+    /// <p>A boolean flag indicating whether tags for the file system should be copied to backups. This value defaults to false. If it's set to true, all tags for the file system are copied to all automatic and user-initiated backups where the user doesn't specify tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.</p>
     #[serde(rename = "CopyTagsToBackups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_tags_to_backups: Option<bool>,
@@ -319,7 +335,7 @@ pub struct CreateFileSystemWindowsConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
-    /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p>MULTI_AZ_1 - Deploys a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability. You can only deploy a Multi-AZ file system in AWS Regions that have a minimum of three Availability Zones.</p> </li> <li> <p>SINGLE_AZ_1 - (Default) Choose to deploy a file system that is configured for single AZ redundancy.</p> </li> </ul> <p>To learn more about high availability Multi-AZ file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html"> High Availability for Amazon FSx for Windows File Server</a>.</p>
+    /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI_AZ_1</code> - Deploys a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability. You can only deploy a Multi-AZ file system in AWS Regions that have a minimum of three Availability Zones. Also supports HDD storage type</p> </li> <li> <p> <code>SINGLE_AZ_1</code> - (Default) Choose to deploy a file system that is configured for single AZ redundancy.</p> </li> <li> <p> <code>SINGLE_AZ_2</code> - The latest generation Single AZ file system. Specifies a file system that is configured for single AZ redundancy and supports HDD storage type.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html"> Availability and Durability: Single-AZ and Multi-AZ File Systems</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
@@ -661,7 +677,7 @@ pub struct FileSystem {
     #[serde(rename = "FileSystemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_type: Option<String>,
-    /// <p>The ID of the AWS Key Management Service (AWS KMS) key used to encrypt the file system's data for an Amazon FSx for Windows File Server file system. Amazon FSx for Lustre does not support KMS encryption. </p>
+    /// <p>The ID of the AWS Key Management Service (AWS KMS) key used to encrypt the file system's data for Amazon FSx for Windows File Server file systems and persistent Amazon FSx for Lustre file systems at rest. In either case, if not specified, the Amazon FSx managed key is used. The scratch Amazon FSx for Lustre file systems are always encrypted at rest using Amazon FSx managed keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html">Encrypt</a> in the <i>AWS Key Management Service API Reference</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -688,7 +704,11 @@ pub struct FileSystem {
     #[serde(rename = "StorageCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_capacity: Option<i64>,
-    /// <p>The ID of the subnet to contain the endpoint for the file system. One and only one is supported. The file system is launched in the Availability Zone associated with this subnet.</p>
+    /// <p>The storage type of the file system. Valid values are <code>SSD</code> and <code>HDD</code>. If set to <code>SSD</code>, the file system uses solid state drive storage. If set to <code>HDD</code>, the file system uses hard disk drive storage. </p>
+    #[serde(rename = "StorageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_type: Option<String>,
+    /// <p>Specifies the IDs of the subnets that the file system is accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment type, there are two subnet IDs, one for the preferred file server and one for the standby file server. The preferred file server subnet identified in the <code>PreferredSubnetID</code> property. All other file systems have only one subnet ID.</p> <p>For Lustre file systems, and Single-AZ Windows file systems, this is the ID of the subnet that contains the endpoint for the file system. For <code>MULTI_AZ_1</code> Windows file systems, the endpoint for the file system is available in the <code>PreferredSubnetID</code>.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -768,6 +788,18 @@ pub struct LustreFileSystemConfiguration {
     #[serde(rename = "DataRepositoryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_repository_configuration: Option<DataRepositoryConfiguration>,
+    /// <p>The deployment type of the FSX for Lustre file system.</p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
+    /// <p>You use the <code>MountName</code> value when mounting the file system.</p> <p>For the <code>SCRATCH_1</code> deployment type, this value is always "<code>fsx</code>". For <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types, this value is a string that is unique within an AWS Region. </p>
+    #[serde(rename = "MountName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mount_name: Option<String>,
+    /// <p> Per unit storage throughput represents the megabytes per second of read or write throughput per 1 tebibyte of storage provisioned. File system throughput capacity is equal to Storage capacity (TiB) * PerUnitStorageThroughput (MB/s/TiB). This option is only valid for <code>PERSISTENT_1</code> deployment types. Valid values are 50, 100, 200. </p>
+    #[serde(rename = "PerUnitStorageThroughput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub per_unit_storage_throughput: Option<i64>,
     /// <p>The UTC time that you want to begin your weekly maintenance window.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -965,7 +997,7 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
-    /// <p>A boolean flag indicating whether tags on the file system should be copied to backups. This value defaults to false. If it's set to true, all tags on the file system are copied to all automatic backups and any user-initiated backups where the user doesn't specify any tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups.</p>
+    /// <p>A boolean flag indicating whether tags on the file system should be copied to backups. This value defaults to false. If it's set to true, all tags on the file system are copied to all automatic backups and any user-initiated backups where the user doesn't specify any tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.</p>
     #[serde(rename = "CopyTagsToBackups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_tags_to_backups: Option<bool>,
@@ -973,7 +1005,7 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
-    /// <p><p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI<em>AZ</em>1</code> - Specifies a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability.</p> </li> <li> <p> <code>SINGLE<em>AZ</em>1</code> - (Default) Specifies a file system that is configured for single AZ redundancy.</p> </li> </ul></p>
+    /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI_AZ_1</code> - Specifies a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability, and supports SSD and HDD storage.</p> </li> <li> <p> <code>SINGLE_AZ_1</code> - (Default) Specifies a file system that is configured for single AZ redundancy, only supports SSD storage.</p> </li> <li> <p> <code>SINGLE_AZ_2</code> - Latest generation Single AZ file system. Specifies a file system that is configured for single AZ redundancy and supports SSD and HDD storage.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html">Single-AZ and Multi-AZ File Systems</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
@@ -981,15 +1013,15 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "MaintenanceOperationsInProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maintenance_operations_in_progress: Option<Vec<String>>,
-    /// <p>For <code>MULTI_AZ_1</code> deployment types, the IP address of the primary, or preferred, file server.</p> <p>Use this IP address when mounting the file system on Linux SMB clients or Windows SMB clients that are not joined to a Microsoft Active Directory. Applicable for both <code>SINGLE_AZ_1</code> and <code>MULTI_AZ_1</code> deployment types. This IP address is temporarily unavailable when the file system is undergoing maintenance. For Linux and Windows SMB clients that are joined to an Active Directory, use the file system's DNSName instead. For more information and instruction on mapping and mounting file shares, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html">https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html</a>.</p>
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, the IP address of the primary, or preferred, file server.</p> <p>Use this IP address when mounting the file system on Linux SMB clients or Windows SMB clients that are not joined to a Microsoft Active Directory. Applicable for all Windows file system deployment types. This IP address is temporarily unavailable when the file system is undergoing maintenance. For Linux and Windows SMB clients that are joined to an Active Directory, use the file system's DNSName instead. For more information on mapping and mounting file shares, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html">Accessing File Shares</a>.</p>
     #[serde(rename = "PreferredFileServerIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_file_server_ip: Option<String>,
-    /// <p>For <code>MULTI_AZ_1</code> deployment types, it specifies the ID of the subnet where the preferred file server is located. Must be one of the two subnet IDs specified in <code>SubnetIds</code> property. Amazon FSx serves traffic from this subnet except in the event of a failover to the secondary file server.</p> <p>For <code>SINGLE_AZ_1</code> deployment types, this value is the same as that for <code>SubnetIDs</code>.</p>
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, it specifies the ID of the subnet where the preferred file server is located. Must be one of the two subnet IDs specified in <code>SubnetIds</code> property. Amazon FSx serves traffic from this subnet except in the event of a failover to the secondary file server.</p> <p>For <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types, this value is the same as that for <code>SubnetIDs</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html#single-multi-az-resources">Availability and Durability: Single-AZ and Multi-AZ File Systems</a> </p>
     #[serde(rename = "PreferredSubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_subnet_id: Option<String>,
-    /// <p>For <code>MULTI_AZ_1</code> deployment types, use this endpoint when performing administrative tasks on the file system using Amazon FSx Remote PowerShell.</p> <p>For <code>SINGLE_AZ_1</code> deployment types, this is the DNS name of the file system.</p> <p>This endpoint is temporarily unavailable when the file system is undergoing maintenance.</p>
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, use this endpoint when performing administrative tasks on the file system using Amazon FSx Remote PowerShell.</p> <p>For <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types, this is the DNS name of the file system.</p> <p>This endpoint is temporarily unavailable when the file system is undergoing maintenance.</p>
     #[serde(rename = "RemoteAdministrationEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_administration_endpoint: Option<String>,
@@ -1245,7 +1277,9 @@ pub enum CreateFileSystemError {
     InvalidImportPath(String),
     /// <p>One or more network settings specified in the request are invalid. <code>InvalidVpcId</code> means that the ID passed for the virtual private cloud (VPC) is invalid. <code>InvalidSubnetIds</code> returns the list of IDs for subnets that are either invalid or not part of the VPC specified. <code>InvalidSecurityGroupIds</code> returns the list of IDs for security groups that are either invalid or not part of the VPC specified.</p>
     InvalidNetworkSettings(String),
-    /// <p>File system configuration is required for this operation.</p>
+    /// <p>An invalid value for <code>PerUnitStorageThroughput</code> was provided. Please create your file system again, using a valid value.</p>
+    InvalidPerUnitStorageThroughput(String),
+    /// <p>A file system configuration is required for this operation.</p>
     MissingFileSystemConfiguration(String),
     /// <p>An error indicating that a particular service limit was exceeded. You can increase some service limits by contacting AWS Support. </p>
     ServiceLimitExceeded(String),
@@ -1284,6 +1318,11 @@ impl CreateFileSystemError {
                         err.msg,
                     ))
                 }
+                "InvalidPerUnitStorageThroughput" => {
+                    return RusotoError::Service(
+                        CreateFileSystemError::InvalidPerUnitStorageThroughput(err.msg),
+                    )
+                }
                 "MissingFileSystemConfiguration" => {
                     return RusotoError::Service(
                         CreateFileSystemError::MissingFileSystemConfiguration(err.msg),
@@ -1312,6 +1351,9 @@ impl fmt::Display for CreateFileSystemError {
             CreateFileSystemError::InvalidExportPath(ref cause) => write!(f, "{}", cause),
             CreateFileSystemError::InvalidImportPath(ref cause) => write!(f, "{}", cause),
             CreateFileSystemError::InvalidNetworkSettings(ref cause) => write!(f, "{}", cause),
+            CreateFileSystemError::InvalidPerUnitStorageThroughput(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateFileSystemError::MissingFileSystemConfiguration(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -1335,7 +1377,7 @@ pub enum CreateFileSystemFromBackupError {
     InternalServerError(String),
     /// <p>One or more network settings specified in the request are invalid. <code>InvalidVpcId</code> means that the ID passed for the virtual private cloud (VPC) is invalid. <code>InvalidSubnetIds</code> returns the list of IDs for subnets that are either invalid or not part of the VPC specified. <code>InvalidSecurityGroupIds</code> returns the list of IDs for security groups that are either invalid or not part of the VPC specified.</p>
     InvalidNetworkSettings(String),
-    /// <p>File system configuration is required for this operation.</p>
+    /// <p>A file system configuration is required for this operation.</p>
     MissingFileSystemConfiguration(String),
     /// <p>An error indicating that a particular service limit was exceeded. You can increase some service limits by contacting AWS Support. </p>
     ServiceLimitExceeded(String),
@@ -1889,7 +1931,7 @@ pub enum UpdateFileSystemError {
     IncompatibleParameterError(String),
     /// <p>A generic error indicating a server-side failure.</p>
     InternalServerError(String),
-    /// <p>File system configuration is required for this operation.</p>
+    /// <p>A file system configuration is required for this operation.</p>
     MissingFileSystemConfiguration(String),
     /// <p>The requested operation is not supported for this resource or API.</p>
     UnsupportedOperation(String),
@@ -1963,7 +2005,7 @@ pub trait Fsx {
         input: CreateBackupRequest,
     ) -> Result<CreateBackupResponse, RusotoError<CreateBackupError>>;
 
-    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Using Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/getting-started-step1.html">Step 1: Create Your Amazon FSx for Lustre File System</a>.</p>
+    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Using Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/export-data-repository.html#export-prefix">Setting the Export Prefix</a>.</p>
     async fn create_data_repository_task(
         &self,
         input: CreateDataRepositoryTaskRequest,
@@ -2133,7 +2175,7 @@ impl Fsx for FsxClient {
         }
     }
 
-    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Using Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/getting-started-step1.html">Step 1: Create Your Amazon FSx for Lustre File System</a>.</p>
+    /// <p>Creates an Amazon FSx for Lustre data repository task. You use data repository tasks to perform bulk operations between your Amazon FSx file system and its linked data repository. An example of a data repository task is exporting any data and metadata changes, including POSIX metadata, to files, directories, and symbolic links (symlinks) from your FSx file system to its linked data repository. A <code>CreateDataRepositoryTask</code> operation will fail if a data repository is not linked to the FSx file system. To learn more about data repository tasks, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html">Using Data Repository Tasks</a>. To learn more about linking a data repository to your file system, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/export-data-repository.html#export-prefix">Setting the Export Prefix</a>.</p>
     async fn create_data_repository_task(
         &self,
         input: CreateDataRepositoryTaskRequest,

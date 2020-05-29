@@ -54,6 +54,28 @@ pub struct CreateOutpostOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOutpostInput {
+    #[serde(rename = "OutpostId")]
+    pub outpost_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteOutpostOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSiteInput {
+    #[serde(rename = "SiteId")]
+    pub site_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteSiteOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOutpostInput {
     #[serde(rename = "OutpostId")]
     pub outpost_id: String,
@@ -249,6 +271,90 @@ impl fmt::Display for CreateOutpostError {
     }
 }
 impl Error for CreateOutpostError {}
+/// Errors returned by DeleteOutpost
+#[derive(Debug, PartialEq)]
+pub enum DeleteOutpostError {
+    /// <p>You do not have permission to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred.</p>
+    InternalServer(String),
+    /// <p>The specified request is not valid.</p>
+    NotFound(String),
+}
+
+impl DeleteOutpostError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOutpostError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteOutpostError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteOutpostError::InternalServer(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteOutpostError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteOutpostError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOutpostError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteOutpostError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteOutpostError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteOutpostError {}
+/// Errors returned by DeleteSite
+#[derive(Debug, PartialEq)]
+pub enum DeleteSiteError {
+    /// <p>You do not have permission to perform this operation.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred.</p>
+    InternalServer(String),
+    /// <p>The specified request is not valid.</p>
+    NotFound(String),
+}
+
+impl DeleteSiteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSiteError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteSiteError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteSiteError::InternalServer(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteSiteError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteSiteError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSiteError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSiteError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteSiteError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSiteError {}
 /// Errors returned by GetOutpost
 #[derive(Debug, PartialEq)]
 pub enum GetOutpostError {
@@ -418,6 +524,18 @@ pub trait Outposts {
         input: CreateOutpostInput,
     ) -> Result<CreateOutpostOutput, RusotoError<CreateOutpostError>>;
 
+    /// <p>Deletes the Outpost.</p>
+    async fn delete_outpost(
+        &self,
+        input: DeleteOutpostInput,
+    ) -> Result<DeleteOutpostOutput, RusotoError<DeleteOutpostError>>;
+
+    /// <p>Deletes the site.</p>
+    async fn delete_site(
+        &self,
+        input: DeleteSiteInput,
+    ) -> Result<DeleteSiteOutput, RusotoError<DeleteSiteError>>;
+
     /// <p>Gets information about the specified Outpost.</p>
     async fn get_outpost(
         &self,
@@ -509,6 +627,60 @@ impl Outposts for OutpostsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateOutpostError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the Outpost.</p>
+    async fn delete_outpost(
+        &self,
+        input: DeleteOutpostInput,
+    ) -> Result<DeleteOutpostOutput, RusotoError<DeleteOutpostError>> {
+        let request_uri = format!("/outposts/{outpost_id}", outpost_id = input.outpost_id);
+
+        let mut request = SignedRequest::new("DELETE", "outposts", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteOutpostOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteOutpostError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the site.</p>
+    async fn delete_site(
+        &self,
+        input: DeleteSiteInput,
+    ) -> Result<DeleteSiteOutput, RusotoError<DeleteSiteError>> {
+        let request_uri = format!("/sites/{site_id}", site_id = input.site_id);
+
+        let mut request = SignedRequest::new("DELETE", "outposts", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteSiteOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSiteError::from_response(response))
         }
     }
 

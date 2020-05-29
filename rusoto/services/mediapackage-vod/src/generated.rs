@@ -57,6 +57,9 @@ pub struct AssetShallow {
     #[serde(rename = "SourceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_role_arn: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A CMAF encryption configuration.</p>
@@ -102,6 +105,9 @@ pub struct CreateAssetRequest {
     /// <p>The IAM role ARN used to access the source S3 bucket.</p>
     #[serde(rename = "SourceRoleArn")]
     pub source_role_arn: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -139,6 +145,9 @@ pub struct CreateAssetResponse {
     #[serde(rename = "SourceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_role_arn: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A new MediaPackage VOD PackagingConfiguration resource configuration.</p>
@@ -163,6 +172,9 @@ pub struct CreatePackagingConfigurationRequest {
     /// <p>The ID of a PackagingGroup.</p>
     #[serde(rename = "PackagingGroupId")]
     pub packaging_group_id: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -192,6 +204,9 @@ pub struct CreatePackagingConfigurationResponse {
     #[serde(rename = "PackagingGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packaging_group_id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A new MediaPackage VOD PackagingGroup resource configuration.</p>
@@ -201,6 +216,9 @@ pub struct CreatePackagingGroupRequest {
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     pub id: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -218,6 +236,9 @@ pub struct CreatePackagingGroupResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.</p>
@@ -230,6 +251,10 @@ pub struct DashEncryption {
 /// <p>A DASH manifest configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashManifest {
+    /// <p>Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level.</p>
+    #[serde(rename = "ManifestLayout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_layout: Option<String>,
     /// <p>An optional string to include in the name of the manifest.</p>
     #[serde(rename = "ManifestName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -256,11 +281,22 @@ pub struct DashPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
+    /// <p>A list of triggers that controls when the outgoing Dynamic Adaptive Streaming over HTTP (DASH)
+    /// Media Presentation Description (MPD) will be partitioned into multiple periods. If empty, the content will not
+    /// be partitioned into more than one period. If the list contains &quot;ADS&quot;, new periods will be created where
+    /// the Asset contains SCTE-35 ad markers.</p>
+    #[serde(rename = "PeriodTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period_triggers: Option<Vec<String>>,
     /// <p>Duration (in seconds) of each segment. Actual segments will be
     /// rounded to the nearest multiple of the source segment duration.</p>
     #[serde(rename = "SegmentDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_duration_seconds: Option<i64>,
+    /// <p>Determines the type of SegmentTemplate included in the Media Presentation Description (MPD).  When set to NUMBER<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs. When set to NUMBER<em>WITH</em>DURATION, only a duration is included in each SegmentTemplate, with $Number$ media URLs.</p>
+    #[serde(rename = "SegmentTemplateFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_template_format: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -342,6 +378,9 @@ pub struct DescribeAssetResponse {
     #[serde(rename = "SourceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_role_arn: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -379,6 +418,9 @@ pub struct DescribePackagingConfigurationResponse {
     #[serde(rename = "PackagingGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packaging_group_id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -404,6 +446,9 @@ pub struct DescribePackagingGroupResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>The endpoint URL used to access an Asset using one PackagingConfiguration.</p>
@@ -583,6 +628,21 @@ pub struct ListPackagingGroupsResponse {
     pub packaging_groups: Option<Vec<PackagingGroup>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MssEncryption {
@@ -645,6 +705,9 @@ pub struct PackagingConfiguration {
     #[serde(rename = "PackagingGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packaging_group_id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A MediaPackage VOD PackagingGroup resource.</p>
@@ -663,6 +726,9 @@ pub struct PackagingGroup {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
@@ -695,6 +761,25 @@ pub struct StreamSelection {
     #[serde(rename = "StreamOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The key(s) of tag to be deleted</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 /// Errors returned by CreateAsset
@@ -1529,6 +1614,72 @@ impl fmt::Display for ListPackagingGroupsError {
     }
 }
 impl Error for ListPackagingGroupsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListTagsForResourceError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the MediaPackage Vod API. MediaPackage Vod clients implement this trait.
 #[async_trait]
 pub trait MediaPackageVod {
@@ -1606,6 +1757,24 @@ pub trait MediaPackageVod {
         &self,
         input: ListPackagingGroupsRequest,
     ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>>;
+
+    /// <p>List tags for a given MediaPackage VOD resource</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Set tags for a given MediaPackage VOD resource</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
+
+    /// <p>Delete tags for a given MediaPackage VOD resource</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 }
 /// A client for the MediaPackage Vod API.
 #[derive(Clone)]
@@ -2022,6 +2191,96 @@ impl MediaPackageVod for MediaPackageVodClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListPackagingGroupsError::from_response(response))
+        }
+    }
+
+    /// <p>List tags for a given MediaPackage VOD resource</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "mediapackage-vod", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Set tags for a given MediaPackage VOD resource</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request =
+            SignedRequest::new("POST", "mediapackage-vod", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Delete tags for a given MediaPackage VOD resource</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request =
+            SignedRequest::new("DELETE", "mediapackage-vod", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 }

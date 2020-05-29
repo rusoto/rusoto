@@ -44,6 +44,10 @@ pub struct ApplicationPolicyStatement {
     /// Permissions</a>.</p>
     #[serde(rename = "Actions")]
     pub actions: Vec<String>,
+    /// <p>An array of PrinciplalOrgIDs, which corresponds to AWS IAM <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#principal-org-id">aws:PrincipalOrgID</a> global condition key.</p>
+    #[serde(rename = "PrincipalOrgIDs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_org_i_ds: Option<Vec<String>>,
     /// <p>An array of AWS account IDs, or * to make the application public.</p>
     #[serde(rename = "Principals")]
     pub principals: Vec<String>,
@@ -850,6 +854,17 @@ pub struct Tag {
     /// Data Type.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UnshareApplicationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The AWS Organization ID to unshare the application from.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1736,6 +1751,62 @@ impl fmt::Display for PutApplicationPolicyError {
     }
 }
 impl Error for PutApplicationPolicyError {}
+/// Errors returned by UnshareApplication
+#[derive(Debug, PartialEq)]
+pub enum UnshareApplicationError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    BadRequest(String),
+    /// <p>The client is not authenticated.</p>
+    Forbidden(String),
+    /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
+    InternalServerError(String),
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
+    NotFound(String),
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
+    TooManyRequests(String),
+}
+
+impl UnshareApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnshareApplicationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UnshareApplicationError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UnshareApplicationError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UnshareApplicationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UnshareApplicationError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UnshareApplicationError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UnshareApplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UnshareApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UnshareApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UnshareApplicationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UnshareApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UnshareApplicationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UnshareApplicationError {}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -1878,6 +1949,12 @@ pub trait ServerlessRepo {
         &self,
         input: PutApplicationPolicyRequest,
     ) -> Result<PutApplicationPolicyResponse, RusotoError<PutApplicationPolicyError>>;
+
+    /// <p>Unshares an application from an AWS Organization.</p><p>This operation can be called only from the organization's master account.</p>
+    async fn unshare_application(
+        &self,
+        input: UnshareApplicationRequest,
+    ) -> Result<(), RusotoError<UnshareApplicationError>>;
 
     /// <p>Updates the specified application.</p>
     async fn update_application(
@@ -2338,6 +2415,38 @@ impl ServerlessRepo for ServerlessRepoClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutApplicationPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Unshares an application from an AWS Organization.</p><p>This operation can be called only from the organization's master account.</p>
+    async fn unshare_application(
+        &self,
+        input: UnshareApplicationRequest,
+    ) -> Result<(), RusotoError<UnshareApplicationError>> {
+        let request_uri = format!(
+            "/applications/{application_id}/unshare",
+            application_id = input.application_id
+        );
+
+        let mut request = SignedRequest::new("POST", "serverlessrepo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UnshareApplicationError::from_response(response))
         }
     }
 

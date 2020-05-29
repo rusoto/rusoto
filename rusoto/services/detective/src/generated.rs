@@ -32,7 +32,7 @@ pub struct AcceptInvitationRequest {
     pub graph_arn: String,
 }
 
-/// <p>Amazon Detective is currently in preview.</p> <p>An AWS account that is the master of or a member of a behavior graph.</p>
+/// <p>An AWS account that is the master of or a member of a behavior graph.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Account {
@@ -145,7 +145,7 @@ pub struct GetMembersResponse {
     pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
 }
 
-/// <p>Amazon Detective is currently in preview.</p> <p>A behavior graph in Detective.</p>
+/// <p>A behavior graph in Detective.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Graph {
@@ -240,7 +240,7 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
-/// <p>Amazon Detective is currently in preview.</p> <p>Details about a member account that was invited to contribute to a behavior graph.</p>
+/// <p>Details about a member account that was invited to contribute to a behavior graph.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberDetail {
@@ -248,6 +248,10 @@ pub struct MemberDetail {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
+    /// <p><p>For member accounts with a status of <code>ACCEPTED<em>BUT</em>DISABLED</code>, the reason that the member account is not enabled.</p> <p>The reason can have one of the following values:</p> <ul> <li> <p> <code>VOLUME<em>TOO</em>HIGH</code> - Indicates that adding the member account would cause the data volume for the behavior graph to be too high.</p> </li> <li> <p> <code>VOLUME_UNKNOWN</code> - Indicates that Detective is unable to verify the data volume for the member account. This is usually because the member account is not enrolled in Amazon GuardDuty. </p> </li> </ul></p>
+    #[serde(rename = "DisabledReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled_reason: Option<String>,
     /// <p>The AWS account root user email address for the member account.</p>
     #[serde(rename = "EmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,7 +268,15 @@ pub struct MemberDetail {
     #[serde(rename = "MasterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_id: Option<String>,
-    /// <p>The current membership status of the member account. The status can have one of the following values:</p> <ul> <li> <p> <code>INVITED</code> - Indicates that the member was sent an invitation but has not yet responded.</p> </li> <li> <p> <code>VERIFICATION_IN_PROGRESS</code> - Indicates that Detective is verifying that the account identifier and email address provided for the member account match. If they do match, then Detective sends the invitation. If the email address and account identifier don't match, then the member cannot be added to the behavior graph.</p> </li> <li> <p> <code>VERIFICATION_FAILED</code> - Indicates that the account and email address provided for the member account do not match, and Detective did not send an invitation to the account.</p> </li> <li> <p> <code>ENABLED</code> - Indicates that the member account accepted the invitation to contribute to the behavior graph.</p> </li> </ul> <p>Member accounts that declined an invitation or that were removed from the behavior graph are not included.</p>
+    /// <p>The member account data volume as a percentage of the maximum allowed data volume. 0 indicates 0 percent, and 100 indicates 100 percent.</p> <p>Note that this is not the percentage of the behavior graph data volume.</p> <p>For example, the data volume for the behavior graph is 80 GB per day. The maximum data volume is 160 GB per day. If the data volume for the member account is 40 GB per day, then <code>PercentOfGraphUtilization</code> is 25. It represents 25% of the maximum allowed data volume. </p>
+    #[serde(rename = "PercentOfGraphUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_of_graph_utilization: Option<f64>,
+    /// <p>The date and time when the graph utilization percentage was last updated.</p>
+    #[serde(rename = "PercentOfGraphUtilizationUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_of_graph_utilization_updated_time: Option<f64>,
+    /// <p>The current membership status of the member account. The status can have one of the following values:</p> <ul> <li> <p> <code>INVITED</code> - Indicates that the member was sent an invitation but has not yet responded.</p> </li> <li> <p> <code>VERIFICATION_IN_PROGRESS</code> - Indicates that Detective is verifying that the account identifier and email address provided for the member account match. If they do match, then Detective sends the invitation. If the email address and account identifier don't match, then the member cannot be added to the behavior graph.</p> </li> <li> <p> <code>VERIFICATION_FAILED</code> - Indicates that the account and email address provided for the member account do not match, and Detective did not send an invitation to the account.</p> </li> <li> <p> <code>ENABLED</code> - Indicates that the member account accepted the invitation to contribute to the behavior graph.</p> </li> <li> <p> <code>ACCEPTED_BUT_DISABLED</code> - Indicates that the member account accepted the invitation but is prevented from contributing data to the behavior graph. <code>DisabledReason</code> provides the reason why the member account is not enabled.</p> </li> </ul> <p>Member accounts that declined an invitation or that were removed from the behavior graph are not included.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -282,7 +294,18 @@ pub struct RejectInvitationRequest {
     pub graph_arn: String,
 }
 
-/// <p>Amazon Detective is currently in preview.</p> <p>A member account that was included in a request but for which the request could not be processed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartMonitoringMemberRequest {
+    /// <p>The account ID of the member account to try to enable.</p> <p>The account must be an invited member account with a status of <code>ACCEPTED_BUT_DISABLED</code>. </p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The ARN of the behavior graph.</p>
+    #[serde(rename = "GraphArn")]
+    pub graph_arn: String,
+}
+
+/// <p>A member account that was included in a request but for which the request could not be processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedAccount {
@@ -345,6 +368,8 @@ pub enum CreateGraphError {
     Conflict(String),
     /// <p>The request was valid but failed because of a problem with the service.</p>
     InternalServer(String),
+    /// <p><p>This request cannot be completed for one of the following reasons.</p> <ul> <li> <p>The request would cause the number of member accounts in the behavior graph to exceed the maximum allowed. A behavior graph cannot have more than 1000 member accounts.</p> </li> <li> <p>The request would cause the data rate for the behavior graph to exceed the maximum allowed.</p> </li> <li> <p>Detective is unable to verify the data rate for the member account. This is usually because the member account is not enrolled in Amazon GuardDuty. </p> </li> </ul></p>
+    ServiceQuotaExceeded(String),
 }
 
 impl CreateGraphError {
@@ -356,6 +381,9 @@ impl CreateGraphError {
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateGraphError::InternalServer(err.msg))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateGraphError::ServiceQuotaExceeded(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -370,6 +398,7 @@ impl fmt::Display for CreateGraphError {
         match *self {
             CreateGraphError::Conflict(ref cause) => write!(f, "{}", cause),
             CreateGraphError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateGraphError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -381,7 +410,7 @@ pub enum CreateMembersError {
     InternalServer(String),
     /// <p>The request refers to a nonexistent resource.</p>
     ResourceNotFound(String),
-    /// <p>This request would cause the number of member accounts in the behavior graph to exceed the maximum allowed. A behavior graph cannot have more than 1000 member accounts.</p>
+    /// <p><p>This request cannot be completed for one of the following reasons.</p> <ul> <li> <p>The request would cause the number of member accounts in the behavior graph to exceed the maximum allowed. A behavior graph cannot have more than 1000 member accounts.</p> </li> <li> <p>The request would cause the data rate for the behavior graph to exceed the maximum allowed.</p> </li> <li> <p>Detective is unable to verify the data rate for the member account. This is usually because the member account is not enrolled in Amazon GuardDuty. </p> </li> </ul></p>
     ServiceQuotaExceeded(String),
 }
 
@@ -714,71 +743,131 @@ impl fmt::Display for RejectInvitationError {
     }
 }
 impl Error for RejectInvitationError {}
+/// Errors returned by StartMonitoringMember
+#[derive(Debug, PartialEq)]
+pub enum StartMonitoringMemberError {
+    /// <p>The request attempted an invalid action.</p>
+    Conflict(String),
+    /// <p>The request was valid but failed because of a problem with the service.</p>
+    InternalServer(String),
+    /// <p>The request refers to a nonexistent resource.</p>
+    ResourceNotFound(String),
+    /// <p><p>This request cannot be completed for one of the following reasons.</p> <ul> <li> <p>The request would cause the number of member accounts in the behavior graph to exceed the maximum allowed. A behavior graph cannot have more than 1000 member accounts.</p> </li> <li> <p>The request would cause the data rate for the behavior graph to exceed the maximum allowed.</p> </li> <li> <p>Detective is unable to verify the data rate for the member account. This is usually because the member account is not enrolled in Amazon GuardDuty. </p> </li> </ul></p>
+    ServiceQuotaExceeded(String),
+}
+
+impl StartMonitoringMemberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMonitoringMemberError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(StartMonitoringMemberError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(StartMonitoringMemberError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartMonitoringMemberError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(StartMonitoringMemberError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartMonitoringMemberError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartMonitoringMemberError::Conflict(ref cause) => write!(f, "{}", cause),
+            StartMonitoringMemberError::InternalServer(ref cause) => write!(f, "{}", cause),
+            StartMonitoringMemberError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StartMonitoringMemberError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartMonitoringMemberError {}
 /// Trait representing the capabilities of the Amazon Detective API. Amazon Detective clients implement this trait.
 #[async_trait]
 pub trait Detective {
-    /// <p>Amazon Detective is currently in preview.</p> <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
+    /// <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
     ) -> Result<(), RusotoError<AcceptInvitationError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
+    /// <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
     async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>>;
 
-    /// <p><p>Amazon Detective is currently in preview.</p> <p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
+    /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
     async fn create_members(
         &self,
         input: CreateMembersRequest,
     ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
+    /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
     async fn delete_graph(
         &self,
         input: DeleteGraphRequest,
     ) -> Result<(), RusotoError<DeleteGraphError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
+    /// <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
     async fn delete_members(
         &self,
         input: DeleteMembersRequest,
     ) -> Result<DeleteMembersResponse, RusotoError<DeleteMembersError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
+    /// <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
     async fn disassociate_membership(
         &self,
         input: DisassociateMembershipRequest,
     ) -> Result<(), RusotoError<DisassociateMembershipError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Returns the membership details for specified member accounts for a behavior graph.</p>
+    /// <p>Returns the membership details for specified member accounts for a behavior graph.</p>
     async fn get_members(
         &self,
         input: GetMembersRequest,
     ) -> Result<GetMembersResponse, RusotoError<GetMembersError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
+    /// <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
     async fn list_graphs(
         &self,
         input: ListGraphsRequest,
     ) -> Result<ListGraphsResponse, RusotoError<ListGraphsError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
+    /// <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
     async fn list_invitations(
         &self,
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
+    /// <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
+    /// <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
     async fn reject_invitation(
         &self,
         input: RejectInvitationRequest,
     ) -> Result<(), RusotoError<RejectInvitationError>>;
+
+    /// <p><p>Sends a request to enable data ingest for a member account that has a status of <code>ACCEPTED<em>BUT</em>DISABLED</code>.</p> <p>For valid member accounts, the status is updated as follows.</p> <ul> <li> <p>If Detective enabled the member account, then the new status is <code>ENABLED</code>.</p> </li> <li> <p>If Detective cannot enable the member account, the status remains <code>ACCEPTED<em>BUT</em>DISABLED</code>. </p> </li> </ul></p>
+    async fn start_monitoring_member(
+        &self,
+        input: StartMonitoringMemberRequest,
+    ) -> Result<(), RusotoError<StartMonitoringMemberError>>;
 }
 /// A client for the Amazon Detective API.
 #[derive(Clone)]
@@ -820,7 +909,7 @@ impl DetectiveClient {
 
 #[async_trait]
 impl Detective for DetectiveClient {
-    /// <p>Amazon Detective is currently in preview.</p> <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
+    /// <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
@@ -850,7 +939,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
+    /// <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
     async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>> {
         let request_uri = "/graph";
 
@@ -876,7 +965,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p><p>Amazon Detective is currently in preview.</p> <p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
+    /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -907,7 +996,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
+    /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
     async fn delete_graph(
         &self,
         input: DeleteGraphRequest,
@@ -937,7 +1026,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
+    /// <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
     async fn delete_members(
         &self,
         input: DeleteMembersRequest,
@@ -968,7 +1057,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
+    /// <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
     async fn disassociate_membership(
         &self,
         input: DisassociateMembershipRequest,
@@ -998,7 +1087,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Returns the membership details for specified member accounts for a behavior graph.</p>
+    /// <p>Returns the membership details for specified member accounts for a behavior graph.</p>
     async fn get_members(
         &self,
         input: GetMembersRequest,
@@ -1029,7 +1118,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
+    /// <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
     async fn list_graphs(
         &self,
         input: ListGraphsRequest,
@@ -1060,7 +1149,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
+    /// <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
     async fn list_invitations(
         &self,
         input: ListInvitationsRequest,
@@ -1091,7 +1180,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
+    /// <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -1122,7 +1211,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Amazon Detective is currently in preview.</p> <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
+    /// <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
     async fn reject_invitation(
         &self,
         input: RejectInvitationRequest,
@@ -1149,6 +1238,36 @@ impl Detective for DetectiveClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RejectInvitationError::from_response(response))
+        }
+    }
+
+    /// <p><p>Sends a request to enable data ingest for a member account that has a status of <code>ACCEPTED<em>BUT</em>DISABLED</code>.</p> <p>For valid member accounts, the status is updated as follows.</p> <ul> <li> <p>If Detective enabled the member account, then the new status is <code>ENABLED</code>.</p> </li> <li> <p>If Detective cannot enable the member account, the status remains <code>ACCEPTED<em>BUT</em>DISABLED</code>. </p> </li> </ul></p>
+    async fn start_monitoring_member(
+        &self,
+        input: StartMonitoringMemberRequest,
+    ) -> Result<(), RusotoError<StartMonitoringMemberError>> {
+        let request_uri = "/graph/member/monitoringstate";
+
+        let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("api.detective".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartMonitoringMemberError::from_response(response))
         }
     }
 }

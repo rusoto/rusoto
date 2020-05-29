@@ -50,6 +50,56 @@ pub struct AddFlowOutputsResponse {
     pub outputs: Option<Vec<Output>>,
 }
 
+/// <p>A request to add sources to the flow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddFlowSourcesRequest {
+    /// <p>The flow that you want to mutate.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>A list of sources that you want to add.</p>
+    #[serde(rename = "Sources")]
+    pub sources: Vec<SetSourceRequest>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddFlowSourcesResponse {
+    /// <p>The ARN of the flow that these sources were added to.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>The details of the newly added sources.</p>
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<Source>>,
+}
+
+/// <p>A request to add VPC interfaces to the flow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddFlowVpcInterfacesRequest {
+    /// <p>The flow that you want to mutate.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>A list of VPC interfaces that you want to add.</p>
+    #[serde(rename = "VpcInterfaces")]
+    pub vpc_interfaces: Vec<VpcInterfaceRequest>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddFlowVpcInterfacesResponse {
+    /// <p>The ARN of the flow that these VPC interfaces were added to.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>The details of the newly added VPC interfaces.</p>
+    #[serde(rename = "VpcInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interfaces: Option<Vec<VpcInterface>>,
+}
+
 /// <p>The output that you want to add to this flow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -97,9 +147,13 @@ pub struct AddOutputRequest {
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
+    /// <p>The name of the VPC interface attachment to use for this output.</p>
+    #[serde(rename = "VpcInterfaceAttachment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
 }
 
-/// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50).</p>
+/// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowRequest {
@@ -119,7 +173,18 @@ pub struct CreateFlowRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<Vec<AddOutputRequest>>,
     #[serde(rename = "Source")]
-    pub source: SetSourceRequest,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<SetSourceRequest>,
+    #[serde(rename = "SourceFailoverConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_failover_config: Option<FailoverConfig>,
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<SetSourceRequest>>,
+    /// <p>The VPC interfaces you want on the flow.</p>
+    #[serde(rename = "VpcInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interfaces: Option<Vec<VpcInterfaceRequest>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -236,6 +301,18 @@ pub struct Entitlement {
     pub subscribers: Vec<String>,
 }
 
+/// <p>The settings for source failover</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FailoverConfig {
+    /// <p>Search window time to look for dash-7 packets</p>
+    #[serde(rename = "RecoveryWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recovery_window: Option<i64>,
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
 /// <p>The settings for a flow, including its source, outputs, and entitlements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -265,9 +342,19 @@ pub struct Flow {
     pub outputs: Vec<Output>,
     #[serde(rename = "Source")]
     pub source: Source,
+    #[serde(rename = "SourceFailoverConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_failover_config: Option<FailoverConfig>,
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<Source>>,
     /// <p>The current status of the flow.</p>
     #[serde(rename = "Status")]
     pub status: String,
+    /// <p>The VPC Interfaces for this flow.</p>
+    #[serde(rename = "VpcInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interfaces: Option<Vec<VpcInterface>>,
 }
 
 /// <p>The entitlements that you want to grant on a flow.</p>
@@ -480,6 +567,10 @@ pub struct Output {
     #[serde(rename = "Transport")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport: Option<Transport>,
+    /// <p>The name of the VPC interface attachment to use for this output.</p>
+    #[serde(rename = "VpcInterfaceAttachment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -504,6 +595,58 @@ pub struct RemoveFlowOutputResponse {
     #[serde(rename = "OutputArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveFlowSourceRequest {
+    /// <p>The flow that you want to remove a source from.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>The ARN of the source that you want to remove.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemoveFlowSourceResponse {
+    /// <p>The ARN of the flow that is associated with the source you removed.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>The ARN of the source that was removed.</p>
+    #[serde(rename = "SourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveFlowVpcInterfaceRequest {
+    /// <p>The flow that you want to remove a VPC interface from.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>The name of the VPC interface that you want to remove.</p>
+    #[serde(rename = "VpcInterfaceName")]
+    pub vpc_interface_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemoveFlowVpcInterfaceResponse {
+    /// <p>The ARN of the flow that is associated with the VPC interface you removed.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>IDs of network interfaces associated with the removed VPC interface that Media Connect was unable to remove.</p>
+    #[serde(rename = "NonDeletedNetworkInterfaceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_deleted_network_interface_ids: Option<Vec<String>>,
+    /// <p>The name of the VPC interface that was removed.</p>
+    #[serde(rename = "VpcInterfaceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -570,6 +713,10 @@ pub struct SetSourceRequest {
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
+    /// <p>The name of the VPC interface to use for this source.</p>
+    #[serde(rename = "VpcInterfaceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_name: Option<String>,
     /// <p>The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.</p>
     #[serde(rename = "WhitelistCidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -614,6 +761,10 @@ pub struct Source {
     #[serde(rename = "Transport")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport: Option<Transport>,
+    /// <p>The name of the VPC Interface this Source is configured with.</p>
+    #[serde(rename = "VpcInterfaceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_name: Option<String>,
     /// <p>The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.</p>
     #[serde(rename = "WhitelistCidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -760,6 +911,19 @@ pub struct UpdateEncryption {
     pub url: Option<String>,
 }
 
+/// <p>The settings for source failover</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFailoverConfig {
+    /// <p>Recovery window time to look for dash-7 packets</p>
+    #[serde(rename = "RecoveryWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recovery_window: Option<i64>,
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
 /// <p>The entitlement fields that you want to update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -846,6 +1010,10 @@ pub struct UpdateFlowOutputRequest {
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
+    /// <p>The name of the VPC interface attachment to use for this output.</p>
+    #[serde(rename = "VpcInterfaceAttachment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -858,6 +1026,26 @@ pub struct UpdateFlowOutputResponse {
     #[serde(rename = "Output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<Output>,
+}
+
+/// <p>A request to update flow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFlowRequest {
+    /// <p>The flow that you want to update.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    #[serde(rename = "SourceFailoverConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_failover_config: Option<UpdateFailoverConfig>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFlowResponse {
+    #[serde(rename = "Flow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow: Option<Flow>,
 }
 
 /// <p>A request to update the source of a flow.</p>
@@ -902,6 +1090,10 @@ pub struct UpdateFlowSourceRequest {
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
+    /// <p>The name of the VPC Interface to configure this Source with.</p>
+    #[serde(rename = "VpcInterfaceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_name: Option<String>,
     /// <p>The range of IP addresses that should be allowed to contribute content to your source. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.</p>
     #[serde(rename = "WhitelistCidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -919,6 +1111,54 @@ pub struct UpdateFlowSourceResponse {
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<Source>,
+}
+
+/// <p>The settings for a VPC Source.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VpcInterface {
+    /// <p>Immutable and has to be a unique against other VpcInterfaces in this Flow</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>IDs of the network interfaces created in customer&#39;s account by MediaConnect.</p>
+    #[serde(rename = "NetworkInterfaceIds")]
+    pub network_interface_ids: Vec<String>,
+    /// <p>Role Arn MediaConnect can assumes to create ENIs in customer&#39;s account</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>Security Group IDs to be used on ENI.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    pub security_group_ids: Vec<String>,
+    /// <p>Subnet must be in the AZ of the Flow</p>
+    #[serde(rename = "SubnetId")]
+    pub subnet_id: String,
+}
+
+/// <p>The settings for attaching a VPC interface to an output.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VpcInterfaceAttachment {
+    /// <p>The name of the VPC interface to use for this output.</p>
+    #[serde(rename = "VpcInterfaceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_interface_name: Option<String>,
+}
+
+/// <p>Desired VPC Interface for a Flow</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct VpcInterfaceRequest {
+    /// <p>The name of the VPC Interface. This value must be unique within the current flow.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Role Arn MediaConnect can assumes to create ENIs in customer&#39;s account</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>Security Group IDs to be used on ENI.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    pub security_group_ids: Vec<String>,
+    /// <p>Subnet must be in the AZ of the Flow</p>
+    #[serde(rename = "SubnetId")]
+    pub subnet_id: String,
 }
 
 /// Errors returned by AddFlowOutputs
@@ -987,6 +1227,132 @@ impl fmt::Display for AddFlowOutputsError {
     }
 }
 impl Error for AddFlowOutputsError {}
+/// Errors returned by AddFlowSources
+#[derive(Debug, PartialEq)]
+pub enum AddFlowSourcesError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl AddFlowSourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFlowSourcesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(AddFlowSourcesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(AddFlowSourcesError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(AddFlowSourcesError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AddFlowSourcesError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(AddFlowSourcesError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AddFlowSourcesError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AddFlowSourcesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddFlowSourcesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AddFlowSourcesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            AddFlowSourcesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddFlowSourcesError::NotFound(ref cause) => write!(f, "{}", cause),
+            AddFlowSourcesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AddFlowSourcesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AddFlowSourcesError {}
+/// Errors returned by AddFlowVpcInterfaces
+#[derive(Debug, PartialEq)]
+pub enum AddFlowVpcInterfacesError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl AddFlowVpcInterfacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFlowVpcInterfacesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(AddFlowVpcInterfacesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(AddFlowVpcInterfacesError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(AddFlowVpcInterfacesError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AddFlowVpcInterfacesError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(AddFlowVpcInterfacesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AddFlowVpcInterfacesError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AddFlowVpcInterfacesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddFlowVpcInterfacesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AddFlowVpcInterfacesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            AddFlowVpcInterfacesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddFlowVpcInterfacesError::NotFound(ref cause) => write!(f, "{}", cause),
+            AddFlowVpcInterfacesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AddFlowVpcInterfacesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AddFlowVpcInterfacesError {}
 /// Errors returned by CreateFlow
 #[derive(Debug, PartialEq)]
 pub enum CreateFlowError {
@@ -1447,6 +1813,134 @@ impl fmt::Display for RemoveFlowOutputError {
     }
 }
 impl Error for RemoveFlowOutputError {}
+/// Errors returned by RemoveFlowSource
+#[derive(Debug, PartialEq)]
+pub enum RemoveFlowSourceError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl RemoveFlowSourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFlowSourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RemoveFlowSourceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RemoveFlowSourceError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(RemoveFlowSourceError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RemoveFlowSourceError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(RemoveFlowSourceError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RemoveFlowSourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveFlowSourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveFlowSourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RemoveFlowSourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RemoveFlowSourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RemoveFlowSourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            RemoveFlowSourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RemoveFlowSourceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemoveFlowSourceError {}
+/// Errors returned by RemoveFlowVpcInterface
+#[derive(Debug, PartialEq)]
+pub enum RemoveFlowVpcInterfaceError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl RemoveFlowVpcInterfaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFlowVpcInterfaceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RemoveFlowVpcInterfaceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RemoveFlowVpcInterfaceError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(RemoveFlowVpcInterfaceError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RemoveFlowVpcInterfaceError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(RemoveFlowVpcInterfaceError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RemoveFlowVpcInterfaceError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveFlowVpcInterfaceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveFlowVpcInterfaceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RemoveFlowVpcInterfaceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RemoveFlowVpcInterfaceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RemoveFlowVpcInterfaceError::NotFound(ref cause) => write!(f, "{}", cause),
+            RemoveFlowVpcInterfaceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RemoveFlowVpcInterfaceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemoveFlowVpcInterfaceError {}
 /// Errors returned by RevokeFlowEntitlement
 #[derive(Debug, PartialEq)]
 pub enum RevokeFlowEntitlementError {
@@ -1717,6 +2211,66 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateFlow
+#[derive(Debug, PartialEq)]
+pub enum UpdateFlowError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateFlowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateFlowError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateFlowError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateFlowError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateFlowError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateFlowError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateFlowError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFlowError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFlowError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFlowError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateFlowError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFlowError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFlowError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateFlowError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFlowError {}
 /// Errors returned by UpdateFlowEntitlement
 #[derive(Debug, PartialEq)]
 pub enum UpdateFlowEntitlementError {
@@ -1910,13 +2464,25 @@ impl Error for UpdateFlowSourceError {}
 /// Trait representing the capabilities of the AWS MediaConnect API. AWS MediaConnect clients implement this trait.
 #[async_trait]
 pub trait MediaConnect {
-    /// <p>Adds outputs to an existing flow. You can create up to 20 outputs per flow.</p>
+    /// <p>Adds outputs to an existing flow. You can create up to 50 outputs per flow.</p>
     async fn add_flow_outputs(
         &self,
         input: AddFlowOutputsRequest,
     ) -> Result<AddFlowOutputsResponse, RusotoError<AddFlowOutputsError>>;
 
-    /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50).</p>
+    /// <p>Adds Sources to flow</p>
+    async fn add_flow_sources(
+        &self,
+        input: AddFlowSourcesRequest,
+    ) -> Result<AddFlowSourcesResponse, RusotoError<AddFlowSourcesError>>;
+
+    /// <p>Adds VPC interfaces to flow</p>
+    async fn add_flow_vpc_interfaces(
+        &self,
+        input: AddFlowVpcInterfacesRequest,
+    ) -> Result<AddFlowVpcInterfacesResponse, RusotoError<AddFlowVpcInterfacesError>>;
+
+    /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
     async fn create_flow(
         &self,
         input: CreateFlowRequest,
@@ -1964,6 +2530,18 @@ pub trait MediaConnect {
         input: RemoveFlowOutputRequest,
     ) -> Result<RemoveFlowOutputResponse, RusotoError<RemoveFlowOutputError>>;
 
+    /// <p>Removes a source from an existing flow. This request can be made only if there is more than one source on the flow.</p>
+    async fn remove_flow_source(
+        &self,
+        input: RemoveFlowSourceRequest,
+    ) -> Result<RemoveFlowSourceResponse, RusotoError<RemoveFlowSourceError>>;
+
+    /// <p>Removes a VPC Interface from an existing flow. This request can be made only on a VPC interface that does not have a Source or Output associated with it. If the VPC interface is referenced by a Source or Output, you must first delete or update the Source or Output to no longer reference the VPC interface.</p>
+    async fn remove_flow_vpc_interface(
+        &self,
+        input: RemoveFlowVpcInterfaceRequest,
+    ) -> Result<RemoveFlowVpcInterfaceResponse, RusotoError<RemoveFlowVpcInterfaceError>>;
+
     /// <p>Revokes an entitlement from a flow. Once an entitlement is revoked, the content becomes unavailable to the subscriber and the associated output is removed.</p>
     async fn revoke_flow_entitlement(
         &self,
@@ -1993,6 +2571,12 @@ pub trait MediaConnect {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
+
+    /// <p>Updates flow</p>
+    async fn update_flow(
+        &self,
+        input: UpdateFlowRequest,
+    ) -> Result<UpdateFlowResponse, RusotoError<UpdateFlowError>>;
 
     /// <p>You can change an entitlement&#39;s description, subscribers, and encryption. If you change the subscribers, the service will remove the outputs that are are used by the subscribers that are removed.</p>
     async fn update_flow_entitlement(
@@ -2052,7 +2636,7 @@ impl MediaConnectClient {
 
 #[async_trait]
 impl MediaConnect for MediaConnectClient {
-    /// <p>Adds outputs to an existing flow. You can create up to 20 outputs per flow.</p>
+    /// <p>Adds outputs to an existing flow. You can create up to 50 outputs per flow.</p>
     async fn add_flow_outputs(
         &self,
         input: AddFlowOutputsRequest,
@@ -2082,7 +2666,70 @@ impl MediaConnect for MediaConnectClient {
         }
     }
 
-    /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 20) and entitlements (up to 50).</p>
+    /// <p>Adds Sources to flow</p>
+    async fn add_flow_sources(
+        &self,
+        input: AddFlowSourcesRequest,
+    ) -> Result<AddFlowSourcesResponse, RusotoError<AddFlowSourcesError>> {
+        let request_uri = format!("/v1/flows/{flow_arn}/source", flow_arn = input.flow_arn);
+
+        let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddFlowSourcesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddFlowSourcesError::from_response(response))
+        }
+    }
+
+    /// <p>Adds VPC interfaces to flow</p>
+    async fn add_flow_vpc_interfaces(
+        &self,
+        input: AddFlowVpcInterfacesRequest,
+    ) -> Result<AddFlowVpcInterfacesResponse, RusotoError<AddFlowVpcInterfacesError>> {
+        let request_uri = format!(
+            "/v1/flows/{flow_arn}/vpcInterfaces",
+            flow_arn = input.flow_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddFlowVpcInterfacesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddFlowVpcInterfacesError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
     async fn create_flow(
         &self,
         input: CreateFlowRequest,
@@ -2329,6 +2976,68 @@ impl MediaConnect for MediaConnectClient {
         }
     }
 
+    /// <p>Removes a source from an existing flow. This request can be made only if there is more than one source on the flow.</p>
+    async fn remove_flow_source(
+        &self,
+        input: RemoveFlowSourceRequest,
+    ) -> Result<RemoveFlowSourceResponse, RusotoError<RemoveFlowSourceError>> {
+        let request_uri = format!(
+            "/v1/flows/{flow_arn}/source/{source_arn}",
+            flow_arn = input.flow_arn,
+            source_arn = input.source_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveFlowSourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveFlowSourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes a VPC Interface from an existing flow. This request can be made only on a VPC interface that does not have a Source or Output associated with it. If the VPC interface is referenced by a Source or Output, you must first delete or update the Source or Output to no longer reference the VPC interface.</p>
+    async fn remove_flow_vpc_interface(
+        &self,
+        input: RemoveFlowVpcInterfaceRequest,
+    ) -> Result<RemoveFlowVpcInterfaceResponse, RusotoError<RemoveFlowVpcInterfaceError>> {
+        let request_uri = format!(
+            "/v1/flows/{flow_arn}/vpcInterfaces/{vpc_interface_name}",
+            flow_arn = input.flow_arn,
+            vpc_interface_name = input.vpc_interface_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveFlowVpcInterfaceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveFlowVpcInterfaceError::from_response(response))
+        }
+    }
+
     /// <p>Revokes an entitlement from a flow. Once an entitlement is revoked, the content becomes unavailable to the subscriber and the associated output is removed.</p>
     async fn revoke_flow_entitlement(
         &self,
@@ -2472,6 +3181,36 @@ impl MediaConnect for MediaConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates flow</p>
+    async fn update_flow(
+        &self,
+        input: UpdateFlowRequest,
+    ) -> Result<UpdateFlowResponse, RusotoError<UpdateFlowError>> {
+        let request_uri = format!("/v1/flows/{flow_arn}", flow_arn = input.flow_arn);
+
+        let mut request = SignedRequest::new("PUT", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFlowResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFlowError::from_response(response))
         }
     }
 

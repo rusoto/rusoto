@@ -145,6 +145,10 @@ pub struct CertificateInfo {
     #[serde(rename = "CommonName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub common_name: Option<String>,
+    /// <p>The date and time when the certificate will expire.</p>
+    #[serde(rename = "ExpiryDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_date_time: Option<f64>,
     /// <p>The state of the certificate.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -734,7 +738,7 @@ pub struct DescribeLDAPSSettingsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The type of LDAP security the customer wants to enable, either server or client. Currently supports only <code>Client</code>, (the default).</p>
+    /// <p>The type of LDAP security to enable. Currently only the value <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1090,7 +1094,7 @@ pub struct DisableLDAPSRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
-    /// <p>The type of LDAP security that the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
+    /// <p>The type of LDAP security to enable. Currently only the value <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -1187,7 +1191,7 @@ pub struct EnableLDAPSRequest {
     /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
-    /// <p>The type of LDAP security the customer wants to enable. The security can be either server or client, but currently only the default <code>Client</code> is supported.</p>
+    /// <p>The type of LDAP security to enable. Currently only the value <code>Client</code> is supported.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }

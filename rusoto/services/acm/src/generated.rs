@@ -200,7 +200,7 @@ pub struct DomainValidation {
     /// <p>A fully qualified domain name (FQDN) in the certificate. For example, <code>www.example.com</code> or <code>example.com</code>. </p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>Contains the CNAME record that you add to your DNS database for domain validation. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">Use DNS to Validate Domain Ownership</a>.</p>
+    /// <p>Contains the CNAME record that you add to your DNS database for domain validation. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html">Use DNS to Validate Domain Ownership</a>.</p> <p>Note: The CNAME information that you need does not include the name of your domain. If you include&#x2028; your domain name in the DNS database CNAME record, validation fails.&#x2028; For example, if the name is "_a79865eb4cd1a6ab990a45779b4e0b96.yourdomain.com", only "_a79865eb4cd1a6ab990a45779b4e0b96" must be used.</p>
     #[serde(rename = "ResourceRecord")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_record: Option<ResourceRecord>,
@@ -310,11 +310,11 @@ pub struct GetCertificateRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCertificateResponse {
-    /// <p>String that contains the ACM certificate represented by the ARN specified at input.</p>
+    /// <p>The ACM-issued certificate corresponding to the ARN specified as input.</p>
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>The certificate chain that contains the root certificate issued by the certificate authority (CA).</p>
+    /// <p>Certificates forming the requested certificate's chain of trust. The chain consists of the certificate of the issuing CA and the intermediate certificates of any other subordinate CAs. </p>
     #[serde(rename = "CertificateChain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_chain: Option<String>,
@@ -488,7 +488,7 @@ pub struct RequestCertificateRequest {
     #[serde(rename = "Options")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<CertificateOptions>,
-    /// <p><p>Additional FQDNs to be included in the Subject Alternative Name extension of the ACM certificate. For example, add the name www.example.net to a certificate for which the <code>DomainName</code> field is www.example.com if users can reach your site by using either name. The maximum number of domain names that you can add to an ACM certificate is 100. However, the initial limit is 10 domain names. If you need more than 10 names, you must request a limit increase. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Limits</a>.</p> <p> The maximum length of a SAN DNS name is 253 octets. The name is made up of multiple labels separated by periods. No label can be longer than 63 octets. Consider the following examples: </p> <ul> <li> <p> <code>(63 octets).(63 octets).(63 octets).(61 octets)</code> is legal because the total length is 253 octets (63+1+63+1+63+1+61) and no label exceeds 63 octets.</p> </li> <li> <p> <code>(64 octets).(63 octets).(63 octets).(61 octets)</code> is not legal because the total length exceeds 253 octets (64+1+63+1+63+1+61) and the first label exceeds 63 octets.</p> </li> <li> <p> <code>(63 octets).(63 octets).(63 octets).(62 octets)</code> is not legal because the total length of the DNS name (63+1+63+1+63+1+62) exceeds 253 octets.</p> </li> </ul></p>
+    /// <p><p>Additional FQDNs to be included in the Subject Alternative Name extension of the ACM certificate. For example, add the name www.example.net to a certificate for which the <code>DomainName</code> field is www.example.com if users can reach your site by using either name. The maximum number of domain names that you can add to an ACM certificate is 100. However, the initial quota is 10 domain names. If you need more than 10 names, you must request a quota increase. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Quotas</a>.</p> <p> The maximum length of a SAN DNS name is 253 octets. The name is made up of multiple labels separated by periods. No label can be longer than 63 octets. Consider the following examples: </p> <ul> <li> <p> <code>(63 octets).(63 octets).(63 octets).(61 octets)</code> is legal because the total length is 253 octets (63+1+63+1+63+1+61) and no label exceeds 63 octets.</p> </li> <li> <p> <code>(64 octets).(63 octets).(63 octets).(61 octets)</code> is not legal because the total length exceeds 253 octets (64+1+63+1+63+1+61) and the first label exceeds 63 octets.</p> </li> <li> <p> <code>(63 octets).(63 octets).(63 octets).(62 octets)</code> is not legal because the total length of the DNS name (63+1+63+1+63+1+62) exceeds 253 octets.</p> </li> </ul></p>
     #[serde(rename = "SubjectAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject_alternative_names: Option<Vec<String>>,
@@ -798,7 +798,7 @@ pub enum ImportCertificateError {
     InvalidParameter(String),
     /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
     InvalidTag(String),
-    /// <p>An ACM limit has been exceeded.</p>
+    /// <p>An ACM quota has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
@@ -1028,7 +1028,7 @@ pub enum RequestCertificateError {
     InvalidParameter(String),
     /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
     InvalidTag(String),
-    /// <p>An ACM limit has been exceeded.</p>
+    /// <p>An ACM quota has been exceeded.</p>
     LimitExceeded(String),
     /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
     TagPolicy(String),
@@ -1148,7 +1148,7 @@ pub enum UpdateCertificateOptionsError {
     InvalidArn(String),
     /// <p>Processing has reached an invalid state.</p>
     InvalidState(String),
-    /// <p>An ACM limit has been exceeded.</p>
+    /// <p>An ACM quota has been exceeded.</p>
     LimitExceeded(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
@@ -1222,7 +1222,7 @@ pub trait Acm {
         input: ExportCertificateRequest,
     ) -> Result<ExportCertificateResponse, RusotoError<ExportCertificateError>>;
 
-    /// <p>Retrieves a certificate specified by an ARN and its certificate chain . The chain is an ordered list of certificates that contains the end entity certificate, intermediate certificates of subordinate CAs, and the root certificate in that order. The certificate and certificate chain are base64 encoded. If you want to decode the certificate to see the individual fields, you can use OpenSSL.</p>
+    /// <p>Retrieves an Amazon-issued certificate and its certificate chain. The chain consists of the certificate of the issuing CA and the intermediate certificates of any other subordinate CAs. All of the certificates are base64 encoded. You can use <a href="https://wiki.openssl.org/index.php/Command_Line_Utilities">OpenSSL</a> to decode the certificates and inspect individual fields.</p>
     async fn get_certificate(
         &self,
         input: GetCertificateRequest,
@@ -1426,7 +1426,7 @@ impl Acm for AcmClient {
         }
     }
 
-    /// <p>Retrieves a certificate specified by an ARN and its certificate chain . The chain is an ordered list of certificates that contains the end entity certificate, intermediate certificates of subordinate CAs, and the root certificate in that order. The certificate and certificate chain are base64 encoded. If you want to decode the certificate to see the individual fields, you can use OpenSSL.</p>
+    /// <p>Retrieves an Amazon-issued certificate and its certificate chain. The chain consists of the certificate of the issuing CA and the intermediate certificates of any other subordinate CAs. All of the certificates are base64 encoded. You can use <a href="https://wiki.openssl.org/index.php/Command_Line_Utilities">OpenSSL</a> to decode the certificates and inspect individual fields.</p>
     async fn get_certificate(
         &self,
         input: GetCertificateRequest,

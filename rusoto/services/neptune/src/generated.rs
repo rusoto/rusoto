@@ -667,7 +667,7 @@ pub struct CreateDBClusterMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>The name for your database of up to 64 alpha-numeric characters. If you do not provide a name, Amazon Neptune will not create a database in the DB cluster you are creating.</p>
     pub database_name: Option<String>,
-    /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p>
+    /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is enabled.</p>
     pub deletion_protection: Option<bool>,
     /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
@@ -1006,7 +1006,7 @@ pub struct CreateDBInstanceMessage {
     pub db_security_groups: Option<Vec<String>>,
     /// <p>A DB subnet group to associate with this DB instance.</p> <p>If there is no DB subnet group, then it is a non-VPC DB instance.</p>
     pub db_subnet_group_name: Option<String>,
-    /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p> <p>You can enable or disable deletion protection for the DB cluster. For more information, see <a>CreateDBCluster</a>. DB instances in a DB cluster can be deleted even when deletion protection is enabled for the DB cluster. </p>
+    /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. See <a href="https://docs.aws.amazon.com/neptune/latest/userguide/manage-console-instances-delete.html">Deleting a DB Instance</a>.</p> <p>DB instances in a DB cluster can be deleted even when deletion protection is enabled in their parent DB cluster.</p>
     pub deletion_protection: Option<bool>,
     /// <p>Specify the Active Directory Domain to create the instance in.</p>
     pub domain: Option<String>,
@@ -1540,7 +1540,7 @@ pub struct DBCluster {
     pub database_name: Option<String>,
     /// <p>The AWS Region-unique, immutable identifier for the DB cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed.</p>
     pub db_cluster_resource_id: Option<String>,
-    /// <p>Indicates if the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. </p>
+    /// <p>Indicates whether or not the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled.</p>
     pub deletion_protection: Option<bool>,
     /// <p>Specifies the earliest time to which a database can be restored with point-in-time restore.</p>
     pub earliest_restorable_time: Option<String>,
@@ -2224,7 +2224,7 @@ pub struct DBClusterSnapshot {
     pub db_cluster_identifier: Option<String>,
     /// <p>The Amazon Resource Name (ARN) for the DB cluster snapshot.</p>
     pub db_cluster_snapshot_arn: Option<String>,
-    /// <p>Specifies the identifier for the DB cluster snapshot.</p>
+    /// <p>Specifies the identifier for a DB cluster snapshot. Must match the identifier of an existing snapshot.</p> <p>After you restore a DB cluster using a <code>DBClusterSnapshotIdentifier</code>, you must specify the same <code>DBClusterSnapshotIdentifier</code> for any future updates to the DB cluster. When you specify this property for an update, the DB cluster is not restored from the snapshot again, and the data in the database is not changed.</p> <p>However, if you don't specify the <code>DBClusterSnapshotIdentifier</code>, an empty DB cluster is created, and the original DB cluster is deleted. If you specify a property that is different from the previous snapshot restore property, the DB cluster is restored from the snapshot specified by the <code>DBClusterSnapshotIdentifier</code>, and the original DB cluster is deleted.</p>
     pub db_cluster_snapshot_identifier: Option<String>,
     /// <p>Specifies the name of the database engine.</p>
     pub engine: Option<String>,
@@ -2739,7 +2739,7 @@ pub struct DBInstance {
     pub db_instance_port: Option<i64>,
     /// <p>The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed.</p>
     pub dbi_resource_id: Option<String>,
-    /// <p>Indicates if the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. </p>
+    /// <p>Indicates whether or not the DB instance has deletion protection enabled. The instance can't be deleted when deletion protection is enabled. See <a href="https://docs.aws.amazon.com/neptune/latest/userguide/manage-console-instances-delete.html">Deleting a DB Instance</a>.</p>
     pub deletion_protection: Option<bool>,
     /// <p>Not supported</p>
     pub domain_memberships: Option<Vec<DomainMembership>>,
@@ -4169,7 +4169,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
 pub struct DescribeDBClustersMessage {
     /// <p><p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
-    /// <p><p>A filter that specifies one or more DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB clusters identified by these ARNs.</p> </li> </ul></p>
+    /// <p>A filter that specifies one or more DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>engine</code> - Accepts an engine name (such as <code>neptune</code>), and restricts the results list to DB clusters created by that engine.</p> </li> </ul> <p>For example, to invoke this API from the AWS CLI and filter so that only Neptune DB clusters are returned, you could use the following command:</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>An optional pagination token provided by a previous <a>DescribeDBClusters</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -4288,7 +4288,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
 pub struct DescribeDBInstancesMessage {
     /// <p><p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
-    /// <p><p>A filter that specifies one or more DB instances to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB instances associated with the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance Amazon Resource Names (ARNs). The results list will only include information about the DB instances identified by these ARNs.</p> </li> </ul></p>
+    /// <p>A filter that specifies one or more DB instances to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB instances associated with the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>engine</code> - Accepts an engine name (such as <code>neptune</code>), and restricts the results list to DB instances created by that engine.</p> </li> </ul> <p>For example, to invoke this API from the AWS CLI and filter so that only Neptune DB instances are returned, you could use the following command:</p>
     pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBInstances</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
@@ -5721,7 +5721,7 @@ pub struct ModifyDBClusterMessage {
     pub db_cluster_identifier: String,
     /// <p>The name of the DB cluster parameter group to use for the DB cluster.</p>
     pub db_cluster_parameter_group_name: Option<String>,
-    /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p>
+    /// <p>A value that indicates whether the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled.</p>
     pub deletion_protection: Option<bool>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
@@ -5993,7 +5993,7 @@ pub struct ModifyDBInstanceMessage {
     pub db_security_groups: Option<Vec<String>>,
     /// <p>The new DB subnet group for the DB instance. You can use this parameter to move your DB instance to a different VPC.</p> <p>Changing the subnet group causes an outage during the change. The change is applied during the next maintenance window, unless you specify <code>true</code> for the <code>ApplyImmediately</code> parameter.</p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetGroup</code> </p>
     pub db_subnet_group_name: Option<String>,
-    /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. </p>
+    /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. See <a href="https://docs.aws.amazon.com/neptune/latest/userguide/manage-console-instances-delete.html">Deleting a DB Instance</a>.</p>
     pub deletion_protection: Option<bool>,
     /// <p>Not supported.</p>
     pub domain: Option<String>,
@@ -7940,6 +7940,102 @@ impl SourceTypeDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartDBClusterMessage {
+    /// <p>The DB cluster identifier of the Neptune DB cluster to be started. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: String,
+}
+
+/// Serialize `StartDBClusterMessage` contents to a `SignedRequest`.
+struct StartDBClusterMessageSerializer;
+impl StartDBClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StartDBClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterIdentifier"),
+            &obj.db_cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StartDBClusterResult {
+    pub db_cluster: Option<DBCluster>,
+}
+
+#[allow(dead_code)]
+struct StartDBClusterResultDeserializer;
+impl StartDBClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StartDBClusterResult, XmlParseError> {
+        deserialize_elements::<_, StartDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DBCluster" => {
+                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopDBClusterMessage {
+    /// <p>The DB cluster identifier of the Neptune DB cluster to be stopped. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: String,
+}
+
+/// Serialize `StopDBClusterMessage` contents to a `SignedRequest`.
+struct StopDBClusterMessageSerializer;
+impl StopDBClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StopDBClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterIdentifier"),
+            &obj.db_cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StopDBClusterResult {
+    pub db_cluster: Option<DBCluster>,
+}
+
+#[allow(dead_code)]
+struct StopDBClusterResultDeserializer;
+impl StopDBClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StopDBClusterResult, XmlParseError> {
+        deserialize_elements::<_, StopDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DBCluster" => {
+                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 #[allow(dead_code)]
@@ -12802,6 +12898,126 @@ impl fmt::Display for RestoreDBClusterToPointInTimeError {
     }
 }
 impl Error for RestoreDBClusterToPointInTimeError {}
+/// Errors returned by StartDBCluster
+#[derive(Debug, PartialEq)]
+pub enum StartDBClusterError {
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
+    DBClusterNotFoundFault(String),
+    /// <p>The DB cluster is not in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl StartDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDBClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(StartDBClusterError::DBClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            StartDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            StartDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StartDBClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            StartDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartDBClusterError {}
+/// Errors returned by StopDBCluster
+#[derive(Debug, PartialEq)]
+pub enum StopDBClusterError {
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
+    DBClusterNotFoundFault(String),
+    /// <p>The DB cluster is not in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl StopDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDBClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(StopDBClusterError::DBClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            StopDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            StopDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StopDBClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopDBClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            StopDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
+            StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon Neptune API. Amazon Neptune clients implement this trait.
 #[async_trait]
 pub trait Neptune {
@@ -12838,7 +13054,7 @@ pub trait Neptune {
         input: CopyDBClusterParameterGroupMessage,
     ) -> Result<CopyDBClusterParameterGroupResult, RusotoError<CopyDBClusterParameterGroupError>>;
 
-    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can't copy from one AWS Region to another.</p>
+    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p>
     async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -12850,7 +13066,7 @@ pub trait Neptune {
         input: CopyDBParameterGroupMessage,
     ) -> Result<CopyDBParameterGroupResult, RusotoError<CopyDBParameterGroupError>>;
 
-    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance.</p>
+    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance.</p> <p>Note that when you create a new cluster using <code>CreateDBCluster</code> directly, deletion protection is disabled by default (when you create a new production cluster in the console, deletion protection is enabled by default). You can only delete a DB cluster if its <code>DeletionProtection</code> field is set to <code>false</code>.</p>
     async fn create_db_cluster(
         &self,
         input: CreateDBClusterMessage,
@@ -12892,7 +13108,7 @@ pub trait Neptune {
         input: CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>>;
 
-    /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p>
+    /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p>Note that the DB Cluster cannot be deleted if deletion protection is enabled. To delete it, you must first set its <code>DeletionProtection</code> field to <code>False</code>.</p>
     async fn delete_db_cluster(
         &self,
         input: DeleteDBClusterMessage,
@@ -12910,7 +13126,7 @@ pub trait Neptune {
         input: DeleteDBClusterSnapshotMessage,
     ) -> Result<DeleteDBClusterSnapshotResult, RusotoError<DeleteDBClusterSnapshotError>>;
 
-    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>You can't delete a DB instance if it is the only instance in the DB cluster.</p>
+    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>You can't delete a DB instance if it is the only instance in the DB cluster, or if it has deletion protection enabled.</p>
     async fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -12961,7 +13177,7 @@ pub trait Neptune {
         input: DescribeDBClusterSnapshotsMessage,
     ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>>;
 
-    /// <p>Returns information about provisioned DB clusters. This API supports pagination.</p>
+    /// <p><p>Returns information about provisioned DB clusters, and supports pagination.</p> <note> <p>This operation can also return information for Amazon RDS clusters and Amazon DocDB clusters.</p> </note></p>
     async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
@@ -12973,7 +13189,7 @@ pub trait Neptune {
         input: DescribeDBEngineVersionsMessage,
     ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>>;
 
-    /// <p>Returns information about provisioned instances. This API supports pagination.</p>
+    /// <p><p>Returns information about provisioned instances, and supports pagination.</p> <note> <p>This operation can also return information for Amazon RDS instances and Amazon DocDB instances.</p> </note></p>
     async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
@@ -13170,6 +13386,18 @@ pub trait Neptune {
         &self,
         input: RestoreDBClusterToPointInTimeMessage,
     ) -> Result<RestoreDBClusterToPointInTimeResult, RusotoError<RestoreDBClusterToPointInTimeError>>;
+
+    /// <p>Starts an Amazon Neptune DB cluster that was stopped using the AWS console, the AWS CLI stop-db-cluster command, or the StopDBCluster API.</p>
+    async fn start_db_cluster(
+        &self,
+        input: StartDBClusterMessage,
+    ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>>;
+
+    /// <p>Stops an Amazon Neptune DB cluster. When you stop a DB cluster, Neptune retains the DB cluster's metadata, including its endpoints and DB parameter groups.</p> <p>Neptune also retains the transaction logs so you can do a point-in-time restore if necessary.</p>
+    async fn stop_db_cluster(
+        &self,
+        input: StopDBClusterMessage,
+    ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>>;
 }
 /// A client for the Amazon Neptune API.
 #[derive(Clone)]
@@ -13418,7 +13646,7 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
-    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can't copy from one AWS Region to another.</p>
+    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p>
     async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -13514,7 +13742,7 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
-    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance.</p>
+    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance.</p> <p>Note that when you create a new cluster using <code>CreateDBCluster</code> directly, deletion protection is disabled by default (when you create a new production cluster in the console, deletion protection is enabled by default). You can only delete a DB cluster if its <code>DeletionProtection</code> field is set to <code>false</code>.</p>
     async fn create_db_cluster(
         &self,
         input: CreateDBClusterMessage,
@@ -13851,7 +14079,7 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
-    /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p>
+    /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p>Note that the DB Cluster cannot be deleted if deletion protection is enabled. To delete it, you must first set its <code>DeletionProtection</code> field to <code>False</code>.</p>
     async fn delete_db_cluster(
         &self,
         input: DeleteDBClusterMessage,
@@ -13975,7 +14203,7 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
-    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>You can't delete a DB instance if it is the only instance in the DB cluster.</p>
+    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>You can't delete a DB instance if it is the only instance in the DB cluster, or if it has deletion protection enabled.</p>
     async fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -14327,7 +14555,7 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
-    /// <p>Returns information about provisioned DB clusters. This API supports pagination.</p>
+    /// <p><p>Returns information about provisioned DB clusters, and supports pagination.</p> <note> <p>This operation can also return information for Amazon RDS clusters and Amazon DocDB clusters.</p> </note></p>
     async fn describe_db_clusters(
         &self,
         input: DescribeDBClustersMessage,
@@ -14421,7 +14649,7 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
-    /// <p>Returns information about provisioned instances. This API supports pagination.</p>
+    /// <p><p>Returns information about provisioned instances, and supports pagination.</p> <note> <p>This operation can also return information for Amazon RDS instances and Amazon DocDB instances.</p> </note></p>
     async fn describe_db_instances(
         &self,
         input: DescribeDBInstancesMessage,
@@ -15847,6 +16075,98 @@ impl Neptune for NeptuneClient {
                 "RestoreDBClusterToPointInTimeResult",
                 &mut stack,
             )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Starts an Amazon Neptune DB cluster that was stopped using the AWS console, the AWS CLI stop-db-cluster command, or the StopDBCluster API.</p>
+    async fn start_db_cluster(
+        &self,
+        input: StartDBClusterMessage,
+    ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StartDBCluster");
+        params.put("Version", "2014-10-31");
+        StartDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(StartDBClusterError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = StartDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Stops an Amazon Neptune DB cluster. When you stop a DB cluster, Neptune retains the DB cluster's metadata, including its endpoints and DB parameter groups.</p> <p>Neptune also retains the transaction logs so you can do a point-in-time restore if necessary.</p>
+    async fn stop_db_cluster(
+        &self,
+        input: StopDBClusterMessage,
+    ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "StopDBCluster");
+        params.put("Version", "2014-10-31");
+        StopDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(StopDBClusterError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = StopDBClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", &mut stack)?;
             skip_tree(&mut stack);
             end_element(&actual_tag_name, &mut stack)?;
         }

@@ -570,7 +570,7 @@ pub struct Condition {
     #[serde(rename = "LogicalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_operator: Option<String>,
-    /// <p>The condition state. Currently, the values supported are <code>SUCCEEDED</code>, <code>STOPPED</code>, <code>TIMEOUT</code>, and <code>FAILED</code>.</p>
+    /// <p>The condition state. Currently, the only job states that a trigger can listen for are <code>SUCCEEDED</code>, <code>STOPPED</code>, <code>FAILED</code>, and <code>TIMEOUT</code>. The only crawler states that a trigger can listen for are <code>SUCCEEDED</code>, <code>FAILED</code>, and <code>CANCELLED</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -602,7 +602,7 @@ pub struct ConfusionMatrix {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
-    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> </ul></p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for connecting to a JDBC data source.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> <li> <p> <code>CONNECTION<em>URL</code> - The URL for connecting to a general (non-JDBC) data source.</p> </li> <li> <p> <code>KAFKA</em>BOOTSTRAP_SERVERS</code> - A comma-separated list of host and port pairs that are the addresses of the Apache Kafka brokers in a Kafka cluster to which a Kafka client will connect to and bootstrap itself.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -647,7 +647,7 @@ pub struct ConnectionInput {
     /// <p>These key-value pairs define parameters for the connection.</p>
     #[serde(rename = "ConnectionProperties")]
     pub connection_properties: ::std::collections::HashMap<String, String>,
-    /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
+    /// <p>The type of the connection. Currently, these types are supported:</p> <ul> <li> <p> <code>JDBC</code> - Designates a connection to a database through Java Database Connectivity (JDBC).</p> </li> <li> <p> <code>KAFKA</code> - Designates a connection to an Apache Kafka streaming platform.</p> </li> <li> <p> <code>MONGODB</code> - Designates a connection to a MongoDB document database.</p> </li> </ul> <p>SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     pub connection_type: String,
     /// <p>The description of the connection.</p>
@@ -1209,6 +1209,10 @@ pub struct CreateJobRequest {
     /// <p>The name you assign to this job definition. It must be unique in your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Non-overridable arguments for this job, specified as name-value pairs.</p>
+    #[serde(rename = "NonOverridableArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_overridable_arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies configuration properties of a job notification.</p>
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1294,6 +1298,10 @@ pub struct CreateMLTransformRequest {
     /// <p><p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. The required permissions include both AWS Glue service role permissions to AWS Glue resources, and Amazon S3 permissions required by the transform. </p> <ul> <li> <p>This role needs AWS Glue service role permissions to allow access to resources in AWS Glue. See <a href="https://docs.aws.amazon.com/glue/latest/dg/attach-policy-iam-user.html">Attach a Policy to IAM Users That Access AWS Glue</a>.</p> </li> <li> <p>This role needs permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries used by the task run for this transform.</p> </li> </ul></p>
     #[serde(rename = "Role")]
     pub role: String,
+    /// <p>The tags to use with this machine learning transform. You may use tags to limit access to the machine learning transform. For more information about tags in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The timeout of the task run for this transform in minutes. This is the maximum time that a task run for this transform can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3259,7 +3267,8 @@ pub struct GetUserDefinedFunctionsRequest {
     pub catalog_id: Option<String>,
     /// <p>The name of the catalog database where the functions are located.</p>
     #[serde(rename = "DatabaseName")]
-    pub database_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
     /// <p>The maximum number of functions to return in one response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3530,6 +3539,10 @@ pub struct Job {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Non-overridable arguments for this job, specified as name-value pairs.</p>
+    #[serde(rename = "NonOverridableArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_overridable_arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies configuration properties of a job notification.</p>
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3666,7 +3679,7 @@ pub struct JobRun {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The current state of the job run.</p>
+    /// <p>The current state of the job run. For more information about the statuses of jobs that have terminated abnormally, see <a href="https://docs.aws.amazon.com/glue/latest/dg/job-run-statuses.html">AWS Glue Job Run Statuses</a>.</p>
     #[serde(rename = "JobRunState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_state: Option<String>,
@@ -3760,6 +3773,10 @@ pub struct JobUpdate {
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
+    /// <p>Non-overridable arguments for this job, specified as name-value pairs.</p>
+    #[serde(rename = "NonOverridableArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_overridable_arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies the configuration properties of a job notification.</p>
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3938,6 +3955,43 @@ pub struct ListJobsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMLTransformsRequest {
+    /// <p>A <code>TransformFilterCriteria</code> used to filter the machine learning transforms.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<TransformFilterCriteria>,
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A <code>TransformSortCriteria</code> used to sort the machine learning transforms.</p>
+    #[serde(rename = "Sort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort: Option<TransformSortCriteria>,
+    /// <p>Specifies to return only these tagged resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListMLTransformsResponse {
+    /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The identifiers of all the machine learning transforms in the account, or the machine learning transforms with the specified tags.</p>
+    #[serde(rename = "TransformIds")]
+    pub transform_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4843,6 +4897,21 @@ pub struct StopTriggerResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopWorkflowRunRequest {
+    /// <p>The name of the workflow to stop.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The ID of the workflow run to stop.</p>
+    #[serde(rename = "RunId")]
+    pub run_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopWorkflowRunResponse {}
 
 /// <p>Describes the physical storage of table data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -10484,6 +10553,54 @@ impl fmt::Display for ListJobsError {
     }
 }
 impl Error for ListJobsError {}
+/// Errors returned by ListMLTransforms
+#[derive(Debug, PartialEq)]
+pub enum ListMLTransformsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ListMLTransformsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMLTransformsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ListMLTransformsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListMLTransformsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListMLTransformsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ListMLTransformsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListMLTransformsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMLTransformsError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ListMLTransformsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListMLTransformsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListMLTransformsError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListMLTransformsError {}
 /// Errors returned by ListTriggers
 #[derive(Debug, PartialEq)]
 pub enum ListTriggersError {
@@ -11578,6 +11695,62 @@ impl fmt::Display for StopTriggerError {
     }
 }
 impl Error for StopTriggerError {}
+/// Errors returned by StopWorkflowRun
+#[derive(Debug, PartialEq)]
+pub enum StopWorkflowRunError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The workflow is in an invalid state to perform a requested operation.</p>
+    IllegalWorkflowState(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl StopWorkflowRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopWorkflowRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StopWorkflowRunError::EntityNotFound(err.msg))
+                }
+                "IllegalWorkflowStateException" => {
+                    return RusotoError::Service(StopWorkflowRunError::IllegalWorkflowState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StopWorkflowRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StopWorkflowRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StopWorkflowRunError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopWorkflowRunError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopWorkflowRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            StopWorkflowRunError::IllegalWorkflowState(ref cause) => write!(f, "{}", cause),
+            StopWorkflowRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopWorkflowRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopWorkflowRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopWorkflowRunError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -12933,6 +13106,12 @@ pub trait Glue {
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>>;
 
+    /// <p> Retrieves a sortable, filterable list of existing AWS Glue machine learning transforms in this AWS account, or the resources with the specified tag. This operation takes the optional <code>Tags</code> field, which you can use as a filter of the responses so that tagged resources can be retrieved as a group. If you choose to use tag filtering, only resources with the tags are retrieved. </p>
+    async fn list_ml_transforms(
+        &self,
+        input: ListMLTransformsRequest,
+    ) -> Result<ListMLTransformsResponse, RusotoError<ListMLTransformsError>>;
+
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     async fn list_triggers(
         &self,
@@ -13052,6 +13231,12 @@ pub trait Glue {
         &self,
         input: StopTriggerRequest,
     ) -> Result<StopTriggerResponse, RusotoError<StopTriggerError>>;
+
+    /// <p>Stops the execution of the specified workflow run.</p>
+    async fn stop_workflow_run(
+        &self,
+        input: StopWorkflowRunRequest,
+    ) -> Result<StopWorkflowRunResponse, RusotoError<StopWorkflowRunError>>;
 
     /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
     async fn tag_resource(
@@ -15631,6 +15816,34 @@ impl Glue for GlueClient {
         }
     }
 
+    /// <p> Retrieves a sortable, filterable list of existing AWS Glue machine learning transforms in this AWS account, or the resources with the specified tag. This operation takes the optional <code>Tags</code> field, which you can use as a filter of the responses so that tagged resources can be retrieved as a group. If you choose to use tag filtering, only resources with the tags are retrieved. </p>
+    async fn list_ml_transforms(
+        &self,
+        input: ListMLTransformsRequest,
+    ) -> Result<ListMLTransformsResponse, RusotoError<ListMLTransformsError>> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.ListMLTransforms");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMLTransformsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMLTransformsError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
     async fn list_triggers(
         &self,
@@ -16165,6 +16378,33 @@ impl Glue for GlueClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StopTriggerError::from_response(response))
+        }
+    }
+
+    /// <p>Stops the execution of the specified workflow run.</p>
+    async fn stop_workflow_run(
+        &self,
+        input: StopWorkflowRunRequest,
+    ) -> Result<StopWorkflowRunResponse, RusotoError<StopWorkflowRunError>> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.StopWorkflowRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<StopWorkflowRunResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StopWorkflowRunError::from_response(response))
         }
     }
 

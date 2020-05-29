@@ -31,7 +31,7 @@ pub struct AcceptInvitationRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>This value is used to validate the master account to the member account.</p>
+    /// <p>The value that is used to validate the master account to the member account.</p>
     #[serde(rename = "InvitationId")]
     pub invitation_id: String,
     /// <p>The account ID of the master GuardDuty account whose invitation you're accepting.</p>
@@ -47,7 +47,7 @@ pub struct AcceptInvitationResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessKeyDetails {
-    /// <p>Access key ID of the user.</p>
+    /// <p>The access key ID of the user.</p>
     #[serde(rename = "AccessKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_key_id: Option<String>,
@@ -69,19 +69,19 @@ pub struct AccessKeyDetails {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccountDetail {
-    /// <p>Member account ID.</p>
+    /// <p>The member account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>Member account's email address.</p>
+    /// <p>The email address of the member account.</p>
     #[serde(rename = "Email")]
     pub email: String,
 }
 
-/// <p>Contains information about action.</p>
+/// <p>Contains information about actions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Action {
-    /// <p>GuardDuty Finding activity type.</p>
+    /// <p>The GuardDuty finding activity type.</p>
     #[serde(rename = "ActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type: Option<String>,
@@ -103,13 +103,27 @@ pub struct Action {
     pub port_probe_action: Option<PortProbeAction>,
 }
 
+/// <p>The account within the organization specified as the GuardDuty delegated administrator.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AdminAccount {
+    /// <p>The AWS account ID for the account.</p>
+    #[serde(rename = "AdminAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin_account_id: Option<String>,
+    /// <p>Indicates whether the account is enabled as the delegated administrator.</p>
+    #[serde(rename = "AdminStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin_status: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ArchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to archive.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>IDs of the findings that you want to archive.</p>
+    /// <p>The IDs of the findings that you want to archive.</p>
     #[serde(rename = "FindingIds")]
     pub finding_ids: Vec<String>,
 }
@@ -122,23 +136,23 @@ pub struct ArchiveFindingsResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AwsApiCallAction {
-    /// <p>AWS API name.</p>
+    /// <p>The AWS API name.</p>
     #[serde(rename = "Api")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api: Option<String>,
-    /// <p>AWS API caller type.</p>
+    /// <p>The AWS API caller type.</p>
     #[serde(rename = "CallerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caller_type: Option<String>,
-    /// <p>Domain information for the AWS API call.</p>
+    /// <p>The domain information for the AWS API call.</p>
     #[serde(rename = "DomainDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_details: Option<DomainDetails>,
-    /// <p>Remote IP information of the connection.</p>
+    /// <p>The remote IP information of the connection.</p>
     #[serde(rename = "RemoteIpDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_ip_details: Option<RemoteIpDetails>,
-    /// <p>AWS service name whose API was invoked.</p>
+    /// <p>The AWS service name whose API was invoked.</p>
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
@@ -148,7 +162,7 @@ pub struct AwsApiCallAction {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct City {
-    /// <p>City name of the remote IP address.</p>
+    /// <p>The city name of the remote IP address.</p>
     #[serde(rename = "CityName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city_name: Option<String>,
@@ -157,41 +171,41 @@ pub struct City {
 /// <p>Contains information about the condition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
-    /// <p>Represents an <b>equal</b> condition to be applied to a single field when querying for findings.</p>
+    /// <p>Represents an <i>equal</i> <b/> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "Equals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub equals: Option<Vec<String>>,
-    /// <p>Represents a greater than condition to be applied to a single field when querying for findings.</p>
+    /// <p>Represents a <i>greater than</i> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "GreaterThan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub greater_than: Option<i64>,
-    /// <p>Represents a greater than equal condition to be applied to a single field when querying for findings.</p>
+    /// <p>Represents a <i>greater than or equal</i> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "GreaterThanOrEqual")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub greater_than_or_equal: Option<i64>,
-    /// <p>Represents a less than condition to be applied to a single field when querying for findings.</p>
+    /// <p>Represents a <i>less than</i> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "LessThan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub less_than: Option<i64>,
-    /// <p>Represents a less than equal condition to be applied to a single field when querying for findings.</p>
+    /// <p>Represents a <i>less than or equal</i> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "LessThanOrEqual")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub less_than_or_equal: Option<i64>,
-    /// <p>Represents an <b>not equal</b> condition to be applied to a single field when querying for findings.</p>
+    /// <p>Represents a <i>not equal</i> <b/> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "NotEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_equals: Option<Vec<String>>,
 }
 
-/// <p>Contains information about the country in which the remote IP address is located.</p>
+/// <p>Contains information about the country where the remote IP address is located.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Country {
-    /// <p>Country code of the remote IP address.</p>
+    /// <p>The country code of the remote IP address.</p>
     #[serde(rename = "CountryCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub country_code: Option<String>,
-    /// <p>Country name of the remote IP address.</p>
+    /// <p>The country name of the remote IP address.</p>
     #[serde(rename = "CountryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub country_name: Option<String>,
@@ -204,10 +218,10 @@ pub struct CreateDetectorRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>A boolean value that specifies whether the detector is to be enabled.</p>
+    /// <p>A Boolean value that specifies whether the detector is to be enabled.</p>
     #[serde(rename = "Enable")]
     pub enable: bool,
-    /// <p>A enum value that specifies how frequently customer got Finding updates published.</p>
+    /// <p>An enum value that specifies how frequently updated findings are exported.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_publishing_frequency: Option<String>,
@@ -241,10 +255,10 @@ pub struct CreateFilterRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account for which you want to create a filter.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account that you want to create a filter for.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>Represents the criteria to be used in the filter for querying findings.</p>
+    /// <p><p>Represents the criteria to be used in the filter for querying findings.</p> <p>You can only use the following attributes to query findings:</p> <ul> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.outpostArn</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.localIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to TRUE, only archived findings are listed. When it&#39;s set to FALSE, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: ISO 8601 string format: YYYY-MM-DDTHH:MM:SS.SSSZ or YYYY-MM-DDTHH:MM:SSZ depending on whether the value contains milliseconds.</p> </li> </ul></p>
     #[serde(rename = "FindingCriteria")]
     pub finding_criteria: FindingCriteria,
     /// <p>The name of the filter.</p>
@@ -271,23 +285,23 @@ pub struct CreateFilterResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
-    /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
+    /// <p>A Boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
     #[serde(rename = "Activate")]
     pub activate: bool,
     /// <p>The idempotency token for the create request.</p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account for which you want to create an IPSet.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account that you want to create an IPSet for.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the IPSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key)</p>
+    /// <p>The URI of the file that contains the IPSet. For example: .</p>
     #[serde(rename = "Location")]
     pub location: String,
-    /// <p>The user friendly name to identify the IPSet. This name is displayed in all findings that are triggered by activity that involves IP addresses included in this IPSet.</p>
+    /// <p>The user-friendly name to identify the IPSet.</p> <p> Allowed characters are alphanumerics, spaces, hyphens (-), and underscores (_).</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The tags to be added to a new IP set resource.</p>
@@ -310,7 +324,7 @@ pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts that you want to associate with the master GuardDuty account.</p>
     #[serde(rename = "AccountDetails")]
     pub account_details: Vec<AccountDetail>,
-    /// <p>The unique ID of the detector of the GuardDuty account with which you want to associate member accounts.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account that you want to associate member accounts with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -318,7 +332,7 @@ pub struct CreateMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that include the <code>accountIds</code> of the unprocessed accounts and a result string that explains why each was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -330,10 +344,10 @@ pub struct CreatePublishingDestinationRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>Properties of the publishing destination, including the ARNs for the destination and the KMS key used for encryption.</p>
+    /// <p>The properties of the publishing destination, including the ARNs for the destination and the KMS key used for encryption.</p>
     #[serde(rename = "DestinationProperties")]
     pub destination_properties: DestinationProperties,
-    /// <p>The type of resource for the publishing destination. Currently only S3 is supported.</p>
+    /// <p>The type of resource for the publishing destination. Currently only Amazon S3 buckets are supported.</p>
     #[serde(rename = "DestinationType")]
     pub destination_type: String,
     /// <p>The ID of the GuardDuty detector associated with the publishing destination.</p>
@@ -344,7 +358,7 @@ pub struct CreatePublishingDestinationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePublishingDestinationResponse {
-    /// <p>The ID of the publishing destination created.</p>
+    /// <p>The ID of the publishing destination that is created.</p>
     #[serde(rename = "DestinationId")]
     pub destination_id: String,
 }
@@ -355,7 +369,7 @@ pub struct CreateSampleFindingsRequest {
     /// <p>The ID of the detector to create sample findings for.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>Types of sample findings to generate.</p>
+    /// <p>The types of sample findings to generate.</p>
     #[serde(rename = "FindingTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_types: Option<Vec<String>>,
@@ -368,26 +382,26 @@ pub struct CreateSampleFindingsResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThreatIntelSetRequest {
-    /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
+    /// <p>A Boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
     #[serde(rename = "Activate")]
     pub activate: bool,
     /// <p>The idempotency token for the create request.</p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account for which you want to create a threatIntelSet.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account that you want to create a threatIntelSet for.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The format of the file that contains the ThreatIntelSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the ThreatIntelSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key).</p>
+    /// <p>The URI of the file that contains the ThreatIntelSet. For example: .</p>
     #[serde(rename = "Location")]
     pub location: String,
-    /// <p>A user-friendly ThreatIntelSet name that is displayed in all finding generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
+    /// <p>A user-friendly ThreatIntelSet name displayed in all findings that are generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The tags to be added to a new Threat List resource.</p>
+    /// <p>The tags to be added to a new threat list resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -412,7 +426,7 @@ pub struct DeclineInvitationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -432,10 +446,10 @@ pub struct DeleteDetectorResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFilterRequest {
-    /// <p>The unique ID of the detector the filter is associated with.</p>
+    /// <p>The unique ID of the detector that the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The name of the filter you want to delete.</p>
+    /// <p>The name of the filter that you want to delete.</p>
     #[serde(rename = "FilterName")]
     pub filter_name: String,
 }
@@ -470,7 +484,7 @@ pub struct DeleteInvitationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -512,10 +526,10 @@ pub struct DeletePublishingDestinationResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThreatIntelSetRequest {
-    /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
+    /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The unique ID of the threatIntelSet you want to delete.</p>
+    /// <p>The unique ID of the threatIntelSet that you want to delete.</p>
     #[serde(rename = "ThreatIntelSetId")]
     pub threat_intel_set_id: String,
 }
@@ -523,6 +537,25 @@ pub struct DeleteThreatIntelSetRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThreatIntelSetResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeOrganizationConfigurationRequest {
+    /// <p>The ID of the detector to retrieve information about the delegated administrator from.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOrganizationConfigurationResponse {
+    /// <p>Indicates whether GuardDuty is automatically enabled for accounts added to the organization.</p>
+    #[serde(rename = "AutoEnable")]
+    pub auto_enable: bool,
+    /// <p>Indicates whether the maximum number of allowed member accounts are already associated with the delegated administrator master account.</p>
+    #[serde(rename = "MemberAccountLimitReached")]
+    pub member_account_limit_reached: bool,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -544,7 +577,7 @@ pub struct DescribePublishingDestinationResponse {
     /// <p>A <code>DestinationProperties</code> object that includes the <code>DestinationArn</code> and <code>KmsKeyArn</code> of the publishing destination.</p>
     #[serde(rename = "DestinationProperties")]
     pub destination_properties: DestinationProperties,
-    /// <p>The type of the publishing destination. Currently, only S3 is supported.</p>
+    /// <p>The type of publishing destination. Currently, only Amazon S3 buckets are supported.</p>
     #[serde(rename = "DestinationType")]
     pub destination_type: String,
     /// <p>The time, in epoch millisecond format, at which GuardDuty was first unable to publish findings to the destination.</p>
@@ -555,14 +588,14 @@ pub struct DescribePublishingDestinationResponse {
     pub status: String,
 }
 
-/// <p>Contains information about a publishing destination, including the ID, type, and status.</p>
+/// <p>Contains information about the publishing destination, including the ID, type, and status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Destination {
     /// <p>The unique ID of the publishing destination.</p>
     #[serde(rename = "DestinationId")]
     pub destination_id: String,
-    /// <p>The type of resource used for the publishing destination. Currently, only S3 is supported.</p>
+    /// <p>The type of resource used for the publishing destination. Currently, only Amazon S3 buckets are supported.</p>
     #[serde(rename = "DestinationType")]
     pub destination_type: String,
     /// <p>The status of the publishing destination.</p>
@@ -570,7 +603,7 @@ pub struct Destination {
     pub status: String,
 }
 
-/// <p>Contains the ARN of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.</p>
+/// <p>Contains the Amazon Resource Name (ARN) of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DestinationProperties {
     /// <p>The ARN of the resource to publish to.</p>
@@ -582,6 +615,18 @@ pub struct DestinationProperties {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisableOrganizationAdminAccountRequest {
+    /// <p>The AWS Account ID for the organizations account to be disabled as a GuardDuty delegated administrator.</p>
+    #[serde(rename = "AdminAccountId")]
+    pub admin_account_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisableOrganizationAdminAccountResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -598,10 +643,10 @@ pub struct DisassociateFromMasterAccountResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
-    /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from master.</p>
+    /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from the master account.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account whose members you want to disassociate from master.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account whose members you want to disassociate from the master account.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -609,7 +654,7 @@ pub struct DisassociateMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMembersResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -618,7 +663,7 @@ pub struct DisassociateMembersResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DnsRequestAction {
-    /// <p>Domain information for the API request.</p>
+    /// <p>The domain information for the API request.</p>
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
@@ -628,11 +673,23 @@ pub struct DnsRequestAction {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainDetails {
-    /// <p>Domain information for the AWS API call.</p>
+    /// <p>The domain information for the AWS API call.</p>
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EnableOrganizationAdminAccountRequest {
+    /// <p>The AWS Account ID for the organization account to be enabled as a GuardDuty delegated administrator.</p>
+    #[serde(rename = "AdminAccountId")]
+    pub admin_account_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EnableOrganizationAdminAccountResponse {}
 
 /// <p>Contains information about the reason that the finding was generated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -651,14 +708,14 @@ pub struct Finding {
     /// <p>The ID of the account in which the finding was generated.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>The ARN for the finding.</p>
+    /// <p>The ARN of the finding.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>The confidence score for the finding.</p>
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f64>,
-    /// <p>The time and date at which the finding was created.</p>
+    /// <p>The time and date when the finding was created.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: String,
     /// <p>The description of the finding.</p>
@@ -672,7 +729,7 @@ pub struct Finding {
     #[serde(rename = "Partition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<String>,
-    /// <p>The Region in which the finding was generated.</p>
+    /// <p>The Region where the finding was generated.</p>
     #[serde(rename = "Region")]
     pub region: String,
     #[serde(rename = "Resource")]
@@ -686,14 +743,14 @@ pub struct Finding {
     /// <p>The severity of the finding.</p>
     #[serde(rename = "Severity")]
     pub severity: f64,
-    /// <p>The title for the finding.</p>
+    /// <p>The title of the finding.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    /// <p>The type of the finding.</p>
+    /// <p>The type of finding.</p>
     #[serde(rename = "Type")]
     pub type_: String,
-    /// <p>The time and date at which the finding was laste updated.</p>
+    /// <p>The time and date when the finding was last updated.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: String,
 }
@@ -711,7 +768,7 @@ pub struct FindingCriteria {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingStatistics {
-    /// <p>Represents a map of severity to count statistic for a set of findings</p>
+    /// <p>Represents a map of severity to count statistics for a set of findings.</p>
     #[serde(rename = "CountBySeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count_by_severity: Option<::std::collections::HashMap<String, i64>>,
@@ -721,11 +778,11 @@ pub struct FindingStatistics {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GeoLocation {
-    /// <p>Latitude information of remote IP address.</p>
+    /// <p>The latitude information of the remote IP address.</p>
     #[serde(rename = "Lat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lat: Option<f64>,
-    /// <p>Longitude information of remote IP address.</p>
+    /// <p>The longitude information of the remote IP address.</p>
     #[serde(rename = "Lon")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lon: Option<f64>,
@@ -742,11 +799,11 @@ pub struct GetDetectorRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorResponse {
-    /// <p>Detector creation timestamp.</p>
+    /// <p>The timestamp of when the detector was created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
-    /// <p>Finding publishing frequency.</p>
+    /// <p>The publishing frequency of the finding.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_publishing_frequency: Option<String>,
@@ -760,7 +817,7 @@ pub struct GetDetectorResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Detector last update timestamp.</p>
+    /// <p>The last-updated timestamp for the detector.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<String>,
@@ -769,7 +826,7 @@ pub struct GetDetectorResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFilterRequest {
-    /// <p>The unique ID of the detector the filter is associated with.</p>
+    /// <p>The unique ID of the detector that the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The name of the filter you want to get.</p>
@@ -809,7 +866,7 @@ pub struct GetFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to retrieve.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>IDs of the findings that you want to retrieve.</p>
+    /// <p>The IDs of the findings that you want to retrieve.</p>
     #[serde(rename = "FindingIds")]
     pub finding_ids: Vec<String>,
     /// <p>Represents the criteria used for sorting findings.</p>
@@ -832,11 +889,11 @@ pub struct GetFindingsStatisticsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings' statistics you want to retrieve.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>Represents the criteria used for querying findings.</p>
+    /// <p>Represents the criteria that is used for querying findings.</p>
     #[serde(rename = "FindingCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_criteria: Option<FindingCriteria>,
-    /// <p>Types of finding statistics to retrieve.</p>
+    /// <p>The types of finding statistics to retrieve.</p>
     #[serde(rename = "FindingStatisticTypes")]
     pub finding_statistic_types: Vec<String>,
 }
@@ -844,7 +901,7 @@ pub struct GetFindingsStatisticsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsStatisticsResponse {
-    /// <p>Finding statistics object.</p>
+    /// <p>The finding statistics object.</p>
     #[serde(rename = "FindingStatistics")]
     pub finding_statistics: FindingStatistics,
 }
@@ -852,7 +909,7 @@ pub struct GetFindingsStatisticsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
-    /// <p>The unique ID of the detector the ipSet is associated with.</p>
+    /// <p>The unique ID of the detector that the IPSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The unique ID of the IPSet to retrieve.</p>
@@ -866,16 +923,16 @@ pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the IPSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key)</p>
+    /// <p>The URI of the file that contains the IPSet. For example: .</p>
     #[serde(rename = "Location")]
     pub location: String,
-    /// <p>The user friendly name for the IPSet.</p>
+    /// <p>The user-friendly name for the IPSet.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The status of ipSet file uploaded.</p>
+    /// <p>The status of IPSet file that was uploaded.</p>
     #[serde(rename = "Status")]
     pub status: String,
-    /// <p>The tags of the IP set resource.</p>
+    /// <p>The tags of the IPSet resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -905,7 +962,7 @@ pub struct GetMasterAccountRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMasterAccountResponse {
-    /// <p>Master account details.</p>
+    /// <p>The master account details.</p>
     #[serde(rename = "Master")]
     pub master: Master,
 }
@@ -927,7 +984,7 @@ pub struct GetMembersResponse {
     /// <p>A list of members.</p>
     #[serde(rename = "Members")]
     pub members: Vec<Member>,
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -935,10 +992,10 @@ pub struct GetMembersResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThreatIntelSetRequest {
-    /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
+    /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The unique ID of the threatIntelSet you want to get.</p>
+    /// <p>The unique ID of the threatIntelSet that you want to get.</p>
     #[serde(rename = "ThreatIntelSetId")]
     pub threat_intel_set_id: String,
 }
@@ -949,16 +1006,16 @@ pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the ThreatIntelSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key).</p>
+    /// <p>The URI of the file that contains the ThreatIntelSet. For example: .</p>
     #[serde(rename = "Location")]
     pub location: String,
-    /// <p>A user-friendly ThreatIntelSet name that is displayed in all finding generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
+    /// <p>A user-friendly ThreatIntelSet name displayed in all findings that are generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The status of threatIntelSet file uploaded.</p>
     #[serde(rename = "Status")]
     pub status: String,
-    /// <p>The tags of the Threat List resource.</p>
+    /// <p>The tags of the threat list resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -968,11 +1025,11 @@ pub struct GetThreatIntelSetResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IamInstanceProfile {
-    /// <p>AWS EC2 instance profile ARN.</p>
+    /// <p>The profile ARN of the EC2 instance.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>AWS EC2 instance profile ID.</p>
+    /// <p>The profile ID of the EC2 instance.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -982,7 +1039,7 @@ pub struct IamInstanceProfile {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceDetails {
-    /// <p>The availability zone of the EC2 instance.</p>
+    /// <p>The Availability Zone of the EC2 instance.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -1014,10 +1071,14 @@ pub struct InstanceDetails {
     #[serde(rename = "LaunchTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_time: Option<String>,
-    /// <p>The network interface information of the EC2 instance.</p>
+    /// <p>The elastic network interface information of the EC2 instance.</p>
     #[serde(rename = "NetworkInterfaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_interfaces: Option<Vec<NetworkInterface>>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Outpost. Only applicable to AWS Outposts instances.</p>
+    #[serde(rename = "OutpostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outpost_arn: Option<String>,
     /// <p>The platform of the EC2 instance.</p>
     #[serde(rename = "Platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1036,7 +1097,7 @@ pub struct InstanceDetails {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
-    /// <p>The ID of the account from which the invitations was sent.</p>
+    /// <p>The ID of the account that the invitation was sent from.</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -1044,7 +1105,7 @@ pub struct Invitation {
     #[serde(rename = "InvitationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitation_id: Option<String>,
-    /// <p>Timestamp at which the invitation was sent.</p>
+    /// <p>The timestamp when the invitation was sent.</p>
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<String>,
@@ -1060,10 +1121,10 @@ pub struct InviteMembersRequest {
     /// <p>A list of account IDs of the accounts that you want to invite to GuardDuty as members.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account with which you want to invite members.</p>
+    /// <p>The unique ID of the detector of the GuardDuty account that you want to invite members with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>A boolean value that specifies whether you want to disable email notification to the accounts that you’re inviting to GuardDuty as members.</p>
+    /// <p>A Boolean value that specifies whether you want to disable email notification to the accounts that you’re inviting to GuardDuty as members.</p>
     #[serde(rename = "DisableEmailNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_email_notification: Option<bool>,
@@ -1076,7 +1137,7 @@ pub struct InviteMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -1084,11 +1145,11 @@ pub struct InviteMembersResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
-    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1097,10 +1158,10 @@ pub struct ListDetectorsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
-    /// <p>A list of detector Ids.</p>
+    /// <p>A list of detector IDs.</p>
     #[serde(rename = "DetectorIds")]
     pub detector_ids: Vec<String>,
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1109,14 +1170,14 @@ pub struct ListDetectorsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFiltersRequest {
-    /// <p>The unique ID of the detector the filter is associated with.</p>
+    /// <p>The unique ID of the detector that the filter is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1125,10 +1186,10 @@ pub struct ListFiltersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFiltersResponse {
-    /// <p>A list of filter names</p>
+    /// <p>A list of filter names.</p>
     #[serde(rename = "FilterNames")]
     pub filter_names: Vec<String>,
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1140,7 +1201,7 @@ pub struct ListFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to list.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p><p>Represents the criteria used for querying findings. Valid values include:</p> <ul> <li> <p>JSON field name</p> </li> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to &#39;true&#39;, only archived findings are listed. When it&#39;s set to &#39;false&#39;, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: Timestamp in Unix Epoch millisecond format: 1486685375000</p> </li> </ul></p>
+    /// <p><p>Represents the criteria used for querying findings. Valid values include:</p> <ul> <li> <p>JSON field name</p> </li> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.outpostArn</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.localIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to &#39;true&#39;, only archived findings are listed. When it&#39;s set to &#39;false&#39;, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: Timestamp in Unix Epoch millisecond format: 1486685375000</p> </li> </ul></p>
     #[serde(rename = "FindingCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_criteria: Option<FindingCriteria>,
@@ -1148,7 +1209,7 @@ pub struct ListFindingsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1161,10 +1222,10 @@ pub struct ListFindingsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
-    /// <p>The IDs of the findings you are listing.</p>
+    /// <p>The IDs of the findings that you're listing.</p>
     #[serde(rename = "FindingIds")]
     pub finding_ids: Vec<String>,
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1173,14 +1234,14 @@ pub struct ListFindingsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
-    /// <p>The unique ID of the detector the ipSet is associated with.</p>
+    /// <p>The unique ID of the detector that the IPSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1192,7 +1253,7 @@ pub struct ListIPSetsResponse {
     /// <p>The IDs of the IPSet resources.</p>
     #[serde(rename = "IpSetIds")]
     pub ip_set_ids: Vec<String>,
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1201,11 +1262,11 @@ pub struct ListIPSetsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
-    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1218,7 +1279,7 @@ pub struct ListInvitationsResponse {
     #[serde(rename = "Invitations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitations: Option<Vec<Invitation>>,
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1234,11 +1295,11 @@ pub struct ListMembersRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies whether to only return associated members or to return all members (including members which haven't been invited yet or have been disassociated).</p>
+    /// <p>Specifies what member accounts the response includes based on their relationship status with the master account. The default value is "true". If set to "false" the response includes all existing member accounts (including members who haven't been invited yet or have been disassociated).</p>
     #[serde(rename = "OnlyAssociated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_associated: Option<String>,
@@ -1251,7 +1312,33 @@ pub struct ListMembersResponse {
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<Member>>,
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOrganizationAdminAccountsRequest {
+    /// <p>The maximum number of results to return in the response.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to use for paginating results that are returned in the response. Set the value of this parameter to null for the first request to a list action. For subsequent calls, use the <code>NextToken</code> value returned from the previous request to continue listing results after the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListOrganizationAdminAccountsResponse {
+    /// <p>An AdminAccounts object that includes a list of accounts configured as GuardDuty delegated administrators.</p>
+    #[serde(rename = "AdminAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin_accounts: Option<Vec<AdminAccount>>,
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1267,7 +1354,7 @@ pub struct ListPublishingDestinationsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to use for paginating results returned in the repsonse. Set the value of this parameter to null for the first request to a list action. For subsequent calls, use the <code>NextToken</code> value returned from the previous request to continue listing results after the first page.</p>
+    /// <p>A token to use for paginating results that are returned in the response. Set the value of this parameter to null for the first request to a list action. For subsequent calls, use the <code>NextToken</code> value returned from the previous request to continue listing results after the first page.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1276,10 +1363,10 @@ pub struct ListPublishingDestinationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishingDestinationsResponse {
-    /// <p>A <code>Destinations</code> obect that includes information about each publishing destination returned.</p>
+    /// <p>A <code>Destinations</code> object that includes information about each publishing destination returned.</p>
     #[serde(rename = "Destinations")]
     pub destinations: Vec<Destination>,
-    /// <p>A token to use for paginating results returned in the repsonse. Set the value of this parameter to null for the first request to a list action. For subsequent calls, use the <code>NextToken</code> value returned from the previous request to continue listing results after the first page.</p>
+    /// <p>A token to use for paginating results that are returned in the response. Set the value of this parameter to null for the first request to a list action. For subsequent calls, use the <code>NextToken</code> value returned from the previous request to continue listing results after the first page.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1288,7 +1375,7 @@ pub struct ListPublishingDestinationsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource </p>
+    /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -1305,14 +1392,14 @@ pub struct ListTagsForResourceResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThreatIntelSetsRequest {
-    /// <p>The unique ID of the detector the threatIntelSet is associated with.</p>
+    /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 50. The maximum value is 50.</p>
+    /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>You can use this parameter to paginate results in the response. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
+    /// <p>You can use this parameter to paginate results in the response. Set the value of this parameter to null on your first call to the list action. For subsequent calls to the action, fill nextToken in the request with the value of NextToken from the previous response to continue listing data.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1321,7 +1408,7 @@ pub struct ListThreatIntelSetsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
-    /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
+    /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1330,33 +1417,43 @@ pub struct ListThreatIntelSetsResponse {
     pub threat_intel_set_ids: Vec<String>,
 }
 
+/// <p>Contains information about the local IP address of the connection.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LocalIpDetails {
+    /// <p>The IPv4 local address of the connection.</p>
+    #[serde(rename = "IpAddressV4")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address_v4: Option<String>,
+}
+
 /// <p>Contains information about the port for the local connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocalPortDetails {
-    /// <p>Port number of the local connection.</p>
+    /// <p>The port number of the local connection.</p>
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Port name of the local connection.</p>
+    /// <p>The port name of the local connection.</p>
     #[serde(rename = "PortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_name: Option<String>,
 }
 
-/// <p>Contains information about the Master account and invitation.</p>
+/// <p>Contains information about the master account and invitation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Master {
-    /// <p>The ID of the account used as the Master account.</p>
+    /// <p>The ID of the account used as the master account.</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>This value is used to validate the master account to the member account.</p>
+    /// <p>The value used to validate the master account to the member account.</p>
     #[serde(rename = "InvitationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitation_id: Option<String>,
-    /// <p>Timestamp at which the invitation was sent.</p>
+    /// <p>The timestamp when the invitation was sent.</p>
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<String>,
@@ -1366,31 +1463,31 @@ pub struct Master {
     pub relationship_status: Option<String>,
 }
 
-/// <p>Continas information about the member account </p>
+/// <p>Contains information about the member account. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
-    /// <p>Member account ID.</p>
+    /// <p>The ID of the member account.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>Member account's detector ID.</p>
+    /// <p>The detector ID of the member account.</p>
     #[serde(rename = "DetectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detector_id: Option<String>,
-    /// <p>Member account's email address.</p>
+    /// <p>The email address of the member account.</p>
     #[serde(rename = "Email")]
     pub email: String,
-    /// <p>Timestamp at which the invitation was sent</p>
+    /// <p>The timestamp when the invitation was sent.</p>
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<String>,
-    /// <p>Master account ID.</p>
+    /// <p>The master account ID.</p>
     #[serde(rename = "MasterId")]
     pub master_id: String,
     /// <p>The status of the relationship between the member and the master.</p>
     #[serde(rename = "RelationshipStatus")]
     pub relationship_status: String,
-    /// <p>Member last updated timestamp.</p>
+    /// <p>The last-updated timestamp of the member.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: String,
 }
@@ -1399,49 +1496,53 @@ pub struct Member {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkConnectionAction {
-    /// <p>Network connection blocked information.</p>
+    /// <p>Indicates whether EC2 blocked the network connection to your instance.</p>
     #[serde(rename = "Blocked")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blocked: Option<bool>,
-    /// <p>Network connection direction.</p>
+    /// <p>The network connection direction.</p>
     #[serde(rename = "ConnectionDirection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_direction: Option<String>,
-    /// <p>Local port information of the connection.</p>
+    /// <p>The local IP information of the connection.</p>
+    #[serde(rename = "LocalIpDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_ip_details: Option<LocalIpDetails>,
+    /// <p>The local port information of the connection.</p>
     #[serde(rename = "LocalPortDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_port_details: Option<LocalPortDetails>,
-    /// <p>Network connection protocol.</p>
+    /// <p>The network connection protocol.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    /// <p>Remote IP information of the connection.</p>
+    /// <p>The remote IP information of the connection.</p>
     #[serde(rename = "RemoteIpDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_ip_details: Option<RemoteIpDetails>,
-    /// <p>Remote port information of the connection.</p>
+    /// <p>The remote port information of the connection.</p>
     #[serde(rename = "RemotePortDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_port_details: Option<RemotePortDetails>,
 }
 
-/// <p>Contains information about the network interface of the Ec2 instance.</p>
+/// <p>Contains information about the elastic network interface of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
-    /// <p>A list of EC2 instance IPv6 address information.</p>
+    /// <p>A list of IPv6 addresses for the EC2 instance.</p>
     #[serde(rename = "Ipv6Addresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ipv_6_addresses: Option<Vec<String>>,
-    /// <p>The ID of the network interface</p>
+    /// <p>The ID of the network interface.</p>
     #[serde(rename = "NetworkInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_interface_id: Option<String>,
-    /// <p>Private DNS name of the EC2 instance.</p>
+    /// <p>The private DNS name of the EC2 instance.</p>
     #[serde(rename = "PrivateDnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_dns_name: Option<String>,
-    /// <p>Private IP address of the EC2 instance.</p>
+    /// <p>The private IP address of the EC2 instance.</p>
     #[serde(rename = "PrivateIpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_ip_address: Option<String>,
@@ -1449,15 +1550,15 @@ pub struct NetworkInterface {
     #[serde(rename = "PrivateIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_ip_addresses: Option<Vec<PrivateIpAddressDetails>>,
-    /// <p>Public DNS name of the EC2 instance.</p>
+    /// <p>The public DNS name of the EC2 instance.</p>
     #[serde(rename = "PublicDnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_dns_name: Option<String>,
-    /// <p>Public IP address of the EC2 instance.</p>
+    /// <p>The public IP address of the EC2 instance.</p>
     #[serde(rename = "PublicIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_ip: Option<String>,
-    /// <p>Security groups associated with the EC2 instance.</p>
+    /// <p>The security groups associated with the EC2 instance.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<SecurityGroup>>,
@@ -1471,23 +1572,23 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
-/// <p>Continas information about the ISP organization of the remote IP address.</p>
+/// <p>Contains information about the ISP organization of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Organization {
-    /// <p>Autonomous system number of the internet provider of the remote IP address.</p>
+    /// <p>The Autonomous System Number (ASN) of the internet provider of the remote IP address.</p>
     #[serde(rename = "Asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<String>,
-    /// <p>Organization that registered this ASN.</p>
+    /// <p>The organization that registered this ASN.</p>
     #[serde(rename = "AsnOrg")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn_org: Option<String>,
-    /// <p>ISP information for the internet provider.</p>
+    /// <p>The ISP information for the internet provider.</p>
     #[serde(rename = "Isp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub isp: Option<String>,
-    /// <p>Name of the internet provider.</p>
+    /// <p>The name of the internet provider.</p>
     #[serde(rename = "Org")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub org: Option<String>,
@@ -1497,11 +1598,11 @@ pub struct Organization {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeAction {
-    /// <p>Port probe blocked information.</p>
+    /// <p>Indicates whether EC2 blocked the port probe to the instance, such as with an ACL.</p>
     #[serde(rename = "Blocked")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blocked: Option<bool>,
-    /// <p>A list of port probe details objects.</p>
+    /// <p>A list of objects related to port probe details.</p>
     #[serde(rename = "PortProbeDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_probe_details: Option<Vec<PortProbeDetail>>,
@@ -1511,11 +1612,15 @@ pub struct PortProbeAction {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeDetail {
-    /// <p>Local port information of the connection.</p>
+    /// <p>The local IP information of the connection.</p>
+    #[serde(rename = "LocalIpDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_ip_details: Option<LocalIpDetails>,
+    /// <p>The local port information of the connection.</p>
     #[serde(rename = "LocalPortDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_port_details: Option<LocalPortDetails>,
-    /// <p>Remote IP information of the connection.</p>
+    /// <p>The remote IP information of the connection.</p>
     #[serde(rename = "RemoteIpDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_ip_details: Option<RemoteIpDetails>,
@@ -1525,51 +1630,51 @@ pub struct PortProbeDetail {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateIpAddressDetails {
-    /// <p>Private DNS name of the EC2 instance.</p>
+    /// <p>The private DNS name of the EC2 instance.</p>
     #[serde(rename = "PrivateDnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_dns_name: Option<String>,
-    /// <p>Private IP address of the EC2 instance.</p>
+    /// <p>The private IP address of the EC2 instance.</p>
     #[serde(rename = "PrivateIpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_ip_address: Option<String>,
 }
 
-/// <p>Contains information about the product code for the Ec2 instance.</p>
+/// <p>Contains information about the product code for the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductCode {
-    /// <p>Product code information.</p>
+    /// <p>The product code information.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    /// <p>Product code type.</p>
+    /// <p>The product code type.</p>
     #[serde(rename = "ProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_type: Option<String>,
 }
 
-/// <p>Continas information about the remote IP address of the connection.</p>
+/// <p>Contains information about the remote IP address of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoteIpDetails {
-    /// <p>City information of the remote IP address.</p>
+    /// <p>The city information of the remote IP address.</p>
     #[serde(rename = "City")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city: Option<City>,
-    /// <p>Country code of the remote IP address.</p>
+    /// <p>The country code of the remote IP address.</p>
     #[serde(rename = "Country")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub country: Option<Country>,
-    /// <p>Location information of the remote IP address.</p>
+    /// <p>The location information of the remote IP address.</p>
     #[serde(rename = "GeoLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub geo_location: Option<GeoLocation>,
-    /// <p>IPV4 remote address of the connection.</p>
+    /// <p>The IPv4 remote address of the connection.</p>
     #[serde(rename = "IpAddressV4")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_v4: Option<String>,
-    /// <p>ISP Organization information of the remote IP address.</p>
+    /// <p>The ISP organization information of the remote IP address.</p>
     #[serde(rename = "Organization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization: Option<Organization>,
@@ -1579,11 +1684,11 @@ pub struct RemoteIpDetails {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemotePortDetails {
-    /// <p>Port number of the remote connection.</p>
+    /// <p>The port number of the remote connection.</p>
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Port name of the remote connection.</p>
+    /// <p>The port name of the remote connection.</p>
     #[serde(rename = "PortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_name: Option<String>,
@@ -1601,7 +1706,7 @@ pub struct Resource {
     #[serde(rename = "InstanceDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_details: Option<InstanceDetails>,
-    /// <p>The type of the AWS resource.</p>
+    /// <p>The type of AWS resource.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -1611,11 +1716,11 @@ pub struct Resource {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroup {
-    /// <p>EC2 instance's security group ID.</p>
+    /// <p>The security group ID of the EC2 instance.</p>
     #[serde(rename = "GroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
-    /// <p>EC2 instance's security group name.</p>
+    /// <p>The security group name of the EC2 instance.</p>
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
@@ -1625,7 +1730,7 @@ pub struct SecurityGroup {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
-    /// <p>Information about the activity described in a finding.</p>
+    /// <p>Information about the activity that is described in a finding.</p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<Action>,
@@ -1633,19 +1738,19 @@ pub struct Service {
     #[serde(rename = "Archived")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archived: Option<bool>,
-    /// <p>Total count of the occurrences of this finding type.</p>
+    /// <p>The total count of the occurrences of this finding type.</p>
     #[serde(rename = "Count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// <p>Detector ID for the GuardDuty service.</p>
+    /// <p>The detector ID for the GuardDuty service.</p>
     #[serde(rename = "DetectorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detector_id: Option<String>,
-    /// <p>First seen timestamp of the activity that prompted GuardDuty to generate this finding.</p>
+    /// <p>The first-seen timestamp of the activity that prompted GuardDuty to generate this finding.</p>
     #[serde(rename = "EventFirstSeen")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_first_seen: Option<String>,
-    /// <p>Last seen timestamp of the activity that prompted GuardDuty to generate this finding.</p>
+    /// <p>The last-seen timestamp of the activity that prompted GuardDuty to generate this finding.</p>
     #[serde(rename = "EventLastSeen")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_last_seen: Option<String>,
@@ -1653,7 +1758,7 @@ pub struct Service {
     #[serde(rename = "Evidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evidence: Option<Evidence>,
-    /// <p>Resource role information for this finding.</p>
+    /// <p>The resource role information for this finding.</p>
     #[serde(rename = "ResourceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_role: Option<String>,
@@ -1661,7 +1766,7 @@ pub struct Service {
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
-    /// <p>Feedback left about the finding.</p>
+    /// <p>Feedback that was submitted about the finding.</p>
     #[serde(rename = "UserFeedback")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_feedback: Option<String>,
@@ -1671,11 +1776,11 @@ pub struct Service {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriteria {
-    /// <p>Represents the finding attribute (for example, accountId) by which to sort findings.</p>
+    /// <p>Represents the finding attribute (for example, accountId) to sort findings by.</p>
     #[serde(rename = "AttributeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_name: Option<String>,
-    /// <p>Order by which the sorted findings are to be displayed.</p>
+    /// <p>The order by which the sorted findings are to be displayed.</p>
     #[serde(rename = "OrderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<String>,
@@ -1695,7 +1800,7 @@ pub struct StartMonitoringMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMonitoringMembersResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
@@ -1703,10 +1808,10 @@ pub struct StartMonitoringMembersResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringMembersRequest {
-    /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to stop monitoring.</p>
+    /// <p>A list of account IDs for the member accounts to stop monitoring.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
-    /// <p>The unique ID of the detector of the GuardDuty account that you want to stop from monitor members' findings.</p>
+    /// <p>The unique ID of the detector associated with the GuardDuty master account that is monitoring member accounts.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -1714,20 +1819,20 @@ pub struct StopMonitoringMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMonitoringMembersResponse {
-    /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
+    /// <p>A list of objects that contain an accountId for each account that could not be processed, and a result string that indicates why the account was not processed. </p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-/// <p>Contains information about a tag associated with the Ec2 instance.</p>
+/// <p>Contains information about a tag associated with the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tag {
-    /// <p>EC2 instance tag key.</p>
+    /// <p>The EC2 instance tag key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>EC2 instance tag value.</p>
+    /// <p>The EC2 instance tag value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -1768,7 +1873,7 @@ pub struct UnarchiveFindingsRequest {
     /// <p>The ID of the detector associated with the findings to unarchive.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>IDs of the findings to unarchive.</p>
+    /// <p>The IDs of the findings to unarchive.</p>
     #[serde(rename = "FindingIds")]
     pub finding_ids: Vec<String>,
 }
@@ -1777,11 +1882,11 @@ pub struct UnarchiveFindingsRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
-/// <p>Contains information about the accounts that were not processed.</p>
+/// <p>Contains information about the accounts that weren't processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedAccount {
-    /// <p>AWS Account ID.</p>
+    /// <p>The AWS account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
     /// <p>A reason why the account hasn't been processed.</p>
@@ -1814,7 +1919,7 @@ pub struct UpdateDetectorRequest {
     #[serde(rename = "Enable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable: Option<bool>,
-    /// <p>A enum value that specifies how frequently findings are exported, such as to CloudWatch Events.</p>
+    /// <p>An enum value that specifies how frequently findings are exported, such as to CloudWatch Events.</p>
     #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_publishing_frequency: Option<String>,
@@ -1872,7 +1977,7 @@ pub struct UpdateFindingsFeedbackRequest {
     /// <p>The feedback for the finding.</p>
     #[serde(rename = "Feedback")]
     pub feedback: String,
-    /// <p>IDs of the findings that you want to mark as useful or not useful.</p>
+    /// <p>The IDs of the findings that you want to mark as useful or not useful.</p>
     #[serde(rename = "FindingIds")]
     pub finding_ids: Vec<String>,
 }
@@ -1884,7 +1989,7 @@ pub struct UpdateFindingsFeedbackResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
-    /// <p>The updated boolean value that specifies whether the IPSet is active or not.</p>
+    /// <p>The updated Boolean value that specifies whether the IPSet is active or not.</p>
     #[serde(rename = "Activate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activate: Option<bool>,
@@ -1894,7 +1999,7 @@ pub struct UpdateIPSetRequest {
     /// <p>The unique ID that specifies the IPSet that you want to update.</p>
     #[serde(rename = "IpSetId")]
     pub ip_set_id: String,
-    /// <p>The updated URI of the file that contains the IPSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key).</p>
+    /// <p>The updated URI of the file that contains the IPSet. For example: .</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -1910,15 +2015,30 @@ pub struct UpdateIPSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateOrganizationConfigurationRequest {
+    /// <p>Indicates whether to automatically enable member accounts in the organization.</p>
+    #[serde(rename = "AutoEnable")]
+    pub auto_enable: bool,
+    /// <p>The ID of the detector to update the delegated administrator for.</p>
+    #[serde(rename = "DetectorId")]
+    pub detector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateOrganizationConfigurationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublishingDestinationRequest {
-    /// <p>The ID of the detector associated with the publishing destinations to update.</p>
+    /// <p>The ID of the publishing destination to update.</p>
     #[serde(rename = "DestinationId")]
     pub destination_id: String,
     /// <p>A <code>DestinationProperties</code> object that includes the <code>DestinationArn</code> and <code>KmsKeyArn</code> of the publishing destination.</p>
     #[serde(rename = "DestinationProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_properties: Option<DestinationProperties>,
-    /// <p>The ID of the </p>
+    /// <p>The ID of the detector associated with the publishing destinations to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
 }
@@ -1930,14 +2050,14 @@ pub struct UpdatePublishingDestinationResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThreatIntelSetRequest {
-    /// <p>The updated boolean value that specifies whether the ThreateIntelSet is active or not.</p>
+    /// <p>The updated Boolean value that specifies whether the ThreateIntelSet is active or not.</p>
     #[serde(rename = "Activate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activate: Option<bool>,
     /// <p>The detectorID that specifies the GuardDuty service whose ThreatIntelSet you want to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The updated URI of the file that contains the ThreateIntelSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key)</p>
+    /// <p>The updated URI of the file that contains the ThreateIntelSet. For example: .</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -1957,9 +2077,9 @@ pub struct UpdateThreatIntelSetResponse {}
 /// Errors returned by AcceptInvitation
 #[derive(Debug, PartialEq)]
 pub enum AcceptInvitationError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -1995,9 +2115,9 @@ impl Error for AcceptInvitationError {}
 /// Errors returned by ArchiveFindings
 #[derive(Debug, PartialEq)]
 pub enum ArchiveFindingsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2031,9 +2151,9 @@ impl Error for ArchiveFindingsError {}
 /// Errors returned by CreateDetector
 #[derive(Debug, PartialEq)]
 pub enum CreateDetectorError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2067,9 +2187,9 @@ impl Error for CreateDetectorError {}
 /// Errors returned by CreateFilter
 #[derive(Debug, PartialEq)]
 pub enum CreateFilterError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2103,9 +2223,9 @@ impl Error for CreateFilterError {}
 /// Errors returned by CreateIPSet
 #[derive(Debug, PartialEq)]
 pub enum CreateIPSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2139,9 +2259,9 @@ impl Error for CreateIPSetError {}
 /// Errors returned by CreateMembers
 #[derive(Debug, PartialEq)]
 pub enum CreateMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2175,9 +2295,9 @@ impl Error for CreateMembersError {}
 /// Errors returned by CreatePublishingDestination
 #[derive(Debug, PartialEq)]
 pub enum CreatePublishingDestinationError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2219,9 +2339,9 @@ impl Error for CreatePublishingDestinationError {}
 /// Errors returned by CreateSampleFindings
 #[derive(Debug, PartialEq)]
 pub enum CreateSampleFindingsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2257,9 +2377,9 @@ impl Error for CreateSampleFindingsError {}
 /// Errors returned by CreateThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum CreateThreatIntelSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2295,9 +2415,9 @@ impl Error for CreateThreatIntelSetError {}
 /// Errors returned by DeclineInvitations
 #[derive(Debug, PartialEq)]
 pub enum DeclineInvitationsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2333,9 +2453,9 @@ impl Error for DeclineInvitationsError {}
 /// Errors returned by DeleteDetector
 #[derive(Debug, PartialEq)]
 pub enum DeleteDetectorError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2369,9 +2489,9 @@ impl Error for DeleteDetectorError {}
 /// Errors returned by DeleteFilter
 #[derive(Debug, PartialEq)]
 pub enum DeleteFilterError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2405,9 +2525,9 @@ impl Error for DeleteFilterError {}
 /// Errors returned by DeleteIPSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteIPSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2441,9 +2561,9 @@ impl Error for DeleteIPSetError {}
 /// Errors returned by DeleteInvitations
 #[derive(Debug, PartialEq)]
 pub enum DeleteInvitationsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2479,9 +2599,9 @@ impl Error for DeleteInvitationsError {}
 /// Errors returned by DeleteMembers
 #[derive(Debug, PartialEq)]
 pub enum DeleteMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2515,9 +2635,9 @@ impl Error for DeleteMembersError {}
 /// Errors returned by DeletePublishingDestination
 #[derive(Debug, PartialEq)]
 pub enum DeletePublishingDestinationError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2559,9 +2679,9 @@ impl Error for DeletePublishingDestinationError {}
 /// Errors returned by DeleteThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteThreatIntelSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2594,12 +2714,56 @@ impl fmt::Display for DeleteThreatIntelSetError {
     }
 }
 impl Error for DeleteThreatIntelSetError {}
+/// Errors returned by DescribeOrganizationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DescribeOrganizationConfigurationError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl DescribeOrganizationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeOrganizationConfigurationError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeOrganizationConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeOrganizationConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeOrganizationConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeOrganizationConfigurationError {}
 /// Errors returned by DescribePublishingDestination
 #[derive(Debug, PartialEq)]
 pub enum DescribePublishingDestinationError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2638,12 +2802,56 @@ impl fmt::Display for DescribePublishingDestinationError {
     }
 }
 impl Error for DescribePublishingDestinationError {}
+/// Errors returned by DisableOrganizationAdminAccount
+#[derive(Debug, PartialEq)]
+pub enum DisableOrganizationAdminAccountError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl DisableOrganizationAdminAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableOrganizationAdminAccountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DisableOrganizationAdminAccountError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DisableOrganizationAdminAccountError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisableOrganizationAdminAccountError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableOrganizationAdminAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DisableOrganizationAdminAccountError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisableOrganizationAdminAccountError {}
 /// Errors returned by DisassociateFromMasterAccount
 #[derive(Debug, PartialEq)]
 pub enum DisassociateFromMasterAccountError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2685,9 +2893,9 @@ impl Error for DisassociateFromMasterAccountError {}
 /// Errors returned by DisassociateMembers
 #[derive(Debug, PartialEq)]
 pub enum DisassociateMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2720,12 +2928,56 @@ impl fmt::Display for DisassociateMembersError {
     }
 }
 impl Error for DisassociateMembersError {}
+/// Errors returned by EnableOrganizationAdminAccount
+#[derive(Debug, PartialEq)]
+pub enum EnableOrganizationAdminAccountError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl EnableOrganizationAdminAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableOrganizationAdminAccountError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(EnableOrganizationAdminAccountError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        EnableOrganizationAdminAccountError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for EnableOrganizationAdminAccountError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableOrganizationAdminAccountError::BadRequest(ref cause) => write!(f, "{}", cause),
+            EnableOrganizationAdminAccountError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for EnableOrganizationAdminAccountError {}
 /// Errors returned by GetDetector
 #[derive(Debug, PartialEq)]
 pub enum GetDetectorError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2759,9 +3011,9 @@ impl Error for GetDetectorError {}
 /// Errors returned by GetFilter
 #[derive(Debug, PartialEq)]
 pub enum GetFilterError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2795,9 +3047,9 @@ impl Error for GetFilterError {}
 /// Errors returned by GetFindings
 #[derive(Debug, PartialEq)]
 pub enum GetFindingsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2831,9 +3083,9 @@ impl Error for GetFindingsError {}
 /// Errors returned by GetFindingsStatistics
 #[derive(Debug, PartialEq)]
 pub enum GetFindingsStatisticsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2869,9 +3121,9 @@ impl Error for GetFindingsStatisticsError {}
 /// Errors returned by GetIPSet
 #[derive(Debug, PartialEq)]
 pub enum GetIPSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2905,9 +3157,9 @@ impl Error for GetIPSetError {}
 /// Errors returned by GetInvitationsCount
 #[derive(Debug, PartialEq)]
 pub enum GetInvitationsCountError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2943,9 +3195,9 @@ impl Error for GetInvitationsCountError {}
 /// Errors returned by GetMasterAccount
 #[derive(Debug, PartialEq)]
 pub enum GetMasterAccountError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -2981,9 +3233,9 @@ impl Error for GetMasterAccountError {}
 /// Errors returned by GetMembers
 #[derive(Debug, PartialEq)]
 pub enum GetMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3017,9 +3269,9 @@ impl Error for GetMembersError {}
 /// Errors returned by GetThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum GetThreatIntelSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3055,9 +3307,9 @@ impl Error for GetThreatIntelSetError {}
 /// Errors returned by InviteMembers
 #[derive(Debug, PartialEq)]
 pub enum InviteMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3091,9 +3343,9 @@ impl Error for InviteMembersError {}
 /// Errors returned by ListDetectors
 #[derive(Debug, PartialEq)]
 pub enum ListDetectorsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3127,9 +3379,9 @@ impl Error for ListDetectorsError {}
 /// Errors returned by ListFilters
 #[derive(Debug, PartialEq)]
 pub enum ListFiltersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3163,9 +3415,9 @@ impl Error for ListFiltersError {}
 /// Errors returned by ListFindings
 #[derive(Debug, PartialEq)]
 pub enum ListFindingsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3199,9 +3451,9 @@ impl Error for ListFindingsError {}
 /// Errors returned by ListIPSets
 #[derive(Debug, PartialEq)]
 pub enum ListIPSetsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3235,9 +3487,9 @@ impl Error for ListIPSetsError {}
 /// Errors returned by ListInvitations
 #[derive(Debug, PartialEq)]
 pub enum ListInvitationsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3271,9 +3523,9 @@ impl Error for ListInvitationsError {}
 /// Errors returned by ListMembers
 #[derive(Debug, PartialEq)]
 pub enum ListMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3304,12 +3556,56 @@ impl fmt::Display for ListMembersError {
     }
 }
 impl Error for ListMembersError {}
+/// Errors returned by ListOrganizationAdminAccounts
+#[derive(Debug, PartialEq)]
+pub enum ListOrganizationAdminAccountsError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl ListOrganizationAdminAccountsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListOrganizationAdminAccountsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListOrganizationAdminAccountsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        ListOrganizationAdminAccountsError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListOrganizationAdminAccountsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOrganizationAdminAccountsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListOrganizationAdminAccountsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListOrganizationAdminAccountsError {}
 /// Errors returned by ListPublishingDestinations
 #[derive(Debug, PartialEq)]
 pub enum ListPublishingDestinationsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3351,9 +3647,9 @@ impl Error for ListPublishingDestinationsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3389,9 +3685,9 @@ impl Error for ListTagsForResourceError {}
 /// Errors returned by ListThreatIntelSets
 #[derive(Debug, PartialEq)]
 pub enum ListThreatIntelSetsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3427,9 +3723,9 @@ impl Error for ListThreatIntelSetsError {}
 /// Errors returned by StartMonitoringMembers
 #[derive(Debug, PartialEq)]
 pub enum StartMonitoringMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3465,9 +3761,9 @@ impl Error for StartMonitoringMembersError {}
 /// Errors returned by StopMonitoringMembers
 #[derive(Debug, PartialEq)]
 pub enum StopMonitoringMembersError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3503,9 +3799,9 @@ impl Error for StopMonitoringMembersError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3539,9 +3835,9 @@ impl Error for TagResourceError {}
 /// Errors returned by UnarchiveFindings
 #[derive(Debug, PartialEq)]
 pub enum UnarchiveFindingsError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3577,9 +3873,9 @@ impl Error for UnarchiveFindingsError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3613,9 +3909,9 @@ impl Error for UntagResourceError {}
 /// Errors returned by UpdateDetector
 #[derive(Debug, PartialEq)]
 pub enum UpdateDetectorError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3649,9 +3945,9 @@ impl Error for UpdateDetectorError {}
 /// Errors returned by UpdateFilter
 #[derive(Debug, PartialEq)]
 pub enum UpdateFilterError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3685,9 +3981,9 @@ impl Error for UpdateFilterError {}
 /// Errors returned by UpdateFindingsFeedback
 #[derive(Debug, PartialEq)]
 pub enum UpdateFindingsFeedbackError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3723,9 +4019,9 @@ impl Error for UpdateFindingsFeedbackError {}
 /// Errors returned by UpdateIPSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateIPSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3756,12 +4052,56 @@ impl fmt::Display for UpdateIPSetError {
     }
 }
 impl Error for UpdateIPSetError {}
+/// Errors returned by UpdateOrganizationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateOrganizationConfigurationError {
+    /// <p>A bad request exception object.</p>
+    BadRequest(String),
+    /// <p>An internal server error exception object.</p>
+    InternalServerError(String),
+}
+
+impl UpdateOrganizationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateOrganizationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateOrganizationConfigurationError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        UpdateOrganizationConfigurationError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateOrganizationConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateOrganizationConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateOrganizationConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateOrganizationConfigurationError {}
 /// Errors returned by UpdatePublishingDestination
 #[derive(Debug, PartialEq)]
 pub enum UpdatePublishingDestinationError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3803,9 +4143,9 @@ impl Error for UpdatePublishingDestinationError {}
 /// Errors returned by UpdateThreatIntelSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateThreatIntelSetError {
-    /// <p>Bad request exception object.</p>
+    /// <p>A bad request exception object.</p>
     BadRequest(String),
-    /// <p>Internal server error exception object.</p>
+    /// <p>An internal server error exception object.</p>
     InternalServerError(String),
 }
 
@@ -3847,13 +4187,13 @@ pub trait GuardDuty {
         input: AcceptInvitationRequest,
     ) -> Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>>;
 
-    /// <p><p>Archives GuardDuty findings specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts do not have permission to archive findings from their accounts.</p> </note></p>
+    /// <p><p>Archives GuardDuty findings that are specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts don&#39;t have permission to archive findings from their accounts.</p> </note></p>
     async fn archive_findings(
         &self,
         input: ArchiveFindingsRequest,
     ) -> Result<ArchiveFindingsResponse, RusotoError<ArchiveFindingsError>>;
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each region that you enable the service. You can have only one detector per account per region.</p>
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region.</p>
     async fn create_detector(
         &self,
         input: CreateDetectorRequest,
@@ -3865,7 +4205,7 @@ pub trait GuardDuty {
         input: CreateFilterRequest,
     ) -> Result<CreateFilterResponse, RusotoError<CreateFilterError>>;
 
-    /// <p>Creates a new IPSet, called Trusted IP list in the consoler user interface. An IPSet is a list IP addresses trusted for secure communication with AWS infrastructure and applications. GuardDuty does not generate findings for IP addresses included in IPSets. Only users from the master account can use this operation.</p>
+    /// <p>Creates a new IPSet, which is called a trusted IP list in the console user interface. An IPSet is a list of IP addresses that are trusted for secure communication with AWS infrastructure and applications. GuardDuty doesn't generate findings for IP addresses that are included in IPSets. Only users from the master account can use this operation.</p>
     async fn create_ip_set(
         &self,
         input: CreateIPSetRequest,
@@ -3877,7 +4217,7 @@ pub trait GuardDuty {
         input: CreateMembersRequest,
     ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>>;
 
-    /// <p>Creates a publishing destination to send findings to. The resource to send findings to must exist before you use this operation.</p>
+    /// <p>Creates a publishing destination to export findings to. The resource to export findings to must exist before you use this operation.</p>
     async fn create_publishing_destination(
         &self,
         input: CreatePublishingDestinationRequest,
@@ -3889,19 +4229,19 @@ pub trait GuardDuty {
         input: CreateSampleFindingsRequest,
     ) -> Result<CreateSampleFindingsResponse, RusotoError<CreateSampleFindingsError>>;
 
-    /// <p>Create a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets. Only users of the master account can use this operation.</p>
+    /// <p>Creates a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets. Only users of the master account can use this operation.</p>
     async fn create_threat_intel_set(
         &self,
         input: CreateThreatIntelSetRequest,
     ) -> Result<CreateThreatIntelSetResponse, RusotoError<CreateThreatIntelSetError>>;
 
-    /// <p>Declines invitations sent to the current member account by AWS account specified by their account IDs.</p>
+    /// <p>Declines invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
     async fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
     ) -> Result<DeclineInvitationsResponse, RusotoError<DeclineInvitationsError>>;
 
-    /// <p>Deletes a Amazon GuardDuty detector specified by the detector ID.</p>
+    /// <p>Deletes an Amazon GuardDuty detector that is specified by the detector ID.</p>
     async fn delete_detector(
         &self,
         input: DeleteDetectorRequest,
@@ -3913,7 +4253,7 @@ pub trait GuardDuty {
         input: DeleteFilterRequest,
     ) -> Result<DeleteFilterResponse, RusotoError<DeleteFilterError>>;
 
-    /// <p>Deletes the IPSet specified by the <code>ipSetId</code>. IPSets are called Trusted IP lists in the console user interface.</p>
+    /// <p>Deletes the IPSet specified by the <code>ipSetId</code>. IPSets are called trusted IP lists in the console user interface.</p>
     async fn delete_ip_set(
         &self,
         input: DeleteIPSetRequest,
@@ -3937,11 +4277,20 @@ pub trait GuardDuty {
         input: DeletePublishingDestinationRequest,
     ) -> Result<DeletePublishingDestinationResponse, RusotoError<DeletePublishingDestinationError>>;
 
-    /// <p>Deletes ThreatIntelSet specified by the ThreatIntelSet ID.</p>
+    /// <p>Deletes the ThreatIntelSet specified by the ThreatIntelSet ID.</p>
     async fn delete_threat_intel_set(
         &self,
         input: DeleteThreatIntelSetRequest,
     ) -> Result<DeleteThreatIntelSetResponse, RusotoError<DeleteThreatIntelSetError>>;
+
+    /// <p>Returns information about the account selected as the delegated administrator for GuardDuty.</p>
+    async fn describe_organization_configuration(
+        &self,
+        input: DescribeOrganizationConfigurationRequest,
+    ) -> Result<
+        DescribeOrganizationConfigurationResponse,
+        RusotoError<DescribeOrganizationConfigurationError>,
+    >;
 
     /// <p>Returns information about the publishing destination specified by the provided <code>destinationId</code>.</p>
     async fn describe_publishing_destination(
@@ -3950,6 +4299,15 @@ pub trait GuardDuty {
     ) -> Result<
         DescribePublishingDestinationResponse,
         RusotoError<DescribePublishingDestinationError>,
+    >;
+
+    /// <p>Disables an AWS account within the Organization as the GuardDuty delegated administrator.</p>
+    async fn disable_organization_admin_account(
+        &self,
+        input: DisableOrganizationAdminAccountRequest,
+    ) -> Result<
+        DisableOrganizationAdminAccountResponse,
+        RusotoError<DisableOrganizationAdminAccountError>,
     >;
 
     /// <p>Disassociates the current GuardDuty member account from its master account.</p>
@@ -3966,6 +4324,15 @@ pub trait GuardDuty {
         &self,
         input: DisassociateMembersRequest,
     ) -> Result<DisassociateMembersResponse, RusotoError<DisassociateMembersError>>;
+
+    /// <p>Enables an AWS account within the organization as the GuardDuty delegated administrator.</p>
+    async fn enable_organization_admin_account(
+        &self,
+        input: EnableOrganizationAdminAccountRequest,
+    ) -> Result<
+        EnableOrganizationAdminAccountResponse,
+        RusotoError<EnableOrganizationAdminAccountError>,
+    >;
 
     /// <p>Retrieves an Amazon GuardDuty detector specified by the detectorId.</p>
     async fn get_detector(
@@ -3985,7 +4352,7 @@ pub trait GuardDuty {
         input: GetFindingsRequest,
     ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>>;
 
-    /// <p>Lists Amazon GuardDuty findings' statistics for the specified detector ID.</p>
+    /// <p>Lists Amazon GuardDuty findings statistics for the specified detector ID.</p>
     async fn get_findings_statistics(
         &self,
         input: GetFindingsStatisticsRequest,
@@ -4020,7 +4387,7 @@ pub trait GuardDuty {
         input: GetThreatIntelSetRequest,
     ) -> Result<GetThreatIntelSetResponse, RusotoError<GetThreatIntelSetError>>;
 
-    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
+    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty, and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
     async fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -4056,11 +4423,20 @@ pub trait GuardDuty {
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
-    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
+    /// <p>Lists details about associated member accounts for the current GuardDuty master account.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
+
+    /// <p>Lists the accounts configured as GuardDuty delegated administrators.</p>
+    async fn list_organization_admin_accounts(
+        &self,
+        input: ListOrganizationAdminAccountsRequest,
+    ) -> Result<
+        ListOrganizationAdminAccountsResponse,
+        RusotoError<ListOrganizationAdminAccountsError>,
+    >;
 
     /// <p>Returns a list of publishing destinations associated with the specified <code>dectectorId</code>.</p>
     async fn list_publishing_destinations(
@@ -4068,7 +4444,7 @@ pub trait GuardDuty {
         input: ListPublishingDestinationsRequest,
     ) -> Result<ListPublishingDestinationsResponse, RusotoError<ListPublishingDestinationsError>>;
 
-    /// <p>Lists tags for a resource. Tagging is currently supported for detectors, finding filters, IP sets, and Threat Intel sets, with a limit of 50 tags per resource. When invoked, this operation returns all assigned tags for a given resource..</p>
+    /// <p>Lists tags for a resource. Tagging is currently supported for detectors, finding filters, IP sets, and threat intel sets, with a limit of 50 tags per resource. When invoked, this operation returns all assigned tags for a given resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -4086,7 +4462,7 @@ pub trait GuardDuty {
         input: StartMonitoringMembersRequest,
     ) -> Result<StartMonitoringMembersResponse, RusotoError<StartMonitoringMembersError>>;
 
-    /// <p>Stops GuardDuty monitoring for the specified member accounnts. Use the <code>StartMonitoringMembers</code> to restart monitoring for those accounts.</p>
+    /// <p>Stops GuardDuty monitoring for the specified member accounts. Use the <code>StartMonitoringMembers</code> operation to restart monitoring for those accounts.</p>
     async fn stop_monitoring_members(
         &self,
         input: StopMonitoringMembersRequest,
@@ -4134,13 +4510,22 @@ pub trait GuardDuty {
         input: UpdateIPSetRequest,
     ) -> Result<UpdateIPSetResponse, RusotoError<UpdateIPSetError>>;
 
+    /// <p>Updates the delegated administrator account with the values provided.</p>
+    async fn update_organization_configuration(
+        &self,
+        input: UpdateOrganizationConfigurationRequest,
+    ) -> Result<
+        UpdateOrganizationConfigurationResponse,
+        RusotoError<UpdateOrganizationConfigurationError>,
+    >;
+
     /// <p>Updates information about the publishing destination specified by the <code>destinationId</code>.</p>
     async fn update_publishing_destination(
         &self,
         input: UpdatePublishingDestinationRequest,
     ) -> Result<UpdatePublishingDestinationResponse, RusotoError<UpdatePublishingDestinationError>>;
 
-    /// <p>Updates the ThreatIntelSet specified by ThreatIntelSet ID.</p>
+    /// <p>Updates the ThreatIntelSet specified by the ThreatIntelSet ID.</p>
     async fn update_threat_intel_set(
         &self,
         input: UpdateThreatIntelSetRequest,
@@ -4219,7 +4604,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p><p>Archives GuardDuty findings specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts do not have permission to archive findings from their accounts.</p> </note></p>
+    /// <p><p>Archives GuardDuty findings that are specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts don&#39;t have permission to archive findings from their accounts.</p> </note></p>
     async fn archive_findings(
         &self,
         input: ArchiveFindingsRequest,
@@ -4252,7 +4637,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each region that you enable the service. You can have only one detector per account per region.</p>
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region.</p>
     async fn create_detector(
         &self,
         input: CreateDetectorRequest,
@@ -4315,7 +4700,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Creates a new IPSet, called Trusted IP list in the consoler user interface. An IPSet is a list IP addresses trusted for secure communication with AWS infrastructure and applications. GuardDuty does not generate findings for IP addresses included in IPSets. Only users from the master account can use this operation.</p>
+    /// <p>Creates a new IPSet, which is called a trusted IP list in the console user interface. An IPSet is a list of IP addresses that are trusted for secure communication with AWS infrastructure and applications. GuardDuty doesn't generate findings for IP addresses that are included in IPSets. Only users from the master account can use this operation.</p>
     async fn create_ip_set(
         &self,
         input: CreateIPSetRequest,
@@ -4381,7 +4766,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Creates a publishing destination to send findings to. The resource to send findings to must exist before you use this operation.</p>
+    /// <p>Creates a publishing destination to export findings to. The resource to export findings to must exist before you use this operation.</p>
     async fn create_publishing_destination(
         &self,
         input: CreatePublishingDestinationRequest,
@@ -4448,7 +4833,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Create a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets. Only users of the master account can use this operation.</p>
+    /// <p>Creates a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets. Only users of the master account can use this operation.</p>
     async fn create_threat_intel_set(
         &self,
         input: CreateThreatIntelSetRequest,
@@ -4481,7 +4866,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Declines invitations sent to the current member account by AWS account specified by their account IDs.</p>
+    /// <p>Declines invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
     async fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
@@ -4511,7 +4896,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Deletes a Amazon GuardDuty detector specified by the detector ID.</p>
+    /// <p>Deletes an Amazon GuardDuty detector that is specified by the detector ID.</p>
     async fn delete_detector(
         &self,
         input: DeleteDetectorRequest,
@@ -4569,7 +4954,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Deletes the IPSet specified by the <code>ipSetId</code>. IPSets are called Trusted IP lists in the console user interface.</p>
+    /// <p>Deletes the IPSet specified by the <code>ipSetId</code>. IPSets are called trusted IP lists in the console user interface.</p>
     async fn delete_ip_set(
         &self,
         input: DeleteIPSetRequest,
@@ -4695,7 +5080,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Deletes ThreatIntelSet specified by the ThreatIntelSet ID.</p>
+    /// <p>Deletes the ThreatIntelSet specified by the ThreatIntelSet ID.</p>
     async fn delete_threat_intel_set(
         &self,
         input: DeleteThreatIntelSetRequest,
@@ -4723,6 +5108,41 @@ impl GuardDuty for GuardDutyClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteThreatIntelSetError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about the account selected as the delegated administrator for GuardDuty.</p>
+    async fn describe_organization_configuration(
+        &self,
+        input: DescribeOrganizationConfigurationRequest,
+    ) -> Result<
+        DescribeOrganizationConfigurationResponse,
+        RusotoError<DescribeOrganizationConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/detector/{detector_id}/admin",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOrganizationConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOrganizationConfigurationError::from_response(
+                response,
+            ))
         }
     }
 
@@ -4757,6 +5177,41 @@ impl GuardDuty for GuardDutyClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribePublishingDestinationError::from_response(response))
+        }
+    }
+
+    /// <p>Disables an AWS account within the Organization as the GuardDuty delegated administrator.</p>
+    async fn disable_organization_admin_account(
+        &self,
+        input: DisableOrganizationAdminAccountRequest,
+    ) -> Result<
+        DisableOrganizationAdminAccountResponse,
+        RusotoError<DisableOrganizationAdminAccountError>,
+    > {
+        let request_uri = "/admin/disable";
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisableOrganizationAdminAccountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisableOrganizationAdminAccountError::from_response(
+                response,
+            ))
         }
     }
 
@@ -4823,6 +5278,39 @@ impl GuardDuty for GuardDutyClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateMembersError::from_response(response))
+        }
+    }
+
+    /// <p>Enables an AWS account within the organization as the GuardDuty delegated administrator.</p>
+    async fn enable_organization_admin_account(
+        &self,
+        input: EnableOrganizationAdminAccountRequest,
+    ) -> Result<
+        EnableOrganizationAdminAccountResponse,
+        RusotoError<EnableOrganizationAdminAccountError>,
+    > {
+        let request_uri = "/admin/enable";
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<EnableOrganizationAdminAccountResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(EnableOrganizationAdminAccountError::from_response(response))
         }
     }
 
@@ -4917,7 +5405,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Lists Amazon GuardDuty findings' statistics for the specified detector ID.</p>
+    /// <p>Lists Amazon GuardDuty findings statistics for the specified detector ID.</p>
     async fn get_findings_statistics(
         &self,
         input: GetFindingsStatisticsRequest,
@@ -5101,7 +5589,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
+    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty, and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
     async fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -5317,7 +5805,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
+    /// <p>Lists details about associated member accounts for the current GuardDuty master account.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -5356,6 +5844,45 @@ impl GuardDuty for GuardDutyClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListMembersError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the accounts configured as GuardDuty delegated administrators.</p>
+    async fn list_organization_admin_accounts(
+        &self,
+        input: ListOrganizationAdminAccountsRequest,
+    ) -> Result<
+        ListOrganizationAdminAccountsResponse,
+        RusotoError<ListOrganizationAdminAccountsError>,
+    > {
+        let request_uri = "/admin";
+
+        let mut request = SignedRequest::new("GET", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListOrganizationAdminAccountsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListOrganizationAdminAccountsError::from_response(response))
         }
     }
 
@@ -5399,7 +5926,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Lists tags for a resource. Tagging is currently supported for detectors, finding filters, IP sets, and Threat Intel sets, with a limit of 50 tags per resource. When invoked, this operation returns all assigned tags for a given resource..</p>
+    /// <p>Lists tags for a resource. Tagging is currently supported for detectors, finding filters, IP sets, and threat intel sets, with a limit of 50 tags per resource. When invoked, this operation returns all assigned tags for a given resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5498,7 +6025,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Stops GuardDuty monitoring for the specified member accounnts. Use the <code>StartMonitoringMembers</code> to restart monitoring for those accounts.</p>
+    /// <p>Stops GuardDuty monitoring for the specified member accounts. Use the <code>StartMonitoringMembers</code> operation to restart monitoring for those accounts.</p>
     async fn stop_monitoring_members(
         &self,
         input: StopMonitoringMembersRequest,
@@ -5758,6 +6285,44 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
+    /// <p>Updates the delegated administrator account with the values provided.</p>
+    async fn update_organization_configuration(
+        &self,
+        input: UpdateOrganizationConfigurationRequest,
+    ) -> Result<
+        UpdateOrganizationConfigurationResponse,
+        RusotoError<UpdateOrganizationConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/detector/{detector_id}/admin",
+            detector_id = input.detector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "guardduty", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateOrganizationConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateOrganizationConfigurationError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Updates information about the publishing destination specified by the <code>destinationId</code>.</p>
     async fn update_publishing_destination(
         &self,
@@ -5793,7 +6358,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Updates the ThreatIntelSet specified by ThreatIntelSet ID.</p>
+    /// <p>Updates the ThreatIntelSet specified by the ThreatIntelSet ID.</p>
     async fn update_threat_intel_set(
         &self,
         input: UpdateThreatIntelSetRequest,

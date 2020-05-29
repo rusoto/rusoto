@@ -84,11 +84,11 @@ pub struct ApplyPendingMaintenanceActionResponse {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
 
-/// <p><p/></p>
+/// <p>The name of the Availability Zone for use during database migration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AvailabilityZone {
-    /// <p>The name of the availability zone.</p>
+    /// <p>The name of the Availability Zone.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -106,7 +106,7 @@ pub struct Certificate {
     #[serde(rename = "CertificateCreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_creation_date: Option<f64>,
-    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "CertificateIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_identifier: Option<String>,
@@ -145,15 +145,15 @@ pub struct Certificate {
     pub valid_to_date: Option<f64>,
 }
 
-/// <p><p/></p>
+/// <p>Status of the connection between an endpoint and a replication instance, including Amazon Resource Names (ARNs) and the last error message issued.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
-    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
+    /// <p>The ARN string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_arn: Option<String>,
-    /// <p>The identifier of the endpoint. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>The identifier of the endpoint. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
@@ -161,7 +161,7 @@ pub struct Connection {
     #[serde(rename = "LastFailureMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_failure_message: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    /// <p>The ARN of the replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance_arn: Option<String>,
@@ -191,7 +191,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
-    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For information about other available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
@@ -199,13 +199,13 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ElasticsearchSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_settings: Option<ElasticsearchSettings>,
-    /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>The database endpoint identifier. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     pub endpoint_identifier: String,
     /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndpointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndpointType</code> value, include <code>"mysql"</code>, <code>"oracle"</code>, <code>"postgres"</code>, <code>"mariadb"</code>, <code>"aurora"</code>, <code>"aurora-postgresql"</code>, <code>"redshift"</code>, <code>"s3"</code>, <code>"db2"</code>, <code>"azuredb"</code>, <code>"sybase"</code>, <code>"dynamodb"</code>, <code>"mongodb"</code>, <code>"kinesis"</code>, <code>"kafka"</code>, <code>"elasticsearch"</code>, <code>"documentdb"</code>, and <code>"sqlserver"</code>.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
     /// <p>The external table definition. </p>
@@ -216,7 +216,11 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Apache Kafka endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html">Using Apache Kafka as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "KafkaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_settings: Option<KafkaSettings>,
+    /// <p>Settings in JSON format for the target endpoint for Amazon Kinesis Data Streams. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html">Using Amazon Kinesis Data Streams as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
@@ -224,10 +228,14 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html#CHAP_Source.MongoDB.Configuration">Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
+    /// <p>Settings in JSON format for the target Amazon Neptune endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.EndpointSettings">https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.EndpointSettings</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    #[serde(rename = "NeptuneSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub neptune_settings: Option<NeptuneSettings>,
     /// <p>The password to be used to log in to the endpoint database.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -294,7 +302,7 @@ pub struct CreateEventSubscriptionMessage {
     #[serde(rename = "SourceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_ids: Option<Vec<String>>,
-    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: <code>replication-instance</code> | <code>replication-task</code> </p>
+    /// <p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value isn't specified, all events are returned. </p> <p>Valid values: <code>replication-instance</code> | <code>replication-task</code> </p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_type: Option<String>,
@@ -325,11 +333,11 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_storage: Option<i64>,
-    /// <p>Indicates whether minor engine upgrades will be applied automatically to the replication instance during the maintenance window. This parameter defaults to <code>true</code>.</p> <p>Default: <code>true</code> </p>
+    /// <p>A value that indicates whether minor engine upgrades are applied automatically to the replication instance during the maintenance window. This parameter defaults to <code>true</code>.</p> <p>Default: <code>true</code> </p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The AWS Availability Zone where the replication instance will be created. The default value is a random, system-chosen Availability Zone in the endpoint's AWS Region, for example: <code>us-east-1d</code> </p>
+    /// <p>The Availability Zone where the replication instance will be created. The default value is a random, system-chosen Availability Zone in the endpoint's AWS Region, for example: <code>us-east-1d</code> </p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -345,7 +353,7 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You can't set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -360,7 +368,7 @@ pub struct CreateReplicationInstanceMessage {
     /// <p>The compute and memory capacity of the replication instance as specified by the replication instance class.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>
     #[serde(rename = "ReplicationInstanceClass")]
     pub replication_instance_class: String,
-    /// <p>The replication instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>myrepinstance</code> </p>
+    /// <p>The replication instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>myrepinstance</code> </p>
     #[serde(rename = "ReplicationInstanceIdentifier")]
     pub replication_instance_identifier: String,
     /// <p>A subnet group to associate with the replication instance.</p>
@@ -441,14 +449,14 @@ pub struct CreateReplicationTaskMessage {
     /// <p><p>An identifier for the replication task.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
-    /// <p>Overall settings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Overall settings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Specifying Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies the source endpoint.</p>
     #[serde(rename = "SourceEndpointArn")]
     pub source_endpoint_arn: String,
-    /// <p>The table mappings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html">Table Mapping</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>The table mappings for the task, in JSON format. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TableMapping.html">Using Table Mapping to Specify Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "TableMappings")]
     pub table_mappings: String,
     /// <p>One or more tags to be assigned to the replication task.</p>
@@ -458,6 +466,10 @@ pub struct CreateReplicationTaskMessage {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies the target endpoint.</p>
     #[serde(rename = "TargetEndpointArn")]
     pub target_endpoint_arn: String,
+    /// <p>Supplemental information that the task requires to migrate the data for certain source and target endpoints. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html">Specifying Supplemental Data for Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "TaskData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_data: Option<String>,
 }
 
 /// <p><p/></p>
@@ -625,7 +637,7 @@ pub struct DescribeCertificatesMessage {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the vlue specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
@@ -1012,7 +1024,7 @@ pub struct DescribeReplicationInstancesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationSubnetGroupsMessage {
-    /// <p>Filters applied to the describe action.</p>
+    /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-subnet-group-id</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1052,7 +1064,7 @@ pub struct DescribeReplicationTaskAssessmentResultsMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
-    /// <p>- The Amazon Resource Name (ARN) string that uniquely identifies the task. When this input parameter is specified the API will return only one result and ignore the values of the max-records and marker parameters. </p>
+    /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the task. When this input parameter is specified, the API returns only one result and ignore the values of the <code>MaxRecords</code> and <code>Marker</code> parameters. </p>
     #[serde(rename = "ReplicationTaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_arn: Option<String>,
@@ -1195,7 +1207,7 @@ pub struct DmsTransferSettings {
     pub service_access_role_arn: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Provides the Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role used to define an Amazon DynamoDB target endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDbSettings {
     /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>
@@ -1203,13 +1215,13 @@ pub struct DynamoDbSettings {
     pub service_access_role_arn: String,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that defines an Elasticsearch endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElasticsearchSettings {
     /// <p>The endpoint for the Elasticsearch cluster.</p>
     #[serde(rename = "EndpointUri")]
     pub endpoint_uri: String,
-    /// <p>The maximum number of seconds that DMS retries failed API requests to the Elasticsearch cluster.</p>
+    /// <p>The maximum number of seconds for which DMS retries failed API requests to the Elasticsearch cluster.</p>
     #[serde(rename = "ErrorRetryDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_retry_duration: Option<i64>,
@@ -1222,7 +1234,7 @@ pub struct ElasticsearchSettings {
     pub service_access_role_arn: String,
 }
 
-/// <p><p/></p>
+/// <p><p>Describes an endpoint of a database instance in response to operations such as the following:</p> <ul> <li> <p> <code>CreateEndpoint</code> </p> </li> <li> <p> <code>DescribeEndpoint</code> </p> </li> <li> <p> <code>DescribeEndpointTypes</code> </p> </li> <li> <p> <code>ModifyEndpoint</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Endpoint {
@@ -1250,7 +1262,7 @@ pub struct Endpoint {
     #[serde(rename = "EndpointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_arn: Option<String>,
-    /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>The database endpoint identifier. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
@@ -1262,7 +1274,7 @@ pub struct Endpoint {
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_display_name: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The database engine name. Valid values, depending on the EndpointType, include <code>"mysql"</code>, <code>"oracle"</code>, <code>"postgres"</code>, <code>"mariadb"</code>, <code>"aurora"</code>, <code>"aurora-postgresql"</code>, <code>"redshift"</code>, <code>"s3"</code>, <code>"db2"</code>, <code>"azuredb"</code>, <code>"sybase"</code>, <code>"dynamodb"</code>, <code>"mongodb"</code>, <code>"kinesis"</code>, <code>"kafka"</code>, <code>"elasticsearch"</code>, <code>"documentdb"</code>, and <code>"sqlserver"</code>.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1278,7 +1290,11 @@ pub struct Endpoint {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>The settings for the Amazon Kinesis source endpoint. For more information, see the <code>KinesisSettings</code> structure.</p>
+    /// <p>The settings for the Apache Kafka target endpoint. For more information, see the <code>KafkaSettings</code> structure.</p>
+    #[serde(rename = "KafkaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_settings: Option<KafkaSettings>,
+    /// <p>The settings for the Amazon Kinesis target endpoint. For more information, see the <code>KinesisSettings</code> structure.</p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
@@ -1290,6 +1306,10 @@ pub struct Endpoint {
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
+    /// <p>The settings for the MongoDB source endpoint. For more information, see the <code>NeptuneSettings</code> structure.</p>
+    #[serde(rename = "NeptuneSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub neptune_settings: Option<NeptuneSettings>,
     /// <p>The port value used to access the endpoint.</p>
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1324,7 +1344,7 @@ pub struct Endpoint {
     pub username: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Describes an identifiable significant activity that affects a replication instance or task. This object can provide the message, the available event categories, the date and source of the event, and the AWS DMS resource type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Event {
@@ -1350,7 +1370,7 @@ pub struct Event {
     pub source_type: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Lists categories of events subscribed to, and generated by, the applicable AWS DMS resource type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventCategoryGroup {
@@ -1364,7 +1384,7 @@ pub struct EventCategoryGroup {
     pub source_type: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Describes an event notification subscription created by the <code>CreateEventSubscription</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventSubscription {
@@ -1406,7 +1426,7 @@ pub struct EventSubscription {
     pub subscription_creation_time: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Identifies the name and value of a source filter object used to limit the number and type of records transferred from your source to your target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
@@ -1421,7 +1441,7 @@ pub struct Filter {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCertificateMessage {
-    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "CertificateIdentifier")]
     pub certificate_identifier: String,
     /// <p>The contents of a <code>.pem</code> file, which contains an X.509 certificate.</p>
@@ -1452,14 +1472,47 @@ pub struct ImportCertificateResponse {
     pub certificate: Option<Certificate>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that describes an Apache Kafka endpoint. This information includes the output format of records applied to the endpoint and details of transaction and control table data information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct KafkaSettings {
+    /// <p>The broker location and port of the Kafka broker that hosts your Kafka instance. Specify the broker in the form <code> <i>broker-hostname-or-ip</i>:<i>port</i> </code>. For example, <code>"ec2-12-345-678-901.compute-1.amazonaws.com:2345"</code>.</p>
+    #[serde(rename = "Broker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub broker: Option<String>,
+    /// <p>The topic to which you migrate the data. If you don't specify a topic, AWS DMS specifies <code>"kafka-default-topic"</code> as the migration topic.</p>
+    #[serde(rename = "Topic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic: Option<String>,
+}
+
+/// <p>Provides information that describes an Amazon Kinesis Data Stream endpoint. This information includes the output format of records applied to the endpoint and details of transaction and control table data information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KinesisSettings {
-    /// <p>The output format for the records created on the endpoint. The message format is <code>JSON</code>.</p>
+    /// <p>Shows detailed control information for table definition, column definition, and table and column changes in the Kinesis message output. The default is <code>False</code>.</p>
+    #[serde(rename = "IncludeControlDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_control_details: Option<bool>,
+    /// <p>Shows the partition value within the Kinesis message output, unless the partition type is <code>schema-table-type</code>. The default is <code>False</code>.</p>
+    #[serde(rename = "IncludePartitionValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_partition_value: Option<bool>,
+    /// <p>Includes any data definition language (DDL) operations that change the table in the control data, such as <code>rename-table</code>, <code>drop-table</code>, <code>add-column</code>, <code>drop-column</code>, and <code>rename-column</code>. The default is <code>False</code>.</p>
+    #[serde(rename = "IncludeTableAlterOperations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_table_alter_operations: Option<bool>,
+    /// <p>Provides detailed transaction information from the source database. This information includes a commit timestamp, a log position, and values for <code>transaction_id</code>, previous <code>transaction_id</code>, and <code>transaction_record_id</code> (the record offset within a transaction). The default is <code>False</code>.</p>
+    #[serde(rename = "IncludeTransactionDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_transaction_details: Option<bool>,
+    /// <p>The output format for the records created on the endpoint. The message format is <code>JSON</code> (default) or <code>JSON_UNFORMATTED</code> (a single line with no tab).</p>
     #[serde(rename = "MessageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_format: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) for the IAM role that DMS uses to write to the Amazon Kinesis data stream.</p>
+    /// <p>Prefixes schema and table names to partition values, when the partition type is <code>primary-key-type</code>. Doing this increases data distribution among Kinesis shards. For example, suppose that a SysBench schema has thousands of tables and each table has only limited range for a primary key. In this case, the same primary key is sent from thousands of tables to the same shard, which causes throttling. The default is <code>False</code>.</p>
+    #[serde(rename = "PartitionIncludeSchemaTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_include_schema_table: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) for the AWS Identity and Access Management (IAM) role that AWS DMS uses to write to the Kinesis data stream.</p>
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
@@ -1500,11 +1553,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Attributes include the following:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Attributes include the following:</p> <ul> <li> <p>serviceAccessRoleArn - The AWS Identity and Access Management (IAM) role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Either set this parameter to NONE (the default) or don't use it to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax for these settings is as follows: <code>ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these settings is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
-    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For information about other available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
@@ -1515,7 +1568,7 @@ pub struct ModifyEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
-    /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
+    /// <p>The database endpoint identifier. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_identifier: Option<String>,
@@ -1523,7 +1576,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndpointType, include <code>"mysql"</code>, <code>"oracle"</code>, <code>"postgres"</code>, <code>"mariadb"</code>, <code>"aurora"</code>, <code>"aurora-postgresql"</code>, <code>"redshift"</code>, <code>"s3"</code>, <code>"db2"</code>, <code>"azuredb"</code>, <code>"sybase"</code>, <code>"dynamodb"</code>, <code>"mongodb"</code>, <code>"kinesis"</code>, <code>"kafka"</code>, <code>"elasticsearch"</code>, <code>"documentdb"</code>, and <code>"sqlserver"</code>.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1535,7 +1588,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Apache Kafka endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html">Using Apache Kafka as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "KafkaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_settings: Option<KafkaSettings>,
+    /// <p>Settings in JSON format for the target endpoint for Amazon Kinesis Data Streams. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html">Using Amazon Kinesis Data Streams as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
@@ -1543,6 +1600,10 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
+    /// <p>Settings in JSON format for the target Amazon Neptune endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.EndpointSettings">https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.EndpointSettings</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    #[serde(rename = "NeptuneSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub neptune_settings: Option<NeptuneSettings>,
     /// <p>The password to be used to login to the endpoint database.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1637,7 +1698,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[serde(rename = "ApplyImmediately")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_immediately: Option<bool>,
-    /// <p> Indicates that minor version upgrades will be applied automatically to the replication instance during the maintenance window. Changing this parameter does not result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and AWS DMS has enabled auto patching for that engine version. </p>
+    /// <p><p>A value that indicates that minor version upgrades are applied automatically to the replication instance during the maintenance window. Changing this parameter doesn&#39;t result in an outage, except in the case dsecribed following. The change is asynchronously applied as soon as possible. </p> <p>An outage does result if these factors apply: </p> <ul> <li> <p>This parameter is set to <code>true</code> during the maintenance window.</p> </li> <li> <p>A newer minor version is available. </p> </li> <li> <p>AWS DMS has enabled automatic patching for the given engine version. </p> </li> </ul></p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
@@ -1645,7 +1706,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You can't set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -1733,7 +1794,7 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "ReplicationTaskIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_identifier: Option<String>,
-    /// <p>JSON file that contains settings for the task, such as target metadata settings.</p>
+    /// <p>JSON file that contains settings for the task, such as task metadata settings.</p>
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
@@ -1741,6 +1802,10 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "TableMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_mappings: Option<String>,
+    /// <p>Supplemental information that the task requires to migrate the data for certain source and target endpoints. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html">Specifying Supplemental Data for Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "TaskData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_data: Option<String>,
 }
 
 /// <p><p/></p>
@@ -1753,14 +1818,14 @@ pub struct ModifyReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that defines a MongoDB endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MongoDbSettings {
-    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This setting is not used when authType=No.</p>
+    /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This setting isn't used when authType=No.</p>
     #[serde(rename = "AuthMechanism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_mechanism: Option<String>,
-    /// <p> The MongoDB database name. This setting is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
+    /// <p> The MongoDB database name. This setting isn't used when <code>authType=NO</code>. </p> <p>The default is admin.</p>
     #[serde(rename = "AuthSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_source: Option<String>,
@@ -1806,7 +1871,38 @@ pub struct MongoDbSettings {
     pub username: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that defines an Amazon Neptune endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NeptuneSettings {
+    /// <p>The number of milliseconds for AWS DMS to wait to retry a bulk-load of migrated graph data to the Neptune target database before raising an error. The default is 250.</p>
+    #[serde(rename = "ErrorRetryDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_retry_duration: Option<i64>,
+    /// <p>If you want IAM authorization enabled for this endpoint, set this parameter to <code>true</code> and attach the appropriate role policy document to your service role specified by <code>ServiceAccessRoleArn</code>. The default is <code>false</code>.</p>
+    #[serde(rename = "IamAuthEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_auth_enabled: Option<bool>,
+    /// <p>The maximum size in KB of migrated graph data stored in a CSV file before AWS DMS bulk-loads the data to the Neptune target database. The default is 1048576 KB. If successful, AWS DMS clears the bucket, ready to store the next batch of migrated graph data.</p>
+    #[serde(rename = "MaxFileSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_file_size: Option<i64>,
+    /// <p>The number of times for AWS DMS to retry a bulk-load of migrated graph data to the Neptune target database before raising an error. The default is 5.</p>
+    #[serde(rename = "MaxRetryCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_retry_count: Option<i64>,
+    /// <p>A folder path where you where you want AWS DMS to store migrated graph data in the S3 bucket specified by <code>S3BucketName</code> </p>
+    #[serde(rename = "S3BucketFolder")]
+    pub s3_bucket_folder: String,
+    /// <p>The name of the S3 bucket for AWS DMS to temporarily store migrated graph data in CSV files before bulk-loading it to the Neptune target database. AWS DMS maps the SQL source data to graph data before storing it in these CSV files.</p>
+    #[serde(rename = "S3BucketName")]
+    pub s3_bucket_name: String,
+    /// <p>The ARN of the service role you have created for the Neptune target endpoint. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.ServiceRole">https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.ServiceRole</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
+}
+
+/// <p>In response to the <code>DescribeOrderableReplicationInstances</code> operation, this object describes an available replication instance. This description includes the replication instance's type, engine version, and allocated storage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrderableReplicationInstance {
@@ -1848,7 +1944,7 @@ pub struct OrderableReplicationInstance {
     pub storage_type: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Describes a maintenance action pending for an AWS DMS resource, including when and how it will be applied. This data type is a response element to the <code>DescribePendingMaintenanceActions</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PendingMaintenanceAction {
@@ -1856,11 +1952,11 @@ pub struct PendingMaintenanceAction {
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    /// <p>The date of the maintenance window when the action will be applied. The maintenance action will be applied to the resource during its first maintenance window after this date. If this date is specified, any <code>next-maintenance</code> opt-in requests are ignored.</p>
+    /// <p>The date of the maintenance window when the action is to be applied. The maintenance action is applied to the resource during its first maintenance window after this date. If this date is specified, any <code>next-maintenance</code> opt-in requests are ignored.</p>
     #[serde(rename = "AutoAppliedAfterDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_applied_after_date: Option<f64>,
-    /// <p>The effective date when the pending maintenance action will be applied to the resource. This date takes into account opt-in requests received from the <code>ApplyPendingMaintenanceAction</code> API, the <code>AutoAppliedAfterDate</code>, and the <code>ForcedApplyDate</code>. This value is blank if an opt-in request has not been received and nothing has been specified as <code>AutoAppliedAfterDate</code> or <code>ForcedApplyDate</code>.</p>
+    /// <p>The effective date when the pending maintenance action will be applied to the resource. This date takes into account opt-in requests received from the <code>ApplyPendingMaintenanceAction</code> API operation, and also the <code>AutoAppliedAfterDate</code> and <code>ForcedApplyDate</code> parameter values. This value is blank if an opt-in request has not been received and nothing has been specified for <code>AutoAppliedAfterDate</code> or <code>ForcedApplyDate</code>.</p>
     #[serde(rename = "CurrentApplyDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_apply_date: Option<f64>,
@@ -1868,11 +1964,11 @@ pub struct PendingMaintenanceAction {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The date when the maintenance action will be automatically applied. The maintenance action will be applied to the resource on this date regardless of the maintenance window for the resource. If this date is specified, any <code>immediate</code> opt-in requests are ignored.</p>
+    /// <p>The date when the maintenance action will be automatically applied. The maintenance action is applied to the resource on this date regardless of the maintenance window for the resource. If this date is specified, any <code>immediate</code> opt-in requests are ignored.</p>
     #[serde(rename = "ForcedApplyDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forced_apply_date: Option<f64>,
-    /// <p>Indicates the type of opt-in request that has been received for the resource.</p>
+    /// <p>The type of opt-in request that has been received for the resource.</p>
     #[serde(rename = "OptInStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub opt_in_status: Option<String>,
@@ -1899,7 +1995,7 @@ pub struct RebootReplicationInstanceResponse {
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that defines an Amazon Redshift endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RedshiftSettings {
     /// <p>A value that indicates to allow any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose <code>true</code> or <code>false</code> (the default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data doesn't match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
@@ -2026,7 +2122,7 @@ pub struct RefreshSchemasResponse {
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that describes status of a schema at an endpoint specified by the <code>DescribeRefreshSchemaStatus</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RefreshSchemasStatus {
@@ -2093,7 +2189,7 @@ pub struct RemoveTagsFromResourceMessage {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {}
 
-/// <p><p/></p>
+/// <p>Provides information that defines a replication instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationInstance {
@@ -2129,7 +2225,7 @@ pub struct ReplicationInstance {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You can't set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -2173,7 +2269,7 @@ pub struct ReplicationInstance {
     #[serde(rename = "ReplicationSubnetGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_subnet_group: Option<ReplicationSubnetGroup>,
-    /// <p>The availability zone of the standby replication instance in a Multi-AZ deployment.</p>
+    /// <p>The Availability Zone of the standby replication instance in a Multi-AZ deployment.</p>
     #[serde(rename = "SecondaryAvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secondary_availability_zone: Option<String>,
@@ -2201,7 +2297,7 @@ pub struct ReplicationInstanceTaskLog {
     pub replication_task_name: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information about the values of pending modifications to a replication instance. This data type is an object of the <code>ReplicationInstance</code> user-defined data type. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationPendingModifiedValues {
@@ -2213,7 +2309,7 @@ pub struct ReplicationPendingModifiedValues {
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
+    /// <p> Specifies whether the replication instance is a Multi-AZ deployment. You can't set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>
     #[serde(rename = "MultiAZ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub multi_az: Option<bool>,
@@ -2223,7 +2319,7 @@ pub struct ReplicationPendingModifiedValues {
     pub replication_instance_class: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Describes a subnet group in response to a request by the <code>DescribeReplicationSubnetGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationSubnetGroup {
@@ -2249,7 +2345,7 @@ pub struct ReplicationSubnetGroup {
     pub vpc_id: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information that describes a replication task created by the <code>CreateReplicationTask</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationTask {
@@ -2321,6 +2417,10 @@ pub struct ReplicationTask {
     #[serde(rename = "TargetEndpointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_endpoint_arn: Option<String>,
+    /// <p>Supplemental information that the task requires to migrate the data for certain source and target endpoints. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html">Specifying Supplemental Data for Task Settings</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "TaskData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_data: Option<String>,
 }
 
 /// <p> The task assessment report in JSON format. </p>
@@ -2357,7 +2457,7 @@ pub struct ReplicationTaskAssessmentResult {
     pub s3_object_url: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>In response to a request by the <code>DescribeReplicationTasks</code> operation, this object provides a collection of statistics about a replication task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationTaskStats {
@@ -2377,7 +2477,7 @@ pub struct ReplicationTaskStats {
     #[serde(rename = "FullLoadProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_progress_percent: Option<i64>,
-    /// <p>The date the the replication task full load was started.</p>
+    /// <p>The date the replication task full load was started.</p>
     #[serde(rename = "FullLoadStartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_start_date: Option<f64>,
@@ -2407,7 +2507,7 @@ pub struct ReplicationTaskStats {
     pub tables_queued: Option<i64>,
 }
 
-/// <p><p/></p>
+/// <p>Identifies an AWS DMS resource and any pending actions for it.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourcePendingMaintenanceActions {
@@ -2424,7 +2524,7 @@ pub struct ResourcePendingMaintenanceActions {
 /// <p>Settings for exporting data to Amazon S3. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Settings {
-    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code> <i>bucketFolder</i>/<i>schema_name</i>/<i>table_name</i>/</code>. If this parameter is not specified, then the path used is <code> <i>schema_name</i>/<i>table_name</i>/</code>. </p>
+    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code> <i>bucketFolder</i>/<i>schema_name</i>/<i>table_name</i>/</code>. If this parameter isn't specified, then the path used is <code> <i>schema_name</i>/<i>table_name</i>/</code>. </p>
     #[serde(rename = "BucketFolder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
@@ -2432,11 +2532,15 @@ pub struct S3Settings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p><p>A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the <code>false</code> setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.</p> <p>If <code>CdcInsertsOnly</code> is set to <code>true</code> or <code>y</code>, only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of <code>IncludeOpForFullLoad</code>. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to I to indicate the INSERT operation at the source. If <code>IncludeOpForFullLoad</code> is set to <code>false</code>, every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports this interaction between the <code>CdcInsertsOnly</code> and <code>IncludeOpForFullLoad</code> parameters in versions 3.1.4 and later. </p> </note></p>
+    /// <p><p>A value that enables a change data capture (CDC) load to write INSERT and UPDATE operations to .csv or .parquet (columnar storage) output files. The default setting is <code>false</code>, but when <code>CdcInsertsAndUpdates</code> is set to <code>true</code>or <code>y</code>, INSERTs and UPDATEs from the source database are migrated to the .csv or .parquet file. </p> <p>For .csv file format only, how these INSERTs and UPDATEs are recorded depends on the value of the <code>IncludeOpForFullLoad</code> parameter. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to either <code>I</code> or <code>U</code> to indicate INSERT and UPDATE operations at the source. But if <code>IncludeOpForFullLoad</code> is set to <code>false</code>, CDC records are written without an indication of INSERT or UPDATE operations at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports the use of the <code>CdcInsertsAndUpdates</code> parameter in versions 3.3.1 and later.</p> <p> <code>CdcInsertsOnly</code> and <code>CdcInsertsAndUpdates</code> can&#39;t both be set to <code>true</code> for the same endpoint. Set either <code>CdcInsertsOnly</code> or <code>CdcInsertsAndUpdates</code> to <code>true</code> for the same endpoint, but not both.</p> </note></p>
+    #[serde(rename = "CdcInsertsAndUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_inserts_and_updates: Option<bool>,
+    /// <p><p>A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the <code>false</code> setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.</p> <p>If <code>CdcInsertsOnly</code> is set to <code>true</code> or <code>y</code>, only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of <code>IncludeOpForFullLoad</code>. If <code>IncludeOpForFullLoad</code> is set to <code>true</code>, the first field of every CDC record is set to I to indicate the INSERT operation at the source. If <code>IncludeOpForFullLoad</code> is set to <code>false</code>, every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> <note> <p>AWS DMS supports the interaction described preceding between the <code>CdcInsertsOnly</code> and <code>IncludeOpForFullLoad</code> parameters in versions 3.1.4 and later. </p> <p> <code>CdcInsertsOnly</code> and <code>CdcInsertsAndUpdates</code> can&#39;t both be set to <code>true</code> for the same endpoint. Set either <code>CdcInsertsOnly</code> or <code>CdcInsertsAndUpdates</code> to <code>true</code> for the same endpoint, but not both.</p> </note></p>
     #[serde(rename = "CdcInsertsOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_inserts_only: Option<bool>,
-    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both .csv and .parquet file formats. </p>
+    /// <p>An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Either set this parameter to NONE (the default) or don't use it to leave the files uncompressed. This parameter applies to both .csv and .parquet file formats. </p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compression_type: Option<String>,
@@ -2476,7 +2580,7 @@ pub struct S3Settings {
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
-    /// <p><p>A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.</p> <note> <p>AWS DMS supports the <code>IncludeOpForFullLoad</code> parameter in versions 3.1.4 and later.</p> </note> <p>For full load, records can only be inserted. By default (the <code>false</code> setting), no information is recorded in these output files for a full load to indicate that the rows were inserted at the source database. If <code>IncludeOpForFullLoad</code> is set to <code>true</code> or <code>y</code>, the INSERT is recorded as an I annotation in the first field of the .csv file. This allows the format of your target records from a full load to be consistent with the target records from a CDC load.</p> <note> <p>This setting works together with the <code>CdcInsertsOnly</code> parameter for output to .csv files only. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> </note></p>
+    /// <p><p>A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.</p> <note> <p>AWS DMS supports the <code>IncludeOpForFullLoad</code> parameter in versions 3.1.4 and later.</p> </note> <p>For full load, records can only be inserted. By default (the <code>false</code> setting), no information is recorded in these output files for a full load to indicate that the rows were inserted at the source database. If <code>IncludeOpForFullLoad</code> is set to <code>true</code> or <code>y</code>, the INSERT is recorded as an I annotation in the first field of the .csv file. This allows the format of your target records from a full load to be consistent with the target records from a CDC load.</p> <note> <p>This setting works together with the <code>CdcInsertsOnly</code> and the <code>CdcInsertsAndUpdates</code> parameters for output to .csv files only. For more information about how these settings work together, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps">Indicating Source DB Operations in Migrated S3 Data</a> in the <i>AWS Database Migration Service User Guide.</i>.</p> </note></p>
     #[serde(rename = "IncludeOpForFullLoad")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_op_for_full_load: Option<bool>,
@@ -2578,7 +2682,7 @@ pub struct StopReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-/// <p><p/></p>
+/// <p>In response to a request by the <code>DescribeReplicationSubnetGroup</code> operation, this object identifies a subnet by its given Availability Zone, subnet identifier, and status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Subnet {
@@ -2596,7 +2700,7 @@ pub struct Subnet {
     pub subnet_status: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p>Provides information about types of supported endpoints in response to a request by the <code>DescribeEndpointTypes</code> operation. This information includes the type of endpoint, the database engine name, and whether change data capture (CDC) is supported.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SupportedEndpointType {
@@ -2608,21 +2712,25 @@ pub struct SupportedEndpointType {
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_display_name: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndpointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The database engine name. Valid values, depending on the EndpointType, include <code>"mysql"</code>, <code>"oracle"</code>, <code>"postgres"</code>, <code>"mariadb"</code>, <code>"aurora"</code>, <code>"aurora-postgresql"</code>, <code>"redshift"</code>, <code>"s3"</code>, <code>"db2"</code>, <code>"azuredb"</code>, <code>"sybase"</code>, <code>"dynamodb"</code>, <code>"mongodb"</code>, <code>"kinesis"</code>, <code>"kafka"</code>, <code>"elasticsearch"</code>, <code>"documentdb"</code>, and <code>"sqlserver"</code>.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
+    /// <p>The earliest AWS DMS engine version that supports this endpoint engine. Note that endpoint engines released with AWS DMS versions earlier than 3.1.1 do not return a value for this parameter.</p>
+    #[serde(rename = "ReplicationInstanceEngineMinimumVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_instance_engine_minimum_version: Option<String>,
     /// <p>Indicates if Change Data Capture (CDC) is supported.</p>
     #[serde(rename = "SupportsCDC")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supports_cdc: Option<bool>,
 }
 
-/// <p><p/></p>
+/// <p>Provides a collection of table statistics in response to a request by the <code>DescribeTableStatistics</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TableStatistics {
-    /// <p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>
+    /// <p>The data definition language (DDL) used to build and modify the structure of your tables.</p>
     #[serde(rename = "Ddls")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ddls: Option<i64>,
@@ -2630,23 +2738,35 @@ pub struct TableStatistics {
     #[serde(rename = "Deletes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletes: Option<i64>,
-    /// <p>The number of rows that failed conditional checks during the Full Load operation (valid only for DynamoDB as a target migrations).</p>
+    /// <p>The number of rows that failed conditional checks during the full load operation (valid only for migrations where DynamoDB is the target).</p>
     #[serde(rename = "FullLoadCondtnlChkFailedRows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_condtnl_chk_failed_rows: Option<i64>,
-    /// <p>The number of rows that failed to load during the Full Load operation (valid only for DynamoDB as a target migrations).</p>
+    /// <p>The time when the full load operation completed.</p>
+    #[serde(rename = "FullLoadEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_load_end_time: Option<f64>,
+    /// <p>The number of rows that failed to load during the full load operation (valid only for migrations where DynamoDB is the target).</p>
     #[serde(rename = "FullLoadErrorRows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_error_rows: Option<i64>,
-    /// <p>The number of rows added during the Full Load operation.</p>
+    /// <p>A value that indicates if the table was reloaded (<code>true</code>) or loaded as part of a new full load operation (<code>false</code>).</p>
+    #[serde(rename = "FullLoadReloaded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_load_reloaded: Option<bool>,
+    /// <p>The number of rows added during the full load operation.</p>
     #[serde(rename = "FullLoadRows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_load_rows: Option<i64>,
+    /// <p>The time when the full load operation started.</p>
+    #[serde(rename = "FullLoadStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_load_start_time: Option<f64>,
     /// <p>The number of insert actions performed on a table.</p>
     #[serde(rename = "Inserts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inserts: Option<i64>,
-    /// <p>The last time the table was updated.</p>
+    /// <p>The last time a table was updated.</p>
     #[serde(rename = "LastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_time: Option<f64>,
@@ -2674,7 +2794,7 @@ pub struct TableStatistics {
     #[serde(rename = "ValidationPendingRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_pending_records: Option<i64>,
-    /// <p><p>The validation state of the table.</p> <p>The parameter can have the following values</p> <ul> <li> <p>Not enabled—Validation is not enabled for the table in the migration task.</p> </li> <li> <p>Pending records—Some records in the table are waiting for validation.</p> </li> <li> <p>Mismatched records—Some records in the table do not match between the source and target.</p> </li> <li> <p>Suspended records—Some records in the table could not be validated.</p> </li> <li> <p>No primary key—The table could not be validated because it had no primary key.</p> </li> <li> <p>Table error—The table was not validated because it was in an error state and some data was not migrated.</p> </li> <li> <p>Validated—All rows in the table were validated. If the table is updated, the status can change from Validated.</p> </li> <li> <p>Error—The table could not be validated because of an unexpected error.</p> </li> </ul></p>
+    /// <p><p>The validation state of the table.</p> <p>This parameter can have the following values:</p> <ul> <li> <p>Not enabled - Validation isn&#39;t enabled for the table in the migration task.</p> </li> <li> <p>Pending records - Some records in the table are waiting for validation.</p> </li> <li> <p>Mismatched records - Some records in the table don&#39;t match between the source and target.</p> </li> <li> <p>Suspended records - Some records in the table couldn&#39;t be validated.</p> </li> <li> <p>No primary key - The table couldn&#39;t be validated because it has no primary key.</p> </li> <li> <p>Table error - The table wasn&#39;t validated because it&#39;s in an error state and some data wasn&#39;t migrated.</p> </li> <li> <p>Validated - All rows in the table are validated. If the table is updated, the status can change from Validated.</p> </li> <li> <p>Error - The table couldn&#39;t be validated because of an unexpected error.</p> </li> </ul></p>
     #[serde(rename = "ValidationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_state: Option<String>,
@@ -2682,13 +2802,13 @@ pub struct TableStatistics {
     #[serde(rename = "ValidationStateDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_state_details: Option<String>,
-    /// <p>The number of records that could not be validated.</p>
+    /// <p>The number of records that couldn't be validated.</p>
     #[serde(rename = "ValidationSuspendedRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_suspended_records: Option<i64>,
 }
 
-/// <p><p/></p>
+/// <p>Provides the name of the schema and table to be reloaded.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TableToReload {
@@ -2702,14 +2822,14 @@ pub struct TableToReload {
     pub table_name: Option<String>,
 }
 
-/// <p><p/></p>
+/// <p><p>A user-defined key-value pair that describes metadata added to an AWS DMS resource and that is used by operations such as the following:</p> <ul> <li> <p> <code>AddTagsToResource</code> </p> </li> <li> <p> <code>ListTagsForResource</code> </p> </li> <li> <p> <code>RemoveTagsFromResource</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
-    /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and cannot be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>A value is the optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and cannot be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    /// <p>A value is the optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and can't be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -2737,7 +2857,7 @@ pub struct TestConnectionResponse {
     pub connection: Option<Connection>,
 }
 
-/// <p><p/></p>
+/// <p>Describes status of a security group associated with the virtual private cloud hosting your replication and DB instances.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcSecurityGroupMembership {

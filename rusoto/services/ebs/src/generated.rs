@@ -46,11 +46,11 @@ pub struct ChangedBlock {
     #[serde(rename = "BlockIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_index: Option<i64>,
-    /// <p>The block token for the block index of the <code>first snapshot ID</code> specified in the <code>list changed blocks</code> operation. This value is absent if the first snapshot does not have the changed block that is on the second snapshot.</p>
+    /// <p>The block token for the block index of the <code>FirstSnapshotId</code> specified in the <code>ListChangedBlocks</code> operation. This value is absent if the first snapshot does not have the changed block that is on the second snapshot.</p>
     #[serde(rename = "FirstBlockToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_block_token: Option<String>,
-    /// <p>The block token for the block index of the <code>second snapshot ID</code> specified in the <code>list changed blocks</code> operation.</p>
+    /// <p>The block token for the block index of the <code>SecondSnapshotId</code> specified in the <code>ListChangedBlocks</code> operation.</p>
     #[serde(rename = "SecondBlockToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub second_block_token: Option<String>,
@@ -59,10 +59,10 @@ pub struct ChangedBlock {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnapshotBlockRequest {
-    /// <p>The block index of the block from which to get data.</p> <p>Obtain the <code>block index</code> by running the <code>list changed blocks</code> or <code>list snapshot blocks</code> operations.</p>
+    /// <p>The block index of the block from which to get data.</p> <p>Obtain the <code>BlockIndex</code> by running the <code>ListChangedBlocks</code> or <code>ListSnapshotBlocks</code> operations.</p>
     #[serde(rename = "BlockIndex")]
     pub block_index: i64,
-    /// <p>The block token of the block from which to get data.</p> <p>Obtain the <code>block token</code> by running the <code>list changed blocks</code> or <code>list snapshot blocks</code> operations.</p>
+    /// <p>The block token of the block from which to get data.</p> <p>Obtain the <code>BlockToken</code> by running the <code>ListChangedBlocks</code> or <code>ListSnapshotBlocks</code> operations.</p>
     #[serde(rename = "BlockToken")]
     pub block_token: String,
     /// <p>The ID of the snapshot containing the block from which to get data.</p>
@@ -74,7 +74,7 @@ pub struct GetSnapshotBlockRequest {
 pub struct GetSnapshotBlockResponse {
     /// <p>The data content of the block.</p>
     pub block_data: Option<bytes::Bytes>,
-    /// <p>The checksum generated for the block.</p>
+    /// <p>The checksum generated for the block, which is Base64 encoded.</p>
     pub checksum: Option<String>,
     /// <p>The algorithm used to generate the checksum for the block, such as SHA256.</p>
     pub checksum_algorithm: Option<String>,
@@ -85,7 +85,7 @@ pub struct GetSnapshotBlockResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangedBlocksRequest {
-    /// <p>The ID of the first snapshot to use for the comparison.</p>
+    /// <p><p>The ID of the first snapshot to use for the comparison.</p> <important> <p>The <code>FirstSnapshotID</code> parameter must be specified with a <code>SecondSnapshotId</code> parameter; otherwise, an error occurs.</p> </important></p>
     #[serde(rename = "FirstSnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_snapshot_id: Option<String>,
@@ -97,7 +97,7 @@ pub struct ListChangedBlocksRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the second snapshot to use for the comparison.</p>
+    /// <p><p>The ID of the second snapshot to use for the comparison.</p> <important> <p>The <code>SecondSnapshotId</code> parameter must be specified with a <code>FirstSnapshotID</code> parameter; otherwise, an error occurs.</p> </important></p>
     #[serde(rename = "SecondSnapshotId")]
     pub second_snapshot_id: String,
     /// <p>The block index from which the comparison should start.</p> <p>The list in the response will start from this block index or the next valid block index in the snapshots.</p>
@@ -117,7 +117,7 @@ pub struct ListChangedBlocksResponse {
     #[serde(rename = "ChangedBlocks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub changed_blocks: Option<Vec<ChangedBlock>>,
-    /// <p>The time when the <code>block token</code> expires.</p>
+    /// <p>The time when the <code>BlockToken</code> expires.</p>
     #[serde(rename = "ExpiryTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expiry_time: Option<f64>,
@@ -162,7 +162,7 @@ pub struct ListSnapshotBlocksResponse {
     #[serde(rename = "Blocks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blocks: Option<Vec<Block>>,
-    /// <p>The time when the <code>block token</code> expires.</p>
+    /// <p>The time when the <code>BlockToken</code> expires.</p>
     #[serde(rename = "ExpiryTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expiry_time: Option<f64>,

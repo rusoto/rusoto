@@ -56,7 +56,7 @@ pub struct AlarmConfiguration {
     #[serde(rename = "enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p><p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment proceeds even if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment stops if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> </ul></p>
+    /// <p><p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p> <code>true</code>: The deployment proceeds even if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> <li> <p> <code>false</code>: The deployment stops if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> </ul></p>
     #[serde(rename = "ignorePollAlarmFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_poll_alarm_failure: Option<bool>,
@@ -132,7 +132,7 @@ pub struct AutoScalingGroup {
     pub name: Option<String>,
 }
 
-/// <p>Represents the input of a BatchGetApplicationRevisions operation.</p>
+/// <p>Represents the input of a <code>BatchGetApplicationRevisions</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationRevisionsInput {
@@ -144,7 +144,7 @@ pub struct BatchGetApplicationRevisionsInput {
     pub revisions: Vec<RevisionLocation>,
 }
 
-/// <p>Represents the output of a BatchGetApplicationRevisions operation.</p>
+/// <p>Represents the output of a <code>BatchGetApplicationRevisions</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationRevisionsOutput {
@@ -162,16 +162,16 @@ pub struct BatchGetApplicationRevisionsOutput {
     pub revisions: Option<Vec<RevisionInfo>>,
 }
 
-/// <p>Represents the input of a BatchGetApplications operation.</p>
+/// <p>Represents the input of a <code>BatchGetApplications</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationsInput {
-    /// <p>A list of application names separated by spaces. The maximum number of application names you can specify is 25.</p>
+    /// <p>A list of application names separated by spaces. The maximum number of application names you can specify is 100.</p>
     #[serde(rename = "applicationNames")]
     pub application_names: Vec<String>,
 }
 
-/// <p>Represents the output of a BatchGetApplications operation.</p>
+/// <p>Represents the output of a <code>BatchGetApplications</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationsOutput {
@@ -181,7 +181,7 @@ pub struct BatchGetApplicationsOutput {
     pub applications_info: Option<Vec<ApplicationInfo>>,
 }
 
-/// <p>Represents the input of a BatchGetDeploymentGroups operation.</p>
+/// <p>Represents the input of a <code>BatchGetDeploymentGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentGroupsInput {
@@ -193,7 +193,7 @@ pub struct BatchGetDeploymentGroupsInput {
     pub deployment_group_names: Vec<String>,
 }
 
-/// <p>Represents the output of a BatchGetDeploymentGroups operation.</p>
+/// <p>Represents the output of a <code>BatchGetDeploymentGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentGroupsOutput {
@@ -207,7 +207,7 @@ pub struct BatchGetDeploymentGroupsOutput {
     pub error_message: Option<String>,
 }
 
-/// <p> Represents the input of a BatchGetDeploymentInstances operation. </p>
+/// <p> Represents the input of a <code>BatchGetDeploymentInstances</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentInstancesInput {
@@ -219,7 +219,7 @@ pub struct BatchGetDeploymentInstancesInput {
     pub instance_ids: Vec<String>,
 }
 
-/// <p>Represents the output of a BatchGetDeploymentInstances operation.</p>
+/// <p>Represents the output of a <code>BatchGetDeploymentInstances</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentInstancesOutput {
@@ -240,7 +240,7 @@ pub struct BatchGetDeploymentTargetsInput {
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p><p> The unique IDs of the deployment targets. The compute platform of the deployment determines the type of the targets and their formats. The maximum number of deployment target IDs you can specify is 25.</p> <ul> <li> <p> For deployments that use the EC2/On-premises compute platform, the target IDs are EC2 or on-premises instances IDs, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the AWS Lambda compute platform, the target IDs are the names of Lambda functions, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the Amazon ECS compute platform, the target IDs are pairs of Amazon ECS clusters and services specified using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. Their target type is <code>ecsTarget</code>. </p> </li> </ul></p>
+    /// <p><p> The unique IDs of the deployment targets. The compute platform of the deployment determines the type of the targets and their formats. The maximum number of deployment target IDs you can specify is 25.</p> <ul> <li> <p> For deployments that use the EC2/On-premises compute platform, the target IDs are EC2 or on-premises instances IDs, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the AWS Lambda compute platform, the target IDs are the names of Lambda functions, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the Amazon ECS compute platform, the target IDs are pairs of Amazon ECS clusters and services specified using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. Their target type is <code>ecsTarget</code>. </p> </li> <li> <p> For deployments that are deployed with AWS CloudFormation, the target IDs are CloudFormation stack IDs. Their target type is <code>cloudFormationTarget</code>. </p> </li> </ul></p>
     #[serde(rename = "targetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_ids: Option<Vec<String>>,
@@ -249,13 +249,13 @@ pub struct BatchGetDeploymentTargetsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentTargetsOutput {
-    /// <p><p> A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment&#39; compute platform. </p> <ul> <li> <p> <b>EC2/On-premises</b>: Each target object is an EC2 or on-premises instance. </p> </li> <li> <p> <b>AWS Lambda</b>: The target object is a specific version of an AWS Lambda function. </p> </li> <li> <p> <b>Amazon ECS</b>: The target object is an Amazon ECS service. </p> </li> </ul></p>
+    /// <p><p> A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment&#39; compute platform. </p> <ul> <li> <p> <b>EC2/On-premises</b>: Each target object is an EC2 or on-premises instance. </p> </li> <li> <p> <b>AWS Lambda</b>: The target object is a specific version of an AWS Lambda function. </p> </li> <li> <p> <b>Amazon ECS</b>: The target object is an Amazon ECS service. </p> </li> <li> <p> <b>CloudFormation</b>: The target object is an AWS CloudFormation blue/green deployment. </p> </li> </ul></p>
     #[serde(rename = "deploymentTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_targets: Option<Vec<DeploymentTarget>>,
 }
 
-/// <p> Represents the input of a BatchGetDeployments operation. </p>
+/// <p> Represents the input of a <code>BatchGetDeployments</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentsInput {
@@ -264,7 +264,7 @@ pub struct BatchGetDeploymentsInput {
     pub deployment_ids: Vec<String>,
 }
 
-/// <p> Represents the output of a BatchGetDeployments operation. </p>
+/// <p> Represents the output of a <code>BatchGetDeployments</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentsOutput {
@@ -274,7 +274,7 @@ pub struct BatchGetDeploymentsOutput {
     pub deployments_info: Option<Vec<DeploymentInfo>>,
 }
 
-/// <p>Represents the input of a BatchGetOnPremisesInstances operation.</p>
+/// <p>Represents the input of a <code>BatchGetOnPremisesInstances</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetOnPremisesInstancesInput {
@@ -283,7 +283,7 @@ pub struct BatchGetOnPremisesInstancesInput {
     pub instance_names: Vec<String>,
 }
 
-/// <p>Represents the output of a BatchGetOnPremisesInstances operation.</p>
+/// <p>Represents the output of a <code>BatchGetOnPremisesInstances</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetOnPremisesInstancesOutput {
@@ -313,7 +313,7 @@ pub struct BlueGreenDeploymentConfiguration {
 /// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful. <code>BlueInstanceTerminationOption</code> does not apply to Lambda deployments. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlueInstanceTerminationOption {
-    /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
+    /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p> <code>TERMINATE</code>: Instances are terminated after a specified wait time.</p> </li> <li> <p> <code>KEEP_ALIVE</code>: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
@@ -323,6 +323,40 @@ pub struct BlueInstanceTerminationOption {
     pub termination_wait_time_in_minutes: Option<i64>,
 }
 
+/// <p> Information about the target to be updated by an AWS CloudFormation blue/green deployment. This target type is used for all deployments initiated by a CloudFormation stack update.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CloudFormationTarget {
+    /// <p>The unique ID of an AWS CloudFormation blue/green deployment.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p> The date and time when the target application was updated by an AWS CloudFormation blue/green deployment. </p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p> The lifecycle events of the AWS CloudFormation blue/green deployment to this target application. </p>
+    #[serde(rename = "lifecycleEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_events: Option<Vec<LifecycleEvent>>,
+    /// <p>The resource type for the AWS CloudFormation blue/green deployment.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p> The status of an AWS CloudFormation blue/green deployment's target application. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The unique ID of a deployment target that has a type of <code>CloudFormationTarget</code>. </p>
+    #[serde(rename = "targetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_id: Option<String>,
+    /// <p>The percentage of production traffic that the target version of an AWS CloudFormation blue/green deployment receives.</p>
+    #[serde(rename = "targetVersionWeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_version_weight: Option<f64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueDeploymentInput {
@@ -330,13 +364,13 @@ pub struct ContinueDeploymentInput {
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p> The status of the deployment's waiting period. READY_WAIT indicates the deployment is ready to start shifting traffic. TERMINATION_WAIT indicates the traffic is shifted, but the original target is not terminated. </p>
+    /// <p> The status of the deployment's waiting period. <code>READY_WAIT</code> indicates that the deployment is ready to start shifting traffic. <code>TERMINATION_WAIT</code> indicates that the traffic is shifted, but the original target is not terminated. </p>
     #[serde(rename = "deploymentWaitType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_wait_type: Option<String>,
 }
 
-/// <p>Represents the input of a CreateApplication operation.</p>
+/// <p>Represents the input of a <code>CreateApplication</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationInput {
@@ -353,7 +387,7 @@ pub struct CreateApplicationInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>Represents the output of a CreateApplication operation.</p>
+/// <p>Represents the output of a <code>CreateApplication</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationOutput {
@@ -363,7 +397,7 @@ pub struct CreateApplicationOutput {
     pub application_id: Option<String>,
 }
 
-/// <p>Represents the input of a CreateDeploymentConfig operation.</p>
+/// <p>Represents the input of a <code>CreateDeploymentConfig</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentConfigInput {
@@ -374,7 +408,7 @@ pub struct CreateDeploymentConfigInput {
     /// <p>The name of the deployment configuration to create.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
-    /// <p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>
+    /// <p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instances and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>
     #[serde(rename = "minimumHealthyHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
@@ -384,7 +418,7 @@ pub struct CreateDeploymentConfigInput {
     pub traffic_routing_config: Option<TrafficRoutingConfig>,
 }
 
-/// <p>Represents the output of a CreateDeploymentConfig operation.</p>
+/// <p>Represents the output of a <code>CreateDeploymentConfig</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentConfigOutput {
@@ -394,7 +428,7 @@ pub struct CreateDeploymentConfigOutput {
     pub deployment_config_id: Option<String>,
 }
 
-/// <p>Represents the input of a CreateDeploymentGroup operation.</p>
+/// <p>Represents the input of a <code>CreateDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentGroupInput {
@@ -417,7 +451,7 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "blueGreenDeploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p> <code>CodeDeployDefault.OneAtATime</code> is the default deployment configuration. It is used if a configuration isn't specified for the deployment or deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Configurations in CodeDeploy</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
@@ -432,7 +466,7 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "ec2TagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    /// <p>Information about groups of tags applied to EC2 instances. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
+    /// <p>Information about groups of tags applied to EC2 instances. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as <code>ec2TagFilters</code>.</p>
     #[serde(rename = "ec2TagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
@@ -444,28 +478,28 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "loadBalancerInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    /// <p>The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet.</p>
+    /// <p>The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags. Cannot be used in the same call as <code>OnPremisesTagSet</code>.</p>
     #[serde(rename = "onPremisesInstanceTagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
-    /// <p>Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all of the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>
+    /// <p>Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all of the tag groups. Cannot be used in the same call as <code>onPremisesInstanceTagFilters</code>.</p>
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
-    /// <p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>
+    /// <p>A service role Amazon Resource Name (ARN) that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>
     #[serde(rename = "serviceRoleArn")]
     pub service_role_arn: String,
     /// <p> The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Information about triggers to create when the deployment group is created. For examples, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html">Create a Trigger for an AWS CodeDeploy Event</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p>Information about triggers to create when the deployment group is created. For examples, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html">Create a Trigger for an AWS CodeDeploy Event</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "triggerConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
 }
 
-/// <p>Represents the output of a CreateDeploymentGroup operation.</p>
+/// <p>Represents the output of a <code>CreateDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentGroupOutput {
@@ -475,7 +509,7 @@ pub struct CreateDeploymentGroupOutput {
     pub deployment_group_id: Option<String>,
 }
 
-/// <p>Represents the input of a CreateDeployment operation.</p>
+/// <p>Represents the input of a <code>CreateDeployment</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentInput {
@@ -486,7 +520,7 @@ pub struct CreateDeploymentInput {
     #[serde(rename = "autoRollbackConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group is used as the default. If the deployment group does not have a deployment configuration associated with it, CodeDeployDefault.OneAtATime is used by default.</p>
+    /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group is used as the default. If the deployment group does not have a deployment configuration associated with it, <code>CodeDeployDefault</code>.<code>OneAtATime</code> is used by default.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
@@ -498,11 +532,11 @@ pub struct CreateDeploymentInput {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
+    /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <p>The <code>fileExistsBehavior</code> parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    /// <p> If true, then if an ApplicationStop, BeforeBlockTraffic, or AfterBlockTraffic deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if ApplicationStop fails, the deployment continues with DownloadBundle. If BeforeBlockTraffic fails, the deployment continues with BlockTraffic. If AfterBlockTraffic fails, the deployment continues with ApplicationStop. </p> <p> If false or not specified, then if a lifecycle event fails during a deployment to an instance, that deployment fails. If deployment to that instance is part of an overall deployment and the number of healthy hosts is not less than the minimum number of healthy hosts, then a deployment to the next instance is attempted. </p> <p> During a deployment, the AWS CodeDeploy agent runs the scripts specified for ApplicationStop, BeforeBlockTraffic, and AfterBlockTraffic in the AppSpec file from the previous successful deployment. (All other scripts are run from the AppSpec file in the current deployment.) If one of these scripts contains an error and does not run successfully, the deployment can fail. </p> <p> If the cause of the failure is a script from the last successful deployment that will never run successfully, create a new deployment and use <code>ignoreApplicationStopFailures</code> to specify that the ApplicationStop, BeforeBlockTraffic, and AfterBlockTraffic failures should be ignored. </p>
+    /// <p> If true, then if an <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, or <code>AfterBlockTraffic</code> deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if <code>ApplicationStop</code> fails, the deployment continues with <code>DownloadBundle</code>. If <code>BeforeBlockTraffic</code> fails, the deployment continues with <code>BlockTraffic</code>. If <code>AfterBlockTraffic</code> fails, the deployment continues with <code>ApplicationStop</code>. </p> <p> If false or not specified, then if a lifecycle event fails during a deployment to an instance, that deployment fails. If deployment to that instance is part of an overall deployment and the number of healthy hosts is not less than the minimum number of healthy hosts, then a deployment to the next instance is attempted. </p> <p> During a deployment, the AWS CodeDeploy agent runs the scripts specified for <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> in the AppSpec file from the previous successful deployment. (All other scripts are run from the AppSpec file in the current deployment.) If one of these scripts contains an error and does not run successfully, the deployment can fail. </p> <p> If the cause of the failure is a script from the last successful deployment that will never run successfully, create a new deployment and use <code>ignoreApplicationStopFailures</code> to specify that the <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> failures should be ignored. </p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
@@ -520,7 +554,7 @@ pub struct CreateDeploymentInput {
     pub update_outdated_instances_only: Option<bool>,
 }
 
-/// <p> Represents the output of a CreateDeployment operation. </p>
+/// <p> Represents the output of a <code>CreateDeployment</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentOutput {
@@ -530,7 +564,7 @@ pub struct CreateDeploymentOutput {
     pub deployment_id: Option<String>,
 }
 
-/// <p>Represents the input of a DeleteApplication operation.</p>
+/// <p>Represents the input of a <code>DeleteApplication</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInput {
@@ -539,7 +573,7 @@ pub struct DeleteApplicationInput {
     pub application_name: String,
 }
 
-/// <p>Represents the input of a DeleteDeploymentConfig operation.</p>
+/// <p>Represents the input of a <code>DeleteDeploymentConfig</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentConfigInput {
@@ -548,7 +582,7 @@ pub struct DeleteDeploymentConfigInput {
     pub deployment_config_name: String,
 }
 
-/// <p>Represents the input of a DeleteDeploymentGroup operation.</p>
+/// <p>Represents the input of a <code>DeleteDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentGroupInput {
@@ -560,7 +594,7 @@ pub struct DeleteDeploymentGroupInput {
     pub deployment_group_name: String,
 }
 
-/// <p>Represents the output of a DeleteDeploymentGroup operation.</p>
+/// <p>Represents the output of a <code>DeleteDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeploymentGroupOutput {
@@ -570,7 +604,7 @@ pub struct DeleteDeploymentGroupOutput {
     pub hooks_not_cleaned_up: Option<Vec<AutoScalingGroup>>,
 }
 
-/// <p>Represents the input of a DeleteGitHubAccount operation.</p>
+/// <p>Represents the input of a <code>DeleteGitHubAccount</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGitHubAccountTokenInput {
@@ -580,7 +614,7 @@ pub struct DeleteGitHubAccountTokenInput {
     pub token_name: Option<String>,
 }
 
-/// <p>Represents the output of a DeleteGitHubAccountToken operation.</p>
+/// <p>Represents the output of a <code>DeleteGitHubAccountToken</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGitHubAccountTokenOutput {
@@ -589,6 +623,19 @@ pub struct DeleteGitHubAccountTokenOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token_name: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteResourcesByExternalIdInput {
+    /// <p>The unique ID of an external resource (for example, a CloudFormation stack ID) that is linked to one or more CodeDeploy resources.</p>
+    #[serde(rename = "externalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteResourcesByExternalIdOutput {}
 
 /// <p>Information about a deployment configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -614,7 +661,7 @@ pub struct DeploymentConfigInfo {
     #[serde(rename = "minimumHealthyHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
-    /// <p>The configuration that specifies how the deployment traffic is routed. Only deployments with a Lambda compute platform can specify this.</p>
+    /// <p>The configuration that specifies how the deployment traffic is routed. Used for deployments with a Lambda or ECS compute platform only.</p>
     #[serde(rename = "trafficRoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traffic_routing_config: Option<TrafficRoutingConfig>,
@@ -742,7 +789,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Amazon EC2 Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul></p>
+    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p> <code>user</code>: A user created the deployment.</p> </li> <li> <p> <code>autoscaling</code>: Amazon EC2 Auto Scaling created the deployment.</p> </li> <li> <p> <code>codeDeployRollback</code>: A rollback process created the deployment.</p> </li> </ul></p>
     #[serde(rename = "creator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
@@ -778,7 +825,11 @@ pub struct DeploymentInfo {
     #[serde(rename = "errorInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_information: Option<ErrorInformation>,
-    /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
+    /// <p>The unique ID for an external resource (for example, a CloudFormation stack ID) that is linked to this deployment.</p>
+    #[serde(rename = "externalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <ul> <li> <p> <code>DISALLOW</code>: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p> <code>OVERWRITE</code>: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p> <code>RETAIN</code>: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
@@ -861,7 +912,7 @@ pub struct DeploymentReadyOption {
     #[serde(rename = "actionOnTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_timeout: Option<String>,
-    /// <p>The number of minutes to wait before the status of a blue/green deployment is changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>
+    /// <p>The number of minutes to wait before the status of a blue/green deployment is changed to Stopped if rerouting is not started manually. Applies only to the <code>STOP_DEPLOYMENT</code> option for <code>actionOnTimeout</code>.</p>
     #[serde(rename = "waitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub wait_time_in_minutes: Option<i64>,
@@ -884,7 +935,10 @@ pub struct DeploymentStyle {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentTarget {
-    /// <p> The deployment type that is specific to the deployment's compute platform. </p>
+    #[serde(rename = "cloudFormationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_formation_target: Option<CloudFormationTarget>,
+    /// <p>The deployment type that is specific to the deployment's compute platform or deployments initiated by a CloudFormation stack update.</p>
     #[serde(rename = "deploymentTargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_target_type: Option<String>,
@@ -902,7 +956,7 @@ pub struct DeploymentTarget {
     pub lambda_target: Option<LambdaTarget>,
 }
 
-/// <p>Represents the input of a DeregisterOnPremisesInstance operation.</p>
+/// <p>Represents the input of a <code>DeregisterOnPremisesInstance</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterOnPremisesInstanceInput {
@@ -940,7 +994,7 @@ pub struct EC2TagFilter {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p><p>The tag filter type:</p> <ul> <li> <p>KEY<em>ONLY: Key only.</p> </li> <li> <p>VALUE</em>ONLY: Value only.</p> </li> <li> <p>KEY<em>AND</em>VALUE: Key and value.</p> </li> </ul></p>
+    /// <p><p>The tag filter type:</p> <ul> <li> <p> <code>KEY<em>ONLY</code>: Key only.</p> </li> <li> <p> <code>VALUE</em>ONLY</code>: Value only.</p> </li> <li> <p> <code>KEY<em>AND</em>VALUE</code>: Key and value.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -992,7 +1046,7 @@ pub struct ECSTarget {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p> The ARN of the target. </p>
+    /// <p> The Amazon Resource Name (ARN) of the target. </p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -1093,7 +1147,7 @@ pub struct GenericRevisionInfo {
     pub register_time: Option<f64>,
 }
 
-/// <p>Represents the input of a GetApplication operation.</p>
+/// <p>Represents the input of a <code>GetApplication</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationInput {
@@ -1102,7 +1156,7 @@ pub struct GetApplicationInput {
     pub application_name: String,
 }
 
-/// <p>Represents the output of a GetApplication operation.</p>
+/// <p>Represents the output of a <code>GetApplication</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationOutput {
@@ -1112,7 +1166,7 @@ pub struct GetApplicationOutput {
     pub application: Option<ApplicationInfo>,
 }
 
-/// <p>Represents the input of a GetApplicationRevision operation.</p>
+/// <p>Represents the input of a <code>GetApplicationRevision</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRevisionInput {
@@ -1124,7 +1178,7 @@ pub struct GetApplicationRevisionInput {
     pub revision: RevisionLocation,
 }
 
-/// <p>Represents the output of a GetApplicationRevision operation.</p>
+/// <p>Represents the output of a <code>GetApplicationRevision</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationRevisionOutput {
@@ -1142,7 +1196,7 @@ pub struct GetApplicationRevisionOutput {
     pub revision_info: Option<GenericRevisionInfo>,
 }
 
-/// <p>Represents the input of a GetDeploymentConfig operation.</p>
+/// <p>Represents the input of a <code>GetDeploymentConfig</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentConfigInput {
@@ -1151,7 +1205,7 @@ pub struct GetDeploymentConfigInput {
     pub deployment_config_name: String,
 }
 
-/// <p>Represents the output of a GetDeploymentConfig operation.</p>
+/// <p>Represents the output of a <code>GetDeploymentConfig</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentConfigOutput {
@@ -1161,7 +1215,7 @@ pub struct GetDeploymentConfigOutput {
     pub deployment_config_info: Option<DeploymentConfigInfo>,
 }
 
-/// <p>Represents the input of a GetDeploymentGroup operation.</p>
+/// <p>Represents the input of a <code>GetDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentGroupInput {
@@ -1173,7 +1227,7 @@ pub struct GetDeploymentGroupInput {
     pub deployment_group_name: String,
 }
 
-/// <p>Represents the output of a GetDeploymentGroup operation.</p>
+/// <p>Represents the output of a <code>GetDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentGroupOutput {
@@ -1183,7 +1237,7 @@ pub struct GetDeploymentGroupOutput {
     pub deployment_group_info: Option<DeploymentGroupInfo>,
 }
 
-/// <p>Represents the input of a GetDeployment operation.</p>
+/// <p>Represents the input of a <code>GetDeployment</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInput {
@@ -1192,7 +1246,7 @@ pub struct GetDeploymentInput {
     pub deployment_id: String,
 }
 
-/// <p> Represents the input of a GetDeploymentInstance operation. </p>
+/// <p> Represents the input of a <code>GetDeploymentInstance</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInstanceInput {
@@ -1204,7 +1258,7 @@ pub struct GetDeploymentInstanceInput {
     pub instance_id: String,
 }
 
-/// <p> Represents the output of a GetDeploymentInstance operation. </p>
+/// <p> Represents the output of a <code>GetDeploymentInstance</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentInstanceOutput {
@@ -1214,7 +1268,7 @@ pub struct GetDeploymentInstanceOutput {
     pub instance_summary: Option<InstanceSummary>,
 }
 
-/// <p>Represents the output of a GetDeployment operation.</p>
+/// <p>Represents the output of a <code>GetDeployment</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentOutput {
@@ -1240,13 +1294,13 @@ pub struct GetDeploymentTargetInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentTargetOutput {
-    /// <p> A deployment target that contains information about a deployment such as its status, lifecyle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (<code>instanceTarget</code>, <code>lambdaTarget</code>, or <code>ecsTarget</code>). </p>
+    /// <p> A deployment target that contains information about a deployment such as its status, lifecycle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (<code>instanceTarget</code>, <code>lambdaTarget</code>, or <code>ecsTarget</code>). </p>
     #[serde(rename = "deploymentTarget")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_target: Option<DeploymentTarget>,
 }
 
-/// <p> Represents the input of a GetOnPremisesInstance operation. </p>
+/// <p> Represents the input of a <code>GetOnPremisesInstance</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOnPremisesInstanceInput {
@@ -1255,7 +1309,7 @@ pub struct GetOnPremisesInstanceInput {
     pub instance_name: String,
 }
 
-/// <p> Represents the output of a GetOnPremisesInstance operation. </p>
+/// <p> Represents the output of a <code>GetOnPremisesInstance</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOnPremisesInstanceOutput {
@@ -1281,7 +1335,7 @@ pub struct GitHubLocation {
 /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GreenFleetProvisioningOption {
-    /// <p><p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER<em>EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY</em>AUTO<em>SCALING</em>GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul></p>
+    /// <p><p>The method used to add instances to a replacement environment.</p> <ul> <li> <p> <code>DISCOVER<em>EXISTING</code>: Use instances that already exist or will be created manually.</p> </li> <li> <p> <code>COPY</em>AUTO<em>SCALING</em>GROUP</code>: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
@@ -1337,7 +1391,7 @@ pub struct InstanceSummary {
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>A timestamp that indicaties when the instance information was last updated.</p>
+    /// <p>A timestamp that indicates when the instance information was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
@@ -1345,7 +1399,7 @@ pub struct InstanceSummary {
     #[serde(rename = "lifecycleEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_events: Option<Vec<LifecycleEvent>>,
-    /// <p><p>The deployment status for this instance:</p> <ul> <li> <p>Pending: The deployment is pending for this instance.</p> </li> <li> <p>In Progress: The deployment is in progress for this instance.</p> </li> <li> <p>Succeeded: The deployment has succeeded for this instance.</p> </li> <li> <p>Failed: The deployment has failed for this instance.</p> </li> <li> <p>Skipped: The deployment has been skipped for this instance.</p> </li> <li> <p>Unknown: The deployment status is unknown for this instance.</p> </li> </ul></p>
+    /// <p><p>The deployment status for this instance:</p> <ul> <li> <p> <code>Pending</code>: The deployment is pending for this instance.</p> </li> <li> <p> <code>In Progress</code>: The deployment is in progress for this instance.</p> </li> <li> <p> <code>Succeeded</code>: The deployment has succeeded for this instance.</p> </li> <li> <p> <code>Failed</code>: The deployment has failed for this instance.</p> </li> <li> <p> <code>Skipped</code>: The deployment has been skipped for this instance.</p> </li> <li> <p> <code>Unknown</code>: The deployment status is unknown for this instance.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1375,7 +1429,7 @@ pub struct InstanceTarget {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p> The ARN of the target. </p>
+    /// <p> The Amazon Resource Name (ARN) of the target. </p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -1393,7 +1447,7 @@ pub struct LambdaFunctionInfo {
     #[serde(rename = "currentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_version: Option<String>,
-    /// <p> The alias of a Lambda function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>. </p>
+    /// <p> The alias of a Lambda function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">AWS Lambda Function Aliases</a> in the <i>AWS Lambda Developer Guide</i>.</p>
     #[serde(rename = "functionAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_alias: Option<String>,
@@ -1435,7 +1489,7 @@ pub struct LambdaTarget {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p> The ARN of the target. </p>
+    /// <p> The Amazon Resource Name (ARN) of the target. </p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -1479,7 +1533,7 @@ pub struct LifecycleEvent {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The deployment lifecycle event name, such as ApplicationStop, BeforeInstall, AfterInstall, ApplicationStart, or ValidateService.</p>
+    /// <p>The deployment lifecycle event name, such as <code>ApplicationStop</code>, <code>BeforeInstall</code>, <code>AfterInstall</code>, <code>ApplicationStart</code>, or <code>ValidateService</code>.</p>
     #[serde(rename = "lifecycleEventName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_event_name: Option<String>,
@@ -1493,14 +1547,14 @@ pub struct LifecycleEvent {
     pub status: Option<String>,
 }
 
-/// <p> Represents the input of a ListApplicationRevisions operation. </p>
+/// <p> Represents the input of a <code>ListApplicationRevisions</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationRevisionsInput {
     /// <p> The name of an AWS CodeDeploy application associated with the IAM user or AWS account. </p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p><p> Whether to list revisions based on whether the revision is the target revision of an deployment group: </p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul></p>
+    /// <p><p> Whether to list revisions based on whether the revision is the target revision of a deployment group: </p> <ul> <li> <p> <code>include</code>: List revisions that are target revisions of a deployment group.</p> </li> <li> <p> <code>exclude</code>: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p> <code>ignore</code>: List all revisions.</p> </li> </ul></p>
     #[serde(rename = "deployed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployed: Option<String>,
@@ -1516,17 +1570,17 @@ pub struct ListApplicationRevisionsInput {
     #[serde(rename = "s3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_key_prefix: Option<String>,
-    /// <p>The column name to use to sort the list results:</p> <ul> <li> <p>registerTime: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p>firstUsedTime: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p>lastUsedTime: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p> If not specified or set to null, the results are returned in an arbitrary order. </p>
+    /// <p>The column name to use to sort the list results:</p> <ul> <li> <p> <code>registerTime</code>: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p> <code>firstUsedTime</code>: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p> <code>lastUsedTime</code>: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p> If not specified or set to null, the results are returned in an arbitrary order. </p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    /// <p> The order in which to sort the list results: </p> <ul> <li> <p>ascending: ascending order.</p> </li> <li> <p>descending: descending order.</p> </li> </ul> <p>If not specified, the results are sorted in ascending order.</p> <p>If set to null, the results are sorted in an arbitrary order.</p>
+    /// <p> The order in which to sort the list results: </p> <ul> <li> <p> <code>ascending</code>: ascending order.</p> </li> <li> <p> <code>descending</code>: descending order.</p> </li> </ul> <p>If not specified, the results are sorted in ascending order.</p> <p>If set to null, the results are sorted in an arbitrary order.</p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
 }
 
-/// <p>Represents the output of a ListApplicationRevisions operation.</p>
+/// <p>Represents the output of a <code>ListApplicationRevisions</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationRevisionsOutput {
@@ -1540,7 +1594,7 @@ pub struct ListApplicationRevisionsOutput {
     pub revisions: Option<Vec<RevisionLocation>>,
 }
 
-/// <p>Represents the input of a ListApplications operation.</p>
+/// <p>Represents the input of a <code>ListApplications</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsInput {
@@ -1564,7 +1618,7 @@ pub struct ListApplicationsOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the input of a ListDeploymentConfigs operation.</p>
+/// <p>Represents the input of a <code>ListDeploymentConfigs</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentConfigsInput {
@@ -1574,11 +1628,11 @@ pub struct ListDeploymentConfigsInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListDeploymentConfigs operation.</p>
+/// <p>Represents the output of a <code>ListDeploymentConfigs</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentConfigsOutput {
-    /// <p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>
+    /// <p>A list of deployment configurations, including built-in configurations such as <code>CodeDeployDefault.OneAtATime</code>.</p>
     #[serde(rename = "deploymentConfigsList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_configs_list: Option<Vec<String>>,
@@ -1588,7 +1642,7 @@ pub struct ListDeploymentConfigsOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the input of a ListDeploymentGroups operation.</p>
+/// <p>Represents the input of a <code>ListDeploymentGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentGroupsInput {
@@ -1601,7 +1655,7 @@ pub struct ListDeploymentGroupsInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListDeploymentGroups operation.</p>
+/// <p>Represents the output of a <code>ListDeploymentGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentGroupsOutput {
@@ -1619,14 +1673,14 @@ pub struct ListDeploymentGroupsOutput {
     pub next_token: Option<String>,
 }
 
-/// <p> Represents the input of a ListDeploymentInstances operation. </p>
+/// <p> Represents the input of a <code>ListDeploymentInstances</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentInstancesInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p><p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instances with pending deployments.</p> </li> <li> <p>InProgress: Include those instances where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instances with failed deployments.</p> </li> <li> <p>Skipped: Include those instances with skipped deployments.</p> </li> <li> <p>Unknown: Include those instances with deployments in an unknown state.</p> </li> </ul></p>
+    /// <p><p>A subset of instances to list by status:</p> <ul> <li> <p> <code>Pending</code>: Include those instances with pending deployments.</p> </li> <li> <p> <code>InProgress</code>: Include those instances where deployments are still in progress.</p> </li> <li> <p> <code>Succeeded</code>: Include those instances with successful deployments.</p> </li> <li> <p> <code>Failed</code>: Include those instances with failed deployments.</p> </li> <li> <p> <code>Skipped</code>: Include those instances with skipped deployments.</p> </li> <li> <p> <code>Unknown</code>: Include those instances with deployments in an unknown state.</p> </li> </ul></p>
     #[serde(rename = "instanceStatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_status_filter: Option<Vec<String>>,
@@ -1640,7 +1694,7 @@ pub struct ListDeploymentInstancesInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListDeploymentInstances operation.</p>
+/// <p>Represents the output of a <code>ListDeploymentInstances</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentInstancesOutput {
@@ -1684,7 +1738,7 @@ pub struct ListDeploymentTargetsOutput {
     pub target_ids: Option<Vec<String>>,
 }
 
-/// <p>Represents the input of a ListDeployments operation.</p>
+/// <p>Represents the input of a <code>ListDeployments</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsInput {
@@ -1700,7 +1754,11 @@ pub struct ListDeploymentsInput {
     #[serde(rename = "deploymentGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    /// <p><p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul></p>
+    /// <p>The unique ID of an external resource for returning deployments linked to the external resource.</p>
+    #[serde(rename = "externalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    /// <p><p>A subset of deployments to list by status:</p> <ul> <li> <p> <code>Created</code>: Include created deployments in the resulting list.</p> </li> <li> <p> <code>Queued</code>: Include queued deployments in the resulting list.</p> </li> <li> <p> <code>In Progress</code>: Include in-progress deployments in the resulting list.</p> </li> <li> <p> <code>Succeeded</code>: Include successful deployments in the resulting list.</p> </li> <li> <p> <code>Failed</code>: Include failed deployments in the resulting list.</p> </li> <li> <p> <code>Stopped</code>: Include stopped deployments in the resulting list.</p> </li> </ul></p>
     #[serde(rename = "includeOnlyStatuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_only_statuses: Option<Vec<String>>,
@@ -1710,7 +1768,7 @@ pub struct ListDeploymentsInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListDeployments operation.</p>
+/// <p>Represents the output of a <code>ListDeployments</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsOutput {
@@ -1724,21 +1782,21 @@ pub struct ListDeploymentsOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the input of a ListGitHubAccountTokenNames operation.</p>
+/// <p>Represents the input of a <code>ListGitHubAccountTokenNames</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGitHubAccountTokenNamesInput {
-    /// <p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>
+    /// <p>An identifier returned from the previous <code>ListGitHubAccountTokenNames</code> call. It can be used to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListGitHubAccountTokenNames operation.</p>
+/// <p>Represents the output of a <code>ListGitHubAccountTokenNames</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGitHubAccountTokenNamesOutput {
-    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent <code>ListGitHubAccountTokenNames</code> call to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1748,7 +1806,7 @@ pub struct ListGitHubAccountTokenNamesOutput {
     pub token_name_list: Option<Vec<String>>,
 }
 
-/// <p>Represents the input of a ListOnPremisesInstances operation.</p>
+/// <p>Represents the input of a <code>ListOnPremisesInstances</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOnPremisesInstancesInput {
@@ -1756,7 +1814,7 @@ pub struct ListOnPremisesInstancesInput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>The registration status of the on-premises instances:</p> <ul> <li> <p>Deregistered: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p>Registered: Include registered on-premises instances in the resulting list.</p> </li> </ul></p>
+    /// <p><p>The registration status of the on-premises instances:</p> <ul> <li> <p> <code>Deregistered</code>: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p> <code>Registered</code>: Include registered on-premises instances in the resulting list.</p> </li> </ul></p>
     #[serde(rename = "registrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_status: Option<String>,
@@ -1825,7 +1883,7 @@ pub struct LoadBalancerInfo {
 /// <p>Information about minimum healthy instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MinimumHealthyHosts {
-    /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment is successful if four or more instance are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the <code>GetDeploymentConfig</code>, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
+    /// <p>The minimum healthy instance type:</p> <ul> <li> <p> <code>HOST_COUNT</code>: The minimum number of healthy instances as an absolute value.</p> </li> <li> <p> <code>FLEET_PERCENT</code>: The minimum number of healthy instances as a percentage of the total number of instances in the deployment.</p> </li> </ul> <p>In an example of nine instances, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instances at a time. The deployment is successful if four or more instances are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the <code>GetDeploymentConfig</code>, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1916,7 +1974,7 @@ pub struct RegisterOnPremisesInstanceInput {
     pub instance_name: String,
 }
 
-/// <p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>
+/// <p>Represents the input of a <code>RemoveTagsFromOnPremisesInstances</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
@@ -1953,7 +2011,7 @@ pub struct RevisionLocation {
     #[serde(rename = "gitHubLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_location: Option<GitHubLocation>,
-    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub (EC2/On-premises deployments only).</p> </li> <li> <p>String: A YAML-formatted or JSON-formatted string (AWS Lambda deployments only).</p> </li> </ul></p>
+    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub (EC2/On-premises deployments only).</p> </li> <li> <p>String: A YAML-formatted or JSON-formatted string (AWS Lambda deployments only).</p> </li> <li> <p>AppSpecContent: An <code>AppSpecContent</code> object that contains the contents of an AppSpec file for an AWS Lambda or Amazon ECS deployment. The content is formatted as JSON or YAML stored as a RawString.</p> </li> </ul></p>
     #[serde(rename = "revisionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_type: Option<String>,
@@ -1992,7 +2050,7 @@ pub struct S3Location {
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p><p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p>tar: A tar archive file.</p> </li> <li> <p>tgz: A compressed tar archive file.</p> </li> <li> <p>zip: A zip archive file.</p> </li> </ul></p>
+    /// <p><p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p> <code>tar</code>: A tar archive file.</p> </li> <li> <p> <code>tgz</code>: A compressed tar archive file.</p> </li> <li> <p> <code>zip</code>: A zip archive file.</p> </li> </ul></p>
     #[serde(rename = "bundleType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_type: Option<String>,
@@ -2019,7 +2077,7 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
     pub deployment_id: Option<String>,
 }
 
-/// <p> Represents the input of a StopDeployment operation. </p>
+/// <p> Represents the input of a <code>StopDeployment</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeploymentInput {
@@ -2032,7 +2090,7 @@ pub struct StopDeploymentInput {
     pub deployment_id: String,
 }
 
-/// <p> Represents the output of a StopDeployment operation. </p>
+/// <p> Represents the output of a <code>StopDeployment</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDeploymentOutput {
@@ -2124,17 +2182,17 @@ pub struct TargetInstances {
     #[serde(rename = "autoScalingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
-    /// <p>Information about the groups of EC2 instance tags that an instance must be identified by in order for it to be included in the replacement environment for a blue/green deployment. Cannot be used in the same call as tagFilters.</p>
+    /// <p>Information about the groups of EC2 instance tags that an instance must be identified by in order for it to be included in the replacement environment for a blue/green deployment. Cannot be used in the same call as <code>tagFilters</code>.</p>
     #[serde(rename = "ec2TagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
-    /// <p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment. Cannot be used in the same call as ec2TagSet.</p>
+    /// <p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment. Cannot be used in the same call as <code>ec2TagSet</code>.</p>
     #[serde(rename = "tagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<EC2TagFilter>>,
 }
 
-/// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+/// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeBasedCanary {
     /// <p>The number of minutes between the first and second traffic shifts of a <code>TimeBasedCanary</code> deployment.</p>
@@ -2147,7 +2205,7 @@ pub struct TimeBasedCanary {
     pub canary_percentage: Option<i64>,
 }
 
-/// <p>A configuration that shifts traffic from one version of a Lambda function to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+/// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeBasedLinear {
     /// <p>The number of minutes between each incremental traffic shift of a <code>TimeBasedLinear</code> deployment.</p>
@@ -2177,24 +2235,24 @@ pub struct TimeRange {
 /// <p> Information about a listener. The listener contains the path used to route traffic that is received from the load balancer to a target group. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrafficRoute {
-    /// <p> The ARN of one listener. The listener identifies the route between a target group and a load balancer. This is an array of strings with a maximum size of one. </p>
+    /// <p> The Amazon Resource Name (ARN) of one listener. The listener identifies the route between a target group and a load balancer. This is an array of strings with a maximum size of one. </p>
     #[serde(rename = "listenerArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listener_arns: Option<Vec<String>>,
 }
 
-/// <p>The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment.</p>
+/// <p>The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment, or from one Amazon ECS task set to another during an Amazon ECS deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrafficRoutingConfig {
-    /// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+    /// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
     #[serde(rename = "timeBasedCanary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_based_canary: Option<TimeBasedCanary>,
-    /// <p>A configuration that shifts traffic from one version of a Lambda function to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+    /// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
     #[serde(rename = "timeBasedLinear")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_based_linear: Option<TimeBasedLinear>,
-    /// <p>The type of traffic shifting (<code>TimeBasedCanary</code> or <code>TimeBasedLinear</code>) used by a deployment configuration .</p>
+    /// <p>The type of traffic shifting (<code>TimeBasedCanary</code> or <code>TimeBasedLinear</code>) used by a deployment configuration.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -2211,7 +2269,7 @@ pub struct TriggerConfig {
     #[serde(rename = "triggerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_name: Option<String>,
-    /// <p>The ARN of the Amazon Simple Notification Service topic through which notifications about deployment or instance events are sent.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service topic through which notifications about deployment or instance events are sent.</p>
     #[serde(rename = "triggerTargetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_target_arn: Option<String>,
@@ -2220,7 +2278,7 @@ pub struct TriggerConfig {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
-    /// <p> The ARN that specifies from which resource to disassociate the tags with the keys in the <code>TagKeys</code> input paramter. </p>
+    /// <p> The Amazon Resource Name (ARN) that specifies from which resource to disassociate the tags with the keys in the <code>TagKeys</code> input parameter. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p> A list of keys of <code>Tag</code> objects. The <code>Tag</code> objects identified by the keys are disassociated from the resource specified by the <code>ResourceArn</code> input parameter. </p>
@@ -2232,7 +2290,7 @@ pub struct UntagResourceInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
-/// <p>Represents the input of an UpdateApplication operation.</p>
+/// <p>Represents the input of an <code>UpdateApplication</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationInput {
@@ -2246,7 +2304,7 @@ pub struct UpdateApplicationInput {
     pub new_application_name: Option<String>,
 }
 
-/// <p>Represents the input of an UpdateDeploymentGroup operation.</p>
+/// <p>Represents the input of an <code>UpdateDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentGroupInput {
@@ -2312,13 +2370,13 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>Information about triggers to change when the deployment group is updated. For examples, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html">Modify Triggers in an AWS CodeDeploy Deployment Group</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p>Information about triggers to change when the deployment group is updated. For examples, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html">Edit a Trigger in a CodeDeploy Deployment Group</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "triggerConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
 }
 
-/// <p>Represents the output of an UpdateDeploymentGroup operation.</p>
+/// <p>Represents the output of an <code>UpdateDeploymentGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentGroupOutput {
@@ -2663,7 +2721,7 @@ pub enum BatchGetDeploymentInstancesError {
     DeploymentIdRequired(String),
     /// <p>The instance ID was not specified.</p>
     InstanceIdRequired(String),
-    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code>, <code>Server</code>, or <code>ECS</code>.</p>
     InvalidComputePlatform(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
@@ -2763,6 +2821,8 @@ pub enum BatchGetDeploymentTargetsError {
     DeploymentTargetIdRequired(String),
     /// <p> The maximum number of targets that can be associated with an Amazon ECS or AWS Lambda deployment was exceeded. The target list of both types of deployments must have exactly one item. This exception does not apply to EC2/On-premises deployments. </p>
     DeploymentTargetListSizeExceeded(String),
+    /// <p>The specified instance does not exist in the deployment group.</p>
+    InstanceDoesNotExist(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
     /// <p> The target ID provided was not valid. </p>
@@ -2803,6 +2863,11 @@ impl BatchGetDeploymentTargetsError {
                         BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(err.msg),
                     )
                 }
+                "InstanceDoesNotExistException" => {
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::InstanceDoesNotExist(err.msg),
+                    )
+                }
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::InvalidDeploymentId(err.msg),
@@ -2840,6 +2905,9 @@ impl fmt::Display for BatchGetDeploymentTargetsError {
                 write!(f, "{}", cause)
             }
             BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchGetDeploymentTargetsError::InstanceDoesNotExist(ref cause) => {
                 write!(f, "{}", cause)
             }
             BatchGetDeploymentTargetsError::InvalidDeploymentId(ref cause) => {
@@ -3061,7 +3129,7 @@ pub enum CreateApplicationError {
     ApplicationNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code>, <code>Server</code>, or <code>ECS</code>.</p>
     InvalidComputePlatform(String),
     /// <p> The specified tags are not valid. </p>
     InvalidTagsToAdd(String),
@@ -3161,6 +3229,8 @@ pub enum CreateDeploymentError {
     InvalidRole(String),
     /// <p><p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul></p>
     InvalidTargetInstances(String),
+    /// <p> The configuration that specifies how traffic is routed during a deployment is invalid.</p>
+    InvalidTrafficRoutingConfiguration(String),
     /// <p>The UpdateOutdatedInstancesOnly value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
     InvalidUpdateOutdatedInstancesOnlyValue(String),
     /// <p>The named revision does not exist with the IAM user or AWS account.</p>
@@ -3264,6 +3334,11 @@ impl CreateDeploymentError {
                         err.msg,
                     ))
                 }
+                "InvalidTrafficRoutingConfigurationException" => {
+                    return RusotoError::Service(
+                        CreateDeploymentError::InvalidTrafficRoutingConfiguration(err.msg),
+                    )
+                }
                 "InvalidUpdateOutdatedInstancesOnlyValueException" => {
                     return RusotoError::Service(
                         CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(err.msg),
@@ -3314,6 +3389,9 @@ impl fmt::Display for CreateDeploymentError {
             CreateDeploymentError::InvalidRevision(ref cause) => write!(f, "{}", cause),
             CreateDeploymentError::InvalidRole(ref cause) => write!(f, "{}", cause),
             CreateDeploymentError::InvalidTargetInstances(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentError::InvalidTrafficRoutingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -3327,13 +3405,13 @@ impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentConfigError {
-    /// <p>A deployment configuration with the specified name with the IAM user or AWS account already exists .</p>
+    /// <p>A deployment configuration with the specified name with the IAM user or AWS account already exists.</p>
     DeploymentConfigAlreadyExists(String),
     /// <p>The deployment configurations limit was exceeded.</p>
     DeploymentConfigLimitExceeded(String),
     /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
-    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code>, <code>Server</code>, or <code>ECS</code>.</p>
     InvalidComputePlatform(String),
     /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
@@ -3473,6 +3551,8 @@ pub enum CreateDeploymentGroupError {
     InvalidTagsToAdd(String),
     /// <p> A target group pair associated with this deployment is not valid. </p>
     InvalidTargetGroupPair(String),
+    /// <p> The configuration that specifies how traffic is routed during a deployment is invalid.</p>
+    InvalidTrafficRoutingConfiguration(String),
     /// <p>The trigger was specified in an invalid format.</p>
     InvalidTriggerConfig(String),
     /// <p>The limit for lifecycle hooks was exceeded.</p>
@@ -3615,6 +3695,11 @@ impl CreateDeploymentGroupError {
                         CreateDeploymentGroupError::InvalidTargetGroupPair(err.msg),
                     )
                 }
+                "InvalidTrafficRoutingConfigurationException" => {
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidTrafficRoutingConfiguration(err.msg),
+                    )
+                }
                 "InvalidTriggerConfigException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidTriggerConfig(
                         err.msg,
@@ -3708,6 +3793,9 @@ impl fmt::Display for CreateDeploymentGroupError {
             CreateDeploymentGroupError::InvalidTag(ref cause) => write!(f, "{}", cause),
             CreateDeploymentGroupError::InvalidTagsToAdd(ref cause) => write!(f, "{}", cause),
             CreateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => write!(f, "{}", cause),
+            CreateDeploymentGroupError::InvalidTrafficRoutingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => write!(f, "{}", cause),
             CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => {
                 write!(f, "{}", cause)
@@ -3970,6 +4058,30 @@ impl fmt::Display for DeleteGitHubAccountTokenError {
     }
 }
 impl Error for DeleteGitHubAccountTokenError {}
+/// Errors returned by DeleteResourcesByExternalId
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourcesByExternalIdError {}
+
+impl DeleteResourcesByExternalIdError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteResourcesByExternalIdError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteResourcesByExternalIdError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DeleteResourcesByExternalIdError {}
 /// Errors returned by DeregisterOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterOnPremisesInstanceError {
@@ -4193,7 +4305,7 @@ pub enum GetDeploymentConfigError {
     DeploymentConfigDoesNotExist(String),
     /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
-    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code>, <code>Server</code>, or <code>ECS</code>.</p>
     InvalidComputePlatform(String),
     /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
@@ -4347,7 +4459,7 @@ pub enum GetDeploymentInstanceError {
     InstanceDoesNotExist(String),
     /// <p>The instance ID was not specified.</p>
     InstanceIdRequired(String),
-    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code>, <code>Server</code>, or <code>ECS</code>.</p>
     InvalidComputePlatform(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
@@ -4803,7 +4915,7 @@ pub enum ListDeploymentInstancesError {
     DeploymentIdRequired(String),
     /// <p>The specified deployment has not started.</p>
     DeploymentNotStarted(String),
-    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code>, <code>Server</code>, or <code>ECS</code>.</p>
     InvalidComputePlatform(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
@@ -5015,6 +5127,10 @@ pub enum ListDeploymentsError {
     InvalidDeploymentGroupName(String),
     /// <p>The specified deployment status doesn't exist or cannot be determined.</p>
     InvalidDeploymentStatus(String),
+    /// <p>The external ID was specified in an invalid format.</p>
+    InvalidExternalId(String),
+    /// <p>The input was specified in an invalid format.</p>
+    InvalidInput(String),
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
     /// <p>The specified time range was specified in an invalid format.</p>
@@ -5060,6 +5176,12 @@ impl ListDeploymentsError {
                         err.msg,
                     ))
                 }
+                "InvalidExternalIdException" => {
+                    return RusotoError::Service(ListDeploymentsError::InvalidExternalId(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListDeploymentsError::InvalidInput(err.msg))
+                }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDeploymentsError::InvalidNextToken(err.msg))
                 }
@@ -5084,6 +5206,8 @@ impl fmt::Display for ListDeploymentsError {
             ListDeploymentsError::InvalidApplicationName(ref cause) => write!(f, "{}", cause),
             ListDeploymentsError::InvalidDeploymentGroupName(ref cause) => write!(f, "{}", cause),
             ListDeploymentsError::InvalidDeploymentStatus(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidExternalId(ref cause) => write!(f, "{}", cause),
+            ListDeploymentsError::InvalidInput(ref cause) => write!(f, "{}", cause),
             ListDeploymentsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
             ListDeploymentsError::InvalidTimeRange(ref cause) => write!(f, "{}", cause),
         }
@@ -5707,6 +5831,8 @@ pub enum StopDeploymentError {
     DeploymentIdRequired(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
+    /// <p>A call was submitted that is not supported for the specified deployment type.</p>
+    UnsupportedActionForDeploymentType(String),
 }
 
 impl StopDeploymentError {
@@ -5734,6 +5860,11 @@ impl StopDeploymentError {
                 "InvalidDeploymentIdException" => {
                     return RusotoError::Service(StopDeploymentError::InvalidDeploymentId(err.msg))
                 }
+                "UnsupportedActionForDeploymentTypeException" => {
+                    return RusotoError::Service(
+                        StopDeploymentError::UnsupportedActionForDeploymentType(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -5750,6 +5881,9 @@ impl fmt::Display for StopDeploymentError {
             StopDeploymentError::DeploymentGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
             StopDeploymentError::DeploymentIdRequired(ref cause) => write!(f, "{}", cause),
             StopDeploymentError::InvalidDeploymentId(ref cause) => write!(f, "{}", cause),
+            StopDeploymentError::UnsupportedActionForDeploymentType(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
@@ -6017,6 +6151,8 @@ pub enum UpdateDeploymentGroupError {
     InvalidTag(String),
     /// <p> A target group pair associated with this deployment is not valid. </p>
     InvalidTargetGroupPair(String),
+    /// <p> The configuration that specifies how traffic is routed during a deployment is invalid.</p>
+    InvalidTrafficRoutingConfiguration(String),
     /// <p>The trigger was specified in an invalid format.</p>
     InvalidTriggerConfig(String),
     /// <p>The limit for lifecycle hooks was exceeded.</p>
@@ -6152,6 +6288,11 @@ impl UpdateDeploymentGroupError {
                         UpdateDeploymentGroupError::InvalidTargetGroupPair(err.msg),
                     )
                 }
+                "InvalidTrafficRoutingConfigurationException" => {
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidTrafficRoutingConfiguration(err.msg),
+                    )
+                }
                 "InvalidTriggerConfigException" => {
                     return RusotoError::Service(UpdateDeploymentGroupError::InvalidTriggerConfig(
                         err.msg,
@@ -6241,6 +6382,9 @@ impl fmt::Display for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::InvalidRole(ref cause) => write!(f, "{}", cause),
             UpdateDeploymentGroupError::InvalidTag(ref cause) => write!(f, "{}", cause),
             UpdateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => write!(f, "{}", cause),
+            UpdateDeploymentGroupError::InvalidTrafficRoutingConfiguration(ref cause) => {
+                write!(f, "{}", cause)
+            }
             UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => write!(f, "{}", cause),
             UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => {
                 write!(f, "{}", cause)
@@ -6271,7 +6415,7 @@ pub trait CodeDeploy {
         input: BatchGetApplicationRevisionsInput,
     ) -> Result<BatchGetApplicationRevisionsOutput, RusotoError<BatchGetApplicationRevisionsError>>;
 
-    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
+    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 100.</p>
     async fn batch_get_applications(
         &self,
         input: BatchGetApplicationsInput,
@@ -6289,7 +6433,7 @@ pub trait CodeDeploy {
         input: BatchGetDeploymentInstancesInput,
     ) -> Result<BatchGetDeploymentInstancesOutput, RusotoError<BatchGetDeploymentInstancesError>>;
 
-    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform or deployment method: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> <li> <p> <b>CloudFormation</b>: Information about targets of blue/green deployments initiated by a CloudFormation stack update.</p> </li> </ul></p>
     async fn batch_get_deployment_targets(
         &self,
         input: BatchGetDeploymentTargetsInput,
@@ -6360,6 +6504,12 @@ pub trait CodeDeploy {
         &self,
         input: DeleteGitHubAccountTokenInput,
     ) -> Result<DeleteGitHubAccountTokenOutput, RusotoError<DeleteGitHubAccountTokenError>>;
+
+    /// <p>Deletes resources linked to an external ID.</p>
+    async fn delete_resources_by_external_id(
+        &self,
+        input: DeleteResourcesByExternalIdInput,
+    ) -> Result<DeleteResourcesByExternalIdOutput, RusotoError<DeleteResourcesByExternalIdError>>;
 
     /// <p>Deregisters an on-premises instance.</p>
     async fn deregister_on_premises_instance(
@@ -6439,7 +6589,7 @@ pub trait CodeDeploy {
         input: ListDeploymentGroupsInput,
     ) -> Result<ListDeploymentGroupsOutput, RusotoError<ListDeploymentGroupsError>>;
 
-    /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
+    /// <p><note> <p> The newer <code>BatchGetDeploymentTargets</code> should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
     async fn list_deployment_instances(
         &self,
         input: ListDeploymentInstancesInput,
@@ -6469,13 +6619,13 @@ pub trait CodeDeploy {
         input: ListOnPremisesInstancesInput,
     ) -> Result<ListOnPremisesInstancesOutput, RusotoError<ListOnPremisesInstancesError>>;
 
-    /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
+    /// <p> Returns a list of tags for the resource identified by a specified Amazon Resource Name (ARN). Tags are used to organize and categorize your CodeDeploy resources. </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
 
-    /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
+    /// <p> Sets the result of a Lambda validation function. The function validates lifecycle hooks during a deployment that uses the AWS Lambda or Amazon ECS compute platform. For AWS Lambda deployments, the available lifecycle hooks are <code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>. For Amazon ECS deployments, the available lifecycle hooks are <code>BeforeInstall</code>, <code>AfterInstall</code>, <code>AfterAllowTestTraffic</code>, <code>BeforeAllowTraffic</code>, and <code>AfterAllowTraffic</code>. Lambda validation functions return <code>Succeeded</code> or <code>Failed</code>. For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-lambda">AppSpec 'hooks' Section for an AWS Lambda Deployment </a> and <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-ecs">AppSpec 'hooks' Section for an Amazon ECS Deployment</a>.</p>
     async fn put_lifecycle_event_hook_execution_status(
         &self,
         input: PutLifecycleEventHookExecutionStatusInput,
@@ -6520,7 +6670,7 @@ pub trait CodeDeploy {
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
 
-    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
+    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identified by the list of keys in the <code>TagKeys</code> input parameter. </p>
     async fn untag_resource(
         &self,
         input: UntagResourceInput,
@@ -6640,7 +6790,7 @@ impl CodeDeploy for CodeDeployClient {
         }
     }
 
-    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
+    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 100.</p>
     async fn batch_get_applications(
         &self,
         input: BatchGetApplicationsInput,
@@ -6731,7 +6881,7 @@ impl CodeDeploy for CodeDeployClient {
         }
     }
 
-    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform or deployment method: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> <li> <p> <b>CloudFormation</b>: Information about targets of blue/green deployments initiated by a CloudFormation stack update.</p> </li> </ul></p>
     async fn batch_get_deployment_targets(
         &self,
         input: BatchGetDeploymentTargetsInput,
@@ -7069,6 +7219,38 @@ impl CodeDeploy for CodeDeployClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteGitHubAccountTokenError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes resources linked to an external ID.</p>
+    async fn delete_resources_by_external_id(
+        &self,
+        input: DeleteResourcesByExternalIdInput,
+    ) -> Result<DeleteResourcesByExternalIdOutput, RusotoError<DeleteResourcesByExternalIdError>>
+    {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.DeleteResourcesByExternalId",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteResourcesByExternalIdOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourcesByExternalIdError::from_response(response))
         }
     }
 
@@ -7438,7 +7620,7 @@ impl CodeDeploy for CodeDeployClient {
         }
     }
 
-    /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
+    /// <p><note> <p> The newer <code>BatchGetDeploymentTargets</code> should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
     async fn list_deployment_instances(
         &self,
         input: ListDeploymentInstancesInput,
@@ -7587,7 +7769,7 @@ impl CodeDeploy for CodeDeployClient {
         }
     }
 
-    /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
+    /// <p> Returns a list of tags for the resource identified by a specified Amazon Resource Name (ARN). Tags are used to organize and categorize your CodeDeploy resources. </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -7615,7 +7797,7 @@ impl CodeDeploy for CodeDeployClient {
         }
     }
 
-    /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
+    /// <p> Sets the result of a Lambda validation function. The function validates lifecycle hooks during a deployment that uses the AWS Lambda or Amazon ECS compute platform. For AWS Lambda deployments, the available lifecycle hooks are <code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>. For Amazon ECS deployments, the available lifecycle hooks are <code>BeforeInstall</code>, <code>AfterInstall</code>, <code>AfterAllowTestTraffic</code>, <code>BeforeAllowTraffic</code>, and <code>AfterAllowTraffic</code>. Lambda validation functions return <code>Succeeded</code> or <code>Failed</code>. For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-lambda">AppSpec 'hooks' Section for an AWS Lambda Deployment </a> and <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-ecs">AppSpec 'hooks' Section for an Amazon ECS Deployment</a>.</p>
     async fn put_lifecycle_event_hook_execution_status(
         &self,
         input: PutLifecycleEventHookExecutionStatusInput,
@@ -7829,7 +8011,7 @@ impl CodeDeploy for CodeDeployClient {
         }
     }
 
-    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
+    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identified by the list of keys in the <code>TagKeys</code> input parameter. </p>
     async fn untag_resource(
         &self,
         input: UntagResourceInput,

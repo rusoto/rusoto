@@ -148,6 +148,21 @@ pub struct DeleteMetricFilterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteQueryDefinitionRequest {
+    #[serde(rename = "queryDefinitionId")]
+    pub query_definition_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteQueryDefinitionResponse {
+    #[serde(rename = "success")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The name of the policy to be revoked. This parameter is required.</p>
     #[serde(rename = "policyName")]
@@ -376,6 +391,31 @@ pub struct DescribeQueriesResponse {
     #[serde(rename = "queries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queries: Option<Vec<QueryInfo>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeQueryDefinitionsRequest {
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "queryDefinitionNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_definition_name_prefix: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeQueryDefinitionsResponse {
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "queryDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_definitions: Option<Vec<QueryDefinition>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -895,7 +935,7 @@ pub struct MetricTransformation {
     /// <p>The name of the CloudWatch metric.</p>
     #[serde(rename = "metricName")]
     pub metric_name: String,
-    /// <p>The namespace of the CloudWatch metric.</p>
+    /// <p>A custom namespace to contain your metric in CloudWatch. Use namespaces to group together metrics that are similar. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#Namespace">Namespaces</a>.</p>
     #[serde(rename = "metricNamespace")]
     pub metric_namespace: String,
     /// <p>The value to publish to the CloudWatch metric when a filter pattern matches a log event.</p>
@@ -967,7 +1007,7 @@ pub struct PutLogEventsRequest {
     /// <p>The name of the log stream.</p>
     #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
-    /// <p>The sequence token obtained from the response of the previous <code>PutLogEvents</code> call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p>
+    /// <p>The sequence token obtained from the response of the previous <code>PutLogEvents</code> call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogStreams.html">DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p>
     #[serde(rename = "sequenceToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sequence_token: Option<String>,
@@ -1001,6 +1041,29 @@ pub struct PutMetricFilterRequest {
     /// <p>A collection of information that defines how metric data gets emitted.</p>
     #[serde(rename = "metricTransformations")]
     pub metric_transformations: Vec<MetricTransformation>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutQueryDefinitionRequest {
+    #[serde(rename = "logGroupNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_names: Option<Vec<String>>,
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "queryDefinitionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_definition_id: Option<String>,
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutQueryDefinitionResponse {
+    #[serde(rename = "queryDefinitionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_definition_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1045,7 +1108,7 @@ pub struct PutSubscriptionFilterRequest {
     #[serde(rename = "distribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution: Option<String>,
-    /// <p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>
+    /// <p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeSubscriptionFilters.html">DescribeSubscriptionFilters</a>.</p>
     #[serde(rename = "filterName")]
     pub filter_name: String,
     /// <p>A filter pattern for subscribing to a filtered stream of log events.</p>
@@ -1076,6 +1139,26 @@ pub struct QueryCompileErrorLocation {
     pub end_char_offset: Option<i64>,
     /// <p>Reserved.</p>
     pub start_char_offset: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct QueryDefinition {
+    #[serde(rename = "lastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<i64>,
+    #[serde(rename = "logGroupNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_names: Option<Vec<String>>,
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "queryDefinitionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_definition_id: Option<String>,
+    #[serde(rename = "queryString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string: Option<String>,
 }
 
 /// <p>Information about one CloudWatch Logs Insights query that matches the request in a <code>DescribeQueries</code> operation. </p>
@@ -1158,7 +1241,7 @@ pub struct ResourcePolicy {
     pub policy_name: Option<String>,
 }
 
-/// <p>Contains one field from one log event returned by a CloudWatch Logs Insights query, along with the value of that field.</p>
+/// <p>Contains one field from one log event returned by a CloudWatch Logs Insights query, along with the value of that field.</p> <p>For more information about the fields that are generated by CloudWatch logs, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html">Supported Logs and Discovered Fields</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResultField {
@@ -1771,6 +1854,54 @@ impl fmt::Display for DeleteMetricFilterError {
     }
 }
 impl Error for DeleteMetricFilterError {}
+/// Errors returned by DeleteQueryDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteQueryDefinitionError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+}
+
+impl DeleteQueryDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueryDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteQueryDefinitionError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteQueryDefinitionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteQueryDefinitionError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteQueryDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteQueryDefinitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteQueryDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteQueryDefinitionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteQueryDefinitionError {}
 /// Errors returned by DeleteResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourcePolicyError {
@@ -2183,6 +2314,46 @@ impl fmt::Display for DescribeQueriesError {
     }
 }
 impl Error for DescribeQueriesError {}
+/// Errors returned by DescribeQueryDefinitions
+#[derive(Debug, PartialEq)]
+pub enum DescribeQueryDefinitionsError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+}
+
+impl DescribeQueryDefinitionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeQueryDefinitionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeQueryDefinitionsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeQueryDefinitionsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeQueryDefinitionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeQueryDefinitionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeQueryDefinitionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeQueryDefinitionsError {}
 /// Errors returned by DescribeResourcePolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourcePoliciesError {
@@ -2789,6 +2960,50 @@ impl fmt::Display for PutMetricFilterError {
     }
 }
 impl Error for PutMetricFilterError {}
+/// Errors returned by PutQueryDefinition
+#[derive(Debug, PartialEq)]
+pub enum PutQueryDefinitionError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+}
+
+impl PutQueryDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutQueryDefinitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(PutQueryDefinitionError::InvalidParameter(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutQueryDefinitionError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutQueryDefinitionError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutQueryDefinitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutQueryDefinitionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutQueryDefinitionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutQueryDefinitionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutQueryDefinitionError {}
 /// Errors returned by PutResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutResourcePolicyError {
@@ -2952,7 +3167,7 @@ pub enum StartQueryError {
     InvalidParameter(String),
     /// <p>You have reached the maximum number of resources that can be created.</p>
     LimitExceeded(String),
-    /// <p>The query string is not valid. Details about this error are displayed in a <code>QueryCompileError</code> object. For more information, see .</p> <p>For more information about valid query syntax, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
+    /// <p>The query string is not valid. Details about this error are displayed in a <code>QueryCompileError</code> object. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_QueryCompileError.html">QueryCompileError</a>"/&gt;.</p> <p>For more information about valid query syntax, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
     MalformedQuery(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -3158,7 +3373,7 @@ pub trait CloudWatchLogs {
         input: CancelExportTaskRequest,
     ) -> Result<(), RusotoError<CancelExportTaskError>>;
 
-    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p> <p>Exporting to S3 buckets that are encrypted with AES-256 is supported. Exporting to S3 buckets encrypted with SSE-KMS is not supported. </p>
+    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeExportTasks.html">DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CancelExportTask.html">CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p> <p>Exporting to S3 buckets that are encrypted with AES-256 is supported. Exporting to S3 buckets encrypted with SSE-KMS is not supported. </p>
     async fn create_export_task(
         &self,
         input: CreateExportTaskRequest,
@@ -3199,6 +3414,11 @@ pub trait CloudWatchLogs {
         &self,
         input: DeleteMetricFilterRequest,
     ) -> Result<(), RusotoError<DeleteMetricFilterError>>;
+
+    async fn delete_query_definition(
+        &self,
+        input: DeleteQueryDefinitionRequest,
+    ) -> Result<DeleteQueryDefinitionResponse, RusotoError<DeleteQueryDefinitionError>>;
 
     /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
     async fn delete_resource_policy(
@@ -3254,6 +3474,11 @@ pub trait CloudWatchLogs {
         input: DescribeQueriesRequest,
     ) -> Result<DescribeQueriesResponse, RusotoError<DescribeQueriesError>>;
 
+    async fn describe_query_definitions(
+        &self,
+        input: DescribeQueryDefinitionsRequest,
+    ) -> Result<DescribeQueryDefinitionsResponse, RusotoError<DescribeQueryDefinitionsError>>;
+
     /// <p>Lists the resource policies in this account.</p>
     async fn describe_resource_policies(
         &self,
@@ -3284,7 +3509,7 @@ pub trait CloudWatchLogs {
         input: GetLogEventsRequest,
     ) -> Result<GetLogEventsResponse, RusotoError<GetLogEventsError>>;
 
-    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
+    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event. For more information about the fields that are generated by CloudWatch logs, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html">Supported Logs and Discovered Fields</a>.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
     async fn get_log_group_fields(
         &self,
         input: GetLogGroupFieldsRequest,
@@ -3296,7 +3521,7 @@ pub trait CloudWatchLogs {
         input: GetLogRecordRequest,
     ) -> Result<GetLogRecordResponse, RusotoError<GetLogRecordError>>;
 
-    /// <p>Returns the results from the specified query.</p> <p>Only the fields requested in the query are returned, along with a <code>@ptr</code> field which is the identifier for the log record. You can use the value of <code>@ptr</code> in a operation to get the full log record.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p> <p>If the value of the <code>Status</code> field in the output is <code>Running</code>, this operation returns only partial results. If you see a value of <code>Scheduled</code> or <code>Running</code> for the status, you can retry the operation later to see the final results. </p>
+    /// <p>Returns the results from the specified query.</p> <p>Only the fields requested in the query are returned, along with a <code>@ptr</code> field which is the identifier for the log record. You can use the value of <code>@ptr</code> in a <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogRecord.html">GetLogRecord</a> operation to get the full log record.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html">StartQuery</a>.</p> <p>If the value of the <code>Status</code> field in the output is <code>Running</code>, this operation returns only partial results. If you see a value of <code>Scheduled</code> or <code>Running</code> for the status, you can retry the operation later to see the final results. </p>
     async fn get_query_results(
         &self,
         input: GetQueryResultsRequest,
@@ -3308,7 +3533,7 @@ pub trait CloudWatchLogs {
         input: ListTagsLogGroupRequest,
     ) -> Result<ListTagsLogGroupResponse, RusotoError<ListTagsLogGroupError>>;
 
-    /// <p>Creates or updates a destination. This operation is used only to create destinations for cross-account subscriptions.</p> <p>A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>.</p> <p>Through an access policy, a destination controls what is written to it. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
+    /// <p>Creates or updates a destination. This operation is used only to create destinations for cross-account subscriptions.</p> <p>A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html">PutLogEvents</a>.</p> <p>Through an access policy, a destination controls what is written to it. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutSubscriptionFilter.html">PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutDestinationPolicy.html">PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
     async fn put_destination(
         &self,
         input: PutDestinationRequest,
@@ -3326,11 +3551,16 @@ pub trait CloudWatchLogs {
         input: PutLogEventsRequest,
     ) -> Result<PutLogEventsResponse, RusotoError<PutLogEventsError>>;
 
-    /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
+    /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html">PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
     async fn put_metric_filter(
         &self,
         input: PutMetricFilterRequest,
     ) -> Result<(), RusotoError<PutMetricFilterError>>;
+
+    async fn put_query_definition(
+        &self,
+        input: PutQueryDefinitionRequest,
+    ) -> Result<PutQueryDefinitionResponse, RusotoError<PutQueryDefinitionError>>;
 
     /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
     async fn put_resource_policy(
@@ -3344,7 +3574,7 @@ pub trait CloudWatchLogs {
         input: PutRetentionPolicyRequest,
     ) -> Result<(), RusotoError<PutRetentionPolicyError>>;
 
-    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
+    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html">PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
     async fn put_subscription_filter(
         &self,
         input: PutSubscriptionFilterRequest,
@@ -3362,7 +3592,7 @@ pub trait CloudWatchLogs {
         input: StopQueryRequest,
     ) -> Result<StopQueryResponse, RusotoError<StopQueryError>>;
 
-    /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
+    /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListTagsLogGroup.html">ListTagsLogGroup</a>. To remove tags, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_UntagLogGroup.html">UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#log-group-tagging">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
     async fn tag_log_group(
         &self,
         input: TagLogGroupRequest,
@@ -3374,7 +3604,7 @@ pub trait CloudWatchLogs {
         input: TestMetricFilterRequest,
     ) -> Result<TestMetricFilterResponse, RusotoError<TestMetricFilterError>>;
 
-    /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
+    /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListTagsLogGroup.html">ListTagsLogGroup</a>. To add tags, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagLogGroup.html">TagLogGroup</a>.</p>
     async fn untag_log_group(
         &self,
         input: UntagLogGroupRequest,
@@ -3474,7 +3704,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p> <p>Exporting to S3 buckets that are encrypted with AES-256 is supported. Exporting to S3 buckets encrypted with SSE-KMS is not supported. </p>
+    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeExportTasks.html">DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CancelExportTask.html">CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p> <p>Exporting to S3 buckets that are encrypted with AES-256 is supported. Exporting to S3 buckets encrypted with SSE-KMS is not supported. </p>
     async fn create_export_task(
         &self,
         input: CreateExportTaskRequest,
@@ -3661,6 +3891,33 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteMetricFilterError::from_response(response))
+        }
+    }
+
+    async fn delete_query_definition(
+        &self,
+        input: DeleteQueryDefinitionRequest,
+    ) -> Result<DeleteQueryDefinitionResponse, RusotoError<DeleteQueryDefinitionError>> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.DeleteQueryDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteQueryDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteQueryDefinitionError::from_response(response))
         }
     }
 
@@ -3912,6 +4169,33 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
+    async fn describe_query_definitions(
+        &self,
+        input: DescribeQueryDefinitionsRequest,
+    ) -> Result<DescribeQueryDefinitionsResponse, RusotoError<DescribeQueryDefinitionsError>> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.DescribeQueryDefinitions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeQueryDefinitionsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeQueryDefinitionsError::from_response(response))
+        }
+    }
+
     /// <p>Lists the resource policies in this account.</p>
     async fn describe_resource_policies(
         &self,
@@ -4050,7 +4334,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
+    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event. For more information about the fields that are generated by CloudWatch logs, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html">Supported Logs and Discovered Fields</a>.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
     async fn get_log_group_fields(
         &self,
         input: GetLogGroupFieldsRequest,
@@ -4105,7 +4389,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Returns the results from the specified query.</p> <p>Only the fields requested in the query are returned, along with a <code>@ptr</code> field which is the identifier for the log record. You can use the value of <code>@ptr</code> in a operation to get the full log record.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p> <p>If the value of the <code>Status</code> field in the output is <code>Running</code>, this operation returns only partial results. If you see a value of <code>Scheduled</code> or <code>Running</code> for the status, you can retry the operation later to see the final results. </p>
+    /// <p>Returns the results from the specified query.</p> <p>Only the fields requested in the query are returned, along with a <code>@ptr</code> field which is the identifier for the log record. You can use the value of <code>@ptr</code> in a <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_GetLogRecord.html">GetLogRecord</a> operation to get the full log record.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html">StartQuery</a>.</p> <p>If the value of the <code>Status</code> field in the output is <code>Running</code>, this operation returns only partial results. If you see a value of <code>Scheduled</code> or <code>Running</code> for the status, you can retry the operation later to see the final results. </p>
     async fn get_query_results(
         &self,
         input: GetQueryResultsRequest,
@@ -4160,7 +4444,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Creates or updates a destination. This operation is used only to create destinations for cross-account subscriptions.</p> <p>A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>.</p> <p>Through an access policy, a destination controls what is written to it. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
+    /// <p>Creates or updates a destination. This operation is used only to create destinations for cross-account subscriptions.</p> <p>A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html">PutLogEvents</a>.</p> <p>Through an access policy, a destination controls what is written to it. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutSubscriptionFilter.html">PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutDestinationPolicy.html">PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
     async fn put_destination(
         &self,
         input: PutDestinationRequest,
@@ -4241,7 +4525,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
+    /// <p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html">PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>
     async fn put_metric_filter(
         &self,
         input: PutMetricFilterRequest,
@@ -4265,6 +4549,33 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutMetricFilterError::from_response(response))
+        }
+    }
+
+    async fn put_query_definition(
+        &self,
+        input: PutQueryDefinitionRequest,
+    ) -> Result<PutQueryDefinitionResponse, RusotoError<PutQueryDefinitionError>> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.PutQueryDefinition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutQueryDefinitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutQueryDefinitionError::from_response(response))
         }
     }
 
@@ -4323,7 +4634,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
+    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html">PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
     async fn put_subscription_filter(
         &self,
         input: PutSubscriptionFilterRequest,
@@ -4404,7 +4715,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
+    /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListTagsLogGroup.html">ListTagsLogGroup</a>. To remove tags, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_UntagLogGroup.html">UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#log-group-tagging">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
     async fn tag_log_group(
         &self,
         input: TagLogGroupRequest,
@@ -4459,7 +4770,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         }
     }
 
-    /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
+    /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_ListTagsLogGroup.html">ListTagsLogGroup</a>. To add tags, use <a href="https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_TagLogGroup.html">TagLogGroup</a>.</p>
     async fn untag_log_group(
         &self,
         input: UntagLogGroupRequest,

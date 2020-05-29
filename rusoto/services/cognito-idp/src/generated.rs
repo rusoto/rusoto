@@ -777,7 +777,7 @@ pub struct AdminUserGlobalSignOutRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUserGlobalSignOutResponse {}
 
-/// <p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p>
+/// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnalyticsConfigurationType {
     /// <p>The application ID for an Amazon Pinpoint application.</p>
@@ -795,7 +795,7 @@ pub struct AnalyticsConfigurationType {
     pub user_data_shared: Option<bool>,
 }
 
-/// <p>An Amazon Pinpoint analytics endpoint.</p> <p>An endpoint uniquely identifies a mobile device, email address, or phone number that can receive messages from Amazon Pinpoint analytics.</p>
+/// <p><p>An Amazon Pinpoint analytics endpoint.</p> <p>An endpoint uniquely identifies a mobile device, email address, or phone number that can receive messages from Amazon Pinpoint analytics.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsMetadataType {
@@ -1157,7 +1157,7 @@ pub struct CreateIdentityProviderRequest {
     #[serde(rename = "IdpIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idp_identifiers: Option<Vec<String>>,
-    /// <p>The identity provider details, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>
+    /// <p><p>The identity provider details. The following list describes the provider detail keys for each identity provider type.</p> <ul> <li> <p>For Google, Facebook and Login with Amazon:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>authorize<em>scopes</p> </li> </ul> </li> <li> <p>For Sign in with Apple:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>team<em>id</p> </li> <li> <p>key</em>id</p> </li> <li> <p>private<em>key</p> </li> <li> <p>authorize</em>scopes</p> </li> </ul> </li> <li> <p>For OIDC providers:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>attributes<em>request</em>method</p> </li> <li> <p>oidc<em>issuer</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>authorize<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>token<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>attributes<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>jwks<em>uri <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>authorize_scopes</p> </li> </ul> </li> <li> <p>For SAML providers:</p> <ul> <li> <p>MetadataFile OR MetadataURL</p> </li> <li> <p>IDPSignout <i>optional</i> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "ProviderDetails")]
     pub provider_details: ::std::collections::HashMap<String, String>,
     /// <p>The identity provider name.</p>
@@ -1234,19 +1234,19 @@ pub struct CreateUserImportJobResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolClientRequest {
-    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
+    /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
-    /// <p>Set to <code>True</code> if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
+    /// <p>Set to true if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>. In addition to these values, custom scopes created in Resource Servers are also supported.</p>
+    /// <p>The allowed OAuth scopes. Possible values provided by OAuth are: <code>phone</code>, <code>email</code>, <code>openid</code>, and <code>profile</code>. Possible values provided by AWS are: <code>aws.cognito.signin.user.admin</code>. Custom scopes created in Resource Servers are also supported.</p>
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    /// <p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p>
+    /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
@@ -1273,7 +1273,7 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After January 1st 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prevent_user_existence_errors: Option<String>,
@@ -1411,6 +1411,10 @@ pub struct CreateUserPoolRequest {
     #[serde(rename = "UsernameAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username_attributes: Option<Vec<String>>,
+    /// <p>You can choose to set case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see .</p>
+    #[serde(rename = "UsernameConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username_configuration: Option<UsernameConfigurationType>,
     /// <p>The template for the verification message that the user sees when the app requests permission to access the user's information.</p>
     #[serde(rename = "VerificationMessageTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1830,6 +1834,10 @@ pub struct EventFeedbackType {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventRiskType {
+    /// <p>Indicates whether compromised credentials were detected during an authentication event.</p>
+    #[serde(rename = "CompromisedCredentialsDetected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compromised_credentials_detected: Option<bool>,
     /// <p>The risk decision.</p>
     #[serde(rename = "RiskDecision")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2180,7 +2188,7 @@ pub struct IdentityProviderType {
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// <p>The identity provider details, such as <code>MetadataURL</code> and <code>MetadataFile</code>.</p>
+    /// <p><p>The identity provider details. The following list describes the provider detail keys for each identity provider type.</p> <ul> <li> <p>For Google, Facebook and Login with Amazon:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>authorize<em>scopes</p> </li> </ul> </li> <li> <p>For Sign in with Apple:</p> <ul> <li> <p>client</em>id</p> </li> <li> <p>team<em>id</p> </li> <li> <p>key</em>id</p> </li> <li> <p>private<em>key</p> </li> <li> <p>authorize</em>scopes</p> </li> </ul> </li> <li> <p>For OIDC providers:</p> <ul> <li> <p>client<em>id</p> </li> <li> <p>client</em>secret</p> </li> <li> <p>attributes<em>request</em>method</p> </li> <li> <p>oidc<em>issuer</p> </li> <li> <p>authorize</em>scopes</p> </li> <li> <p>authorize<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>token<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>attributes<em>url <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>jwks<em>uri <i>if not available from discovery URL specified by oidc</em>issuer key</i> </p> </li> <li> <p>authorize_scopes</p> </li> </ul> </li> <li> <p>For SAML providers:</p> <ul> <li> <p>MetadataFile OR MetadataURL</p> </li> <li> <p>IDPSignOut <i>optional</i> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "ProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_details: Option<::std::collections::HashMap<String, String>>,
@@ -2956,7 +2964,7 @@ pub struct SchemaAttributeType {
     #[serde(rename = "AttributeDataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_data_type: Option<String>,
-    /// <p>Specifies whether the attribute type is developer only.</p>
+    /// <p><note> <p>We recommend that you use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserPoolClientType.html#CognitoUserPools-Type-UserPoolClientType-WriteAttributes">WriteAttributes</a> in the user pool client to control how attributes can be mutated for new use cases instead of using <code>DeveloperOnlyAttribute</code>.</p> </note> <p>Specifies whether the attribute type is developer only. This attribute can only be modified by an administrator. Users will not be able to modify this attribute using their access token. For example, <code>DeveloperOnlyAttribute</code> can be modified using the API but cannot be updated using the API.</p></p>
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
@@ -3510,19 +3518,19 @@ pub struct UpdateUserAttributesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolClientRequest {
-    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p>
+    /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
-    /// <p>Set to TRUE if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
+    /// <p>Set to true if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>. In addition to these values, custom scopes created in Resource Servers are also supported.</p>
+    /// <p>The allowed OAuth scopes. Possible values provided by OAuth are: <code>phone</code>, <code>email</code>, <code>openid</code>, and <code>profile</code>. Possible values provided by AWS are: <code>aws.cognito.signin.user.admin</code>. Custom scopes created in Resource Servers are also supported.</p>
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    /// <p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p>
+    /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
@@ -3549,7 +3557,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After January 1st 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prevent_user_existence_errors: Option<String>,
@@ -3785,19 +3793,19 @@ pub struct UserPoolClientDescription {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolClientType {
-    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
+    /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
-    /// <p>Set to TRUE if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
+    /// <p>Set to true if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows_user_pool_client: Option<bool>,
-    /// <p>A list of allowed <code>OAuth</code> scopes. Currently supported values are <code>"phone"</code>, <code>"email"</code>, <code>"openid"</code>, and <code>"Cognito"</code>. In addition to these values, custom scopes created in Resource Servers are also supported.</p>
+    /// <p>The allowed OAuth scopes. Possible values provided by OAuth are: <code>phone</code>, <code>email</code>, <code>openid</code>, and <code>profile</code>. Possible values provided by AWS are: <code>aws.cognito.signin.user.admin</code>. Custom scopes created in Resource Servers are also supported.</p>
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
-    /// <p>The Amazon Pinpoint analytics configuration for the user pool client.</p>
+    /// <p><p>The Amazon Pinpoint analytics configuration for the user pool client.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
@@ -3837,7 +3845,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "LogoutURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logout_ur_ls: Option<Vec<String>>,
-    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After January 1st 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
+    /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <p>This setting affects the behavior of following APIs:</p> <ul> <li> <p> <a>AdminInitiateAuth</a> </p> </li> <li> <p> <a>AdminRespondToAuthChallenge</a> </p> </li> <li> <p> <a>InitiateAuth</a> </p> </li> <li> <p> <a>RespondToAuthChallenge</a> </p> </li> <li> <p> <a>ForgotPassword</a> </p> </li> <li> <p> <a>ConfirmForgotPassword</a> </p> </li> <li> <p> <a>ConfirmSignUp</a> </p> </li> <li> <p> <a>ResendConfirmationCode</a> </p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prevent_user_existence_errors: Option<String>,
@@ -4022,6 +4030,10 @@ pub struct UserPoolType {
     #[serde(rename = "UsernameAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username_attributes: Option<Vec<String>>,
+    /// <p>You can choose to enable case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see .</p>
+    #[serde(rename = "UsernameConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username_configuration: Option<UsernameConfigurationType>,
     /// <p>The template for verification messages.</p>
     #[serde(rename = "VerificationMessageTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4060,6 +4072,14 @@ pub struct UserType {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+/// <p>The username configuration type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UsernameConfigurationType {
+    /// <p><p>Specifies whether username case sensitivity will be applied for all users in the user pool through Cognito APIs.</p> <p>Valid values include:</p> <ul> <li> <p> <b> <code>True</code> </b>: Enables case sensitivity for all username input. When this option is set to <code>True</code>, users must sign in using the exact capitalization of their given username. For example, “UserName”. This is the default value.</p> </li> <li> <p> <b> <code>False</code> </b>: Enables case insensitivity for all username input. For example, when this option is set to <code>False</code>, users will be able to sign in using either &quot;username&quot; or &quot;Username&quot;. This option also enables both <code>preferred_username</code> and <code>email</code> alias to be case insensitive, in addition to the <code>username</code> attribute.</p> </li> </ul></p>
+    #[serde(rename = "CaseSensitive")]
+    pub case_sensitive: bool,
 }
 
 /// <p>The template for verification messages.</p>
@@ -12387,7 +12407,7 @@ pub trait CognitoIdentityProvider {
         input: ForgetDeviceRequest,
     ) -> Result<(), RusotoError<ForgetDeviceError>>;
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. The method used to send the confirmation code is sent according to the specified AccountRecoverySetting. For more information, see <a href="">Recovering User Accounts</a> in the <i>Amazon Cognito Developer Guide</i>. If neither a verified phone number nor a verified email exists, an <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
     async fn forgot_password(
         &self,
         input: ForgotPasswordRequest,
@@ -14398,7 +14418,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         }
     }
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. The method used to send the confirmation code is sent according to the specified AccountRecoverySetting. For more information, see <a href="">Recovering User Accounts</a> in the <i>Amazon Cognito Developer Guide</i>. If neither a verified phone number nor a verified email exists, an <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
     async fn forgot_password(
         &self,
         input: ForgotPasswordRequest,

@@ -284,6 +284,10 @@ pub struct EncryptionConfig {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorRootCause {
+    /// <p>A flag that denotes that the root cause impacts the trace client.</p>
+    #[serde(rename = "ClientImpacting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_impacting: Option<bool>,
     /// <p>A list of services corresponding to an error. A service identifies a segment and it contains a name, account ID, type, and inferred flag.</p>
     #[serde(rename = "Services")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -360,6 +364,10 @@ pub struct ErrorStatistics {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaultRootCause {
+    /// <p>A flag that denotes that the root cause impacts the trace client.</p>
+    #[serde(rename = "ClientImpacting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_impacting: Option<bool>,
     /// <p>A list of corresponding services. A service identifies a segment and it contains a name, account ID, type, and inferred flag.</p>
     #[serde(rename = "Services")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -889,6 +897,10 @@ pub struct ResourceARNDetail {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResponseTimeRootCause {
+    /// <p>A flag that denotes that the root cause impacts the trace client.</p>
+    #[serde(rename = "ClientImpacting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_impacting: Option<bool>,
     /// <p>A list of corresponding services. A service identifies a segment and contains a name, account ID, type, and inferred flag.</p>
     #[serde(rename = "Services")]
     #[serde(skip_serializing_if = "Option::is_none")]

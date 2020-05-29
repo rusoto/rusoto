@@ -42,6 +42,7 @@ pub struct AdditionalAuthenticationProvider {
     pub user_pool_config: Option<CognitoUserPoolConfig>,
 }
 
+/// <p>The <code>ApiCache</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiCache {
@@ -320,6 +321,10 @@ pub struct CreateGraphqlApiRequest {
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
+    /// <p>A flag indicating whether to enable X-Ray tracing for the <code>GraphqlApi</code>.</p>
+    #[serde(rename = "xrayEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xray_enabled: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -670,6 +675,7 @@ pub struct GetApiCacheRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiCacheResponse {
+    /// <p>The <code>ApiCache</code> object.</p>
     #[serde(rename = "apiCache")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_cache: Option<ApiCache>,
@@ -864,6 +870,10 @@ pub struct GraphqlApi {
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
+    /// <p>A flag representing whether X-Ray tracing is enabled for this <code>GraphqlApi</code>.</p>
+    #[serde(rename = "xrayEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xray_enabled: Option<bool>,
 }
 
 /// <p>Describes an HTTP data source configuration.</p>
@@ -879,6 +889,7 @@ pub struct HttpDataSourceConfig {
     pub endpoint: Option<String>,
 }
 
+/// <p>The <code>LambdaConflictHandlerConfig</code> object when configuring LAMBDA as the Conflict Handler.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LambdaConflictHandlerConfig {
     /// <p>The Arn for the Lambda function to use as the Conflict Handler.</p>
@@ -1523,6 +1534,10 @@ pub struct UpdateGraphqlApiRequest {
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
+    /// <p>A flag indicating whether to enable X-Ray tracing for the <code>GraphqlApi</code>.</p>
+    #[serde(rename = "xrayEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xray_enabled: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

@@ -147,6 +147,18 @@ pub struct DeleteLifecyclePolicyOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteMetricPolicyInput {
+    /// <p>The name of the container that is associated with the metric policy that you want to delete.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteMetricPolicyOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContainerInput {
     /// <p>The name of the container to query.</p>
     #[serde(rename = "ContainerName")]
@@ -213,6 +225,22 @@ pub struct GetLifecyclePolicyOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetMetricPolicyInput {
+    /// <p>The name of the container that is associated with the metric policy.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetMetricPolicyOutput {
+    /// <p>The metric policy that is associated with the specific container.</p>
+    #[serde(rename = "MetricPolicy")]
+    pub metric_policy: MetricPolicy,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContainersInput {
     /// <p>Enter the maximum number of containers in the response. Use from 1 to 255 characters. </p>
     #[serde(rename = "MaxResults")]
@@ -251,6 +279,29 @@ pub struct ListTagsForResourceOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>The metric policy that is associated with the container. A metric policy allows AWS Elemental MediaStore to send metrics to Amazon CloudWatch. In the policy, you must indicate whether you want MediaStore to send container-level metrics. You can also include rules to define groups of objects that you want MediaStore to send object-level metrics for.</p> <p>To view examples of how to construct a metric policy for your use case, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/policies-metric-examples.html">Example Metric Policies</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MetricPolicy {
+    /// <p>A setting to enable or disable metrics at the container level.</p>
+    #[serde(rename = "ContainerLevelMetrics")]
+    pub container_level_metrics: String,
+    /// <p>A parameter that holds an array of rules that enable metrics at the object level. This parameter is optional, but if you choose to include it, you must also include at least one rule. By default, you can include up to five rules. You can also <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-1#!/services/mediastore/quotas">request a quota increase</a> to allow up to 300 rules per policy.</p>
+    #[serde(rename = "MetricPolicyRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_policy_rules: Option<Vec<MetricPolicyRule>>,
+}
+
+/// <p>A setting that enables metrics at the object level. Each rule contains an object group and an object group name. If the policy includes the MetricPolicyRules parameter, you must include at least one rule. Each metric policy can include up to five rules by default. You can also <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-1#!/services/mediastore/quotas">request a quota increase</a> to allow up to 300 rules per policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MetricPolicyRule {
+    /// <p>A path or file name that defines which objects to include in the group. Wildcards (*) are acceptable.</p>
+    #[serde(rename = "ObjectGroup")]
+    pub object_group: String,
+    /// <p>A name that allows you to refer to the object group.</p>
+    #[serde(rename = "ObjectGroupName")]
+    pub object_group_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -297,6 +348,21 @@ pub struct PutLifecyclePolicyInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecyclePolicyOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutMetricPolicyInput {
+    /// <p>The name of the container that you want to add the metric policy to.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+    /// <p><p>The metric policy that you want to associate with the container. In the policy, you must indicate whether you want MediaStore to send container-level metrics. You can also include up to five rules to define groups of objects that you want MediaStore to send object-level metrics for. If you include rules in the policy, construct each rule with both of the following:</p> <ul> <li> <p>An object group that defines which objects to include in the group. The definition can be a path or a file name, but it can&#39;t have more than 900 characters. Valid characters are: a-z, A-Z, 0-9, _ (underscore), = (equal), : (colon), . (period), - (hyphen), ~ (tilde), / (forward slash), and * (asterisk). Wildcards (*) are acceptable.</p> </li> <li> <p>An object group name that allows you to refer to the object group. The name can&#39;t have more than 30 characters. Valid characters are: a-z, A-Z, 0-9, and _ (underscore).</p> </li> </ul></p>
+    #[serde(rename = "MetricPolicy")]
+    pub metric_policy: MetricPolicy,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutMetricPolicyOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -610,6 +676,58 @@ impl fmt::Display for DeleteLifecyclePolicyError {
     }
 }
 impl Error for DeleteLifecyclePolicyError {}
+/// Errors returned by DeleteMetricPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteMetricPolicyError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The policy that you specified in the request does not exist.</p>
+    PolicyNotFound(String),
+}
+
+impl DeleteMetricPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMetricPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ContainerInUseException" => {
+                    return RusotoError::Service(DeleteMetricPolicyError::ContainerInUse(err.msg))
+                }
+                "ContainerNotFoundException" => {
+                    return RusotoError::Service(DeleteMetricPolicyError::ContainerNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteMetricPolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "PolicyNotFoundException" => {
+                    return RusotoError::Service(DeleteMetricPolicyError::PolicyNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteMetricPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteMetricPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            DeleteMetricPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteMetricPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteMetricPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteMetricPolicyError {}
 /// Errors returned by DescribeContainer
 #[derive(Debug, PartialEq)]
 pub enum DescribeContainerError {
@@ -800,6 +918,54 @@ impl fmt::Display for GetLifecyclePolicyError {
     }
 }
 impl Error for GetLifecyclePolicyError {}
+/// Errors returned by GetMetricPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetMetricPolicyError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The policy that you specified in the request does not exist.</p>
+    PolicyNotFound(String),
+}
+
+impl GetMetricPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ContainerInUseException" => {
+                    return RusotoError::Service(GetMetricPolicyError::ContainerInUse(err.msg))
+                }
+                "ContainerNotFoundException" => {
+                    return RusotoError::Service(GetMetricPolicyError::ContainerNotFound(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(GetMetricPolicyError::InternalServerError(err.msg))
+                }
+                "PolicyNotFoundException" => {
+                    return RusotoError::Service(GetMetricPolicyError::PolicyNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetMetricPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetMetricPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            GetMetricPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            GetMetricPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetMetricPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetMetricPolicyError {}
 /// Errors returned by ListContainers
 #[derive(Debug, PartialEq)]
 pub enum ListContainersError {
@@ -1010,6 +1176,48 @@ impl fmt::Display for PutLifecyclePolicyError {
     }
 }
 impl Error for PutLifecyclePolicyError {}
+/// Errors returned by PutMetricPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutMetricPolicyError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+}
+
+impl PutMetricPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMetricPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ContainerInUseException" => {
+                    return RusotoError::Service(PutMetricPolicyError::ContainerInUse(err.msg))
+                }
+                "ContainerNotFoundException" => {
+                    return RusotoError::Service(PutMetricPolicyError::ContainerNotFound(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(PutMetricPolicyError::InternalServerError(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutMetricPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutMetricPolicyError::ContainerInUse(ref cause) => write!(f, "{}", cause),
+            PutMetricPolicyError::ContainerNotFound(ref cause) => write!(f, "{}", cause),
+            PutMetricPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutMetricPolicyError {}
 /// Errors returned by StartAccessLogging
 #[derive(Debug, PartialEq)]
 pub enum StartAccessLoggingError {
@@ -1217,6 +1425,12 @@ pub trait MediaStore {
         input: DeleteLifecyclePolicyInput,
     ) -> Result<DeleteLifecyclePolicyOutput, RusotoError<DeleteLifecyclePolicyError>>;
 
+    /// <p>Deletes the metric policy that is associated with the specified container. If there is no metric policy associated with the container, MediaStore doesn't send metrics to CloudWatch.</p>
+    async fn delete_metric_policy(
+        &self,
+        input: DeleteMetricPolicyInput,
+    ) -> Result<DeleteMetricPolicyOutput, RusotoError<DeleteMetricPolicyError>>;
+
     /// <p>Retrieves the properties of the requested container. This request is commonly used to retrieve the endpoint of a container. An endpoint is a value assigned by the service when a new container is created. A container's endpoint does not change after it has been assigned. The <code>DescribeContainer</code> request returns a single <code>Container</code> object based on <code>ContainerName</code>. To return all <code>Container</code> objects that are associated with a specified AWS account, use <a>ListContainers</a>.</p>
     async fn describe_container(
         &self,
@@ -1240,6 +1454,12 @@ pub trait MediaStore {
         &self,
         input: GetLifecyclePolicyInput,
     ) -> Result<GetLifecyclePolicyOutput, RusotoError<GetLifecyclePolicyError>>;
+
+    /// <p>Returns the metric policy for the specified container. </p>
+    async fn get_metric_policy(
+        &self,
+        input: GetMetricPolicyInput,
+    ) -> Result<GetMetricPolicyOutput, RusotoError<GetMetricPolicyError>>;
 
     /// <p>Lists the properties of all containers in AWS Elemental MediaStore. </p> <p>You can query to receive all the containers in one response. Or you can include the <code>MaxResults</code> parameter to receive a limited number of containers in each response. In this case, the response includes a token. To get the next set of containers, send the command again, this time with the <code>NextToken</code> parameter (with the returned token as its value). The next set of responses appears, with a token if there are still more containers to receive. </p> <p>See also <a>DescribeContainer</a>, which gets the properties of one container. </p>
     async fn list_containers(
@@ -1270,6 +1490,12 @@ pub trait MediaStore {
         &self,
         input: PutLifecyclePolicyInput,
     ) -> Result<PutLifecyclePolicyOutput, RusotoError<PutLifecyclePolicyError>>;
+
+    /// <p>The metric policy that you want to add to the container. A metric policy allows AWS Elemental MediaStore to send metrics to Amazon CloudWatch. It takes up to 20 minutes for the new policy to take effect.</p>
+    async fn put_metric_policy(
+        &self,
+        input: PutMetricPolicyInput,
+    ) -> Result<PutMetricPolicyOutput, RusotoError<PutMetricPolicyError>>;
 
     /// <p>Starts access logging on the specified container. When you enable access logging on a container, MediaStore delivers access logs for objects stored in that container to Amazon CloudWatch Logs.</p>
     async fn start_access_logging(
@@ -1472,6 +1698,34 @@ impl MediaStore for MediaStoreClient {
         }
     }
 
+    /// <p>Deletes the metric policy that is associated with the specified container. If there is no metric policy associated with the container, MediaStore doesn't send metrics to CloudWatch.</p>
+    async fn delete_metric_policy(
+        &self,
+        input: DeleteMetricPolicyInput,
+    ) -> Result<DeleteMetricPolicyOutput, RusotoError<DeleteMetricPolicyError>> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.DeleteMetricPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteMetricPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteMetricPolicyError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves the properties of the requested container. This request is commonly used to retrieve the endpoint of a container. An endpoint is a value assigned by the service when a new container is created. A container's endpoint does not change after it has been assigned. The <code>DescribeContainer</code> request returns a single <code>Container</code> object based on <code>ContainerName</code>. To return all <code>Container</code> objects that are associated with a specified AWS account, use <a>ListContainers</a>.</p>
     async fn describe_container(
         &self,
@@ -1579,6 +1833,33 @@ impl MediaStore for MediaStoreClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetLifecyclePolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the metric policy for the specified container. </p>
+    async fn get_metric_policy(
+        &self,
+        input: GetMetricPolicyInput,
+    ) -> Result<GetMetricPolicyOutput, RusotoError<GetMetricPolicyError>> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.GetMetricPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetMetricPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMetricPolicyError::from_response(response))
         }
     }
 
@@ -1717,6 +1998,33 @@ impl MediaStore for MediaStoreClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutLifecyclePolicyError::from_response(response))
+        }
+    }
+
+    /// <p>The metric policy that you want to add to the container. A metric policy allows AWS Elemental MediaStore to send metrics to Amazon CloudWatch. It takes up to 20 minutes for the new policy to take effect.</p>
+    async fn put_metric_policy(
+        &self,
+        input: PutMetricPolicyInput,
+    ) -> Result<PutMetricPolicyOutput, RusotoError<PutMetricPolicyError>> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.PutMetricPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutMetricPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutMetricPolicyError::from_response(response))
         }
     }
 

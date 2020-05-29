@@ -513,11 +513,11 @@ pub struct CreateIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The connection ID.</p>
+    /// <p>The ID of the VPC link for a private integration. Supported only for HTTP APIs.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -537,10 +537,10 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     pub integration_type: String,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
@@ -548,7 +548,7 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
@@ -569,10 +569,14 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds for WebSocket APIs and between 50 and 30,000 milliseconds for HTTP APIs. The default timeout is 29 seconds for WebSocket APIs and 30 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+    #[serde(rename = "TlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfigInput>,
 }
 
 /// <p>Creates a new IntegrationResponse resource to represent an integration response.</p>
@@ -642,11 +646,11 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "ApiGatewayManaged")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_managed: Option<bool>,
-    /// <p>The connection ID.</p>
+    /// <p>The ID of the VPC link for a private integration. Supported only for HTTP APIs.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -674,11 +678,11 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
@@ -686,7 +690,7 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
@@ -707,10 +711,14 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds for WebSocket APIs and between 50 and 30,000 milliseconds for HTTP APIs. The default timeout is 29 seconds for WebSocket APIs and 30 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+    #[serde(rename = "TlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
 }
 
 /// <p>Creates a new Model.</p>
@@ -960,7 +968,7 @@ pub struct CreateStageRequest {
     /// <p>The name of the stage.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -1021,7 +1029,7 @@ pub struct CreateStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -1029,6 +1037,78 @@ pub struct CreateStageResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Creates a VPC link</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateVpcLinkRequest {
+    /// <p>The name of the VPC link.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A list of security group IDs for the VPC link.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of subnet IDs to include in the VPC link.</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>A list of tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateVpcLinkResponse {
+    /// <p>The timestamp when the VPC link was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The name of the VPC link.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of security group IDs for the VPC link.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of subnet IDs to include in the VPC link.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>Tags for the VPC link.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_id: Option<String>,
+    /// <p>The status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status: Option<String>,
+    /// <p>A message summarizing the cause of the status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status_message: Option<String>,
+    /// <p>The version of the VPC link.</p>
+    #[serde(rename = "VpcLinkVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAccessLogSettingsRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>The stage name. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
+    #[serde(rename = "StageName")]
+    pub stage_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1137,6 +1217,20 @@ pub struct DeleteRouteRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteRouteRequestParameterRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>The route request parameter key.</p>
+    #[serde(rename = "RequestParameterKey")]
+    pub request_parameter_key: String,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    pub route_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteResponseRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1173,6 +1267,18 @@ pub struct DeleteStageRequest {
     #[serde(rename = "StageName")]
     pub stage_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteVpcLinkRequest {
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    pub vpc_link_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteVpcLinkResponse {}
 
 /// <p>An immutable representation of an API that can be called by users. A Deployment must be associated with a Stage for it to be callable over the internet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1264,6 +1370,37 @@ pub struct DomainNameConfiguration {
     #[serde(rename = "SecurityPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_policy: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportApiRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>The version of the API Gateway export algorithm. API Gateway uses the latest version by default. Currently, the only supported version is 1.0.</p>
+    #[serde(rename = "ExportVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_version: Option<String>,
+    /// <p>Specifies whether to include <a href="https://docs.aws.amazon.com//apigateway/latest/developerguide/api-gateway-swagger-extensions.html">API Gateway extensions</a> in the exported API definition. API Gateway extensions are included by default.</p>
+    #[serde(rename = "IncludeExtensions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_extensions: Option<bool>,
+    /// <p>The output type of the exported definition file. Valid values are JSON and YAML.</p>
+    #[serde(rename = "OutputType")]
+    pub output_type: String,
+    /// <p>The version of the API specification to use. OAS30, for OpenAPI 3.0, is the only supported value.</p>
+    #[serde(rename = "Specification")]
+    pub specification: String,
+    /// <p>The name of the API stage to export. If you don't specify this property, a representation of the latest API configuration is exported.</p>
+    #[serde(rename = "StageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExportApiResponse {
+    pub body: Option<bytes::Bytes>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1721,11 +1858,11 @@ pub struct GetIntegrationResult {
     #[serde(rename = "ApiGatewayManaged")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_managed: Option<bool>,
-    /// <p>The connection ID.</p>
+    /// <p>The ID of the VPC link for a private integration. Supported only for HTTP APIs.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -1753,11 +1890,11 @@ pub struct GetIntegrationResult {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
@@ -1765,7 +1902,7 @@ pub struct GetIntegrationResult {
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
@@ -1786,10 +1923,14 @@ pub struct GetIntegrationResult {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds for WebSocket APIs and between 50 and 30,000 milliseconds for HTTP APIs. The default timeout is 29 seconds for WebSocket APIs and 30 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+    #[serde(rename = "TlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2136,7 +2277,7 @@ pub struct GetStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -2187,21 +2328,97 @@ pub struct GetTagsRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsResponse {
     #[serde(rename = "Tags")]
-    pub tags: ::std::collections::HashMap<String, String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetVpcLinkRequest {
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    pub vpc_link_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetVpcLinkResponse {
+    /// <p>The timestamp when the VPC link was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The name of the VPC link.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of security group IDs for the VPC link.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of subnet IDs to include in the VPC link.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>Tags for the VPC link.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_id: Option<String>,
+    /// <p>The status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status: Option<String>,
+    /// <p>A message summarizing the cause of the status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status_message: Option<String>,
+    /// <p>The version of the VPC link.</p>
+    #[serde(rename = "VpcLinkVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetVpcLinksRequest {
+    /// <p>The maximum number of elements to be returned for this resource.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<String>,
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetVpcLinksResponse {
+    /// <p>A collection of VPC links.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<VpcLink>>,
+    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportApiRequest {
-    /// <p>Represents the base path of the imported API. Supported only for HTTP APIs.</p>
+    /// <p>Specifies how to interpret the base path of the API during import. Valid values are ignore, prepend, and split. The default value is ignore. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-import-api-basePath.html">Set the OpenAPI basePath Property</a>. Supported only for HTTP APIs.</p>
     #[serde(rename = "Basepath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basepath: Option<String>,
     /// <p>The OpenAPI definition. Supported only for HTTP APIs.</p>
     #[serde(rename = "Body")]
     pub body: String,
-    /// <p>Specifies whether to rollback the API creation (true) or not (false) when a warning is encountered. The default value is false.</p>
+    /// <p>Specifies whether to rollback the API creation when a warning is encountered. By default, API creation continues if a warning is encountered.</p>
     #[serde(rename = "FailOnWarnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fail_on_warnings: Option<bool>,
@@ -2276,11 +2493,11 @@ pub struct Integration {
     #[serde(rename = "ApiGatewayManaged")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_managed: Option<bool>,
-    /// <p>The connection ID.</p>
+    /// <p>The ID of the VPC link for a private integration. Supported only for HTTP APIs.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -2308,11 +2525,11 @@ pub struct Integration {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
@@ -2320,7 +2537,7 @@ pub struct Integration {
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
@@ -2341,10 +2558,14 @@ pub struct Integration {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds for WebSocket APIs and between 50 and 30,000 milliseconds for HTTP APIs. The default timeout is 29 seconds for WebSocket APIs and 30 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+    #[serde(rename = "TlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
 }
 
 /// <p>Represents an integration response.</p>
@@ -2431,14 +2652,14 @@ pub struct ReimportApiRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Represents the base path of the imported API. Supported only for HTTP APIs.</p>
+    /// <p>Specifies how to interpret the base path of the API during import. Valid values are ignore, prepend, and split. The default value is ignore. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-import-api-basePath.html">Set the OpenAPI basePath Property</a>. Supported only for HTTP APIs.</p>
     #[serde(rename = "Basepath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basepath: Option<String>,
     /// <p>The OpenAPI definition. Supported only for HTTP APIs.</p>
     #[serde(rename = "Body")]
     pub body: String,
-    /// <p>Specifies whether to rollback the API creation (true) or not (false) when a warning is encountered. The default value is false.</p>
+    /// <p>Specifies whether to rollback the API creation when a warning is encountered. By default, API creation continues if a warning is encountered.</p>
     #[serde(rename = "FailOnWarnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fail_on_warnings: Option<bool>,
@@ -2602,11 +2823,11 @@ pub struct RouteSettings {
     #[serde(rename = "LoggingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_level: Option<String>,
-    /// <p>Specifies the throttling burst limit. Supported only for WebSocket APIs.</p>
+    /// <p>Specifies the throttling burst limit.</p>
     #[serde(rename = "ThrottlingBurstLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub throttling_burst_limit: Option<i64>,
-    /// <p>Specifies the throttling rate limit. Supported only for WebSocket APIs.</p>
+    /// <p>Specifies the throttling rate limit.</p>
     #[serde(rename = "ThrottlingRateLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub throttling_rate_limit: Option<f64>,
@@ -2663,7 +2884,7 @@ pub struct Stage {
     /// <p>The name of the stage.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -2690,14 +2911,33 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TlsConfig {
+    /// <p>If you specify a server name, API Gateway uses it to verify the hostname on the integration's certificate. The server name is also included in the TLS handshake to support Server Name Indication (SNI) or virtual hosting.</p>
+    #[serde(rename = "ServerNameToVerify")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_name_to_verify: Option<String>,
+}
+
+/// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TlsConfigInput {
+    /// <p>If you specify a server name, API Gateway uses it to verify the hostname on the integration's certificate. The server name is also included in the TLS handshake to support Server Name Indication (SNI) or virtual hosting.</p>
+    #[serde(rename = "ServerNameToVerify")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_name_to_verify: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The resource ARN for the tag.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <pre><code>        &lt;p&gt;The Tag keys to delete.&lt;/p&gt;
-    /// </code></pre>
+    /// <p>The Tag keys to delete</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -3029,11 +3269,11 @@ pub struct UpdateIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The connection ID.</p>
+    /// <p>The ID of the VPC link for a private integration. Supported only for HTTP APIs.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -3056,11 +3296,11 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
@@ -3068,7 +3308,7 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
@@ -3089,10 +3329,14 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds for WebSocket APIs and between 50 and 30,000 milliseconds for HTTP APIs. The default timeout is 29 seconds for WebSocket APIs and 30 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+    #[serde(rename = "TlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfigInput>,
 }
 
 /// <p>Updates an IntegrationResponses.</p>
@@ -3173,11 +3417,11 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "ApiGatewayManaged")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_managed: Option<bool>,
-    /// <p>The connection ID.</p>
+    /// <p>The ID of the VPC link for a private integration. Supported only for HTTP APIs.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. Currently the only valid value is INTERNET, for connections through the public routable internet.</p>
+    /// <p>The type of the network connection to the integration endpoint. Specify INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and resources in a VPC. The default value is INTERNET.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -3205,11 +3449,11 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
@@ -3217,7 +3461,7 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs. Currently, the only supported value is 1.0.</p>
+    /// <p>Specifies the format of the payload sent to an integration. Required for HTTP APIs.</p>
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
@@ -3238,10 +3482,14 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds for WebSocket APIs. The default value is 5,000 milliseconds, or 5 seconds for HTTP APIs.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds for WebSocket APIs and between 50 and 30,000 milliseconds for HTTP APIs. The default timeout is 29 seconds for WebSocket APIs and 30 seconds for HTTP APIs.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
+    #[serde(rename = "TlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
 }
 
 /// <p>Updates a Model.</p>
@@ -3504,7 +3752,7 @@ pub struct UpdateStageRequest {
     /// <p>The stage name. Stage names can only contain alphanumeric characters, hyphens, and underscores. Maximum length is 128 characters.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -3561,7 +3809,7 @@ pub struct UpdateStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+. Supported only for WebSocket APIs.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&amp;=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -3569,6 +3817,98 @@ pub struct UpdateStageResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Updates a VPC link.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateVpcLinkRequest {
+    /// <p>The name of the VPC link.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    pub vpc_link_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateVpcLinkResponse {
+    /// <p>The timestamp when the VPC link was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The name of the VPC link.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of security group IDs for the VPC link.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of subnet IDs to include in the VPC link.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>Tags for the VPC link.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_id: Option<String>,
+    /// <p>The status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status: Option<String>,
+    /// <p>A message summarizing the cause of the status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status_message: Option<String>,
+    /// <p>The version of the VPC link.</p>
+    #[serde(rename = "VpcLinkVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_version: Option<String>,
+}
+
+/// <p>Represents a VPC link.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VpcLink {
+    /// <p>The timestamp when the VPC link was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The name of the VPC link.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A list of security group IDs for the VPC link.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    pub security_group_ids: Vec<String>,
+    /// <p>A list of subnet IDs to include in the VPC link.</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>Tags for the VPC link.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ID of the VPC link.</p>
+    #[serde(rename = "VpcLinkId")]
+    pub vpc_link_id: String,
+    /// <p>The status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status: Option<String>,
+    /// <p>A message summarizing the cause of the status of the VPC link.</p>
+    #[serde(rename = "VpcLinkStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_status_message: Option<String>,
+    /// <p>The version of the VPC link.</p>
+    #[serde(rename = "VpcLinkVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_link_version: Option<String>,
 }
 
 /// Errors returned by CreateApi
@@ -4108,6 +4448,80 @@ impl fmt::Display for CreateStageError {
     }
 }
 impl Error for CreateStageError {}
+/// Errors returned by CreateVpcLink
+#[derive(Debug, PartialEq)]
+pub enum CreateVpcLinkError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl CreateVpcLinkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVpcLinkError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateVpcLinkError::BadRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateVpcLinkError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateVpcLinkError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateVpcLinkError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateVpcLinkError {}
+/// Errors returned by DeleteAccessLogSettings
+#[derive(Debug, PartialEq)]
+pub enum DeleteAccessLogSettingsError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteAccessLogSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessLogSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteAccessLogSettingsError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteAccessLogSettingsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAccessLogSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAccessLogSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAccessLogSettingsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAccessLogSettingsError {}
 /// Errors returned by DeleteApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiError {
@@ -4478,6 +4892,48 @@ impl fmt::Display for DeleteRouteError {
     }
 }
 impl Error for DeleteRouteError {}
+/// Errors returned by DeleteRouteRequestParameter
+#[derive(Debug, PartialEq)]
+pub enum DeleteRouteRequestParameterError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteRouteRequestParameterError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteRouteRequestParameterError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteRouteRequestParameterError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteRouteRequestParameterError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteRouteRequestParameterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteRouteRequestParameterError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRouteRequestParameterError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteRouteRequestParameterError {}
 /// Errors returned by DeleteRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteResponseError {
@@ -4586,6 +5042,84 @@ impl fmt::Display for DeleteStageError {
     }
 }
 impl Error for DeleteStageError {}
+/// Errors returned by DeleteVpcLink
+#[derive(Debug, PartialEq)]
+pub enum DeleteVpcLinkError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteVpcLinkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVpcLinkError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteVpcLinkError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteVpcLinkError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteVpcLinkError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteVpcLinkError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteVpcLinkError {}
+/// Errors returned by ExportApi
+#[derive(Debug, PartialEq)]
+pub enum ExportApiError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl ExportApiError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportApiError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ExportApiError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ExportApiError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ExportApiError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportApiError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportApiError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ExportApiError::NotFound(ref cause) => write!(f, "{}", cause),
+            ExportApiError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExportApiError {}
 /// Errors returned by GetApi
 #[derive(Debug, PartialEq)]
 pub enum GetApiError {
@@ -5536,6 +6070,78 @@ impl fmt::Display for GetTagsError {
     }
 }
 impl Error for GetTagsError {}
+/// Errors returned by GetVpcLink
+#[derive(Debug, PartialEq)]
+pub enum GetVpcLinkError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl GetVpcLinkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVpcLinkError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(GetVpcLinkError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetVpcLinkError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetVpcLinkError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetVpcLinkError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetVpcLinkError {}
+/// Errors returned by GetVpcLinks
+#[derive(Debug, PartialEq)]
+pub enum GetVpcLinksError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl GetVpcLinksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVpcLinksError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetVpcLinksError::BadRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetVpcLinksError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetVpcLinksError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetVpcLinksError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVpcLinksError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetVpcLinksError {}
 /// Errors returned by ImportApi
 #[derive(Debug, PartialEq)]
 pub enum ImportApiError {
@@ -6260,6 +6866,48 @@ impl fmt::Display for UpdateStageError {
     }
 }
 impl Error for UpdateStageError {}
+/// Errors returned by UpdateVpcLink
+#[derive(Debug, PartialEq)]
+pub enum UpdateVpcLinkError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateVpcLinkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVpcLinkError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateVpcLinkError::BadRequest(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateVpcLinkError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateVpcLinkError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateVpcLinkError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateVpcLinkError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVpcLinkError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVpcLinkError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateVpcLinkError {}
 /// Trait representing the capabilities of the AmazonApiGatewayV2 API. AmazonApiGatewayV2 clients implement this trait.
 #[async_trait]
 pub trait ApiGatewayV2 {
@@ -6329,6 +6977,18 @@ pub trait ApiGatewayV2 {
         input: CreateStageRequest,
     ) -> Result<CreateStageResponse, RusotoError<CreateStageError>>;
 
+    /// <p>Creates a VPC link.</p>
+    async fn create_vpc_link(
+        &self,
+        input: CreateVpcLinkRequest,
+    ) -> Result<CreateVpcLinkResponse, RusotoError<CreateVpcLinkError>>;
+
+    /// <p>Deletes the AccessLogSettings for a Stage. To disable access logging for a Stage, delete its AccessLogSettings.</p>
+    async fn delete_access_log_settings(
+        &self,
+        input: DeleteAccessLogSettingsRequest,
+    ) -> Result<(), RusotoError<DeleteAccessLogSettingsError>>;
+
     /// <p>Deletes an Api resource.</p>
     async fn delete_api(&self, input: DeleteApiRequest) -> Result<(), RusotoError<DeleteApiError>>;
 
@@ -6386,6 +7046,12 @@ pub trait ApiGatewayV2 {
         input: DeleteRouteRequest,
     ) -> Result<(), RusotoError<DeleteRouteError>>;
 
+    /// <p>Deletes a route request parameter.</p>
+    async fn delete_route_request_parameter(
+        &self,
+        input: DeleteRouteRequestParameterRequest,
+    ) -> Result<(), RusotoError<DeleteRouteRequestParameterError>>;
+
     /// <p>Deletes a RouteResponse.</p>
     async fn delete_route_response(
         &self,
@@ -6403,6 +7069,17 @@ pub trait ApiGatewayV2 {
         &self,
         input: DeleteStageRequest,
     ) -> Result<(), RusotoError<DeleteStageError>>;
+
+    /// <p>Deletes a VPC link.</p>
+    async fn delete_vpc_link(
+        &self,
+        input: DeleteVpcLinkRequest,
+    ) -> Result<DeleteVpcLinkResponse, RusotoError<DeleteVpcLinkError>>;
+
+    async fn export_api(
+        &self,
+        input: ExportApiRequest,
+    ) -> Result<ExportApiResponse, RusotoError<ExportApiError>>;
 
     /// <p>Gets an Api resource.</p>
     async fn get_api(
@@ -6548,6 +7225,18 @@ pub trait ApiGatewayV2 {
         input: GetTagsRequest,
     ) -> Result<GetTagsResponse, RusotoError<GetTagsError>>;
 
+    /// <p>Gets a VPC link.</p>
+    async fn get_vpc_link(
+        &self,
+        input: GetVpcLinkRequest,
+    ) -> Result<GetVpcLinkResponse, RusotoError<GetVpcLinkError>>;
+
+    /// <p>Gets a collection of VPC links.</p>
+    async fn get_vpc_links(
+        &self,
+        input: GetVpcLinksRequest,
+    ) -> Result<GetVpcLinksResponse, RusotoError<GetVpcLinksError>>;
+
     /// <p>Imports an API.</p>
     async fn import_api(
         &self,
@@ -6637,6 +7326,12 @@ pub trait ApiGatewayV2 {
         &self,
         input: UpdateStageRequest,
     ) -> Result<UpdateStageResponse, RusotoError<UpdateStageError>>;
+
+    /// <p>Updates a VPC link.</p>
+    async fn update_vpc_link(
+        &self,
+        input: UpdateVpcLinkRequest,
+    ) -> Result<UpdateVpcLinkResponse, RusotoError<UpdateVpcLinkError>>;
 }
 /// A client for the AmazonApiGatewayV2 API.
 #[derive(Clone)]
@@ -7020,6 +7715,66 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    /// <p>Creates a VPC link.</p>
+    async fn create_vpc_link(
+        &self,
+        input: CreateVpcLinkRequest,
+    ) -> Result<CreateVpcLinkResponse, RusotoError<CreateVpcLinkError>> {
+        let request_uri = "/v2/vpclinks";
+
+        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVpcLinkResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateVpcLinkError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the AccessLogSettings for a Stage. To disable access logging for a Stage, delete its AccessLogSettings.</p>
+    async fn delete_access_log_settings(
+        &self,
+        input: DeleteAccessLogSettingsRequest,
+    ) -> Result<(), RusotoError<DeleteAccessLogSettingsError>> {
+        let request_uri = format!(
+            "/v2/apis/{api_id}/stages/{stage_name}/accesslogsettings",
+            api_id = input.api_id,
+            stage_name = input.stage_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAccessLogSettingsError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an Api resource.</p>
     async fn delete_api(&self, input: DeleteApiRequest) -> Result<(), RusotoError<DeleteApiError>> {
         let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
@@ -7304,6 +8059,37 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    /// <p>Deletes a route request parameter.</p>
+    async fn delete_route_request_parameter(
+        &self,
+        input: DeleteRouteRequestParameterRequest,
+    ) -> Result<(), RusotoError<DeleteRouteRequestParameterError>> {
+        let request_uri = format!(
+            "/v2/apis/{api_id}/routes/{route_id}/requestparameters/{request_parameter_key}",
+            api_id = input.api_id,
+            request_parameter_key = input.request_parameter_key,
+            route_id = input.route_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRouteRequestParameterError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a RouteResponse.</p>
     async fn delete_route_response(
         &self,
@@ -7393,6 +8179,80 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteStageError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a VPC link.</p>
+    async fn delete_vpc_link(
+        &self,
+        input: DeleteVpcLinkRequest,
+    ) -> Result<DeleteVpcLinkResponse, RusotoError<DeleteVpcLinkError>> {
+        let request_uri = format!(
+            "/v2/vpclinks/{vpc_link_id}",
+            vpc_link_id = input.vpc_link_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVpcLinkResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVpcLinkError::from_response(response))
+        }
+    }
+
+    async fn export_api(
+        &self,
+        input: ExportApiRequest,
+    ) -> Result<ExportApiResponse, RusotoError<ExportApiError>> {
+        let request_uri = format!(
+            "/v2/apis/{api_id}/exports/{specification}",
+            api_id = input.api_id,
+            specification = input.specification
+        );
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.export_version {
+            params.put("exportVersion", x);
+        }
+        if let Some(ref x) = input.include_extensions {
+            params.put("includeExtensions", x);
+        }
+        params.put("outputType", &input.output_type);
+        if let Some(ref x) = input.stage_name {
+            params.put("stageName", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+
+            let mut result = ExportApiResponse::default();
+            result.body = Some(response.body);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ExportApiError::from_response(response))
         }
     }
 
@@ -8194,6 +9054,72 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    /// <p>Gets a VPC link.</p>
+    async fn get_vpc_link(
+        &self,
+        input: GetVpcLinkRequest,
+    ) -> Result<GetVpcLinkResponse, RusotoError<GetVpcLinkError>> {
+        let request_uri = format!(
+            "/v2/vpclinks/{vpc_link_id}",
+            vpc_link_id = input.vpc_link_id
+        );
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVpcLinkResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVpcLinkError::from_response(response))
+        }
+    }
+
+    /// <p>Gets a collection of VPC links.</p>
+    async fn get_vpc_links(
+        &self,
+        input: GetVpcLinksRequest,
+    ) -> Result<GetVpcLinksResponse, RusotoError<GetVpcLinksError>> {
+        let request_uri = "/v2/vpclinks";
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVpcLinksResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVpcLinksError::from_response(response))
+        }
+    }
+
     /// <p>Imports an API.</p>
     async fn import_api(
         &self,
@@ -8698,6 +9624,39 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateStageError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a VPC link.</p>
+    async fn update_vpc_link(
+        &self,
+        input: UpdateVpcLinkRequest,
+    ) -> Result<UpdateVpcLinkResponse, RusotoError<UpdateVpcLinkError>> {
+        let request_uri = format!(
+            "/v2/vpclinks/{vpc_link_id}",
+            vpc_link_id = input.vpc_link_id
+        );
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVpcLinkResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVpcLinkError::from_response(response))
         }
     }
 }

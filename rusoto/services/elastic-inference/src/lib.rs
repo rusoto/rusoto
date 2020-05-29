@@ -12,7 +12,7 @@
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
-//! <p>Elastic Inference public APIs.</p>
+//! <p> Elastic Inference public APIs. </p>
 //!
 //! If you're using the service, you're probably looking for [ElasticInferenceClient](struct.ElasticInferenceClient.html) and [ElasticInference](trait.ElasticInference.html).
 

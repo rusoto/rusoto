@@ -25,6 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiscovererRequest {
@@ -77,6 +78,7 @@ pub struct CreateRegistryRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
     /// <p>Tags to associate with the registry.</p>
@@ -109,20 +111,24 @@ pub struct CreateRegistryResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
+    /// <p>The source of the schema definition.</p>
     #[serde(rename = "Content")]
     pub content: String,
     /// <p>A description of the schema.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
     /// <p>Tags associated with the schema.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The type of schema.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -166,6 +172,7 @@ pub struct CreateSchemaResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDiscovererRequest {
+    /// <p>The ID of the discoverer.</p>
     #[serde(rename = "DiscovererId")]
     pub discoverer_id: String,
 }
@@ -173,15 +180,27 @@ pub struct DeleteDiscovererRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistryRequest {
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteResourcePolicyRequest {
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
 }
@@ -189,10 +208,13 @@ pub struct DeleteSchemaRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaVersionRequest {
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
+    /// <p>The version number of the schema</p>
     #[serde(rename = "SchemaVersion")]
     pub schema_version: String,
 }
@@ -200,12 +222,16 @@ pub struct DeleteSchemaVersionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeBindingRequest {
+    /// <p>The language of the code binding.</p>
     #[serde(rename = "Language")]
     pub language: String,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
+    /// <p>Specifying this limits the results to only this schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
@@ -235,6 +261,7 @@ pub struct DescribeCodeBindingResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDiscovererRequest {
+    /// <p>The ID of the discoverer.</p>
     #[serde(rename = "DiscovererId")]
     pub discoverer_id: String,
 }
@@ -271,6 +298,7 @@ pub struct DescribeDiscovererResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegistryRequest {
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
 }
@@ -299,10 +327,13 @@ pub struct DescribeRegistryResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemaRequest {
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
+    /// <p>Specifying this limits the results to only this schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
@@ -311,6 +342,7 @@ pub struct DescribeSchemaRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemaResponse {
+    /// <p>The source of the schema definition.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
@@ -363,6 +395,7 @@ pub struct DiscovererSummary {
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
+    /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -375,12 +408,16 @@ pub struct DiscovererSummary {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCodeBindingSourceRequest {
+    /// <p>The language of the code binding.</p>
     #[serde(rename = "Language")]
     pub language: String,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
+    /// <p>Specifying this limits the results to only this schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
@@ -394,7 +431,7 @@ pub struct GetCodeBindingSourceResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoveredSchemaRequest {
-    /// <p>An array of strings that</p>
+    /// <p>An array of strings where each string is a JSON event. These are the events that were used to generate the schema. The array includes a single type of event and has a maximum size of 10 events.</p>
     #[serde(rename = "Events")]
     pub events: Vec<String>,
     /// <p>The type of event.</p>
@@ -405,6 +442,7 @@ pub struct GetDiscoveredSchemaRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoveredSchemaResponse {
+    /// <p>The source of the schema definition.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
@@ -412,16 +450,41 @@ pub struct GetDiscoveredSchemaResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetResourcePolicyRequest {
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetResourcePolicyResponse {
+    /// <p>The resource-based policy.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The revision ID.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoverersRequest {
+    /// <p>Specifying this limits the results to only those discoverer IDs that start with the specified prefix.</p>
     #[serde(rename = "DiscovererIdPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub discoverer_id_prefix: Option<String>,
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The token that specifies the next page of results to return. To request the first page, leave NextToken empty. The token will expire in 24 hours, and cannot be shared with other accounts.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Specifying this limits the results to only those ARNs that start with the specified prefix.</p>
     #[serde(rename = "SourceArnPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn_prefix: Option<String>,
@@ -446,12 +509,15 @@ pub struct ListRegistriesRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The token that specifies the next page of results to return. To request the first page, leave NextToken empty. The token will expire in 24 hours, and cannot be shared with other accounts.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Specifying this limits the results to only those registry names that start with the specified prefix.</p>
     #[serde(rename = "RegistryNamePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_name_prefix: Option<String>,
+    /// <p>Can be set to Local or AWS to limit responses to your custom registries, or the ones provided by AWS.</p>
     #[serde(rename = "Scope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
@@ -476,11 +542,14 @@ pub struct ListSchemaVersionsRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The token that specifies the next page of results to return. To request the first page, leave NextToken empty. The token will expire in 24 hours, and cannot be shared with other accounts.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
 }
@@ -504,11 +573,14 @@ pub struct ListSchemasRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The token that specifies the next page of results to return. To request the first page, leave NextToken empty. The token will expire in 24 hours, and cannot be shared with other accounts.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>Specifying this limits the results to only those schema names that start with the specified prefix.</p>
     #[serde(rename = "SchemaNamePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_name_prefix: Option<String>,
@@ -530,6 +602,7 @@ pub struct ListSchemasResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
+    /// <p>The ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -538,41 +611,23 @@ pub struct ListTagsForResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
-    pub tags: ::std::collections::HashMap<String, String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct LockServiceLinkedRoleRequest {
-    #[serde(rename = "RoleArn")]
-    pub role_arn: String,
-    #[serde(rename = "Timeout")]
-    pub timeout: i64,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct LockServiceLinkedRoleResponse {
-    #[serde(rename = "CanBeDeleted")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub can_be_deleted: Option<bool>,
-    #[serde(rename = "ReasonOfFailure")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub reason_of_failure: Option<String>,
-    #[serde(rename = "RelatedResources")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub related_resources: Option<Vec<DiscovererSummary>>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutCodeBindingRequest {
+    /// <p>The language of the code binding.</p>
     #[serde(rename = "Language")]
     pub language: String,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
+    /// <p>Specifying this limits the results to only this schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
@@ -597,6 +652,36 @@ pub struct PutCodeBindingResponse {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>The name of the policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutResourcePolicyRequest {
+    /// <p>The resource-based policy.</p>
+    #[serde(rename = "Policy")]
+    pub policy: String,
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_name: Option<String>,
+    /// <p>The revision ID of the policy.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutResourcePolicyResponse {
+    /// <p>The resource-based policy.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The revision ID of the policy.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -683,6 +768,7 @@ pub struct SearchSchemaSummary {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSchemaVersionSummary {
+    /// <p>The date the schema version was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
@@ -695,14 +781,17 @@ pub struct SearchSchemaVersionSummary {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSchemasRequest {
+    /// <p>Specifying this limits the results to only schemas that include the provided keywords.</p>
     #[serde(rename = "Keywords")]
     pub keywords: String,
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The token that specifies the next page of results to return. To request the first page, leave NextToken empty. The token will expire in 24 hours, and cannot be shared with other accounts.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
 }
@@ -723,6 +812,7 @@ pub struct SearchSchemasResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDiscovererRequest {
+    /// <p>The ID of the discoverer.</p>
     #[serde(rename = "DiscovererId")]
     pub discoverer_id: String,
 }
@@ -743,6 +833,7 @@ pub struct StartDiscovererResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDiscovererRequest {
+    /// <p>The ID of the discoverer.</p>
     #[serde(rename = "DiscovererId")]
     pub discoverer_id: String,
 }
@@ -760,31 +851,25 @@ pub struct StopDiscovererResponse {
     pub state: Option<String>,
 }
 
+/// <p></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
+    /// <p>The ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
+    /// <p>Tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct UnlockServiceLinkedRoleRequest {
-    #[serde(rename = "RoleArn")]
-    pub role_arn: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct UnlockServiceLinkedRoleResponse {}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
+    /// <p>The ARN of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
+    /// <p>Keys of key-value pairs.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -796,6 +881,7 @@ pub struct UpdateDiscovererRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The ID of the discoverer.</p>
     #[serde(rename = "DiscovererId")]
     pub discoverer_id: String,
 }
@@ -829,6 +915,7 @@ pub struct UpdateDiscovererResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Updates the registry.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegistryRequest {
@@ -836,6 +923,7 @@ pub struct UpdateRegistryRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
 }
@@ -876,8 +964,10 @@ pub struct UpdateSchemaRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The name of the registry.</p>
     #[serde(rename = "RegistryName")]
     pub registry_name: String,
+    /// <p>The name of the schema.</p>
     #[serde(rename = "SchemaName")]
     pub schema_name: String,
     /// <p>The schema type for the events schema.</p>
@@ -1209,6 +1299,69 @@ impl fmt::Display for DeleteRegistryError {
     }
 }
 impl Error for DeleteRegistryError {}
+/// Errors returned by DeleteResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourcePolicyError {
+    BadRequest(String),
+
+    Forbidden(String),
+
+    InternalServerError(String),
+
+    NotFound(String),
+
+    ServiceUnavailable(String),
+
+    Unauthorized(String),
+}
+
+impl DeleteResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteResourcePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteResourcePolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteResourcePolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteResourcePolicyError {}
 /// Errors returned by DeleteSchema
 #[derive(Debug, PartialEq)]
 pub enum DeleteSchemaError {
@@ -1695,6 +1848,69 @@ impl fmt::Display for GetDiscoveredSchemaError {
     }
 }
 impl Error for GetDiscoveredSchemaError {}
+/// Errors returned by GetResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetResourcePolicyError {
+    BadRequest(String),
+
+    Forbidden(String),
+
+    InternalServerError(String),
+
+    NotFound(String),
+
+    ServiceUnavailable(String),
+
+    Unauthorized(String),
+}
+
+impl GetResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetResourcePolicyError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetResourcePolicyError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(GetResourcePolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetResourcePolicyError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetResourcePolicyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetResourcePolicyError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetResourcePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetResourcePolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetResourcePolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetResourcePolicyError {}
 /// Errors returned by ListDiscoverers
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoverersError {
@@ -1966,63 +2182,6 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
-/// Errors returned by LockServiceLinkedRole
-#[derive(Debug, PartialEq)]
-pub enum LockServiceLinkedRoleError {
-    BadRequest(String),
-
-    Forbidden(String),
-
-    InternalServerError(String),
-
-    ServiceUnavailable(String),
-
-    Unauthorized(String),
-}
-
-impl LockServiceLinkedRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LockServiceLinkedRoleError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "BadRequestException" => {
-                    return RusotoError::Service(LockServiceLinkedRoleError::BadRequest(err.msg))
-                }
-                "ForbiddenException" => {
-                    return RusotoError::Service(LockServiceLinkedRoleError::Forbidden(err.msg))
-                }
-                "InternalServerErrorException" => {
-                    return RusotoError::Service(LockServiceLinkedRoleError::InternalServerError(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(LockServiceLinkedRoleError::ServiceUnavailable(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(LockServiceLinkedRoleError::Unauthorized(err.msg))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        RusotoError::Unknown(res)
-    }
-}
-impl fmt::Display for LockServiceLinkedRoleError {
-    #[allow(unused_variables)]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            LockServiceLinkedRoleError::BadRequest(ref cause) => write!(f, "{}", cause),
-            LockServiceLinkedRoleError::Forbidden(ref cause) => write!(f, "{}", cause),
-            LockServiceLinkedRoleError::InternalServerError(ref cause) => write!(f, "{}", cause),
-            LockServiceLinkedRoleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
-            LockServiceLinkedRoleError::Unauthorized(ref cause) => write!(f, "{}", cause),
-        }
-    }
-}
-impl Error for LockServiceLinkedRoleError {}
 /// Errors returned by PutCodeBinding
 #[derive(Debug, PartialEq)]
 pub enum PutCodeBindingError {
@@ -2086,6 +2245,77 @@ impl fmt::Display for PutCodeBindingError {
     }
 }
 impl Error for PutCodeBindingError {}
+/// Errors returned by PutResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutResourcePolicyError {
+    BadRequest(String),
+
+    Forbidden(String),
+
+    InternalServerError(String),
+
+    NotFound(String),
+
+    PreconditionFailed(String),
+
+    ServiceUnavailable(String),
+
+    Unauthorized(String),
+}
+
+impl PutResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(PutResourcePolicyError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PutResourcePolicyError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(PutResourcePolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutResourcePolicyError::NotFound(err.msg))
+                }
+                "PreconditionFailedException" => {
+                    return RusotoError::Service(PutResourcePolicyError::PreconditionFailed(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutResourcePolicyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(PutResourcePolicyError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutResourcePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutResourcePolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutResourcePolicyError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutResourcePolicyError {}
 /// Errors returned by SearchSchemas
 #[derive(Debug, PartialEq)]
 pub enum SearchSchemasError {
@@ -2304,65 +2534,6 @@ impl fmt::Display for TagResourceError {
     }
 }
 impl Error for TagResourceError {}
-/// Errors returned by UnlockServiceLinkedRole
-#[derive(Debug, PartialEq)]
-pub enum UnlockServiceLinkedRoleError {
-    BadRequest(String),
-
-    Forbidden(String),
-
-    InternalServerError(String),
-
-    ServiceUnavailable(String),
-
-    Unauthorized(String),
-}
-
-impl UnlockServiceLinkedRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnlockServiceLinkedRoleError> {
-        if let Some(err) = proto::json::Error::parse_rest(&res) {
-            match err.typ.as_str() {
-                "BadRequestException" => {
-                    return RusotoError::Service(UnlockServiceLinkedRoleError::BadRequest(err.msg))
-                }
-                "ForbiddenException" => {
-                    return RusotoError::Service(UnlockServiceLinkedRoleError::Forbidden(err.msg))
-                }
-                "InternalServerErrorException" => {
-                    return RusotoError::Service(UnlockServiceLinkedRoleError::InternalServerError(
-                        err.msg,
-                    ))
-                }
-                "ServiceUnavailableException" => {
-                    return RusotoError::Service(UnlockServiceLinkedRoleError::ServiceUnavailable(
-                        err.msg,
-                    ))
-                }
-                "UnauthorizedException" => {
-                    return RusotoError::Service(UnlockServiceLinkedRoleError::Unauthorized(
-                        err.msg,
-                    ))
-                }
-                "ValidationException" => return RusotoError::Validation(err.msg),
-                _ => {}
-            }
-        }
-        RusotoError::Unknown(res)
-    }
-}
-impl fmt::Display for UnlockServiceLinkedRoleError {
-    #[allow(unused_variables)]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            UnlockServiceLinkedRoleError::BadRequest(ref cause) => write!(f, "{}", cause),
-            UnlockServiceLinkedRoleError::Forbidden(ref cause) => write!(f, "{}", cause),
-            UnlockServiceLinkedRoleError::InternalServerError(ref cause) => write!(f, "{}", cause),
-            UnlockServiceLinkedRoleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
-            UnlockServiceLinkedRoleError::Unauthorized(ref cause) => write!(f, "{}", cause),
-        }
-    }
-}
-impl Error for UnlockServiceLinkedRoleError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -2598,7 +2769,7 @@ pub trait Schemas {
         input: CreateRegistryRequest,
     ) -> Result<CreateRegistryResponse, RusotoError<CreateRegistryError>>;
 
-    /// <p>Creates a schema definition.</p>
+    /// <p><p>Creates a schema definition.</p> <note><p>Inactive schemas will be deleted after two years.</p></note></p>
     async fn create_schema(
         &self,
         input: CreateSchemaRequest,
@@ -2615,6 +2786,12 @@ pub trait Schemas {
         &self,
         input: DeleteRegistryRequest,
     ) -> Result<(), RusotoError<DeleteRegistryError>>;
+
+    /// <p>Delete the resource-based policy attached to the specified registry.</p>
+    async fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyRequest,
+    ) -> Result<(), RusotoError<DeleteResourcePolicyError>>;
 
     /// <p>Delete a schema definition.</p>
     async fn delete_schema(
@@ -2664,6 +2841,12 @@ pub trait Schemas {
         input: GetDiscoveredSchemaRequest,
     ) -> Result<GetDiscoveredSchemaResponse, RusotoError<GetDiscoveredSchemaError>>;
 
+    /// <p>Retrieves the resource-based policy attached to a given registry.</p>
+    async fn get_resource_policy(
+        &self,
+        input: GetResourcePolicyRequest,
+    ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>>;
+
     /// <p>List the discoverers.</p>
     async fn list_discoverers(
         &self,
@@ -2694,16 +2877,17 @@ pub trait Schemas {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    async fn lock_service_linked_role(
-        &self,
-        input: LockServiceLinkedRoleRequest,
-    ) -> Result<LockServiceLinkedRoleResponse, RusotoError<LockServiceLinkedRoleError>>;
-
     /// <p>Put code binding URI</p>
     async fn put_code_binding(
         &self,
         input: PutCodeBindingRequest,
     ) -> Result<PutCodeBindingResponse, RusotoError<PutCodeBindingError>>;
+
+    /// <p>The name of the policy.</p>
+    async fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyRequest,
+    ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>>;
 
     /// <p>Search the schemas</p>
     async fn search_schemas(
@@ -2729,11 +2913,6 @@ pub trait Schemas {
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>>;
 
-    async fn unlock_service_linked_role(
-        &self,
-        input: UnlockServiceLinkedRoleRequest,
-    ) -> Result<UnlockServiceLinkedRoleResponse, RusotoError<UnlockServiceLinkedRoleError>>;
-
     /// <p>Removes tags from a resource.</p>
     async fn untag_resource(
         &self,
@@ -2752,7 +2931,7 @@ pub trait Schemas {
         input: UpdateRegistryRequest,
     ) -> Result<UpdateRegistryResponse, RusotoError<UpdateRegistryError>>;
 
-    /// <p>Updates the schema definition</p>
+    /// <p><p>Updates the schema definition</p> <note><p>Inactive schemas will be deleted after two years.</p></note></p>
     async fn update_schema(
         &self,
         input: UpdateSchemaRequest,
@@ -2861,7 +3040,7 @@ impl Schemas for SchemasClient {
         }
     }
 
-    /// <p>Creates a schema definition.</p>
+    /// <p><p>Creates a schema definition.</p> <note><p>Inactive schemas will be deleted after two years.</p></note></p>
     async fn create_schema(
         &self,
         input: CreateSchemaRequest,
@@ -2950,6 +3129,38 @@ impl Schemas for SchemasClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRegistryError::from_response(response))
+        }
+    }
+
+    /// <p>Delete the resource-based policy attached to the specified registry.</p>
+    async fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyRequest,
+    ) -> Result<(), RusotoError<DeleteResourcePolicyError>> {
+        let request_uri = "/v1/policy";
+
+        let mut request = SignedRequest::new("DELETE", "schemas", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.registry_name {
+            params.put("registryName", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteResourcePolicyError::from_response(response))
         }
     }
 
@@ -3208,6 +3419,39 @@ impl Schemas for SchemasClient {
         }
     }
 
+    /// <p>Retrieves the resource-based policy attached to a given registry.</p>
+    async fn get_resource_policy(
+        &self,
+        input: GetResourcePolicyRequest,
+    ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>> {
+        let request_uri = "/v1/policy";
+
+        let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.registry_name {
+            params.put("registryName", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourcePolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourcePolicyError::from_response(response))
+        }
+    }
+
     /// <p>List the discoverers.</p>
     async fn list_discoverers(
         &self,
@@ -3401,35 +3645,6 @@ impl Schemas for SchemasClient {
         }
     }
 
-    async fn lock_service_linked_role(
-        &self,
-        input: LockServiceLinkedRoleRequest,
-    ) -> Result<LockServiceLinkedRoleResponse, RusotoError<LockServiceLinkedRoleError>> {
-        let request_uri = "/slr-deletion/lock";
-
-        let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<LockServiceLinkedRoleResponse, _>()?;
-
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(LockServiceLinkedRoleError::from_response(response))
-        }
-    }
-
     /// <p>Put code binding URI</p>
     async fn put_code_binding(
         &self,
@@ -3465,6 +3680,42 @@ impl Schemas for SchemasClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutCodeBindingError::from_response(response))
+        }
+    }
+
+    /// <p>The name of the policy.</p>
+    async fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyRequest,
+    ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>> {
+        let request_uri = "/v1/policy";
+
+        let mut request = SignedRequest::new("PUT", "schemas", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.registry_name {
+            params.put("registryName", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutResourcePolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutResourcePolicyError::from_response(response))
         }
     }
 
@@ -3597,35 +3848,6 @@ impl Schemas for SchemasClient {
         }
     }
 
-    async fn unlock_service_linked_role(
-        &self,
-        input: UnlockServiceLinkedRoleRequest,
-    ) -> Result<UnlockServiceLinkedRoleResponse, RusotoError<UnlockServiceLinkedRoleError>> {
-        let request_uri = "/slr-deletion/unlock";
-
-        let mut request = SignedRequest::new("POST", "schemas", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UnlockServiceLinkedRoleResponse, _>()?;
-
-            Ok(result)
-        } else {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            Err(UnlockServiceLinkedRoleError::from_response(response))
-        }
-    }
-
     /// <p>Removes tags from a resource.</p>
     async fn untag_resource(
         &self,
@@ -3724,7 +3946,7 @@ impl Schemas for SchemasClient {
         }
     }
 
-    /// <p>Updates the schema definition</p>
+    /// <p><p>Updates the schema definition</p> <note><p>Inactive schemas will be deleted after two years.</p></note></p>
     async fn update_schema(
         &self,
         input: UpdateSchemaRequest,

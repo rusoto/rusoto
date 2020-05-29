@@ -410,6 +410,10 @@ pub struct ExportAssetsToS3RequestDetails {
     /// <p>The unique identifier for the data set associated with this export job.</p>
     #[serde(rename = "DataSetId")]
     pub data_set_id: String,
+    /// <p>Encryption configuration for the export job.</p>
+    #[serde(rename = "Encryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption: Option<ExportServerSideEncryption>,
     /// <p>The unique identifier for the revision associated with this export request.</p>
     #[serde(rename = "RevisionId")]
     pub revision_id: String,
@@ -425,9 +429,24 @@ pub struct ExportAssetsToS3ResponseDetails {
     /// <p>The unique identifier for the data set associated with this export job.</p>
     #[serde(rename = "DataSetId")]
     pub data_set_id: String,
+    /// <p>Encryption configuration of the export job.</p>
+    #[serde(rename = "Encryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption: Option<ExportServerSideEncryption>,
     /// <p>The unique identifier for the revision associated with this export response.</p>
     #[serde(rename = "RevisionId")]
     pub revision_id: String,
+}
+
+/// <p>Encryption configuration of the export job. Includes the encryption type as well as the AWS KMS key. The KMS key is only necessary if you chose the KMS encryption type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ExportServerSideEncryption {
+    /// <p>The Amazon Resource Name (ARN) of the the AWS KMS key you want to use to encrypt the Amazon S3 objects. This parameter is required if you choose aws:kms as an encryption type.</p>
+    #[serde(rename = "KmsKeyArn")]
+    pub kms_key_arn: String,
+    /// <p>The type of server side encryption used for encrypting the objects in Amazon S3.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -777,7 +796,7 @@ pub struct JobError {
     /// <p>The message related to the job error.</p>
     #[serde(rename = "Message")]
     pub message: String,
-    /// <p>The unqiue identifier for the resource related to the error.</p>
+    /// <p>The unique identifier for the resource related to the error.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,

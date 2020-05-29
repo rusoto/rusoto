@@ -200,6 +200,7 @@ pub struct DescribeSecretResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Returns the name of the service that created this secret.</p>
     #[serde(rename = "OwningService")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owning_service: Option<String>,
@@ -594,10 +595,11 @@ pub struct SecretListEntry {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Returns the name of the service that created the secret.</p>
     #[serde(rename = "OwningService")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owning_service: Option<String>,
-    /// <p>Indicated whether automatic, scheduled rotation is enabled for this secret.</p>
+    /// <p>Indicates whether automatic, scheduled rotation is enabled for this secret.</p>
     #[serde(rename = "RotationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rotation_enabled: Option<bool>,

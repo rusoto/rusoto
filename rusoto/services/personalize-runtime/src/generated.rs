@@ -30,7 +30,7 @@ pub struct GetPersonalizedRankingRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to use for generating the personalized ranking.</p>
     #[serde(rename = "campaignArn")]
     pub campaign_arn: String,
-    /// <p>The contextual metadata to use when getting recommendations. Contextual metadata includes any interaction information that might be relevant when getting a user's recommendations, such as the user's current location or device type. For more information, see Contextual Metadata.</p>
+    /// <p>The contextual metadata to use when getting recommendations. Contextual metadata includes any interaction information that might be relevant when getting a user's recommendations, such as the user's current location or device type.</p>
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
@@ -57,7 +57,7 @@ pub struct GetRecommendationsRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to use for getting recommendations.</p>
     #[serde(rename = "campaignArn")]
     pub campaign_arn: String,
-    /// <p>The contextual metadata to use when getting recommendations. Contextual metadata includes any interaction information that might be relevant when getting a user's recommendations, such as the user's current location or device type. For more information, see Contextual Metadata.</p>
+    /// <p>The contextual metadata to use when getting recommendations. Contextual metadata includes any interaction information that might be relevant when getting a user's recommendations, such as the user's current location or device type.</p>
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
@@ -92,6 +92,10 @@ pub struct PredictedItem {
     #[serde(rename = "itemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_id: Option<String>,
+    /// <p>A numeric representation of the model's certainty in the item's suitability. For more information on scoring logic, see <a>how-scores-work</a>.</p>
+    #[serde(rename = "score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f64>,
 }
 
 /// Errors returned by GetPersonalizedRanking

@@ -792,6 +792,23 @@ pub struct DashboardPublishOptions {
     pub sheet_controls_option: Option<SheetControlsOption>,
 }
 
+/// <p>A filter that you apply when searching for dashboards. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DashboardSearchFilter {
+    /// <p>The name of the value that you want to use as a filter. For example, <code>"Name": "QUICKSIGHT_USER"</code>. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The comparison operator that you want to use as a filter. For example, <code>"Operator": "StringEquals"</code>.</p>
+    #[serde(rename = "Operator")]
+    pub operator: String,
+    /// <p>The value of the named item, in this case <code>QUICKSIGHT_USER</code>, that you want to use as a filter. For example, <code>"Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1"</code>. </p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 /// <p>Dashboard source entity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3150,6 +3167,46 @@ pub struct S3Source {
     #[serde(rename = "UploadSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_settings: Option<UploadSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SearchDashboardsRequest {
+    /// <p>The ID of the AWS account that contains the user whose dashboards you're searching for. </p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The filters to apply to the search. Currently, you can search only by user name. For example, <code>"Filters": [ { "Name": "QUICKSIGHT_USER", "Operator": "StringEquals", "Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1" } ]</code> </p>
+    #[serde(rename = "Filters")]
+    pub filters: Vec<DashboardSearchFilter>,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SearchDashboardsResponse {
+    /// <p>The list of dashboards owned by the user specified in <code>Filters</code> in your request.</p>
+    #[serde(rename = "DashboardSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dashboard_summary_list: Option<Vec<DashboardSummary>>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 /// <p>ServiceNow parameters.</p>
@@ -7625,6 +7682,70 @@ impl fmt::Display for RegisterUserError {
     }
 }
 impl Error for RegisterUserError {}
+/// Errors returned by SearchDashboards
+#[derive(Debug, PartialEq)]
+pub enum SearchDashboardsError {
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl SearchDashboardsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchDashboardsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(SearchDashboardsError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(SearchDashboardsError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(SearchDashboardsError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(SearchDashboardsError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(SearchDashboardsError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(SearchDashboardsError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SearchDashboardsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SearchDashboardsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SearchDashboardsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            SearchDashboardsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SearchDashboardsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SearchDashboardsError::Throttling(ref cause) => write!(f, "{}", cause),
+            SearchDashboardsError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SearchDashboardsError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -8973,6 +9094,12 @@ pub trait Quicksight {
         &self,
         input: RegisterUserRequest,
     ) -> Result<RegisterUserResponse, RusotoError<RegisterUserError>>;
+
+    /// <p>Searchs for dashboards that belong to a user. </p>
+    async fn search_dashboards(
+        &self,
+        input: SearchDashboardsRequest,
+    ) -> Result<SearchDashboardsResponse, RusotoError<SearchDashboardsError>>;
 
     /// <p><p>Assigns one or more tags (key-value pairs) to the specified QuickSight resource. </p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. You can use the <code>TagResource</code> operation with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource. QuickSight supports tagging on data set, data source, dashboard, and template. </p> <p>Tagging for QuickSight works in a similar way to tagging for other AWS services, except for the following:</p> <ul> <li> <p>You can&#39;t use tags to track AWS costs for QuickSight. This restriction is because QuickSight costs are based on users and SPICE capacity, which aren&#39;t taggable resources.</p> </li> <li> <p>QuickSight doesn&#39;t currently support the Tag Editor for AWS Resource Groups.</p> </li> </ul></p>
     async fn tag_resource(
@@ -10903,6 +11030,40 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RegisterUserError::from_response(response))
+        }
+    }
+
+    /// <p>Searchs for dashboards that belong to a user. </p>
+    async fn search_dashboards(
+        &self,
+        input: SearchDashboardsRequest,
+    ) -> Result<SearchDashboardsResponse, RusotoError<SearchDashboardsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/search/dashboards",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchDashboardsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchDashboardsError::from_response(response))
         }
     }
 

@@ -407,6 +407,14 @@ pub struct CreateSlotTypeVersionResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The built-in slot type used a the parent of the slot type.</p>
+    #[serde(rename = "parentSlotTypeSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_slot_type_signature: Option<String>,
+    /// <p>Configuration information that extends the parent built-in slot type.</p>
+    #[serde(rename = "slotTypeConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slot_type_configurations: Option<Vec<SlotTypeConfiguration>>,
     /// <p>The strategy that Amazon Lex uses to determine the value of the slot. For more information, see <a>PutSlotType</a>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1213,6 +1221,14 @@ pub struct GetSlotTypeResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The built-in slot type used as a parent for the slot type.</p>
+    #[serde(rename = "parentSlotTypeSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_slot_type_signature: Option<String>,
+    /// <p>Configuration information that extends the parent built-in slot type.</p>
+    #[serde(rename = "slotTypeConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slot_type_configurations: Option<Vec<SlotTypeConfiguration>>,
     /// <p>The strategy that Amazon Lex uses to determine the value of the slot. For more information, see <a>PutSlotType</a>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1346,6 +1362,23 @@ pub struct IntentMetadata {
     pub version: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource to get a list of tags for.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags associated with a resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>Settings used to configure delivery mode and destination for conversation logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1445,6 +1478,10 @@ pub struct PutBotAliasRequest {
     /// <p>The name of the alias. The name is <i>not</i> case sensitive.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>A list of tags to add to the bot alias. You can only add tags when you create an alias, you can't use the <code>PutBotAlias</code> operation to update the tags on a bot alias. To update tags, use the <code>TagResource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1482,6 +1519,10 @@ pub struct PutBotAliasResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A list of tags associated with a bot.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1532,6 +1573,10 @@ pub struct PutBotRequest {
     #[serde(rename = "processBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub process_behavior: Option<String>,
+    /// <p>A list of tags to add to the bot. You can only add tags when you create a bot, you can't use the <code>PutBot</code> operation to update the tags on a bot. To update tags, use the <code>TagResource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The Amazon Polly voice ID that you want Amazon Lex to use for voice interactions with the user. The locale configured for the voice must match the locale of the bot. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/voicelist.html">Voices in Amazon Polly</a> in the <i>Amazon Polly Developer Guide</i>.</p>
     #[serde(rename = "voiceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1601,6 +1646,10 @@ pub struct PutBotResponse {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>A list of tags associated with the bot.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1758,6 +1807,14 @@ pub struct PutSlotTypeRequest {
     /// <p>The name of the slot type. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in slot type name, or a built-in slot type name with "AMAZON." removed. For example, because there is a built-in slot type called <code>AMAZON.DATE</code>, you can't create a custom slot type called <code>DATE</code>.</p> <p>For a list of built-in slot types, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The built-in slot type used as the parent of the slot type. When you define a parent slot type, the new slot type has all of the same configuration as the parent.</p> <p>Only <code>AMAZON.AlphaNumeric</code> is supported.</p>
+    #[serde(rename = "parentSlotTypeSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_slot_type_signature: Option<String>,
+    /// <p>Configuration information that extends the parent built-in slot type. The configuration is added to the settings for the parent slot type.</p>
+    #[serde(rename = "slotTypeConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slot_type_configurations: Option<Vec<SlotTypeConfiguration>>,
     /// <p>Determines the slot resolution strategy that Amazon Lex uses to return slot type values. The field can be set to one of the following values:</p> <ul> <li> <p> <code>ORIGINAL_VALUE</code> - Returns the value entered by the user, if the user value is similar to the slot value.</p> </li> <li> <p> <code>TOP_RESOLUTION</code> - If there is a resolution list for the slot, return the first value in the resolution list as the slot type value. If there is no resolution list, null is returned.</p> </li> </ul> <p>If you don't specify the <code>valueSelectionStrategy</code>, the default is <code>ORIGINAL_VALUE</code>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1795,6 +1852,14 @@ pub struct PutSlotTypeResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The built-in slot type used as the parent of the slot type.</p>
+    #[serde(rename = "parentSlotTypeSignature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_slot_type_signature: Option<String>,
+    /// <p>Configuration information that extends the parent built-in slot type.</p>
+    #[serde(rename = "slotTypeConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slot_type_configurations: Option<Vec<SlotTypeConfiguration>>,
     /// <p>The slot resolution strategy that Amazon Lex uses to determine the value of the slot. For more information, see <a>PutSlotType</a>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1857,6 +1922,15 @@ pub struct Slot {
     pub value_elicitation_prompt: Option<Prompt>,
 }
 
+/// <p>Provides configuration information for a slot type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SlotTypeConfiguration {
+    /// <p>A regular expression used to validate the value of a slot.</p>
+    #[serde(rename = "regexConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_configuration: Option<SlotTypeRegexConfiguration>,
+}
+
 /// <p>Provides information about a slot type..</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1883,6 +1957,14 @@ pub struct SlotTypeMetadata {
     pub version: Option<String>,
 }
 
+/// <p>Provides a regular expression used to validate the value of a slot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SlotTypeRegexConfiguration {
+    /// <p><p>A regular expression used to validate the value of a slot. </p> <p>Use a standard regular expression. Amazon Lex supports the following characters in the regular expression:</p> <ul> <li> <p>A-Z, a-z</p> </li> <li> <p>0-9</p> </li> <li> <p>Unicode characters (&quot;\ u&lt;Unicode&gt;&quot;)</p> </li> </ul> <p>Represent Unicode characters with four digits, for example &quot;\u0041&quot; or &quot;\u005A&quot;.</p> <p>The following regular expression operators are not supported:</p> <ul> <li> <p>Infinite repeaters: *, +, or {x,} with no upper bound.</p> </li> <li> <p>Wild card (.)</p> </li> </ul></p>
+    #[serde(rename = "pattern")]
+    pub pattern: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportRequest {
@@ -1900,6 +1982,10 @@ pub struct StartImportRequest {
     /// <p><p>Specifies the type of resource to export. Each resource also exports any resources that it depends on. </p> <ul> <li> <p>A bot exports dependent intents.</p> </li> <li> <p>An intent exports dependent slot types.</p> </li> </ul></p>
     #[serde(rename = "resourceType")]
     pub resource_type: String,
+    /// <p>A list of tags to add to the imported bot. You can only add tags when you import a bot, you can't add tags to an intent or slot type.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1929,6 +2015,10 @@ pub struct StartImportResponse {
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>A list of tags added to the imported bot.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>A collection of messages that convey information to the user. At runtime, Amazon Lex selects the message to convey. </p>
@@ -1942,6 +2032,47 @@ pub struct Statement {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_card: Option<String>,
 }
+
+/// <p>A list of key/value pairs that identify a bot, bot alias, or bot channel. Tag keys and values can consist of Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key for the tag. Keys are not case-sensitive and must be unique.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The value associated with a key. The value may be an empty string but it can't be null.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the bot, bot alias, or bot channel to tag.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>A list of tag keys to add to the resource. If a tag key already exists, the existing value is replaced with the new value.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource to remove the tags from.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>A list of tag keys to remove from the resource. If a tag key does not exist on the resource, it is ignored.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// <p>Provides information about a single utterance that was made to your bot. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3595,6 +3726,54 @@ impl fmt::Display for GetUtterancesViewError {
     }
 }
 impl Error for GetUtterancesViewError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again.</p>
+    BadRequest(String),
+    /// <p>An internal Amazon Lex error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    NotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListTagsForResourceError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by PutBot
 #[derive(Debug, PartialEq)]
 pub enum PutBotError {
@@ -3851,6 +4030,114 @@ impl fmt::Display for StartImportError {
     }
 }
 impl Error for StartImportError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again.</p>
+    BadRequest(String),
+    /// <p> There was a conflict processing the request. Try your request again. </p>
+    Conflict(String),
+    /// <p>An internal Amazon Lex error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    NotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(TagResourceError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(TagResourceError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again.</p>
+    BadRequest(String),
+    /// <p> There was a conflict processing the request. Try your request again. </p>
+    Conflict(String),
+    /// <p>An internal Amazon Lex error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    NotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UntagResourceError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UntagResourceError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon Lex Model Building Service API. Amazon Lex Model Building Service clients implement this trait.
 #[async_trait]
 pub trait LexModels {
@@ -4037,6 +4324,12 @@ pub trait LexModels {
         input: GetUtterancesViewRequest,
     ) -> Result<GetUtterancesViewResponse, RusotoError<GetUtterancesViewError>>;
 
+    /// <p>Gets a list of tags associated with the specified resource. Only bots, bot aliases, and bot channels can have tags associated with them.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>security-iam</a>.</p>
     async fn put_bot(
         &self,
@@ -4066,6 +4359,18 @@ pub trait LexModels {
         &self,
         input: StartImportRequest,
     ) -> Result<StartImportResponse, RusotoError<StartImportError>>;
+
+    /// <p>Adds the specified tags to the specified resource. If a tag key already exists, the existing value is replaced with the new value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from a bot, bot alias or bot channel.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the Amazon Lex Model Building Service API.
 #[derive(Clone)]
@@ -5183,6 +5488,35 @@ impl LexModels for LexModelsClient {
         }
     }
 
+    /// <p>Gets a list of tags associated with the specified resource. Only bots, bot aliases, and bot channels can have tags associated with them.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("models.lex".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>security-iam</a>.</p>
     async fn put_bot(
         &self,
@@ -5339,6 +5673,72 @@ impl LexModels for LexModelsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StartImportError::from_response(response))
+        }
+    }
+
+    /// <p>Adds the specified tags to the specified resource. If a tag key already exists, the existing value is replaced with the new value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("models.lex".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes tags from a bot, bot alias or bot channel.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("models.lex".to_string());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 }

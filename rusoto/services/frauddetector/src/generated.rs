@@ -116,6 +116,10 @@ pub struct CreateDetectorVersionRequest {
     #[serde(rename = "modelVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_versions: Option<Vec<ModelVersion>>,
+    /// <p>The rule execution mode for the rules included in the detector version.</p> <p>You can define and edit the rule mode at the detector version level, when it is in draft status.</p> <p>If you specify <code>FIRST_MATCHED</code>, Amazon Fraud Detector evaluates rules sequentially, first to last, stopping at the first matched rule. Amazon Fraud dectector then provides the outcomes for that single rule.</p> <p>If you specifiy <code>ALL_MATCHED</code>, Amazon Fraud Detector evaluates all rules and returns the outcomes for all matched rules. </p> <p>The default behavior is <code>FIRST_MATCHED</code>.</p>
+    #[serde(rename = "ruleExecutionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_execution_mode: Option<String>,
     /// <p>The rules to include in the detector version.</p>
     #[serde(rename = "rules")]
     pub rules: Vec<Rule>,
@@ -238,6 +242,18 @@ pub struct CreateVariableResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDetectorRequest {
+    /// <p>The ID of the detector to delete.</p>
+    #[serde(rename = "detectorId")]
+    pub detector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteDetectorResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorVersionRequest {
     /// <p>The ID of the parent detector for the detector version to delete.</p>
     #[serde(rename = "detectorId")]
@@ -262,6 +278,24 @@ pub struct DeleteEventRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteRuleVersionRequest {
+    /// <p>The ID of the detector that includes the rule version to delete.</p>
+    #[serde(rename = "detectorId")]
+    pub detector_id: String,
+    /// <p>The rule ID of the rule version to delete.</p>
+    #[serde(rename = "ruleId")]
+    pub rule_id: String,
+    /// <p>The rule version to delete.</p>
+    #[serde(rename = "ruleVersion")]
+    pub rule_version: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteRuleVersionResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -458,6 +492,10 @@ pub struct GetDetectorVersionResult {
     #[serde(rename = "modelVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_versions: Option<Vec<ModelVersion>>,
+    /// <p>The execution mode of the rule in the dectector</p> <p> <code>FIRST_MATCHED</code> indicates that Amazon Fraud Detector evaluates rules sequentially, first to last, stopping at the first matched rule. Amazon Fraud dectector then provides the outcomes for that single rule.</p> <p> <code>ALL_MATCHED</code> indicates that Amazon Fraud Detector evaluates all rules and returns the outcomes for all matched rules. You can define and edit the rule mode at the detector version level, when it is in draft status.</p>
+    #[serde(rename = "ruleExecutionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_execution_mode: Option<String>,
     /// <p>The rules included in the detector version.</p>
     #[serde(rename = "rules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -666,6 +704,10 @@ pub struct GetPredictionResult {
     #[serde(rename = "outcomes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outcomes: Option<Vec<String>>,
+    /// <p>The rule results in the prediction.</p>
+    #[serde(rename = "ruleResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_results: Option<Vec<RuleResult>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1109,6 +1151,20 @@ pub struct RuleDetail {
     pub rule_version: Option<String>,
 }
 
+/// <p>The rule results.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RuleResult {
+    /// <p>The outcomes of the matched rule, based on the rule execution mode.</p>
+    #[serde(rename = "outcomes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outcomes: Option<Vec<String>>,
+    /// <p>The rule ID that was matched, based on the rule execution mode.</p>
+    #[serde(rename = "ruleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_id: Option<String>,
+}
+
 /// <p>The training data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrainingDataSource {
@@ -1158,6 +1214,10 @@ pub struct UpdateDetectorVersionRequest {
     #[serde(rename = "modelVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_versions: Option<Vec<ModelVersion>>,
+    /// <p>The rule execution mode to add to the detector.</p> <p>If you specify <code>FIRST_MATCHED</code>, Amazon Fraud Detector evaluates rules sequentially, first to last, stopping at the first matched rule. Amazon Fraud dectector then provides the outcomes for that single rule.</p> <p>If you specifiy <code>ALL_MATCHED</code>, Amazon Fraud Detector evaluates all rules and returns the outcomes for all matched rules. You can define and edit the rule mode at the detector version level, when it is in draft status.</p> <p>The default behavior is <code>FIRST_MATCHED</code>.</p>
+    #[serde(rename = "ruleExecutionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_execution_mode: Option<String>,
     /// <p>The rules to include in the detector version.</p>
     #[serde(rename = "rules")]
     pub rules: Vec<Rule>,
@@ -1469,6 +1529,8 @@ impl Error for CreateDetectorVersionError {}
 pub enum CreateModelVersionError {
     /// <p>An exception indicating an internal server error.</p>
     InternalServer(String),
+    /// <p>An exception indicating the specified resource was not found.</p>
+    ResourceNotFound(String),
     /// <p>An exception indicating a throttling error.</p>
     Throttling(String),
 }
@@ -1479,6 +1541,9 @@ impl CreateModelVersionError {
             match err.typ.as_str() {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateModelVersionError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateModelVersionError::ResourceNotFound(err.msg))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateModelVersionError::Throttling(err.msg))
@@ -1495,6 +1560,7 @@ impl fmt::Display for CreateModelVersionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateModelVersionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateModelVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             CreateModelVersionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1572,9 +1638,53 @@ impl fmt::Display for CreateVariableError {
     }
 }
 impl Error for CreateVariableError {}
+/// Errors returned by DeleteDetector
+#[derive(Debug, PartialEq)]
+pub enum DeleteDetectorError {
+    /// <p><p>An exception indicating there was a conflict during a delete operation. The following delete operations can cause a conflict exception:</p> <ul> <li> <p>DeleteDetector: A conflict exception will occur if the detector has associated <code>Rules</code> or <code>DetectorVersions</code>. You can only delete a detector if it has no <code>Rules</code> or <code>DetectorVersions</code>.</p> </li> <li> <p>DeleteDetectorVersion: A conflict exception will occur if the <code>DetectorVersion</code> status is <code>ACTIVE</code>.</p> </li> <li> <p>DeleteRuleVersion: A conflict exception will occur if the <code>RuleVersion</code> is in use by an associated <code>ACTIVE</code> or <code>INACTIVE DetectorVersion</code>.</p> </li> </ul></p>
+    Conflict(String),
+    /// <p>An exception indicating an internal server error.</p>
+    InternalServer(String),
+    /// <p>An exception indicating a throttling error.</p>
+    Throttling(String),
+}
+
+impl DeleteDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteDetectorError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteDetectorError::InternalServer(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteDetectorError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDetectorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDetectorError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteDetectorError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDetectorError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDetectorError {}
 /// Errors returned by DeleteDetectorVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteDetectorVersionError {
+    /// <p><p>An exception indicating there was a conflict during a delete operation. The following delete operations can cause a conflict exception:</p> <ul> <li> <p>DeleteDetector: A conflict exception will occur if the detector has associated <code>Rules</code> or <code>DetectorVersions</code>. You can only delete a detector if it has no <code>Rules</code> or <code>DetectorVersions</code>.</p> </li> <li> <p>DeleteDetectorVersion: A conflict exception will occur if the <code>DetectorVersion</code> status is <code>ACTIVE</code>.</p> </li> <li> <p>DeleteRuleVersion: A conflict exception will occur if the <code>RuleVersion</code> is in use by an associated <code>ACTIVE</code> or <code>INACTIVE DetectorVersion</code>.</p> </li> </ul></p>
+    Conflict(String),
     /// <p>An exception indicating an internal server error.</p>
     InternalServer(String),
     /// <p>An exception indicating the specified resource was not found.</p>
@@ -1587,6 +1697,9 @@ impl DeleteDetectorVersionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorVersionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteDetectorVersionError::Conflict(err.msg))
+                }
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteDetectorVersionError::InternalServer(
                         err.msg,
@@ -1611,6 +1724,7 @@ impl fmt::Display for DeleteDetectorVersionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteDetectorVersionError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteDetectorVersionError::InternalServer(ref cause) => write!(f, "{}", cause),
             DeleteDetectorVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteDetectorVersionError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -1654,6 +1768,48 @@ impl fmt::Display for DeleteEventError {
     }
 }
 impl Error for DeleteEventError {}
+/// Errors returned by DeleteRuleVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteRuleVersionError {
+    /// <p><p>An exception indicating there was a conflict during a delete operation. The following delete operations can cause a conflict exception:</p> <ul> <li> <p>DeleteDetector: A conflict exception will occur if the detector has associated <code>Rules</code> or <code>DetectorVersions</code>. You can only delete a detector if it has no <code>Rules</code> or <code>DetectorVersions</code>.</p> </li> <li> <p>DeleteDetectorVersion: A conflict exception will occur if the <code>DetectorVersion</code> status is <code>ACTIVE</code>.</p> </li> <li> <p>DeleteRuleVersion: A conflict exception will occur if the <code>RuleVersion</code> is in use by an associated <code>ACTIVE</code> or <code>INACTIVE DetectorVersion</code>.</p> </li> </ul></p>
+    Conflict(String),
+    /// <p>An exception indicating an internal server error.</p>
+    InternalServer(String),
+    /// <p>An exception indicating a throttling error.</p>
+    Throttling(String),
+}
+
+impl DeleteRuleVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteRuleVersionError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteRuleVersionError::InternalServer(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteRuleVersionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteRuleVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteRuleVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteRuleVersionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteRuleVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteRuleVersionError {}
 /// Errors returned by DescribeDetector
 #[derive(Debug, PartialEq)]
 pub enum DescribeDetectorError {
@@ -2609,7 +2765,13 @@ pub trait FraudDetector {
         input: CreateVariableRequest,
     ) -> Result<CreateVariableResult, RusotoError<CreateVariableError>>;
 
-    /// <p>Deletes the detector version.</p>
+    /// <p>Deletes the detector. Before deleting a detector, you must first delete all detector versions and rule versions associated with the detector.</p>
+    async fn delete_detector(
+        &self,
+        input: DeleteDetectorRequest,
+    ) -> Result<DeleteDetectorResult, RusotoError<DeleteDetectorError>>;
+
+    /// <p>Deletes the detector version. You cannot delete detector versions that are in <code>ACTIVE</code> status.</p>
     async fn delete_detector_version(
         &self,
         input: DeleteDetectorVersionRequest,
@@ -2620,6 +2782,12 @@ pub trait FraudDetector {
         &self,
         input: DeleteEventRequest,
     ) -> Result<DeleteEventResult, RusotoError<DeleteEventError>>;
+
+    /// <p>Deletes the rule version. You cannot delete a rule version if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p>
+    async fn delete_rule_version(
+        &self,
+        input: DeleteRuleVersionRequest,
+    ) -> Result<DeleteRuleVersionResult, RusotoError<DeleteRuleVersionError>>;
 
     /// <p>Gets all versions for a specified detector.</p>
     async fn describe_detector(
@@ -2967,7 +3135,34 @@ impl FraudDetector for FraudDetectorClient {
         }
     }
 
-    /// <p>Deletes the detector version.</p>
+    /// <p>Deletes the detector. Before deleting a detector, you must first delete all detector versions and rule versions associated with the detector.</p>
+    async fn delete_detector(
+        &self,
+        input: DeleteDetectorRequest,
+    ) -> Result<DeleteDetectorResult, RusotoError<DeleteDetectorError>> {
+        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSHawksNestServiceFacade.DeleteDetector");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDetectorResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDetectorError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the detector version. You cannot delete detector versions that are in <code>ACTIVE</code> status.</p>
     async fn delete_detector_version(
         &self,
         input: DeleteDetectorVersionRequest,
@@ -3022,6 +3217,36 @@ impl FraudDetector for FraudDetectorClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEventError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the rule version. You cannot delete a rule version if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p>
+    async fn delete_rule_version(
+        &self,
+        input: DeleteRuleVersionRequest,
+    ) -> Result<DeleteRuleVersionResult, RusotoError<DeleteRuleVersionError>> {
+        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSHawksNestServiceFacade.DeleteRuleVersion",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRuleVersionResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRuleVersionError::from_response(response))
         }
     }
 

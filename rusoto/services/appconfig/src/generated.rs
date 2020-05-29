@@ -163,7 +163,7 @@ pub struct CreateConfigurationProfileRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A URI to locate the configuration. You can specify either a Systems Manager (SSM) document or an SSM Parameter Store parameter. For an SSM document, specify either the document name in the format <code>ssm-document://&lt;Document name&gt;</code> or the Amazon Resource Name (ARN). For a parameter, specify either the parameter name in the format <code>ssm-parameter://&lt;Parameter name&gt;</code> or the ARN.</p>
+    /// <p>A URI to locate the configuration. You can specify a Systems Manager (SSM) document, an SSM Parameter Store parameter, or an Amazon S3 object. For an SSM document, specify either the document name in the format <code>ssm-document://&lt;Document_name&gt;</code> or the Amazon Resource Name (ARN). For a parameter, specify either the parameter name in the format <code>ssm-parameter://&lt;Parameter_name&gt;</code> or the ARN. For an Amazon S3 object, specify the URI in the following format: <code>s3://&lt;bucket&gt;/&lt;objectKey&gt; </code>. Here is an example: s3://my-bucket/my-app/us-east-1/my-config.json</p>
     #[serde(rename = "LocationUri")]
     pub location_uri: String,
     /// <p>A name for the configuration profile.</p>
@@ -199,7 +199,7 @@ pub struct CreateDeploymentStrategyRequest {
     /// <p>The percentage of targets to receive a deployed configuration during each interval.</p>
     #[serde(rename = "GrowthFactor")]
     pub growth_factor: f32,
-    /// <p>The algorithm used to define how percentage grows over time.</p>
+    /// <p>The algorithm used to define how percentage grows over time. AWS AppConfig supports the following growth types:</p> <p> <b>Linear</b>: For this type, AppConfig processes the deployment by dividing the total number of targets by the value specified for <code>Step percentage</code>. For example, a linear deployment that uses a <code>Step percentage</code> of 10 deploys the configuration to 10 percent of the hosts. After those deployments are complete, the system deploys the configuration to the next 10 percent. This continues until 100% of the targets have successfully received the configuration.</p> <p> <b>Exponential</b>: For this type, AppConfig processes the deployment exponentially using the following formula: <code>G*(2^N)</code>. In this formula, <code>G</code> is the growth factor specified by the user and <code>N</code> is the number of steps until the configuration is deployed to all targets. For example, if you specify a growth factor of 2, then the system rolls out the configuration as follows:</p> <p> <code>2*(2^0)</code> </p> <p> <code>2*(2^1)</code> </p> <p> <code>2*(2^2)</code> </p> <p>Expressed numerically, the deployment rolls out as follows: 2% of the targets, 4% of the targets, 8% of the targets, and continues until the configuration has been deployed to all targets.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub growth_type: Option<String>,
@@ -323,6 +323,10 @@ pub struct Deployment {
     #[serde(rename = "EnvironmentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_id: Option<String>,
+    /// <p>A list containing all events related to a deployment. The most recent events are displayed first.</p>
+    #[serde(rename = "EventLog")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_log: Option<Vec<DeploymentEvent>>,
     /// <p>The amount of time AppConfig monitored for alarms before considering the deployment to be complete and no longer eligible for automatic roll back.</p>
     #[serde(rename = "FinalBakeTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -347,6 +351,28 @@ pub struct Deployment {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+/// <p>An object that describes a deployment event.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeploymentEvent {
+    /// <p>A description of the deployment event. Descriptions include, but are not limited to, the user account or the CloudWatch alarm ARN that initiated a rollback, the percentage of hosts that received the deployment, or in the case of an internal error, a recommendation to attempt a new deployment.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The type of deployment event. Deployment event types include the start, stop, or completion of a deployment; a percentage update; the start or stop of a bake period; the start or completion of a rollback.</p>
+    #[serde(rename = "EventType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type: Option<String>,
+    /// <p>The date and time the event occurred.</p>
+    #[serde(rename = "OccurredAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub occurred_at: Option<f64>,
+    /// <p>The entity that triggered the deployment event. Events can be triggered by a user, AWS AppConfig, an Amazon CloudWatch alarm, or an internal error.</p>
+    #[serde(rename = "TriggeredBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub triggered_by: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -526,20 +552,20 @@ pub struct GetConfigurationProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationRequest {
-    /// <p>The application to get.</p>
+    /// <p>The application to get. Specify either the application name or the application ID.</p>
     #[serde(rename = "Application")]
     pub application: String,
-    /// <p>The configuration version returned in the most recent GetConfiguration response.</p>
+    /// <p>The configuration version returned in the most recent <code>GetConfiguration</code> response.</p> <important> <p>AWS AppConfig uses the value of the <code>ClientConfigurationVersion</code> parameter to identify the configuration version on your clients. If you don’t send <code>ClientConfigurationVersion</code> with each call to <code>GetConfiguration</code>, your clients receive the current configuration. You are charged each time your clients receive a configuration.</p> <p>To avoid excess charges, we recommend that you include the <code>ClientConfigurationVersion</code> value with every call to <code>GetConfiguration</code>. This value must be saved on your client. Subsequent calls to <code>GetConfiguration</code> must pass this value by using the <code>ClientConfigurationVersion</code> parameter. </p> </important> <p>For more information about working with configurations, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig-retrieving-the-configuration.html">Retrieving the Configuration</a> in the <i>AWS AppConfig User Guide</i>.</p>
     #[serde(rename = "ClientConfigurationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_configuration_version: Option<String>,
     /// <p>A unique ID to identify the client for the configuration. This ID enables AppConfig to deploy the configuration in intervals, as defined in the deployment strategy.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
-    /// <p>The configuration to get.</p>
+    /// <p>The configuration to get. Specify either the configuration name or the configuration ID.</p>
     #[serde(rename = "Configuration")]
     pub configuration: String,
-    /// <p>The environment to get.</p>
+    /// <p>The environment to get. Specify either the environment name or the environment ID.</p>
     #[serde(rename = "Environment")]
     pub environment: String,
 }
@@ -813,7 +839,7 @@ pub struct UpdateDeploymentStrategyRequest {
     #[serde(rename = "GrowthFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub growth_factor: Option<f32>,
-    /// <p>The algorithm used to define how percentage grows over time.</p>
+    /// <p>The algorithm used to define how percentage grows over time. AWS AppConfig supports the following growth types:</p> <p> <b>Linear</b>: For this type, AppConfig processes the deployment by increments of the growth factor evenly distributed over the deployment time. For example, a linear deployment that uses a growth factor of 20 initially makes the configuration available to 20 percent of the targets. After 1/5th of the deployment time has passed, the system updates the percentage to 40 percent. This continues until 100% of the targets are set to receive the deployed configuration.</p> <p> <b>Exponential</b>: For this type, AppConfig processes the deployment exponentially using the following formula: <code>G*(2^N)</code>. In this formula, <code>G</code> is the growth factor specified by the user and <code>N</code> is the number of steps until the configuration is deployed to all targets. For example, if you specify a growth factor of 2, then the system rolls out the configuration as follows:</p> <p> <code>2*(2^0)</code> </p> <p> <code>2*(2^1)</code> </p> <p> <code>2*(2^2)</code> </p> <p>Expressed numerically, the deployment rolls out as follows: 2% of the targets, 4% of the targets, 8% of the targets, and continues until the configuration has been deployed to all targets.</p>
     #[serde(rename = "GrowthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub growth_type: Option<String>,
@@ -859,7 +885,7 @@ pub struct ValidateConfigurationRequest {
 /// <p>A validator provides a syntactic or semantic check to ensure the configuration you want to deploy functions as intended. To validate your application configuration data, you provide a schema or a Lambda function that runs against the configuration. The configuration deployment or update can only proceed when the configuration data is valid.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Validator {
-    /// <p>Either the JSON Schema content or an AWS Lambda function name.</p>
+    /// <p>Either the JSON Schema content or the Amazon Resource Name (ARN) of an AWS Lambda function.</p>
     #[serde(rename = "Content")]
     pub content: String,
     /// <p>AppConfig supports validators of type <code>JSON_SCHEMA</code> and <code>LAMBDA</code> </p>
@@ -2144,7 +2170,7 @@ pub trait AppConfig {
         input: CreateApplicationRequest,
     ) -> Result<Application, RusotoError<CreateApplicationError>>;
 
-    /// <p><p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents and SSM Parameter Store parameters. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul></p>
+    /// <p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents, SSM Parameter Store parameters, and Amazon S3 objects. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig-creating-configuration-and-profile.html">Create a Configuration and a Configuration Profile</a> in the <i>AWS AppConfig User Guide</i>.</p>
     async fn create_configuration_profile(
         &self,
         input: CreateConfigurationProfileRequest,
@@ -2192,7 +2218,7 @@ pub trait AppConfig {
         input: GetApplicationRequest,
     ) -> Result<Application, RusotoError<GetApplicationError>>;
 
-    /// <p>Retrieve information about a configuration.</p>
+    /// <p><p>Receive information about a configuration.</p> <important> <p>AWS AppConfig uses the value of the <code>ClientConfigurationVersion</code> parameter to identify the configuration version on your clients. If you don’t send <code>ClientConfigurationVersion</code> with each call to <code>GetConfiguration</code>, your clients receive the current configuration. You are charged each time your clients receive a configuration.</p> <p>To avoid excess charges, we recommend that you include the <code>ClientConfigurationVersion</code> value with every call to <code>GetConfiguration</code>. This value must be saved on your client. Subsequent calls to <code>GetConfiguration</code> must pass this value by using the <code>ClientConfigurationVersion</code> parameter. </p> </important></p>
     async fn get_configuration(
         &self,
         input: GetConfigurationRequest,
@@ -2382,7 +2408,7 @@ impl AppConfig for AppConfigClient {
         }
     }
 
-    /// <p><p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents and SSM Parameter Store parameters. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul></p>
+    /// <p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents, SSM Parameter Store parameters, and Amazon S3 objects. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig-creating-configuration-and-profile.html">Create a Configuration and a Configuration Profile</a> in the <i>AWS AppConfig User Guide</i>.</p>
     async fn create_configuration_profile(
         &self,
         input: CreateConfigurationProfileRequest,
@@ -2626,7 +2652,7 @@ impl AppConfig for AppConfigClient {
         }
     }
 
-    /// <p>Retrieve information about a configuration.</p>
+    /// <p><p>Receive information about a configuration.</p> <important> <p>AWS AppConfig uses the value of the <code>ClientConfigurationVersion</code> parameter to identify the configuration version on your clients. If you don’t send <code>ClientConfigurationVersion</code> with each call to <code>GetConfiguration</code>, your clients receive the current configuration. You are charged each time your clients receive a configuration.</p> <p>To avoid excess charges, we recommend that you include the <code>ClientConfigurationVersion</code> value with every call to <code>GetConfiguration</code>. This value must be saved on your client. Subsequent calls to <code>GetConfiguration</code> must pass this value by using the <code>ClientConfigurationVersion</code> parameter. </p> </important></p>
     async fn get_configuration(
         &self,
         input: GetConfigurationRequest,

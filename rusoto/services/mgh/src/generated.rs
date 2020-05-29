@@ -579,6 +579,8 @@ pub enum AssociateCreatedArtifactError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -622,6 +624,9 @@ impl AssociateCreatedArtifactError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AssociateCreatedArtifactError::Throttling(err.msg))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         AssociateCreatedArtifactError::UnauthorizedOperation(err.msg),
@@ -645,6 +650,7 @@ impl fmt::Display for AssociateCreatedArtifactError {
             AssociateCreatedArtifactError::InvalidInput(ref cause) => write!(f, "{}", cause),
             AssociateCreatedArtifactError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             AssociateCreatedArtifactError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AssociateCreatedArtifactError::Throttling(ref cause) => write!(f, "{}", cause),
             AssociateCreatedArtifactError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -671,6 +677,8 @@ pub enum AssociateDiscoveredResourceError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -721,6 +729,11 @@ impl AssociateDiscoveredResourceError {
                         AssociateDiscoveredResourceError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AssociateDiscoveredResourceError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         AssociateDiscoveredResourceError::UnauthorizedOperation(err.msg),
@@ -749,6 +762,7 @@ impl fmt::Display for AssociateDiscoveredResourceError {
             AssociateDiscoveredResourceError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            AssociateDiscoveredResourceError::Throttling(ref cause) => write!(f, "{}", cause),
             AssociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -771,6 +785,8 @@ pub enum CreateProgressUpdateStreamError {
     InvalidInput(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -811,6 +827,11 @@ impl CreateProgressUpdateStreamError {
                         CreateProgressUpdateStreamError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateProgressUpdateStreamError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         CreateProgressUpdateStreamError::UnauthorizedOperation(err.msg),
@@ -837,6 +858,7 @@ impl fmt::Display for CreateProgressUpdateStreamError {
             CreateProgressUpdateStreamError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            CreateProgressUpdateStreamError::Throttling(ref cause) => write!(f, "{}", cause),
             CreateProgressUpdateStreamError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -861,6 +883,8 @@ pub enum DeleteProgressUpdateStreamError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -906,6 +930,11 @@ impl DeleteProgressUpdateStreamError {
                         DeleteProgressUpdateStreamError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteProgressUpdateStreamError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         DeleteProgressUpdateStreamError::UnauthorizedOperation(err.msg),
@@ -933,6 +962,7 @@ impl fmt::Display for DeleteProgressUpdateStreamError {
             DeleteProgressUpdateStreamError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DeleteProgressUpdateStreamError::Throttling(ref cause) => write!(f, "{}", cause),
             DeleteProgressUpdateStreamError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -957,6 +987,8 @@ pub enum DescribeApplicationStateError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl DescribeApplicationStateError {
@@ -998,6 +1030,9 @@ impl DescribeApplicationStateError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeApplicationStateError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1016,6 +1051,7 @@ impl fmt::Display for DescribeApplicationStateError {
             DescribeApplicationStateError::PolicyError(ref cause) => write!(f, "{}", cause),
             DescribeApplicationStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DescribeApplicationStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationStateError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1035,6 +1071,8 @@ pub enum DescribeMigrationTaskError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl DescribeMigrationTaskError {
@@ -1067,6 +1105,9 @@ impl DescribeMigrationTaskError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeMigrationTaskError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1084,6 +1125,7 @@ impl fmt::Display for DescribeMigrationTaskError {
             DescribeMigrationTaskError::InvalidInput(ref cause) => write!(f, "{}", cause),
             DescribeMigrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DescribeMigrationTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeMigrationTaskError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1105,6 +1147,8 @@ pub enum DisassociateCreatedArtifactError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -1150,6 +1194,11 @@ impl DisassociateCreatedArtifactError {
                         DisassociateCreatedArtifactError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DisassociateCreatedArtifactError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         DisassociateCreatedArtifactError::UnauthorizedOperation(err.msg),
@@ -1177,6 +1226,7 @@ impl fmt::Display for DisassociateCreatedArtifactError {
             DisassociateCreatedArtifactError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DisassociateCreatedArtifactError::Throttling(ref cause) => write!(f, "{}", cause),
             DisassociateCreatedArtifactError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -1201,6 +1251,8 @@ pub enum DisassociateDiscoveredResourceError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -1246,6 +1298,11 @@ impl DisassociateDiscoveredResourceError {
                         DisassociateDiscoveredResourceError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DisassociateDiscoveredResourceError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         DisassociateDiscoveredResourceError::UnauthorizedOperation(err.msg),
@@ -1279,6 +1336,7 @@ impl fmt::Display for DisassociateDiscoveredResourceError {
             DisassociateDiscoveredResourceError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DisassociateDiscoveredResourceError::Throttling(ref cause) => write!(f, "{}", cause),
             DisassociateDiscoveredResourceError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -1303,6 +1361,8 @@ pub enum ImportMigrationTaskError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -1340,6 +1400,9 @@ impl ImportMigrationTaskError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ImportMigrationTaskError::Throttling(err.msg))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(ImportMigrationTaskError::UnauthorizedOperation(
                         err.msg,
@@ -1363,6 +1426,7 @@ impl fmt::Display for ImportMigrationTaskError {
             ImportMigrationTaskError::InvalidInput(ref cause) => write!(f, "{}", cause),
             ImportMigrationTaskError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ImportMigrationTaskError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ImportMigrationTaskError::Throttling(ref cause) => write!(f, "{}", cause),
             ImportMigrationTaskError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1381,6 +1445,8 @@ pub enum ListApplicationStatesError {
     InvalidInput(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl ListApplicationStatesError {
@@ -1408,6 +1474,9 @@ impl ListApplicationStatesError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListApplicationStatesError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1424,6 +1493,7 @@ impl fmt::Display for ListApplicationStatesError {
             ListApplicationStatesError::InternalServerError(ref cause) => write!(f, "{}", cause),
             ListApplicationStatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
             ListApplicationStatesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListApplicationStatesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1443,6 +1513,8 @@ pub enum ListCreatedArtifactsError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl ListCreatedArtifactsError {
@@ -1475,6 +1547,9 @@ impl ListCreatedArtifactsError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListCreatedArtifactsError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1492,6 +1567,7 @@ impl fmt::Display for ListCreatedArtifactsError {
             ListCreatedArtifactsError::InvalidInput(ref cause) => write!(f, "{}", cause),
             ListCreatedArtifactsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListCreatedArtifactsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListCreatedArtifactsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1511,6 +1587,8 @@ pub enum ListDiscoveredResourcesError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl ListDiscoveredResourcesError {
@@ -1547,6 +1625,9 @@ impl ListDiscoveredResourcesError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListDiscoveredResourcesError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1564,6 +1645,7 @@ impl fmt::Display for ListDiscoveredResourcesError {
             ListDiscoveredResourcesError::InvalidInput(ref cause) => write!(f, "{}", cause),
             ListDiscoveredResourcesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListDiscoveredResourcesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListDiscoveredResourcesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1585,6 +1667,8 @@ pub enum ListMigrationTasksError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl ListMigrationTasksError {
@@ -1616,6 +1700,9 @@ impl ListMigrationTasksError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListMigrationTasksError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1634,6 +1721,7 @@ impl fmt::Display for ListMigrationTasksError {
             ListMigrationTasksError::PolicyError(ref cause) => write!(f, "{}", cause),
             ListMigrationTasksError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListMigrationTasksError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListMigrationTasksError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1651,6 +1739,8 @@ pub enum ListProgressUpdateStreamsError {
     InvalidInput(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl ListProgressUpdateStreamsError {
@@ -1682,6 +1772,11 @@ impl ListProgressUpdateStreamsError {
                         ListProgressUpdateStreamsError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListProgressUpdateStreamsError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1700,6 +1795,7 @@ impl fmt::Display for ListProgressUpdateStreamsError {
             }
             ListProgressUpdateStreamsError::InvalidInput(ref cause) => write!(f, "{}", cause),
             ListProgressUpdateStreamsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListProgressUpdateStreamsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1723,6 +1819,8 @@ pub enum NotifyApplicationStateError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -1765,6 +1863,9 @@ impl NotifyApplicationStateError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(NotifyApplicationStateError::Throttling(err.msg))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         NotifyApplicationStateError::UnauthorizedOperation(err.msg),
@@ -1789,6 +1890,7 @@ impl fmt::Display for NotifyApplicationStateError {
             NotifyApplicationStateError::PolicyError(ref cause) => write!(f, "{}", cause),
             NotifyApplicationStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             NotifyApplicationStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            NotifyApplicationStateError::Throttling(ref cause) => write!(f, "{}", cause),
             NotifyApplicationStateError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1811,6 +1913,8 @@ pub enum NotifyMigrationTaskStateError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -1854,6 +1958,9 @@ impl NotifyMigrationTaskStateError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(NotifyMigrationTaskStateError::Throttling(err.msg))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(
                         NotifyMigrationTaskStateError::UnauthorizedOperation(err.msg),
@@ -1877,6 +1984,7 @@ impl fmt::Display for NotifyMigrationTaskStateError {
             NotifyMigrationTaskStateError::InvalidInput(ref cause) => write!(f, "{}", cause),
             NotifyMigrationTaskStateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             NotifyMigrationTaskStateError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            NotifyMigrationTaskStateError::Throttling(ref cause) => write!(f, "{}", cause),
             NotifyMigrationTaskStateError::UnauthorizedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -1901,6 +2009,8 @@ pub enum PutResourceAttributesError {
     ResourceNotFound(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
 }
@@ -1940,6 +2050,9 @@ impl PutResourceAttributesError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(PutResourceAttributesError::Throttling(err.msg))
+                }
                 "UnauthorizedOperation" => {
                     return RusotoError::Service(PutResourceAttributesError::UnauthorizedOperation(
                         err.msg,
@@ -1963,6 +2076,7 @@ impl fmt::Display for PutResourceAttributesError {
             PutResourceAttributesError::InvalidInput(ref cause) => write!(f, "{}", cause),
             PutResourceAttributesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             PutResourceAttributesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutResourceAttributesError::Throttling(ref cause) => write!(f, "{}", cause),
             PutResourceAttributesError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
         }
     }

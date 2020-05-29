@@ -1,6 +1,6 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - AWS Transfer for SFTP @ 2018-11-05"
+description = "AWS SDK for Rust - AWS Transfer Family @ 2018-11-05"
 documentation = "https://docs.rs/rusoto_transfer"
 keywords = ["AWS", "Amazon", "transfer"]
 license = "MIT"

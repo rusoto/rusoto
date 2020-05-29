@@ -183,10 +183,14 @@ pub struct ClusterMetadata {
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>
+    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
+    /// <p>The tax documents required in your AWS Region.</p>
+    #[serde(rename = "TaxDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tax_documents: Option<TaxDocuments>,
 }
 
 /// <p>A JSON-formatted object that describes a compatible Amazon Machine Image (AMI), including the ID and name for a Snowball Edge AMI. This AMI is compatible with the device's physical hardware requirements, and it should be able to be run in an SBE1 instance on the device.</p>
@@ -254,10 +258,14 @@ pub struct CreateClusterRequest {
     /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     pub shipping_option: String,
-    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>
+    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
+    /// <p>The tax documents required in your AWS Region.</p>
+    #[serde(rename = "TaxDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tax_documents: Option<TaxDocuments>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -316,10 +324,14 @@ pub struct CreateJobRequest {
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
-    /// <p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>
+    /// <p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
+    /// <p>The tax documents required in your AWS Region.</p>
+    #[serde(rename = "TaxDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tax_documents: Option<TaxDocuments>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -523,6 +535,15 @@ pub struct GetSoftwareUpdatesResult {
     pub updates_uri: Option<String>,
 }
 
+/// <p>The tax documents required in AWS Regions in India.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct INDTaxDocuments {
+    /// <p>The Goods and Services Tax (GST) documents required in AWS Regions in India.</p>
+    #[serde(rename = "GSTIN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gstin: Option<String>,
+}
+
 /// <p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of an export job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -647,6 +668,10 @@ pub struct JobMetadata {
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
+    /// <p>The metadata associated with the tax documents required in your AWS Region.</p>
+    #[serde(rename = "TaxDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tax_documents: Option<TaxDocuments>,
 }
 
 /// <p>Contains an array of AWS resource objects. Each object represents an Amazon S3 bucket, an AWS Lambda function, or an Amazon Machine Image (AMI) based on Amazon EC2 that is associated with a particular job.</p>
@@ -859,6 +884,15 @@ pub struct ShippingDetails {
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
+}
+
+/// <p>The tax documents required in your AWS Region.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TaxDocuments {
+    /// <p>The tax documents required in AWS Regions in India.</p>
+    #[serde(rename = "IND")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ind: Option<INDTaxDocuments>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
