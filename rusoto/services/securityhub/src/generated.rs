@@ -130,13 +130,13 @@ pub struct AwsCloudFrontDistributionLogging {
     #[serde(rename = "IncludeCookies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_cookies: Option<bool>,
-    /// <p>An optional string that you want CloudFront to prefix to the access log filenames for this distribution.</p>
+    /// <p>An optional string that you want CloudFront to use as a prefix to the access log filenames for this distribution.</p>
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
 }
 
-/// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon MediaStore, or other server from which CloudFront gets your files.</p>
+/// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon Elemental MediaStore, or other server from which CloudFront gets your files.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsCloudFrontDistributionOriginItem {
     /// <p>Amazon S3 origins: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin.</p>
@@ -160,6 +160,107 @@ pub struct AwsCloudFrontDistributionOrigins {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<AwsCloudFrontDistributionOriginItem>>,
+}
+
+/// <p>Information about an AWS CodeBuild project.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCodeBuildProjectDetails {
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) used to encrypt the build output artifacts.</p> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK alias (using the format alias/alias-name). </p>
+    #[serde(rename = "EncryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_key: Option<String>,
+    /// <p>Information about the build environment for this build project.</p>
+    #[serde(rename = "Environment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment: Option<AwsCodeBuildProjectEnvironment>,
+    /// <p>The name of the build project.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ARN of the IAM role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>
+    #[serde(rename = "ServiceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role: Option<String>,
+    /// <p>Information about the build input source code for this build project.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<AwsCodeBuildProjectSource>,
+    /// <p>Information about the VPC configuration that AWS CodeBuild accesses.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<AwsCodeBuildProjectVpcConfig>,
+}
+
+/// <p>Information about the build environment for this build project.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCodeBuildProjectEnvironment {
+    /// <p>The certificate to use with this build project.</p>
+    #[serde(rename = "Certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<String>,
+    /// <p>The type of credentials AWS CodeBuild uses to pull images in your build.</p> <p>Valid values:</p> <ul> <li> <p> <code>CODEBUILD</code> specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust the AWS CodeBuild service principal.</p> </li> <li> <p> <code>SERVICE_ROLE</code> specifies that AWS CodeBuild uses your build project's service role.</p> </li> </ul> <p>When you use a cross-account or private registry image, you must use <code>SERVICE_ROLE</code> credentials. When you use an AWS CodeBuild curated image, you must use <code>CODEBUILD</code> credentials.</p>
+    #[serde(rename = "ImagePullCredentialsType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_pull_credentials_type: Option<String>,
+    /// <p>The credentials for access to a private registry.</p>
+    #[serde(rename = "RegistryCredential")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_credential: Option<AwsCodeBuildProjectEnvironmentRegistryCredential>,
+    /// <p>The type of build environment to use for related builds.</p> <p>The environment type <code>ARM_CONTAINER</code> is available only in Regions US East (N. Virginia), US East (Ohio), US West (Oregon), Europe (Ireland), Asia Pacific (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Sydney), and Europe (Frankfurt).</p> <p>The environment type <code>LINUX_CONTAINER</code> with compute type build.general1.2xlarge is available only in Regions US East (N. Virginia), US East (N. Virginia), US West (Oregon), Canada (Central), Europe (Ireland), Europe (London), Europe (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Seoul), Asia Pacific (Singapore), Asia Pacific (Sydney), China (Beijing), and China (Ningxia).</p> <p>The environment type <code>LINUX_GPU_CONTAINER</code> is available only in Regions US East (N. Virginia), US East (N. Virginia), US West (Oregon), Canada (Central), Europe (Ireland), Europe (London), Europe (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Seoul), Asia Pacific (Singapore), Asia Pacific (Sydney), China (Beijing), and China (Ningxia).</p> <p>Valid values: <code>WINDOWS_CONTAINER</code> | <code>LINUX_CONTAINER</code> | <code>LINUX_GPU_CONTAINER</code> | <code>ARM_CONTAINER</code> </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The credentials for access to a private registry.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCodeBuildProjectEnvironmentRegistryCredential {
+    /// <p><p>The Amazon Resource Name (ARN) or name of credentials created using AWS Secrets Manager.</p> <note> <p>The credential can use the name of the credentials only if they exist in your current AWS Region. </p> </note></p>
+    #[serde(rename = "Credential")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credential: Option<String>,
+    /// <p>The service that created the credentials to access a private Docker registry.</p> <p>The valid value,<code> SECRETS_MANAGER</code>, is for AWS Secrets Manager.</p>
+    #[serde(rename = "CredentialProvider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credential_provider: Option<String>,
+}
+
+/// <p>Information about the build input source code for this build project.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCodeBuildProjectSource {
+    /// <p>Information about the Git clone depth for the build project.</p>
+    #[serde(rename = "GitCloneDepth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_clone_depth: Option<i64>,
+    /// <p>Whether to ignore SSL warnings while connecting to the project source code.</p>
+    #[serde(rename = "InsecureSsl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insecure_ssl: Option<bool>,
+    /// <p><p>Information about the location of the source code to be built.</p> <p>Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, location should not be specified. If it is specified, AWS CodePipeline ignores it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the build spec file (for example, <code>https://git-codecommit.region-ID.amazonaws.com/v1/repos/repo-name</code> ).</p> </li> <li> <p>For source code in an S3 input bucket, one of the following.</p> <ul> <li> <p>The path to the ZIP file that contains the source code (for example, <code>bucket-name/path/to/object-name.zip</code>).</p> </li> <li> <p> The path to the folder that contains the source code (for example, <code>bucket-name/path/to/source-code/folder/</code>).</p> </li> </ul> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the build spec file.</p> </li> <li> <p>For source code in a Bitbucket repository, the HTTPS clone URL to the repository that contains the source and the build spec file. </p> </li> </ul></p>
+    #[serde(rename = "Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+    /// <p><p>The type of repository that contains the source code to be built. Valid values are:</p> <ul> <li> <p> <code>BITBUCKET</code> - The source code is in a Bitbucket repository.</p> </li> <li> <p> <code>CODECOMMIT</code> - The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code> - The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code> - The source code is in a GitHub repository.</p> </li> <li> <p> <code>GITHUB<em>ENTERPRISE</code> - The source code is in a GitHub Enterprise repository.</p> </li> <li> <p> <code>NO</em>SOURCE</code> - The project does not have input source code.</p> </li> <li> <p> <code>S3</code> - The source code is in an S3 input bucket. </p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Information about the VPC configuration that AWS CodeBuild accesses.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsCodeBuildProjectVpcConfig {
+    /// <p>A list of one or more security group IDs in your Amazon VPC.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of one or more subnet IDs in your Amazon VPC.</p>
+    #[serde(rename = "Subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnets: Option<Vec<String>>,
+    /// <p>The ID of the VPC.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
 }
 
 /// <p>The details of an Amazon EC2 instance.</p>
@@ -203,6 +304,292 @@ pub struct AwsEc2InstanceDetails {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Information about the network interface attachment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2NetworkInterfaceAttachment {
+    /// <p>The timestamp indicating when the attachment initiated.</p>
+    #[serde(rename = "AttachTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attach_time: Option<String>,
+    /// <p>The identifier of the network interface attachment</p>
+    #[serde(rename = "AttachmentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_id: Option<String>,
+    /// <p>Indicates whether the network interface is deleted when the instance is terminated.</p>
+    #[serde(rename = "DeleteOnTermination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_on_termination: Option<bool>,
+    /// <p>The device index of the network interface attachment on the instance.</p>
+    #[serde(rename = "DeviceIndex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_index: Option<i64>,
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+    /// <p>The AWS account ID of the owner of the instance.</p>
+    #[serde(rename = "InstanceOwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_owner_id: Option<String>,
+    /// <p>The attachment state.</p> <p>Valid values: <code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Details about the network interface</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2NetworkInterfaceDetails {
+    /// <p>The network interface attachment.</p>
+    #[serde(rename = "Attachment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment: Option<AwsEc2NetworkInterfaceAttachment>,
+    /// <p>The ID of the network interface.</p>
+    #[serde(rename = "NetworkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_id: Option<String>,
+    /// <p>Security groups for the network interface.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<AwsEc2NetworkInterfaceSecurityGroup>>,
+    /// <p>Indicates whether traffic to or from the instance is validated.</p>
+    #[serde(rename = "SourceDestCheck")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_dest_check: Option<bool>,
+}
+
+/// <p>A security group associated with the network interface.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2NetworkInterfaceSecurityGroup {
+    /// <p>The ID of the security group.</p>
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// <p>The name of the security group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+/// <p>Details about an EC2 security group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2SecurityGroupDetails {
+    /// <p>The ID of the security group.</p>
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// <p>The name of the security group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The inbound rules associated with the security group.</p>
+    #[serde(rename = "IpPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_permissions: Option<Vec<AwsEc2SecurityGroupIpPermission>>,
+    /// <p>[VPC only] The outbound rules associated with the security group.</p>
+    #[serde(rename = "IpPermissionsEgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_permissions_egress: Option<Vec<AwsEc2SecurityGroupIpPermission>>,
+    /// <p>The AWS account ID of the owner of the security group.</p>
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    /// <p>[VPC only] The ID of the VPC for the security group.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>An IP permission for an EC2 security group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2SecurityGroupIpPermission {
+    /// <p>The start of the port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number.</p> <p>A value of -1 indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify all codes. </p>
+    #[serde(rename = "FromPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_port: Option<i64>,
+    /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>, <code>icmpv6</code>) or number.</p> <p>[VPC only] Use <code>-1</code> to specify all protocols.</p> <p>When authorizing security group rules, specifying -1 or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>icmpv6</code> allows traffic on all ports, regardless of any port range you specify.</p> <p>For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range.</p> <p>For <code>icmpv6</code>, the port range is optional. If you omit the port range, traffic for all types and codes is allowed. </p>
+    #[serde(rename = "IpProtocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_protocol: Option<String>,
+    /// <p>The IPv4 ranges.</p>
+    #[serde(rename = "IpRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_ranges: Option<Vec<AwsEc2SecurityGroupIpRange>>,
+    /// <p>The IPv6 ranges.</p>
+    #[serde(rename = "Ipv6Ranges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv_6_ranges: Option<Vec<AwsEc2SecurityGroupIpv6Range>>,
+    /// <p>[VPC only] The prefix list IDs for an AWS service. With outbound rules, this is the AWS service to access through a VPC endpoint from instances associated with the security group.</p>
+    #[serde(rename = "PrefixListIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix_list_ids: Option<Vec<AwsEc2SecurityGroupPrefixListId>>,
+    /// <p>The end of the port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code.</p> <p>A value of -1 indicates all ICMP/ICMPv6 codes. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
+    #[serde(rename = "ToPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to_port: Option<i64>,
+    /// <p>The security group and AWS account ID pairs.</p>
+    #[serde(rename = "UserIdGroupPairs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id_group_pairs: Option<Vec<AwsEc2SecurityGroupUserIdGroupPair>>,
+}
+
+/// <p>A range of IPv4 addresses.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2SecurityGroupIpRange {
+    /// <p>The IPv4 CIDR range. You can specify either a CIDR range or a source security group, but not both. To specify a single IPv4 address, use the /32 prefix length.</p>
+    #[serde(rename = "CidrIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_ip: Option<String>,
+}
+
+/// <p>A range of IPv6 addresses.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2SecurityGroupIpv6Range {
+    /// <p>The IPv6 CIDR range. You can specify either a CIDR range or a source security group, but not both. To specify a single IPv6 address, use the /128 prefix length.</p>
+    #[serde(rename = "CidrIpv6")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_ipv_6: Option<String>,
+}
+
+/// <p>A prefix list ID.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2SecurityGroupPrefixListId {
+    /// <p>The ID of the prefix.</p>
+    #[serde(rename = "PrefixListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix_list_id: Option<String>,
+}
+
+/// <p>A relationship between a security group and a user.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2SecurityGroupUserIdGroupPair {
+    /// <p>The ID of the security group.</p>
+    #[serde(rename = "GroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// <p>The name of the security group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>The status of a VPC peering connection, if applicable.</p>
+    #[serde(rename = "PeeringStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peering_status: Option<String>,
+    /// <p>The ID of an AWS account.</p> <p>For a referenced security group in another VPC, the account ID of the referenced security group is returned in the response. If the referenced security group is deleted, this value is not returned.</p> <p>[EC2-Classic] Required when adding or removing rules that reference a security group in another AWS. </p>
+    #[serde(rename = "UserId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    /// <p>The ID of the VPC for the referenced security group, if applicable.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+    /// <p>The ID of the VPC peering connection, if applicable.</p>
+    #[serde(rename = "VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_peering_connection_id: Option<String>,
+}
+
+/// <p>Information about an Elasticsearch domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsElasticsearchDomainDetails {
+    /// <p>IAM policy document specifying the access policies for the new Amazon ES domain.</p>
+    #[serde(rename = "AccessPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_policies: Option<String>,
+    /// <p>Additional options for the domain endpoint.</p>
+    #[serde(rename = "DomainEndpointOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_endpoint_options: Option<AwsElasticsearchDomainDomainEndpointOptions>,
+    /// <p>Unique identifier for an Amazon ES domain.</p>
+    #[serde(rename = "DomainId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_id: Option<String>,
+    /// <p>Name of an Amazon ES domain.</p> <p>Domain names are unique across all domains owned by the same account within an AWS Region.</p> <p>Domain names must start with a lowercase letter and must be between 3 and 28 characters.</p> <p>Valid characters are a-z (lowercase only), 0-9, and – (hyphen). </p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>Elasticsearch version.</p>
+    #[serde(rename = "ElasticsearchVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elasticsearch_version: Option<String>,
+    /// <p>Details about the configuration for encryption at rest.</p>
+    #[serde(rename = "EncryptionAtRestOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_at_rest_options: Option<AwsElasticsearchDomainEncryptionAtRestOptions>,
+    /// <p>Domain-specific endpoint used to submit index, search, and data upload requests to an Amazon ES domain.</p> <p>The endpoint is a service URL. </p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<String>,
+    /// <p>The key-value pair that exists if the Amazon ES domain uses VPC endpoints.</p>
+    #[serde(rename = "Endpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoints: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Details about the configuration for node-to-node encryption.</p>
+    #[serde(rename = "NodeToNodeEncryptionOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_to_node_encryption_options: Option<AwsElasticsearchDomainNodeToNodeEncryptionOptions>,
+    /// <p>Information that Amazon ES derives based on <code>VPCOptions</code> for the domain.</p>
+    #[serde(rename = "VPCOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_options: Option<AwsElasticsearchDomainVPCOptions>,
+}
+
+/// <p>Additional options for the domain endpoint, such as whether to require HTTPS for all traffic.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsElasticsearchDomainDomainEndpointOptions {
+    /// <p>Whether to require that all traffic to the domain arrive over HTTPS.</p>
+    #[serde(rename = "EnforceHTTPS")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce_https: Option<bool>,
+    /// <p><p>The TLS security policy to apply to the HTTPS endpoint of the Elasticsearch domain.</p> <p>Valid values:</p> <ul> <li> <p> <code>Policy-Min-TLS-1-0-2019-07</code>, which supports TLSv1.0 and higher</p> </li> <li> <p> <code>Policy-Min-TLS-1-2-2019-07</code>, which only supports TLSv1.2</p> </li> </ul></p>
+    #[serde(rename = "TLSSecurityPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_security_policy: Option<String>,
+}
+
+/// <p>Details about the configuration for encryption at rest.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsElasticsearchDomainEncryptionAtRestOptions {
+    /// <p>Whether encryption at rest is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The KMS key ID. Takes the form 1a2a3a4-1a2a-3a4a-5a6a-1a2a3a4a5a6a.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+}
+
+/// <p>Details about the configuration for node-to-node encryption.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsElasticsearchDomainNodeToNodeEncryptionOptions {
+    /// <p>Whether node-to-node encryption is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// <p>Information that Amazon ES derives based on <code>VPCOptions</code> for the domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsElasticsearchDomainVPCOptions {
+    /// <p>The list of Availability Zones associated with the VPC subnets.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>The list of security group IDs associated with the VPC endpoints for the domain.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of subnet IDs associated with the VPC endpoints for the domain.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>ID for the VPC.</p>
+    #[serde(rename = "VPCId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
 /// <p>Information about a load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsElbv2LoadBalancerDetails {
@@ -222,7 +609,7 @@ pub struct AwsElbv2LoadBalancerDetails {
     #[serde(rename = "DNSName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_name: Option<String>,
-    /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are ipv4 (for IPv4 addresses) and dualstack (for IPv4 and IPv6 addresses).</p>
+    /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses).</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_type: Option<String>,
@@ -325,7 +712,7 @@ pub struct AwsKmsKeyDetails {
     #[serde(rename = "KeyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_state: Option<String>,
-    /// <p>The source of the CMK's key material. When this value is AWS_KMS, AWS KMS created the key material. When this value is EXTERNAL, the key material was imported from your existing key management infrastructure or the CMK lacks key material. When this value is AWS_CLOUDHSM, the key material was created in the AWS CloudHSM cluster associated with a custom key store.</p>
+    /// <p>The source of the CMK's key material.</p> <p>When this value is <code>AWS_KMS</code>, AWS KMS created the key material.</p> <p>When this value is <code>EXTERNAL</code>, the key material was imported from your existing key management infrastructure or the CMK lacks key material.</p> <p>When this value is <code>AWS_CLOUDHSM</code>, the key material was created in the AWS CloudHSM cluster associated with a custom key store.</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origin: Option<String>,
@@ -503,9 +890,158 @@ pub struct AwsLambdaFunctionVpcConfig {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Details about a Lambda layer version.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsLambdaLayerVersionDetails {
+    /// <p>The layer's compatible runtimes. Maximum number of five items.</p> <p>Valid values: <code>nodejs10.x</code> | <code>nodejs12.x</code> | <code>java8</code> | <code>java11</code> | <code>python2.7</code> | <code>python3.6</code> | <code>python3.7</code> | <code>python3.8</code> | <code>dotnetcore1.0</code> | <code>dotnetcore2.1</code> | <code>go1.x</code> | <code>ruby2.5</code> | <code>provided</code> </p>
+    #[serde(rename = "CompatibleRuntimes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_runtimes: Option<Vec<String>>,
+    /// <p>The date that the version was created, in ISO 8601 format. For example, 2018-11-27T15:10:45.123+0000. </p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<String>,
+    /// <p>The version number.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
+/// <p>An AWS Identity and Access Management (IAM) role associated with the DB instance.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsRdsDbInstanceAssociatedRole {
+    /// <p>The name of the feature associated with the IAM)role.</p>
+    #[serde(rename = "FeatureName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that is associated with the DB instance.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p><p>Describes the state of the association between the IAM role and the DB instance. The <code>Status</code> property returns one of the following values:</p> <ul> <li> <p> <code>ACTIVE</code> - The IAM role ARN is associated with the DB instance and can be used to access other AWS services on your behalf.</p> </li> <li> <p> <code>PENDING</code> - The IAM role ARN is being associated with the DB instance.</p> </li> <li> <p> <code>INVALID</code> - The IAM role ARN is associated with the DB instance. But the DB instance is unable to assume the IAM role in order to access other AWS services on your behalf. </p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Contains the details of an Amazon RDS DB instance.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsRdsDbInstanceDetails {
+    /// <p>The AWS Identity and Access Management (IAM) roles associated with the DB instance.</p>
+    #[serde(rename = "AssociatedRoles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub associated_roles: Option<Vec<AwsRdsDbInstanceAssociatedRole>>,
+    /// <p>The identifier of the CA certificate for this DB instance.</p>
+    #[serde(rename = "CACertificateIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ca_certificate_identifier: Option<String>,
+    /// <p>If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.</p>
+    #[serde(rename = "DBClusterIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_identifier: Option<String>,
+    /// <p>Contains the name of the compute and memory capacity class of the DB instance.</p>
+    #[serde(rename = "DBInstanceClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_class: Option<String>,
+    /// <p>Contains a user-supplied database identifier. This identifier is the unique key that identifies a DB instance.</p>
+    #[serde(rename = "DBInstanceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_identifier: Option<String>,
+    /// <p>The meaning of this parameter differs according to the database engine you use.</p> <p> <b>MySQL, MariaDB, SQL Server, PostgreSQL</b> </p> <p>Contains the name of the initial database of this instance that was provided at create time, if one was specified when the DB instance was created. This same name is returned for the life of the DB instance.</p> <p> <b>Oracle</b> </p> <p>Contains the Oracle System ID (SID) of the created DB instance. Not shown when the returned parameters do not apply to an Oracle DB instance. </p>
+    #[serde(rename = "DBName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_name: Option<String>,
+    /// <p>Specifies the port that the DB instance listens on. If the DB instance is part of a DB cluster, this can be a different port than the DB cluster port.</p>
+    #[serde(rename = "DbInstancePort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_instance_port: Option<i64>,
+    /// <p>The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed. </p>
+    #[serde(rename = "DbiResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dbi_resource_id: Option<String>,
+    /// <p>Indicates whether the DB instance has deletion protection enabled.</p> <p>When deletion protection is enabled, the database cannot be deleted.</p>
+    #[serde(rename = "DeletionProtection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletion_protection: Option<bool>,
+    /// <p>Specifies the connection endpoint.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<AwsRdsDbInstanceEndpoint>,
+    /// <p>Provides the name of the database engine to use for this DB instance.</p>
+    #[serde(rename = "Engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p>Indicates the database engine version.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p><p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.</p> <p>IAM database authentication can be enabled for the following database engines.</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora 5.6 or higher</p> </li> </ul></p>
+    #[serde(rename = "IAMDatabaseAuthenticationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_database_authentication_enabled: Option<bool>,
+    /// <p>Provides the date and time the DB instance was created.</p>
+    #[serde(rename = "InstanceCreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_create_time: Option<String>,
+    /// <p>If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB instance.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>Specifies the accessibility options for the DB instance.</p> <p>A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address.</p> <p>A value of false specifies an internal instance with a DNS name that resolves to a private IP address. </p>
+    #[serde(rename = "PubliclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+    /// <p>Specifies whether the DB instance is encrypted.</p>
+    #[serde(rename = "StorageEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_encrypted: Option<bool>,
+    /// <p>The ARN from the key store with which the instance is associated for TDE encryption.</p>
+    #[serde(rename = "TdeCredentialArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tde_credential_arn: Option<String>,
+    /// <p>A list of VPC security groups that the DB instance belongs to.</p>
+    #[serde(rename = "VpcSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_security_groups: Option<Vec<AwsRdsDbInstanceVpcSecurityGroup>>,
+}
+
+/// <p>Specifies the connection endpoint.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsRdsDbInstanceEndpoint {
+    /// <p>Specifies the DNS address of the DB instance.</p>
+    #[serde(rename = "Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<String>,
+    /// <p>Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.</p>
+    #[serde(rename = "HostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hosted_zone_id: Option<String>,
+    /// <p>Specifies the port that the database engine is listening on.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+}
+
+/// <p>A VPC security groups that the DB instance belongs to.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsRdsDbInstanceVpcSecurityGroup {
+    /// <p>The status of the VPC security group.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The name of the VPC security group.</p>
+    #[serde(rename = "VpcSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_security_group_id: Option<String>,
+}
+
 /// <p>The details of an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsS3BucketDetails {
+    /// <p>The date and time when the S3 bucket was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
     /// <p>The canonical user ID of the owner of the S3 bucket.</p>
     #[serde(rename = "OwnerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -514,26 +1050,90 @@ pub struct AwsS3BucketDetails {
     #[serde(rename = "OwnerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_name: Option<String>,
+    /// <p>The encryption rules that are applied to the S3 bucket.</p>
+    #[serde(rename = "ServerSideEncryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_side_encryption_configuration: Option<AwsS3BucketServerSideEncryptionConfiguration>,
 }
 
-/// <p><p>Provides consistent format for the contents of the Security Hub-aggregated findings. <code>AwsSecurityFinding</code> format enables you to share findings between AWS security services and third-party solutions, and compliance checks.</p> <note> <p>A finding is a potential security issue generated either by AWS services (Amazon GuardDuty, Amazon Inspector, and Amazon Macie) or by the integrated third-party solutions and compliance checks.</p> </note></p>
+/// <p>Specifies the default server-side encryption to apply to new objects in the bucket.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsS3BucketServerSideEncryptionByDefault {
+    /// <p>AWS KMS customer master key (CMK) ID to use for the default encryption.</p>
+    #[serde(rename = "KMSMasterKeyID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p>Server-side encryption algorithm to use for the default encryption.</p>
+    #[serde(rename = "SSEAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_algorithm: Option<String>,
+}
+
+/// <p>The encryption configuration for the S3 bucket.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsS3BucketServerSideEncryptionConfiguration {
+    /// <p>The encryption rules that are applied to the S3 bucket.</p>
+    #[serde(rename = "Rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<AwsS3BucketServerSideEncryptionRule>>,
+}
+
+/// <p>An encryption rule to apply to the S3 bucket.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsS3BucketServerSideEncryptionRule {
+    /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a <code>PUT</code> object request doesn't specify any server-side encryption, this default encryption is applied.</p>
+    #[serde(rename = "ApplyServerSideEncryptionByDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_server_side_encryption_by_default: Option<AwsS3BucketServerSideEncryptionByDefault>,
+}
+
+/// <p>Details about an Amazon S3 object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsS3ObjectDetails {
+    /// <p>A standard MIME type describing the format of the object data.</p>
+    #[serde(rename = "ContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>The opaque identifier assigned by a web server to a specific version of a resource found at a URL.</p>
+    #[serde(rename = "ETag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub e_tag: Option<String>,
+    /// <p>The date and time when the object was last modified.</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified: Option<String>,
+    /// <p>The identifier of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
+    #[serde(rename = "SSEKMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssekms_key_id: Option<String>,
+    /// <p>If the object is stored using server-side encryption, the value of the server-side encryption algorithm used when storing this object in Amazon S3.</p>
+    #[serde(rename = "ServerSideEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_side_encryption: Option<String>,
+    /// <p>The version of the object.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
+}
+
+/// <p><p>Provides consistent format for the contents of the Security Hub-aggregated findings. <code>AwsSecurityFinding</code> format enables you to share findings between AWS security services and third-party solutions, and security standards checks.</p> <note> <p>A finding is a potential security issue generated either by AWS services (Amazon GuardDuty, Amazon Inspector, and Amazon Macie) or by the integrated third-party solutions and standards checks.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsSecurityFinding {
     /// <p>The AWS account ID that a finding is generated in.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
-    /// <p>This data type is exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard (for example, CIS AWS Foundations). Contains compliance-related finding details.</p>
+    /// <p>This data type is exclusive to findings that are generated as the result of a check run against a specific rule in a supported security standard, such as CIS AWS Foundations. Contains security standard-related finding details.</p>
     #[serde(rename = "Compliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance: Option<Compliance>,
-    /// <p>A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify. Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>
+    /// <p>A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify.</p> <p>Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<i64>,
     /// <p>An ISO8601-formatted timestamp that indicates when the security-findings provider created the potential security issue that a finding captured.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: String,
-    /// <p>The level of importance assigned to the resources associated with the finding. A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>
+    /// <p>The level of importance assigned to the resources associated with the finding.</p> <p>A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>
     #[serde(rename = "Criticality")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub criticality: Option<i64>,
@@ -544,7 +1144,7 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "FirstObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_observed_at: Option<String>,
-    /// <p>The identifier for the solution-specific component (a discrete unit of logic) that generated a finding. In various security-findings providers' solutions, this generator can be called a rule, a check, a detector, a plug-in, etc. </p>
+    /// <p>The identifier for the solution-specific component (a discrete unit of logic) that generated a finding. In various security-findings providers' solutions, this generator can be called a rule, a check, a detector, a plugin, etc. </p>
     #[serde(rename = "GeneratorId")]
     pub generator_id: String,
     /// <p>The security findings provider-specific identifier for a finding.</p>
@@ -570,7 +1170,7 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "Process")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub process: Option<ProcessDetails>,
-    /// <p>The ARN generated by Security Hub that uniquely identifies a third-party company (security-findings provider) after this provider's product (solution that generates findings) is registered with Security Hub. </p>
+    /// <p>The ARN generated by Security Hub that uniquely identifies a product that generates findings. This can be the ARN for a third-party product that is integrated with Security Hub, or the ARN for a custom integration.</p>
     #[serde(rename = "ProductArn")]
     pub product_arn: String,
     /// <p>A data type where security-findings providers can include additional solution-specific details that aren't part of the defined <code>AwsSecurityFinding</code> format.</p>
@@ -602,7 +1202,7 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "SourceUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_url: Option<String>,
-    /// <p>Threat intel details related to a finding.</p>
+    /// <p>Threat intelligence details related to a finding.</p>
     #[serde(rename = "ThreatIntelIndicators")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicators: Option<Vec<ThreatIntelIndicator>>,
@@ -623,13 +1223,17 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "VerificationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_state: Option<String>,
+    /// <p>Provides information about the status of the investigation into a finding.</p>
+    #[serde(rename = "Workflow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow: Option<Workflow>,
     /// <p>The workflow state of a finding. </p>
     #[serde(rename = "WorkflowState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workflow_state: Option<String>,
 }
 
-/// <p>A collection of attributes that are applied to all active Security Hub-aggregated findings and that result in a subset of findings that are included in this insight. </p>
+/// <p>A collection of attributes that are applied to all active Security Hub-aggregated findings and that result in a subset of findings that are included in this insight.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsSecurityFindingFilters {
     /// <p>The AWS account ID that a finding is generated in.</p>
@@ -640,11 +1244,11 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "CompanyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub company_name: Option<Vec<StringFilter>>,
-    /// <p>Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard (for example, CIS AWS Foundations). Contains compliance-related finding details.</p>
+    /// <p>Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard, such as CIS AWS Foundations. Contains security standard-related finding details.</p>
     #[serde(rename = "ComplianceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_status: Option<Vec<StringFilter>>,
-    /// <p>A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify. Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>
+    /// <p>A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify.</p> <p>Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<Vec<NumberFilter>>,
@@ -652,7 +1256,7 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<Vec<DateFilter>>,
-    /// <p>The level of importance assigned to the resources associated with the finding. A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>
+    /// <p>The level of importance assigned to the resources associated with the finding.</p> <p>A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>
     #[serde(rename = "Criticality")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub criticality: Option<Vec<NumberFilter>>,
@@ -664,7 +1268,7 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "FirstObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_observed_at: Option<Vec<DateFilter>>,
-    /// <p>The identifier for the solution-specific component (a discrete unit of logic) that generated a finding. In various security-findings providers' solutions, this generator can be called a rule, a check, a detector, a plug-in, etc.</p>
+    /// <p>The identifier for the solution-specific component (a discrete unit of logic) that generated a finding. In various security-findings providers' solutions, this generator can be called a rule, a check, a detector, a plugin, etc.</p>
     #[serde(rename = "GeneratorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generator_id: Option<Vec<StringFilter>>,
@@ -824,7 +1428,7 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "ResourceAwsEc2InstanceKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_aws_ec_2_instance_key_name: Option<Vec<StringFilter>>,
-    /// <p>The date/time the instance was launched.</p>
+    /// <p>The date and time the instance was launched.</p>
     #[serde(rename = "ResourceAwsEc2InstanceLaunchedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_aws_ec_2_instance_launched_at: Option<Vec<DateFilter>>,
@@ -916,27 +1520,27 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "SourceUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_url: Option<Vec<StringFilter>>,
-    /// <p>The category of a threat intel indicator.</p>
+    /// <p>The category of a threat intelligence indicator.</p>
     #[serde(rename = "ThreatIntelIndicatorCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicator_category: Option<Vec<StringFilter>>,
-    /// <p>The date/time of the last observation of a threat intel indicator.</p>
+    /// <p>The date/time of the last observation of a threat intelligence indicator.</p>
     #[serde(rename = "ThreatIntelIndicatorLastObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicator_last_observed_at: Option<Vec<DateFilter>>,
-    /// <p>The source of the threat intel.</p>
+    /// <p>The source of the threat intelligence.</p>
     #[serde(rename = "ThreatIntelIndicatorSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicator_source: Option<Vec<StringFilter>>,
-    /// <p>The URL for more details from the source of the threat intel.</p>
+    /// <p>The URL for more details from the source of the threat intelligence.</p>
     #[serde(rename = "ThreatIntelIndicatorSourceUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicator_source_url: Option<Vec<StringFilter>>,
-    /// <p>The type of a threat intel indicator.</p>
+    /// <p>The type of a threat intelligence indicator.</p>
     #[serde(rename = "ThreatIntelIndicatorType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicator_type: Option<Vec<StringFilter>>,
-    /// <p>The value of a threat intel indicator.</p>
+    /// <p>The value of a threat intelligence indicator.</p>
     #[serde(rename = "ThreatIntelIndicatorValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threat_intel_indicator_value: Option<Vec<StringFilter>>,
@@ -964,12 +1568,27 @@ pub struct AwsSecurityFindingFilters {
     #[serde(rename = "WorkflowState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workflow_state: Option<Vec<StringFilter>>,
+    /// <p><p>The status of the investigation into a finding. Allowed values are the following.</p> <ul> <li> <p> <code>NEW</code> - The initial state of a finding, before it is reviewed.</p> </li> <li> <p> <code>NOTIFIED</code> - Indicates that the resource owner has been notified about the security issue. Used when the initial reviewer is not the resource owner, and needs intervention from the resource owner.</p> </li> <li> <p> <code>SUPPRESSED</code> - The finding will not be reviewed again and will not be acted upon.</p> </li> <li> <p> <code>RESOLVED</code> - The finding was reviewed and remediated and is now considered resolved. </p> </li> </ul></p>
+    #[serde(rename = "WorkflowStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow_status: Option<Vec<StringFilter>>,
+}
+
+/// <p>Identifies a finding to update using <code>BatchUpdateFindings</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsSecurityFindingIdentifier {
+    /// <p>The identifier of the finding that was specified by the finding provider.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The ARN generated by Security Hub that uniquely identifies a product that generates findings. This can be the ARN for a third-party product that is integrated with Security Hub, or the ARN for a custom integration.</p>
+    #[serde(rename = "ProductArn")]
+    pub product_arn: String,
 }
 
 /// <p>A wrapper type for the topic's Amazon Resource Name (ARN).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsSnsTopicDetails {
-    /// <p>The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK.</p>
+    /// <p>The ID of an AWS managed customer master key (CMK) for Amazon SNS or a custom CMK.</p>
     #[serde(rename = "KmsMasterKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_master_key_id: Option<String>,
@@ -1003,7 +1622,7 @@ pub struct AwsSnsTopicSubscription {
 /// <p>Data about a queue.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsSqsQueueDetails {
-    /// <p>The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of maxReceiveCount is exceeded. </p>
+    /// <p>The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of <code>maxReceiveCount</code> is exceeded. </p>
     #[serde(rename = "DeadLetterTargetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dead_letter_target_arn: Option<String>,
@@ -1011,7 +1630,7 @@ pub struct AwsSqsQueueDetails {
     #[serde(rename = "KmsDataKeyReusePeriodSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_data_key_reuse_period_seconds: Option<i64>,
-    /// <p>The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK.</p>
+    /// <p>The ID of an AWS managed customer master key (CMK) for Amazon SQS or a custom CMK.</p>
     #[serde(rename = "KmsMasterKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_master_key_id: Option<String>,
@@ -1019,6 +1638,56 @@ pub struct AwsSqsQueueDetails {
     #[serde(rename = "QueueName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue_name: Option<String>,
+}
+
+/// <p>Details about a WAF WebACL.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsWafWebAclDetails {
+    /// <p>The action to perform if none of the rules contained in the WebACL match.</p>
+    #[serde(rename = "DefaultAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_action: Option<String>,
+    /// <p>A friendly name or description of the WebACL. You can't change the name of a WebACL after you create it.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>An array that contains the action for each rule in a WebACL, the priority of the rule, and the ID of the rule.</p>
+    #[serde(rename = "Rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<AwsWafWebAclRule>>,
+    /// <p>A unique identifier for a WebACL.</p>
+    #[serde(rename = "WebAclId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_acl_id: Option<String>,
+}
+
+/// <p>Details for a rule in a WAF WebACL.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsWafWebAclRule {
+    /// <p>Specifies the action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule. </p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<WafAction>,
+    /// <p>Rules to exclude from a rule group.</p>
+    #[serde(rename = "ExcludedRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub excluded_rules: Option<Vec<WafExcludedRule>>,
+    /// <p>Use the <code>OverrideAction</code> to test your RuleGroup.</p> <p>Any rule in a RuleGroup can potentially block a request. If you set the <code>OverrideAction</code> to <code>None</code>, the RuleGroup blocks a request if any individual rule in the RuleGroup matches the request and is configured to block that request.</p> <p>However, if you first want to test the RuleGroup, set the <code>OverrideAction</code> to <code>Count</code>. The RuleGroup then overrides any block action specified by individual rules contained within the group. Instead of blocking matching requests, those requests are counted.</p> <p> <code>ActivatedRule</code>|<code>OverrideAction</code> applies only when updating or adding a RuleGroup to a WebACL. In this case you do not use <code>ActivatedRule</code>|<code>Action</code>. For all other update requests, <code>ActivatedRule</code>|<code>Action</code> is used instead of <code>ActivatedRule</code>|<code>OverrideAction</code>. </p>
+    #[serde(rename = "OverrideAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub override_action: Option<WafOverrideAction>,
+    /// <p>Specifies the order in which the rules in a WebACL are evaluated. Rules with a lower value for <code>Priority</code> are evaluated before rules with a higher value. The value must be a unique integer. If you add multiple rules to a WebACL, the values do not need to be consecutive.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>The identifier for a rule.</p>
+    #[serde(rename = "RuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_id: Option<String>,
+    /// <p>The rule type.</p> <p>Valid values: <code>REGULAR</code> | <code>RATE_BASED</code> | <code>GROUP</code> </p> <p>The default is <code>REGULAR</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1041,7 +1710,7 @@ pub struct BatchDisableStandardsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchEnableStandardsRequest {
-    /// <p><p>The list of standards compliance checks to enable.</p> <important> <p>In this release, Security Hub supports only the CIS AWS Foundations standard.</p> <p>The ARN for the standard is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important></p>
+    /// <p>The list of standards checks to enable.</p>
     #[serde(rename = "StandardsSubscriptionRequests")]
     pub standards_subscription_requests: Vec<StandardsSubscriptionRequest>,
 }
@@ -1069,7 +1738,7 @@ pub struct BatchImportFindingsResponse {
     /// <p>The number of findings that failed to import.</p>
     #[serde(rename = "FailedCount")]
     pub failed_count: i64,
-    /// <p>The list of the findings that failed to import.</p>
+    /// <p>The list of findings that failed to import.</p>
     #[serde(rename = "FailedFindings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_findings: Option<Vec<ImportFindingsError>>,
@@ -1078,13 +1747,90 @@ pub struct BatchImportFindingsResponse {
     pub success_count: i64,
 }
 
-/// <p><p>Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard (for example, CIS AWS Foundations). Contains compliance-related finding details.</p> <p>Values include the following:</p> <ul> <li> <p>Allowed values are the following:</p> <ul> <li> <p> <code>PASSED</code> - Compliance check passed for all evaluated resources.</p> </li> <li> <p> <code>WARNING</code> - Some information is missing or this check is not supported given your configuration.</p> </li> <li> <p> <code>FAILED</code> - Compliance check failed for at least one evaluated resource.</p> </li> <li> <p> <code>NOT_AVAILABLE</code> - Check could not be performed due to a service outage or API error.</p> </li> </ul> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchUpdateFindingsRequest {
+    /// <p>The updated value for the finding confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify.</p> <p>Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<i64>,
+    /// <p>The updated value for the level of importance assigned to the resources associated with the findings.</p> <p>A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources. </p>
+    #[serde(rename = "Criticality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub criticality: Option<i64>,
+    /// <p>The list of findings to update. <code>BatchUpdateFindings</code> can be used to update up to 100 findings at a time.</p> <p>For each finding, the list provides the finding identifier and the ARN of the finding provider.</p>
+    #[serde(rename = "FindingIdentifiers")]
+    pub finding_identifiers: Vec<AwsSecurityFindingIdentifier>,
+    #[serde(rename = "Note")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub note: Option<NoteUpdate>,
+    /// <p>A list of findings that are related to the updated findings.</p>
+    #[serde(rename = "RelatedFindings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_findings: Option<Vec<RelatedFinding>>,
+    /// <p>Used to update the finding severity.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<SeverityUpdate>,
+    /// <p><p>One or more finding types in the format of namespace/category/classifier that classify a finding.</p> <p>Valid namespace values are as follows.</p> <ul> <li> <p>Software and Configuration Checks</p> </li> <li> <p>TTPs</p> </li> <li> <p>Effects</p> </li> <li> <p>Unusual Behaviors</p> </li> <li> <p>Sensitive Data Identifications </p> </li> </ul></p>
+    #[serde(rename = "Types")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub types: Option<Vec<String>>,
+    /// <p>A list of name/value string pairs associated with the finding. These are custom, user-defined fields added to a finding.</p>
+    #[serde(rename = "UserDefinedFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_defined_fields: Option<::std::collections::HashMap<String, String>>,
+    /// <p><p>Indicates the veracity of a finding.</p> <p>The available values for <code>VerificationState</code> are as follows.</p> <ul> <li> <p> <code>UNKNOWN</code> – The default disposition of a security finding</p> </li> <li> <p> <code>TRUE<em>POSITIVE</code> – The security finding is confirmed</p> </li> <li> <p> <code>FALSE</em>POSITIVE</code> – The security finding was determined to be a false alarm</p> </li> <li> <p> <code>BENIGN<em>POSITIVE</code> – A special case of <code>TRUE</em>POSITIVE</code> where the finding doesn&#39;t pose any threat, is expected, or both</p> </li> </ul></p>
+    #[serde(rename = "VerificationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub verification_state: Option<String>,
+    /// <p>Used to update the workflow status of a finding.</p> <p>The workflow status indicates the progress of the investigation into the finding. </p>
+    #[serde(rename = "Workflow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workflow: Option<WorkflowUpdate>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchUpdateFindingsResponse {
+    /// <p>The list of findings that were updated successfully.</p>
+    #[serde(rename = "ProcessedFindings")]
+    pub processed_findings: Vec<AwsSecurityFindingIdentifier>,
+    /// <p>The list of findings that were not updated.</p>
+    #[serde(rename = "UnprocessedFindings")]
+    pub unprocessed_findings: Vec<BatchUpdateFindingsUnprocessedFinding>,
+}
+
+/// <p>A finding from a <code>BatchUpdateFindings</code> request that Security Hub was unable to update.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchUpdateFindingsUnprocessedFinding {
+    /// <p>The code associated with the error.</p>
+    #[serde(rename = "ErrorCode")]
+    pub error_code: String,
+    /// <p>The message associated with the error.</p>
+    #[serde(rename = "ErrorMessage")]
+    pub error_message: String,
+    /// <p>The identifier of the finding that was not updated.</p>
+    #[serde(rename = "FindingIdentifier")]
+    pub finding_identifier: AwsSecurityFindingIdentifier,
+}
+
+/// <p>Contains finding details that are specific to control-based findings. Only returned for findings generated from controls.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Compliance {
-    /// <p>The result of a compliance check.</p>
+    /// <p>For a control, the industry or regulatory framework requirements that are related to the control. The check for that control is aligned with these requirements.</p>
+    #[serde(rename = "RelatedRequirements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_requirements: Option<Vec<String>>,
+    /// <p><p>The result of a standards check.</p> <p>The valid values for <code>Status</code> are as follows.</p> <ul> <li> <ul> <li> <p> <code>PASSED</code> - Standards check passed for all evaluated resources.</p> </li> <li> <p> <code>WARNING</code> - Some information is missing or this check is not supported for your configuration.</p> </li> <li> <p> <code>FAILED</code> - Standards check failed for at least one evaluated resource.</p> </li> <li> <p> <code>NOT<em>AVAILABLE</code> - Check could not be performed due to a service outage, API error, or because the result of the AWS Config evaluation was <code>NOT</em>APPLICABLE</code>. If the AWS Config evaluation result was <code>NOT_APPLICABLE</code>, then after 3 days, Security Hub automatically archives the finding.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>For findings generated from controls, a list of reasons behind the value of <code>Status</code>. For the list of status reason codes and their meanings, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards-results.html#securityhub-standards-results-asff">Standards-related information in the ASFF</a> in the <i>AWS Security Hub User Guide</i>. </p>
+    #[serde(rename = "StatusReasons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reasons: Option<Vec<StatusReason>>,
 }
 
 /// <p>Container details related to a finding.</p>
@@ -1133,10 +1879,10 @@ pub struct CreateActionTargetResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInsightRequest {
-    /// <p>One or more attributes used to filter the findings included in the insight. Only findings that match the criteria defined in the filters are included in the insight.</p>
+    /// <p>One or more attributes used to filter the findings included in the insight. The insight only includes findings that match the criteria defined in the filters.</p>
     #[serde(rename = "Filters")]
     pub filters: AwsSecurityFindingFilters,
-    /// <p>The attribute used as the aggregator to group related findings for the insight.</p>
+    /// <p>The attribute used to group the findings for the insight. The grouping attribute identifies the type of item that the insight applies to. For example, if an insight is grouped by resource identifier, then the insight produces a list of resource identifiers.</p>
     #[serde(rename = "GroupByAttribute")]
     pub group_by_attribute: String,
     /// <p>The name of the custom insight to create.</p>
@@ -1155,7 +1901,7 @@ pub struct CreateInsightResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
-    /// <p>A list of account ID and email address pairs of the accounts to associate with the Security Hub master account.</p>
+    /// <p>The list of accounts to associate with the Security Hub master account. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "AccountDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_details: Option<Vec<AccountDetails>>,
@@ -1164,7 +1910,7 @@ pub struct CreateMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
-    /// <p>A list of account ID and email address pairs of the AWS accounts that weren't processed.</p>
+    /// <p>The list of AWS accounts that were not processed. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
@@ -1203,7 +1949,7 @@ pub struct DateRange {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
-    /// <p>A list of account IDs that specify the accounts that invitations to Security Hub are declined from.</p>
+    /// <p>The list of account IDs for the accounts from which to decline the invitations to Security Hub.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
 }
@@ -1211,7 +1957,7 @@ pub struct DeclineInvitationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
-    /// <p>A list of account ID and email address pairs of the AWS accounts that weren't processed.</p>
+    /// <p>The list of AWS accounts that were not processed. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
@@ -1252,7 +1998,7 @@ pub struct DeleteInsightResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
-    /// <p>A list of the account IDs that sent the invitations to delete.</p>
+    /// <p>The list of the account IDs that sent the invitations to delete.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
 }
@@ -1260,7 +2006,7 @@ pub struct DeleteInvitationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
-    /// <p>A list of account ID and email address pairs of the AWS accounts that invitations weren't deleted for.</p>
+    /// <p>The list of AWS accounts for which the invitations were not deleted. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
@@ -1269,7 +2015,7 @@ pub struct DeleteInvitationsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
-    /// <p>A list of account IDs of the member accounts to delete.</p>
+    /// <p>The list of account IDs for the member accounts to delete.</p>
     #[serde(rename = "AccountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -1278,7 +2024,7 @@ pub struct DeleteMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
-    /// <p>A list of account ID and email address pairs of the AWS accounts that weren't deleted.</p>
+    /// <p>The list of AWS accounts that were not deleted. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
@@ -1295,7 +2041,7 @@ pub struct DescribeActionTargetsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>DescribeActionTargets</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1307,7 +2053,7 @@ pub struct DescribeActionTargetsResponse {
     /// <p>A list of <code>ActionTarget</code> objects. Each object includes the <code>ActionTargetArn</code>, <code>Description</code>, and <code>Name</code> of a custom action target available in Security Hub.</p>
     #[serde(rename = "ActionTargets")]
     pub action_targets: Vec<ActionTarget>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1325,7 +2071,7 @@ pub struct DescribeHubRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHubResponse {
-    /// <p>The ARN of the Hub resource retrieved.</p>
+    /// <p>The ARN of the Hub resource that was retrieved.</p>
     #[serde(rename = "HubArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hub_arn: Option<String>,
@@ -1342,7 +2088,7 @@ pub struct DescribeProductsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>DescribeProducts</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1351,7 +2097,7 @@ pub struct DescribeProductsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductsResponse {
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1363,11 +2109,11 @@ pub struct DescribeProductsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStandardsControlsRequest {
-    /// <p>The maximum number of compliance standard controls to return.</p>
+    /// <p>The maximum number of security standard controls to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>For requests to get the next page of results, the pagination token that was returned with the previous set of results. The initial request does not include a pagination token.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>DescribeStandardsControls</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1379,14 +2125,40 @@ pub struct DescribeStandardsControlsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStandardsControlsResponse {
-    /// <p>A list of compliance standards controls.</p>
+    /// <p>A list of security standards controls.</p>
     #[serde(rename = "Controls")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub controls: Option<Vec<StandardsControl>>,
-    /// <p>If there are more compliance standards control remaining in the results, then this is the pagination token to use to request the next page of compliance standard controls.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeStandardsRequest {
+    /// <p>The maximum number of standards to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that is required for pagination. On your first call to the <code>DescribeStandards</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeStandardsResponse {
+    /// <p>The pagination token to use to request the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of available standards.</p>
+    #[serde(rename = "Standards")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub standards: Option<Vec<Standard>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1450,7 +2222,11 @@ pub struct EnableImportFindingsForProductResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSecurityHubRequest {
-    /// <p>The tags to add to the Hub resource when you enable Security Hub.</p>
+    /// <p>Whether to enable the security standards that Security Hub has designated as automatically enabled. If you do not provide a value for <code>EnableDefaultStandards</code>, it is set to <code>true</code>. To not enable the automatically enabled standards, set <code>EnableDefaultStandards</code> to <code>false</code>.</p>
+    #[serde(rename = "EnableDefaultStandards")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_default_standards: Option<bool>,
+    /// <p>The tags to add to the hub resource when you enable Security Hub.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1467,11 +2243,11 @@ pub struct GetEnabledStandardsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. On your first call to the <code>GetEnabledStandards</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>GetEnabledStandards</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of the standards subscription ARNs for the standards to retrieve.</p>
+    /// <p>The list of the standards subscription ARNs for the standards to retrieve.</p>
     #[serde(rename = "StandardsSubscriptionArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standards_subscription_arns: Option<Vec<String>>,
@@ -1480,11 +2256,11 @@ pub struct GetEnabledStandardsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEnabledStandardsResponse {
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of <code>StandardsSubscriptions</code> objects that include information about the enabled standards.</p>
+    /// <p>The list of <code>StandardsSubscriptions</code> objects that include information about the enabled standards.</p>
     #[serde(rename = "StandardsSubscriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standards_subscriptions: Option<Vec<StandardsSubscription>>,
@@ -1493,7 +2269,7 @@ pub struct GetEnabledStandardsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
-    /// <p>The findings attributes used to define a condition to filter the findings returned.</p>
+    /// <p>The finding attributes used to define a condition to filter the returned findings.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<AwsSecurityFindingFilters>,
@@ -1501,11 +2277,11 @@ pub struct GetFindingsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. On your first call to the <code>GetFindings</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>GetFindings</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Findings attributes used to sort the list of findings returned.</p>
+    /// <p>The finding attributes used to sort the list of returned findings.</p>
     #[serde(rename = "SortCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_criteria: Option<Vec<SortCriterion>>,
@@ -1517,7 +2293,7 @@ pub struct GetFindingsResponse {
     /// <p>The findings that matched the filters specified in the request.</p>
     #[serde(rename = "Findings")]
     pub findings: Vec<AwsSecurityFinding>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1526,7 +2302,7 @@ pub struct GetFindingsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightResultsRequest {
-    /// <p>The ARN of the insight whose results you want to see.</p>
+    /// <p>The ARN of the insight for which to return results.</p>
     #[serde(rename = "InsightArn")]
     pub insight_arn: String,
 }
@@ -1542,15 +2318,15 @@ pub struct GetInsightResultsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInsightsRequest {
-    /// <p>The ARNs of the insights that you want to describe.</p>
+    /// <p>The ARNs of the insights to describe. If you do not provide any insight ARNs, then <code>GetInsights</code> returns all of your custom insights. It does not return any managed insights.</p>
     #[serde(rename = "InsightArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub insight_arns: Option<Vec<String>>,
-    /// <p>The maximum number of items that you want in the response.</p>
+    /// <p>The maximum number of items to return in the response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. On your first call to the <code>GetInsights</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>GetInsights</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1562,7 +2338,7 @@ pub struct GetInsightsResponse {
     /// <p>The insights returned by the operation.</p>
     #[serde(rename = "Insights")]
     pub insights: Vec<Insight>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1575,7 +2351,7 @@ pub struct GetInvitationsCountRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationsCountResponse {
-    /// <p>The number of all membership invitations sent to this Security Hub member account, not including the currently accepted invitation. </p>
+    /// <p>The number of all membership invitations sent to this Security Hub member account, not including the currently accepted invitation.</p>
     #[serde(rename = "InvitationsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitations_count: Option<i64>,
@@ -1597,7 +2373,7 @@ pub struct GetMasterAccountResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
-    /// <p>A list of account IDs for the Security Hub member accounts that you want to return the details for. </p>
+    /// <p>The list of account IDs for the Security Hub member accounts to return the details for. </p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
 }
@@ -1605,27 +2381,27 @@ pub struct GetMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
-    /// <p>A list of details about the Security Hub member accounts.</p>
+    /// <p>The list of details about the Security Hub member accounts.</p>
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<Member>>,
-    /// <p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed.</p>
+    /// <p>The list of AWS accounts that could not be processed. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
 }
 
-/// <p>Includes details of the list of the findings that can't be imported.</p>
+/// <p>The list of the findings that cannot be imported. For each finding, the list provides the error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportFindingsError {
-    /// <p>The code of the error made during the <code>BatchImportFindings</code> operation.</p>
+    /// <p>The code of the error returned by the <code>BatchImportFindings</code> operation.</p>
     #[serde(rename = "ErrorCode")]
     pub error_code: String,
-    /// <p>The message of the error made during the <code>BatchImportFindings</code> operation.</p>
+    /// <p>The message of the error returned by the <code>BatchImportFindings</code> operation.</p>
     #[serde(rename = "ErrorMessage")]
     pub error_message: String,
-    /// <p>The ID of the error made during the <code>BatchImportFindings</code> operation.</p>
+    /// <p>The identifier of the finding that could not be updated.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
@@ -1634,10 +2410,10 @@ pub struct ImportFindingsError {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Insight {
-    /// <p>One or more attributes used to filter the findings included in the insight. Only findings that match the criteria defined in the filters are included in the insight.</p>
+    /// <p>One or more attributes used to filter the findings included in the insight. The insight only includes findings that match the criteria defined in the filters.</p>
     #[serde(rename = "Filters")]
     pub filters: AwsSecurityFindingFilters,
-    /// <p>The attribute that the insight's findings are grouped by. This attribute is used as a findings aggregator for the purposes of viewing and managing multiple related findings under a single operand.</p>
+    /// <p>The grouping attribute for the insight's findings. Indicates how to group the matching findings, and identifies the type of item that the insight applies to. For example, if an insight is grouped by resource identifier, then the insight produces a list of resource identifiers.</p>
     #[serde(rename = "GroupByAttribute")]
     pub group_by_attribute: String,
     /// <p>The ARN of a Security Hub insight.</p>
@@ -1691,7 +2467,7 @@ pub struct Invitation {
     #[serde(rename = "InvitedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_at: Option<f64>,
-    /// <p>The current status of the association between member and master accounts.</p>
+    /// <p>The current status of the association between the member and master accounts.</p>
     #[serde(rename = "MemberStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_status: Option<String>,
@@ -1700,7 +2476,7 @@ pub struct Invitation {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
-    /// <p>A list of IDs of the AWS accounts that you want to invite to Security Hub as members. </p>
+    /// <p>The list of account IDs of the AWS accounts to invite to Security Hub as members. </p>
     #[serde(rename = "AccountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -1709,7 +2485,7 @@ pub struct InviteMembersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
-    /// <p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed. </p>
+    /// <p>The list of AWS accounts that could not be processed. For each account, the list includes the account ID and the email address.</p>
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
@@ -1736,11 +2512,11 @@ pub struct KeywordFilter {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnabledProductsForImportRequest {
-    /// <p>The maximum number of items that you want in the response.</p>
+    /// <p>The maximum number of items to return in the response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. On your first call to the <code>ListEnabledProductsForImport</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>NextToken</code> from the previous response to continue listing data.</p>
+    /// <p>The token that is required for pagination. On your first call to the <code>ListEnabledProductsForImport</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1749,11 +2525,11 @@ pub struct ListEnabledProductsForImportRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEnabledProductsForImportResponse {
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of ARNs for the resources that represent your subscriptions to products. </p>
+    /// <p>The list of ARNs for the resources that represent your subscriptions to products. </p>
     #[serde(rename = "ProductSubscriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_subscriptions: Option<Vec<String>>,
@@ -1762,11 +2538,11 @@ pub struct ListEnabledProductsForImportResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
-    /// <p>The maximum number of items that you want in the response. </p>
+    /// <p>The maximum number of items to return in the response. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. On your first call to the <code>ListInvitations</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>NextToken</code> from the previous response to continue listing data. </p>
+    /// <p>The token that is required for pagination. On your first call to the <code>ListInvitations</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1779,7 +2555,7 @@ pub struct ListInvitationsResponse {
     #[serde(rename = "Invitations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invitations: Option<Vec<Invitation>>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1788,15 +2564,15 @@ pub struct ListInvitationsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
-    /// <p>The maximum number of items that you want in the response. </p>
+    /// <p>The maximum number of items to return in the response. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Paginates results. Set the value of this parameter to <code>NULL</code> on your first call to the <code>ListMembers</code> operation. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data. </p>
+    /// <p>The token that is required for pagination. On your first call to the <code>ListMembers</code> operation, set the value of this parameter to <code>NULL</code>.</p> <p>For subsequent calls to the operation, to continue listing data, set the value of this parameter to the value returned from the previous response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies which member accounts the response includes based on their relationship status with the master account. The default value is <code>TRUE</code>. If <code>onlyAssociated</code> is set to <code>TRUE</code>, the response includes member accounts whose relationship status with the master is set to <code>ENABLED</code> or <code>DISABLED</code>. If <code>onlyAssociated</code> is set to <code>FALSE</code>, the response includes all existing member accounts. </p>
+    /// <p>Specifies which member accounts to include in the response based on their relationship status with the master account. The default value is <code>TRUE</code>.</p> <p>If <code>OnlyAssociated</code> is set to <code>TRUE</code>, the response includes member accounts whose relationship status with the master is set to <code>ENABLED</code> or <code>DISABLED</code>.</p> <p>If <code>OnlyAssociated</code> is set to <code>FALSE</code>, the response includes all existing member accounts. </p>
     #[serde(rename = "OnlyAssociated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_associated: Option<bool>,
@@ -1809,7 +2585,7 @@ pub struct ListMembersResponse {
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub members: Option<Vec<Member>>,
-    /// <p>The token that is required for pagination.</p>
+    /// <p>The pagination token to use to request the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1835,7 +2611,7 @@ pub struct ListTagsForResourceResponse {
 /// <p>Information about the state of the load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancerState {
-    /// <p>The state code. The initial state of the load balancer is provisioning. After the load balancer is fully set up and ready to route traffic, its state is active. If the load balancer could not be set up, its state is failed. </p>
+    /// <p>The state code. The initial state of the load balancer is provisioning.</p> <p>After the load balancer is fully set up and ready to route traffic, its state is active.</p> <p>If the load balancer could not be set up, its state is failed. </p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -2053,6 +2829,10 @@ pub struct Product {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p><p>The types of integration that the product supports. Available values are the following.</p> <ul> <li> <p> <code>SEND<em>FINDINGS</em>TO<em>SECURITY</em>HUB</code> - Indicates that the integration sends findings to Security Hub.</p> </li> <li> <p> <code>RECEIVE<em>FINDINGS</em>FROM<em>SECURITY</em>HUB</code> - Indicates that the integration receives findings from Security Hub.</p> </li> </ul></p>
+    #[serde(rename = "IntegrationTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_types: Option<Vec<String>>,
     /// <p>The URL for the page that contains more information about the product.</p>
     #[serde(rename = "MarketplaceUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2125,22 +2905,38 @@ pub struct Resource {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of the resource that details are provided for.</p>
+    /// <p>The type of the resource that details are provided for. If possible, set <code>Type</code> to one of the supported resource types. For example, if the resource is an EC2 instance, then set <code>Type</code> to <code>AwsEc2Instance</code>.</p> <p>If the resource does not match any of the provided types, then set <code>Type</code> to <code>Other</code>. </p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
 
-/// <p>Additional details about a resource related to a finding.</p>
+/// <p>Additional details about a resource related to a finding.</p> <p>To provide the details, use the object that corresponds to the resource type. For example, if the resource type is <code>AwsEc2Instance</code>, then you use the <code>AwsEc2Instance</code> object to provide the details.</p> <p>If the type-specific object does not contain all of the fields you want to populate, then you use the <code>Other</code> object to populate those additional fields.</p> <p>You also use the <code>Other</code> object to populate the details when the selected type does not have a corresponding object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDetails {
     /// <p>Details about a CloudFront distribution.</p>
     #[serde(rename = "AwsCloudFrontDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_cloud_front_distribution: Option<AwsCloudFrontDistributionDetails>,
+    /// <p>Details for an AWS CodeBuild project.</p>
+    #[serde(rename = "AwsCodeBuildProject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_code_build_project: Option<AwsCodeBuildProjectDetails>,
     /// <p>Details about an Amazon EC2 instance related to a finding.</p>
     #[serde(rename = "AwsEc2Instance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_ec_2_instance: Option<AwsEc2InstanceDetails>,
+    /// <p>Details for an Amazon EC2 network interface.</p>
+    #[serde(rename = "AwsEc2NetworkInterface")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_network_interface: Option<AwsEc2NetworkInterfaceDetails>,
+    /// <p>Details for an EC2 security group.</p>
+    #[serde(rename = "AwsEc2SecurityGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_security_group: Option<AwsEc2SecurityGroupDetails>,
+    /// <p>Details for an Elasticsearch domain.</p>
+    #[serde(rename = "AwsElasticsearchDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_elasticsearch_domain: Option<AwsElasticsearchDomainDetails>,
     /// <p>Details about a load balancer.</p>
     #[serde(rename = "AwsElbv2LoadBalancer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2161,10 +2957,22 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsLambdaFunction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_lambda_function: Option<AwsLambdaFunctionDetails>,
-    /// <p>Details about an Amazon S3 Bucket related to a finding.</p>
+    /// <p>Details for a Lambda layer version.</p>
+    #[serde(rename = "AwsLambdaLayerVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_lambda_layer_version: Option<AwsLambdaLayerVersionDetails>,
+    /// <p>Details for an Amazon RDS database instance.</p>
+    #[serde(rename = "AwsRdsDbInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_rds_db_instance: Option<AwsRdsDbInstanceDetails>,
+    /// <p>Details about an Amazon S3 bucket related to a finding.</p>
     #[serde(rename = "AwsS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_s3_bucket: Option<AwsS3BucketDetails>,
+    /// <p>Details about an Amazon S3 object related to a finding.</p>
+    #[serde(rename = "AwsS3Object")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_s3_object: Option<AwsS3ObjectDetails>,
     /// <p>Details about an SNS topic.</p>
     #[serde(rename = "AwsSnsTopic")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2173,25 +2981,29 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsSqsQueue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_sqs_queue: Option<AwsSqsQueueDetails>,
+    /// <p>Details for a WAF WebACL.</p>
+    #[serde(rename = "AwsWafWebAcl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_waf_web_acl: Option<AwsWafWebAclDetails>,
     /// <p>Details about a container resource related to a finding.</p>
     #[serde(rename = "Container")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container: Option<ContainerDetails>,
-    /// <p>Details about a resource that doesn't have a specific type defined.</p>
+    /// <p><p>Details about a resource that are not available in a type-specific details object. Use the <code>Other</code> object in the following cases.</p> <ul> <li> <p>The type-specific object does not contain all of the fields that you want to populate. In this case, first use the type-specific object to populate those fields. Use the <code>Other</code> object to populate the fields that are missing from the type-specific object.</p> </li> <li> <p>The resource type does not have a corresponding object. This includes resources for which the type is <code>Other</code>. </p> </li> </ul></p>
     #[serde(rename = "Other")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub other: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Details about the account that wasn't processed.</p>
+/// <p>Details about the account that was not processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityHubResult {
-    /// <p>An AWS account ID of the account that wasn't be processed.</p>
+    /// <p>An AWS account ID of the account that was not processed.</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>The reason that the account wasn't be processed.</p>
+    /// <p>The reason that the account was not processed.</p>
     #[serde(rename = "ProcessingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_result: Option<String>,
@@ -2200,9 +3012,36 @@ pub struct SecurityHubResult {
 /// <p>The severity of the finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Severity {
-    /// <p>The normalized severity of a finding.</p>
+    /// <p><p>The severity value of the finding. The allowed values are the following.</p> <ul> <li> <p> <code>INFORMATIONAL</code> - No issue was found.</p> </li> <li> <p> <code>LOW</code> - The issue does not require action on its own.</p> </li> <li> <p> <code>MEDIUM</code> - The issue must be addressed but not urgently.</p> </li> <li> <p> <code>HIGH</code> - The issue must be addressed as a priority.</p> </li> <li> <p> <code>CRITICAL</code> - The issue must be remediated immediately to avoid it escalating.</p> </li> </ul></p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    /// <p><p>Deprecated. This attribute is being deprecated. Instead of providing <code>Normalized</code>, provide <code>Label</code>.</p> <p>If you provide <code>Normalized</code> and do not provide <code>Label</code>, <code>Label</code> is set automatically as follows. </p> <ul> <li> <p>0 - <code>INFORMATIONAL</code> </p> </li> <li> <p>1–39 - <code>LOW</code> </p> </li> <li> <p>40–69 - <code>MEDIUM</code> </p> </li> <li> <p>70–89 - <code>HIGH</code> </p> </li> <li> <p>90–100 - <code>CRITICAL</code> </p> </li> </ul></p>
     #[serde(rename = "Normalized")]
-    pub normalized: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub normalized: Option<i64>,
+    /// <p>The native severity from the finding product that generated the finding.</p>
+    #[serde(rename = "Original")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub original: Option<String>,
+    /// <p>Deprecated. This attribute is being deprecated. Instead of providing <code>Product</code>, provide <code>Original</code>.</p> <p>The native severity as defined by the AWS service or integrated partner product that generated the finding.</p>
+    #[serde(rename = "Product")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product: Option<f64>,
+}
+
+/// <p>Updates to the severity information for a finding.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SeverityUpdate {
+    /// <p><p>The severity value of the finding. The allowed values are the following.</p> <ul> <li> <p> <code>INFORMATIONAL</code> - No issue was found.</p> </li> <li> <p> <code>LOW</code> - The issue does not require action on its own.</p> </li> <li> <p> <code>MEDIUM</code> - The issue must be addressed but not urgently.</p> </li> <li> <p> <code>HIGH</code> - The issue must be addressed as a priority.</p> </li> <li> <p> <code>CRITICAL</code> - The issue must be remediated immediately to avoid it escalating.</p> </li> </ul></p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    /// <p><p>The normalized severity for the finding. This attribute is to be deprecated in favor of <code>Label</code>.</p> <p>If you provide <code>Normalized</code> and do not provide <code>Label</code>, <code>Label</code> is set automatically as follows.</p> <ul> <li> <p>0 - <code>INFORMATIONAL</code> </p> </li> <li> <p>1–39 - <code>LOW</code> </p> </li> <li> <p>40–69 - <code>MEDIUM</code> </p> </li> <li> <p>70–89 - <code>HIGH</code> </p> </li> <li> <p>90–100 - <code>CRITICAL</code> </p> </li> </ul></p>
+    #[serde(rename = "Normalized")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub normalized: Option<i64>,
     /// <p>The native severity as defined by the AWS service or integrated partner product that generated the finding.</p>
     #[serde(rename = "Product")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2223,23 +3062,45 @@ pub struct SortCriterion {
     pub sort_order: Option<String>,
 }
 
-/// <p>Details for an individual compliance standard control.</p>
+/// <p>Provides information about a specific standard.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Standard {
+    /// <p>A description of the standard.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Whether the standard is enabled by default. When Security Hub is enabled from the console, if a standard is enabled by default, the check box for that standard is selected by default.</p> <p>When Security Hub is enabled using the <code>EnableSecurityHub</code> API operation, the standard is enabled by default unless <code>EnableDefaultStandards</code> is set to <code>false</code>.</p>
+    #[serde(rename = "EnabledByDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled_by_default: Option<bool>,
+    /// <p>The name of the standard.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ARN of a standard.</p>
+    #[serde(rename = "StandardsArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub standards_arn: Option<String>,
+}
+
+/// <p>Details for an individual security standard control.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StandardsControl {
-    /// <p>The identifier of the compliance standard control.</p>
+    /// <p>The identifier of the security standard control.</p>
     #[serde(rename = "ControlId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub control_id: Option<String>,
-    /// <p>The current status of the compliance standard control. Indicates whether the control is enabled or disabled. Security Hub does not check against disabled controls.</p>
+    /// <p>The current status of the security standard control. Indicates whether the control is enabled or disabled. Security Hub does not check against disabled controls.</p>
     #[serde(rename = "ControlStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub control_status: Option<String>,
-    /// <p>The date and time that the status of the compliance standard control was most recently updated.</p>
+    /// <p>The date and time that the status of the security standard control was most recently updated.</p>
     #[serde(rename = "ControlStatusUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub control_status_updated_at: Option<f64>,
-    /// <p>The longer description of the compliance standard control. Provides information about what the control is checking for.</p>
+    /// <p>The longer description of the security standard control. Provides information about what the control is checking for.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -2247,19 +3108,23 @@ pub struct StandardsControl {
     #[serde(rename = "DisabledReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled_reason: Option<String>,
-    /// <p>A link to remediation information for the control in the Security Hub user documentation</p>
+    /// <p>The list of requirements that are related to this control.</p>
+    #[serde(rename = "RelatedRequirements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_requirements: Option<Vec<String>>,
+    /// <p>A link to remediation information for the control in the Security Hub user documentation.</p>
     #[serde(rename = "RemediationUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remediation_url: Option<String>,
-    /// <p>The severity of findings generated from this compliance standard control.</p> <p>The finding severity is based on an assessment of how easy it would be to compromise AWS resources if the compliance issue is detected.</p>
+    /// <p>The severity of findings generated from this security standard control.</p> <p>The finding severity is based on an assessment of how easy it would be to compromise AWS resources if the issue is detected.</p>
     #[serde(rename = "SeverityRating")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub severity_rating: Option<String>,
-    /// <p>The ARN of the compliance standard control.</p>
+    /// <p>The ARN of the security standard control.</p>
     #[serde(rename = "StandardsControlArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standards_control_arn: Option<String>,
-    /// <p>The title of the compliance standard control.</p>
+    /// <p>The title of the security standard control.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -2269,7 +3134,7 @@ pub struct StandardsControl {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StandardsSubscription {
-    /// <p>The ARN of a standard.</p> <p>In this release, Security Hub supports only the CIS AWS Foundations standard, which uses the following ARN: <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0.</code> </p>
+    /// <p>The ARN of a standard.</p>
     #[serde(rename = "StandardsArn")]
     pub standards_arn: String,
     /// <p>A key-value pair of input for the standard.</p>
@@ -2287,13 +3152,25 @@ pub struct StandardsSubscription {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StandardsSubscriptionRequest {
-    /// <p><p>The ARN of the standard that you want to enable.</p> <important> <p>In this release, Security Hub only supports the CIS AWS Foundations standard. </p> <p>Its ARN is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important></p>
+    /// <p>The ARN of the standard that you want to enable. To view the list of available standards and their ARNs, use the <code> <a>DescribeStandards</a> </code> operation.</p>
     #[serde(rename = "StandardsArn")]
     pub standards_arn: String,
     /// <p>A key-value pair of input for the standard.</p>
     #[serde(rename = "StandardsInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standards_input: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Provides additional context for the value of <code>Compliance.Status</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StatusReason {
+    /// <p>The corresponding description for the status reason code.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A code that represents a reason for the control status. For the list of status reason codes and their meanings, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards-results.html#securityhub-standards-results-asff">Standards-related information in the ASFF</a> in the <i>AWS Security Hub User Guide</i>. </p>
+    #[serde(rename = "ReasonCode")]
+    pub reason_code: String,
 }
 
 /// <p>A string filter for querying findings.</p>
@@ -2324,30 +3201,30 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-/// <p>Details about the threat intel related to a finding.</p>
+/// <p>Details about the threat intelligence related to a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThreatIntelIndicator {
-    /// <p>The category of a threat intel indicator.</p>
+    /// <p>The category of a threat intelligence indicator.</p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
-    /// <p>The date and time when the most recent instance of a threat intel indicator was observed.</p>
+    /// <p>The date and time when the most recent instance of a threat intelligence indicator was observed.</p>
     #[serde(rename = "LastObservedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_observed_at: Option<String>,
-    /// <p>The source of the threat intel indicator.</p>
+    /// <p>The source of the threat intelligence indicator.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    /// <p>The URL to the page or site where you can get more information about the threat intel indicator.</p>
+    /// <p>The URL to the page or site where you can get more information about the threat intelligence indicator.</p>
     #[serde(rename = "SourceUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_url: Option<String>,
-    /// <p>The type of a threat intel indicator.</p>
+    /// <p>The type of threat intelligence indicator.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>The value of a threat intel indicator.</p>
+    /// <p>The value of a threat intelligence indicator.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -2435,15 +3312,15 @@ pub struct UpdateInsightResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStandardsControlRequest {
-    /// <p>The updated status of the compliance standard control.</p>
+    /// <p>The updated status of the security standard control.</p>
     #[serde(rename = "ControlStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub control_status: Option<String>,
-    /// <p>A description of the reason why you are disabling a compliance standard control.</p>
+    /// <p>A description of the reason why you are disabling a security standard control.</p>
     #[serde(rename = "DisabledReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled_reason: Option<String>,
-    /// <p>The ARN of the compliance standard control to enable or disable.</p>
+    /// <p>The ARN of the security standard control to enable or disable.</p>
     #[serde(rename = "StandardsControlArn")]
     pub standards_control_arn: String,
 }
@@ -2451,6 +3328,52 @@ pub struct UpdateStandardsControlRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStandardsControlResponse {}
+
+/// <p>Details about the action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WafAction {
+    /// <p><p>Specifies how you want AWS WAF to respond to requests that match the settings in a rule.</p> <p>Valid settings include the following:</p> <ul> <li> <p> <code>ALLOW</code> - AWS WAF allows requests</p> </li> <li> <p> <code>BLOCK</code> - AWS WAF blocks requests</p> </li> <li> <p> <code>COUNT</code> - AWS WAF increments a counter of the requests that match all of the conditions in the rule. AWS WAF then continues to inspect the web request based on the remaining rules in the web ACL. You can&#39;t specify <code>COUNT</code> for the default action for a WebACL.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Details about a rule to exclude from a rule group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WafExcludedRule {
+    /// <p>The unique identifier for the rule to exclude from the rule group.</p>
+    #[serde(rename = "RuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_id: Option<String>,
+}
+
+/// <p>Details about an override action for a rule.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WafOverrideAction {
+    /// <p> <code>COUNT</code> overrides the action specified by the individual rule within a <code>RuleGroup</code> .</p> <p>If set to <code>NONE</code>, the rule's action takes place.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Provides information about the status of the investigation into a finding.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Workflow {
+    /// <p><p>The status of the investigation into the finding. The allowed values are the following.</p> <ul> <li> <p> <code>NEW</code> - The initial state of a finding, before it is reviewed.</p> </li> <li> <p> <code>NOTIFIED</code> - Indicates that you notified the resource owner about the security issue. Used when the initial reviewer is not the resource owner, and needs intervention from the resource owner.</p> </li> <li> <p> <code>SUPPRESSED</code> - The finding will not be reviewed again and will not be acted upon.</p> </li> <li> <p> <code>RESOLVED</code> - The finding was reviewed and remediated and is now considered resolved. </p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Used to update information about the investigation into the finding.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct WorkflowUpdate {
+    /// <p><p>The status of the investigation into the finding. The allowed values are the following.</p> <ul> <li> <p> <code>NEW</code> - The initial state of a finding, before it is reviewed.</p> </li> <li> <p> <code>NOTIFIED</code> - Indicates that you notified the resource owner about the security issue. Used when the initial reviewer is not the resource owner, and needs intervention from the resource owner.</p> </li> <li> <p> <code>RESOLVED</code> - The finding was reviewed and remediated and is now considered resolved.</p> </li> <li> <p> <code>SUPPRESSED</code> - The finding will not be reviewed again and will not be acted upon.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
 
 /// Errors returned by AcceptInvitation
 #[derive(Debug, PartialEq)]
@@ -2650,6 +3573,54 @@ impl fmt::Display for BatchImportFindingsError {
     }
 }
 impl Error for BatchImportFindingsError {}
+/// Errors returned by BatchUpdateFindings
+#[derive(Debug, PartialEq)]
+pub enum BatchUpdateFindingsError {
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>AWS Security Hub isn't enabled for the account used to make this request.</p>
+    InvalidAccess(String),
+    /// <p>The request was rejected because you supplied an invalid or out-of-range value for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    LimitExceeded(String),
+}
+
+impl BatchUpdateFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdateFindingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(BatchUpdateFindingsError::Internal(err.msg))
+                }
+                "InvalidAccessException" => {
+                    return RusotoError::Service(BatchUpdateFindingsError::InvalidAccess(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchUpdateFindingsError::InvalidInput(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(BatchUpdateFindingsError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchUpdateFindingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchUpdateFindingsError::Internal(ref cause) => write!(f, "{}", cause),
+            BatchUpdateFindingsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            BatchUpdateFindingsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchUpdateFindingsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchUpdateFindingsError {}
 /// Errors returned by CreateActionTarget
 #[derive(Debug, PartialEq)]
 pub enum CreateActionTargetError {
@@ -3222,6 +4193,48 @@ impl fmt::Display for DescribeProductsError {
     }
 }
 impl Error for DescribeProductsError {}
+/// Errors returned by DescribeStandards
+#[derive(Debug, PartialEq)]
+pub enum DescribeStandardsError {
+    /// <p>Internal server error.</p>
+    Internal(String),
+    /// <p>AWS Security Hub isn't enabled for the account used to make this request.</p>
+    InvalidAccess(String),
+    /// <p>The request was rejected because you supplied an invalid or out-of-range value for an input parameter.</p>
+    InvalidInput(String),
+}
+
+impl DescribeStandardsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStandardsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeStandardsError::Internal(err.msg))
+                }
+                "InvalidAccessException" => {
+                    return RusotoError::Service(DescribeStandardsError::InvalidAccess(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DescribeStandardsError::InvalidInput(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeStandardsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeStandardsError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeStandardsError::InvalidAccess(ref cause) => write!(f, "{}", cause),
+            DescribeStandardsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeStandardsError {}
 /// Errors returned by DescribeStandardsControls
 #[derive(Debug, PartialEq)]
 pub enum DescribeStandardsControlsError {
@@ -4541,43 +5554,49 @@ impl Error for UpdateStandardsControlError {}
 /// Trait representing the capabilities of the AWS SecurityHub API. AWS SecurityHub clients implement this trait.
 #[async_trait]
 pub trait SecurityHub {
-    /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
+    /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from.</p> <p>When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
     ) -> Result<AcceptInvitationResponse, RusotoError<AcceptInvitationError>>;
 
-    /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
+    /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Security Standards</a> section of the <i>AWS Security Hub User Guide</i>.</p>
     async fn batch_disable_standards(
         &self,
         input: BatchDisableStandardsRequest,
     ) -> Result<BatchDisableStandardsResponse, RusotoError<BatchDisableStandardsError>>;
 
-    /// <p>Enables the standards specified by the provided <code>standardsArn</code>. In this release, only CIS AWS Foundations standards are supported. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
+    /// <p>Enables the standards specified by the provided <code>StandardsArn</code>. To obtain the ARN for a standard, use the <code> <a>DescribeStandards</a> </code> operation.</p> <p>For more information, see the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Security Standards</a> section of the <i>AWS Security Hub User Guide</i>.</p>
     async fn batch_enable_standards(
         &self,
         input: BatchEnableStandardsRequest,
     ) -> Result<BatchEnableStandardsResponse, RusotoError<BatchEnableStandardsError>>;
 
-    /// <p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub. The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p>
+    /// <p><p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub.</p> <p>The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p> <p>After a finding is created, <code>BatchImportFindings</code> cannot be used to update the following finding fields and objects, which Security Hub customers use to manage their investigation workflow.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul></p>
     async fn batch_import_findings(
         &self,
         input: BatchImportFindingsRequest,
     ) -> Result<BatchImportFindingsResponse, RusotoError<BatchImportFindingsError>>;
 
-    /// <p>Creates a custom action target in Security Hub. You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
+    /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>Member accounts can only use <code>BatchUpdateFindings</code> to update the Note object.</p>
+    async fn batch_update_findings(
+        &self,
+        input: BatchUpdateFindingsRequest,
+    ) -> Result<BatchUpdateFindingsResponse, RusotoError<BatchUpdateFindingsError>>;
+
+    /// <p>Creates a custom action target in Security Hub.</p> <p>You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
     async fn create_action_target(
         &self,
         input: CreateActionTargetRequest,
     ) -> Result<CreateActionTargetResponse, RusotoError<CreateActionTargetError>>;
 
-    /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation. Use the <code>GroupByAttribute</code> to group the related findings in the insight.</p>
+    /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation.</p> <p>To group the related findings in the insight, use the <code>GroupByAttribute</code>.</p>
     async fn create_insight(
         &self,
         input: CreateInsightRequest,
     ) -> Result<CreateInsightResponse, RusotoError<CreateInsightError>>;
 
-    /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. You can use the <a>EnableSecurityHub</a> to enable Security Hub.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you need to use the <a>InviteMembers</a> action, which invites the accounts to enable Security Hub and become member accounts in Security Hub. If the invitation is accepted by the account owner, the account becomes a member account in Security Hub, and a permission policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start being sent to both the member and master accounts.</p> <p>You can remove the association between the master and member accounts by using the <a>DisassociateFromMasterAccount</a> or <a>DisassociateMembers</a> operation.</p>
+    /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. To enable Security Hub, you can use the <code> <a>EnableSecurityHub</a> </code> operation.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you must use the <code> <a>InviteMembers</a> </code> operation to invite the accounts to enable Security Hub and become member accounts in Security Hub.</p> <p>If the account owner accepts the invitation, the account becomes a member account in Security Hub. A permissions policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start to be sent to both the member and master accounts.</p> <p>To remove the association between the master and member accounts, use the <code> <a>DisassociateFromMasterAccount</a> </code> or <code> <a>DisassociateMembers</a> </code> operation.</p>
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -4589,7 +5608,7 @@ pub trait SecurityHub {
         input: DeclineInvitationsRequest,
     ) -> Result<DeclineInvitationsResponse, RusotoError<DeclineInvitationsError>>;
 
-    /// <p>Deletes a custom action target from Security Hub. Deleting a custom action target doesn't affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
+    /// <p>Deletes a custom action target from Security Hub.</p> <p>Deleting a custom action target does not affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
     async fn delete_action_target(
         &self,
         input: DeleteActionTargetRequest,
@@ -4625,19 +5644,25 @@ pub trait SecurityHub {
         input: DescribeHubRequest,
     ) -> Result<DescribeHubResponse, RusotoError<DescribeHubError>>;
 
-    /// <p>Returns information about the products available that you can subscribe to and integrate with Security Hub to consolidate findings.</p>
+    /// <p>Returns information about the available products that you can subscribe to and integrate with Security Hub in order to consolidate findings.</p>
     async fn describe_products(
         &self,
         input: DescribeProductsRequest,
     ) -> Result<DescribeProductsResponse, RusotoError<DescribeProductsError>>;
 
-    /// <p>Returns a list of compliance standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
+    /// <p>Returns a list of the available standards in Security Hub.</p> <p>For each standard, the results include the standard ARN, the name, and a description. </p>
+    async fn describe_standards(
+        &self,
+        input: DescribeStandardsRequest,
+    ) -> Result<DescribeStandardsResponse, RusotoError<DescribeStandardsError>>;
+
+    /// <p>Returns a list of security standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
     async fn describe_standards_controls(
         &self,
         input: DescribeStandardsControlsRequest,
     ) -> Result<DescribeStandardsControlsResponse, RusotoError<DescribeStandardsControlsError>>;
 
-    /// <p>Disables the integration of the specified product with Security Hub. Findings from that product are no longer sent to Security Hub after the integration is disabled.</p>
+    /// <p>Disables the integration of the specified product with Security Hub. After the integration is disabled, findings from that product are no longer sent to Security Hub.</p>
     async fn disable_import_findings_for_product(
         &self,
         input: DisableImportFindingsForProductRequest,
@@ -4646,7 +5671,7 @@ pub trait SecurityHub {
         RusotoError<DisableImportFindingsForProductError>,
     >;
 
-    /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub. When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and can't be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed. If you want to save your existing findings, you must export them before you disable Security Hub.</p>
+    /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub.</p> <p>When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and cannot be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed.</p> <p>If you want to save your existing findings, you must export them before you disable Security Hub.</p>
     async fn disable_security_hub(
         &self,
     ) -> Result<DisableSecurityHubResponse, RusotoError<DisableSecurityHubError>>;
@@ -4665,7 +5690,7 @@ pub trait SecurityHub {
         input: DisassociateMembersRequest,
     ) -> Result<DisassociateMembersResponse, RusotoError<DisassociateMembersError>>;
 
-    /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub. When you enable a product integration, a permission policy that grants permission for the product to send findings to Security Hub is applied.</p>
+    /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub.</p> <p>When you enable a product integration, a permissions policy that grants permission for the product to send findings to Security Hub is applied.</p>
     async fn enable_import_findings_for_product(
         &self,
         input: EnableImportFindingsForProductRequest,
@@ -4674,7 +5699,7 @@ pub trait SecurityHub {
         RusotoError<EnableImportFindingsForProductError>,
     >;
 
-    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. Enabling Security Hub also enables the CIS AWS Foundations standard. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
+    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request.</p> <p>When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from other services that are integrated with Security Hub.</p> <p>When you use the <code>EnableSecurityHub</code> operation to enable Security Hub, you also automatically enable the following standards.</p> <ul> <li> <p>CIS AWS Foundations</p> </li> <li> <p>AWS Foundational Security Best Practices</p> </li> </ul> <p>You do not enable the Payment Card Industry Data Security Standard (PCI DSS) standard. </p> <p>To not enable the automatically enabled standards, set <code>EnableDefaultStandards</code> to <code>false</code>.</p> <p>After you enable Security Hub, to enable a standard, use the <code> <a>BatchEnableStandards</a> </code> operation. To disable a standard, use the <code> <a>BatchDisableStandards</a> </code> operation.</p> <p>To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a> in the <i>AWS Security Hub User Guide</i>.</p>
     async fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,
@@ -4692,13 +5717,13 @@ pub trait SecurityHub {
         input: GetFindingsRequest,
     ) -> Result<GetFindingsResponse, RusotoError<GetFindingsError>>;
 
-    /// <p>Lists the results of the Security Hub insight that the insight ARN specifies.</p>
+    /// <p>Lists the results of the Security Hub insight specified by the insight ARN.</p>
     async fn get_insight_results(
         &self,
         input: GetInsightResultsRequest,
     ) -> Result<GetInsightResultsResponse, RusotoError<GetInsightResultsError>>;
 
-    /// <p>Lists and describes insights that insight ARNs specify.</p>
+    /// <p>Lists and describes insights for the specified insight ARNs.</p>
     async fn get_insights(
         &self,
         input: GetInsightsRequest,
@@ -4709,24 +5734,24 @@ pub trait SecurityHub {
         &self,
     ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>>;
 
-    /// <p>Provides the details for the Security Hub master account to the current member account. </p>
+    /// <p>Provides the details for the Security Hub master account for the current member account. </p>
     async fn get_master_account(
         &self,
     ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>>;
 
-    /// <p>Returns the details on the Security Hub member accounts that the account IDs specify.</p>
+    /// <p>Returns the details for the Security Hub member accounts for the specified account IDs.</p>
     async fn get_members(
         &self,
         input: GetMembersRequest,
     ) -> Result<GetMembersResponse, RusotoError<GetMembersError>>;
 
-    /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from. Before you can use this action to invite a member, you must first create the member account in Security Hub by using the <a>CreateMembers</a> action. When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from member account.</p>
+    /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from.</p> <p>Before you can use this action to invite a member, you must first use the <code> <a>CreateMembers</a> </code> action to create the member account in Security Hub.</p> <p>When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from the member account.</p>
     async fn invite_members(
         &self,
         input: InviteMembersRequest,
     ) -> Result<InviteMembersResponse, RusotoError<InviteMembersError>>;
 
-    /// <p>Lists all findings-generating solutions (products) whose findings you have subscribed to receive in Security Hub.</p>
+    /// <p>Lists all findings-generating solutions (products) that you are subscribed to receive findings from in Security Hub.</p>
     async fn list_enabled_products_for_import(
         &self,
         input: ListEnabledProductsForImportRequest,
@@ -4768,19 +5793,19 @@ pub trait SecurityHub {
         input: UpdateActionTargetRequest,
     ) -> Result<UpdateActionTargetResponse, RusotoError<UpdateActionTargetError>>;
 
-    /// <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
+    /// <p> <code>UpdateFindings</code> is deprecated. Instead of <code>UpdateFindings</code>, use <code>BatchUpdateFindings</code>.</p> <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
     async fn update_findings(
         &self,
         input: UpdateFindingsRequest,
     ) -> Result<UpdateFindingsResponse, RusotoError<UpdateFindingsError>>;
 
-    /// <p>Updates the Security Hub insight that the insight ARN specifies.</p>
+    /// <p>Updates the Security Hub insight identified by the specified insight ARN.</p>
     async fn update_insight(
         &self,
         input: UpdateInsightRequest,
     ) -> Result<UpdateInsightResponse, RusotoError<UpdateInsightError>>;
 
-    /// <p>Used to control whether an individual compliance standard control is enabled or disabled.</p>
+    /// <p>Used to control whether an individual security standard control is enabled or disabled.</p>
     async fn update_standards_control(
         &self,
         input: UpdateStandardsControlRequest,
@@ -4826,7 +5851,7 @@ impl SecurityHubClient {
 
 #[async_trait]
 impl SecurityHub for SecurityHubClient {
-    /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
+    /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from.</p> <p>When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
@@ -4856,7 +5881,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
+    /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Security Standards</a> section of the <i>AWS Security Hub User Guide</i>.</p>
     async fn batch_disable_standards(
         &self,
         input: BatchDisableStandardsRequest,
@@ -4886,7 +5911,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Enables the standards specified by the provided <code>standardsArn</code>. In this release, only CIS AWS Foundations standards are supported. For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Standards Supported in AWS Security Hub</a>.</p>
+    /// <p>Enables the standards specified by the provided <code>StandardsArn</code>. To obtain the ARN for a standard, use the <code> <a>DescribeStandards</a> </code> operation.</p> <p>For more information, see the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Security Standards</a> section of the <i>AWS Security Hub User Guide</i>.</p>
     async fn batch_enable_standards(
         &self,
         input: BatchEnableStandardsRequest,
@@ -4916,7 +5941,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub. The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p>
+    /// <p><p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub.</p> <p>The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p> <p>After a finding is created, <code>BatchImportFindings</code> cannot be used to update the following finding fields and objects, which Security Hub customers use to manage their investigation workflow.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul></p>
     async fn batch_import_findings(
         &self,
         input: BatchImportFindingsRequest,
@@ -4946,7 +5971,37 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Creates a custom action target in Security Hub. You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
+    /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>Member accounts can only use <code>BatchUpdateFindings</code> to update the Note object.</p>
+    async fn batch_update_findings(
+        &self,
+        input: BatchUpdateFindingsRequest,
+    ) -> Result<BatchUpdateFindingsResponse, RusotoError<BatchUpdateFindingsError>> {
+        let request_uri = "/findings/batchupdate";
+
+        let mut request = SignedRequest::new("PATCH", "securityhub", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchUpdateFindingsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchUpdateFindingsError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a custom action target in Security Hub.</p> <p>You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
     async fn create_action_target(
         &self,
         input: CreateActionTargetRequest,
@@ -4976,7 +6031,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation. Use the <code>GroupByAttribute</code> to group the related findings in the insight.</p>
+    /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation.</p> <p>To group the related findings in the insight, use the <code>GroupByAttribute</code>.</p>
     async fn create_insight(
         &self,
         input: CreateInsightRequest,
@@ -5006,7 +6061,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. You can use the <a>EnableSecurityHub</a> to enable Security Hub.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you need to use the <a>InviteMembers</a> action, which invites the accounts to enable Security Hub and become member accounts in Security Hub. If the invitation is accepted by the account owner, the account becomes a member account in Security Hub, and a permission policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start being sent to both the member and master accounts.</p> <p>You can remove the association between the master and member accounts by using the <a>DisassociateFromMasterAccount</a> or <a>DisassociateMembers</a> operation.</p>
+    /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. To enable Security Hub, you can use the <code> <a>EnableSecurityHub</a> </code> operation.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you must use the <code> <a>InviteMembers</a> </code> operation to invite the accounts to enable Security Hub and become member accounts in Security Hub.</p> <p>If the account owner accepts the invitation, the account becomes a member account in Security Hub. A permissions policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start to be sent to both the member and master accounts.</p> <p>To remove the association between the master and member accounts, use the <code> <a>DisassociateFromMasterAccount</a> </code> or <code> <a>DisassociateMembers</a> </code> operation.</p>
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -5066,7 +6121,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Deletes a custom action target from Security Hub. Deleting a custom action target doesn't affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
+    /// <p>Deletes a custom action target from Security Hub.</p> <p>Deleting a custom action target does not affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
     async fn delete_action_target(
         &self,
         input: DeleteActionTargetRequest,
@@ -5246,7 +6301,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Returns information about the products available that you can subscribe to and integrate with Security Hub to consolidate findings.</p>
+    /// <p>Returns information about the available products that you can subscribe to and integrate with Security Hub in order to consolidate findings.</p>
     async fn describe_products(
         &self,
         input: DescribeProductsRequest,
@@ -5282,7 +6337,43 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Returns a list of compliance standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
+    /// <p>Returns a list of the available standards in Security Hub.</p> <p>For each standard, the results include the standard ARN, the name, and a description. </p>
+    async fn describe_standards(
+        &self,
+        input: DescribeStandardsRequest,
+    ) -> Result<DescribeStandardsResponse, RusotoError<DescribeStandardsError>> {
+        let request_uri = "/standards";
+
+        let mut request = SignedRequest::new("GET", "securityhub", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeStandardsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeStandardsError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of security standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
     async fn describe_standards_controls(
         &self,
         input: DescribeStandardsControlsRequest,
@@ -5322,7 +6413,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Disables the integration of the specified product with Security Hub. Findings from that product are no longer sent to Security Hub after the integration is disabled.</p>
+    /// <p>Disables the integration of the specified product with Security Hub. After the integration is disabled, findings from that product are no longer sent to Security Hub.</p>
     async fn disable_import_findings_for_product(
         &self,
         input: DisableImportFindingsForProductRequest,
@@ -5357,7 +6448,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub. When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and can't be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed. If you want to save your existing findings, you must export them before you disable Security Hub.</p>
+    /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub.</p> <p>When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and cannot be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed.</p> <p>If you want to save your existing findings, you must export them before you disable Security Hub.</p>
     async fn disable_security_hub(
         &self,
     ) -> Result<DisableSecurityHubResponse, RusotoError<DisableSecurityHubError>> {
@@ -5442,7 +6533,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub. When you enable a product integration, a permission policy that grants permission for the product to send findings to Security Hub is applied.</p>
+    /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub.</p> <p>When you enable a product integration, a permissions policy that grants permission for the product to send findings to Security Hub is applied.</p>
     async fn enable_import_findings_for_product(
         &self,
         input: EnableImportFindingsForProductRequest,
@@ -5475,7 +6566,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request. Enabling Security Hub also enables the CIS AWS Foundations standard. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a>.</p>
+    /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request.</p> <p>When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from other services that are integrated with Security Hub.</p> <p>When you use the <code>EnableSecurityHub</code> operation to enable Security Hub, you also automatically enable the following standards.</p> <ul> <li> <p>CIS AWS Foundations</p> </li> <li> <p>AWS Foundational Security Best Practices</p> </li> </ul> <p>You do not enable the Payment Card Industry Data Security Standard (PCI DSS) standard. </p> <p>To not enable the automatically enabled standards, set <code>EnableDefaultStandards</code> to <code>false</code>.</p> <p>After you enable Security Hub, to enable a standard, use the <code> <a>BatchEnableStandards</a> </code> operation. To disable a standard, use the <code> <a>BatchDisableStandards</a> </code> operation.</p> <p>To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a> in the <i>AWS Security Hub User Guide</i>.</p>
     async fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,
@@ -5565,7 +6656,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Lists the results of the Security Hub insight that the insight ARN specifies.</p>
+    /// <p>Lists the results of the Security Hub insight specified by the insight ARN.</p>
     async fn get_insight_results(
         &self,
         input: GetInsightResultsRequest,
@@ -5595,7 +6686,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Lists and describes insights that insight ARNs specify.</p>
+    /// <p>Lists and describes insights for the specified insight ARNs.</p>
     async fn get_insights(
         &self,
         input: GetInsightsRequest,
@@ -5651,7 +6742,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Provides the details for the Security Hub master account to the current member account. </p>
+    /// <p>Provides the details for the Security Hub master account for the current member account. </p>
     async fn get_master_account(
         &self,
     ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>> {
@@ -5677,7 +6768,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Returns the details on the Security Hub member accounts that the account IDs specify.</p>
+    /// <p>Returns the details for the Security Hub member accounts for the specified account IDs.</p>
     async fn get_members(
         &self,
         input: GetMembersRequest,
@@ -5707,7 +6798,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from. Before you can use this action to invite a member, you must first create the member account in Security Hub by using the <a>CreateMembers</a> action. When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from member account.</p>
+    /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from.</p> <p>Before you can use this action to invite a member, you must first use the <code> <a>CreateMembers</a> </code> action to create the member account in Security Hub.</p> <p>When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from the member account.</p>
     async fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -5737,7 +6828,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Lists all findings-generating solutions (products) whose findings you have subscribed to receive in Security Hub.</p>
+    /// <p>Lists all findings-generating solutions (products) that you are subscribed to receive findings from in Security Hub.</p>
     async fn list_enabled_products_for_import(
         &self,
         input: ListEnabledProductsForImportRequest,
@@ -5972,7 +7063,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
+    /// <p> <code>UpdateFindings</code> is deprecated. Instead of <code>UpdateFindings</code>, use <code>BatchUpdateFindings</code>.</p> <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
     async fn update_findings(
         &self,
         input: UpdateFindingsRequest,
@@ -6002,7 +7093,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Updates the Security Hub insight that the insight ARN specifies.</p>
+    /// <p>Updates the Security Hub insight identified by the specified insight ARN.</p>
     async fn update_insight(
         &self,
         input: UpdateInsightRequest,
@@ -6032,7 +7123,7 @@ impl SecurityHub for SecurityHubClient {
         }
     }
 
-    /// <p>Used to control whether an individual compliance standard control is enabled or disabled.</p>
+    /// <p>Used to control whether an individual security standard control is enabled or disabled.</p>
     async fn update_standards_control(
         &self,
         input: UpdateStandardsControlRequest,

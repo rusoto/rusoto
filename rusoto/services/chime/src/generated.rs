@@ -379,6 +379,15 @@ pub struct BusinessCallingSettings {
     pub cdr_bucket: Option<String>,
 }
 
+/// <p>The retention settings that determine how long to retain chat conversation messages for an Amazon Chime Enterprise account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ConversationRetentionSettings {
+    /// <p>The number of days for which to retain chat conversation messages.</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountRequest {
@@ -423,6 +432,10 @@ pub struct CreateAttendeeRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
     #[serde(rename = "MeetingId")]
     pub meeting_id: String,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>The Amazon Chime SDK attendee fields to create, used with the BatchCreateAttendee action.</p>
@@ -432,6 +445,10 @@ pub struct CreateAttendeeRequestItem {
     /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
     pub external_user_id: String,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -473,6 +490,10 @@ pub struct CreateMeetingRequest {
     /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
+    /// <p>The external meeting ID.</p>
+    #[serde(rename = "ExternalMeetingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_meeting_id: Option<String>,
     /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -485,6 +506,10 @@ pub struct CreateMeetingRequest {
     #[serde(rename = "NotificationsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications_configuration: Option<MeetingNotificationConfiguration>,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -514,6 +539,49 @@ pub struct CreatePhoneNumberOrderResponse {
     #[serde(rename = "PhoneNumberOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number_order: Option<PhoneNumberOrder>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateProxySessionRequest {
+    /// <p>The proxy session capabilities.</p>
+    #[serde(rename = "Capabilities")]
+    pub capabilities: Vec<String>,
+    /// <p>The number of minutes allowed for the proxy session.</p>
+    #[serde(rename = "ExpiryMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_minutes: Option<i64>,
+    /// <p>The preference for matching the country or area code of the proxy phone number with that of the first participant.</p>
+    #[serde(rename = "GeoMatchLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_level: Option<String>,
+    /// <p>The country and area code for the proxy phone number.</p>
+    #[serde(rename = "GeoMatchParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_params: Option<GeoMatchParams>,
+    /// <p>The name of the proxy session.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The preference for proxy phone number reuse, or stickiness, between the same participants across sessions.</p>
+    #[serde(rename = "NumberSelectionBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_selection_behavior: Option<String>,
+    /// <p>The participant phone numbers.</p>
+    #[serde(rename = "ParticipantPhoneNumbers")]
+    pub participant_phone_numbers: Vec<String>,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateProxySessionResponse {
+    /// <p>The proxy session details.</p>
+    #[serde(rename = "ProxySession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_session: Option<ProxySession>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -706,6 +774,17 @@ pub struct DeletePhoneNumberRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProxySessionRequest {
+    /// <p>The proxy session ID.</p>
+    #[serde(rename = "ProxySessionId")]
+    pub proxy_session_id: String,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -740,6 +819,14 @@ pub struct DeleteVoiceConnectorGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorOriginationRequest {
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteVoiceConnectorProxyRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
@@ -869,6 +956,17 @@ pub struct EventsConfiguration {
     #[serde(rename = "OutboundEventsHTTPSEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outbound_events_https_endpoint: Option<String>,
+}
+
+/// <p>The country and area code for a proxy phone number in a proxy phone session.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GeoMatchParams {
+    /// <p>The area code.</p>
+    #[serde(rename = "AreaCode")]
+    pub area_code: String,
+    /// <p>The country.</p>
+    #[serde(rename = "Country")]
+    pub country: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1044,6 +1142,47 @@ pub struct GetPhoneNumberSettingsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetProxySessionRequest {
+    /// <p>The proxy session ID.</p>
+    #[serde(rename = "ProxySessionId")]
+    pub proxy_session_id: String,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetProxySessionResponse {
+    /// <p>The proxy session details.</p>
+    #[serde(rename = "ProxySession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_session: Option<ProxySession>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetRetentionSettingsRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetRetentionSettingsResponse {
+    /// <p>The timestamp representing the time at which the specified items are permanently deleted, in ISO 8601 format.</p>
+    #[serde(rename = "InitiateDeletionTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initiate_deletion_timestamp: Option<f64>,
+    /// <p>The retention settings.</p>
+    #[serde(rename = "RetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_settings: Option<RetentionSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1151,6 +1290,23 @@ pub struct GetVoiceConnectorOriginationResponse {
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origination: Option<Origination>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetVoiceConnectorProxyRequest {
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetVoiceConnectorProxyResponse {
+    /// <p>The proxy configuration details.</p>
+    #[serde(rename = "Proxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy: Option<Proxy>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1303,6 +1459,26 @@ pub struct ListAccountsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAttendeeTagsRequest {
+    /// <p>The Amazon Chime SDK attendee ID.</p>
+    #[serde(rename = "AttendeeId")]
+    pub attendee_id: String,
+    /// <p>The Amazon Chime SDK meeting ID.</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAttendeeTagsResponse {
+    /// <p>A list of tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttendeesRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1357,6 +1533,23 @@ pub struct ListBotsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMeetingTagsRequest {
+    /// <p>The Amazon Chime SDK meeting ID.</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListMeetingTagsResponse {
+    /// <p>A list of tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1455,6 +1648,39 @@ pub struct ListPhoneNumbersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListProxySessionsRequest {
+    /// <p>The maximum number of results to return in a single call.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The proxy session status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListProxySessionsResponse {
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The proxy session details.</p>
+    #[serde(rename = "ProxySessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_sessions: Option<Vec<ProxySession>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomMembershipsRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1516,6 +1742,23 @@ pub struct ListRoomsResponse {
     #[serde(rename = "Rooms")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rooms: Option<Vec<Room>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A list of tag-key value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1652,6 +1895,10 @@ pub struct LogoutUserResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MediaPlacement {
+    /// <p>The audio fallback URL.</p>
+    #[serde(rename = "AudioFallbackUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_fallback_url: Option<String>,
     /// <p>The audio host URL.</p>
     #[serde(rename = "AudioHostUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1682,6 +1929,10 @@ pub struct MediaPlacement {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Meeting {
+    /// <p>The external meeting ID.</p>
+    #[serde(rename = "ExternalMeetingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_meeting_id: Option<String>,
     /// <p>The media placement for the meeting.</p>
     #[serde(rename = "MediaPlacement")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1818,6 +2069,20 @@ pub struct OriginationRoute {
     #[serde(rename = "Weight")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<i64>,
+}
+
+/// <p>The phone number and proxy phone number for a participant in an Amazon Chime Voice Connector proxy session.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Participant {
+    /// <p>The participant's phone number.</p>
+    #[serde(rename = "PhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
+    /// <p>The participant's proxy phone number.</p>
+    #[serde(rename = "ProxyPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_phone_number: Option<String>,
 }
 
 /// <p>A phone number used for Amazon Chime Business Calling or an Amazon Chime Voice Connector.</p>
@@ -1970,6 +2235,86 @@ pub struct PhoneNumberOrder {
     pub updated_timestamp: Option<f64>,
 }
 
+/// <p>The proxy configuration for an Amazon Chime Voice Connector.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Proxy {
+    /// <p>The default number of minutes allowed for proxy sessions.</p>
+    #[serde(rename = "DefaultSessionExpiryMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_session_expiry_minutes: Option<i64>,
+    /// <p>When true, stops proxy sessions from being created on the specified Amazon Chime Voice Connector.</p>
+    #[serde(rename = "Disabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// <p>The phone number to route calls to after a proxy session expires.</p>
+    #[serde(rename = "FallBackPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fall_back_phone_number: Option<String>,
+    /// <p>The countries for proxy phone numbers to be selected from.</p>
+    #[serde(rename = "PhoneNumberCountries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number_countries: Option<Vec<String>>,
+}
+
+/// <p>The proxy session for an Amazon Chime Voice Connector.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProxySession {
+    /// <p>The proxy session capabilities.</p>
+    #[serde(rename = "Capabilities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capabilities: Option<Vec<String>>,
+    /// <p>The created timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The ended timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "EndedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ended_timestamp: Option<f64>,
+    /// <p>The number of minutes allowed for the proxy session.</p>
+    #[serde(rename = "ExpiryMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_minutes: Option<i64>,
+    /// <p>The preference for matching the country or area code of the proxy phone number with that of the first participant.</p>
+    #[serde(rename = "GeoMatchLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_level: Option<String>,
+    /// <p>The country and area code for the proxy phone number.</p>
+    #[serde(rename = "GeoMatchParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_params: Option<GeoMatchParams>,
+    /// <p>The name of the proxy session.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The preference for proxy phone number reuse, or stickiness, between the same participants across sessions.</p>
+    #[serde(rename = "NumberSelectionBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_selection_behavior: Option<String>,
+    /// <p>The proxy session participants.</p>
+    #[serde(rename = "Participants")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub participants: Option<Vec<Participant>>,
+    /// <p>The proxy session ID.</p>
+    #[serde(rename = "ProxySessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_session_id: Option<String>,
+    /// <p>The status of the proxy session.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The updated timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "UpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_timestamp: Option<f64>,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub voice_connector_id: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsConfigurationRequest {
@@ -1995,6 +2340,30 @@ pub struct PutEventsConfigurationResponse {
     #[serde(rename = "EventsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub events_configuration: Option<EventsConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutRetentionSettingsRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The retention settings.</p>
+    #[serde(rename = "RetentionSettings")]
+    pub retention_settings: RetentionSettings,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutRetentionSettingsResponse {
+    /// <p>The timestamp representing the time at which the specified items are permanently deleted, in ISO 8601 format.</p>
+    #[serde(rename = "InitiateDeletionTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initiate_deletion_timestamp: Option<f64>,
+    /// <p>The retention settings.</p>
+    #[serde(rename = "RetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_settings: Option<RetentionSettings>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2035,6 +2404,37 @@ pub struct PutVoiceConnectorOriginationResponse {
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origination: Option<Origination>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutVoiceConnectorProxyRequest {
+    /// <p>The default number of minutes allowed for proxy sessions.</p>
+    #[serde(rename = "DefaultSessionExpiryMinutes")]
+    pub default_session_expiry_minutes: i64,
+    /// <p>When true, stops proxy sessions from being created on the specified Amazon Chime Voice Connector.</p>
+    #[serde(rename = "Disabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// <p>The phone number to route calls to after a proxy session expires.</p>
+    #[serde(rename = "FallBackPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fall_back_phone_number: Option<String>,
+    /// <p>The countries for proxy phone numbers to be selected from.</p>
+    #[serde(rename = "PhoneNumberPoolCountries")]
+    pub phone_number_pool_countries: Vec<String>,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutVoiceConnectorProxyResponse {
+    /// <p>The proxy configuration details.</p>
+    #[serde(rename = "Proxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy: Option<Proxy>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2088,6 +2488,42 @@ pub struct PutVoiceConnectorTerminationResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination: Option<Termination>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RedactConversationMessageRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The conversation ID.</p>
+    #[serde(rename = "ConversationId")]
+    pub conversation_id: String,
+    /// <p>The message ID.</p>
+    #[serde(rename = "MessageId")]
+    pub message_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RedactConversationMessageResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RedactRoomMessageRequest {
+    /// <p>The Amazon Chime account ID.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The message ID.</p>
+    #[serde(rename = "MessageId")]
+    pub message_id: String,
+    /// <p>The room ID.</p>
+    #[serde(rename = "RoomId")]
+    pub room_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RedactRoomMessageResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2145,6 +2581,19 @@ pub struct RestorePhoneNumberResponse {
     pub phone_number: Option<PhoneNumber>,
 }
 
+/// <p>The retention settings for an Amazon Chime Enterprise account that determine how long to retain items such as chat room messages and chat conversation messages.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RetentionSettings {
+    /// <p>The chat conversation retention settings.</p>
+    #[serde(rename = "ConversationRetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_retention_settings: Option<ConversationRetentionSettings>,
+    /// <p>The chat room retention settings.</p>
+    #[serde(rename = "RoomRetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub room_retention_settings: Option<RoomRetentionSettings>,
+}
+
 /// <p>The Amazon Chime chat room details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2198,6 +2647,15 @@ pub struct RoomMembership {
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
+}
+
+/// <p>The retention settings that determine how long to retain chat room messages for an Amazon Chime Enterprise account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RoomRetentionSettings {
+    /// <p>The number of days for which to retain chat room messages.</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2261,6 +2719,65 @@ pub struct StreamingConfiguration {
     #[serde(rename = "Disabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled: Option<bool>,
+    /// <p>The streaming notification targets.</p>
+    #[serde(rename = "StreamingNotificationTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub streaming_notification_targets: Option<Vec<StreamingNotificationTarget>>,
+}
+
+/// <p>The targeted recipient for a streaming configuration notification.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StreamingNotificationTarget {
+    /// <p>The streaming notification target.</p>
+    #[serde(rename = "NotificationTarget")]
+    pub notification_target: String,
+}
+
+/// <p>Describes a tag applied to a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key of the tag.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagAttendeeRequest {
+    /// <p>The Amazon Chime SDK attendee ID.</p>
+    #[serde(rename = "AttendeeId")]
+    pub attendee_id: String,
+    /// <p>The Amazon Chime SDK meeting ID.</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagMeetingRequest {
+    /// <p>The Amazon Chime SDK meeting ID.</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
 }
 
 /// <p>Settings that allow management of telephony permissions for an Amazon Chime user, such as inbound and outbound calling and text messaging.</p>
@@ -2288,7 +2805,7 @@ pub struct Termination {
     #[serde(rename = "CidrAllowedList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cidr_allowed_list: Option<Vec<String>>,
-    /// <p>The limit on calls per second. Max value based on account service limit. Default value of 1.</p>
+    /// <p>The limit on calls per second. Max value based on account service quota. Default value of 1.</p>
     #[serde(rename = "CpsLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cps_limit: Option<i64>,
@@ -2314,6 +2831,42 @@ pub struct TerminationHealth {
     #[serde(rename = "Timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagAttendeeRequest {
+    /// <p>The Amazon Chime SDK attendee ID.</p>
+    #[serde(rename = "AttendeeId")]
+    pub attendee_id: String,
+    /// <p>The Amazon Chime SDK meeting ID.</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+    /// <p>The tag keys.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagMeetingRequest {
+    /// <p>The Amazon Chime SDK meeting ID.</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+    /// <p>The tag keys.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tag keys.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2435,6 +2988,33 @@ pub struct UpdatePhoneNumberSettingsRequest {
     /// <p>The default outbound calling name for the account.</p>
     #[serde(rename = "CallingName")]
     pub calling_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateProxySessionRequest {
+    /// <p>The proxy session capabilities.</p>
+    #[serde(rename = "Capabilities")]
+    pub capabilities: Vec<String>,
+    /// <p>The number of minutes allowed for the proxy session.</p>
+    #[serde(rename = "ExpiryMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_minutes: Option<i64>,
+    /// <p>The proxy session ID.</p>
+    #[serde(rename = "ProxySessionId")]
+    pub proxy_session_id: String,
+    /// <p>The Amazon Chime voice connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateProxySessionResponse {
+    /// <p>The proxy session details.</p>
+    #[serde(rename = "ProxySession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_session: Option<ProxySession>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4034,6 +4614,76 @@ impl fmt::Display for CreatePhoneNumberOrderError {
     }
 }
 impl Error for CreatePhoneNumberOrderError {}
+/// Errors returned by CreateProxySession
+#[derive(Debug, PartialEq)]
+pub enum CreateProxySessionError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateProxySessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProxySessionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateProxySessionError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateProxySessionError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateProxySessionError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateProxySessionError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateProxySessionError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateProxySessionError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateProxySessionError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateProxySessionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateProxySessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateProxySessionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateProxySessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateProxySessionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateProxySessionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateProxySessionError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateProxySessionError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateProxySessionError {}
 /// Errors returned by CreateRoom
 #[derive(Debug, PartialEq)]
 pub enum CreateRoomError {
@@ -4778,6 +5428,76 @@ impl fmt::Display for DeletePhoneNumberError {
     }
 }
 impl Error for DeletePhoneNumberError {}
+/// Errors returned by DeleteProxySession
+#[derive(Debug, PartialEq)]
+pub enum DeleteProxySessionError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteProxySessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProxySessionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteProxySessionError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteProxySessionError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteProxySessionError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteProxySessionError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteProxySessionError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteProxySessionError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteProxySessionError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteProxySessionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProxySessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteProxySessionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteProxySessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProxySessionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteProxySessionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteProxySessionError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteProxySessionError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteProxySessionError {}
 /// Errors returned by DeleteRoom
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomError {
@@ -5166,6 +5886,82 @@ impl fmt::Display for DeleteVoiceConnectorOriginationError {
     }
 }
 impl Error for DeleteVoiceConnectorOriginationError {}
+/// Errors returned by DeleteVoiceConnectorProxy
+#[derive(Debug, PartialEq)]
+pub enum DeleteVoiceConnectorProxyError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteVoiceConnectorProxyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVoiceConnectorProxyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteVoiceConnectorProxyError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteVoiceConnectorProxyError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteVoiceConnectorProxyError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteVoiceConnectorProxyError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorProxyError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteVoiceConnectorProxyError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorProxyError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteVoiceConnectorProxyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteVoiceConnectorProxyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorProxyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorProxyError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorProxyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorProxyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorProxyError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteVoiceConnectorProxyError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteVoiceConnectorProxyError {}
 /// Errors returned by DeleteVoiceConnectorStreamingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorStreamingConfigurationError {
@@ -6524,6 +7320,144 @@ impl fmt::Display for GetPhoneNumberSettingsError {
     }
 }
 impl Error for GetPhoneNumberSettingsError {}
+/// Errors returned by GetProxySession
+#[derive(Debug, PartialEq)]
+pub enum GetProxySessionError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetProxySessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProxySessionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetProxySessionError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetProxySessionError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetProxySessionError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetProxySessionError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetProxySessionError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetProxySessionError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(GetProxySessionError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetProxySessionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetProxySessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetProxySessionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetProxySessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetProxySessionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetProxySessionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetProxySessionError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetProxySessionError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetProxySessionError {}
+/// Errors returned by GetRetentionSettings
+#[derive(Debug, PartialEq)]
+pub enum GetRetentionSettingsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetRetentionSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRetentionSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(GetRetentionSettingsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetRetentionSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetRetentionSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetRetentionSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetRetentionSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetRetentionSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetRetentionSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetRetentionSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetRetentionSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetRetentionSettingsError {}
 /// Errors returned by GetRoom
 #[derive(Debug, PartialEq)]
 pub enum GetRoomError {
@@ -7048,6 +7982,80 @@ impl fmt::Display for GetVoiceConnectorOriginationError {
     }
 }
 impl Error for GetVoiceConnectorOriginationError {}
+/// Errors returned by GetVoiceConnectorProxy
+#[derive(Debug, PartialEq)]
+pub enum GetVoiceConnectorProxyError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetVoiceConnectorProxyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVoiceConnectorProxyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(GetVoiceConnectorProxyError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetVoiceConnectorProxyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetVoiceConnectorProxyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorProxyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorProxyError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorProxyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorProxyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorProxyError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetVoiceConnectorProxyError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetVoiceConnectorProxyError {}
 /// Errors returned by GetVoiceConnectorStreamingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorStreamingConfigurationError {
@@ -7454,6 +8462,72 @@ impl fmt::Display for ListAccountsError {
     }
 }
 impl Error for ListAccountsError {}
+/// Errors returned by ListAttendeeTags
+#[derive(Debug, PartialEq)]
+pub enum ListAttendeeTagsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListAttendeeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttendeeTagsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListAttendeeTagsError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAttendeeTagsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAttendeeTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAttendeeTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListAttendeeTagsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListAttendeeTagsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListAttendeeTagsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAttendeeTagsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListAttendeeTagsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAttendeeTagsError {}
 /// Errors returned by ListAttendees
 #[derive(Debug, PartialEq)]
 pub enum ListAttendeesError {
@@ -7586,6 +8660,72 @@ impl fmt::Display for ListBotsError {
     }
 }
 impl Error for ListBotsError {}
+/// Errors returned by ListMeetingTags
+#[derive(Debug, PartialEq)]
+pub enum ListMeetingTagsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListMeetingTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMeetingTagsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListMeetingTagsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListMeetingTagsError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListMeetingTagsError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListMeetingTagsError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListMeetingTagsError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListMeetingTagsError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListMeetingTagsError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListMeetingTagsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMeetingTagsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListMeetingTagsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListMeetingTagsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListMeetingTagsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListMeetingTagsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListMeetingTagsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListMeetingTagsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListMeetingTagsError {}
 /// Errors returned by ListMeetings
 #[derive(Debug, PartialEq)]
 pub enum ListMeetingsError {
@@ -7774,6 +8914,76 @@ impl fmt::Display for ListPhoneNumbersError {
     }
 }
 impl Error for ListPhoneNumbersError {}
+/// Errors returned by ListProxySessions
+#[derive(Debug, PartialEq)]
+pub enum ListProxySessionsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListProxySessionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProxySessionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListProxySessionsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListProxySessionsError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListProxySessionsError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListProxySessionsError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListProxySessionsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListProxySessionsError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListProxySessionsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListProxySessionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListProxySessionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListProxySessionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListProxySessionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListProxySessionsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListProxySessionsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListProxySessionsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListProxySessionsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListProxySessionsError {}
 /// Errors returned by ListRoomMemberships
 #[derive(Debug, PartialEq)]
 pub enum ListRoomMembershipsError {
@@ -7910,6 +9120,70 @@ impl fmt::Display for ListRoomsError {
     }
 }
 impl Error for ListRoomsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListTagsForResourceError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -8344,6 +9618,84 @@ impl fmt::Display for PutEventsConfigurationError {
     }
 }
 impl Error for PutEventsConfigurationError {}
+/// Errors returned by PutRetentionSettings
+#[derive(Debug, PartialEq)]
+pub enum PutRetentionSettingsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutRetentionSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(PutRetentionSettingsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutRetentionSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutRetentionSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            PutRetentionSettingsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutRetentionSettingsError {}
 /// Errors returned by PutVoiceConnectorLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorLoggingConfigurationError {
@@ -8526,6 +9878,86 @@ impl fmt::Display for PutVoiceConnectorOriginationError {
     }
 }
 impl Error for PutVoiceConnectorOriginationError {}
+/// Errors returned by PutVoiceConnectorProxy
+#[derive(Debug, PartialEq)]
+pub enum PutVoiceConnectorProxyError {
+    /// <p>You don't have permissions to perform the requested operation.</p>
+    AccessDenied(String),
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutVoiceConnectorProxyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutVoiceConnectorProxyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::AccessDenied(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(PutVoiceConnectorProxyError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutVoiceConnectorProxyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutVoiceConnectorProxyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            PutVoiceConnectorProxyError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutVoiceConnectorProxyError {}
 /// Errors returned by PutVoiceConnectorStreamingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorStreamingConfigurationError {
@@ -8812,6 +10244,152 @@ impl fmt::Display for PutVoiceConnectorTerminationCredentialsError {
     }
 }
 impl Error for PutVoiceConnectorTerminationCredentialsError {}
+/// Errors returned by RedactConversationMessage
+#[derive(Debug, PartialEq)]
+pub enum RedactConversationMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl RedactConversationMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RedactConversationMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RedactConversationMessageError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RedactConversationMessageError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RedactConversationMessageError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(RedactConversationMessageError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        RedactConversationMessageError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(RedactConversationMessageError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        RedactConversationMessageError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RedactConversationMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RedactConversationMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RedactConversationMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RedactConversationMessageError::NotFound(ref cause) => write!(f, "{}", cause),
+            RedactConversationMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RedactConversationMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RedactConversationMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            RedactConversationMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RedactConversationMessageError {}
+/// Errors returned by RedactRoomMessage
+#[derive(Debug, PartialEq)]
+pub enum RedactRoomMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl RedactRoomMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RedactRoomMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RedactRoomMessageError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RedactRoomMessageError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RedactRoomMessageError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(RedactRoomMessageError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(RedactRoomMessageError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(RedactRoomMessageError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(RedactRoomMessageError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RedactRoomMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RedactRoomMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RedactRoomMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RedactRoomMessageError::NotFound(ref cause) => write!(f, "{}", cause),
+            RedactRoomMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RedactRoomMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RedactRoomMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            RedactRoomMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RedactRoomMessageError {}
 /// Errors returned by RegenerateSecurityToken
 #[derive(Debug, PartialEq)]
 pub enum RegenerateSecurityTokenError {
@@ -9116,6 +10694,402 @@ impl fmt::Display for SearchAvailablePhoneNumbersError {
     }
 }
 impl Error for SearchAvailablePhoneNumbersError {}
+/// Errors returned by TagAttendee
+#[derive(Debug, PartialEq)]
+pub enum TagAttendeeError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl TagAttendeeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagAttendeeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagAttendeeError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(TagAttendeeError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagAttendeeError::NotFound(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(TagAttendeeError::ResourceLimitExceeded(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(TagAttendeeError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(TagAttendeeError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(TagAttendeeError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(TagAttendeeError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagAttendeeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            TagAttendeeError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagAttendeeError {}
+/// Errors returned by TagMeeting
+#[derive(Debug, PartialEq)]
+pub enum TagMeetingError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl TagMeetingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagMeetingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagMeetingError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(TagMeetingError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagMeetingError::NotFound(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(TagMeetingError::ResourceLimitExceeded(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(TagMeetingError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(TagMeetingError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(TagMeetingError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(TagMeetingError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagMeetingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            TagMeetingError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagMeetingError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(TagResourceError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(TagResourceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(TagResourceError::ServiceUnavailable(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(TagResourceError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagResourceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagAttendee
+#[derive(Debug, PartialEq)]
+pub enum UntagAttendeeError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UntagAttendeeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagAttendeeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagAttendeeError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UntagAttendeeError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagAttendeeError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UntagAttendeeError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UntagAttendeeError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UntagAttendeeError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UntagAttendeeError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagAttendeeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagAttendeeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagAttendeeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UntagAttendeeError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagAttendeeError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UntagAttendeeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UntagAttendeeError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UntagAttendeeError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagAttendeeError {}
+/// Errors returned by UntagMeeting
+#[derive(Debug, PartialEq)]
+pub enum UntagMeetingError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UntagMeetingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagMeetingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagMeetingError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UntagMeetingError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagMeetingError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UntagMeetingError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UntagMeetingError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UntagMeetingError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UntagMeetingError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagMeetingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagMeetingError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagMeetingError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UntagMeetingError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagMeetingError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UntagMeetingError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UntagMeetingError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UntagMeetingError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagMeetingError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UntagResourceError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UntagResourceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UntagResourceError::ServiceUnavailable(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UntagResourceError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAccount
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountError {
@@ -9534,6 +11508,76 @@ impl fmt::Display for UpdatePhoneNumberSettingsError {
     }
 }
 impl Error for UpdatePhoneNumberSettingsError {}
+/// Errors returned by UpdateProxySession
+#[derive(Debug, PartialEq)]
+pub enum UpdateProxySessionError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateProxySessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProxySessionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateProxySessionError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateProxySessionError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateProxySessionError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateProxySessionError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateProxySessionError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateProxySessionError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateProxySessionError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateProxySessionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateProxySessionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateProxySessionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateProxySessionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateProxySessionError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateProxySessionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateProxySessionError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateProxySessionError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateProxySessionError {}
 /// Errors returned by UpdateRoom
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoomError {
@@ -10004,7 +12048,7 @@ pub trait Chime {
         input: BatchCreateAttendeeRequest,
     ) -> Result<BatchCreateAttendeeResponse, RusotoError<BatchCreateAttendeeError>>;
 
-    /// <p>Adds up to 50 members to a chat room. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
     async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
@@ -10070,13 +12114,19 @@ pub trait Chime {
         input: CreatePhoneNumberOrderRequest,
     ) -> Result<CreatePhoneNumberOrderResponse, RusotoError<CreatePhoneNumberOrderError>>;
 
-    /// <p>Creates a chat room for the specified Amazon Chime account.</p>
+    /// <p>Creates a proxy session on the specified Amazon Chime Voice Connector for the specified participant phone numbers.</p>
+    async fn create_proxy_session(
+        &self,
+        input: CreateProxySessionRequest,
+    ) -> Result<CreateProxySessionResponse, RusotoError<CreateProxySessionError>>;
+
+    /// <p>Creates a chat room for the specified Amazon Chime Enterprise account.</p>
     async fn create_room(
         &self,
         input: CreateRoomRequest,
     ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>>;
 
-    /// <p>Adds a member to a chat room. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    /// <p>Adds a member to a chat room in an Amazon Chime Enterprise account. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
     async fn create_room_membership(
         &self,
         input: CreateRoomMembershipRequest,
@@ -10094,7 +12144,7 @@ pub trait Chime {
         input: CreateVoiceConnectorRequest,
     ) -> Result<CreateVoiceConnectorResponse, RusotoError<CreateVoiceConnectorError>>;
 
-    /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate up to three existing Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
+    /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
     async fn create_voice_connector_group(
         &self,
         input: CreateVoiceConnectorGroupRequest,
@@ -10130,13 +12180,19 @@ pub trait Chime {
         input: DeletePhoneNumberRequest,
     ) -> Result<(), RusotoError<DeletePhoneNumberError>>;
 
-    /// <p>Deletes a chat room.</p>
+    /// <p>Deletes the specified proxy session from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_proxy_session(
+        &self,
+        input: DeleteProxySessionRequest,
+    ) -> Result<(), RusotoError<DeleteProxySessionError>>;
+
+    /// <p>Deletes a chat room in an Amazon Chime Enterprise account.</p>
     async fn delete_room(
         &self,
         input: DeleteRoomRequest,
     ) -> Result<(), RusotoError<DeleteRoomError>>;
 
-    /// <p>Removes a member from a chat room.</p>
+    /// <p>Removes a member from a chat room in an Amazon Chime Enterprise account.</p>
     async fn delete_room_membership(
         &self,
         input: DeleteRoomMembershipRequest,
@@ -10159,6 +12215,12 @@ pub trait Chime {
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorOriginationError>>;
+
+    /// <p>Deletes the proxy configuration from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_voice_connector_proxy(
+        &self,
+        input: DeleteVoiceConnectorProxyRequest,
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorProxyError>>;
 
     /// <p>Deletes the streaming configuration for the specified Amazon Chime Voice Connector.</p>
     async fn delete_voice_connector_streaming_configuration(
@@ -10272,7 +12334,19 @@ pub trait Chime {
         &self,
     ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>>;
 
-    /// <p>Retrieves room details, such as the room name.</p>
+    /// <p>Gets the specified proxy session details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_proxy_session(
+        &self,
+        input: GetProxySessionRequest,
+    ) -> Result<GetProxySessionResponse, RusotoError<GetProxySessionError>>;
+
+    /// <p>Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    async fn get_retention_settings(
+        &self,
+        input: GetRetentionSettingsRequest,
+    ) -> Result<GetRetentionSettingsResponse, RusotoError<GetRetentionSettingsError>>;
+
+    /// <p>Retrieves room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
     async fn get_room(
         &self,
         input: GetRoomRequest,
@@ -10317,6 +12391,12 @@ pub trait Chime {
         input: GetVoiceConnectorOriginationRequest,
     ) -> Result<GetVoiceConnectorOriginationResponse, RusotoError<GetVoiceConnectorOriginationError>>;
 
+    /// <p>Gets the proxy configuration details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_voice_connector_proxy(
+        &self,
+        input: GetVoiceConnectorProxyRequest,
+    ) -> Result<GetVoiceConnectorProxyResponse, RusotoError<GetVoiceConnectorProxyError>>;
+
     /// <p>Retrieves the streaming configuration details for the specified Amazon Chime Voice Connector. Shows whether media streaming is enabled for sending to Amazon Kinesis. It also shows the retention period, in hours, for the Amazon Kinesis data.</p>
     async fn get_voice_connector_streaming_configuration(
         &self,
@@ -10353,6 +12433,12 @@ pub trait Chime {
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
+    /// <p>Lists the tags applied to an Amazon Chime SDK attendee resource.</p>
+    async fn list_attendee_tags(
+        &self,
+        input: ListAttendeeTagsRequest,
+    ) -> Result<ListAttendeeTagsResponse, RusotoError<ListAttendeeTagsError>>;
+
     /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn list_attendees(
         &self,
@@ -10364,6 +12450,12 @@ pub trait Chime {
         &self,
         input: ListBotsRequest,
     ) -> Result<ListBotsResponse, RusotoError<ListBotsError>>;
+
+    /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    async fn list_meeting_tags(
+        &self,
+        input: ListMeetingTagsRequest,
+    ) -> Result<ListMeetingTagsResponse, RusotoError<ListMeetingTagsError>>;
 
     /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn list_meetings(
@@ -10383,17 +12475,29 @@ pub trait Chime {
         input: ListPhoneNumbersRequest,
     ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>>;
 
-    /// <p>Lists the membership details for the specified room, such as the members' IDs, email addresses, and names.</p>
+    /// <p>Lists the proxy sessions for the specified Amazon Chime Voice Connector.</p>
+    async fn list_proxy_sessions(
+        &self,
+        input: ListProxySessionsRequest,
+    ) -> Result<ListProxySessionsResponse, RusotoError<ListProxySessionsError>>;
+
+    /// <p>Lists the membership details for the specified room in an Amazon Chime Enterprise account, such as the members' IDs, email addresses, and names.</p>
     async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
     ) -> Result<ListRoomMembershipsResponse, RusotoError<ListRoomMembershipsError>>;
 
-    /// <p>Lists the room details for the specified Amazon Chime account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
+    /// <p>Lists the room details for the specified Amazon Chime Enterprise account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
     async fn list_rooms(
         &self,
         input: ListRoomsRequest,
     ) -> Result<ListRoomsResponse, RusotoError<ListRoomsError>>;
+
+    /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
     /// <p>Lists the users that belong to the specified Amazon Chime account. You can specify an email address to list only the user that the email address belongs to.</p>
     async fn list_users(
@@ -10434,6 +12538,12 @@ pub trait Chime {
         input: PutEventsConfigurationRequest,
     ) -> Result<PutEventsConfigurationResponse, RusotoError<PutEventsConfigurationError>>;
 
+    /// <p>Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    async fn put_retention_settings(
+        &self,
+        input: PutRetentionSettingsRequest,
+    ) -> Result<PutRetentionSettingsResponse, RusotoError<PutRetentionSettingsError>>;
+
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     async fn put_voice_connector_logging_configuration(
         &self,
@@ -10448,6 +12558,12 @@ pub trait Chime {
         &self,
         input: PutVoiceConnectorOriginationRequest,
     ) -> Result<PutVoiceConnectorOriginationResponse, RusotoError<PutVoiceConnectorOriginationError>>;
+
+    /// <p>Puts the specified proxy configuration to the specified Amazon Chime Voice Connector.</p>
+    async fn put_voice_connector_proxy(
+        &self,
+        input: PutVoiceConnectorProxyRequest,
+    ) -> Result<PutVoiceConnectorProxyResponse, RusotoError<PutVoiceConnectorProxyError>>;
 
     /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
     async fn put_voice_connector_streaming_configuration(
@@ -10469,6 +12585,18 @@ pub trait Chime {
         &self,
         input: PutVoiceConnectorTerminationCredentialsRequest,
     ) -> Result<(), RusotoError<PutVoiceConnectorTerminationCredentialsError>>;
+
+    /// <p>Redacts the specified message from the specified Amazon Chime conversation.</p>
+    async fn redact_conversation_message(
+        &self,
+        input: RedactConversationMessageRequest,
+    ) -> Result<RedactConversationMessageResponse, RusotoError<RedactConversationMessageError>>;
+
+    /// <p>Redacts the specified message from the specified Amazon Chime chat room.</p>
+    async fn redact_room_message(
+        &self,
+        input: RedactRoomMessageRequest,
+    ) -> Result<RedactRoomMessageResponse, RusotoError<RedactRoomMessageError>>;
 
     /// <p>Regenerates the security token for a bot.</p>
     async fn regenerate_security_token(
@@ -10493,6 +12621,42 @@ pub trait Chime {
         &self,
         input: SearchAvailablePhoneNumbersRequest,
     ) -> Result<SearchAvailablePhoneNumbersResponse, RusotoError<SearchAvailablePhoneNumbersError>>;
+
+    /// <p>Applies the specified tags to the specified Amazon Chime SDK attendee.</p>
+    async fn tag_attendee(
+        &self,
+        input: TagAttendeeRequest,
+    ) -> Result<(), RusotoError<TagAttendeeError>>;
+
+    /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting.</p>
+    async fn tag_meeting(
+        &self,
+        input: TagMeetingRequest,
+    ) -> Result<(), RusotoError<TagMeetingError>>;
+
+    /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>>;
+
+    /// <p>Untags the specified tags from the specified Amazon Chime SDK attendee.</p>
+    async fn untag_attendee(
+        &self,
+        input: UntagAttendeeRequest,
+    ) -> Result<(), RusotoError<UntagAttendeeError>>;
+
+    /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting.</p>
+    async fn untag_meeting(
+        &self,
+        input: UntagMeetingRequest,
+    ) -> Result<(), RusotoError<UntagMeetingError>>;
+
+    /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>>;
 
     /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
     async fn update_account(
@@ -10530,13 +12694,19 @@ pub trait Chime {
         input: UpdatePhoneNumberSettingsRequest,
     ) -> Result<(), RusotoError<UpdatePhoneNumberSettingsError>>;
 
-    /// <p>Updates room details, such as the room name.</p>
+    /// <p>Updates the specified proxy session details, such as voice or SMS capabilities.</p>
+    async fn update_proxy_session(
+        &self,
+        input: UpdateProxySessionRequest,
+    ) -> Result<UpdateProxySessionResponse, RusotoError<UpdateProxySessionError>>;
+
+    /// <p>Updates room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
     async fn update_room(
         &self,
         input: UpdateRoomRequest,
     ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>>;
 
-    /// <p>Updates room membership details, such as the member role. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
+    /// <p>Updates room membership details, such as the member role, for a room in an Amazon Chime Enterprise account. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
     async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,
@@ -10802,7 +12972,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds up to 50 members to a chat room. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
     async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
@@ -11169,7 +13339,40 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a chat room for the specified Amazon Chime account.</p>
+    /// <p>Creates a proxy session on the specified Amazon Chime Voice Connector for the specified participant phone numbers.</p>
+    async fn create_proxy_session(
+        &self,
+        input: CreateProxySessionRequest,
+    ) -> Result<CreateProxySessionResponse, RusotoError<CreateProxySessionError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/proxy-sessions",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateProxySessionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateProxySessionError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a chat room for the specified Amazon Chime Enterprise account.</p>
     async fn create_room(
         &self,
         input: CreateRoomRequest,
@@ -11202,7 +13405,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds a member to a chat room. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    /// <p>Adds a member to a chat room in an Amazon Chime Enterprise account. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
     async fn create_room_membership(
         &self,
         input: CreateRoomMembershipRequest,
@@ -11303,7 +13506,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate up to three existing Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
+    /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
     async fn create_voice_connector_group(
         &self,
         input: CreateVoiceConnectorGroupRequest,
@@ -11476,7 +13679,37 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes a chat room.</p>
+    /// <p>Deletes the specified proxy session from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_proxy_session(
+        &self,
+        input: DeleteProxySessionRequest,
+    ) -> Result<(), RusotoError<DeleteProxySessionError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/proxy-sessions/{proxy_session_id}",
+            proxy_session_id = input.proxy_session_id,
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProxySessionError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a chat room in an Amazon Chime Enterprise account.</p>
     async fn delete_room(
         &self,
         input: DeleteRoomRequest,
@@ -11506,7 +13739,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Removes a member from a chat room.</p>
+    /// <p>Removes a member from a chat room in an Amazon Chime Enterprise account.</p>
     async fn delete_room_membership(
         &self,
         input: DeleteRoomMembershipRequest,
@@ -11623,6 +13856,35 @@ impl Chime for ChimeClient {
             Err(DeleteVoiceConnectorOriginationError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Deletes the proxy configuration from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_voice_connector_proxy(
+        &self,
+        input: DeleteVoiceConnectorProxyRequest,
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorProxyError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/programmable-numbers/proxy",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorProxyError::from_response(response))
         }
     }
 
@@ -12169,7 +14431,68 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves room details, such as the room name.</p>
+    /// <p>Gets the specified proxy session details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_proxy_session(
+        &self,
+        input: GetProxySessionRequest,
+    ) -> Result<GetProxySessionResponse, RusotoError<GetProxySessionError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/proxy-sessions/{proxy_session_id}",
+            proxy_session_id = input.proxy_session_id,
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetProxySessionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetProxySessionError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    async fn get_retention_settings(
+        &self,
+        input: GetRetentionSettingsRequest,
+    ) -> Result<GetRetentionSettingsResponse, RusotoError<GetRetentionSettingsError>> {
+        let request_uri = format!(
+            "/accounts/{account_id}/retention-settings",
+            account_id = input.account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetRetentionSettingsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetRetentionSettingsError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
     async fn get_room(
         &self,
         input: GetRoomRequest,
@@ -12388,6 +14711,36 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Gets the proxy configuration details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_voice_connector_proxy(
+        &self,
+        input: GetVoiceConnectorProxyRequest,
+    ) -> Result<GetVoiceConnectorProxyResponse, RusotoError<GetVoiceConnectorProxyError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/programmable-numbers/proxy",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorProxyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorProxyError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves the streaming configuration details for the specified Amazon Chime Voice Connector. Shows whether media streaming is enabled for sending to Amazon Kinesis. It also shows the retention period, in hours, for the Amazon Kinesis data.</p>
     async fn get_voice_connector_streaming_configuration(
         &self,
@@ -12568,6 +14921,37 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Lists the tags applied to an Amazon Chime SDK attendee resource.</p>
+    async fn list_attendee_tags(
+        &self,
+        input: ListAttendeeTagsRequest,
+    ) -> Result<ListAttendeeTagsResponse, RusotoError<ListAttendeeTagsError>> {
+        let request_uri = format!(
+            "/meetings/{meeting_id}/attendees/{attendee_id}/tags",
+            attendee_id = input.attendee_id,
+            meeting_id = input.meeting_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAttendeeTagsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAttendeeTagsError::from_response(response))
+        }
+    }
+
     /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn list_attendees(
         &self,
@@ -12640,6 +15024,33 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListBotsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    async fn list_meeting_tags(
+        &self,
+        input: ListMeetingTagsRequest,
+    ) -> Result<ListMeetingTagsResponse, RusotoError<ListMeetingTagsError>> {
+        let request_uri = format!("/meetings/{meeting_id}/tags", meeting_id = input.meeting_id);
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListMeetingTagsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListMeetingTagsError::from_response(response))
         }
     }
 
@@ -12763,7 +15174,49 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists the membership details for the specified room, such as the members' IDs, email addresses, and names.</p>
+    /// <p>Lists the proxy sessions for the specified Amazon Chime Voice Connector.</p>
+    async fn list_proxy_sessions(
+        &self,
+        input: ListProxySessionsRequest,
+    ) -> Result<ListProxySessionsResponse, RusotoError<ListProxySessionsError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/proxy-sessions",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("status", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListProxySessionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListProxySessionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the membership details for the specified room in an Amazon Chime Enterprise account, such as the members' IDs, email addresses, and names.</p>
     async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
@@ -12803,7 +15256,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists the room details for the specified Amazon Chime account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
+    /// <p>Lists the room details for the specified Amazon Chime Enterprise account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
     async fn list_rooms(
         &self,
         input: ListRoomsRequest,
@@ -12842,6 +15295,37 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListRoomsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = "/tags";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("arn", &input.resource_arn);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
         }
     }
 
@@ -13064,6 +15548,39 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    async fn put_retention_settings(
+        &self,
+        input: PutRetentionSettingsRequest,
+    ) -> Result<PutRetentionSettingsResponse, RusotoError<PutRetentionSettingsError>> {
+        let request_uri = format!(
+            "/accounts/{account_id}/retention-settings",
+            account_id = input.account_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutRetentionSettingsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRetentionSettingsError::from_response(response))
+        }
+    }
+
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     async fn put_voice_connector_logging_configuration(
         &self,
@@ -13133,6 +15650,39 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutVoiceConnectorOriginationError::from_response(response))
+        }
+    }
+
+    /// <p>Puts the specified proxy configuration to the specified Amazon Chime Voice Connector.</p>
+    async fn put_voice_connector_proxy(
+        &self,
+        input: PutVoiceConnectorProxyRequest,
+    ) -> Result<PutVoiceConnectorProxyResponse, RusotoError<PutVoiceConnectorProxyError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/programmable-numbers/proxy",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorProxyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorProxyError::from_response(response))
         }
     }
 
@@ -13243,6 +15793,79 @@ impl Chime for ChimeClient {
             Err(PutVoiceConnectorTerminationCredentialsError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Redacts the specified message from the specified Amazon Chime conversation.</p>
+    async fn redact_conversation_message(
+        &self,
+        input: RedactConversationMessageRequest,
+    ) -> Result<RedactConversationMessageResponse, RusotoError<RedactConversationMessageError>>
+    {
+        let request_uri = format!(
+            "/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
+            account_id = input.account_id,
+            conversation_id = input.conversation_id,
+            message_id = input.message_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("operation", "redact");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RedactConversationMessageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RedactConversationMessageError::from_response(response))
+        }
+    }
+
+    /// <p>Redacts the specified message from the specified Amazon Chime chat room.</p>
+    async fn redact_room_message(
+        &self,
+        input: RedactRoomMessageRequest,
+    ) -> Result<RedactRoomMessageResponse, RusotoError<RedactRoomMessageError>> {
+        let request_uri = format!(
+            "/accounts/{account_id}/rooms/{room_id}/messages/{message_id}",
+            account_id = input.account_id,
+            message_id = input.message_id,
+            room_id = input.room_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("operation", "redact");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RedactRoomMessageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RedactRoomMessageError::from_response(response))
         }
     }
 
@@ -13400,6 +16023,212 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SearchAvailablePhoneNumbersError::from_response(response))
+        }
+    }
+
+    /// <p>Applies the specified tags to the specified Amazon Chime SDK attendee.</p>
+    async fn tag_attendee(
+        &self,
+        input: TagAttendeeRequest,
+    ) -> Result<(), RusotoError<TagAttendeeError>> {
+        let request_uri = format!(
+            "/meetings/{meeting_id}/attendees/{attendee_id}/tags",
+            attendee_id = input.attendee_id,
+            meeting_id = input.meeting_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "add");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagAttendeeError::from_response(response))
+        }
+    }
+
+    /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting.</p>
+    async fn tag_meeting(
+        &self,
+        input: TagMeetingRequest,
+    ) -> Result<(), RusotoError<TagMeetingError>> {
+        let request_uri = format!("/meetings/{meeting_id}/tags", meeting_id = input.meeting_id);
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "add");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagMeetingError::from_response(response))
+        }
+    }
+
+    /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<(), RusotoError<TagResourceError>> {
+        let request_uri = "/tags";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "tag-resource");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Untags the specified tags from the specified Amazon Chime SDK attendee.</p>
+    async fn untag_attendee(
+        &self,
+        input: UntagAttendeeRequest,
+    ) -> Result<(), RusotoError<UntagAttendeeError>> {
+        let request_uri = format!(
+            "/meetings/{meeting_id}/attendees/{attendee_id}/tags",
+            attendee_id = input.attendee_id,
+            meeting_id = input.meeting_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "delete");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagAttendeeError::from_response(response))
+        }
+    }
+
+    /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting.</p>
+    async fn untag_meeting(
+        &self,
+        input: UntagMeetingRequest,
+    ) -> Result<(), RusotoError<UntagMeetingError>> {
+        let request_uri = format!("/meetings/{meeting_id}/tags", meeting_id = input.meeting_id);
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "delete");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagMeetingError::from_response(response))
+        }
+    }
+
+    /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<(), RusotoError<UntagResourceError>> {
+        let request_uri = "/tags";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "untag-resource");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 
@@ -13591,7 +16420,41 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates room details, such as the room name.</p>
+    /// <p>Updates the specified proxy session details, such as voice or SMS capabilities.</p>
+    async fn update_proxy_session(
+        &self,
+        input: UpdateProxySessionRequest,
+    ) -> Result<UpdateProxySessionResponse, RusotoError<UpdateProxySessionError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/proxy-sessions/{proxy_session_id}",
+            proxy_session_id = input.proxy_session_id,
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateProxySessionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateProxySessionError::from_response(response))
+        }
+    }
+
+    /// <p>Updates room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
     async fn update_room(
         &self,
         input: UpdateRoomRequest,
@@ -13625,7 +16488,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates room membership details, such as the member role. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
+    /// <p>Updates room membership details, such as the member role, for a room in an Amazon Chime Enterprise account. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
     async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,

@@ -24,6 +24,56 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>A rule that controls access to an Amazon WorkMail organization.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccessControlRule {
+    /// <p>Access protocol actions to include in the rule. Valid values include <code>ActiveSync</code>, <code>AutoDiscover</code>, <code>EWS</code>, <code>IMAP</code>, <code>SMTP</code>, <code>WindowsOutlook</code>, and <code>WebMail</code>.</p>
+    #[serde(rename = "Actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<String>>,
+    /// <p>The date that the rule was created.</p>
+    #[serde(rename = "DateCreated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_created: Option<f64>,
+    /// <p>The date that the rule was modified.</p>
+    #[serde(rename = "DateModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_modified: Option<f64>,
+    /// <p>The rule description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The rule effect.</p>
+    #[serde(rename = "Effect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effect: Option<String>,
+    /// <p>IPv4 CIDR ranges to include in the rule.</p>
+    #[serde(rename = "IpRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_ranges: Option<Vec<String>>,
+    /// <p>The rule name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Access protocol actions to exclude from the rule. Valid values include <code>ActiveSync</code>, <code>AutoDiscover</code>, <code>EWS</code>, <code>IMAP</code>, <code>SMTP</code>, <code>WindowsOutlook</code>, and <code>WebMail</code>.</p>
+    #[serde(rename = "NotActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_actions: Option<Vec<String>>,
+    /// <p>IPv4 CIDR ranges to exclude from the rule.</p>
+    #[serde(rename = "NotIpRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_ip_ranges: Option<Vec<String>>,
+    /// <p>User IDs to exclude from the rule.</p>
+    #[serde(rename = "NotUserIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_user_ids: Option<Vec<String>>,
+    /// <p>User IDs to include in the rule.</p>
+    #[serde(rename = "UserIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_ids: Option<Vec<String>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDelegateToResourceRequest {
@@ -178,6 +228,21 @@ pub struct Delegate {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAccessControlRuleRequest {
+    /// <p>The name of the access control rule.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The identifier for the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAccessControlRuleResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAliasRequest {
     /// <p>The aliases to be removed from the user's set of aliases. Duplicate entries in the list are collapsed into single entries (the list is transformed into a set).</p>
     #[serde(rename = "Alias")]
@@ -323,6 +388,10 @@ pub struct DescribeOrganizationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationResponse {
+    /// <p>The Amazon Resource Name (ARN) of the organization.</p>
+    #[serde(rename = "ARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The alias for an organization.</p>
     #[serde(rename = "Alias")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -395,7 +464,7 @@ pub struct DescribeResourceResponse {
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    /// <p>The state of the resource: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
+    /// <p>The state of the resource: enabled (registered to Amazon WorkMail), disabled (deregistered or never registered to WorkMail), or deleted.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -491,6 +560,36 @@ pub struct DisassociateMemberFromGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAccessControlEffectRequest {
+    /// <p>The access protocol action. Valid values include <code>ActiveSync</code>, <code>AutoDiscover</code>, <code>EWS</code>, <code>IMAP</code>, <code>SMTP</code>, <code>WindowsOutlook</code>, and <code>WebMail</code>.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>The IPv4 address.</p>
+    #[serde(rename = "IpAddress")]
+    pub ip_address: String,
+    /// <p>The identifier for the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+    /// <p>The user ID.</p>
+    #[serde(rename = "UserId")]
+    pub user_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAccessControlEffectResponse {
+    /// <p>The rule effect.</p>
+    #[serde(rename = "Effect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effect: Option<String>,
+    /// <p>The rules that match the given parameters, resulting in an effect.</p>
+    #[serde(rename = "MatchedRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub matched_rules: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMailboxDetailsRequest {
     /// <p>The identifier for the organization that contains the user whose mailbox details are being requested.</p>
     #[serde(rename = "OrganizationId")]
@@ -541,6 +640,23 @@ pub struct Group {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAccessControlRulesRequest {
+    /// <p>The identifier for the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAccessControlRulesResponse {
+    /// <p>The access control rules.</p>
+    #[serde(rename = "Rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<AccessControlRule>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -757,6 +873,23 @@ pub struct ListResourcesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A list of tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -853,6 +986,51 @@ pub struct Permission {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAccessControlRuleRequest {
+    /// <p>Access protocol actions to include in the rule. Valid values include <code>ActiveSync</code>, <code>AutoDiscover</code>, <code>EWS</code>, <code>IMAP</code>, <code>SMTP</code>, <code>WindowsOutlook</code>, and <code>WebMail</code>.</p>
+    #[serde(rename = "Actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<String>>,
+    /// <p>The rule description.</p>
+    #[serde(rename = "Description")]
+    pub description: String,
+    /// <p>The rule effect.</p>
+    #[serde(rename = "Effect")]
+    pub effect: String,
+    /// <p>IPv4 CIDR ranges to include in the rule.</p>
+    #[serde(rename = "IpRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_ranges: Option<Vec<String>>,
+    /// <p>The rule name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Access protocol actions to exclude from the rule. Valid values include <code>ActiveSync</code>, <code>AutoDiscover</code>, <code>EWS</code>, <code>IMAP</code>, <code>SMTP</code>, <code>WindowsOutlook</code>, and <code>WebMail</code>.</p>
+    #[serde(rename = "NotActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_actions: Option<Vec<String>>,
+    /// <p>IPv4 CIDR ranges to exclude from the rule.</p>
+    #[serde(rename = "NotIpRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_ip_ranges: Option<Vec<String>>,
+    /// <p>User IDs to exclude from the rule.</p>
+    #[serde(rename = "NotUserIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_user_ids: Option<Vec<String>>,
+    /// <p>The identifier of the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+    /// <p>User IDs to include in the rule.</p>
+    #[serde(rename = "UserIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAccessControlRuleResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMailboxPermissionsRequest {
     /// <p>The identifier of the user, group, or resource for which to update mailbox permissions.</p>
     #[serde(rename = "EntityId")]
@@ -941,6 +1119,47 @@ pub struct Resource {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
+
+/// <p>Describes a tag applied to a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key of the tag.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tag keys.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1208,6 +1427,8 @@ pub enum CreateAliasError {
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
+    /// <p>The request exceeds the limit of the resource.</p>
+    LimitExceeded(String),
     /// <p>For an email or alias to be created in Amazon WorkMail, the included domain must be defined in the organization.</p>
     MailDomainNotFound(String),
     /// <p>After a domain has been added to the organization, it must be verified. The domain is not yet verified.</p>
@@ -1233,6 +1454,9 @@ impl CreateAliasError {
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateAliasError::InvalidParameter(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateAliasError::LimitExceeded(err.msg))
                 }
                 "MailDomainNotFoundException" => {
                     return RusotoError::Service(CreateAliasError::MailDomainNotFound(err.msg))
@@ -1261,6 +1485,7 @@ impl fmt::Display for CreateAliasError {
             CreateAliasError::EntityNotFound(ref cause) => write!(f, "{}", cause),
             CreateAliasError::EntityState(ref cause) => write!(f, "{}", cause),
             CreateAliasError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateAliasError::MailDomainNotFound(ref cause) => write!(f, "{}", cause),
             CreateAliasError::MailDomainState(ref cause) => write!(f, "{}", cause),
             CreateAliasError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
@@ -1497,6 +1722,46 @@ impl fmt::Display for CreateUserError {
     }
 }
 impl Error for CreateUserError {}
+/// Errors returned by DeleteAccessControlRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteAccessControlRuleError {
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl DeleteAccessControlRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessControlRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteAccessControlRuleError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(DeleteAccessControlRuleError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAccessControlRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAccessControlRuleError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAccessControlRuleError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAccessControlRuleError {}
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
@@ -2229,6 +2494,62 @@ impl fmt::Display for DisassociateMemberFromGroupError {
     }
 }
 impl Error for DisassociateMemberFromGroupError {}
+/// Errors returned by GetAccessControlEffect
+#[derive(Debug, PartialEq)]
+pub enum GetAccessControlEffectError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl GetAccessControlEffectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccessControlEffectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetAccessControlEffectError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetAccessControlEffectError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(GetAccessControlEffectError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(GetAccessControlEffectError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAccessControlEffectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAccessControlEffectError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetAccessControlEffectError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetAccessControlEffectError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            GetAccessControlEffectError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAccessControlEffectError {}
 /// Errors returned by GetMailboxDetails
 #[derive(Debug, PartialEq)]
 pub enum GetMailboxDetailsError {
@@ -2273,6 +2594,46 @@ impl fmt::Display for GetMailboxDetailsError {
     }
 }
 impl Error for GetMailboxDetailsError {}
+/// Errors returned by ListAccessControlRules
+#[derive(Debug, PartialEq)]
+pub enum ListAccessControlRulesError {
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl ListAccessControlRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccessControlRulesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(ListAccessControlRulesError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(ListAccessControlRulesError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAccessControlRulesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAccessControlRulesError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            ListAccessControlRulesError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAccessControlRulesError {}
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
@@ -2621,6 +2982,38 @@ impl fmt::Display for ListResourcesError {
     }
 }
 impl Error for ListResourcesError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -2663,6 +3056,66 @@ impl fmt::Display for ListUsersError {
     }
 }
 impl Error for ListUsersError {}
+/// Errors returned by PutAccessControlRule
+#[derive(Debug, PartialEq)]
+pub enum PutAccessControlRuleError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>The request exceeds the limit of the resource.</p>
+    LimitExceeded(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl PutAccessControlRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccessControlRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(PutAccessControlRuleError::EntityNotFound(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(PutAccessControlRuleError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(PutAccessControlRuleError::LimitExceeded(err.msg))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(PutAccessControlRuleError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(PutAccessControlRuleError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAccessControlRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAccessControlRuleError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            PutAccessControlRuleError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutAccessControlRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutAccessControlRuleError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            PutAccessControlRuleError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutAccessControlRuleError {}
 /// Errors returned by PutMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum PutMailboxPermissionsError {
@@ -2913,6 +3366,78 @@ impl fmt::Display for ResetPasswordError {
     }
 }
 impl Error for ResetPasswordError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The resource can have up to 50 user-applied tags.</p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "OrganizationStateException" => {
+                    return RusotoError::Service(TagResourceError::OrganizationState(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::OrganizationState(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateMailboxQuota
 #[derive(Debug, PartialEq)]
 pub enum UpdateMailboxQuotaError {
@@ -3216,6 +3741,12 @@ pub trait Workmail {
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
+    /// <p>Deletes an access control rule for the specified WorkMail organization.</p>
+    async fn delete_access_control_rule(
+        &self,
+        input: DeleteAccessControlRuleRequest,
+    ) -> Result<DeleteAccessControlRuleResponse, RusotoError<DeleteAccessControlRuleError>>;
+
     /// <p>Remove one or more specified aliases from a set of aliases for a given user.</p>
     async fn delete_alias(
         &self,
@@ -3291,11 +3822,23 @@ pub trait Workmail {
         input: DisassociateMemberFromGroupRequest,
     ) -> Result<DisassociateMemberFromGroupResponse, RusotoError<DisassociateMemberFromGroupError>>;
 
+    /// <p>Gets the effects of an organization's access control rules as they apply to a specified IPv4 address, access protocol action, or user ID. </p>
+    async fn get_access_control_effect(
+        &self,
+        input: GetAccessControlEffectRequest,
+    ) -> Result<GetAccessControlEffectResponse, RusotoError<GetAccessControlEffectError>>;
+
     /// <p>Requests a user's mailbox details for a specified organization and user.</p>
     async fn get_mailbox_details(
         &self,
         input: GetMailboxDetailsRequest,
     ) -> Result<GetMailboxDetailsResponse, RusotoError<GetMailboxDetailsError>>;
+
+    /// <p>Lists the access control rules for the specified organization.</p>
+    async fn list_access_control_rules(
+        &self,
+        input: ListAccessControlRulesRequest,
+    ) -> Result<ListAccessControlRulesResponse, RusotoError<ListAccessControlRulesError>>;
 
     /// <p>Creates a paginated call to list the aliases associated with a given entity.</p>
     async fn list_aliases(
@@ -3321,7 +3864,7 @@ pub trait Workmail {
         input: ListMailboxPermissionsRequest,
     ) -> Result<ListMailboxPermissionsResponse, RusotoError<ListMailboxPermissionsError>>;
 
-    /// <p>Returns summaries of the customer's non-deleted organizations.</p>
+    /// <p>Returns summaries of the customer's organizations.</p>
     async fn list_organizations(
         &self,
         input: ListOrganizationsRequest,
@@ -3339,11 +3882,23 @@ pub trait Workmail {
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
+    /// <p>Lists the tags applied to an Amazon WorkMail organization resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Returns summaries of the organization's users.</p>
     async fn list_users(
         &self,
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
+
+    /// <p>Adds a new access control rule for the specified organization. The rule allows or denies access to the organization for the specified IPv4 addresses, access protocol actions, and user IDs. Adding a new rule with the same name as an existing rule replaces the older rule.</p>
+    async fn put_access_control_rule(
+        &self,
+        input: PutAccessControlRuleRequest,
+    ) -> Result<PutAccessControlRuleResponse, RusotoError<PutAccessControlRuleError>>;
 
     /// <p>Sets permissions for a user, group, or resource. This replaces any pre-existing permissions.</p>
     async fn put_mailbox_permissions(
@@ -3351,7 +3906,7 @@ pub trait Workmail {
         input: PutMailboxPermissionsRequest,
     ) -> Result<PutMailboxPermissionsResponse, RusotoError<PutMailboxPermissionsError>>;
 
-    /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com//workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
+    /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com/workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
     async fn register_to_work_mail(
         &self,
         input: RegisterToWorkMailRequest,
@@ -3362,6 +3917,18 @@ pub trait Workmail {
         &self,
         input: ResetPasswordRequest,
     ) -> Result<ResetPasswordResponse, RusotoError<ResetPasswordError>>;
+
+    /// <p>Applies the specified tags to the specified Amazon WorkMail organization resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Untags the specified tags from the specified Amazon WorkMail organization resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates a user's current mailbox quota for a specified organization and user.</p>
     async fn update_mailbox_quota(
@@ -3586,6 +4153,34 @@ impl Workmail for WorkmailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(CreateUserError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an access control rule for the specified WorkMail organization.</p>
+    async fn delete_access_control_rule(
+        &self,
+        input: DeleteAccessControlRuleRequest,
+    ) -> Result<DeleteAccessControlRuleResponse, RusotoError<DeleteAccessControlRuleError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.DeleteAccessControlRule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAccessControlRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAccessControlRuleError::from_response(response))
         }
     }
 
@@ -3931,6 +4526,34 @@ impl Workmail for WorkmailClient {
         }
     }
 
+    /// <p>Gets the effects of an organization's access control rules as they apply to a specified IPv4 address, access protocol action, or user ID. </p>
+    async fn get_access_control_effect(
+        &self,
+        input: GetAccessControlEffectRequest,
+    ) -> Result<GetAccessControlEffectResponse, RusotoError<GetAccessControlEffectError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.GetAccessControlEffect");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAccessControlEffectResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAccessControlEffectError::from_response(response))
+        }
+    }
+
     /// <p>Requests a user's mailbox details for a specified organization and user.</p>
     async fn get_mailbox_details(
         &self,
@@ -3956,6 +4579,34 @@ impl Workmail for WorkmailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetMailboxDetailsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the access control rules for the specified organization.</p>
+    async fn list_access_control_rules(
+        &self,
+        input: ListAccessControlRulesRequest,
+    ) -> Result<ListAccessControlRulesResponse, RusotoError<ListAccessControlRulesError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.ListAccessControlRules");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAccessControlRulesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAccessControlRulesError::from_response(response))
         }
     }
 
@@ -4069,7 +4720,7 @@ impl Workmail for WorkmailClient {
         }
     }
 
-    /// <p>Returns summaries of the customer's non-deleted organizations.</p>
+    /// <p>Returns summaries of the customer's organizations.</p>
     async fn list_organizations(
         &self,
         input: ListOrganizationsRequest,
@@ -4152,6 +4803,34 @@ impl Workmail for WorkmailClient {
         }
     }
 
+    /// <p>Lists the tags applied to an Amazon WorkMail organization resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Returns summaries of the organization's users.</p>
     async fn list_users(
         &self,
@@ -4176,6 +4855,34 @@ impl Workmail for WorkmailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListUsersError::from_response(response))
+        }
+    }
+
+    /// <p>Adds a new access control rule for the specified organization. The rule allows or denies access to the organization for the specified IPv4 addresses, access protocol actions, and user IDs. Adding a new rule with the same name as an existing rule replaces the older rule.</p>
+    async fn put_access_control_rule(
+        &self,
+        input: PutAccessControlRuleRequest,
+    ) -> Result<PutAccessControlRuleResponse, RusotoError<PutAccessControlRuleError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.PutAccessControlRule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutAccessControlRuleResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutAccessControlRuleError::from_response(response))
         }
     }
 
@@ -4207,7 +4914,7 @@ impl Workmail for WorkmailClient {
         }
     }
 
-    /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com//workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
+    /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com/workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
     async fn register_to_work_mail(
         &self,
         input: RegisterToWorkMailRequest,
@@ -4259,6 +4966,60 @@ impl Workmail for WorkmailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ResetPasswordError::from_response(response))
+        }
+    }
+
+    /// <p>Applies the specified tags to the specified Amazon WorkMail organization resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Untags the specified tags from the specified Amazon WorkMail organization resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

@@ -29,7 +29,7 @@ use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessLogSettings {
-    /// <p>The ARN of the CloudWatch Logs log group to receive access logs.</p>
+    /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or Kinesis Data Firehose delivery stream to receive access logs. If you specify a Kinesis Data Firehose delivery stream, the stream name must begin with <code>amazon-apigateway-</code>.</p>
     #[serde(rename = "destinationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
@@ -325,7 +325,7 @@ pub struct CreateApiKeyRequest {
     #[serde(rename = "enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>Specifies whether (<code>true</code>) or not (<code>false</code>) the key identifier is distinct from the created API key value.</p>
+    /// <p>Specifies whether (<code>true</code>) or not (<code>false</code>) the key identifier is distinct from the created API key value. This parameter is deprecated and should not be used.</p>
     #[serde(rename = "generateDistinctId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generate_distinct_id: Option<bool>,
@@ -404,7 +404,7 @@ pub struct CreateBasePathMappingRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the API's stage that you want to use for this mapping. Specify '(none)' if you do not want callers to explicitly specify the stage name after any base path name.</p>
+    /// <p>The name of the API's stage that you want to use for this mapping. Specify '(none)' if you want callers to explicitly specify the stage name after any base path name.</p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
@@ -745,7 +745,7 @@ pub struct CreateVpcLinkRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>[Required] The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    /// <p>[Required] The ARN of the network load balancer of the VPC targeted by the VPC link. The network load balancer must be owned by the same AWS account of the API owner.</p>
     #[serde(rename = "targetArns")]
     pub target_arns: Vec<String>,
 }
@@ -1923,7 +1923,7 @@ pub struct GetTagsRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
 }
@@ -2282,7 +2282,7 @@ pub struct MethodSetting {
     #[serde(rename = "dataTraceEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_trace_enabled: Option<bool>,
-    /// <p>Specifies the logging level for this method, which affects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/loglevel</code>, and the available levels are <code>OFF</code>, <code>ERROR</code>, and <code>INFO</code>.</p>
+    /// <p>Specifies the logging level for this method, which affects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/loglevel</code>, and the available levels are <code>OFF</code>, <code>ERROR</code>, and <code>INFO</code>. Choose <code>ERROR</code> to write only error-level entries to CloudWatch Logs, or choose <code>INFO</code> to include all <code>ERROR</code> events as well as extra informational events.</p>
     #[serde(rename = "loggingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_level: Option<String>,
@@ -2940,7 +2940,7 @@ pub struct Stages {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>[Required] The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
@@ -2962,7 +2962,7 @@ pub struct Tags {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Template {
-    /// <p>The Apache <a href="https://velocity.apache.org/engine/devel/vtl-reference-guide.html" target="_blank">Velocity Template Language (VTL)</a> template content used for the template resource.</p>
+    /// <p>The Apache <a href="https://velocity.apache.org/engine/devel/vtl-reference.html" target="_blank">Velocity Template Language (VTL)</a> template content used for the template resource.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -3123,7 +3123,7 @@ pub struct ThrottleSettings {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>[Required] The Tag keys to delete.</p>
@@ -3588,7 +3588,7 @@ pub struct UsagePlans {
     pub position: Option<String>,
 }
 
-/// <p><p>A API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
+/// <p><p>An API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcLink {
@@ -3616,7 +3616,7 @@ pub struct VpcLink {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    /// <p>The ARN of the network load balancer of the VPC targeted by the VPC link. The network load balancer must be owned by the same AWS account of the API owner.</p>
     #[serde(rename = "targetArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arns: Option<Vec<String>>,

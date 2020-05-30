@@ -41,17 +41,17 @@ pub struct AclConfiguration {
     pub allowed_groups_column_name: String,
 }
 
-/// <p><p/></p>
+/// <p>An attribute returned from an index query.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdditionalResultAttribute {
-    /// <p><p/></p>
+    /// <p>The key that identifies the attribute.</p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p><p/></p>
+    /// <p>An object that contains the attribute value.</p>
     #[serde(rename = "Value")]
     pub value: AdditionalResultAttributeValue,
-    /// <p><p/></p>
+    /// <p>The data type of the <code>Value</code> property.</p>
     #[serde(rename = "ValueType")]
     pub value_type: String,
 }
@@ -66,7 +66,7 @@ pub struct AdditionalResultAttributeValue {
     pub text_with_highlights_value: Option<TextWithHighlights>,
 }
 
-/// <p>Provides filtering the query results based on document attributes.</p>
+/// <p>Provides filtering the query results based on document attributes.</p> <p>When you use the <code>AndAllFilters</code> or <code>OrAllFilters</code>, filters you can use 2 layers under the first attribute filter. For example, you can use:</p> <p> <code>&lt;AndAllFilters&gt;</code> </p> <ol> <li> <p> <code> &lt;OrAllFilters&gt;</code> </p> </li> <li> <p> <code> &lt;EqualTo&gt;</code> </p> </li> </ol> <p>If you use more than 2 layers, you receive a <code>ValidationException</code> exception with the message "<code>AttributeFilter</code> cannot have a depth of more than 2."</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttributeFilter {
@@ -74,11 +74,11 @@ pub struct AttributeFilter {
     #[serde(rename = "AndAllFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub and_all_filters: Option<Vec<AttributeFilter>>,
-    /// <p>Returns true when a document contains all of the specified document attributes.</p>
+    /// <p>Returns true when a document contains all of the specified document attributes. This filter is only appicable to <code>StringListValue</code> metadata.</p>
     #[serde(rename = "ContainsAll")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contains_all: Option<DocumentAttribute>,
-    /// <p>Returns true when a document contains any of the specified document attributes.</p>
+    /// <p>Returns true when a document contains any of the specified document attributes.This filter is only appicable to <code>StringListValue</code> metadata.</p>
     #[serde(rename = "ContainsAny")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contains_any: Option<DocumentAttribute>,
@@ -115,6 +115,9 @@ pub struct AttributeFilter {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteDocumentRequest {
+    #[serde(rename = "DataSourceSyncJobMetricTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source_sync_job_metric_target: Option<DataSourceSyncJobMetricTarget>,
     /// <p>One or more identifiers for documents to delete from the index.</p>
     #[serde(rename = "DocumentIdList")]
     pub document_id_list: Vec<String>,
@@ -153,7 +156,7 @@ pub struct BatchDeleteDocumentResponseFailedDocument {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutDocumentRequest {
-    /// <p>One or more documents to add to the index. </p> <p>Each document is limited to 5 Mb, the total size of the list is limited to 50 Mb.</p>
+    /// <p>One or more documents to add to the index. </p> <p>Documents have the following file size limits.</p> <ul> <li> <p>5 MB total size for inline documents</p> </li> <li> <p>50 MB total size for files from an S3 bucket</p> </li> <li> <p>5 MB extracted text for any file</p> </li> </ul> <p>For more information about file size and transaction per second quotas, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas</a>.</p>
     #[serde(rename = "Documents")]
     pub documents: Vec<Document>,
     /// <p>The identifier of the index to add the documents to. You need to create the index first using the <a>CreateIndex</a> operation.</p>
@@ -168,7 +171,7 @@ pub struct BatchPutDocumentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutDocumentResponse {
-    /// <p>A list of documents that were not added to the index because the document failed a validation check. Each document contains an error message that indicates why the document couldn't be added to the index.</p> <p>If there was an error adding a document to an index the error is reported in your AWS CloudWatch log.</p>
+    /// <p>A list of documents that were not added to the index because the document failed a validation check. Each document contains an error message that indicates why the document couldn't be added to the index.</p> <p>If there was an error adding a document to an index the error is reported in your AWS CloudWatch log. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/cloudwatch-logs.html">Monitoring Amazon Kendra with Amazon CloudWatch Logs</a> </p>
     #[serde(rename = "FailedDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_documents: Option<Vec<BatchPutDocumentResponseFailedDocument>>,
@@ -192,11 +195,22 @@ pub struct BatchPutDocumentResponseFailedDocument {
     pub id: Option<String>,
 }
 
+/// <p>Specifies capacity units configured for your index. You can add and remove capacity units to tune an index to your requirements.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CapacityUnitsConfiguration {
+    /// <p>The amount of extra query capacity for an index. Each capacity unit provides 0.5 queries per second and 40,000 queries per day.</p>
+    #[serde(rename = "QueryCapacityUnits")]
+    pub query_capacity_units: i64,
+    /// <p>The amount of extra storage capacity for an index. Each capacity unit provides 150 Gb of storage space or 500,000 documents, whichever is reached first.</p>
+    #[serde(rename = "StorageCapacityUnits")]
+    pub storage_capacity_units: i64,
+}
+
 /// <p>Gathers information about when a particular result was clicked by a user. Your application uses the <a>SubmitFeedback</a> operation to provide click information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClickFeedback {
-    /// <p>The Unix timestamp of the data and time that the result was clicked.</p>
+    /// <p>The Unix timestamp of the date and time that the result was clicked.</p>
     #[serde(rename = "ClickTime")]
     pub click_time: f64,
     /// <p>The unique identifier of the search result that was clicked.</p>
@@ -269,6 +283,10 @@ pub struct CreateDataSourceRequest {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>A list of key-value pairs that identify the data source. You can use the tags to identify and organize your resources and to control access to resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The type of repository that contains the data source.</p>
     #[serde(rename = "Type")]
     pub type_: String,
@@ -301,6 +319,10 @@ pub struct CreateFaqRequest {
     /// <p>The S3 location of the FAQ input data.</p>
     #[serde(rename = "S3Path")]
     pub s3_path: S3Path,
+    /// <p>A list of key-value pairs that identify the FAQ. You can use the tags to identify and organize your resources and to control access to resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -315,10 +337,18 @@ pub struct CreateFaqResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIndexRequest {
+    /// <p>A token that you provide to identify the request to create an index. Multiple calls to the <code>CreateIndex</code> operation with the same client token will create only one index.”</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
     /// <p>A description for the index.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The Amazon Kendra edition to use for the index. Choose <code>DEVELOPER_EDITION</code> for indexes intended for development, testing, or proof of concept. Use <code>ENTERPRISE_EDITION</code> for your production databases. Once you set the edition for an index, it can't be changed. </p>
+    #[serde(rename = "Edition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edition: Option<String>,
     /// <p>The name for the new index.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -329,6 +359,10 @@ pub struct CreateIndexRequest {
     #[serde(rename = "ServerSideEncryptionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
+    /// <p>A list of key-value pairs that identify the index. You can use the tags to identify and organize your resources and to control access to resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -347,10 +381,22 @@ pub struct DataSourceConfiguration {
     #[serde(rename = "DatabaseConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_configuration: Option<DatabaseConfiguration>,
+    /// <p>Provided configuration for data sources that connect to Microsoft OneDrive.</p>
+    #[serde(rename = "OneDriveConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub one_drive_configuration: Option<OneDriveConfiguration>,
     /// <p>Provides information to create a connector for a document repository in an Amazon S3 bucket.</p>
     #[serde(rename = "S3Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_configuration: Option<S3DataSourceConfiguration>,
+    /// <p>Provides configuration information for data sources that connect to a Salesforce site.</p>
+    #[serde(rename = "SalesforceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub salesforce_configuration: Option<SalesforceConfiguration>,
+    /// <p>Provides configuration for data sources that connect to ServiceNow instances.</p>
+    #[serde(rename = "ServiceNowConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_now_configuration: Option<ServiceNowConfiguration>,
     /// <p>Provides information necessary to create a connector for a Microsoft SharePoint site.</p>
     #[serde(rename = "SharePointConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -411,6 +457,10 @@ pub struct DataSourceSyncJob {
     #[serde(rename = "ExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_id: Option<String>,
+    /// <p>Maps a batch delete document request to a specific data source sync job. This is optional and should only be supplied when documents are deleted by a connector.</p>
+    #[serde(rename = "Metrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metrics: Option<DataSourceSyncJobMetrics>,
     /// <p>The UNIX datetime that the synchronization job was started.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -419,6 +469,44 @@ pub struct DataSourceSyncJob {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>Maps a particular data source sync job to a particular data source.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DataSourceSyncJobMetricTarget {
+    /// <p>The ID of the data source that is running the sync job.</p>
+    #[serde(rename = "DataSourceId")]
+    pub data_source_id: String,
+    /// <p>The ID of the sync job that is running on the data source.</p>
+    #[serde(rename = "DataSourceSyncJobId")]
+    pub data_source_sync_job_id: String,
+}
+
+/// <p>Maps a batch delete document request to a specific data source sync job. This is optional and should only be supplied when documents are deleted by a connector.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DataSourceSyncJobMetrics {
+    /// <p>The number of documents added from the data source up to now in the data source sync.</p>
+    #[serde(rename = "DocumentsAdded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents_added: Option<String>,
+    /// <p>The number of documents deleted from the data source up to now in the data source sync run.</p>
+    #[serde(rename = "DocumentsDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents_deleted: Option<String>,
+    /// <p>The number of documents that failed to sync from the data source up to now in the data source sync run.</p>
+    #[serde(rename = "DocumentsFailed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents_failed: Option<String>,
+    /// <p>The number of documents modified in the data source up to now in the data source sync run.</p>
+    #[serde(rename = "DocumentsModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents_modified: Option<String>,
+    /// <p>The current number of documents crawled by the current sync job in the data source.</p>
+    #[serde(rename = "DocumentsScanned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents_scanned: Option<String>,
 }
 
 /// <p>Maps a column or attribute in the data source to an index field. You must first create the fields in the index using the <a>UpdateIndex</a> operation.</p>
@@ -466,6 +554,17 @@ pub struct DatabaseConfiguration {
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDataSourceRequest {
+    /// <p>The unique identifier of the data source to delete.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The unique identifier of the index associated with the data source.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -617,6 +716,10 @@ pub struct DescribeIndexRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIndexResponse {
+    /// <p>For enterprise edtion indexes, you can choose to use additional capacity to meet the needs of your application. This contains the capacity units used for the index. A 0 for the query capacity or the storage capacity indicates that the index is using the default capacity for the index.</p>
+    #[serde(rename = "CapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_units: Option<CapacityUnitsConfiguration>,
     /// <p>The Unix datetime that the index was created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -629,6 +732,10 @@ pub struct DescribeIndexResponse {
     #[serde(rename = "DocumentMetadataConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_metadata_configurations: Option<Vec<DocumentMetadataConfiguration>>,
+    /// <p>The Amazon Kendra edition used for the index. You decide the edition when you create the index.</p>
+    #[serde(rename = "Edition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edition: Option<String>,
     /// <p>When th e<code>Status</code> field value is <code>FAILED</code>, the <code>ErrorMessage</code> field contains a message that explains why.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -675,7 +782,7 @@ pub struct Document {
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<DocumentAttribute>>,
-    /// <p>The contents of the document as a base-64 encoded string.</p>
+    /// <p>The contents of the document. </p> <p>Documents passed to the <code>Blob</code> parameter must be base64 encoded. Your code might not need to encode the document file bytes if you're using an AWS SDK to call Amazon Kendra operations. If you are calling the Amazon Kendra endpoint directly using REST, you must base64 encode the contents before sending.</p>
     #[serde(rename = "Blob")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -774,7 +881,7 @@ pub struct DocumentsMetadataConfiguration {
     pub s3_prefix: Option<String>,
 }
 
-/// <p>Information a document attribute</p>
+/// <p>Information about a document attribute</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Facet {
@@ -856,6 +963,10 @@ pub struct IndexConfigurationSummary {
     /// <p>The Unix timestamp when the index was created.</p>
     #[serde(rename = "CreatedAt")]
     pub created_at: f64,
+    /// <p>Indicates whether the index is a enterprise edition index or a developer edition index. </p>
+    #[serde(rename = "Edition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edition: Option<String>,
     /// <p>A unique identifier for the index. Use this to identify the index when you are using operations such as <code>Query</code>, <code>DescribeIndex</code>, <code>UpdateIndex</code>, and <code>DeleteIndex</code>.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1008,6 +1119,62 @@ pub struct ListIndicesResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to get a list of tags for.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A list of tags associated with the index, FAQ, or data source.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Provides configuration information for data sources that connect to OneDrive.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OneDriveConfiguration {
+    /// <p>List of regular expressions applied to documents. Items that match the exclusion pattern are not indexed. If you provide both an inclusion pattern and an exclusion pattern, any item that matches the exclusion pattern isn't indexed. </p> <p>The exclusion pattern is applied to the file name.</p>
+    #[serde(rename = "ExclusionPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusion_patterns: Option<Vec<String>>,
+    /// <p>A list of <code>DataSourceToIndexFieldMapping</code> objects that map Microsoft OneDrive fields to custom fields in the Amazon Kendra index. You must first create the index fields before you map OneDrive fields.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>A list of regular expression patterns. Documents that match the pattern are included in the index. Documents that don't match the pattern are excluded from the index. If a document matches both an inclusion pattern and an exclusion pattern, the document is not included in the index. </p> <p>The exclusion pattern is applied to the file name.</p>
+    #[serde(rename = "InclusionPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inclusion_patterns: Option<Vec<String>>,
+    /// <p>A list of user accounts whose documents should be indexed.</p>
+    #[serde(rename = "OneDriveUsers")]
+    pub one_drive_users: OneDriveUsers,
+    /// <p>The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains the user name and password to connect to OneDrive. The user namd should be the application ID for the OneDrive application, and the password is the application key for the OneDrive application.</p>
+    #[serde(rename = "SecretArn")]
+    pub secret_arn: String,
+    /// <p>Tha Azure Active Directory domain of the organization. </p>
+    #[serde(rename = "TenantDomain")]
+    pub tenant_domain: String,
+}
+
+/// <p>User accounts whose documents should be indexed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OneDriveUsers {
+    /// <p>A list of users whose documents should be indexed. Specify the user names in email format, for example, <code>username@tenantdomain</code>. If you need to index the documents of more than 100 users, use the <code>OneDriveUserS3Path</code> field to specify the location of a file containing a list of users.</p>
+    #[serde(rename = "OneDriveUserList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub one_drive_user_list: Option<Vec<String>>,
+    /// <p>The S3 bucket location of a file containing a list of users whose documents should be indexed.</p>
+    #[serde(rename = "OneDriveUserS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub one_drive_user_s3_path: Option<S3Path>,
+}
+
 /// <p>Provides user and group information for document access filtering.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1041,7 +1208,7 @@ pub struct QueryRequest {
     #[serde(rename = "PageNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_number: Option<i64>,
-    /// <p>Sets the number of results that are returned in each page of results. The default page size is 100.</p>
+    /// <p>Sets the number of results that are returned in each page of results. The default page size is 10. The maximum number of results returned is 100. If you ask for more than 100 results, only 100 are returned.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
@@ -1083,7 +1250,7 @@ pub struct QueryResult {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryResultItem {
-    /// <p><p/></p>
+    /// <p>One or more additional attribues associated with the query result.</p>
     #[serde(rename = "AdditionalAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_attributes: Option<Vec<AdditionalResultAttribute>>,
@@ -1167,7 +1334,7 @@ pub struct S3DataSourceConfiguration {
     #[serde(rename = "DocumentsMetadataConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub documents_metadata_configuration: Option<DocumentsMetadataConfiguration>,
-    /// <p>A list of glob patterns for documents that should not be indexed. If a document that matches an inclusion prefix also matches an exclusion pattern, the document is not indexed.</p> <p>For more information about glob patterns, see <a href="http://wikipedia.org/wiki/Glob_%28programming%29">glob (programming)</a> in <i>Wikipedia</i>.</p>
+    /// <p>A list of glob patterns for documents that should not be indexed. If a document that matches an inclusion prefix also matches an exclusion pattern, the document is not indexed.</p> <p>For more information about glob patterns, see <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob (programming)</a> in <i>Wikipedia</i>.</p>
     #[serde(rename = "ExclusionPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusion_patterns: Option<Vec<String>>,
@@ -1186,6 +1353,151 @@ pub struct S3Path {
     /// <p>The name of the file.</p>
     #[serde(rename = "Key")]
     pub key: String,
+}
+
+/// <p>Defines configuration for syncing a Salesforce chatter feed. The contents of the object comes from the Salesforce FeedItem table.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceChatterFeedConfiguration {
+    /// <p>The name of the column in the Salesforce FeedItem table that contains the content to index. Typically this is the <code>Body</code> column.</p>
+    #[serde(rename = "DocumentDataFieldName")]
+    pub document_data_field_name: String,
+    /// <p>The name of the column in the Salesforce FeedItem table that contains the title of the document. This is typically the <code>Title</code> collumn.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>Maps fields from a Salesforce chatter feed into Amazon Kendra index fields.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>Filters the documents in the feed based on status of the user. When you specify <code>ACTIVE_USERS</code> only documents from users who have an active account are indexed. When you specify <code>STANDARD_USER</code> only documents for Salesforce standard users are documented. You can specify both.</p>
+    #[serde(rename = "IncludeFilterTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_filter_types: Option<Vec<String>>,
+}
+
+/// <p>Provides configuration information for connecting to a Salesforce data source.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceConfiguration {
+    /// <p>Specifies configuration information for Salesforce chatter feeds.</p>
+    #[serde(rename = "ChatterFeedConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chatter_feed_configuration: Option<SalesforceChatterFeedConfiguration>,
+    /// <p>Indicates whether Amazon Kendra should index attachments to Salesforce objects.</p>
+    #[serde(rename = "CrawlAttachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawl_attachments: Option<bool>,
+    /// <p>A list of regular expression patterns. Documents that match the patterns are excluded from the index. Documents that don't match the patterns are included in the index. If a document matches both an exclusion pattern and an inclusion pattern, the document is not included in the index.</p> <p>The regex is applied to the name of the attached file.</p>
+    #[serde(rename = "ExcludeAttachmentFilePatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_attachment_file_patterns: Option<Vec<String>>,
+    /// <p>A list of regular expression patterns. Documents that match the patterns are included in the index. Documents that don't match the patterns are excluded from the index. If a document matches both an inclusion pattern and an exclusion pattern, the document is not included in the index.</p> <p>The regex is applied to the name of the attached file.</p>
+    #[serde(rename = "IncludeAttachmentFilePatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_attachment_file_patterns: Option<Vec<String>>,
+    /// <p>Specifies configuration information for the knowlege article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both.</p>
+    #[serde(rename = "KnowledgeArticleConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub knowledge_article_configuration: Option<SalesforceKnowledgeArticleConfiguration>,
+    /// <p><p>The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains the key/value pairs required to connect to your Salesforce instance. The secret must contain a JSON structure with the following keys:</p> <ul> <li> <p>authenticationUrl - The OAUTH endpoint that Amazon Kendra connects to get an OAUTH token. </p> </li> <li> <p>consumerKey - The application public key generated when you created your Salesforce application.</p> </li> <li> <p>consumerSecret - The application private key generated when you created your Salesforce application.</p> </li> <li> <p>password - The password associated with the user logging in to the Salesforce instance.</p> </li> <li> <p>securityToken - The token associated with the user account logging in to the Salesforce instance.</p> </li> <li> <p>username - The user name of the user logging in to the Salesforce instance.</p> </li> </ul></p>
+    #[serde(rename = "SecretArn")]
+    pub secret_arn: String,
+    /// <p>The instance URL for the Salesforce site that you want to index.</p>
+    #[serde(rename = "ServerUrl")]
+    pub server_url: String,
+    /// <p>Provides configuration information for processing attachments to Salesforce standard objects. </p>
+    #[serde(rename = "StandardObjectAttachmentConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub standard_object_attachment_configuration:
+        Option<SalesforceStandardObjectAttachmentConfiguration>,
+    /// <p>Specifies the Salesforce standard objects that Amazon Kendra indexes.</p>
+    #[serde(rename = "StandardObjectConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub standard_object_configurations: Option<Vec<SalesforceStandardObjectConfiguration>>,
+}
+
+/// <p>Provides configuration information for indexing Salesforce custom articles.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceCustomKnowledgeArticleTypeConfiguration {
+    /// <p>The name of the field in the custom knowledge article that contains the document data to index.</p>
+    #[serde(rename = "DocumentDataFieldName")]
+    pub document_data_field_name: String,
+    /// <p>The name of the field in the custom knowledge article that contains the document title.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>One or more objects that map fields in the custom knowledge article to fields in the Amazon Kendra index.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+/// <p>Specifies configuration information for the knowlege article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceKnowledgeArticleConfiguration {
+    /// <p>Provides configuration information for custom Salesforce knowledge articles.</p>
+    #[serde(rename = "CustomKnowledgeArticleTypeConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_knowledge_article_type_configurations:
+        Option<Vec<SalesforceCustomKnowledgeArticleTypeConfiguration>>,
+    /// <p>Specifies the document states that should be included when Amazon Kendra indexes knowledge articles. You must specify at least one state.</p>
+    #[serde(rename = "IncludedStates")]
+    pub included_states: Vec<String>,
+    /// <p>Provides configuration information for standard Salesforce knowledge articles.</p>
+    #[serde(rename = "StandardKnowledgeArticleTypeConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub standard_knowledge_article_type_configuration:
+        Option<SalesforceStandardKnowledgeArticleTypeConfiguration>,
+}
+
+/// <p>Provides configuration information for standard Salesforce knowledge articles.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceStandardKnowledgeArticleTypeConfiguration {
+    /// <p>The name of the field that contains the document data to index.</p>
+    #[serde(rename = "DocumentDataFieldName")]
+    pub document_data_field_name: String,
+    /// <p>The name of the field that contains the document title.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>One or more objects that map fields in the knowledge article to Amazon Kendra index fields. The index field must exist before you can map a Salesforce field to it.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+}
+
+/// <p>Provides configuration information for processing attachments to Salesforce standard objects. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceStandardObjectAttachmentConfiguration {
+    /// <p>The name of the field used for the document title.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>One or more objects that map fields in attachments to Amazon Kendra index fields.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+}
+
+/// <p>Specifies confguration information for indexing a single standard object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SalesforceStandardObjectConfiguration {
+    /// <p>The name of the field in the standard object table that contains the document contents.</p>
+    #[serde(rename = "DocumentDataFieldName")]
+    pub document_data_field_name: String,
+    /// <p>The name of the field in the standard object table that contains the document titleB.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>One or more objects that map fields in the standard object to Amazon Kendra index fields. The index field must exist before you can map a Salesforce field to it.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>The name of the standard object.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
 }
 
 /// <p>Provides information about how a custom index field is used during a search.</p>
@@ -1214,6 +1526,84 @@ pub struct ServerSideEncryptionConfiguration {
     pub kms_key_id: Option<String>,
 }
 
+/// <p>Provides configuration information required to connect to a ServiceNow data source.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceNowConfiguration {
+    /// <p>The ServiceNow instance that the data source connects to. The host endpoint should look like the following: <code>{instance}.service-now.com.</code> </p>
+    #[serde(rename = "HostUrl")]
+    pub host_url: String,
+    /// <p>Provides configuration information for crawling knowledge articles in the ServiceNow site.</p>
+    #[serde(rename = "KnowledgeArticleConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub knowledge_article_configuration: Option<ServiceNowKnowledgeArticleConfiguration>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Secret Manager secret that contains the user name and password required to connect to the ServiceNow instance.</p>
+    #[serde(rename = "SecretArn")]
+    pub secret_arn: String,
+    /// <p>Provides configuration information for crawling service catalogs in the ServiceNow site.</p>
+    #[serde(rename = "ServiceCatalogConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_catalog_configuration: Option<ServiceNowServiceCatalogConfiguration>,
+    /// <p>The identifier of the release that the ServiceNow host is running. If the host is not running the <code>LONDON</code> release, use <code>OTHERS</code>.</p>
+    #[serde(rename = "ServiceNowBuildVersion")]
+    pub service_now_build_version: String,
+}
+
+/// <p>Provides configuration information for crawling knowledge articles in the ServiceNow site.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceNowKnowledgeArticleConfiguration {
+    /// <p>Indicates whether Amazon Kendra should index attachments to knowledge articles.</p>
+    #[serde(rename = "CrawlAttachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawl_attachments: Option<bool>,
+    /// <p>The name of the ServiceNow field that is mapped to the index document contents field in the Amazon Kendra index.</p>
+    #[serde(rename = "DocumentDataFieldName")]
+    pub document_data_field_name: String,
+    /// <p>The name of the ServiceNow field that is mapped to the index document title field.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>List of regular expressions applied to knowledge articles. Items that don't match the inclusion pattern are not indexed. The regex is applied to the field specified in the <code>PatternTargetField</code> </p>
+    #[serde(rename = "ExcludeAttachmentFilePatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_attachment_file_patterns: Option<Vec<String>>,
+    /// <p>Mapping between ServiceNow fields and Amazon Kendra index fields. You must create the index field before you map the field.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>List of regular expressions applied to knowledge articles. Items that don't match the inclusion pattern are not indexed. The regex is applied to the field specified in the <code>PatternTargetField</code>.</p>
+    #[serde(rename = "IncludeAttachmentFilePatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_attachment_file_patterns: Option<Vec<String>>,
+}
+
+/// <p>Provides configuration information for crawling service catalog items in the ServiceNow site</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ServiceNowServiceCatalogConfiguration {
+    /// <p>Indicates whether Amazon Kendra should crawl attachments to the service catalog items. </p>
+    #[serde(rename = "CrawlAttachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawl_attachments: Option<bool>,
+    /// <p>The name of the ServiceNow field that is mapped to the index document contents field in the Amazon Kendra index.</p>
+    #[serde(rename = "DocumentDataFieldName")]
+    pub document_data_field_name: String,
+    /// <p>The name of the ServiceNow field that is mapped to the index document title field.</p>
+    #[serde(rename = "DocumentTitleFieldName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_title_field_name: Option<String>,
+    /// <p>Determines the types of file attachments that are excluded from the index.</p>
+    #[serde(rename = "ExcludeAttachmentFilePatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_attachment_file_patterns: Option<Vec<String>>,
+    /// <p>Mapping between ServiceNow fields and Amazon Kendra index fields. You must create the index field before you map the field.</p>
+    #[serde(rename = "FieldMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>Determines the types of file attachments that are included in the index. </p>
+    #[serde(rename = "IncludeAttachmentFilePatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_attachment_file_patterns: Option<Vec<String>>,
+}
+
 /// <p>Provides configuration information for connecting to a Microsoft SharePoint data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharePointConfiguration {
@@ -1225,10 +1615,18 @@ pub struct SharePointConfiguration {
     #[serde(rename = "DocumentTitleFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_title_field_name: Option<String>,
+    /// <p>A list of regulary expression patterns. Documents that match the patterns are excluded from the index. Documents that don't match the patterns are included in the index. If a document matches both an exclusion pattern and an inclusion pattern, the document is not included in the index.</p> <p>The regex is applied to the display URL of the SharePoint document.</p>
+    #[serde(rename = "ExclusionPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusion_patterns: Option<Vec<String>>,
     /// <p>A list of <code>DataSourceToIndexFieldMapping</code> objects that map Microsoft SharePoint attributes to custom fields in the Amazon Kendra index. You must first create the index fields using the operation before you map SharePoint attributes. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html">Mapping Data Source Fields</a>.</p>
     #[serde(rename = "FieldMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>A list of regular expression patterns. Documents that match the patterns are included in the index. Documents that don't match the patterns are excluded from the index. If a document matches both an inclusion pattern and an exclusion pattern, the document is not included in the index.</p> <p>The regex is applied to the display URL of the SharePoint document.</p>
+    #[serde(rename = "InclusionPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inclusion_patterns: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of credentials stored in AWS Secrets Manager. The credentials should be a user/password pair. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html">Using a Microsoft SharePoint Data Source</a>. For more information about AWS Secrets Manager, see <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"> What Is AWS Secrets Manager </a> in the <i>AWS Secrets Manager</i> user guide.</p>
     #[serde(rename = "SecretArn")]
     pub secret_arn: String,
@@ -1238,6 +1636,10 @@ pub struct SharePointConfiguration {
     /// <p>The URLs of the Microsoft SharePoint site that contains the documents that should be indexed.</p>
     #[serde(rename = "Urls")]
     pub urls: Vec<String>,
+    /// <p>Set to <code>TRUE</code> to use the Microsoft SharePoint change log to determine the documents that need to be updated in the index. Depending on the size of the SharePoint change log, it may take longer for Amazon Kendra to use the change log than it takes it to determine the changed documents using the Amazon Kendra document crawler.</p>
+    #[serde(rename = "UseChangeLog")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_change_log: Option<bool>,
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
@@ -1293,10 +1695,39 @@ pub struct SubmitFeedbackRequest {
     pub relevance_feedback_items: Option<Vec<RelevanceFeedback>>,
 }
 
+/// <p>A list of key/value pairs that identify an index, FAQ, or data source. Tag keys and values can consist of Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key for the tag. Keys are not case sensitive and must be unique for the index, FAQ, or data source.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The value associated with the tag. The value may be an empty string but it can't be null.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to tag.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>A list of tag keys to add to the index, FAQ, or data source. If a tag already exists, the existing value is replaced with the new value.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>Provides information about text documents indexed in an index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TextDocumentStatistics {
+    /// <p>The total size, in bytes, of the indexed documents.</p>
+    #[serde(rename = "IndexedTextBytes")]
+    pub indexed_text_bytes: i64,
     /// <p>The number of text documents indexed.</p>
     #[serde(rename = "IndexedTextDocumentsCount")]
     pub indexed_text_documents_count: i64,
@@ -1332,6 +1763,21 @@ pub struct TimeRange {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to remove the tag from.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>A list of tag keys to remove from the index, FAQ, or data source. If a tag key does not exist on the resource, it is ignored.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1363,6 +1809,10 @@ pub struct UpdateDataSourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexRequest {
+    /// <p>Sets the number of addtional storage and query capacity units that should be used by the index. You can change the capacity of the index up to 5 times per day.</p> <p>If you are using extra storage units, you can't reduce the storage capacity below that required to meet the storage needs for your index.</p>
+    #[serde(rename = "CapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_units: Option<CapacityUnitsConfiguration>,
     /// <p>A new description for the index.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1638,6 +2088,8 @@ pub enum CreateIndexError {
     /// <p><p/></p>
     AccessDenied(String),
     /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
     InternalServer(String),
     /// <p><p/></p>
     ResourceAlreadyExist(String),
@@ -1653,6 +2105,9 @@ impl CreateIndexError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIndexError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateIndexError::Conflict(err.msg))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateIndexError::InternalServer(err.msg))
@@ -1678,6 +2133,7 @@ impl fmt::Display for CreateIndexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateIndexError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateIndexError::Conflict(ref cause) => write!(f, "{}", cause),
             CreateIndexError::InternalServer(ref cause) => write!(f, "{}", cause),
             CreateIndexError::ResourceAlreadyExist(ref cause) => write!(f, "{}", cause),
             CreateIndexError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
@@ -1686,6 +2142,60 @@ impl fmt::Display for CreateIndexError {
     }
 }
 impl Error for CreateIndexError {}
+/// Errors returned by DeleteDataSource
+#[derive(Debug, PartialEq)]
+pub enum DeleteDataSourceError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl DeleteDataSourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataSourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteDataSourceError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteDataSourceError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteDataSourceError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteDataSourceError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteDataSourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDataSourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDataSourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDataSourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDataSourceError {}
 /// Errors returned by DeleteFaq
 #[derive(Debug, PartialEq)]
 pub enum DeleteFaqError {
@@ -2134,6 +2644,56 @@ impl fmt::Display for ListIndicesError {
     }
 }
 impl Error for ListIndicesError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceUnavailable(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by Query
 #[derive(Debug, PartialEq)]
 pub enum QueryError {
@@ -2145,6 +2705,8 @@ pub enum QueryError {
     InternalServer(String),
     /// <p><p/></p>
     ResourceNotFound(String),
+    /// <p><p/></p>
+    ServiceQuotaExceeded(String),
     /// <p><p/></p>
     Throttling(String),
 }
@@ -2162,6 +2724,9 @@ impl QueryError {
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(QueryError::ResourceNotFound(err.msg))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(QueryError::ServiceQuotaExceeded(err.msg))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(QueryError::Throttling(err.msg))
@@ -2181,6 +2746,7 @@ impl fmt::Display for QueryError {
             QueryError::Conflict(ref cause) => write!(f, "{}", cause),
             QueryError::InternalServer(ref cause) => write!(f, "{}", cause),
             QueryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            QueryError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             QueryError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2358,6 +2924,102 @@ impl fmt::Display for SubmitFeedbackError {
     }
 }
 impl Error for SubmitFeedbackError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceUnavailable(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(TagResourceError::InternalServer(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(TagResourceError::ResourceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(TagResourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceUnavailable(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UntagResourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
@@ -2424,6 +3086,8 @@ pub enum UpdateIndexError {
     /// <p><p/></p>
     ResourceNotFound(String),
     /// <p><p/></p>
+    ServiceQuotaExceeded(String),
+    /// <p><p/></p>
     Throttling(String),
 }
 
@@ -2443,6 +3107,9 @@ impl UpdateIndexError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateIndexError::ResourceNotFound(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(UpdateIndexError::ServiceQuotaExceeded(err.msg))
+                }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateIndexError::Throttling(err.msg))
                 }
@@ -2461,6 +3128,7 @@ impl fmt::Display for UpdateIndexError {
             UpdateIndexError::Conflict(ref cause) => write!(f, "{}", cause),
             UpdateIndexError::InternalServer(ref cause) => write!(f, "{}", cause),
             UpdateIndexError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateIndexError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             UpdateIndexError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2498,6 +3166,12 @@ pub trait Kendra {
         &self,
         input: CreateIndexRequest,
     ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>>;
+
+    /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
+    async fn delete_data_source(
+        &self,
+        input: DeleteDataSourceRequest,
+    ) -> Result<(), RusotoError<DeleteDataSourceError>>;
 
     /// <p>Removes an FAQ from an index.</p>
     async fn delete_faq(&self, input: DeleteFaqRequest) -> Result<(), RusotoError<DeleteFaqError>>;
@@ -2550,6 +3224,12 @@ pub trait Kendra {
         input: ListIndicesRequest,
     ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>>;
 
+    /// <p>Gets a list of tags associated with a specified resource. Indexes, FAQs, and data sources can have tags associated with them.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Searches an active index. Use this API to search your documents using query. The <code>Query</code> operation enables to do faceted search and to filter results based on document attributes.</p> <p>It also enables you to provide user context that Amazon Kendra uses to enforce document access control in the search results. </p> <p>Amazon Kendra searches your index for text content and question and answer (FAQ) content. By default the response contains three types of results.</p> <ul> <li> <p>Relevant passages</p> </li> <li> <p>Matching FAQs</p> </li> <li> <p>Relevant documents</p> </li> </ul> <p>You can specify that the query return only one type of result using the <code>QueryResultTypeConfig</code> parameter.</p>
     async fn query(&self, input: QueryRequest) -> Result<QueryResult, RusotoError<QueryError>>;
 
@@ -2570,6 +3250,18 @@ pub trait Kendra {
         &self,
         input: SubmitFeedbackRequest,
     ) -> Result<(), RusotoError<SubmitFeedbackError>>;
+
+    /// <p>Adds the specified tag to the specified index, FAQ, or data source resource. If the tag already exists, the existing value is replaced with the new value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes a tag from an index, FAQ, or a data source.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates an existing Amazon Kendra data source.</p>
     async fn update_data_source(
@@ -2761,6 +3453,33 @@ impl Kendra for KendraClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(CreateIndexError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
+    async fn delete_data_source(
+        &self,
+        input: DeleteDataSourceRequest,
+    ) -> Result<(), RusotoError<DeleteDataSourceError>> {
+        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSKendraFrontendService.DeleteDataSource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDataSourceError::from_response(response))
         }
     }
 
@@ -3012,6 +3731,37 @@ impl Kendra for KendraClient {
         }
     }
 
+    /// <p>Gets a list of tags associated with a specified resource. Indexes, FAQs, and data sources can have tags associated with them.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Searches an active index. Use this API to search your documents using query. The <code>Query</code> operation enables to do faceted search and to filter results based on document attributes.</p> <p>It also enables you to provide user context that Amazon Kendra uses to enforce document access control in the search results. </p> <p>Amazon Kendra searches your index for text content and question and answer (FAQ) content. By default the response contains three types of results.</p> <ul> <li> <p>Relevant passages</p> </li> <li> <p>Matching FAQs</p> </li> <li> <p>Relevant documents</p> </li> </ul> <p>You can specify that the query return only one type of result using the <code>QueryResultTypeConfig</code> parameter.</p>
     async fn query(&self, input: QueryRequest) -> Result<QueryResult, RusotoError<QueryError>> {
         let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
@@ -3121,6 +3871,60 @@ impl Kendra for KendraClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(SubmitFeedbackError::from_response(response))
+        }
+    }
+
+    /// <p>Adds the specified tag to the specified index, FAQ, or data source resource. If the tag already exists, the existing value is replaced with the new value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSKendraFrontendService.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes a tag from an index, FAQ, or a data source.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSKendraFrontendService.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

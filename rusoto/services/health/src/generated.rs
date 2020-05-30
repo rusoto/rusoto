@@ -99,6 +99,9 @@ pub struct DescribeAffectedAccountsForOrganizationResponse {
     #[serde(rename = "affectedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub affected_accounts: Option<Vec<String>>,
+    #[serde(rename = "eventScopeCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_scope_code: Option<String>,
     /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -446,6 +449,9 @@ pub struct Event {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    #[serde(rename = "eventScopeCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_scope_code: Option<String>,
     /// <p>The category of the event. Possible values are <code>issue</code>, <code>scheduledChange</code>, and <code>accountNotification</code>.</p>
     #[serde(rename = "eventTypeCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -482,7 +488,8 @@ pub struct Event {
 pub struct EventAccountFilter {
     /// <p>The 12-digit AWS account numbers that contains the affected entities.</p>
     #[serde(rename = "awsAccountId")]
-    pub aws_account_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_account_id: Option<String>,
     /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
     #[serde(rename = "eventArn")]
     pub event_arn: String,
@@ -648,6 +655,9 @@ pub struct OrganizationEvent {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    #[serde(rename = "eventScopeCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_scope_code: Option<String>,
     /// <p>The category of the event type.</p>
     #[serde(rename = "eventTypeCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -787,7 +787,7 @@ pub struct Cluster {
     pub cluster_security_groups: Option<Vec<ClusterSecurityGroupMembership>>,
     /// <p>A value that returns the destination region and retention period that are configured for cross-region snapshot copy.</p>
     pub cluster_snapshot_copy_status: Option<ClusterSnapshotCopyStatus>,
-    /// <p><p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>available, prep-for-resize</code> </p> </li> <li> <p> <code>available, resize-cleanup</code> </p> </li> <li> <p> <code>cancelling-resize</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul></p>
+    /// <p><p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>available, prep-for-resize</code> </p> </li> <li> <p> <code>available, resize-cleanup</code> </p> </li> <li> <p> <code>cancelling-resize</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>paused</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul></p>
     pub cluster_status: Option<String>,
     /// <p>The name of the subnet group that is associated with the cluster. This parameter is valid only when the cluster is in a VPC.</p>
     pub cluster_subnet_group_name: Option<String>,
@@ -2361,7 +2361,7 @@ pub struct CreateClusterMessage {
     pub master_user_password: String,
     /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="https://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
     pub master_username: String,
-    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.16xlarge</code> </p>
+    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.4xlarge</code> | <code>ra3.16xlarge</code> </p>
     pub node_type: String,
     /// <p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>
     pub number_of_nodes: Option<i64>,
@@ -3280,6 +3280,53 @@ impl CreateTagsMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateUsageLimitMessage {
+    /// <p>The limit amount. If time-based, this amount is in minutes. If data-based, this amount is in terabytes (TB). The value must be a positive number. </p>
+    pub amount: i64,
+    /// <p>The action that Amazon Redshift takes when the limit is reached. The default is log. For more information about this parameter, see <a>UsageLimit</a>.</p>
+    pub breach_action: Option<String>,
+    /// <p>The identifier of the cluster that you want to limit usage.</p>
+    pub cluster_identifier: String,
+    /// <p>The Amazon Redshift feature that you want to limit.</p>
+    pub feature_type: String,
+    /// <p>The type of limit. Depending on the feature type, this can be based on a time duration or data size. If <code>FeatureType</code> is <code>spectrum</code>, then <code>LimitType</code> must be <code>data-scanned</code>. If <code>FeatureType</code> is <code>concurrency-scaling</code>, then <code>LimitType</code> must be <code>time</code>. </p>
+    pub limit_type: String,
+    /// <p>The time period that the amount applies to. A <code>weekly</code> period begins on Sunday. The default is <code>monthly</code>. </p>
+    pub period: Option<String>,
+    /// <p>A list of tag instances.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateUsageLimitMessage` contents to a `SignedRequest`.
+struct CreateUsageLimitMessageSerializer;
+impl CreateUsageLimitMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateUsageLimitMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Amount"), &obj.amount);
+        if let Some(ref field_value) = obj.breach_action {
+            params.put(&format!("{}{}", prefix, "BreachAction"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        params.put(&format!("{}{}", prefix, "FeatureType"), &obj.feature_type);
+        params.put(&format!("{}{}", prefix, "LimitType"), &obj.limit_type);
+        if let Some(ref field_value) = obj.period {
+            params.put(&format!("{}{}", prefix, "Period"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomerStorageMessage {
     /// <p>The total amount of storage currently used for snapshots.</p>
@@ -3895,6 +3942,29 @@ impl DeleteTagsMessageSerializer {
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteUsageLimitMessage {
+    /// <p>The identifier of the usage limit to delete.</p>
+    pub usage_limit_id: String,
+}
+
+/// Serialize `DeleteUsageLimitMessage` contents to a `SignedRequest`.
+struct DeleteUsageLimitMessageSerializer;
+impl DeleteUsageLimitMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteUsageLimitMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "UsageLimitId"),
+            &obj.usage_limit_id,
+        );
     }
 }
 
@@ -4700,7 +4770,7 @@ impl DescribeLoggingStatusMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodeConfigurationOptionsMessage {
-    /// <p>The action type to evaluate for possible node configurations. Specify "restore-cluster" to get configuration combinations based on an existing snapshot. Specify "recommend-node-config" to get configuration recommendations based on an existing cluster or snapshot. </p>
+    /// <p>The action type to evaluate for possible node configurations. Specify "restore-cluster" to get configuration combinations based on an existing snapshot. Specify "recommend-node-config" to get configuration recommendations based on an existing cluster or snapshot. Specify "resize-cluster" to get configuration combinations for elastic resize based on an existing cluster. </p>
     pub action_type: String,
     /// <p>The identifier of the cluster to evaluate for possible node configurations.</p>
     pub cluster_identifier: Option<String>,
@@ -5188,6 +5258,66 @@ impl DescribeTagsMessageSerializer {
                 &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeUsageLimitsMessage {
+    /// <p>The identifier of the cluster for which you want to describe usage limits.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The feature type for which you want to describe usage limits.</p>
+    pub feature_type: Option<String>,
+    /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeUsageLimits</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+    /// <p>A tag key or keys for which you want to return all matching usage limit objects that are associated with the specified key or keys. For example, suppose that you have parameter groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the usage limit objects have either or both of these tag keys associated with them.</p>
+    pub tag_keys: Option<Vec<String>>,
+    /// <p>A tag value or values for which you want to return all matching usage limit objects that are associated with the specified tag value or values. For example, suppose that you have parameter groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the usage limit objects that have either or both of these tag values associated with them.</p>
+    pub tag_values: Option<Vec<String>>,
+    /// <p>The identifier of the usage limit to describe.</p>
+    pub usage_limit_id: Option<String>,
+}
+
+/// Serialize `DescribeUsageLimitsMessage` contents to a `SignedRequest`.
+struct DescribeUsageLimitsMessageSerializer;
+impl DescribeUsageLimitsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeUsageLimitsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.feature_type {
+            params.put(&format!("{}{}", prefix, "FeatureType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_keys {
+            TagKeyListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagKey"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.tag_values {
+            TagValueListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagValue"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.usage_limit_id {
+            params.put(&format!("{}{}", prefix, "UsageLimitId"), &field_value);
         }
     }
 }
@@ -6948,7 +7078,7 @@ pub struct ModifyClusterMessage {
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
     pub new_cluster_identifier: Option<String>,
-    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p> For more information about resizing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/rs-resize-tutorial.html">Resizing Clusters in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.16xlarge</code> </p>
+    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p> For more information about resizing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/rs-resize-tutorial.html">Resizing Clusters in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.4xlarge</code> | <code>ra3.16xlarge</code> </p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p> For more information about resizing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/rs-resize-tutorial.html">Resizing Clusters in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Valid Values: Integer greater than <code>0</code>.</p>
     pub number_of_nodes: Option<i64>,
@@ -7553,6 +7683,39 @@ impl ModifySnapshotScheduleMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyUsageLimitMessage {
+    /// <p>The new limit amount. For more information about this parameter, see <a>UsageLimit</a>. </p>
+    pub amount: Option<i64>,
+    /// <p>The new action that Amazon Redshift takes when the limit is reached. For more information about this parameter, see <a>UsageLimit</a>. </p>
+    pub breach_action: Option<String>,
+    /// <p>The identifier of the usage limit to modify.</p>
+    pub usage_limit_id: String,
+}
+
+/// Serialize `ModifyUsageLimitMessage` contents to a `SignedRequest`.
+struct ModifyUsageLimitMessageSerializer;
+impl ModifyUsageLimitMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyUsageLimitMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.amount {
+            params.put(&format!("{}{}", prefix, "Amount"), &field_value);
+        }
+        if let Some(ref field_value) = obj.breach_action {
+            params.put(&format!("{}{}", prefix, "BreachAction"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "UsageLimitId"),
+            &obj.usage_limit_id,
+        );
+    }
+}
+
 /// <p>A list of node configurations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -8004,6 +8167,76 @@ impl ParametersListSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PauseClusterMessage {
+    /// <p>The identifier of the cluster to be paused.</p>
+    pub cluster_identifier: String,
+}
+
+#[allow(dead_code)]
+struct PauseClusterMessageDeserializer;
+impl PauseClusterMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PauseClusterMessage, XmlParseError> {
+        deserialize_elements::<_, PauseClusterMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        StringDeserializer::deserialize("ClusterIdentifier", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `PauseClusterMessage` contents to a `SignedRequest`.
+struct PauseClusterMessageSerializer;
+impl PauseClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PauseClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PauseClusterResult {
+    pub cluster: Option<Cluster>,
+}
+
+#[allow(dead_code)]
+struct PauseClusterResultDeserializer;
+impl PauseClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PauseClusterResult, XmlParseError> {
+        deserialize_elements::<_, PauseClusterResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Cluster" => {
+                    obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct PendingActionsListDeserializer;
 impl PendingActionsListDeserializer {
@@ -8647,7 +8880,7 @@ pub struct ResizeClusterMessage {
     /// <p>The new node type for the nodes you are adding. If not specified, the cluster's current node type is used.</p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes for the cluster.</p>
-    pub number_of_nodes: i64,
+    pub number_of_nodes: Option<i64>,
 }
 
 #[allow(dead_code)]
@@ -8674,7 +8907,8 @@ impl ResizeClusterMessageDeserializer {
                     obj.node_type = Some(StringDeserializer::deserialize("NodeType", stack)?);
                 }
                 "NumberOfNodes" => {
-                    obj.number_of_nodes = IntegerDeserializer::deserialize("NumberOfNodes", stack)?;
+                    obj.number_of_nodes =
+                        Some(IntegerDeserializer::deserialize("NumberOfNodes", stack)?);
                 }
                 _ => skip_tree(stack),
             }
@@ -8705,10 +8939,9 @@ impl ResizeClusterMessageSerializer {
         if let Some(ref field_value) = obj.node_type {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "NumberOfNodes"),
-            &obj.number_of_nodes,
-        );
+        if let Some(ref field_value) = obj.number_of_nodes {
+            params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
+        }
     }
 }
 
@@ -8971,7 +9204,7 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub maintenance_track_name: Option<String>,
     /// <p>The default number of days to retain a manual snapshot. If the value is -1, the snapshot is retained indefinitely. This setting doesn't change the retention period of existing snapshots.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
     pub manual_snapshot_retention_period: Option<i64>,
-    /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlarge cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     pub node_type: Option<String>,
     /// <p>The number of nodes specified when provisioning the restored cluster.</p>
     pub number_of_nodes: Option<i64>,
@@ -9320,6 +9553,76 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResumeClusterMessage {
+    /// <p>The identifier of the cluster to be resumed.</p>
+    pub cluster_identifier: String,
+}
+
+#[allow(dead_code)]
+struct ResumeClusterMessageDeserializer;
+impl ResumeClusterMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResumeClusterMessage, XmlParseError> {
+        deserialize_elements::<_, ResumeClusterMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        StringDeserializer::deserialize("ClusterIdentifier", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `ResumeClusterMessage` contents to a `SignedRequest`.
+struct ResumeClusterMessageSerializer;
+impl ResumeClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResumeClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ResumeClusterResult {
+    pub cluster: Option<Cluster>,
+}
+
+#[allow(dead_code)]
+struct ResumeClusterResultDeserializer;
+impl ResumeClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResumeClusterResult, XmlParseError> {
+        deserialize_elements::<_, ResumeClusterResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Cluster" => {
+                    obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes a <code>RevisionTarget</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -9635,7 +9938,7 @@ pub struct ScheduledAction {
     pub iam_role: Option<String>,
     /// <p>List of times when the scheduled action will run. </p>
     pub next_invocations: Option<Vec<String>>,
-    /// <p>The schedule for a one-time (at format) or recurring (cron format) scheduled action. Schedule invocations must be separated by at least one hour.</p> <p>Format of at expressions is "<code>at(yyyy-mm-ddThh:mm:ss)</code>". For example, "<code>at(2016-03-04T17:27:00)</code>".</p> <p>Format of cron expressions is "<code>cron(Minutes Hours Day-of-month Month Day-of-week Year)</code>". For example, "<code>cron(0, 10, *, *, MON, *)</code>". For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">Cron Expressions</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
+    /// <p>The schedule for a one-time (at format) or recurring (cron format) scheduled action. Schedule invocations must be separated by at least one hour.</p> <p>Format of at expressions is "<code>at(yyyy-mm-ddThh:mm:ss)</code>". For example, "<code>at(2016-03-04T17:27:00)</code>".</p> <p>Format of cron expressions is "<code>cron(Minutes Hours Day-of-month Month Day-of-week Year)</code>". For example, "<code>cron(0 10 ? * MON *)</code>". For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">Cron Expressions</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
     pub schedule: Option<String>,
     /// <p>The description of the scheduled action. </p>
     pub scheduled_action_description: Option<String>,
@@ -9799,8 +10102,12 @@ impl ScheduledActionTimeListDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledActionType {
+    /// <p>An action that runs a <code>PauseCluster</code> API operation. </p>
+    pub pause_cluster: Option<PauseClusterMessage>,
     /// <p>An action that runs a <code>ResizeCluster</code> API operation. </p>
     pub resize_cluster: Option<ResizeClusterMessage>,
+    /// <p>An action that runs a <code>ResumeCluster</code> API operation. </p>
+    pub resume_cluster: Option<ResumeClusterMessage>,
 }
 
 #[allow(dead_code)]
@@ -9813,9 +10120,21 @@ impl ScheduledActionTypeDeserializer {
     ) -> Result<ScheduledActionType, XmlParseError> {
         deserialize_elements::<_, ScheduledActionType, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "PauseCluster" => {
+                    obj.pause_cluster = Some(PauseClusterMessageDeserializer::deserialize(
+                        "PauseCluster",
+                        stack,
+                    )?);
+                }
                 "ResizeCluster" => {
                     obj.resize_cluster = Some(ResizeClusterMessageDeserializer::deserialize(
                         "ResizeCluster",
+                        stack,
+                    )?);
+                }
+                "ResumeCluster" => {
+                    obj.resume_cluster = Some(ResumeClusterMessageDeserializer::deserialize(
+                        "ResumeCluster",
                         stack,
                     )?);
                 }
@@ -9835,10 +10154,24 @@ impl ScheduledActionTypeSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.pause_cluster {
+            PauseClusterMessageSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PauseCluster"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.resize_cluster {
             ResizeClusterMessageSerializer::serialize(
                 params,
                 &format!("{}{}", prefix, "ResizeCluster"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.resume_cluster {
+            ResumeClusterMessageSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ResumeCluster"),
                 field_value,
             );
         }
@@ -11260,6 +11593,180 @@ impl UpdateTargetDeserializer {
                     );
                 }
                 _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes a usage limit object for a cluster. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UsageLimit {
+    /// <p>The limit amount. If time-based, this amount is in minutes. If data-based, this amount is in terabytes (TB).</p>
+    pub amount: Option<i64>,
+    /// <p><p>The action that Amazon Redshift takes when the limit is reached. Possible values are: </p> <ul> <li> <p> <b>log</b> - To log an event in a system table. The default is log.</p> </li> <li> <p> <b>emit-metric</b> - To emit CloudWatch metrics.</p> </li> <li> <p> <b>disable</b> - To disable the feature until the next usage period begins.</p> </li> </ul></p>
+    pub breach_action: Option<String>,
+    /// <p>The identifier of the cluster with a usage limit.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The Amazon Redshift feature to which the limit applies.</p>
+    pub feature_type: Option<String>,
+    /// <p>The type of limit. Depending on the feature type, this can be based on a time duration or data size.</p>
+    pub limit_type: Option<String>,
+    /// <p>The time period that the amount applies to. A <code>weekly</code> period begins on Sunday. The default is <code>monthly</code>. </p>
+    pub period: Option<String>,
+    /// <p>A list of tag instances.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The identifier of the usage limit.</p>
+    pub usage_limit_id: Option<String>,
+}
+
+#[allow(dead_code)]
+struct UsageLimitDeserializer;
+impl UsageLimitDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UsageLimit, XmlParseError> {
+        deserialize_elements::<_, UsageLimit, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Amount" => {
+                    obj.amount = Some(LongDeserializer::deserialize("Amount", stack)?);
+                }
+                "BreachAction" => {
+                    obj.breach_action = Some(UsageLimitBreachActionDeserializer::deserialize(
+                        "BreachAction",
+                        stack,
+                    )?);
+                }
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        Some(StringDeserializer::deserialize("ClusterIdentifier", stack)?);
+                }
+                "FeatureType" => {
+                    obj.feature_type = Some(UsageLimitFeatureTypeDeserializer::deserialize(
+                        "FeatureType",
+                        stack,
+                    )?);
+                }
+                "LimitType" => {
+                    obj.limit_type = Some(UsageLimitLimitTypeDeserializer::deserialize(
+                        "LimitType",
+                        stack,
+                    )?);
+                }
+                "Period" => {
+                    obj.period = Some(UsageLimitPeriodDeserializer::deserialize("Period", stack)?);
+                }
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("Tags", stack)?);
+                }
+                "UsageLimitId" => {
+                    obj.usage_limit_id =
+                        Some(StringDeserializer::deserialize("UsageLimitId", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct UsageLimitBreachActionDeserializer;
+impl UsageLimitBreachActionDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[allow(dead_code)]
+struct UsageLimitFeatureTypeDeserializer;
+impl UsageLimitFeatureTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[allow(dead_code)]
+struct UsageLimitLimitTypeDeserializer;
+impl UsageLimitLimitTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UsageLimitList {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
+    pub marker: Option<String>,
+    /// <p>Contains the output from the <a>DescribeUsageLimits</a> action. </p>
+    pub usage_limits: Option<Vec<UsageLimit>>,
+}
+
+#[allow(dead_code)]
+struct UsageLimitListDeserializer;
+impl UsageLimitListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UsageLimitList, XmlParseError> {
+        deserialize_elements::<_, UsageLimitList, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                "UsageLimits" => {
+                    obj.usage_limits
+                        .get_or_insert(vec![])
+                        .extend(UsageLimitsDeserializer::deserialize("UsageLimits", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct UsageLimitPeriodDeserializer;
+impl UsageLimitPeriodDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[allow(dead_code)]
+struct UsageLimitsDeserializer;
+impl UsageLimitsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<UsageLimit>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(UsageLimitDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
             Ok(())
         })
@@ -13202,6 +13709,102 @@ impl fmt::Display for CreateTagsError {
     }
 }
 impl Error for CreateTagsError {}
+/// Errors returned by CreateUsageLimit
+#[derive(Debug, PartialEq)]
+pub enum CreateUsageLimitError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The usage limit is not valid.</p>
+    InvalidUsageLimitFault(String),
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    LimitExceededFault(String),
+    /// <p>You have exceeded the number of tags allowed.</p>
+    TagLimitExceededFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// <p>The usage limit already exists. </p>
+    UsageLimitAlreadyExistsFault(String),
+}
+
+impl CreateUsageLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUsageLimitError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(CreateUsageLimitError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            CreateUsageLimitError::InvalidClusterStateFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidUsageLimit" => {
+                        return RusotoError::Service(CreateUsageLimitError::InvalidUsageLimitFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededFault" => {
+                        return RusotoError::Service(CreateUsageLimitError::LimitExceededFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagLimitExceededFault" => {
+                        return RusotoError::Service(CreateUsageLimitError::TagLimitExceededFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            CreateUsageLimitError::UnsupportedOperationFault(parsed_error.message),
+                        )
+                    }
+                    "UsageLimitAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateUsageLimitError::UsageLimitAlreadyExistsFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateUsageLimitError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateUsageLimitError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateUsageLimitError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+            CreateUsageLimitError::InvalidUsageLimitFault(ref cause) => write!(f, "{}", cause),
+            CreateUsageLimitError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateUsageLimitError::TagLimitExceededFault(ref cause) => write!(f, "{}", cause),
+            CreateUsageLimitError::UnsupportedOperationFault(ref cause) => write!(f, "{}", cause),
+            CreateUsageLimitError::UsageLimitAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateUsageLimitError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -13950,6 +14553,58 @@ impl fmt::Display for DeleteTagsError {
     }
 }
 impl Error for DeleteTagsError {}
+/// Errors returned by DeleteUsageLimit
+#[derive(Debug, PartialEq)]
+pub enum DeleteUsageLimitError {
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// <p>The usage limit identifier can't be found.</p>
+    UsageLimitNotFoundFault(String),
+}
+
+impl DeleteUsageLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUsageLimitError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            DeleteUsageLimitError::UnsupportedOperationFault(parsed_error.message),
+                        )
+                    }
+                    "UsageLimitNotFound" => {
+                        return RusotoError::Service(
+                            DeleteUsageLimitError::UsageLimitNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteUsageLimitError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteUsageLimitError::UnsupportedOperationFault(ref cause) => write!(f, "{}", cause),
+            DeleteUsageLimitError::UsageLimitNotFoundFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteUsageLimitError {}
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountAttributesError {}
@@ -15418,6 +16073,62 @@ impl fmt::Display for DescribeTagsError {
     }
 }
 impl Error for DescribeTagsError {}
+/// Errors returned by DescribeUsageLimits
+#[derive(Debug, PartialEq)]
+pub enum DescribeUsageLimitsError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+}
+
+impl DescribeUsageLimitsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUsageLimitsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            DescribeUsageLimitsError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            DescribeUsageLimitsError::UnsupportedOperationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeUsageLimitsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeUsageLimitsError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeUsageLimitsError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeUsageLimitsError {}
 /// Errors returned by DisableLogging
 #[derive(Debug, PartialEq)]
 pub enum DisableLoggingError {
@@ -15545,6 +16256,8 @@ pub enum EnableLoggingError {
     ClusterNotFoundFault(String),
     /// <p>The cluster does not have read bucket or put object permissions on the S3 bucket specified when enabling logging.</p>
     InsufficientS3BucketPolicyFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
     /// <p>The S3 bucket name is invalid. For more information about naming rules, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html">Bucket Restrictions and Limitations</a> in the Amazon Simple Storage Service (S3) Developer Guide.</p>
     InvalidS3BucketNameFault(String),
     /// <p>The string specified for the logging S3 key prefix does not comply with the documented constraints.</p>
@@ -15575,6 +16288,11 @@ impl EnableLoggingError {
                                 parsed_error.message,
                             ),
                         )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(EnableLoggingError::InvalidClusterStateFault(
+                            parsed_error.message,
+                        ))
                     }
                     "InvalidS3BucketNameFault" => {
                         return RusotoError::Service(EnableLoggingError::InvalidS3BucketNameFault(
@@ -15610,6 +16328,7 @@ impl fmt::Display for EnableLoggingError {
             EnableLoggingError::InsufficientS3BucketPolicyFault(ref cause) => {
                 write!(f, "{}", cause)
             }
+            EnableLoggingError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
             EnableLoggingError::InvalidS3BucketNameFault(ref cause) => write!(f, "{}", cause),
             EnableLoggingError::InvalidS3KeyPrefixFault(ref cause) => write!(f, "{}", cause),
         }
@@ -16281,6 +17000,8 @@ impl Error for ModifyClusterIamRolesError {}
 pub enum ModifyClusterMaintenanceError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
 }
 
 impl ModifyClusterMaintenanceError {
@@ -16294,6 +17015,13 @@ impl ModifyClusterMaintenanceError {
                     "ClusterNotFound" => {
                         return RusotoError::Service(
                             ModifyClusterMaintenanceError::ClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            ModifyClusterMaintenanceError::InvalidClusterStateFault(
                                 parsed_error.message,
                             ),
                         )
@@ -16318,6 +17046,9 @@ impl fmt::Display for ModifyClusterMaintenanceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModifyClusterMaintenanceError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyClusterMaintenanceError::InvalidClusterStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
         }
@@ -17001,6 +17732,118 @@ impl fmt::Display for ModifySnapshotScheduleError {
     }
 }
 impl Error for ModifySnapshotScheduleError {}
+/// Errors returned by ModifyUsageLimit
+#[derive(Debug, PartialEq)]
+pub enum ModifyUsageLimitError {
+    /// <p>The usage limit is not valid.</p>
+    InvalidUsageLimitFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// <p>The usage limit identifier can't be found.</p>
+    UsageLimitNotFoundFault(String),
+}
+
+impl ModifyUsageLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyUsageLimitError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidUsageLimit" => {
+                        return RusotoError::Service(ModifyUsageLimitError::InvalidUsageLimitFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            ModifyUsageLimitError::UnsupportedOperationFault(parsed_error.message),
+                        )
+                    }
+                    "UsageLimitNotFound" => {
+                        return RusotoError::Service(
+                            ModifyUsageLimitError::UsageLimitNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyUsageLimitError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyUsageLimitError::InvalidUsageLimitFault(ref cause) => write!(f, "{}", cause),
+            ModifyUsageLimitError::UnsupportedOperationFault(ref cause) => write!(f, "{}", cause),
+            ModifyUsageLimitError::UsageLimitNotFoundFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ModifyUsageLimitError {}
+/// Errors returned by PauseCluster
+#[derive(Debug, PartialEq)]
+pub enum PauseClusterError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+}
+
+impl PauseClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PauseClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(PauseClusterError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(PauseClusterError::InvalidClusterStateFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for PauseClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PauseClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            PauseClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PauseClusterError {}
 /// Errors returned by PurchaseReservedNodeOffering
 #[derive(Debug, PartialEq)]
 pub enum PurchaseReservedNodeOfferingError {
@@ -17722,6 +18565,58 @@ impl fmt::Display for RestoreTableFromClusterSnapshotError {
     }
 }
 impl Error for RestoreTableFromClusterSnapshotError {}
+/// Errors returned by ResumeCluster
+#[derive(Debug, PartialEq)]
+pub enum ResumeClusterError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+}
+
+impl ResumeClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(ResumeClusterError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(ResumeClusterError::InvalidClusterStateFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ResumeClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ResumeClusterError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ResumeClusterError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ResumeClusterError {}
 /// Errors returned by RevokeClusterSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum RevokeClusterSecurityGroupIngressError {
@@ -18024,7 +18919,7 @@ pub trait Redshift {
         input: CreateSnapshotCopyGrantMessage,
     ) -> Result<CreateSnapshotCopyGrantResult, RusotoError<CreateSnapshotCopyGrantError>>;
 
-    /// <p>Creates a snapshot schedule with the rate of every 12 hours.</p>
+    /// <p>Create a snapshot schedule that can be associated to a cluster and which overrides the default system backup schedule. </p>
     async fn create_snapshot_schedule(
         &self,
         input: CreateSnapshotScheduleMessage,
@@ -18035,6 +18930,12 @@ pub trait Redshift {
         &self,
         input: CreateTagsMessage,
     ) -> Result<(), RusotoError<CreateTagsError>>;
+
+    /// <p>Creates a usage limit for a specified Amazon Redshift feature on a cluster. The usage limit is identified by the returned usage limit identifier.</p>
+    async fn create_usage_limit(
+        &self,
+        input: CreateUsageLimitMessage,
+    ) -> Result<UsageLimit, RusotoError<CreateUsageLimitError>>;
 
     /// <p>Deletes a previously provisioned cluster without its final snapshot being created. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn delete_cluster(
@@ -18107,6 +19008,12 @@ pub trait Redshift {
         &self,
         input: DeleteTagsMessage,
     ) -> Result<(), RusotoError<DeleteTagsError>>;
+
+    /// <p>Deletes a usage limit from a cluster.</p>
+    async fn delete_usage_limit(
+        &self,
+        input: DeleteUsageLimitMessage,
+    ) -> Result<(), RusotoError<DeleteUsageLimitError>>;
 
     /// <p>Returns a list of attributes attached to an account</p>
     async fn describe_account_attributes(
@@ -18278,6 +19185,12 @@ pub trait Redshift {
         input: DescribeTagsMessage,
     ) -> Result<TaggedResourceListMessage, RusotoError<DescribeTagsError>>;
 
+    /// <p><p>Shows usage limits on a cluster. Results are filtered based on the combination of input usage limit identifier, cluster identifier, and feature type parameters:</p> <ul> <li> <p>If usage limit identifier, cluster identifier, and feature type are not provided, then all usage limit objects for the current account in the current region are returned.</p> </li> <li> <p>If usage limit identifier is provided, then the corresponding usage limit object is returned.</p> </li> <li> <p>If cluster identifier is provided, then all usage limit objects for the specified cluster are returned.</p> </li> <li> <p>If cluster identifier and feature type are provided, then all usage limit objects for the combination of cluster and feature are returned.</p> </li> </ul></p>
+    async fn describe_usage_limits(
+        &self,
+        input: DescribeUsageLimitsMessage,
+    ) -> Result<UsageLimitList, RusotoError<DescribeUsageLimitsError>>;
+
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     async fn disable_logging(
         &self,
@@ -18392,6 +19305,18 @@ pub trait Redshift {
         input: ModifySnapshotScheduleMessage,
     ) -> Result<SnapshotSchedule, RusotoError<ModifySnapshotScheduleError>>;
 
+    /// <p>Modifies a usage limit in a cluster. You can't modify the feature type or period of a usage limit.</p>
+    async fn modify_usage_limit(
+        &self,
+        input: ModifyUsageLimitMessage,
+    ) -> Result<UsageLimit, RusotoError<ModifyUsageLimitError>>;
+
+    /// <p>Pauses a cluster.</p>
+    async fn pause_cluster(
+        &self,
+        input: PauseClusterMessage,
+    ) -> Result<PauseClusterResult, RusotoError<PauseClusterError>>;
+
     /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn purchase_reserved_node_offering(
         &self,
@@ -18410,7 +19335,7 @@ pub trait Redshift {
         input: ResetClusterParameterGroupMessage,
     ) -> Result<ClusterParameterGroupNameMessage, RusotoError<ResetClusterParameterGroupError>>;
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.4xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
     async fn resize_cluster(
         &self,
         input: ResizeClusterMessage,
@@ -18430,6 +19355,12 @@ pub trait Redshift {
         RestoreTableFromClusterSnapshotResult,
         RusotoError<RestoreTableFromClusterSnapshotError>,
     >;
+
+    /// <p>Resumes a paused cluster.</p>
+    async fn resume_cluster(
+        &self,
+        input: ResumeClusterMessage,
+    ) -> Result<ResumeClusterResult, RusotoError<ResumeClusterError>>;
 
     /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     async fn revoke_cluster_security_group_ingress(
@@ -19317,7 +20248,7 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
-    /// <p>Creates a snapshot schedule with the rate of every 12 hours.</p>
+    /// <p>Create a snapshot schedule that can be associated to a cluster and which overrides the default system backup schedule. </p>
     async fn create_snapshot_schedule(
         &self,
         input: CreateSnapshotScheduleMessage,
@@ -19391,6 +20322,51 @@ impl Redshift for RedshiftClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Creates a usage limit for a specified Amazon Redshift feature on a cluster. The usage limit is identified by the returned usage limit identifier.</p>
+    async fn create_usage_limit(
+        &self,
+        input: CreateUsageLimitMessage,
+    ) -> Result<UsageLimit, RusotoError<CreateUsageLimitError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateUsageLimit");
+        params.put("Version", "2012-12-01");
+        CreateUsageLimitMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateUsageLimitError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = UsageLimit::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UsageLimitDeserializer::deserialize("CreateUsageLimitResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a previously provisioned cluster without its final snapshot being created. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -19761,6 +20737,34 @@ impl Redshift for RedshiftClient {
         if !response.status.is_success() {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             return Err(DeleteTagsError::from_response(response));
+        }
+
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a usage limit from a cluster.</p>
+    async fn delete_usage_limit(
+        &self,
+        input: DeleteUsageLimitMessage,
+    ) -> Result<(), RusotoError<DeleteUsageLimitError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteUsageLimit");
+        params.put("Version", "2012-12-01");
+        DeleteUsageLimitMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteUsageLimitError::from_response(response));
         }
 
         std::mem::drop(response);
@@ -21114,6 +22118,52 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p><p>Shows usage limits on a cluster. Results are filtered based on the combination of input usage limit identifier, cluster identifier, and feature type parameters:</p> <ul> <li> <p>If usage limit identifier, cluster identifier, and feature type are not provided, then all usage limit objects for the current account in the current region are returned.</p> </li> <li> <p>If usage limit identifier is provided, then the corresponding usage limit object is returned.</p> </li> <li> <p>If cluster identifier is provided, then all usage limit objects for the specified cluster are returned.</p> </li> <li> <p>If cluster identifier and feature type are provided, then all usage limit objects for the combination of cluster and feature are returned.</p> </li> </ul></p>
+    async fn describe_usage_limits(
+        &self,
+        input: DescribeUsageLimitsMessage,
+    ) -> Result<UsageLimitList, RusotoError<DescribeUsageLimitsError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeUsageLimits");
+        params.put("Version", "2012-12-01");
+        DescribeUsageLimitsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeUsageLimitsError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = UsageLimitList::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                UsageLimitListDeserializer::deserialize("DescribeUsageLimitsResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     async fn disable_logging(
         &self,
@@ -21961,6 +23011,96 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Modifies a usage limit in a cluster. You can't modify the feature type or period of a usage limit.</p>
+    async fn modify_usage_limit(
+        &self,
+        input: ModifyUsageLimitMessage,
+    ) -> Result<UsageLimit, RusotoError<ModifyUsageLimitError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyUsageLimit");
+        params.put("Version", "2012-12-01");
+        ModifyUsageLimitMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyUsageLimitError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = UsageLimit::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = UsageLimitDeserializer::deserialize("ModifyUsageLimitResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Pauses a cluster.</p>
+    async fn pause_cluster(
+        &self,
+        input: PauseClusterMessage,
+    ) -> Result<PauseClusterResult, RusotoError<PauseClusterError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "PauseCluster");
+        params.put("Version", "2012-12-01");
+        PauseClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(PauseClusterError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = PauseClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = PauseClusterResultDeserializer::deserialize("PauseClusterResult", &mut stack)?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn purchase_reserved_node_offering(
         &self,
@@ -22105,7 +23245,7 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
-    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> <li> <p>ra3.4xlarge</p> </li> <li> <p>ra3.16xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
     async fn resize_cluster(
         &self,
         input: ResizeClusterMessage,
@@ -22246,6 +23386,52 @@ impl Redshift for RedshiftClient {
                 "RestoreTableFromClusterSnapshotResult",
                 &mut stack,
             )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Resumes a paused cluster.</p>
+    async fn resume_cluster(
+        &self,
+        input: ResumeClusterMessage,
+    ) -> Result<ResumeClusterResult, RusotoError<ResumeClusterError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ResumeCluster");
+        params.put("Version", "2012-12-01");
+        ResumeClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ResumeClusterError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = ResumeClusterResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result =
+                ResumeClusterResultDeserializer::deserialize("ResumeClusterResult", &mut stack)?;
             skip_tree(&mut stack);
             end_element(&actual_tag_name, &mut stack)?;
         }

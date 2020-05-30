@@ -58,7 +58,7 @@ pub struct CreateLifecyclePolicyResponse {
 /// <p>Specifies when to create snapshots of EBS volumes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateRule {
-    /// <p>The interval between snapshots. The supported values are 2, 3, 4, 6, 8, 12, and 24.</p>
+    /// <p>The interval between snapshots. The supported values are 1, 2, 3, 4, 6, 8, 12, and 24.</p>
     #[serde(rename = "Interval")]
     pub interval: i64,
     /// <p>The interval unit.</p>
@@ -274,10 +274,10 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Optional parameters that can be added to the policy. The set of valid parameters depends on the combination of <code>policyType</code> and <code>resourceType</code> values.</p>
+/// <p>Specifies optional parameters to add to a policy. The set of valid parameters depends on the combination of policy type and resource type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Parameters {
-    /// <p>When executing an EBS Snapshot Management – Instance policy, execute all CreateSnapshots calls with the <code>excludeBootVolume</code> set to the supplied field. Defaults to false. Only valid for EBS Snapshot Management – Instance policies.</p>
+    /// <p>[EBS Snapshot Management – Instance policies only] Indicates whether to exclude the root volume from snapshots created using <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateSnapshots.html">CreateSnapshots</a>. The default is false.</p>
     #[serde(rename = "ExcludeBootVolume")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude_boot_volume: Option<bool>,
@@ -286,11 +286,11 @@ pub struct Parameters {
 /// <p>Specifies the configuration of a lifecycle policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PolicyDetails {
-    /// <p>A set of optional parameters that can be provided by the policy. </p>
+    /// <p>A set of optional parameters for the policy. </p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Parameters>,
-    /// <p>This field determines the valid target resource types and actions a policy can manage. This field defaults to EBS_SNAPSHOT_MANAGEMENT if not present.</p>
+    /// <p>The valid target resource types and actions a policy can manage. The default is EBS_SNAPSHOT_MANAGEMENT.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_type: Option<String>,
@@ -325,7 +325,7 @@ pub struct RetainRule {
     pub interval_unit: Option<String>,
 }
 
-/// <p>Specifies a schedule.</p>
+/// <p>Specifies a backup schedule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Schedule {
     /// <p>Copy all user-defined tags on a source volume to snapshots of the volume created by this policy.</p>

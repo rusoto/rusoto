@@ -379,14 +379,14 @@ impl ApplicationNamesListSerializer {
     }
 }
 
-/// <p>The resource lifecycle configuration for an application. Defines lifecycle settings for resources that belong to the application, and the service role that Elastic Beanstalk assumes in order to apply lifecycle settings. The version lifecycle configuration defines lifecycle settings for application versions.</p>
+/// <p>The resource lifecycle configuration for an application. Defines lifecycle settings for resources that belong to the application, and the service role that AWS Elastic Beanstalk assumes in order to apply lifecycle settings. The version lifecycle configuration defines lifecycle settings for application versions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationResourceLifecycleConfig {
     /// <p>The ARN of an IAM service role that Elastic Beanstalk has permission to assume.</p> <p>The <code>ServiceRole</code> property is required the first time that you provide a <code>VersionLifecycleConfig</code> for the application in one of the supporting calls (<code>CreateApplication</code> or <code>UpdateApplicationResourceLifecycle</code>). After you provide it once, in either one of the calls, Elastic Beanstalk persists the Service Role with the application, and you don't need to specify it again in subsequent <code>UpdateApplicationResourceLifecycle</code> calls. You can, however, specify it in subsequent calls to change the Service Role to another value.</p>
     pub service_role: Option<String>,
-    /// <p>The application version lifecycle configuration.</p>
+    /// <p>Defines lifecycle settings for application versions.</p>
     pub version_lifecycle_config: Option<ApplicationVersionLifecycleConfig>,
 }
 
@@ -956,6 +956,30 @@ impl BoxedIntDeserializer {
         Ok(obj)
     }
 }
+#[allow(dead_code)]
+struct BranchNameDeserializer;
+impl BranchNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[allow(dead_code)]
+struct BranchOrderDeserializer;
+impl BranchOrderDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Settings for an AWS CodeBuild build.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1435,16 +1459,16 @@ impl ConfigurationOptionPossibleValuesDeserializer {
         })
     }
 }
-/// <p> A specification identifying an individual configuration option along with its current value. For a list of possible option values, go to <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html">Option Values</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>. </p>
+/// <p>A specification identifying an individual configuration option along with its current value. For a list of possible namespaces and option values, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html">Option Values</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigurationOptionSetting {
-    /// <p>A unique namespace identifying the option's associated AWS resource.</p>
+    /// <p>A unique namespace that identifies the option's associated AWS resource.</p>
     pub namespace: Option<String>,
     /// <p>The name of the configuration option.</p>
     pub option_name: Option<String>,
-    /// <p>A unique resource name for a time-based scaling configuration option.</p>
+    /// <p>A unique resource name for the option setting. Use it for a time–based scaling configuration option.</p>
     pub resource_name: Option<String>,
     /// <p>The current value for the configuration option.</p>
     pub value: Option<String>,
@@ -1592,7 +1616,7 @@ impl ConfigurationOptionValueTypeDeserializer {
 pub struct ConfigurationOptionsDescription {
     /// <p> A list of <a>ConfigurationOptionDescription</a>. </p>
     pub options: Option<Vec<ConfigurationOptionDescription>>,
-    /// <p>The ARN of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>The name of the solution stack these configuration options belong to.</p>
     pub solution_stack_name: Option<String>,
@@ -1653,7 +1677,7 @@ pub struct ConfigurationSettingsDescription {
     pub environment_name: Option<String>,
     /// <p>A list of the configuration options and their values in this configuration set.</p>
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
-    /// <p>The ARN of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>The name of the solution stack this configuration set uses.</p>
     pub solution_stack_name: Option<String>,
@@ -1862,11 +1886,11 @@ impl ConfigurationTemplateNamesListDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationMessage {
-    /// <p>The name of the application.</p> <p>Constraint: This name must be unique within your account. If the specified name already exists, the action returns an <code>InvalidParameterValue</code> error.</p>
+    /// <p>The name of the application. Must be unique within your account.</p>
     pub application_name: String,
-    /// <p>Describes the application.</p>
+    /// <p>Your description of the application.</p>
     pub description: Option<String>,
-    /// <p>Specify an application resource lifecycle configuration to prevent your application from accumulating too many versions.</p>
+    /// <p>Specifies an application resource lifecycle configuration to prevent your application from accumulating too many versions.</p>
     pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
     /// <p>Specifies the tags applied to the application.</p> <p>Elastic Beanstalk applies these tags only to the application. Environments that you create in the application don't inherit the tags.</p>
     pub tags: Option<Vec<Tag>>,
@@ -1911,7 +1935,7 @@ pub struct CreateApplicationVersionMessage {
     pub auto_create_application: Option<bool>,
     /// <p>Settings for an AWS CodeBuild build.</p>
     pub build_configuration: Option<BuildConfiguration>,
-    /// <p>Describes this version.</p>
+    /// <p>A description of this application version.</p>
     pub description: Option<String>,
     /// <p><p>Pre-processes and validates the environment manifest (<code>env.yaml</code>) and configuration files (<code>*.config</code> files in the <code>.ebextensions</code> folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p> <p>You must turn processing on for application versions that you create using AWS CodeBuild or AWS CodeCommit. For application versions built from a source bundle in Amazon S3, processing is optional.</p> <note> <p>The <code>Process</code> option validates Elastic Beanstalk configuration files. It doesn&#39;t validate your application&#39;s configuration files, like proxy server or Docker configuration.</p> </note></p>
     pub process: Option<bool>,
@@ -1982,23 +2006,23 @@ impl CreateApplicationVersionMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationTemplateMessage {
-    /// <p>The name of the application to associate with this configuration template. If no application is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>
+    /// <p>The name of the Elastic Beanstalk application to associate with this configuration template.</p>
     pub application_name: String,
-    /// <p>Describes this configuration.</p>
+    /// <p>An optional description for this configuration.</p>
     pub description: Option<String>,
-    /// <p>The ID of the environment used with this configuration template.</p>
+    /// <p>The ID of an environment whose settings you want to use to create the configuration template. You must specify <code>EnvironmentId</code> if you don't specify <code>PlatformArn</code>, <code>SolutionStackName</code>, or <code>SourceConfiguration</code>.</p>
     pub environment_id: Option<String>,
-    /// <p>If specified, AWS Elastic Beanstalk sets the specified configuration option to the requested value. The new value overrides the value obtained from the solution stack or the source configuration template.</p>
+    /// <p>Option values for the Elastic Beanstalk configuration, such as the instance type. If specified, these values override the values obtained from the solution stack or the source configuration template. For a complete list of Elastic Beanstalk configuration options, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html">Option Values</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
-    /// <p>The ARN of the custom platform.</p>
+    /// <p><p>The Amazon Resource Name (ARN) of the custom platform. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html"> Custom Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <note> <p>If you specify <code>PlatformArn</code>, then don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
     pub platform_arn: Option<String>,
-    /// <p>The name of the solution stack used by this configuration. The solution stack specifies the operating system, architecture, and application server for a configuration template. It determines the set of configuration options as well as the possible and default values.</p> <p> Use <a>ListAvailableSolutionStacks</a> to obtain a list of available solution stacks. </p> <p> A solution stack name or a source configuration parameter must be specified, otherwise AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>If a solution stack name is not specified and the source configuration parameter is specified, AWS Elastic Beanstalk uses the same solution stack as the source configuration template.</p>
+    /// <p>The name of an Elastic Beanstalk solution stack (platform version) that this configuration uses. For example, <code>64bit Amazon Linux 2013.09 running Tomcat 7 Java 7</code>. A solution stack specifies the operating system, runtime, and application server for a configuration template. It also determines the set of configuration options as well as the possible and default values. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html">Supported Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <p>You must specify <code>SolutionStackName</code> if you don't specify <code>PlatformArn</code>, <code>EnvironmentId</code>, or <code>SourceConfiguration</code>.</p> <p>Use the <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_ListAvailableSolutionStacks.html"> <code>ListAvailableSolutionStacks</code> </a> API to obtain a list of available solution stacks.</p>
     pub solution_stack_name: Option<String>,
-    /// <p>If specified, AWS Elastic Beanstalk uses the configuration values from the specified configuration template to create a new configuration.</p> <p> Values specified in the <code>OptionSettings</code> parameter of this call overrides any values obtained from the <code>SourceConfiguration</code>. </p> <p> If no configuration template is found, returns an <code>InvalidParameterValue</code> error. </p> <p> Constraint: If both the solution stack name parameter and the source configuration parameters are specified, the solution stack of the source configuration template must match the specified solution stack name or else AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p>
+    /// <p>An Elastic Beanstalk configuration template to base this one on. If specified, Elastic Beanstalk uses the configuration values from the specified configuration template to create a new configuration.</p> <p>Values specified in <code>OptionSettings</code> override any values obtained from the <code>SourceConfiguration</code>.</p> <p>You must specify <code>SourceConfiguration</code> if you don't specify <code>PlatformArn</code>, <code>EnvironmentId</code>, or <code>SolutionStackName</code>.</p> <p>Constraint: If both solution stack name and source configuration are specified, the solution stack of the source configuration template must match the specified solution stack name.</p>
     pub source_configuration: Option<SourceConfiguration>,
     /// <p>Specifies the tags applied to the configuration template.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>The name of the configuration template.</p> <p>Constraint: This name must be unique per application.</p> <p>Default: If a configuration template already exists with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>
+    /// <p>The name of the configuration template.</p> <p>Constraint: This name must be unique per application.</p>
     pub template_name: String,
 }
 
@@ -2052,13 +2076,13 @@ impl CreateConfigurationTemplateMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentMessage {
-    /// <p>The name of the application that contains the version to be deployed.</p> <p> If no application is found with this name, <code>CreateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p>
+    /// <p>The name of the application that is associated with this environment.</p>
     pub application_name: String,
-    /// <p>If specified, the environment attempts to use this value as the prefix for the CNAME. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name.</p>
+    /// <p>If specified, the environment attempts to use this value as the prefix for the CNAME in your Elastic Beanstalk environment URL. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name.</p>
     pub cname_prefix: Option<String>,
-    /// <p>Describes this environment.</p>
+    /// <p>Your description for this environment.</p>
     pub description: Option<String>,
-    /// <p>A unique name for the deployment environment. Used in the application URL.</p> <p>Constraint: Must be from 4 to 40 characters in length. The name can contain only letters, numbers, and hyphens. It cannot start or end with a hyphen. This name must be unique within a region in your account. If the specified name already exists in the region, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If the CNAME parameter is not specified, the environment name becomes part of the CNAME, and therefore part of the visible URL for your application.</p>
+    /// <p>A unique name for the environment.</p> <p>Constraint: Must be from 4 to 40 characters in length. The name can contain only letters, numbers, and hyphens. It can't start or end with a hyphen. This name must be unique within a region in your account. If the specified name already exists in the region, Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>If you don't specify the <code>CNAMEPrefix</code> parameter, the environment name becomes part of the CNAME, and therefore part of the visible URL for your application.</p>
     pub environment_name: Option<String>,
     /// <p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name parameter. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html">Environment Manifest (env.yaml)</a> for details.</p>
     pub group_name: Option<String>,
@@ -2066,17 +2090,17 @@ pub struct CreateEnvironmentMessage {
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     /// <p>A list of custom user-defined configuration options to remove from the configuration set for this new environment.</p>
     pub options_to_remove: Option<Vec<OptionSpecification>>,
-    /// <p>The ARN of the platform.</p>
+    /// <p><p>The Amazon Resource Name (ARN) of the custom platform to use with the environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html"> Custom Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <note> <p>If you specify <code>PlatformArn</code>, don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
     pub platform_arn: Option<String>,
-    /// <p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p> <p>For a list of current solution stacks, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html">Elastic Beanstalk Supported Platforms</a>.</p>
+    /// <p><p>The name of an Elastic Beanstalk solution stack (platform version) to use with the environment. If specified, Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack. For a list of current solution stacks, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html">Elastic Beanstalk Supported Platforms</a> in the <i>AWS Elastic Beanstalk Platforms</i> guide.</p> <note> <p>If you specify <code>SolutionStackName</code>, don&#39;t specify <code>PlatformArn</code> or <code>TemplateName</code>.</p> </note></p>
     pub solution_stack_name: Option<String>,
     /// <p>Specifies the tags applied to resources in the environment.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p> The name of the configuration template to use in deployment. If no configuration template is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>
+    /// <p><p>The name of the Elastic Beanstalk configuration template to use with the environment.</p> <note> <p>If you specify <code>TemplateName</code>, then don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
     pub template_name: Option<String>,
-    /// <p>This specifies the tier to use for creating this environment.</p>
+    /// <p>Specifies the tier to use in creating this environment. The environment tier that you choose determines whether Elastic Beanstalk provisions resources to support a web application that handles HTTP(S) requests or a web application that handles background-processing tasks.</p>
     pub tier: Option<EnvironmentTier>,
-    /// <p>The name of the application version to deploy.</p> <p> If the specified application has no associated application versions, AWS Elastic Beanstalk <code>UpdateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If not specified, AWS Elastic Beanstalk attempts to launch the sample application in the container.</p>
+    /// <p>The name of the application version to deploy.</p> <p>Default: If not specified, Elastic Beanstalk attempts to deploy the sample application.</p>
     pub version_label: Option<String>,
 }
 
@@ -3149,7 +3173,7 @@ pub struct DescribeEventsMessage {
     pub max_records: Option<i64>,
     /// <p>Pagination token. If specified, the events return the next batch of results.</p>
     pub next_token: Option<String>,
-    /// <p>The ARN of the version of the custom platform.</p>
+    /// <p>The ARN of a custom platform version. If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this custom platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk restricts the described events to include only those associated with this request ID.</p>
     pub request_id: Option<String>,
@@ -3304,7 +3328,7 @@ impl DescribeInstancesHealthResultDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlatformVersionRequest {
-    /// <p>The ARN of the version of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
 }
 
@@ -3326,7 +3350,7 @@ impl DescribePlatformVersionRequestSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePlatformVersionResult {
-    /// <p>Detailed information about the version of the platform.</p>
+    /// <p>Detailed information about the platform version.</p>
     pub platform_description: Option<PlatformDescription>,
 }
 
@@ -3435,7 +3459,7 @@ pub struct EnvironmentDescription {
     pub health: Option<String>,
     /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
     pub health_status: Option<String>,
-    /// <p>The ARN of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>The description of the AWS resources used by this environment.</p>
     pub resources: Option<EnvironmentResourcesDescription>,
@@ -4101,7 +4125,7 @@ pub struct EventDescription {
     pub event_date: Option<String>,
     /// <p>The event message.</p>
     pub message: Option<String>,
-    /// <p>The ARN of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>The web service request ID for the activity of this event.</p>
     pub request_id: Option<String>,
@@ -4663,12 +4687,88 @@ impl ListAvailableSolutionStacksResultMessageDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct ListPlatformVersionsRequest {
-    /// <p>List only the platforms where the platform member value relates to one of the supplied values.</p>
-    pub filters: Option<Vec<PlatformFilter>>,
-    /// <p>The maximum number of platform values returned in one call.</p>
+pub struct ListPlatformBranchesRequest {
+    /// <p>Criteria for restricting the resulting list of platform branches. The filter is evaluated as a logical conjunction (AND) of the separate <code>SearchFilter</code> terms.</p> <p>The following list shows valid attribute values for each of the <code>SearchFilter</code> terms. Most operators take a single value. The <code>in</code> and <code>not_in</code> operators can take multiple values.</p> <ul> <li> <p> <code>Attribute = BranchName</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> | <code>begins_with</code> | <code>ends_with</code> | <code>contains</code> | <code>in</code> | <code>not_in</code> </p> </li> </ul> </li> <li> <p> <code>Attribute = LifecycleState</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> | <code>in</code> | <code>not_in</code> </p> </li> <li> <p> <code>Values</code>: <code>beta</code> | <code>supported</code> | <code>deprecated</code> | <code>retired</code> </p> </li> </ul> </li> <li> <p> <code>Attribute = PlatformName</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> | <code>begins_with</code> | <code>ends_with</code> | <code>contains</code> | <code>in</code> | <code>not_in</code> </p> </li> </ul> </li> <li> <p> <code>Attribute = TierType</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> </p> </li> <li> <p> <code>Values</code>: <code>WebServer/Standard</code> | <code>Worker/SQS/HTTP</code> </p> </li> </ul> </li> </ul> <p>Array size: limited to 10 <code>SearchFilter</code> objects.</p> <p>Within each <code>SearchFilter</code> item, the <code>Values</code> array is limited to 10 items.</p>
+    pub filters: Option<Vec<SearchFilter>>,
+    /// <p>The maximum number of platform branch values returned in one call.</p>
     pub max_records: Option<i64>,
-    /// <p>The starting index into the remaining list of platforms. Use the <code>NextToken</code> value from a previous <code>ListPlatformVersion</code> call.</p>
+    /// <p>For a paginated request. Specify a token from a previous response page to retrieve the next response page. All other parameter values must be identical to the ones specified in the initial request.</p> <p>If no <code>NextToken</code> is specified, the first page is retrieved.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `ListPlatformBranchesRequest` contents to a `SignedRequest`.
+struct ListPlatformBranchesRequestSerializer;
+impl ListPlatformBranchesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListPlatformBranchesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.filters {
+            SearchFiltersSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filters"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListPlatformBranchesResult {
+    /// <p>In a paginated request, if this value isn't <code>null</code>, it's the token that you can pass in a subsequent request to get the next response page.</p>
+    pub next_token: Option<String>,
+    /// <p>Summary information about the platform branches.</p>
+    pub platform_branch_summary_list: Option<Vec<PlatformBranchSummary>>,
+}
+
+#[allow(dead_code)]
+struct ListPlatformBranchesResultDeserializer;
+impl ListPlatformBranchesResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListPlatformBranchesResult, XmlParseError> {
+        deserialize_elements::<_, ListPlatformBranchesResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "NextToken" => {
+                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    "PlatformBranchSummaryList" => {
+                        obj.platform_branch_summary_list
+                            .get_or_insert(vec![])
+                            .extend(PlatformBranchSummaryListDeserializer::deserialize(
+                                "PlatformBranchSummaryList",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPlatformVersionsRequest {
+    /// <p>Criteria for restricting the resulting list of platform versions. The filter is interpreted as a logical conjunction (AND) of the separate <code>PlatformFilter</code> terms.</p>
+    pub filters: Option<Vec<PlatformFilter>>,
+    /// <p>The maximum number of platform version values returned in one call.</p>
+    pub max_records: Option<i64>,
+    /// <p>For a paginated request. Specify a token from a previous response page to retrieve the next response page. All other parameter values must be identical to the ones specified in the initial request.</p> <p>If no <code>NextToken</code> is specified, the first page is retrieved.</p>
     pub next_token: Option<String>,
 }
 
@@ -4700,9 +4800,9 @@ impl ListPlatformVersionsRequestSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformVersionsResult {
-    /// <p>The starting index into the remaining list of platforms. if this value is not <code>null</code>, you can use it in a subsequent <code>ListPlatformVersion</code> call. </p>
+    /// <p>In a paginated request, if this value isn't <code>null</code>, it's the token that you can pass in a subsequent request to get the next response page.</p>
     pub next_token: Option<String>,
-    /// <p>Detailed information about the platforms.</p>
+    /// <p>Summary information about the platform versions.</p>
     pub platform_summary_list: Option<Vec<PlatformSummary>>,
 }
 
@@ -4740,7 +4840,7 @@ impl ListPlatformVersionsResultDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
-    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list is requested.</p> <p>Must be the ARN of an Elastic Beanstalk environment.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list is requested.</p> <p>Must be the ARN of an Elastic Beanstalk resource.</p>
     pub resource_arn: String,
 }
 
@@ -5451,6 +5551,96 @@ impl PlatformArnDeserializer {
     }
 }
 #[allow(dead_code)]
+struct PlatformBranchLifecycleStateDeserializer;
+impl PlatformBranchLifecycleStateDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Summary information about a platform branch.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PlatformBranchSummary {
+    /// <p>The name of the platform branch.</p>
+    pub branch_name: Option<String>,
+    /// <p>An ordinal number that designates the order in which platform branches have been added to a platform. This can be helpful, for example, if your code calls the <code>ListPlatformBranches</code> action and then displays a list of platform branches.</p> <p>A larger <code>BranchOrder</code> value designates a newer platform branch within the platform.</p>
+    pub branch_order: Option<i64>,
+    /// <p>The support life cycle state of the platform branch.</p> <p>Possible values: <code>beta</code> | <code>supported</code> | <code>deprecated</code> | <code>retired</code> </p>
+    pub lifecycle_state: Option<String>,
+    /// <p>The name of the platform to which this platform branch belongs.</p>
+    pub platform_name: Option<String>,
+    /// <p>The environment tiers that platform versions in this branch support.</p> <p>Possible values: <code>WebServer/Standard</code> | <code>Worker/SQS/HTTP</code> </p>
+    pub supported_tier_list: Option<Vec<String>>,
+}
+
+#[allow(dead_code)]
+struct PlatformBranchSummaryDeserializer;
+impl PlatformBranchSummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PlatformBranchSummary, XmlParseError> {
+        deserialize_elements::<_, PlatformBranchSummary, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BranchName" => {
+                    obj.branch_name =
+                        Some(BranchNameDeserializer::deserialize("BranchName", stack)?);
+                }
+                "BranchOrder" => {
+                    obj.branch_order =
+                        Some(BranchOrderDeserializer::deserialize("BranchOrder", stack)?);
+                }
+                "LifecycleState" => {
+                    obj.lifecycle_state =
+                        Some(PlatformBranchLifecycleStateDeserializer::deserialize(
+                            "LifecycleState",
+                            stack,
+                        )?);
+                }
+                "PlatformName" => {
+                    obj.platform_name = Some(PlatformNameDeserializer::deserialize(
+                        "PlatformName",
+                        stack,
+                    )?);
+                }
+                "SupportedTierList" => {
+                    obj.supported_tier_list.get_or_insert(vec![]).extend(
+                        SupportedTierListDeserializer::deserialize("SupportedTierList", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct PlatformBranchSummaryListDeserializer;
+impl PlatformBranchSummaryListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PlatformBranchSummary>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PlatformBranchSummaryDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
 struct PlatformCategoryDeserializer;
 impl PlatformCategoryDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -5462,45 +5652,51 @@ impl PlatformCategoryDeserializer {
         Ok(obj)
     }
 }
-/// <p>Detailed information about a platform.</p>
+/// <p>Detailed information about a platform version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformDescription {
-    /// <p>The custom AMIs supported by the platform.</p>
+    /// <p>The custom AMIs supported by the platform version.</p>
     pub custom_ami_list: Option<Vec<CustomAmi>>,
-    /// <p>The date when the platform was created.</p>
+    /// <p>The date when the platform version was created.</p>
     pub date_created: Option<String>,
-    /// <p>The date when the platform was last updated.</p>
+    /// <p>The date when the platform version was last updated.</p>
     pub date_updated: Option<String>,
-    /// <p>The description of the platform.</p>
+    /// <p>The description of the platform version.</p>
     pub description: Option<String>,
-    /// <p>The frameworks supported by the platform.</p>
+    /// <p>The frameworks supported by the platform version.</p>
     pub frameworks: Option<Vec<PlatformFramework>>,
-    /// <p>Information about the maintainer of the platform.</p>
+    /// <p>Information about the maintainer of the platform version.</p>
     pub maintainer: Option<String>,
-    /// <p>The operating system used by the platform.</p>
+    /// <p>The operating system used by the platform version.</p>
     pub operating_system_name: Option<String>,
-    /// <p>The version of the operating system used by the platform.</p>
+    /// <p>The version of the operating system used by the platform version.</p>
     pub operating_system_version: Option<String>,
-    /// <p>The ARN of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
-    /// <p>The category of the platform.</p>
+    /// <p>The state of the platform version's branch in its lifecycle.</p> <p>Possible values: <code>Beta</code> | <code>Supported</code> | <code>Deprecated</code> | <code>Retired</code> </p>
+    pub platform_branch_lifecycle_state: Option<String>,
+    /// <p>The platform branch to which the platform version belongs.</p>
+    pub platform_branch_name: Option<String>,
+    /// <p>The category of the platform version.</p>
     pub platform_category: Option<String>,
-    /// <p>The name of the platform.</p>
+    /// <p>The state of the platform version in its lifecycle.</p> <p>Possible values: <code>Recommended</code> | <code>null</code> </p> <p>If a null value is returned, the platform version isn't the recommended one for its branch. Each platform branch has a single recommended platform version, typically the most recent one.</p>
+    pub platform_lifecycle_state: Option<String>,
+    /// <p>The name of the platform version.</p>
     pub platform_name: Option<String>,
-    /// <p>The AWS account ID of the person who created the platform.</p>
+    /// <p>The AWS account ID of the person who created the platform version.</p>
     pub platform_owner: Option<String>,
-    /// <p>The status of the platform.</p>
+    /// <p>The status of the platform version.</p>
     pub platform_status: Option<String>,
-    /// <p>The version of the platform.</p>
+    /// <p>The version of the platform version.</p>
     pub platform_version: Option<String>,
-    /// <p>The programming languages supported by the platform.</p>
+    /// <p>The programming languages supported by the platform version.</p>
     pub programming_languages: Option<Vec<PlatformProgrammingLanguage>>,
-    /// <p>The name of the solution stack used by the platform.</p>
+    /// <p>The name of the solution stack used by the platform version.</p>
     pub solution_stack_name: Option<String>,
-    /// <p>The additions supported by the platform.</p>
+    /// <p>The additions supported by the platform version.</p>
     pub supported_addon_list: Option<Vec<String>>,
-    /// <p>The tiers supported by the platform.</p>
+    /// <p>The tiers supported by the platform version.</p>
     pub supported_tier_list: Option<Vec<String>>,
 }
 
@@ -5557,11 +5753,31 @@ impl PlatformDescriptionDeserializer {
                     obj.platform_arn =
                         Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
                 }
+                "PlatformBranchLifecycleState" => {
+                    obj.platform_branch_lifecycle_state =
+                        Some(PlatformBranchLifecycleStateDeserializer::deserialize(
+                            "PlatformBranchLifecycleState",
+                            stack,
+                        )?);
+                }
+                "PlatformBranchName" => {
+                    obj.platform_branch_name = Some(BranchNameDeserializer::deserialize(
+                        "PlatformBranchName",
+                        stack,
+                    )?);
+                }
                 "PlatformCategory" => {
                     obj.platform_category = Some(PlatformCategoryDeserializer::deserialize(
                         "PlatformCategory",
                         stack,
                     )?);
+                }
+                "PlatformLifecycleState" => {
+                    obj.platform_lifecycle_state =
+                        Some(PlatformLifecycleStateDeserializer::deserialize(
+                            "PlatformLifecycleState",
+                            stack,
+                        )?);
                 }
                 "PlatformName" => {
                     obj.platform_name = Some(PlatformNameDeserializer::deserialize(
@@ -5617,15 +5833,15 @@ impl PlatformDescriptionDeserializer {
         })
     }
 }
-/// <p>Specify criteria to restrict the results when listing custom platforms.</p> <p>The filter is evaluated as the expression:</p> <p> <code>Type</code> <code>Operator</code> <code>Values[i]</code> </p>
+/// <p>Describes criteria to restrict the results when listing platform versions.</p> <p>The filter is evaluated as follows: <code>Type Operator Values[1]</code> </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PlatformFilter {
-    /// <p>The operator to apply to the <code>Type</code> with each of the <code>Values</code>.</p> <p> Valid Values: <code>=</code> (equal to) | <code>!=</code> (not equal to) | <code>&lt;</code> (less than) | <code>&lt;=</code> (less than or equal to) | <code>&gt;</code> (greater than) | <code>&gt;=</code> (greater than or equal to) | <code>contains</code> | <code>begins_with</code> | <code>ends_with</code> </p>
+    /// <p>The operator to apply to the <code>Type</code> with each of the <code>Values</code>.</p> <p>Valid values: <code>=</code> | <code>!=</code> | <code>&lt;</code> | <code>&lt;=</code> | <code>&gt;</code> | <code>&gt;=</code> | <code>contains</code> | <code>begins_with</code> | <code>ends_with</code> </p>
     pub operator: Option<String>,
-    /// <p>The custom platform attribute to which the filter values are applied.</p> <p>Valid Values: <code>PlatformName</code> | <code>PlatformVersion</code> | <code>PlatformStatus</code> | <code>PlatformOwner</code> </p>
+    /// <p>The platform version attribute to which the filter values are applied.</p> <p>Valid values: <code>PlatformName</code> | <code>PlatformVersion</code> | <code>PlatformStatus</code> | <code>PlatformBranchName</code> | <code>PlatformLifecycleState</code> | <code>PlatformOwner</code> | <code>SupportedTier</code> | <code>SupportedAddon</code> | <code>ProgrammingLanguageName</code> | <code>OperatingSystemName</code> </p>
     pub type_: Option<String>,
-    /// <p>The list of values applied to the custom platform attribute.</p>
+    /// <p><p>The list of values applied to the filtering platform version attribute. Only one value is supported for all current operators.</p> <p>The following list shows valid filter values for some filter attributes.</p> <ul> <li> <p> <code>PlatformStatus</code>: <code>Creating</code> | <code>Failed</code> | <code>Ready</code> | <code>Deleting</code> | <code>Deleted</code> </p> </li> <li> <p> <code>PlatformLifecycleState</code>: <code>recommended</code> </p> </li> <li> <p> <code>SupportedTier</code>: <code>WebServer/Standard</code> | <code>Worker/SQS/HTTP</code> </p> </li> <li> <p> <code>SupportedAddon</code>: <code>Log/S3</code> | <code>Monitoring/Healthd</code> | <code>WorkerDaemon/SQSD</code> </p> </li> </ul></p>
     pub values: Option<Vec<String>>,
 }
 
@@ -5676,7 +5892,7 @@ impl PlatformFiltersSerializer {
     }
 }
 
-/// <p>A framework supported by the custom platform.</p>
+/// <p>A framework supported by the platform.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformFramework {
@@ -5724,6 +5940,18 @@ impl PlatformFrameworksDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[allow(dead_code)]
+struct PlatformLifecycleStateDeserializer;
+impl PlatformLifecycleStateDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 #[allow(dead_code)]
@@ -5818,25 +6046,33 @@ impl PlatformStatusDeserializer {
         Ok(obj)
     }
 }
-/// <p>Detailed information about a platform.</p>
+/// <p>Summary information about a platform version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformSummary {
-    /// <p>The operating system used by the platform.</p>
+    /// <p>The operating system used by the platform version.</p>
     pub operating_system_name: Option<String>,
-    /// <p>The version of the operating system used by the platform.</p>
+    /// <p>The version of the operating system used by the platform version.</p>
     pub operating_system_version: Option<String>,
-    /// <p>The ARN of the platform.</p>
+    /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
-    /// <p>The category of platform.</p>
+    /// <p>The state of the platform version's branch in its lifecycle.</p> <p>Possible values: <code>beta</code> | <code>supported</code> | <code>deprecated</code> | <code>retired</code> </p>
+    pub platform_branch_lifecycle_state: Option<String>,
+    /// <p>The platform branch to which the platform version belongs.</p>
+    pub platform_branch_name: Option<String>,
+    /// <p>The category of platform version.</p>
     pub platform_category: Option<String>,
-    /// <p>The AWS account ID of the person who created the platform.</p>
+    /// <p>The state of the platform version in its lifecycle.</p> <p>Possible values: <code>recommended</code> | empty</p> <p>If an empty value is returned, the platform version is supported but isn't the recommended one for its branch.</p>
+    pub platform_lifecycle_state: Option<String>,
+    /// <p>The AWS account ID of the person who created the platform version.</p>
     pub platform_owner: Option<String>,
-    /// <p>The status of the platform. You can create an environment from the platform once it is ready.</p>
+    /// <p>The status of the platform version. You can create an environment from the platform version once it is ready.</p>
     pub platform_status: Option<String>,
-    /// <p>The additions associated with the platform.</p>
+    /// <p>The version string of the platform version.</p>
+    pub platform_version: Option<String>,
+    /// <p>The additions associated with the platform version.</p>
     pub supported_addon_list: Option<Vec<String>>,
-    /// <p>The tiers in which the platform runs.</p>
+    /// <p>The tiers in which the platform version runs.</p>
     pub supported_tier_list: Option<Vec<String>>,
 }
 
@@ -5867,11 +6103,31 @@ impl PlatformSummaryDeserializer {
                     obj.platform_arn =
                         Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
                 }
+                "PlatformBranchLifecycleState" => {
+                    obj.platform_branch_lifecycle_state =
+                        Some(PlatformBranchLifecycleStateDeserializer::deserialize(
+                            "PlatformBranchLifecycleState",
+                            stack,
+                        )?);
+                }
+                "PlatformBranchName" => {
+                    obj.platform_branch_name = Some(BranchNameDeserializer::deserialize(
+                        "PlatformBranchName",
+                        stack,
+                    )?);
+                }
                 "PlatformCategory" => {
                     obj.platform_category = Some(PlatformCategoryDeserializer::deserialize(
                         "PlatformCategory",
                         stack,
                     )?);
+                }
+                "PlatformLifecycleState" => {
+                    obj.platform_lifecycle_state =
+                        Some(PlatformLifecycleStateDeserializer::deserialize(
+                            "PlatformLifecycleState",
+                            stack,
+                        )?);
                 }
                 "PlatformOwner" => {
                     obj.platform_owner = Some(PlatformOwnerDeserializer::deserialize(
@@ -5882,6 +6138,12 @@ impl PlatformSummaryDeserializer {
                 "PlatformStatus" => {
                     obj.platform_status = Some(PlatformStatusDeserializer::deserialize(
                         "PlatformStatus",
+                        stack,
+                    )?);
+                }
+                "PlatformVersion" => {
+                    obj.platform_version = Some(PlatformVersionDeserializer::deserialize(
+                        "PlatformVersion",
                         stack,
                     )?);
                 }
@@ -6226,7 +6488,7 @@ impl ResourceQuotasDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceTagsDescriptionMessage {
-    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list was requested.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource for which a tag list was requested.</p>
     pub resource_arn: Option<String>,
     /// <p>A list of tag key-value pairs.</p>
     pub resource_tags: Option<Vec<Tag>>,
@@ -6444,6 +6706,65 @@ impl SampleTimestampDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes criteria to restrict a list of results.</p> <p>For operators that apply a single value to the attribute, the filter is evaluated as follows: <code>Attribute Operator Values[1]</code> </p> <p>Some operators, e.g. <code>in</code>, can apply multiple values. In this case, the filter is evaluated as a logical union (OR) of applications of the operator to the attribute with each one of the values: <code>(Attribute Operator Values[1]) OR (Attribute Operator Values[2]) OR ...</code> </p> <p>The valid values for attributes of <code>SearchFilter</code> depend on the API action. For valid values, see the reference page for the API action you're calling that takes a <code>SearchFilter</code> parameter.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SearchFilter {
+    /// <p>The result attribute to which the filter values are applied. Valid values vary by API action.</p>
+    pub attribute: Option<String>,
+    /// <p>The operator to apply to the <code>Attribute</code> with each of the <code>Values</code>. Valid values vary by <code>Attribute</code>.</p>
+    pub operator: Option<String>,
+    /// <p>The list of values applied to the <code>Attribute</code> and <code>Operator</code> attributes. Number of values and valid values vary by <code>Attribute</code>.</p>
+    pub values: Option<Vec<String>>,
+}
+
+/// Serialize `SearchFilter` contents to a `SignedRequest`.
+struct SearchFilterSerializer;
+impl SearchFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SearchFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.attribute {
+            params.put(&format!("{}{}", prefix, "Attribute"), &field_value);
+        }
+        if let Some(ref field_value) = obj.operator {
+            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
+        }
+        if let Some(ref field_value) = obj.values {
+            SearchFilterValuesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// Serialize `SearchFilterValues` contents to a `SignedRequest`.
+struct SearchFilterValuesSerializer;
+impl SearchFilterValuesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+/// Serialize `SearchFilters` contents to a `SignedRequest`.
+struct SearchFiltersSerializer;
+impl SearchFiltersSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<SearchFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            SearchFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 /// <p>Detailed health information about an Amazon EC2 instance in your Elastic Beanstalk environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -6663,7 +6984,7 @@ impl SourceBuildInformationSerializer {
     }
 }
 
-/// <p>A specification for an environment configuration</p>
+/// <p>A specification for an environment configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceConfiguration {
@@ -7420,7 +7741,7 @@ impl UpdateEnvironmentMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagsForResourceMessage {
-    /// <p>The Amazon Resource Name (ARN) of the resouce to be updated.</p> <p>Must be the ARN of an Elastic Beanstalk environment.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resouce to be updated.</p> <p>Must be the ARN of an Elastic Beanstalk resource.</p>
     pub resource_arn: String,
     /// <p>A list of tags to add or update.</p> <p>If a key of an existing tag is added, the tag's value is updated.</p>
     pub tags_to_add: Option<Vec<Tag>>,
@@ -9182,6 +9503,40 @@ impl fmt::Display for ListAvailableSolutionStacksError {
     }
 }
 impl Error for ListAvailableSolutionStacksError {}
+/// Errors returned by ListPlatformBranches
+#[derive(Debug, PartialEq)]
+pub enum ListPlatformBranchesError {}
+
+impl ListPlatformBranchesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPlatformBranchesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListPlatformBranchesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListPlatformBranchesError {}
 /// Errors returned by ListPlatformVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPlatformVersionsError {
@@ -9919,25 +10274,25 @@ pub trait ElasticBeanstalk {
         input: ComposeEnvironmentsMessage,
     ) -> Result<EnvironmentDescriptionsMessage, RusotoError<ComposeEnvironmentsError>>;
 
-    /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
+    /// <p>Creates an application that has one configuration template named <code>default</code> and no application versions.</p>
     async fn create_application(
         &self,
         input: CreateApplicationMessage,
     ) -> Result<ApplicationDescriptionMessage, RusotoError<CreateApplicationError>>;
 
-    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
+    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>After you create an application version with a specified Amazon S3 bucket and key location, you can&#39;t change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     async fn create_application_version(
         &self,
         input: CreateApplicationVersionMessage,
     ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<CreateApplicationVersionError>>;
 
-    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
+    /// <p><p>Creates an AWS Elastic Beanstalk configuration template, associated with a specific Elastic Beanstalk application. You define application configuration settings in a configuration template. You can then use the configuration template to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     async fn create_configuration_template(
         &self,
         input: CreateConfigurationTemplateMessage,
     ) -> Result<ConfigurationSettingsDescription, RusotoError<CreateConfigurationTemplateError>>;
 
-    /// <p>Launches an environment for the specified application using the specified configuration.</p>
+    /// <p>Launches an AWS Elastic Beanstalk environment for the specified application using the specified configuration.</p>
     async fn create_environment(
         &self,
         input: CreateEnvironmentMessage,
@@ -10064,7 +10419,7 @@ pub trait ElasticBeanstalk {
         input: DescribeInstancesHealthRequest,
     ) -> Result<DescribeInstancesHealthResult, RusotoError<DescribeInstancesHealthError>>;
 
-    /// <p>Describes the version of the platform.</p>
+    /// <p>Describes a platform version. Provides full details. Compare to <a>ListPlatformVersions</a>, which provides summary information about a list of platform versions.</p> <p>For definitions of platform version and other platform-related terms, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-glossary.html">AWS Elastic Beanstalk Platforms Glossary</a>.</p>
     async fn describe_platform_version(
         &self,
         input: DescribePlatformVersionRequest,
@@ -10078,13 +10433,19 @@ pub trait ElasticBeanstalk {
         RusotoError<ListAvailableSolutionStacksError>,
     >;
 
-    /// <p>Lists the available platforms.</p>
+    /// <p>Lists the platform branches available for your account in an AWS Region. Provides summary information about each platform branch.</p> <p>For definitions of platform branch and other platform-related terms, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-glossary.html">AWS Elastic Beanstalk Platforms Glossary</a>.</p>
+    async fn list_platform_branches(
+        &self,
+        input: ListPlatformBranchesRequest,
+    ) -> Result<ListPlatformBranchesResult, RusotoError<ListPlatformBranchesError>>;
+
+    /// <p>Lists the platform versions available for your account in an AWS Region. Provides summary information about each platform version. Compare to <a>DescribePlatformVersion</a>, which provides full details about a single platform version.</p> <p>For definitions of platform version and other platform-related terms, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-glossary.html">AWS Elastic Beanstalk Platforms Glossary</a>.</p>
     async fn list_platform_versions(
         &self,
         input: ListPlatformVersionsRequest,
     ) -> Result<ListPlatformVersionsResult, RusotoError<ListPlatformVersionsError>>;
 
-    /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
+    /// <p>Return the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Elastic Beanstalk supports tagging of all of its resources. For details about resource tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/applications-tagging-resources.html">Tagging Application Resources</a>.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
@@ -10159,7 +10520,7 @@ pub trait ElasticBeanstalk {
         input: UpdateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, RusotoError<UpdateEnvironmentError>>;
 
-    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
+    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Elastic Beanstalk supports tagging of all of its resources. For details about resource tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/applications-tagging-resources.html">Tagging Application Resources</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     async fn update_tags_for_resource(
         &self,
         input: UpdateTagsForResourceMessage,
@@ -10387,7 +10748,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
+    /// <p>Creates an application that has one configuration template named <code>default</code> and no application versions.</p>
     async fn create_application(
         &self,
         input: CreateApplicationMessage,
@@ -10435,7 +10796,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
+    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>After you create an application version with a specified Amazon S3 bucket and key location, you can&#39;t change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     async fn create_application_version(
         &self,
         input: CreateApplicationVersionMessage,
@@ -10484,7 +10845,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
+    /// <p><p>Creates an AWS Elastic Beanstalk configuration template, associated with a specific Elastic Beanstalk application. You define application configuration settings in a configuration template. You can then use the configuration template to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     async fn create_configuration_template(
         &self,
         input: CreateConfigurationTemplateMessage,
@@ -10533,7 +10894,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p>Launches an environment for the specified application using the specified configuration.</p>
+    /// <p>Launches an AWS Elastic Beanstalk environment for the specified application using the specified configuration.</p>
     async fn create_environment(
         &self,
         input: CreateEnvironmentMessage,
@@ -11431,7 +11792,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p>Describes the version of the platform.</p>
+    /// <p>Describes a platform version. Provides full details. Compare to <a>ListPlatformVersions</a>, which provides summary information about a list of platform versions.</p> <p>For definitions of platform version and other platform-related terms, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-glossary.html">AWS Elastic Beanstalk Platforms Glossary</a>.</p>
     async fn describe_platform_version(
         &self,
         input: DescribePlatformVersionRequest,
@@ -11529,7 +11890,55 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p>Lists the available platforms.</p>
+    /// <p>Lists the platform branches available for your account in an AWS Region. Provides summary information about each platform branch.</p> <p>For definitions of platform branch and other platform-related terms, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-glossary.html">AWS Elastic Beanstalk Platforms Glossary</a>.</p>
+    async fn list_platform_branches(
+        &self,
+        input: ListPlatformBranchesRequest,
+    ) -> Result<ListPlatformBranchesResult, RusotoError<ListPlatformBranchesError>> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListPlatformBranches");
+        params.put("Version", "2010-12-01");
+        ListPlatformBranchesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ListPlatformBranchesError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = ListPlatformBranchesResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ListPlatformBranchesResultDeserializer::deserialize(
+                "ListPlatformBranchesResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Lists the platform versions available for your account in an AWS Region. Provides summary information about each platform version. Compare to <a>DescribePlatformVersion</a>, which provides full details about a single platform version.</p> <p>For definitions of platform version and other platform-related terms, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-glossary.html">AWS Elastic Beanstalk Platforms Glossary</a>.</p>
     async fn list_platform_versions(
         &self,
         input: ListPlatformVersionsRequest,
@@ -11577,7 +11986,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
+    /// <p>Return the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Elastic Beanstalk supports tagging of all of its resources. For details about resource tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/applications-tagging-resources.html">Tagging Application Resources</a>.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceMessage,
@@ -12081,7 +12490,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         Ok(result)
     }
 
-    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
+    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Elastic Beanstalk supports tagging of all of its resources. For details about resource tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/applications-tagging-resources.html">Tagging Application Resources</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     async fn update_tags_for_resource(
         &self,
         input: UpdateTagsForResourceMessage,

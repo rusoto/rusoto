@@ -39,6 +39,19 @@ pub struct BrokerEBSVolumeInfo {
     pub volume_size_gb: i64,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BrokerLogs {
+    #[serde(rename = "CloudWatchLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logs: Option<CloudWatchLogs>,
+    #[serde(rename = "Firehose")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firehose: Option<Firehose>,
+    #[serde(rename = "S3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3: Option<S3>,
+}
+
 /// <pre><code>        &lt;p&gt;Describes the setup to be used for Kafka broker nodes in the cluster.&lt;/p&gt;
 /// </code></pre>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -141,6 +154,15 @@ pub struct ClientAuthentication {
     pub tls: Option<Tls>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CloudWatchLogs {
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+    #[serde(rename = "LogGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group: Option<String>,
+}
+
 /// <pre><code>        &lt;p&gt;Returns information about a cluster.&lt;/p&gt;
 /// </code></pre>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -196,6 +218,9 @@ pub struct ClusterInfo {
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_monitoring: Option<String>,
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
     /// <pre><code>        &lt;p&gt;The number of broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "NumberOfBrokerNodes")]
@@ -211,6 +236,9 @@ pub struct ClusterInfo {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    #[serde(rename = "StateInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_info: Option<StateInfo>,
     /// <pre><code>        &lt;p&gt;Tags attached to the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "Tags")]
@@ -380,6 +408,9 @@ pub struct CreateClusterRequest {
     /// </code></pre>
     #[serde(rename = "KafkaVersion")]
     pub kafka_version: String,
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
     /// <pre><code>        &lt;p&gt;The number of broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "NumberOfBrokerNodes")]
@@ -707,6 +738,15 @@ pub struct ErrorInfo {
     pub error_string: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Firehose {
+    #[serde(rename = "DeliveryStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_stream: Option<String>,
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBootstrapBrokersRequest {
@@ -751,6 +791,17 @@ pub struct JmxExporterInfo {
     /// </code></pre>
     #[serde(rename = "EnabledInBroker")]
     pub enabled_in_broker: bool,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct KafkaVersion {
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -894,6 +945,32 @@ pub struct ListConfigurationsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListKafkaVersionsRequest {
+    /// <pre><code>        &lt;p&gt;The maximum number of results to return in the response. If there are more results, the response includes a NextToken parameter.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <pre><code>        &lt;p&gt;The paginated results marker. When the result of the operation is truncated, the call returns NextToken in the response. To get the next batch, provide this token in your next request.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListKafkaVersionsResponse {
+    #[serde(rename = "KafkaVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_versions: Option<Vec<KafkaVersion>>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNodesRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
     /// </code></pre>
@@ -947,6 +1024,12 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LoggingInfo {
+    #[serde(rename = "BrokerLogs")]
+    pub broker_logs: BrokerLogs,
+}
+
 /// <pre><code>        &lt;p&gt;Information about cluster attributes that can be updated via update APIs.&lt;/p&gt;
 /// </code></pre>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -967,6 +1050,9 @@ pub struct MutableClusterInfo {
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_monitoring: Option<String>,
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
     /// <pre><code>        &lt;p&gt;The number of broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "NumberOfBrokerNodes")]
@@ -1092,6 +1178,29 @@ pub struct PrometheusInfo {
     #[serde(rename = "NodeExporter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_exporter: Option<NodeExporterInfo>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3 {
+    #[serde(rename = "Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+    #[serde(rename = "Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StateInfo {
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
 }
 
 /// <pre><code>        &lt;p&gt;Contains information about storage volumes attached to MSK broker nodes.&lt;/p&gt;
@@ -1274,6 +1383,9 @@ pub struct UpdateMonitoringRequest {
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_monitoring: Option<String>,
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging_info: Option<LoggingInfo>,
     /// <pre><code>        &lt;p&gt;The settings for open monitoring.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "OpenMonitoring")]
@@ -2118,6 +2230,60 @@ impl fmt::Display for ListConfigurationsError {
     }
 }
 impl Error for ListConfigurationsError {}
+/// Errors returned by ListKafkaVersions
+#[derive(Debug, PartialEq)]
+pub enum ListKafkaVersionsError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl ListKafkaVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKafkaVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListKafkaVersionsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListKafkaVersionsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListKafkaVersionsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListKafkaVersionsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListKafkaVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListKafkaVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListKafkaVersionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListKafkaVersionsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListKafkaVersionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListKafkaVersionsError {}
 /// Errors returned by ListNodes
 #[derive(Debug, PartialEq)]
 pub enum ListNodesError {
@@ -2666,6 +2832,13 @@ pub trait Kafka {
         input: ListConfigurationsRequest,
     ) -> Result<ListConfigurationsResponse, RusotoError<ListConfigurationsError>>;
 
+    /// <pre><code>        &lt;p&gt;Returns a list of Kafka versions.&lt;/p&gt;
+    /// </code></pre>
+    async fn list_kafka_versions(
+        &self,
+        input: ListKafkaVersionsRequest,
+    ) -> Result<ListKafkaVersionsResponse, RusotoError<ListKafkaVersionsError>>;
+
     /// <pre><code>        &lt;p&gt;Returns a list of the broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
     async fn list_nodes(
@@ -3169,6 +3342,43 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListConfigurationsError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Returns a list of Kafka versions.&lt;/p&gt;
+    /// </code></pre>
+    async fn list_kafka_versions(
+        &self,
+        input: ListKafkaVersionsRequest,
+    ) -> Result<ListKafkaVersionsResponse, RusotoError<ListKafkaVersionsError>> {
+        let request_uri = "/v1/kafka-versions";
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListKafkaVersionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListKafkaVersionsError::from_response(response))
         }
     }
 

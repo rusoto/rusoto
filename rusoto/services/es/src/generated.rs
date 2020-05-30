@@ -75,6 +75,72 @@ pub struct AdvancedOptionsStatus {
     pub status: OptionStatus,
 }
 
+/// <p>Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AdvancedSecurityOptions {
+    /// <p>True if advanced security is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>True if the internal user database is enabled.</p>
+    #[serde(rename = "InternalUserDatabaseEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub internal_user_database_enabled: Option<bool>,
+}
+
+/// <p>Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled, master username and password (if internal database is enabled), and master user ARN (if IAM is enabled).</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AdvancedSecurityOptionsInput {
+    /// <p>True if advanced security is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>True if the internal user database is enabled.</p>
+    #[serde(rename = "InternalUserDatabaseEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub internal_user_database_enabled: Option<bool>,
+    /// <p>Credentials for the master user: username and password, ARN, or both.</p>
+    #[serde(rename = "MasterUserOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_options: Option<MasterUserOptions>,
+}
+
+/// <p> Specifies the status of advanced security options for the specified Elasticsearch domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AdvancedSecurityOptionsStatus {
+    /// <p> Specifies advanced security options for the specified Elasticsearch domain.</p>
+    #[serde(rename = "Options")]
+    pub options: AdvancedSecurityOptions,
+    /// <p> Status of the advanced security options for the specified Elasticsearch domain.</p>
+    #[serde(rename = "Status")]
+    pub status: OptionStatus,
+}
+
+/// <p> Container for request parameters to <code> <a>AssociatePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociatePackageRequest {
+    /// <p>Name of the domain that you want to associate the package with.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>Internal ID of the package that you want to associate with a domain. Use <code>DescribePackages</code> to find this value.</p>
+    #[serde(rename = "PackageID")]
+    pub package_id: String,
+}
+
+/// <p> Container for response returned by <code> <a>AssociatePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociatePackageResponse {
+    /// <p><code>DomainPackageDetails</code></p>
+    #[serde(rename = "DomainPackageDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_package_details: Option<DomainPackageDetails>,
+}
+
 /// <p>Container for the parameters to the <code><a>CancelElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to cancel a service software update on.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -151,6 +217,10 @@ pub struct CreateElasticsearchDomainRequest {
     #[serde(rename = "AdvancedOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_options: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies advanced security options.</p>
+    #[serde(rename = "AdvancedSecurityOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_security_options: Option<AdvancedSecurityOptionsInput>,
     /// <p>Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -206,6 +276,35 @@ pub struct CreateElasticsearchDomainResponse {
     pub domain_status: Option<ElasticsearchDomainStatus>,
 }
 
+/// <p> Container for request parameters to <code> <a>CreatePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreatePackageRequest {
+    /// <p>Description of the package.</p>
+    #[serde(rename = "PackageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_description: Option<String>,
+    /// <p>Unique identifier for the package.</p>
+    #[serde(rename = "PackageName")]
+    pub package_name: String,
+    /// <p>The customer S3 location <code>PackageSource</code> for importing the package.</p>
+    #[serde(rename = "PackageSource")]
+    pub package_source: PackageSource,
+    /// <p>Type of package. Currently supports only TXT-DICTIONARY.</p>
+    #[serde(rename = "PackageType")]
+    pub package_type: String,
+}
+
+/// <p> Container for response returned by <code> <a>CreatePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreatePackageResponse {
+    /// <p>Information about the package <code>PackageDetails</code>.</p>
+    #[serde(rename = "PackageDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_details: Option<PackageDetails>,
+}
+
 /// <p>Container for the parameters to the <code><a>DeleteElasticsearchDomain</a></code> operation. Specifies the name of the Elasticsearch domain that you want to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -223,6 +322,25 @@ pub struct DeleteElasticsearchDomainResponse {
     #[serde(rename = "DomainStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_status: Option<ElasticsearchDomainStatus>,
+}
+
+/// <p> Container for request parameters to <code> <a>DeletePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeletePackageRequest {
+    /// <p>Internal ID of the package that you want to delete. Use <code>DescribePackages</code> to find this value.</p>
+    #[serde(rename = "PackageID")]
+    pub package_id: String,
+}
+
+/// <p> Container for response parameters to <code> <a>DeletePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeletePackageResponse {
+    /// <p><code>PackageDetails</code></p>
+    #[serde(rename = "PackageDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_details: Option<PackageDetails>,
 }
 
 /// <p> Container for the parameters to the <code>DescribeElasticsearchDomainConfig</code> operation. Specifies the domain name for which you want configuration information.</p>
@@ -304,6 +422,51 @@ pub struct DescribeElasticsearchInstanceTypeLimitsResponse {
     pub limits_by_role: Option<::std::collections::HashMap<String, Limits>>,
 }
 
+/// <p>Filter to apply in <code>DescribePackage</code> response.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePackagesFilter {
+    /// <p>Any field from <code>PackageDetails</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A list of values for the specified field.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<Vec<String>>,
+}
+
+/// <p> Container for request parameters to <code> <a>DescribePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePackagesRequest {
+    /// <p>Only returns packages that match the <code>DescribePackagesFilterList</code> values.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<DescribePackagesFilter>>,
+    /// <p>Limits results to a maximum number of packages.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Used for pagination. Only necessary if a previous API call includes a non-null NextToken value. If provided, returns results for the next page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Container for response returned by <code> <a>DescribePackages</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribePackagesResponse {
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>List of <code>PackageDetails</code> objects.</p>
+    #[serde(rename = "PackageDetailsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_details_list: Option<Vec<PackageDetails>>,
+}
+
 /// <p>Container for parameters to <code>DescribeReservedElasticsearchInstanceOfferings</code></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -369,6 +532,28 @@ pub struct DescribeReservedElasticsearchInstancesResponse {
     pub reserved_elasticsearch_instances: Option<Vec<ReservedElasticsearchInstance>>,
 }
 
+/// <p> Container for request parameters to <code> <a>DissociatePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DissociatePackageRequest {
+    /// <p>Name of the domain that you want to associate the package with.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>Internal ID of the package that you want to associate with a domain. Use <code>DescribePackages</code> to find this value.</p>
+    #[serde(rename = "PackageID")]
+    pub package_id: String,
+}
+
+/// <p> Container for response returned by <code> <a>DissociatePackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DissociatePackageResponse {
+    /// <p><code>DomainPackageDetails</code></p>
+    #[serde(rename = "DomainPackageDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_package_details: Option<DomainPackageDetails>,
+}
+
 /// <p>Options to configure endpoint for the Elasticsearch domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomainEndpointOptions {
@@ -401,6 +586,44 @@ pub struct DomainInfo {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+}
+
+/// <p>Information on a package that is associated with a domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DomainPackageDetails {
+    /// <p>Name of the domain you've associated a package with.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>State of the association. Values are ASSOCIATING/ASSOCIATION_FAILED/ACTIVE/DISSOCIATING/DISSOCIATION_FAILED.</p>
+    #[serde(rename = "DomainPackageStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_package_status: Option<String>,
+    /// <p>Additional information if the package is in an error state. Null otherwise.</p>
+    #[serde(rename = "ErrorDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_details: Option<ErrorDetails>,
+    /// <p>Timestamp of the most-recent update to the association status.</p>
+    #[serde(rename = "LastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated: Option<f64>,
+    /// <p>Internal ID of the package.</p>
+    #[serde(rename = "PackageID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_id: Option<String>,
+    /// <p>User specified name of the package.</p>
+    #[serde(rename = "PackageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_name: Option<String>,
+    /// <p>Currently supports only TXT-DICTIONARY.</p>
+    #[serde(rename = "PackageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_type: Option<String>,
+    /// <p>The relative path on Amazon ES nodes, which can be used as synonym_path when the package is synonym file.</p>
+    #[serde(rename = "ReferencePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_path: Option<String>,
 }
 
 /// <p>Options to enable, disable, and specify the properties of EBS storage volumes. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs" target="_blank"> Configuring EBS-based Storage</a>.</p>
@@ -505,6 +728,10 @@ pub struct ElasticsearchDomainConfig {
     #[serde(rename = "AdvancedOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_options: Option<AdvancedOptionsStatus>,
+    /// <p>Specifies <code>AdvancedSecurityOptions</code> for the domain. </p>
+    #[serde(rename = "AdvancedSecurityOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_security_options: Option<AdvancedSecurityOptionsStatus>,
     /// <p>The <code>CognitoOptions</code> for the specified domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -562,6 +789,10 @@ pub struct ElasticsearchDomainStatus {
     #[serde(rename = "AdvancedOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_options: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The current status of the Elasticsearch domain's advanced security options.</p>
+    #[serde(rename = "AdvancedSecurityOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_security_options: Option<AdvancedSecurityOptions>,
     /// <p>The <code>CognitoOptions</code> for the specified domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -671,6 +902,17 @@ pub struct EncryptionAtRestOptionsStatus {
     /// <p> Specifies the status of the Encryption At Rest options for the specified Elasticsearch domain.</p>
     #[serde(rename = "Status")]
     pub status: OptionStatus,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ErrorDetails {
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    #[serde(rename = "ErrorType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_type: Option<String>,
 }
 
 /// <p> Container for request parameters to <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
@@ -794,6 +1036,36 @@ pub struct ListDomainNamesResponse {
     pub domain_names: Option<Vec<DomainInfo>>,
 }
 
+/// <p> Container for request parameters to <code> <a>ListDomainsForPackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDomainsForPackageRequest {
+    /// <p>Limits results to a maximum number of domains.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Used for pagination. Only necessary if a previous API call includes a non-null NextToken value. If provided, returns results for the next page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The package for which to list domains.</p>
+    #[serde(rename = "PackageID")]
+    pub package_id: String,
+}
+
+/// <p> Container for response parameters to <code> <a>ListDomainsForPackage</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDomainsForPackageResponse {
+    /// <p>List of <code>DomainPackageDetails</code> objects.</p>
+    #[serde(rename = "DomainPackageDetailsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_package_details_list: Option<Vec<DomainPackageDetails>>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p> Container for the parameters to the <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -854,6 +1126,37 @@ pub struct ListElasticsearchVersionsResponse {
     pub next_token: Option<String>,
 }
 
+/// <p> Container for request parameters to <code> <a>ListPackagesForDomain</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPackagesForDomainRequest {
+    /// <p>The name of the domain for which you want to list associated packages.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>Limits results to a maximum number of packages.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Used for pagination. Only necessary if a previous API call includes a non-null NextToken value. If provided, returns results for the next page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Container for response parameters to <code> <a>ListPackagesForDomain</a> </code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPackagesForDomainResponse {
+    /// <p>List of <code>DomainPackageDetails</code> objects.</p>
+    #[serde(rename = "DomainPackageDetailsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_package_details_list: Option<Vec<DomainPackageDetails>>,
+    /// <p>Pagination token that needs to be supplied to the next call to get the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Container for the parameters to the <code><a>ListTags</a></code> operation. Specify the <code>ARN</code> for the Elasticsearch domain to which the tags are attached that you want to view are attached.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -899,6 +1202,24 @@ pub struct LogPublishingOptionsStatus {
     pub status: Option<OptionStatus>,
 }
 
+/// <p>Credentials for the master user: username and password, ARN, or both.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MasterUserOptions {
+    /// <p>ARN for the master user (if IAM is enabled).</p>
+    #[serde(rename = "MasterUserARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_arn: Option<String>,
+    /// <p>The master user's username, which is stored in the Amazon Elasticsearch Service domain's internal database.</p>
+    #[serde(rename = "MasterUserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_name: Option<String>,
+    /// <p>The master user's password, which is stored in the Amazon Elasticsearch Service domain's internal database.</p>
+    #[serde(rename = "MasterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+}
+
 /// <p>Specifies the node-to-node encryption options.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeToNodeEncryptionOptions {
@@ -941,6 +1262,54 @@ pub struct OptionStatus {
     #[serde(rename = "UpdateVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_version: Option<i64>,
+}
+
+/// <p>Basic information about a package.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PackageDetails {
+    /// <p>Timestamp which tells creation date of the package.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>Additional information if the package is in an error state. Null otherwise.</p>
+    #[serde(rename = "ErrorDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_details: Option<ErrorDetails>,
+    /// <p>User-specified description of the package.</p>
+    #[serde(rename = "PackageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_description: Option<String>,
+    /// <p>Internal ID of the package.</p>
+    #[serde(rename = "PackageID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_id: Option<String>,
+    /// <p>User specified name of the package.</p>
+    #[serde(rename = "PackageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_name: Option<String>,
+    /// <p>Current state of the package. Values are COPYING/COPY_FAILED/AVAILABLE/DELETING/DELETE_FAILED</p>
+    #[serde(rename = "PackageStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_status: Option<String>,
+    /// <p>Currently supports only TXT-DICTIONARY.</p>
+    #[serde(rename = "PackageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_type: Option<String>,
+}
+
+/// <p>The S3 location for importing the package specified as <code>S3BucketName</code> and <code>S3Key</code></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PackageSource {
+    /// <p>Name of the bucket containing the package.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>Key (file name) of the package.</p>
+    #[serde(rename = "S3Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key: Option<String>,
 }
 
 /// <p>Container for parameters to <code>PurchaseReservedElasticsearchInstanceOffering</code></p>
@@ -1119,6 +1488,10 @@ pub struct ServiceSoftwareOptions {
     #[serde(rename = "NewVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_version: Option<String>,
+    /// <p><code>True</code> if a service software is never automatically updated. <code>False</code> if a service software is automatically updated after <code>AutomatedUpdateDate</code>. </p>
+    #[serde(rename = "OptionalDeployment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub optional_deployment: Option<bool>,
     /// <p><code>True</code> if you are able to update you service software version. <code>False</code> if you are not able to update your service software version. </p>
     #[serde(rename = "UpdateAvailable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1222,6 +1595,10 @@ pub struct UpdateElasticsearchDomainConfigRequest {
     #[serde(rename = "AdvancedOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_options: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies advanced security options.</p>
+    #[serde(rename = "AdvancedSecurityOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advanced_security_options: Option<AdvancedSecurityOptionsInput>,
     /// <p>Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1437,6 +1814,60 @@ impl fmt::Display for AddTagsError {
     }
 }
 impl Error for AddTagsError {}
+/// Errors returned by AssociatePackage
+#[derive(Debug, PartialEq)]
+pub enum AssociatePackageError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>An error occurred because the client attempts to remove a resource that is currently in use. Returns HTTP status code 409.</p>
+    Conflict(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl AssociatePackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociatePackageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(AssociatePackageError::AccessDenied(err.msg))
+                }
+                "BaseException" => {
+                    return RusotoError::Service(AssociatePackageError::Base(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(AssociatePackageError::Conflict(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(AssociatePackageError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociatePackageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociatePackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociatePackageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociatePackageError::Base(ref cause) => write!(f, "{}", cause),
+            AssociatePackageError::Conflict(ref cause) => write!(f, "{}", cause),
+            AssociatePackageError::Internal(ref cause) => write!(f, "{}", cause),
+            AssociatePackageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociatePackageError {}
 /// Errors returned by CancelElasticsearchServiceSoftwareUpdate
 #[derive(Debug, PartialEq)]
 pub enum CancelElasticsearchServiceSoftwareUpdateError {
@@ -1563,6 +1994,64 @@ impl fmt::Display for CreateElasticsearchDomainError {
     }
 }
 impl Error for CreateElasticsearchDomainError {}
+/// Errors returned by CreatePackage
+#[derive(Debug, PartialEq)]
+pub enum CreatePackageError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for trying to create or access sub-resource that is either invalid or not supported. Gives http status code of 409.</p>
+    InvalidType(String),
+    /// <p>An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.</p>
+    LimitExceeded(String),
+    /// <p>An exception for creating a resource that already exists. Gives http status code of 400.</p>
+    ResourceAlreadyExists(String),
+}
+
+impl CreatePackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePackageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreatePackageError::AccessDenied(err.msg))
+                }
+                "BaseException" => return RusotoError::Service(CreatePackageError::Base(err.msg)),
+                "InternalException" => {
+                    return RusotoError::Service(CreatePackageError::Internal(err.msg))
+                }
+                "InvalidTypeException" => {
+                    return RusotoError::Service(CreatePackageError::InvalidType(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreatePackageError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreatePackageError::ResourceAlreadyExists(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreatePackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreatePackageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreatePackageError::Base(ref cause) => write!(f, "{}", cause),
+            CreatePackageError::Internal(ref cause) => write!(f, "{}", cause),
+            CreatePackageError::InvalidType(ref cause) => write!(f, "{}", cause),
+            CreatePackageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePackageError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreatePackageError {}
 /// Errors returned by DeleteElasticsearchDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteElasticsearchDomainError {
@@ -1647,6 +2136,58 @@ impl fmt::Display for DeleteElasticsearchServiceRoleError {
     }
 }
 impl Error for DeleteElasticsearchServiceRoleError {}
+/// Errors returned by DeletePackage
+#[derive(Debug, PartialEq)]
+pub enum DeletePackageError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>An error occurred because the client attempts to remove a resource that is currently in use. Returns HTTP status code 409.</p>
+    Conflict(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DeletePackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePackageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeletePackageError::AccessDenied(err.msg))
+                }
+                "BaseException" => return RusotoError::Service(DeletePackageError::Base(err.msg)),
+                "ConflictException" => {
+                    return RusotoError::Service(DeletePackageError::Conflict(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DeletePackageError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeletePackageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeletePackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeletePackageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeletePackageError::Base(ref cause) => write!(f, "{}", cause),
+            DeletePackageError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeletePackageError::Internal(ref cause) => write!(f, "{}", cause),
+            DeletePackageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeletePackageError {}
 /// Errors returned by DescribeElasticsearchDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeElasticsearchDomainError {
@@ -1861,6 +2402,54 @@ impl fmt::Display for DescribeElasticsearchInstanceTypeLimitsError {
     }
 }
 impl Error for DescribeElasticsearchInstanceTypeLimitsError {}
+/// Errors returned by DescribePackages
+#[derive(Debug, PartialEq)]
+pub enum DescribePackagesError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribePackagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePackagesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribePackagesError::AccessDenied(err.msg))
+                }
+                "BaseException" => {
+                    return RusotoError::Service(DescribePackagesError::Base(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DescribePackagesError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribePackagesError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribePackagesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePackagesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribePackagesError::Base(ref cause) => write!(f, "{}", cause),
+            DescribePackagesError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribePackagesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribePackagesError {}
 /// Errors returned by DescribeReservedElasticsearchInstanceOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedElasticsearchInstanceOfferingsError {
@@ -1977,6 +2566,60 @@ impl fmt::Display for DescribeReservedElasticsearchInstancesError {
     }
 }
 impl Error for DescribeReservedElasticsearchInstancesError {}
+/// Errors returned by DissociatePackage
+#[derive(Debug, PartialEq)]
+pub enum DissociatePackageError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>An error occurred because the client attempts to remove a resource that is currently in use. Returns HTTP status code 409.</p>
+    Conflict(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DissociatePackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DissociatePackageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DissociatePackageError::AccessDenied(err.msg))
+                }
+                "BaseException" => {
+                    return RusotoError::Service(DissociatePackageError::Base(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DissociatePackageError::Conflict(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DissociatePackageError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DissociatePackageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DissociatePackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DissociatePackageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DissociatePackageError::Base(ref cause) => write!(f, "{}", cause),
+            DissociatePackageError::Conflict(ref cause) => write!(f, "{}", cause),
+            DissociatePackageError::Internal(ref cause) => write!(f, "{}", cause),
+            DissociatePackageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DissociatePackageError {}
 /// Errors returned by GetCompatibleElasticsearchVersions
 #[derive(Debug, PartialEq)]
 pub enum GetCompatibleElasticsearchVersionsError {
@@ -2165,6 +2808,56 @@ impl fmt::Display for ListDomainNamesError {
     }
 }
 impl Error for ListDomainNamesError {}
+/// Errors returned by ListDomainsForPackage
+#[derive(Debug, PartialEq)]
+pub enum ListDomainsForPackageError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl ListDomainsForPackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsForPackageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListDomainsForPackageError::AccessDenied(err.msg))
+                }
+                "BaseException" => {
+                    return RusotoError::Service(ListDomainsForPackageError::Base(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(ListDomainsForPackageError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListDomainsForPackageError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDomainsForPackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDomainsForPackageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListDomainsForPackageError::Base(ref cause) => write!(f, "{}", cause),
+            ListDomainsForPackageError::Internal(ref cause) => write!(f, "{}", cause),
+            ListDomainsForPackageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDomainsForPackageError {}
 /// Errors returned by ListElasticsearchInstanceTypes
 #[derive(Debug, PartialEq)]
 pub enum ListElasticsearchInstanceTypesError {
@@ -2259,6 +2952,56 @@ impl fmt::Display for ListElasticsearchVersionsError {
     }
 }
 impl Error for ListElasticsearchVersionsError {}
+/// Errors returned by ListPackagesForDomain
+#[derive(Debug, PartialEq)]
+pub enum ListPackagesForDomainError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl ListPackagesForDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPackagesForDomainError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListPackagesForDomainError::AccessDenied(err.msg))
+                }
+                "BaseException" => {
+                    return RusotoError::Service(ListPackagesForDomainError::Base(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(ListPackagesForDomainError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListPackagesForDomainError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPackagesForDomainError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPackagesForDomainError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListPackagesForDomainError::Base(ref cause) => write!(f, "{}", cause),
+            ListPackagesForDomainError::Internal(ref cause) => write!(f, "{}", cause),
+            ListPackagesForDomainError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListPackagesForDomainError {}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -2609,6 +3352,12 @@ pub trait Es {
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>>;
 
+    /// <p>Associates a package with an Amazon ES domain.</p>
+    async fn associate_package(
+        &self,
+        input: AssociatePackageRequest,
+    ) -> Result<AssociatePackageResponse, RusotoError<AssociatePackageError>>;
+
     /// <p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>
     async fn cancel_elasticsearch_service_software_update(
         &self,
@@ -2624,6 +3373,12 @@ pub trait Es {
         input: CreateElasticsearchDomainRequest,
     ) -> Result<CreateElasticsearchDomainResponse, RusotoError<CreateElasticsearchDomainError>>;
 
+    /// <p>Create a package for use with Amazon ES domains.</p>
+    async fn create_package(
+        &self,
+        input: CreatePackageRequest,
+    ) -> Result<CreatePackageResponse, RusotoError<CreatePackageError>>;
+
     /// <p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>
     async fn delete_elasticsearch_domain(
         &self,
@@ -2634,6 +3389,12 @@ pub trait Es {
     async fn delete_elasticsearch_service_role(
         &self,
     ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>>;
+
+    /// <p>Delete the package.</p>
+    async fn delete_package(
+        &self,
+        input: DeletePackageRequest,
+    ) -> Result<DeletePackageResponse, RusotoError<DeletePackageError>>;
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>
     async fn describe_elasticsearch_domain(
@@ -2665,6 +3426,12 @@ pub trait Es {
         RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
     >;
 
+    /// <p>Describes all packages available to Amazon ES. Includes options for filtering, limiting the number of results, and pagination.</p>
+    async fn describe_packages(
+        &self,
+        input: DescribePackagesRequest,
+    ) -> Result<DescribePackagesResponse, RusotoError<DescribePackagesError>>;
+
     /// <p>Lists available reserved Elasticsearch instance offerings.</p>
     async fn describe_reserved_elasticsearch_instance_offerings(
         &self,
@@ -2682,6 +3449,12 @@ pub trait Es {
         DescribeReservedElasticsearchInstancesResponse,
         RusotoError<DescribeReservedElasticsearchInstancesError>,
     >;
+
+    /// <p>Dissociates a package from the Amazon ES domain.</p>
+    async fn dissociate_package(
+        &self,
+        input: DissociatePackageRequest,
+    ) -> Result<DissociatePackageResponse, RusotoError<DissociatePackageError>>;
 
     /// <p> Returns a list of upgrade compatible Elastisearch versions. You can optionally pass a <code> <a>DomainName</a> </code> to get all upgrade compatible Elasticsearch versions for that specific domain. </p>
     async fn get_compatible_elasticsearch_versions(
@@ -2709,6 +3482,12 @@ pub trait Es {
         &self,
     ) -> Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>>;
 
+    /// <p>Lists all Amazon ES domains associated with the package.</p>
+    async fn list_domains_for_package(
+        &self,
+        input: ListDomainsForPackageRequest,
+    ) -> Result<ListDomainsForPackageResponse, RusotoError<ListDomainsForPackageError>>;
+
     /// <p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>
     async fn list_elasticsearch_instance_types(
         &self,
@@ -2723,6 +3502,12 @@ pub trait Es {
         &self,
         input: ListElasticsearchVersionsRequest,
     ) -> Result<ListElasticsearchVersionsResponse, RusotoError<ListElasticsearchVersionsError>>;
+
+    /// <p>Lists all packages associated with the Amazon ES domain.</p>
+    async fn list_packages_for_domain(
+        &self,
+        input: ListPackagesForDomainRequest,
+    ) -> Result<ListPackagesForDomainResponse, RusotoError<ListPackagesForDomainError>>;
 
     /// <p>Returns all tags for the given Elasticsearch domain.</p>
     async fn list_tags(
@@ -2835,6 +3620,37 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Associates a package with an Amazon ES domain.</p>
+    async fn associate_package(
+        &self,
+        input: AssociatePackageRequest,
+    ) -> Result<AssociatePackageResponse, RusotoError<AssociatePackageError>> {
+        let request_uri = format!(
+            "/2015-01-01/packages/associate/{package_id}/{domain_name}",
+            domain_name = input.domain_name,
+            package_id = input.package_id
+        );
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociatePackageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociatePackageError::from_response(response))
+        }
+    }
+
     /// <p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>
     async fn cancel_elasticsearch_service_software_update(
         &self,
@@ -2899,6 +3715,36 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Create a package for use with Amazon ES domains.</p>
+    async fn create_package(
+        &self,
+        input: CreatePackageRequest,
+    ) -> Result<CreatePackageResponse, RusotoError<CreatePackageError>> {
+        let request_uri = "/2015-01-01/packages";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePackageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePackageError::from_response(response))
+        }
+    }
+
     /// <p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>
     async fn delete_elasticsearch_domain(
         &self,
@@ -2952,6 +3798,36 @@ impl Es for EsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteElasticsearchServiceRoleError::from_response(response))
+        }
+    }
+
+    /// <p>Delete the package.</p>
+    async fn delete_package(
+        &self,
+        input: DeletePackageRequest,
+    ) -> Result<DeletePackageResponse, RusotoError<DeletePackageError>> {
+        let request_uri = format!(
+            "/2015-01-01/packages/{package_id}",
+            package_id = input.package_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeletePackageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeletePackageError::from_response(response))
         }
     }
 
@@ -3094,6 +3970,36 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Describes all packages available to Amazon ES. Includes options for filtering, limiting the number of results, and pagination.</p>
+    async fn describe_packages(
+        &self,
+        input: DescribePackagesRequest,
+    ) -> Result<DescribePackagesResponse, RusotoError<DescribePackagesError>> {
+        let request_uri = "/2015-01-01/packages/describe";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribePackagesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribePackagesError::from_response(response))
+        }
+    }
+
     /// <p>Lists available reserved Elasticsearch instance offerings.</p>
     async fn describe_reserved_elasticsearch_instance_offerings(
         &self,
@@ -3178,6 +4084,37 @@ impl Es for EsClient {
             Err(DescribeReservedElasticsearchInstancesError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Dissociates a package from the Amazon ES domain.</p>
+    async fn dissociate_package(
+        &self,
+        input: DissociatePackageRequest,
+    ) -> Result<DissociatePackageResponse, RusotoError<DissociatePackageError>> {
+        let request_uri = format!(
+            "/2015-01-01/packages/dissociate/{package_id}/{domain_name}",
+            domain_name = input.domain_name,
+            package_id = input.package_id
+        );
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DissociatePackageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DissociatePackageError::from_response(response))
         }
     }
 
@@ -3314,6 +4251,45 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Lists all Amazon ES domains associated with the package.</p>
+    async fn list_domains_for_package(
+        &self,
+        input: ListDomainsForPackageRequest,
+    ) -> Result<ListDomainsForPackageResponse, RusotoError<ListDomainsForPackageError>> {
+        let request_uri = format!(
+            "/2015-01-01/packages/{package_id}/domains",
+            package_id = input.package_id
+        );
+
+        let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDomainsForPackageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDomainsForPackageError::from_response(response))
+        }
+    }
+
     /// <p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>
     async fn list_elasticsearch_instance_types(
         &self,
@@ -3393,6 +4369,45 @@ impl Es for EsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListElasticsearchVersionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all packages associated with the Amazon ES domain.</p>
+    async fn list_packages_for_domain(
+        &self,
+        input: ListPackagesForDomainRequest,
+    ) -> Result<ListPackagesForDomainResponse, RusotoError<ListPackagesForDomainError>> {
+        let request_uri = format!(
+            "/2015-01-01/domain/{domain_name}/packages",
+            domain_name = input.domain_name
+        );
+
+        let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPackagesForDomainResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPackagesForDomainError::from_response(response))
         }
     }
 

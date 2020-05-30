@@ -50,6 +50,10 @@ pub struct ApplicationComponent {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationInfo {
+    /// <p> Indicates whether Application Insights can listen to CloudWatch events for the application resources, such as <code>instance terminated</code>, <code>failed deployment</code>, and others. </p>
+    #[serde(rename = "CWEMonitorEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cwe_monitor_enabled: Option<bool>,
     /// <p>The lifecycle of the application. </p>
     #[serde(rename = "LifeCycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -105,6 +109,10 @@ pub struct ConfigurationEvent {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
+    /// <p> Indicates whether Application Insights can listen to CloudWatch events for the application resources, such as <code>instance terminated</code>, <code>failed deployment</code>, and others. </p>
+    #[serde(rename = "CWEMonitorEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cwe_monitor_enabled: Option<bool>,
     /// <p> When set to <code>true</code>, creates opsItems for any problems detected on an application. </p>
     #[serde(rename = "OpsCenterEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -644,10 +652,66 @@ pub struct LogPattern {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Observation {
+    /// <p> The detail type of the CloudWatch Event-based observation, for example, <code>EC2 Instance State-change Notification</code>. </p>
+    #[serde(rename = "CloudWatchEventDetailType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_event_detail_type: Option<String>,
+    /// <p> The ID of the CloudWatch Event-based observation related to the detected problem. </p>
+    #[serde(rename = "CloudWatchEventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_event_id: Option<String>,
+    /// <p> The source of the CloudWatch Event. </p>
+    #[serde(rename = "CloudWatchEventSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_event_source: Option<String>,
+    /// <p> The CodeDeploy application to which the deployment belongs. </p>
+    #[serde(rename = "CodeDeployApplication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_deploy_application: Option<String>,
+    /// <p> The deployment group to which the CodeDeploy deployment belongs. </p>
+    #[serde(rename = "CodeDeployDeploymentGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_deploy_deployment_group: Option<String>,
+    /// <p> The deployment ID of the CodeDeploy-based observation related to the detected problem. </p>
+    #[serde(rename = "CodeDeployDeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_deploy_deployment_id: Option<String>,
+    /// <p> The instance group to which the CodeDeploy instance belongs. </p>
+    #[serde(rename = "CodeDeployInstanceGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_deploy_instance_group_id: Option<String>,
+    /// <p> The status of the CodeDeploy deployment, for example <code>SUCCESS</code> or <code> FAILURE</code>. </p>
+    #[serde(rename = "CodeDeployState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_deploy_state: Option<String>,
+    /// <p> The state of the instance, such as <code>STOPPING</code> or <code>TERMINATING</code>. </p>
+    #[serde(rename = "Ec2State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ec_2_state: Option<String>,
     /// <p>The time when the observation ended, in epoch seconds.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p> The Amazon Resource Name (ARN) of the AWS Health Event-based observation.</p>
+    #[serde(rename = "HealthEventArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_event_arn: Option<String>,
+    /// <p> The description of the AWS Health event provided by the service, such as Amazon EC2. </p>
+    #[serde(rename = "HealthEventDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_event_description: Option<String>,
+    /// <p> The category of the AWS Health event, such as <code>issue</code>. </p>
+    #[serde(rename = "HealthEventTypeCategory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_event_type_category: Option<String>,
+    /// <p> The type of the AWS Health event, for example, <code>AWS_EC2_POWER_CONNECTIVITY_ISSUE</code>. </p>
+    #[serde(rename = "HealthEventTypeCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_event_type_code: Option<String>,
+    /// <p> The service to which the AWS Health Event belongs, such as EC2. </p>
+    #[serde(rename = "HealthService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_service: Option<String>,
     /// <p>The ID of the observation type.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -696,6 +760,34 @@ pub struct Observation {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<f64>,
+    /// <p> The X-Ray request error percentage for this node. </p>
+    #[serde(rename = "XRayErrorPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_error_percent: Option<i64>,
+    /// <p> The X-Ray request fault percentage for this node. </p>
+    #[serde(rename = "XRayFaultPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_fault_percent: Option<i64>,
+    /// <p> The name of the X-Ray node. </p>
+    #[serde(rename = "XRayNodeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_node_name: Option<String>,
+    /// <p> The type of the X-Ray node. </p>
+    #[serde(rename = "XRayNodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_node_type: Option<String>,
+    /// <p> The X-Ray node request average latency for this node. </p>
+    #[serde(rename = "XRayRequestAverageLatency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_request_average_latency: Option<i64>,
+    /// <p> The X-Ray request count for this node. </p>
+    #[serde(rename = "XRayRequestCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_request_count: Option<i64>,
+    /// <p> The X-Ray request throttle percentage for this node. </p>
+    #[serde(rename = "XRayThrottlePercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x_ray_throttle_percent: Option<i64>,
 }
 
 /// <p>Describes a problem that is detected by correlating observations.</p>
@@ -798,6 +890,10 @@ pub struct UntagResourceResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
+    /// <p> Indicates whether Application Insights can listen to CloudWatch events for the application resources, such as <code>instance terminated</code>, <code>failed deployment</code>, and others. </p>
+    #[serde(rename = "CWEMonitorEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cwe_monitor_enabled: Option<bool>,
     /// <p> When set to <code>true</code>, creates opsItems for any problems detected on an application. </p>
     #[serde(rename = "OpsCenterEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]

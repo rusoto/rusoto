@@ -103,7 +103,7 @@ pub struct Ac3Settings {
     pub sample_rate: Option<i64>,
 }
 
-/// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
+/// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccelerationSettings {
     /// <p>Specify the conditions when the service will run your job with accelerated transcoding.</p>
@@ -254,7 +254,7 @@ pub struct AudioNormalizationSettings {
     #[serde(rename = "AlgorithmControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_control: Option<String>,
-    /// <p>Content measuring above this level will be corrected to the target level. Content measuring below this level will not be corrected. Gating only applies when not using real<em>time</em>correction.</p>
+    /// <p>Content measuring above this level will be corrected to the target level. Content measuring below this level will not be corrected.</p>
     #[serde(rename = "CorrectionGateLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub correction_gate_level: Option<i64>,
@@ -324,6 +324,72 @@ pub struct AudioSelectorGroup {
     #[serde(rename = "AudioSelectorNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selector_names: Option<Vec<String>>,
+}
+
+/// <p>Settings for quality-defined variable bitrate encoding with the AV1 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Av1QvbrSettings {
+    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within av1Settings. Specify the general target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9. Optionally, to specify a value between whole numbers, also provide a value for the setting qvbrQualityLevelFineTune. For example, if you want your QVBR quality level to be 7.33, set qvbrQualityLevel to 7 and set qvbrQualityLevelFineTune to .33.</p>
+    #[serde(rename = "QvbrQualityLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level: Option<i64>,
+    /// <p>Optional. Specify a value here to set the QVBR quality to a level that is between whole numbers. For example, if you want your QVBR quality level to be 7.33, set qvbrQualityLevel to 7 and set qvbrQualityLevelFineTune to .33. MediaConvert rounds your QVBR quality level to the nearest third of a whole number. For example, if you set qvbrQualityLevel to 7 and you set qvbrQualityLevelFineTune to .25, your actual QVBR quality level is 7.33.</p>
+    #[serde(rename = "QvbrQualityLevelFineTune")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level_fine_tune: Option<f64>,
+}
+
+/// <p>Required when you set Codec, under VideoDescription&gt;CodecSettings to the value AV1.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Av1Settings {
+    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    #[serde(rename = "AdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adaptive_quantization: Option<String>,
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    #[serde(rename = "FramerateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_control: Option<String>,
+    /// <p>When set to INTERPOLATE, produces smoother motion during frame rate conversion.</p>
+    #[serde(rename = "FramerateConversionAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_conversion_algorithm: Option<String>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+    /// <p>Specify the GOP length (keyframe interval) in frames. With AV1, MediaConvert doesn&#39;t support GOP length in seconds. This value must be greater than zero and preferably equal to 1 + ((numberBFrames + 1) * x), where x is an integer value.</p>
+    #[serde(rename = "GopSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size: Option<f64>,
+    /// <p>Maximum bitrate in bits/second. For example, enter five megabits per second as 5000000. Required when Rate control mode is QVBR.</p>
+    #[serde(rename = "MaxBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_bitrate: Option<i64>,
+    /// <p>Specify the number of B-frames. With AV1, MediaConvert supports only 7 or 15.</p>
+    #[serde(rename = "NumberBFramesBetweenReferenceFrames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_b_frames_between_reference_frames: Option<i64>,
+    /// <p>Settings for quality-defined variable bitrate encoding with the AV1 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
+    #[serde(rename = "QvbrSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_settings: Option<Av1QvbrSettings>,
+    /// <p>&#39;With AV1 outputs, for rate control mode, MediaConvert supports only quality-defined variable bitrate (QVBR). You can&#39;&#39;t use CBR or VBR.&#39;</p>
+    #[serde(rename = "RateControlMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rate_control_mode: Option<String>,
+    /// <p>Specify the number of slices per picture. This value must be 1, 2, 4, 8, 16, or 32. For progressive pictures, this value must be less than or equal to the number of macroblock rows. For interlaced pictures, this value must be less than or equal to half the number of macroblock rows.</p>
+    #[serde(rename = "Slices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slices: Option<i64>,
+    /// <p>Adjust quantization within each frame based on spatial variation of content complexity.</p>
+    #[serde(rename = "SpatialAdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spatial_adaptive_quantization: Option<String>,
 }
 
 /// <p>Settings for Avail Blanking</p>
@@ -524,6 +590,19 @@ pub struct CaptionSelector {
     pub source_settings: Option<CaptionSourceSettings>,
 }
 
+/// <p>Ignore this setting unless your input captions format is SCC. To have the service compensate for differing framerates between your input captions and input video, specify the framerate of the captions file. Specify this value as a fraction, using the settings Framerate numerator (framerateNumerator) and Framerate denominator (framerateDenominator). For example, you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps, or 30000 / 1001 for 29.97 fps.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CaptionSourceFramerate {
+    /// <p>Specify the denominator of the fraction that represents the framerate for the setting Caption source framerate (CaptionSourceFramerate). Use this setting along with the setting Framerate numerator (framerateNumerator).</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>Specify the numerator of the fraction that represents the framerate for the setting Caption source framerate (CaptionSourceFramerate). Use this setting along with the setting Framerate denominator (framerateDenominator).</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+}
+
 /// <p>If your input captions are SCC, TTML, STL, SMI, SRT, or IMSC in an xml file, specify the URI of the input captions source file. If your input captions are IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionSourceSettings {
@@ -709,7 +788,7 @@ pub struct ColorCorrector {
     #[serde(rename = "Brightness")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub brightness: Option<i64>,
-    /// <p>Specify the color space you want for this output. The service supports conversion between HDR formats, between SDR formats, and from SDR to HDR. The service doesn&#39;t support conversion from HDR to SDR. SDR to HDR conversion doesn&#39;t upgrade the dynamic range. The converted video has an HDR format, but visually appears the same as an unconverted output.</p>
+    /// <p>Specify the color space you want for this output. The service supports conversion between HDR formats, between SDR formats, from SDR to HDR, and from HDR to SDR. SDR to HDR conversion doesn&#39;t upgrade the dynamic range. The converted video has an HDR format, but visually appears the same as an unconverted output. HDR to SDR conversion uses Elemental tone mapping technology to approximate the outcome of manually regrading from HDR to SDR.</p>
     #[serde(rename = "ColorSpaceConversion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space_conversion: Option<String>,
@@ -766,12 +845,16 @@ pub struct ContainerSettings {
     #[serde(rename = "MpdSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mpd_settings: Option<MpdSettings>,
+    /// <p>MXF settings</p>
+    #[serde(rename = "MxfSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mxf_settings: Option<MxfSettings>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
-    /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
+    /// <p>Optional. Accelerated transcoding can significantly speed up jobs with long, visually complex content. Outputs that use this feature incur pro-tier pricing. For information about feature limitations, see the AWS Elemental MediaConvert User Guide.</p>
     #[serde(rename = "AccelerationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acceleration_settings: Option<AccelerationSettings>,
@@ -779,15 +862,19 @@ pub struct CreateJobRequest {
     #[serde(rename = "BillingTagsSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_tags_source: Option<String>,
-    /// <p>Idempotency token for CreateJob operation.</p>
+    /// <p>Optional. Idempotency token for CreateJob operation.</p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>When you create a job, you can either specify a job template or specify the transcoding settings individually</p>
+    /// <p>Optional. Use queue hopping to avoid overly long waits in the backlog of the queue that you submit your job to. Specify an alternate queue and the maximum time that your job will wait in the initial queue before hopping. For more information about this feature, see the AWS Elemental MediaConvert User Guide.</p>
+    #[serde(rename = "HopDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hop_destinations: Option<Vec<HopDestination>>,
+    /// <p>Optional. When you create a job, you can either specify a job template or specify the transcoding settings individually.</p>
     #[serde(rename = "JobTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_template: Option<String>,
-    /// <p>Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don&#39;t specify a priority, the service uses the default value 0.</p>
+    /// <p>Optional. Specify the relative priority for this job. In any given queue, the service begins processing the job with the highest value first. When more than one job has the same priority, the service begins processing the job that you submitted first. If you don&#39;t specify a priority, the service uses the default value 0.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
@@ -801,19 +888,19 @@ pub struct CreateJobRequest {
     /// <p>JobSettings contains all the transcode settings for a job.</p>
     #[serde(rename = "Settings")]
     pub settings: JobSettings,
-    /// <p>Enable this setting when you run a test job to estimate how many reserved transcoding slots (RTS) you need. When this is enabled, MediaConvert runs your job from an on-demand queue with similar performance to what you will see with one RTS in a reserved queue. This setting is disabled by default.</p>
+    /// <p>Optional. Enable this setting when you run a test job to estimate how many reserved transcoding slots (RTS) you need. When this is enabled, MediaConvert runs your job from an on-demand queue with similar performance to what you will see with one RTS in a reserved queue. This setting is disabled by default.</p>
     #[serde(rename = "SimulateReservedQueue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub simulate_reserved_queue: Option<String>,
-    /// <p>Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.</p>
+    /// <p>Optional. Specify how often MediaConvert sends STATUS_UPDATE events to Amazon CloudWatch Events. Set the interval, in seconds, between status updates. MediaConvert sends an update at this interval from the time the service begins processing your job to the time it completes the transcode or encounters an error.</p>
     #[serde(rename = "StatusUpdateInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_update_interval: Option<String>,
-    /// <p>The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.</p>
+    /// <p>Optional. The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs.</p>
+    /// <p>Optional. User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs.</p>
     #[serde(rename = "UserMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_metadata: Option<::std::collections::HashMap<String, String>>,
@@ -843,6 +930,10 @@ pub struct CreateJobTemplateRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Optional. Use queue hopping to avoid overly long waits in the backlog of the queue that you submit your job to. Specify an alternate queue and the maximum time that your job will wait in the initial queue before hopping. For more information about this feature, see the AWS Elemental MediaConvert User Guide.</p>
+    #[serde(rename = "HopDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hop_destinations: Option<Vec<HopDestination>>,
     /// <p>The name of the job template you are creating.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1564,6 +1655,10 @@ pub struct FileSourceSettings {
     #[serde(rename = "Convert608To708")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub convert_608_to_708: Option<String>,
+    /// <p>Ignore this setting unless your input captions format is SCC. To have the service compensate for differing framerates between your input captions and input video, specify the framerate of the captions file. Specify this value as a fraction, using the settings Framerate numerator (framerateNumerator) and Framerate denominator (framerateDenominator). For example, you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps, or 30000 / 1001 for 29.97 fps.</p>
+    #[serde(rename = "Framerate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate: Option<CaptionSourceFramerate>,
     /// <p>External caption file used for loading captions. Accepted file extensions are &#39;scc&#39;, &#39;ttml&#39;, &#39;dfxp&#39;, &#39;stl&#39;, &#39;srt&#39;, &#39;xml&#39;, and &#39;smi&#39;.</p>
     #[serde(rename = "SourceFile")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1670,10 +1765,14 @@ pub struct H264QvbrSettings {
     #[serde(rename = "MaxAverageBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_average_bitrate: Option<i64>,
-    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within h264Settings. Specify the target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9.</p>
+    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within h264Settings. Specify the general target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9. Optionally, to specify a value between whole numbers, also provide a value for the setting qvbrQualityLevelFineTune. For example, if you want your QVBR quality level to be 7.33, set qvbrQualityLevel to 7 and set qvbrQualityLevelFineTune to .33.</p>
     #[serde(rename = "QvbrQualityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qvbr_quality_level: Option<i64>,
+    /// <p>Optional. Specify a value here to set the QVBR quality to a level that is between whole numbers. For example, if you want your QVBR quality level to be 7.33, set qvbrQualityLevel to 7 and set qvbrQualityLevelFineTune to .33. MediaConvert rounds your QVBR quality level to the nearest third of a whole number. For example, if you set qvbrQualityLevel to 7 and you set qvbrQualityLevelFineTune to .25, your actual QVBR quality level is 7.33.</p>
+    #[serde(rename = "QvbrQualityLevelFineTune")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level_fine_tune: Option<f64>,
 }
 
 /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value H_264.</p>
@@ -1846,10 +1945,14 @@ pub struct H265QvbrSettings {
     #[serde(rename = "MaxAverageBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_average_bitrate: Option<i64>,
-    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within h265Settings. Specify the target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9.</p>
+    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within h265Settings. Specify the general target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9. Optionally, to specify a value between whole numbers, also provide a value for the setting qvbrQualityLevelFineTune. For example, if you want your QVBR quality level to be 7.33, set qvbrQualityLevel to 7 and set qvbrQualityLevelFineTune to .33.</p>
     #[serde(rename = "QvbrQualityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qvbr_quality_level: Option<i64>,
+    /// <p>Optional. Specify a value here to set the QVBR quality to a level that is between whole numbers. For example, if you want your QVBR quality level to be 7.33, set qvbrQualityLevel to 7 and set qvbrQualityLevelFineTune to .33. MediaConvert rounds your QVBR quality level to the nearest third of a whole number. For example, if you set qvbrQualityLevel to 7 and you set qvbrQualityLevelFineTune to .25, your actual QVBR quality level is 7.33.</p>
+    #[serde(rename = "QvbrQualityLevelFineTune")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level_fine_tune: Option<f64>,
 }
 
 /// <p>Settings for H265 codec</p>
@@ -2261,10 +2364,27 @@ pub struct HlsSettings {
     #[serde(rename = "IFrameOnlyManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i_frame_only_manifest: Option<String>,
-    /// <p>String concatenated to end of segment filenames. Accepts &quot;Format Identifiers&quot;:#format<em>identifier</em>parameters.</p>
+    /// <p>Use this setting to add an identifying string to the filename of each segment. The service adds this string between the name modifier and segment index number. You can use format identifiers in the string. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/using-variables-in-your-job-settings.html</p>
     #[serde(rename = "SegmentModifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_modifier: Option<String>,
+}
+
+/// <p>Optional. Configuration for a destination queue to which the job can hop once a customer-defined minimum wait time has passed.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HopDestination {
+    /// <p>Optional. When you set up a job to use queue hopping, you can specify a different relative priority for the job in the destination queue. If you don&#39;t specify, the relative priority will remain the same as in the previous queue.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>Optional unless the job is submitted on the default queue. When you set up a job to use queue hopping, you can specify a destination queue. This queue cannot be the original queue to which the job is submitted. If the original queue isn&#39;t the default queue and you don&#39;t specify the destination queue, the job will move to the default queue.</p>
+    #[serde(rename = "Queue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue: Option<String>,
+    /// <p>Required for setting up a job to use queue hopping. Minimum wait time in minutes until the job can hop to the destination queue. Valid range is 1 to 1440 minutes, inclusive.</p>
+    #[serde(rename = "WaitMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wait_minutes: Option<i64>,
 }
 
 /// <p>To insert ID3 tags in your output, specify two values. Use ID3 tag (Id3) to specify the base 64 encoded string and use Timecode (TimeCode) to specify the time when the tag should be inserted. To insert multiple ID3 tags in your output, create multiple instances of ID3 insertion (Id3Insertion).</p>
@@ -2292,7 +2412,7 @@ pub struct ImageInserter {
 /// <p>Settings specific to IMSC caption outputs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ImscDestinationSettings {
-    /// <p>Keep this setting enabled to have MediaConvert use the font style and position information from the captions source in the output. This option is available only when your input captions are CFF-TT, IMSC, SMPTE-TT, or TTML. Disable this setting for simplified output captions.</p>
+    /// <p>Keep this setting enabled to have MediaConvert use the font style and position information from the captions source in the output. This option is available only when your input captions are IMSC, SMPTE-TT, or TTML. Disable this setting for simplified output captions.</p>
     #[serde(rename = "StylePassthrough")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style_passthrough: Option<String>,
@@ -2547,7 +2667,7 @@ pub struct Job {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>Optional. Choose a tag type that AWS Billing and Cost Management will use to sort your AWS Elemental MediaConvert costs on any billing report that you set up. Any transcoding outputs that don&#39;t have an associated tag will appear in your billing report unsorted. If you don&#39;t choose a valid value for this field, your job outputs will appear on the billing report unsorted.</p>
+    /// <p>The tag type that AWS Billing and Cost Management will use to sort your AWS Elemental MediaConvert costs on any billing report that you set up.</p>
     #[serde(rename = "BillingTagsSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_tags_source: Option<String>,
@@ -2567,6 +2687,10 @@ pub struct Job {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
+    /// <p>Optional list of hop destinations.</p>
+    #[serde(rename = "HopDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hop_destinations: Option<Vec<HopDestination>>,
     /// <p>A portion of the job&#39;s ARN, unique within your AWS Elemental MediaConvert resources</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2591,10 +2715,14 @@ pub struct Job {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>Optional. When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue: Option<String>,
+    /// <p>The job&#39;s queue hopping history.</p>
+    #[serde(rename = "QueueTransitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_transitions: Option<Vec<QueueTransition>>,
     /// <p>The number of times that the service automatically attempted to process your job after encountering an error.</p>
     #[serde(rename = "RetryCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2706,6 +2834,10 @@ pub struct JobTemplate {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Optional list of hop destinations.</p>
+    #[serde(rename = "HopDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hop_destinations: Option<Vec<HopDestination>>,
     /// <p>The timestamp in epoch seconds when the Job template was last updated.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2794,7 +2926,7 @@ pub struct ListJobTemplatesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>When you request lists of resources, you can optionally specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
+    /// <p>Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
     #[serde(rename = "Order")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
@@ -2820,19 +2952,19 @@ pub struct ListJobsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>Use this string, provided with the response to a previous request, to request the next batch of jobs.</p>
+    /// <p>Optional. Use this string, provided with the response to a previous request, to request the next batch of jobs.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>When you request lists of resources, you can optionally specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
+    /// <p>Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
     #[serde(rename = "Order")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
-    /// <p>Provide a queue name to get back only jobs from that queue.</p>
+    /// <p>Optional. Provide a queue name to get back only jobs from that queue.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue: Option<String>,
-    /// <p>A job&#39;s status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.</p>
+    /// <p>Optional. A job&#39;s status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2870,7 +3002,7 @@ pub struct ListPresetsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>When you request lists of resources, you can optionally specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
+    /// <p>Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
     #[serde(rename = "Order")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
@@ -2904,7 +3036,7 @@ pub struct ListQueuesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>When you request lists of resources, you can optionally specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
+    /// <p>Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.</p>
     #[serde(rename = "Order")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
@@ -3517,6 +3649,15 @@ pub struct MsSmoothGroupSettings {
     pub manifest_encoding: Option<String>,
 }
 
+/// <p>MXF settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MxfSettings {
+    /// <p>Optional. When you have AFD signaling set up in your output video stream, use this setting to choose whether to also include it in the MXF wrapper. Choose Don&#39;t copy (NO<em>COPY) to exclude AFD signaling from the MXF wrapper. Choose Copy from video stream (COPY</em>FROM_VIDEO) to copy the AFD values from the video stream for this output to the MXF wrapper. Regardless of which option you choose, the AFD values remain in the video stream. Related settings: To set up your output to include or exclude AFD values, see AfdSignaling, under VideoDescription. On the console, find AFD signaling under the output&#39;s video encoding settings.</p>
+    #[serde(rename = "AfdSignaling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub afd_signaling: Option<String>,
+}
+
 /// <p>Settings for your Nielsen configuration. If you don&#39;t do Nielsen measurement and analytics, ignore these settings. When you enable Nielsen configuration (nielsenConfiguration), MediaConvert enables PCM to ID3 tagging for all outputs in the job. To enable Nielsen configuration programmatically, include an instance of nielsenConfiguration in your JSON job specification. Even if you don&#39;t include any children of nielsenConfiguration, you still enable the setting.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NielsenConfiguration {
@@ -3880,6 +4021,24 @@ pub struct Queue {
     pub type_: Option<String>,
 }
 
+/// <p>Description of the source and destination queues between which the job has moved, along with the timestamp of the move</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct QueueTransition {
+    /// <p>The queue that the job was on after the transition.</p>
+    #[serde(rename = "DestinationQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_queue: Option<String>,
+    /// <p>The queue that the job was on before the transition.</p>
+    #[serde(rename = "SourceQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_queue: Option<String>,
+    /// <p>The time, in Unix epoch format, that the job moved from the source queue to the destination queue.</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+}
+
 /// <p>Use Rectangle to identify a specific area of the video frame.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Rectangle {
@@ -4203,7 +4362,7 @@ pub struct TrackSourceSettings {
 /// <p>Settings specific to TTML caption outputs, including Pass style information (TtmlStylePassthrough).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TtmlDestinationSettings {
-    /// <p>Pass through style and position information from a TTML-like input source (TTML, SMPTE-TT, CFF-TT) to the CFF-TT output or TTML output.</p>
+    /// <p>Pass through style and position information from a TTML-like input source (TTML, SMPTE-TT) to the TTML output.</p>
     #[serde(rename = "StylePassthrough")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style_passthrough: Option<String>,
@@ -4240,6 +4399,10 @@ pub struct UpdateJobTemplateRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Optional list of hop destinations.</p>
+    #[serde(rename = "HopDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hop_destinations: Option<Vec<HopDestination>>,
     /// <p>The name of the job template you are modifying</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -4328,9 +4491,13 @@ pub struct UpdateQueueResponse {
     pub queue: Option<Queue>,
 }
 
-/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
+/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoCodecSettings {
+    /// <p>Required when you set Codec, under VideoDescription&gt;CodecSettings to the value AV1.</p>
+    #[serde(rename = "Av1Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub av_1_settings: Option<Av1Settings>,
     /// <p>Specifies the video codec. This must be equal to one of the enum values defined by the object  VideoCodec.</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4368,7 +4535,7 @@ pub struct VideoDescription {
     #[serde(rename = "AntiAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
-    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
+    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,

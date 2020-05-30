@@ -59,6 +59,92 @@ pub struct AddOnRequest {
     pub auto_snapshot_add_on_request: Option<AutoSnapshotAddOnRequest>,
 }
 
+/// <p>Describes an alarm.</p> <p>An alarm is a way to monitor your Amazon Lightsail resource metrics. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Alarm {
+    /// <p>The Amazon Resource Name (ARN) of the alarm.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The arithmetic operation used when comparing the specified statistic and threshold.</p>
+    #[serde(rename = "comparisonOperator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comparison_operator: Option<String>,
+    /// <p>The contact protocols for the alarm, such as <code>Email</code>, <code>SMS</code> (text messaging), or both.</p>
+    #[serde(rename = "contactProtocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_protocols: Option<Vec<String>>,
+    /// <p>The timestamp when the alarm was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The number of data points that must not within the specified threshold to trigger the alarm.</p>
+    #[serde(rename = "datapointsToAlarm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datapoints_to_alarm: Option<i64>,
+    /// <p>The number of periods over which data is compared to the specified threshold.</p>
+    #[serde(rename = "evaluationPeriods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_periods: Option<i64>,
+    /// <p>An object that lists information about the location of the alarm.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the metric associated with the alarm.</p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+    /// <p>An object that lists information about the resource monitored by the alarm.</p>
+    #[serde(rename = "monitoredResourceInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitored_resource_info: Option<MonitoredResourceInfo>,
+    /// <p>The name of the alarm.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Indicates whether the alarm is enabled.</p>
+    #[serde(rename = "notificationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_enabled: Option<bool>,
+    /// <p>The alarm states that trigger a notification.</p>
+    #[serde(rename = "notificationTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_triggers: Option<Vec<String>>,
+    /// <p>The period, in seconds, over which the statistic is applied.</p>
+    #[serde(rename = "period")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period: Option<i64>,
+    /// <p>The Lightsail resource type (e.g., <code>Alarm</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p><p>The current state of the alarm.</p> <p>An alarm has the following possible states:</p> <ul> <li> <p> <code>ALARM</code> - The metric is outside of the defined threshold.</p> </li> <li> <p> <code>INSUFFICIENT_DATA</code> - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.</p> </li> <li> <p> <code>OK</code> - The metric is within the defined threshold.</p> </li> </ul></p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p><p>The statistic for the metric associated with the alarm.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
+    #[serde(rename = "statistic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistic: Option<String>,
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail alarm. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+    /// <p>The value against which the specified statistic is compared.</p>
+    #[serde(rename = "threshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threshold: Option<f64>,
+    /// <p><p>Specifies how the alarm handles missing data points.</p> <p>An alarm can treat missing data in the following ways:</p> <ul> <li> <p> <code>breaching</code> - Assume the missing data is not within the threshold. Missing data counts towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>notBreaching</code> - Assume the missing data is within the threshold. Missing data does not count towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>ignore</code> - Ignore the missing data. Maintains the current alarm state.</p> </li> <li> <p> <code>missing</code> - Missing data is treated as missing.</p> </li> </ul></p>
+    #[serde(rename = "treatMissingData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub treat_missing_data: Option<String>,
+    /// <p>The unit of the metric associated with the alarm.</p>
+    #[serde(rename = "unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateStaticIpRequest {
@@ -70,7 +156,7 @@ pub struct AllocateStaticIpRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AllocateStaticIpResult {
-    /// <p>An array of key-value pairs containing information about the static IP address you allocated.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -93,7 +179,7 @@ pub struct AttachDiskRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachDiskResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -113,7 +199,7 @@ pub struct AttachInstancesToLoadBalancerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachInstancesToLoadBalancerResult {
-    /// <p>An object representing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -133,7 +219,7 @@ pub struct AttachLoadBalancerTlsCertificateRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachLoadBalancerTlsCertificateResult {
-    /// <p>An object representing the API operations.</p> <p>These SSL/TLS certificates are only usable by Lightsail load balancers. You can't get the certificate and use it for another purpose.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p> <p>These SSL/TLS certificates are only usable by Lightsail load balancers. You can't get the certificate and use it for another purpose.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -153,7 +239,7 @@ pub struct AttachStaticIpRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachStaticIpResult {
-    /// <p>An array of key-value pairs containing information about your API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -326,10 +412,10 @@ pub struct Bundle {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseInstancePublicPortsRequest {
-    /// <p>The name of the instance on which you're attempting to close the public ports.</p>
+    /// <p>The name of the instance for which to close ports.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
-    /// <p>Information about the public port you are trying to close.</p>
+    /// <p>An object to describe the ports to close for the specified instance.</p>
     #[serde(rename = "portInfo")]
     pub port_info: PortInfo,
 }
@@ -337,7 +423,7 @@ pub struct CloseInstancePublicPortsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloseInstancePublicPortsResult {
-    /// <p>An array of key-value pairs that contains information about the operation.</p>
+    /// <p>An object that describes the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -399,6 +485,47 @@ pub struct CloudFormationStackRecordSourceInfo {
     pub resource_type: Option<String>,
 }
 
+/// <p>Describes a contact method.</p> <p>A contact method is a way to send you notifications. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContactMethod {
+    /// <p>The Amazon Resource Name (ARN) of the contact method.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The destination of the contact method, such as an email address or a mobile phone number.</p>
+    #[serde(rename = "contactEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_endpoint: Option<String>,
+    /// <p>The timestamp when the contact method was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the contact method.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The protocol of the contact method, such as email or SMS (text messaging).</p>
+    #[serde(rename = "protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>ContactMethod</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p><p>The current status of the contact method.</p> <p>A contact method has the following possible status:</p> <ul> <li> <p> <code>PendingVerification</code> - The contact method has not yet been verified, and the verification has not yet expired.</p> </li> <li> <p> <code>Valid</code> - The contact method has been verified.</p> </li> <li> <p> <code>InValid</code> - An attempt was made to verify the contact method, but the verification has expired.</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail contact method. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
@@ -429,7 +556,7 @@ pub struct CopySnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopySnapshotResult {
-    /// <p>A list of objects describing the API operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -446,7 +573,27 @@ pub struct CreateCloudFormationStackRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationStackResult {
-    /// <p>A list of objects describing the API operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateContactMethodRequest {
+    /// <p>The destination of the contact method, such as an email address or a mobile phone number.</p> <p>Use the E.164 format when specifying a mobile phone number. E.164 is a standard for the phone number structure used for international telecommunication. Phone numbers that follow this format can have a maximum of 15 digits, and they are prefixed with the plus character (+) and the country code. For example, a U.S. phone number in E.164 format would be specified as +1XXX5550100. For more information, see <a href="https://en.wikipedia.org/wiki/E.164">E.164</a> on <i>Wikipedia</i>.</p>
+    #[serde(rename = "contactEndpoint")]
+    pub contact_endpoint: String,
+    /// <p>The protocol of the contact method, such as <code>Email</code> or <code>SMS</code> (text messaging).</p> <p>The <code>SMS</code> protocol is supported only in the following AWS Regions.</p> <ul> <li> <p>US East (N. Virginia) (<code>us-east-1</code>)</p> </li> <li> <p>US West (Oregon) (<code>us-west-2</code>)</p> </li> <li> <p>Europe (Ireland) (<code>eu-west-1</code>)</p> </li> <li> <p>Asia Pacific (Tokyo) (<code>ap-northeast-1</code>)</p> </li> <li> <p>Asia Pacific (Singapore) (<code>ap-southeast-1</code>)</p> </li> <li> <p>Asia Pacific (Sydney) (<code>ap-southeast-2</code>)</p> </li> </ul> <p>For a list of countries/regions where SMS text messages can be sent, and the latest AWS Regions where SMS text messaging is supported, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html">Supported Regions and Countries</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>For more information about notifications in Amazon Lightsail, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    #[serde(rename = "protocol")]
+    pub protocol: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateContactMethodResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -493,7 +640,7 @@ pub struct CreateDiskFromSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiskFromSnapshotResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -524,7 +671,7 @@ pub struct CreateDiskRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiskResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -553,7 +700,7 @@ pub struct CreateDiskSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDiskSnapshotResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -573,7 +720,7 @@ pub struct CreateDomainEntryRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainEntryResult {
-    /// <p>An array of key-value pairs containing information about the operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -594,7 +741,7 @@ pub struct CreateDomainRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainResult {
-    /// <p>An array of key-value pairs containing information about the domain resource you created.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -618,7 +765,7 @@ pub struct CreateInstanceSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceSnapshotResult {
-    /// <p>An array of key-value pairs containing information about the results of your create instances snapshot request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -677,7 +824,7 @@ pub struct CreateInstancesFromSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstancesFromSnapshotResult {
-    /// <p>An array of key-value pairs containing information about the results of your create instances from snapshot request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -719,7 +866,7 @@ pub struct CreateInstancesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstancesResult {
-    /// <p>An array of key-value pairs containing information about the results of your create instances request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -744,7 +891,7 @@ pub struct CreateKeyPairResult {
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair: Option<KeyPair>,
-    /// <p>An array of key-value pairs containing information about the results of your create key pair request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -792,7 +939,7 @@ pub struct CreateLoadBalancerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoadBalancerResult {
-    /// <p>An object containing information about the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -823,7 +970,7 @@ pub struct CreateLoadBalancerTlsCertificateRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoadBalancerTlsCertificateResult {
-    /// <p>An object containing information about the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -872,7 +1019,7 @@ pub struct CreateRelationalDatabaseFromSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRelationalDatabaseFromSnapshotResult {
-    /// <p>An object describing the result of your create relational database from snapshot request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -925,7 +1072,7 @@ pub struct CreateRelationalDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRelationalDatabaseResult {
-    /// <p>An object describing the result of your create relational database request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -949,7 +1096,24 @@ pub struct CreateRelationalDatabaseSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRelationalDatabaseSnapshotResult {
-    /// <p>An object describing the result of your create relational database snapshot request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAlarmRequest {
+    /// <p>The name of the alarm to delete.</p>
+    #[serde(rename = "alarmName")]
+    pub alarm_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAlarmResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -969,7 +1133,24 @@ pub struct DeleteAutoSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAutoSnapshotResult {
-    /// <p>An array of objects that describe the result of your request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteContactMethodRequest {
+    /// <p><p>The protocol that will be deleted, such as <code>Email</code> or <code>SMS</code> (text messaging).</p> <note> <p>To delete an <code>Email</code> and an <code>SMS</code> contact method if you added both, you must run separate <code>DeleteContactMethod</code> actions to delete each protocol.</p> </note></p>
+    #[serde(rename = "protocol")]
+    pub protocol: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteContactMethodResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -990,7 +1171,7 @@ pub struct DeleteDiskRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDiskResult {
-    /// <p>An array of objects that describe the result of your request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1007,7 +1188,7 @@ pub struct DeleteDiskSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDiskSnapshotResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1027,7 +1208,7 @@ pub struct DeleteDomainEntryRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainEntryResult {
-    /// <p>An array of key-value pairs containing information about the results of your delete domain entry request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -1044,7 +1225,7 @@ pub struct DeleteDomainRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainResult {
-    /// <p>An array of key-value pairs containing information about the results of your delete domain request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -1065,7 +1246,7 @@ pub struct DeleteInstanceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceResult {
-    /// <p>An array of key-value pairs containing information about the results of your delete instance request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1082,7 +1263,7 @@ pub struct DeleteInstanceSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceSnapshotResult {
-    /// <p>An array of key-value pairs containing information about the results of your delete instance snapshot request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1099,7 +1280,7 @@ pub struct DeleteKeyPairRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteKeyPairResult {
-    /// <p>An array of key-value pairs containing information about the results of your delete key pair request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -1116,7 +1297,7 @@ pub struct DeleteKnownHostKeysRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteKnownHostKeysResult {
-    /// <p>A list of objects describing the API operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1133,7 +1314,7 @@ pub struct DeleteLoadBalancerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoadBalancerResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1157,7 +1338,7 @@ pub struct DeleteLoadBalancerTlsCertificateRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoadBalancerTlsCertificateResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1182,7 +1363,7 @@ pub struct DeleteRelationalDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRelationalDatabaseResult {
-    /// <p>An object describing the result of your delete relational database request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1199,7 +1380,7 @@ pub struct DeleteRelationalDatabaseSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRelationalDatabaseSnapshotResult {
-    /// <p>An object describing the result of your delete relational database snapshot request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1230,7 +1411,7 @@ pub struct DetachDiskRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachDiskResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1250,7 +1431,7 @@ pub struct DetachInstancesFromLoadBalancerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachInstancesFromLoadBalancerResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1267,7 +1448,7 @@ pub struct DetachStaticIpRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachStaticIpResult {
-    /// <p>An array of key-value pairs containing information about the results of your detach static IP request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1287,7 +1468,7 @@ pub struct DisableAddOnRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableAddOnResult {
-    /// <p>An array of objects that describe the result of your request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1565,7 +1746,7 @@ pub struct EnableAddOnRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableAddOnResult {
-    /// <p>An array of objects that describe the result of your request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1658,7 +1839,7 @@ pub struct ExportSnapshotRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportSnapshotResult {
-    /// <p>A list of objects describing the API operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1667,7 +1848,7 @@ pub struct ExportSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetActiveNamesRequest {
-    /// <p>A token used for paginating results from your get active names request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetActiveNames</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1680,7 +1861,37 @@ pub struct GetActiveNamesResult {
     #[serde(rename = "activeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_names: Option<Vec<String>>,
-    /// <p>A token used for advancing to the next page of results from your get active names request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetActiveNames</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAlarmsRequest {
+    /// <p>The name of the alarm.</p> <p>Specify an alarm name to return information about a specific alarm.</p>
+    #[serde(rename = "alarmName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alarm_name: Option<String>,
+    /// <p>The name of the Lightsail resource being monitored by the alarm.</p> <p>Specify a monitored resource name to return information about all alarms for a specific resource.</p>
+    #[serde(rename = "monitoredResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitored_resource_name: Option<String>,
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetAlarms</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAlarmsResult {
+    /// <p>An array of objects that describe the alarms.</p>
+    #[serde(rename = "alarms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alarms: Option<Vec<Alarm>>,
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetAlarms</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1718,7 +1929,7 @@ pub struct GetBlueprintsRequest {
     #[serde(rename = "includeInactive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_inactive: Option<bool>,
-    /// <p>A token used for advancing to the next page of results from your get blueprints request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetBlueprints</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1731,7 +1942,7 @@ pub struct GetBlueprintsResult {
     #[serde(rename = "blueprints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blueprints: Option<Vec<Blueprint>>,
-    /// <p>A token used for advancing to the next page of results from your get blueprints request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetBlueprints</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1744,7 +1955,7 @@ pub struct GetBundlesRequest {
     #[serde(rename = "includeInactive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_inactive: Option<bool>,
-    /// <p>A token used for advancing to the next page of results from your get bundles request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetBundles</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1757,7 +1968,7 @@ pub struct GetBundlesResult {
     #[serde(rename = "bundles")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundles: Option<Vec<Bundle>>,
-    /// <p>A token used for advancing to the next page of results from your get active names request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetBundles</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1766,7 +1977,7 @@ pub struct GetBundlesResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationStackRecordsRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get cloud formation stack records</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetClouFormationStackRecords</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1779,10 +1990,28 @@ pub struct GetCloudFormationStackRecordsResult {
     #[serde(rename = "cloudFormationStackRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_formation_stack_records: Option<Vec<CloudFormationStackRecord>>,
-    /// <p>A token used for advancing to the next page of results of your get relational database bundles request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetCloudFormationStackRecords</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetContactMethodsRequest {
+    /// <p>The protocols used to send notifications, such as <code>Email</code>, or <code>SMS</code> (text messaging).</p> <p>Specify a protocol in your request to return information about a specific contact method protocol.</p>
+    #[serde(rename = "protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetContactMethodsResult {
+    /// <p>An array of objects that describe the contact methods.</p>
+    #[serde(rename = "contactMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_methods: Option<Vec<ContactMethod>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1822,7 +2051,7 @@ pub struct GetDiskSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiskSnapshotsRequest {
-    /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetDiskSnapshots</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1835,7 +2064,7 @@ pub struct GetDiskSnapshotsResult {
     #[serde(rename = "diskSnapshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_snapshots: Option<Vec<DiskSnapshot>>,
-    /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetDiskSnapshots</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1844,7 +2073,7 @@ pub struct GetDiskSnapshotsResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDisksRequest {
-    /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetDisks</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1857,7 +2086,7 @@ pub struct GetDisksResult {
     #[serde(rename = "disks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disks: Option<Vec<Disk>>,
-    /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetDisks</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1883,7 +2112,7 @@ pub struct GetDomainResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainsRequest {
-    /// <p>A token used for advancing to the next page of results from your get domains request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetDomains</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1896,7 +2125,7 @@ pub struct GetDomainsResult {
     #[serde(rename = "domains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domains: Option<Vec<Domain>>,
-    /// <p>A token used for advancing to the next page of results from your get active names request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetDomains</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1905,7 +2134,7 @@ pub struct GetDomainsResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportSnapshotRecordsRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get export snapshot records</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetExportSnapshotRecords</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1918,7 +2147,7 @@ pub struct GetExportSnapshotRecordsResult {
     #[serde(rename = "exportSnapshotRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_snapshot_records: Option<Vec<ExportSnapshotRecord>>,
-    /// <p>A token used for advancing to the next page of results of your get relational database bundles request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetExportSnapshotRecords</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1954,19 +2183,19 @@ pub struct GetInstanceMetricDataRequest {
     /// <p>The name of the instance for which you want to get metrics data.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
-    /// <p>The metric name to get data about. </p>
+    /// <p><p>The metric for which you want to return information.</p> <p>Valid instance metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value.</p> <ul> <li> <p> <b> <code>CPUUtilization</code> </b> - The percentage of allocated compute units that are currently in use on the instance. This metric identifies the processing power to run the applications on the instance. Tools in your operating system can show a lower percentage than Lightsail when the instance is not allocated a full processor core.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>NetworkIn</code> </b> - The number of bytes received on all network interfaces by the instance. This metric identifies the volume of incoming network traffic to the instance. The number reported is the number of bytes received during the period. Because this metric is reported in 5-minute intervals, divide the reported number by 300 to find Bytes/second.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes</code>.</p> </li> <li> <p> <b> <code>NetworkOut</code> </b> - The number of bytes sent out on all network interfaces by the instance. This metric identifies the volume of outgoing network traffic from the instance. The number reported is the number of bytes sent during the period. Because this metric is reported in 5-minute intervals, divide the reported number by 300 to find Bytes/second.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes</code>.</p> </li> <li> <p> <b> <code>StatusCheckFailed</code> </b> - Reports whether the instance passed or failed both the instance status check and the system status check. This metric can be either 0 (passed) or 1 (failed). This metric data is available in 1-minute (60 seconds) granularity.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>StatusCheckFailed<em>Instance</code> </b> - Reports whether the instance passed or failed the instance status check. This metric can be either 0 (passed) or 1 (failed). This metric data is available in 1-minute (60 seconds) granularity.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>StatusCheckFailed</em>System</code> </b> - Reports whether the instance passed or failed the system status check. This metric can be either 0 (passed) or 1 (failed). This metric data is available in 1-minute (60 seconds) granularity.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
     pub metric_name: String,
-    /// <p>The granularity, in seconds, of the returned data points.</p>
+    /// <p>The granularity, in seconds, of the returned data points.</p> <p>The <code>StatusCheckFailed</code>, <code>StatusCheckFailed_Instance</code>, and <code>StatusCheckFailed_System</code> instance metric data is available in 1-minute (60 seconds) granularity. All other instance metric data is available in 5-minute (300 seconds) granularity.</p>
     #[serde(rename = "period")]
     pub period: i64,
     /// <p>The start time of the time period.</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p>The instance statistics. </p>
+    /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
     pub statistics: Vec<String>,
-    /// <p>The unit. The list of valid values is below.</p>
+    /// <p>The unit for the metric data request. Valid units depend on the metric data being requested. For the valid units to specify with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
     pub unit: String,
 }
@@ -1987,7 +2216,7 @@ pub struct GetInstanceMetricDataResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancePortStatesRequest {
-    /// <p>The name of the instance.</p>
+    /// <p>The name of the instance for which to return firewall port states.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
@@ -1995,7 +2224,7 @@ pub struct GetInstancePortStatesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstancePortStatesResult {
-    /// <p>Information about the port states resulting from your request.</p>
+    /// <p>An array of objects that describe the firewall port states for the specified instance.</p>
     #[serde(rename = "portStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_states: Option<Vec<InstancePortState>>,
@@ -2038,7 +2267,7 @@ pub struct GetInstanceSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceSnapshotsRequest {
-    /// <p>A token used for advancing to the next page of results from your get instance snapshots request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetInstanceSnapshots</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2051,7 +2280,7 @@ pub struct GetInstanceSnapshotsResult {
     #[serde(rename = "instanceSnapshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_snapshots: Option<Vec<InstanceSnapshot>>,
-    /// <p>A token used for advancing to the next page of results from your get instance snapshots request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetInstanceSnapshots</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2077,7 +2306,7 @@ pub struct GetInstanceStateResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstancesRequest {
-    /// <p>A token used for advancing to the next page of results from your get instances request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetInstances</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2090,7 +2319,7 @@ pub struct GetInstancesResult {
     #[serde(rename = "instances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances: Option<Vec<Instance>>,
-    /// <p>A token used for advancing to the next page of results from your get instances request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetInstances</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2116,7 +2345,7 @@ pub struct GetKeyPairResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetKeyPairsRequest {
-    /// <p>A token used for advancing to the next page of results from your get key pairs request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetKeyPairs</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2129,7 +2358,7 @@ pub struct GetKeyPairsResult {
     #[serde(rename = "keyPairs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pairs: Option<Vec<KeyPair>>,
-    /// <p>A token used for advancing to the next page of results from your get key pairs request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetKeyPairs</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2144,7 +2373,7 @@ pub struct GetLoadBalancerMetricDataRequest {
     /// <p>The name of the load balancer.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
-    /// <p><p>The metric about which you want to return information. Valid values are listed below, along with the most useful <code>statistics</code> to include in your request.</p> <ul> <li> <p> <b> <code>ClientTLSNegotiationErrorCount</code> </b> - The number of TLS connections initiated by the client that did not establish a session with the load balancer. Possible causes include a mismatch of ciphers or protocols.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>HealthyHostCount</code> </b> - The number of target instances that are considered healthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>UnhealthyHostCount</code> </b> - The number of target instances that are considered unhealthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>LB</em>4XX<em>Count</code> </b> - The number of HTTP 4XX client error codes that originate from the load balancer. Client errors are generated when requests are malformed or incomplete. These requests have not been received by the target instance. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>LB<em>5XX</em>Count</code> </b> - The number of HTTP 5XX server error codes that originate from the load balancer. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>2XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>3XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer. </p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>4XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>5XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>InstanceResponseTime</code> </b> - The time elapsed, in seconds, after the request leaves the load balancer until a response from the target instance is received.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> </li> <li> <p> <b> <code>RejectedConnectionCount</code> </b> - The number of connections that were rejected because the load balancer had reached its maximum number of connections.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>RequestCount</code> </b> - The number of requests processed over IPv4. This count includes only the requests with a response generated by a target instance of the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> </ul></p>
+    /// <p><p>The metric for which you want to return information.</p> <p>Valid load balancer metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value.</p> <ul> <li> <p> <b> <code>ClientTLSNegotiationErrorCount</code> </b> - The number of TLS connections initiated by the client that did not establish a session with the load balancer due to a TLS error generated by the load balancer. Possible causes include a mismatch of ciphers or protocols.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HealthyHostCount</code> </b> - The number of target instances that are considered healthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>2XX<em>Count</code> </b> - The number of HTTP 2XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>3XX</em>Count</code> </b> - The number of HTTP 3XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>4XX<em>Count</code> </b> - The number of HTTP 4XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>5XX</em>Count</code> </b> - The number of HTTP 5XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>LB</em>4XX<em>Count</code> </b> - The number of HTTP 4XX client error codes that originated from the load balancer. Client errors are generated when requests are malformed or incomplete. These requests were not received by the target instance. This count does not include response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>LB<em>5XX</em>Count</code> </b> - The number of HTTP 5XX server error codes that originated from the load balancer. This does not include any response codes generated by the target instance. This metric is reported if there are no healthy instances attached to the load balancer, or if the request rate exceeds the capacity of the instances (spillover) or the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>InstanceResponseTime</code> </b> - The time elapsed, in seconds, after the request leaves the load balancer until a response from the target instance is received.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Seconds</code>.</p> </li> <li> <p> <b> <code>RejectedConnectionCount</code> </b> - The number of connections that were rejected because the load balancer had reached its maximum number of connections.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>RequestCount</code> </b> - The number of requests processed over IPv4. This count includes only the requests with a response generated by a target instance of the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>UnhealthyHostCount</code> </b> - The number of target instances that are considered unhealthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
     pub metric_name: String,
     /// <p>The granularity, in seconds, of the returned data points.</p>
@@ -2153,10 +2382,10 @@ pub struct GetLoadBalancerMetricDataRequest {
     /// <p>The start time of the period.</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p><p>An array of statistics that you want to request metrics for. Valid values are listed below.</p> <ul> <li> <p> <b> <code>SampleCount</code> </b> - The count (number) of data points used for the statistical calculation.</p> </li> <li> <p> <b> <code>Average</code> </b> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum. This comparison helps you to know when to increase or decrease your resources as needed.</p> </li> <li> <p> <b> <code>Sum</code> </b> - All values submitted for the matching metric added together. This statistic can be useful for determining the total volume of a metric.</p> </li> <li> <p> <b> <code>Minimum</code> </b> - The lowest value observed during the specified period. You can use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <b> <code>Maximum</code> </b> - The highest value observed during the specified period. You can use this value to determine high volumes of activity for your application.</p> </li> </ul></p>
+    /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
     pub statistics: Vec<String>,
-    /// <p>The unit for the time period request. Valid values are listed below.</p>
+    /// <p>The unit for the metric data request. Valid units depend on the metric data being required. For the valid units with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
     pub unit: String,
 }
@@ -2211,7 +2440,7 @@ pub struct GetLoadBalancerTlsCertificatesResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoadBalancersRequest {
-    /// <p>A token used for paginating the results from your GetLoadBalancers request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetLoadBalancers</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2224,7 +2453,7 @@ pub struct GetLoadBalancersResult {
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
-    /// <p>A token used for advancing to the next page of results from your GetLoadBalancers request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetLoadBalancers</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2241,7 +2470,7 @@ pub struct GetOperationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationResult {
-    /// <p>An array of key-value pairs containing information about the results of your get operation request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -2250,7 +2479,7 @@ pub struct GetOperationResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsForResourceRequest {
-    /// <p>A token used for advancing to the next page of results from your get operations for resource request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetOperationsForResource</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2262,11 +2491,11 @@ pub struct GetOperationsForResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationsForResourceResult {
-    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetOperationsForResource</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>An array of key-value pairs containing information about the results of your get operations for resource request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -2275,7 +2504,7 @@ pub struct GetOperationsForResourceResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOperationsRequest {
-    /// <p>A token used for advancing to the next page of results from your get operations request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetOperations</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2284,11 +2513,11 @@ pub struct GetOperationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOperationsResult {
-    /// <p>A token used for advancing to the next page of results from your get operations request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetOperations</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>An array of key-value pairs containing information about the results of your get operations request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -2319,7 +2548,7 @@ pub struct GetRegionsResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBlueprintsRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get relational database blueprints</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabaseBlueprints</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2332,7 +2561,7 @@ pub struct GetRelationalDatabaseBlueprintsResult {
     #[serde(rename = "blueprints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blueprints: Option<Vec<RelationalDatabaseBlueprint>>,
-    /// <p>A token used for advancing to the next page of results of your get relational database blueprints request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetRelationalDatabaseBlueprints</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2341,7 +2570,7 @@ pub struct GetRelationalDatabaseBlueprintsResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseBundlesRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get relational database bundles</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabaseBundles</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2354,7 +2583,7 @@ pub struct GetRelationalDatabaseBundlesResult {
     #[serde(rename = "bundles")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundles: Option<Vec<RelationalDatabaseBundle>>,
-    /// <p>A token used for advancing to the next page of results of your get relational database bundles request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetRelationalDatabaseBundles</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2367,7 +2596,7 @@ pub struct GetRelationalDatabaseEventsRequest {
     #[serde(rename = "durationInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_in_minutes: Option<i64>,
-    /// <p>A token used for advancing to a specific page of results from for get relational database events request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabaseEvents</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2379,7 +2608,7 @@ pub struct GetRelationalDatabaseEventsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseEventsResult {
-    /// <p>A token used for advancing to the next page of results from your get relational database events request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetRelationalDatabaseEvents</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2399,7 +2628,7 @@ pub struct GetRelationalDatabaseLogEventsRequest {
     /// <p>The name of the log stream.</p> <p>Use the <code>get relational database log streams</code> operation to get a list of available log streams.</p>
     #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
-    /// <p>A token used for advancing to a specific page of results for your <code>get relational database log events</code> request.</p>
+    /// <p>The token to advance to the next or previous page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabaseLogEvents</code> request. If your results are paginated, the response will return a next forward token and/or next backward token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2481,10 +2710,10 @@ pub struct GetRelationalDatabaseMetricDataRequest {
     /// <p><p>The end of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
     #[serde(rename = "endTime")]
     pub end_time: f64,
-    /// <p>The name of the metric data to return.</p>
+    /// <p><p>The metric for which you want to return information.</p> <p>Valid relational database metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value. All relational database metric data is available in 1-minute (60 seconds) granularity.</p> <ul> <li> <p> <b> <code>CPUUtilization</code> </b> - The percentage of CPU utilization currently in use on the database.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>DatabaseConnections</code> </b> - The number of database connections in use.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>DiskQueueDepth</code> </b> - The number of outstanding IOs (read/write requests) that are waiting to access the disk.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>FreeStorageSpace</code> </b> - The amount of available storage space.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes</code>.</p> </li> <li> <p> <b> <code>NetworkReceiveThroughput</code> </b> - The incoming (Receive) network traffic on the database, including both customer database traffic and AWS traffic used for monitoring and replication.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes/Second</code>.</p> </li> <li> <p> <b> <code>NetworkTransmitThroughput</code> </b> - The outgoing (Transmit) network traffic on the database, including both customer database traffic and AWS traffic used for monitoring and replication.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes/Second</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
     pub metric_name: String,
-    /// <p>The granularity, in seconds, of the returned data points.</p>
+    /// <p>The granularity, in seconds, of the returned data points.</p> <p>All relational database metric data is available in 1-minute (60 seconds) granularity.</p>
     #[serde(rename = "period")]
     pub period: i64,
     /// <p>The name of your database from which to get metric data.</p>
@@ -2493,10 +2722,10 @@ pub struct GetRelationalDatabaseMetricDataRequest {
     /// <p><p>The start of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p>The array of statistics for your metric data request.</p>
+    /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
     pub statistics: Vec<String>,
-    /// <p>The unit for the metric data request.</p>
+    /// <p>The unit for the metric data request. Valid units depend on the metric data being required. For the valid units with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
     pub unit: String,
 }
@@ -2517,7 +2746,7 @@ pub struct GetRelationalDatabaseMetricDataResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseParametersRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get relational database parameters</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabaseParameters</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2529,7 +2758,7 @@ pub struct GetRelationalDatabaseParametersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseParametersResult {
-    /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetRelationalDatabaseParameters</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2576,7 +2805,7 @@ pub struct GetRelationalDatabaseSnapshotResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabaseSnapshotsRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get relational database snapshots</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabaseSnapshots</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2585,7 +2814,7 @@ pub struct GetRelationalDatabaseSnapshotsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabaseSnapshotsResult {
-    /// <p>A token used for advancing to the next page of results from your get relational database snapshots request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetRelationalDatabaseSnapshots</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2598,7 +2827,7 @@ pub struct GetRelationalDatabaseSnapshotsResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRelationalDatabasesRequest {
-    /// <p>A token used for advancing to a specific page of results for your <code>get relational database</code> request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetRelationalDatabases</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2607,7 +2836,7 @@ pub struct GetRelationalDatabasesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRelationalDatabasesResult {
-    /// <p>A token used for advancing to the next page of results from your get relational databases request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetRelationalDatabases</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2637,7 +2866,7 @@ pub struct GetStaticIpResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStaticIpsRequest {
-    /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetStaticIps</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -2646,7 +2875,7 @@ pub struct GetStaticIpsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStaticIpsResult {
-    /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
+    /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetStaticIps</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2704,7 +2933,7 @@ pub struct ImportKeyPairRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportKeyPairResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -2852,7 +3081,7 @@ pub struct InstanceEntry {
     /// <p>The instance type (e.g., <code>t2.micro</code>) to use for the new Amazon EC2 instance.</p>
     #[serde(rename = "instanceType")]
     pub instance_type: String,
-    /// <p><p>The port configuration to use for the new Amazon EC2 instance.</p> <p>The following configuration options are available:</p> <ul> <li> <p>DEFAULT — Use the default firewall settings from the image.</p> </li> <li> <p>INSTANCE — Use the firewall settings from the source Lightsail instance.</p> </li> <li> <p>NONE — Default to Amazon EC2.</p> </li> <li> <p>CLOSED — All ports closed.</p> </li> </ul></p>
+    /// <p><p>The port configuration to use for the new Amazon EC2 instance.</p> <p>The following configuration options are available:</p> <ul> <li> <p> <code>DEFAULT</code> - Use the default firewall settings from the Lightsail instance blueprint.</p> </li> <li> <p> <code>INSTANCE</code> - Use the configured firewall settings from the source Lightsail instance.</p> </li> <li> <p> <code>NONE</code> - Use the default Amazon EC2 security group.</p> </li> <li> <p> <code>CLOSED</code> - All ports closed.</p> </li> </ul> <note> <p>If you configured <code>lightsail-connect</code> as a <code>cidrListAliases</code> on your instance, or if you chose to allow the Lightsail browser-based SSH or RDP clients to connect to your instance, that configuration is not carried over to your new Amazon EC2 instance.</p> </note></p>
     #[serde(rename = "portInfoSource")]
     pub port_info_source: String,
     /// <p>The name of the export snapshot record, which contains the exported Lightsail instance snapshot that will be used as the source of the new Amazon EC2 instance.</p> <p>Use the <code>get export snapshot records</code> operation to get a list of export snapshot records that you can use to create a CloudFormation stack.</p>
@@ -2914,15 +3143,15 @@ pub struct InstanceNetworking {
     pub ports: Option<Vec<InstancePortInfo>>,
 }
 
-/// <p>Describes information about the instance ports.</p>
+/// <p>Describes information about ports for an Amazon Lightsail instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstancePortInfo {
-    /// <p>The access direction (<code>inbound</code> or <code>outbound</code>).</p>
+    /// <p><p>The access direction (<code>inbound</code> or <code>outbound</code>).</p> <note> <p>Lightsail currently supports only <code>inbound</code> access direction.</p> </note></p>
     #[serde(rename = "accessDirection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_direction: Option<String>,
-    /// <p>The location from which access is allowed (e.g., <code>Anywhere (0.0.0.0/0)</code>).</p>
+    /// <p>The location from which access is allowed. For example, <code>Anywhere (0.0.0.0/0)</code>, or <code>Custom</code> if a specific IP address or range of IP addresses is allowed.</p>
     #[serde(rename = "accessFrom")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_from: Option<String>,
@@ -2930,41 +3159,57 @@ pub struct InstancePortInfo {
     #[serde(rename = "accessType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_type: Option<String>,
-    /// <p>The common name.</p>
+    /// <p>An alias that defines access for a preconfigured range of IP addresses.</p> <p>The only alias currently supported is <code>lightsail-connect</code>, which allows IP addresses of the browser-based RDP/SSH client in the Lightsail console to connect to your instance.</p>
+    #[serde(rename = "cidrListAliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_list_aliases: Option<Vec<String>>,
+    /// <p>The IP address, or range of IP addresses in CIDR notation, that are allowed to connect to an instance through the ports, and the protocol. Lightsail supports IPv4 addresses.</p> <p>For more information about CIDR block notation, see <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation">Classless Inter-Domain Routing</a> on <i>Wikipedia</i>.</p>
+    #[serde(rename = "cidrs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidrs: Option<Vec<String>>,
+    /// <p>The common name of the port information.</p>
     #[serde(rename = "commonName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub common_name: Option<String>,
-    /// <p>The first port in the range.</p>
+    /// <p><p>The first port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - <code>8</code> (to configure Ping)</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "fromPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_port: Option<i64>,
-    /// <p><p>The protocol being used. Can be one of the following.</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on Wikipedia.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> </ul></p>
+    /// <p><p>The IP protocol name.</p> <p>The name can be one of the following:</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on <i>Wikipedia</i>.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> <li> <p> <code>icmp</code> - Internet Control Message Protocol (ICMP) is used to send error messages and operational information indicating success or failure when communicating with an instance. For example, an error is indicated when an instance could not be reached.</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    /// <p>The last port in the range.</p>
+    /// <p><p>The last port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - <code>-1</code> (to configure Ping)</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "toPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_port: Option<i64>,
 }
 
-/// <p>Describes the port state.</p>
+/// <p>Describes open ports on an instance, the IP addresses allowed to connect to the instance through the ports, and the protocol.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstancePortState {
-    /// <p>The first port in the range.</p>
+    /// <p>An alias that defines access for a preconfigured range of IP addresses.</p> <p>The only alias currently supported is <code>lightsail-connect</code>, which allows IP addresses of the browser-based RDP/SSH client in the Lightsail console to connect to your instance.</p>
+    #[serde(rename = "cidrListAliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_list_aliases: Option<Vec<String>>,
+    /// <p>The IP address, or range of IP addresses in CIDR notation, that are allowed to connect to an instance through the ports, and the protocol. Lightsail supports IPv4 addresses.</p> <p>For more information about CIDR block notation, see <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation">Classless Inter-Domain Routing</a> on <i>Wikipedia</i>.</p>
+    #[serde(rename = "cidrs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidrs: Option<Vec<String>>,
+    /// <p><p>The first port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - <code>8</code> (to configure Ping)</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "fromPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_port: Option<i64>,
-    /// <p><p>The protocol being used. Can be one of the following.</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on Wikipedia.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> </ul></p>
+    /// <p><p>The IP protocol name.</p> <p>The name can be one of the following:</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on <i>Wikipedia</i>.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> <li> <p> <code>icmp</code> - Internet Control Message Protocol (ICMP) is used to send error messages and operational information indicating success or failure when communicating with an instance. For example, an error is indicated when an instance could not be reached.</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    /// <p>Specifies whether the instance port is <code>open</code> or <code>closed</code>.</p>
+    /// <p><p>Specifies whether the instance port is <code>open</code> or <code>closed</code>.</p> <note> <p>The port state for Lightsail instances is always <code>open</code>.</p> </note></p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The last port in the range.</p>
+    /// <p><p>The last port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - <code>-1</code> (to configure Ping)</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "toPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_port: Option<i64>,
@@ -3415,6 +3660,24 @@ pub struct MetricDatapoint {
     pub unit: Option<String>,
 }
 
+/// <p>Describes resource being monitored by an alarm.</p> <p>An alarm is a way to monitor your Amazon Lightsail resource metrics. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MonitoredResourceInfo {
+    /// <p>The Amazon Resource Name (ARN) of the resource being monitored.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The name of the Lightsail resource being monitored.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Lightsail resource type of the resource being monitored.</p> <p>Instances, load balancers, and relational databases are the only Lightsail resources that can currently be monitored by alarms.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
 /// <p>Describes the monthly data transfer in and out of your virtual private server (or <i>instance</i>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3428,10 +3691,10 @@ pub struct MonthlyTransfer {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpenInstancePublicPortsRequest {
-    /// <p>The name of the instance for which you want to open the public ports.</p>
+    /// <p>The name of the instance for which to open ports.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
-    /// <p>An array of key-value pairs containing information about the port mappings.</p>
+    /// <p>An object to describe the ports to open for the specified instance.</p>
     #[serde(rename = "portInfo")]
     pub port_info: PortInfo,
 }
@@ -3439,7 +3702,7 @@ pub struct OpenInstancePublicPortsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpenInstancePublicPortsResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -3520,7 +3783,7 @@ pub struct PeerVpcRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PeerVpcResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -3562,19 +3825,27 @@ pub struct PendingModifiedRelationalDatabaseValues {
     pub master_user_password: Option<String>,
 }
 
-/// <p>Describes information about the ports on your virtual private server (or <i>instance</i>).</p>
+/// <p>Describes ports to open on an instance, the IP addresses allowed to connect to the instance through the ports, and the protocol.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PortInfo {
-    /// <p>The first port in the range.</p>
+    /// <p>An alias that defines access for a preconfigured range of IP addresses.</p> <p>The only alias currently supported is <code>lightsail-connect</code>, which allows IP addresses of the browser-based RDP/SSH client in the Lightsail console to connect to your instance.</p>
+    #[serde(rename = "cidrListAliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_list_aliases: Option<Vec<String>>,
+    /// <p>The IP address, or range of IP addresses in CIDR notation, that are allowed to connect to an instance through the ports, and the protocol. Lightsail supports IPv4 addresses.</p> <p>Examples:</p> <ul> <li> <p>To allow the IP address <code>192.0.2.44</code>, specify <code>192.0.2.44</code> or <code>192.0.2.44/32</code>. </p> </li> <li> <p>To allow the IP addresses <code>192.0.2.0</code> to <code>192.0.2.255</code>, specify <code>192.0.2.0/24</code>.</p> </li> </ul> <p>For more information about CIDR block notation, see <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation">Classless Inter-Domain Routing</a> on <i>Wikipedia</i>.</p>
+    #[serde(rename = "cidrs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidrs: Option<Vec<String>>,
+    /// <p><p>The first port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - <code>8</code> (to configure Ping)</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "fromPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_port: Option<i64>,
-    /// <p>The protocol. </p>
+    /// <p><p>The IP protocol name.</p> <p>The name can be one of the following:</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on <i>Wikipedia</i>.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> <li> <p> <code>icmp</code> - Internet Control Message Protocol (ICMP) is used to send error messages and operational information indicating success or failure when communicating with an instance. For example, an error is indicated when an instance could not be reached.</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    /// <p>The last port in the range.</p>
+    /// <p><p>The last port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - <code>-1</code> (to configure Ping)</p> <note> <p>Ping is the only communication supported through the ICMP protocol in Lightsail. To configure ping, specify the <code>fromPort</code> parameter as <code>8</code>, and the <code>toPort</code> parameter as <code>-1</code>.</p> </note> </li> </ul></p>
     #[serde(rename = "toPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_port: Option<i64>,
@@ -3582,11 +3853,63 @@ pub struct PortInfo {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAlarmRequest {
+    /// <p>The name for the alarm. Specify the name of an existing alarm to update, and overwrite the previous configuration of the alarm.</p>
+    #[serde(rename = "alarmName")]
+    pub alarm_name: String,
+    /// <p>The arithmetic operation to use when comparing the specified statistic to the threshold. The specified statistic value is used as the first operand.</p>
+    #[serde(rename = "comparisonOperator")]
+    pub comparison_operator: String,
+    /// <p>The contact protocols to use for the alarm, such as <code>Email</code>, <code>SMS</code> (text messaging), or both.</p> <p>A notification is sent via the specified contact protocol if notifications are enabled for the alarm, and when the alarm is triggered.</p> <p>A notification is not sent if a contact protocol is not specified, if the specified contact protocol is not configured in the AWS Region, or if notifications are not enabled for the alarm using the <code>notificationEnabled</code> paramater.</p> <p>Use the <code>CreateContactMethod</code> action to configure a contact protocol in an AWS Region.</p>
+    #[serde(rename = "contactProtocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_protocols: Option<Vec<String>>,
+    /// <p>The number of data points that must be not within the specified threshold to trigger the alarm. If you are setting an "M out of N" alarm, this value (<code>datapointsToAlarm</code>) is the M.</p>
+    #[serde(rename = "datapointsToAlarm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datapoints_to_alarm: Option<i64>,
+    /// <p>The number of most recent periods over which data is compared to the specified threshold. If you are setting an "M out of N" alarm, this value (<code>evaluationPeriods</code>) is the N.</p> <p>If you are setting an alarm that requires that a number of consecutive data points be breaching to trigger the alarm, this value specifies the rolling period of time in which data points are evaluated.</p> <p>Each evaluation period is five minutes long. For example, specify an evaluation period of 24 to evaluate a metric over a rolling period of two hours.</p> <p>You can specify a minimum valuation period of 1 (5 minutes), and a maximum evaluation period of 288 (24 hours).</p>
+    #[serde(rename = "evaluationPeriods")]
+    pub evaluation_periods: i64,
+    /// <p><p>The name of the metric to associate with the alarm.</p> <p>You can configure up to two alarms per metric.</p> <p>The following metrics are available for each resource type:</p> <ul> <li> <p> <b>Instances</b>: <code>CPUUtilization</code>, <code>NetworkIn</code>, <code>NetworkOut</code>, <code>StatusCheckFailed</code>, <code>StatusCheckFailed<em>Instance</code>, and <code>StatusCheckFailed</em>System</code>.</p> </li> <li> <p> <b>Load balancers</b>: <code>ClientTLSNegotiationErrorCount</code>, <code>HealthyHostCount</code>, <code>UnhealthyHostCount</code>, <code>HTTPCode<em>LB</em>4XX<em>Count</code>, <code>HTTPCode</em>LB<em>5XX</em>Count</code>, <code>HTTPCode<em>Instance</em>2XX<em>Count</code>, <code>HTTPCode</em>Instance<em>3XX</em>Count</code>, <code>HTTPCode<em>Instance</em>4XX<em>Count</code>, <code>HTTPCode</em>Instance<em>5XX</em>Count</code>, <code>InstanceResponseTime</code>, <code>RejectedConnectionCount</code>, and <code>RequestCount</code>.</p> </li> <li> <p> <b>Relational databases</b>: <code>CPUUtilization</code>, <code>DatabaseConnections</code>, <code>DiskQueueDepth</code>, <code>FreeStorageSpace</code>, <code>NetworkReceiveThroughput</code>, and <code>NetworkTransmitThroughput</code>.</p> </li> </ul></p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+    /// <p>The name of the Lightsail resource that will be monitored.</p> <p>Instances, load balancers, and relational databases are the only Lightsail resources that can currently be monitored by alarms.</p>
+    #[serde(rename = "monitoredResourceName")]
+    pub monitored_resource_name: String,
+    /// <p>Indicates whether the alarm is enabled.</p> <p>Notifications are enabled by default if you don't specify this parameter.</p>
+    #[serde(rename = "notificationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_enabled: Option<bool>,
+    /// <p>The alarm states that trigger a notification.</p> <p>An alarm has the following possible states:</p> <ul> <li> <p> <code>ALARM</code> - The metric is outside of the defined threshold.</p> </li> <li> <p> <code>INSUFFICIENT_DATA</code> - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.</p> </li> <li> <p> <code>OK</code> - The metric is within the defined threshold.</p> </li> </ul> <p>When you specify a notification trigger, the <code>ALARM</code> state must be specified. The <code>INSUFFICIENT_DATA</code> and <code>OK</code> states can be specified in addition to the <code>ALARM</code> state.</p> <ul> <li> <p>If you specify <code>OK</code> as an alarm trigger, a notification is sent when the alarm switches from an <code>ALARM</code> or <code>INSUFFICIENT_DATA</code> alarm state to an <code>OK</code> state. This can be thought of as an <i>all clear</i> alarm notification.</p> </li> <li> <p>If you specify <code>INSUFFICIENT_DATA</code> as the alarm trigger, a notification is sent when the alarm switches from an <code>OK</code> or <code>ALARM</code> alarm state to an <code>INSUFFICIENT_DATA</code> state.</p> </li> </ul> <p>The notification trigger defaults to <code>ALARM</code> if you don't specify this parameter.</p>
+    #[serde(rename = "notificationTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_triggers: Option<Vec<String>>,
+    /// <p>The value against which the specified statistic is compared.</p>
+    #[serde(rename = "threshold")]
+    pub threshold: f64,
+    /// <p>Sets how this alarm will handle missing data points.</p> <p>An alarm can treat missing data in the following ways:</p> <ul> <li> <p> <code>breaching</code> - Assume the missing data is not within the threshold. Missing data counts towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>notBreaching</code> - Assume the missing data is within the threshold. Missing data does not count towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>ignore</code> - Ignore the missing data. Maintains the current alarm state.</p> </li> <li> <p> <code>missing</code> - Missing data is treated as missing.</p> </li> </ul> <p>If <code>treatMissingData</code> is not specified, the default behavior of <code>missing</code> is used.</p>
+    #[serde(rename = "treatMissingData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub treat_missing_data: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAlarmResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutInstancePublicPortsRequest {
-    /// <p>The Lightsail instance name of the public port(s) you are setting.</p>
+    /// <p>The name of the instance for which to open ports.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
-    /// <p>Specifies information about the public port(s).</p>
+    /// <p>An array of objects to describe the ports to open for the specified instance.</p>
     #[serde(rename = "portInfos")]
     pub port_infos: Vec<PortInfo>,
 }
@@ -3594,7 +3917,7 @@ pub struct PutInstancePublicPortsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutInstancePublicPortsResult {
-    /// <p>Describes metadata about the operation you just executed.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -3611,7 +3934,7 @@ pub struct RebootInstanceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootInstanceResult {
-    /// <p>An array of key-value pairs containing information about the request operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -3628,7 +3951,7 @@ pub struct RebootRelationalDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootRelationalDatabaseResult {
-    /// <p>An object describing the result of your reboot relational database request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4014,7 +4337,7 @@ pub struct ReleaseStaticIpRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReleaseStaticIpResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4036,6 +4359,23 @@ pub struct ResourceLocation {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SendContactMethodVerificationRequest {
+    /// <p>The protocol to verify, such as <code>Email</code> or <code>SMS</code> (text messaging).</p>
+    #[serde(rename = "protocol")]
+    pub protocol: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SendContactMethodVerificationResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
     /// <p>The name of the instance (a virtual private server) to start.</p>
     #[serde(rename = "instanceName")]
@@ -4045,7 +4385,7 @@ pub struct StartInstanceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartInstanceResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4062,7 +4402,7 @@ pub struct StartRelationalDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRelationalDatabaseResult {
-    /// <p>An object describing the result of your start relational database request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4125,7 +4465,7 @@ pub struct StopInstanceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopInstanceResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4146,7 +4486,7 @@ pub struct StopRelationalDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRelationalDatabaseResult {
-    /// <p>An object describing the result of your stop relational database request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4183,7 +4523,27 @@ pub struct TagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResult {
-    /// <p>A list of objects describing the API operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TestAlarmRequest {
+    /// <p>The name of the alarm to test.</p>
+    #[serde(rename = "alarmName")]
+    pub alarm_name: String,
+    /// <p><p>The alarm state to test.</p> <p>An alarm has the following possible states that can be tested:</p> <ul> <li> <p> <code>ALARM</code> - The metric is outside of the defined threshold.</p> </li> <li> <p> <code>INSUFFICIENT_DATA</code> - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.</p> </li> <li> <p> <code>OK</code> - The metric is within the defined threshold.</p> </li> </ul></p>
+    #[serde(rename = "state")]
+    pub state: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TestAlarmResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4196,7 +4556,7 @@ pub struct UnpeerVpcRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnpeerVpcResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
@@ -4220,7 +4580,7 @@ pub struct UntagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResult {
-    /// <p>A list of objects describing the API operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4240,7 +4600,7 @@ pub struct UpdateDomainEntryRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainEntryResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4263,7 +4623,7 @@ pub struct UpdateLoadBalancerAttributeRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLoadBalancerAttributeResult {
-    /// <p>An object describing the API operations.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4283,7 +4643,7 @@ pub struct UpdateRelationalDatabaseParametersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRelationalDatabaseParametersResult {
-    /// <p>An object describing the result of your update relational database parameters request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4336,7 +4696,7 @@ pub struct UpdateRelationalDatabaseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRelationalDatabaseResult {
-    /// <p>An object describing the result of your update relational database request.</p>
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -4946,6 +5306,68 @@ impl fmt::Display for CreateCloudFormationStackError {
     }
 }
 impl Error for CreateCloudFormationStackError {}
+/// Errors returned by CreateContactMethod
+#[derive(Debug, PartialEq)]
+pub enum CreateContactMethodError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl CreateContactMethodError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactMethodError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateContactMethodError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateContactMethodError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateContactMethodError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(CreateContactMethodError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(CreateContactMethodError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CreateContactMethodError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateContactMethodError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateContactMethodError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateContactMethodError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateContactMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateContactMethodError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateContactMethodError::Service(ref cause) => write!(f, "{}", cause),
+            CreateContactMethodError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateContactMethodError {}
 /// Errors returned by CreateDisk
 #[derive(Debug, PartialEq)]
 pub enum CreateDiskError {
@@ -6004,6 +6426,66 @@ impl fmt::Display for CreateRelationalDatabaseSnapshotError {
     }
 }
 impl Error for CreateRelationalDatabaseSnapshotError {}
+/// Errors returned by DeleteAlarm
+#[derive(Debug, PartialEq)]
+pub enum DeleteAlarmError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DeleteAlarmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAlarmError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteAlarmError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteAlarmError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteAlarmError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(DeleteAlarmError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteAlarmError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteAlarmError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAlarmError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAlarmError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteAlarmError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteAlarmError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAlarmError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAlarmError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteAlarmError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAlarmError {}
 /// Errors returned by DeleteAutoSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteAutoSnapshotError {
@@ -6064,6 +6546,68 @@ impl fmt::Display for DeleteAutoSnapshotError {
     }
 }
 impl Error for DeleteAutoSnapshotError {}
+/// Errors returned by DeleteContactMethod
+#[derive(Debug, PartialEq)]
+pub enum DeleteContactMethodError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DeleteContactMethodError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContactMethodError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteContactMethodError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteContactMethodError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteContactMethodError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(DeleteContactMethodError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteContactMethodError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteContactMethodError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteContactMethodError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteContactMethodError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteContactMethodError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteContactMethodError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteContactMethodError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteContactMethodError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteContactMethodError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteContactMethodError {}
 /// Errors returned by DeleteDisk
 #[derive(Debug, PartialEq)]
 pub enum DeleteDiskError {
@@ -7494,6 +8038,66 @@ impl fmt::Display for GetActiveNamesError {
     }
 }
 impl Error for GetActiveNamesError {}
+/// Errors returned by GetAlarms
+#[derive(Debug, PartialEq)]
+pub enum GetAlarmsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetAlarmsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAlarmsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetAlarmsError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetAlarmsError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetAlarmsError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(GetAlarmsError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetAlarmsError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetAlarmsError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAlarmsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAlarmsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAlarmsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetAlarmsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAlarmsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetAlarmsError::Service(ref cause) => write!(f, "{}", cause),
+            GetAlarmsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAlarmsError {}
 /// Errors returned by GetAutoSnapshots
 #[derive(Debug, PartialEq)]
 pub enum GetAutoSnapshotsError {
@@ -7776,6 +8380,66 @@ impl fmt::Display for GetCloudFormationStackRecordsError {
     }
 }
 impl Error for GetCloudFormationStackRecordsError {}
+/// Errors returned by GetContactMethods
+#[derive(Debug, PartialEq)]
+pub enum GetContactMethodsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetContactMethodsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContactMethodsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetContactMethodsError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetContactMethodsError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetContactMethodsError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(GetContactMethodsError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetContactMethodsError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetContactMethodsError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetContactMethodsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetContactMethodsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetContactMethodsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetContactMethodsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetContactMethodsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetContactMethodsError::Service(ref cause) => write!(f, "{}", cause),
+            GetContactMethodsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetContactMethodsError {}
 /// Errors returned by GetDisk
 #[derive(Debug, PartialEq)]
 pub enum GetDiskError {
@@ -10962,6 +11626,64 @@ impl fmt::Display for PeerVpcError {
     }
 }
 impl Error for PeerVpcError {}
+/// Errors returned by PutAlarm
+#[derive(Debug, PartialEq)]
+pub enum PutAlarmError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl PutAlarmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAlarmError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(PutAlarmError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(PutAlarmError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutAlarmError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(PutAlarmError::OperationFailure(err.msg))
+                }
+                "ServiceException" => return RusotoError::Service(PutAlarmError::Service(err.msg)),
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(PutAlarmError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAlarmError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAlarmError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutAlarmError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutAlarmError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutAlarmError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            PutAlarmError::Service(ref cause) => write!(f, "{}", cause),
+            PutAlarmError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutAlarmError {}
 /// Errors returned by PutInstancePublicPorts
 #[derive(Debug, PartialEq)]
 pub enum PutInstancePublicPortsError {
@@ -11250,6 +11972,84 @@ impl fmt::Display for ReleaseStaticIpError {
     }
 }
 impl Error for ReleaseStaticIpError {}
+/// Errors returned by SendContactMethodVerification
+#[derive(Debug, PartialEq)]
+pub enum SendContactMethodVerificationError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl SendContactMethodVerificationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SendContactMethodVerificationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(SendContactMethodVerificationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(SendContactMethodVerificationError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(SendContactMethodVerificationError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(
+                        SendContactMethodVerificationError::OperationFailure(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(SendContactMethodVerificationError::Service(
+                        err.msg,
+                    ))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        SendContactMethodVerificationError::Unauthenticated(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SendContactMethodVerificationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SendContactMethodVerificationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SendContactMethodVerificationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            SendContactMethodVerificationError::NotFound(ref cause) => write!(f, "{}", cause),
+            SendContactMethodVerificationError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendContactMethodVerificationError::Service(ref cause) => write!(f, "{}", cause),
+            SendContactMethodVerificationError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for SendContactMethodVerificationError {}
 /// Errors returned by StartInstance
 #[derive(Debug, PartialEq)]
 pub enum StartInstanceError {
@@ -11602,6 +12402,66 @@ impl fmt::Display for TagResourceError {
     }
 }
 impl Error for TagResourceError {}
+/// Errors returned by TestAlarm
+#[derive(Debug, PartialEq)]
+pub enum TestAlarmError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl TestAlarmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestAlarmError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(TestAlarmError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(TestAlarmError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TestAlarmError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(TestAlarmError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(TestAlarmError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(TestAlarmError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TestAlarmError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TestAlarmError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TestAlarmError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TestAlarmError::NotFound(ref cause) => write!(f, "{}", cause),
+            TestAlarmError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            TestAlarmError::Service(ref cause) => write!(f, "{}", cause),
+            TestAlarmError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TestAlarmError {}
 /// Errors returned by UnpeerVpc
 #[derive(Debug, PartialEq)]
 pub enum UnpeerVpcError {
@@ -12077,7 +12937,7 @@ pub trait Lightsail {
         input: AttachInstancesToLoadBalancerRequest,
     ) -> Result<AttachInstancesToLoadBalancerResult, RusotoError<AttachInstancesToLoadBalancerError>>;
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>attach load balancer tls certificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> action with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>AttachLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
@@ -12092,7 +12952,7 @@ pub trait Lightsail {
         input: AttachStaticIpRequest,
     ) -> Result<AttachStaticIpResult, RusotoError<AttachStaticIpError>>;
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Closes ports for a specific Amazon Lightsail instance.</p> <p>The <code>CloseInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
@@ -12109,6 +12969,12 @@ pub trait Lightsail {
         &self,
         input: CreateCloudFormationStackRequest,
     ) -> Result<CreateCloudFormationStackResult, RusotoError<CreateCloudFormationStackError>>;
+
+    /// <p>Creates an email or SMS text message contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    async fn create_contact_method(
+        &self,
+        input: CreateContactMethodRequest,
+    ) -> Result<CreateContactMethodResult, RusotoError<CreateContactMethodError>>;
 
     /// <p>Creates a block storage disk that can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn create_disk(
@@ -12170,7 +13036,7 @@ pub trait Lightsail {
         input: CreateLoadBalancerRequest,
     ) -> Result<CreateLoadBalancerResult, RusotoError<CreateLoadBalancerError>>;
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>CreateLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
@@ -12203,11 +13069,23 @@ pub trait Lightsail {
         RusotoError<CreateRelationalDatabaseSnapshotError>,
     >;
 
+    /// <p>Deletes an alarm.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+    async fn delete_alarm(
+        &self,
+        input: DeleteAlarmRequest,
+    ) -> Result<DeleteAlarmResult, RusotoError<DeleteAlarmError>>;
+
     /// <p>Deletes an automatic snapshot of an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn delete_auto_snapshot(
         &self,
         input: DeleteAutoSnapshotRequest,
     ) -> Result<DeleteAutoSnapshotResult, RusotoError<DeleteAutoSnapshotError>>;
+
+    /// <p>Deletes a contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    async fn delete_contact_method(
+        &self,
+        input: DeleteContactMethodRequest,
+    ) -> Result<DeleteContactMethodResult, RusotoError<DeleteContactMethodError>>;
 
     /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn delete_disk(
@@ -12263,7 +13141,7 @@ pub trait Lightsail {
         input: DeleteLoadBalancerRequest,
     ) -> Result<DeleteLoadBalancerResult, RusotoError<DeleteLoadBalancerError>>;
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>DeleteLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
@@ -12337,6 +13215,12 @@ pub trait Lightsail {
         input: GetActiveNamesRequest,
     ) -> Result<GetActiveNamesResult, RusotoError<GetActiveNamesError>>;
 
+    /// <p>Returns information about the configured alarms. Specify an alarm name in your request to return information about a specific alarm, or specify a monitored resource name to return information about all alarms for a specific resource.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+    async fn get_alarms(
+        &self,
+        input: GetAlarmsRequest,
+    ) -> Result<GetAlarmsResult, RusotoError<GetAlarmsError>>;
+
     /// <p>Returns the available automatic snapshots for an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn get_auto_snapshots(
         &self,
@@ -12361,6 +13245,12 @@ pub trait Lightsail {
         input: GetCloudFormationStackRecordsRequest,
     ) -> Result<GetCloudFormationStackRecordsResult, RusotoError<GetCloudFormationStackRecordsError>>;
 
+    /// <p>Returns information about the configured contact methods. Specify a protocol in your request to return information about a specific contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    async fn get_contact_methods(
+        &self,
+        input: GetContactMethodsRequest,
+    ) -> Result<GetContactMethodsResult, RusotoError<GetContactMethodsError>>;
+
     /// <p>Returns information about a specific block storage disk.</p>
     async fn get_disk(
         &self,
@@ -12373,13 +13263,13 @@ pub trait Lightsail {
         input: GetDiskSnapshotRequest,
     ) -> Result<GetDiskSnapshotResult, RusotoError<GetDiskSnapshotError>>;
 
-    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p>
     async fn get_disk_snapshots(
         &self,
         input: GetDiskSnapshotsRequest,
     ) -> Result<GetDiskSnapshotsResult, RusotoError<GetDiskSnapshotsError>>;
 
-    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    /// <p>Returns information about all block storage disks in your AWS account and region.</p>
     async fn get_disks(
         &self,
         input: GetDisksRequest,
@@ -12421,7 +13311,7 @@ pub trait Lightsail {
         input: GetInstanceMetricDataRequest,
     ) -> Result<GetInstanceMetricDataResult, RusotoError<GetInstanceMetricDataError>>;
 
-    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
+    /// <p>Returns the firewall port states for a specific Amazon Lightsail instance, the IP addresses allowed to connect to the instance through the ports, and the protocol.</p>
     async fn get_instance_port_states(
         &self,
         input: GetInstancePortStatesRequest,
@@ -12484,7 +13374,7 @@ pub trait Lightsail {
         RusotoError<GetLoadBalancerTlsCertificatesError>,
     >;
 
-    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    /// <p>Returns information about all load balancers in an account.</p>
     async fn get_load_balancers(
         &self,
         input: GetLoadBalancersRequest,
@@ -12628,7 +13518,7 @@ pub trait Lightsail {
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     async fn is_vpc_peered(&self) -> Result<IsVpcPeeredResult, RusotoError<IsVpcPeeredError>>;
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Opens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol.</p> <p>The <code>OpenInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
@@ -12637,7 +13527,13 @@ pub trait Lightsail {
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     async fn peer_vpc(&self) -> Result<PeerVpcResult, RusotoError<PeerVpcError>>;
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates or updates an alarm, and associates it with the specified metric.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p> <p>When this action creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm. The alarm is then evaluated with the updated configuration.</p>
+    async fn put_alarm(
+        &self,
+        input: PutAlarmRequest,
+    ) -> Result<PutAlarmResult, RusotoError<PutAlarmError>>;
+
+    /// <p>Opens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol. This action also closes all currently open ports that are not included in the request. Include all of the ports and the protocols you want to open in your <code>PutInstancePublicPorts</code>request. Or use the <code>OpenInstancePublicPorts</code> action to open ports without closing currently open ports.</p> <p>The <code>PutInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
@@ -12660,6 +13556,12 @@ pub trait Lightsail {
         &self,
         input: ReleaseStaticIpRequest,
     ) -> Result<ReleaseStaticIpResult, RusotoError<ReleaseStaticIpError>>;
+
+    /// <p><p>Sends a verification request to an email contact method to ensure it&#39;s owned by the requester. SMS contact methods don&#39;t need to be verified.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p> <p>A verification request is sent to the contact method when you initially create it. Use this action to send another verification request if a previous verification request was deleted, or has expired.</p> <important> <p>Notifications are not sent to an email contact method until after it is verified, and confirmed as valid.</p> </important></p>
+    async fn send_contact_method_verification(
+        &self,
+        input: SendContactMethodVerificationRequest,
+    ) -> Result<SendContactMethodVerificationResult, RusotoError<SendContactMethodVerificationError>>;
 
     /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn start_instance(
@@ -12690,6 +13592,12 @@ pub trait Lightsail {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResult, RusotoError<TagResourceError>>;
+
+    /// <p>Tests an alarm by displaying a banner on the Amazon Lightsail console. If a notification trigger is configured for the specified alarm, the test also sends a notification to the notification protocol (<code>Email</code> and/or <code>SMS</code>) configured for the alarm.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+    async fn test_alarm(
+        &self,
+        input: TestAlarmRequest,
+    ) -> Result<TestAlarmResult, RusotoError<TestAlarmError>>;
 
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     async fn unpeer_vpc(&self) -> Result<UnpeerVpcResult, RusotoError<UnpeerVpcError>>;
@@ -12853,7 +13761,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>attach load balancer tls certificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> action with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>AttachLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
@@ -12916,7 +13824,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Closes ports for a specific Amazon Lightsail instance.</p> <p>The <code>CloseInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
@@ -13002,6 +13910,34 @@ impl Lightsail for LightsailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(CreateCloudFormationStackError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an email or SMS text message contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    async fn create_contact_method(
+        &self,
+        input: CreateContactMethodRequest,
+    ) -> Result<CreateContactMethodResult, RusotoError<CreateContactMethodError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateContactMethod");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateContactMethodResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContactMethodError::from_response(response))
         }
     }
 
@@ -13284,7 +14220,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>CreateLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
@@ -13423,6 +14359,33 @@ impl Lightsail for LightsailClient {
         }
     }
 
+    /// <p>Deletes an alarm.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+    async fn delete_alarm(
+        &self,
+        input: DeleteAlarmRequest,
+    ) -> Result<DeleteAlarmResult, RusotoError<DeleteAlarmError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteAlarm");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAlarmResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAlarmError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an automatic snapshot of an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn delete_auto_snapshot(
         &self,
@@ -13448,6 +14411,34 @@ impl Lightsail for LightsailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAutoSnapshotError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    async fn delete_contact_method(
+        &self,
+        input: DeleteContactMethodRequest,
+    ) -> Result<DeleteContactMethodResult, RusotoError<DeleteContactMethodError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteContactMethod");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteContactMethodResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteContactMethodError::from_response(response))
         }
     }
 
@@ -13698,7 +14689,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>DeleteLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
@@ -14025,6 +15016,33 @@ impl Lightsail for LightsailClient {
         }
     }
 
+    /// <p>Returns information about the configured alarms. Specify an alarm name in your request to return information about a specific alarm, or specify a monitored resource name to return information about all alarms for a specific resource.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+    async fn get_alarms(
+        &self,
+        input: GetAlarmsRequest,
+    ) -> Result<GetAlarmsResult, RusotoError<GetAlarmsError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetAlarms");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetAlarmsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAlarmsError::from_response(response))
+        }
+    }
+
     /// <p>Returns the available automatic snapshots for an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
     async fn get_auto_snapshots(
         &self,
@@ -14138,6 +15156,33 @@ impl Lightsail for LightsailClient {
         }
     }
 
+    /// <p>Returns information about the configured contact methods. Specify a protocol in your request to return information about a specific contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
+    async fn get_contact_methods(
+        &self,
+        input: GetContactMethodsRequest,
+    ) -> Result<GetContactMethodsResult, RusotoError<GetContactMethodsError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetContactMethods");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetContactMethodsResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetContactMethodsError::from_response(response))
+        }
+    }
+
     /// <p>Returns information about a specific block storage disk.</p>
     async fn get_disk(
         &self,
@@ -14192,7 +15237,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p>
     async fn get_disk_snapshots(
         &self,
         input: GetDiskSnapshotsRequest,
@@ -14219,7 +15264,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    /// <p>Returns information about all block storage disks in your AWS account and region.</p>
     async fn get_disks(
         &self,
         input: GetDisksRequest,
@@ -14417,7 +15462,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
+    /// <p>Returns the firewall port states for a specific Amazon Lightsail instance, the IP addresses allowed to connect to the instance through the ports, and the protocol.</p>
     async fn get_instance_port_states(
         &self,
         input: GetInstancePortStatesRequest,
@@ -14701,7 +15746,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    /// <p>Returns information about all load balancers in an account.</p>
     async fn get_load_balancers(
         &self,
         input: GetLoadBalancersRequest,
@@ -15344,7 +16389,7 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Opens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol.</p> <p>The <code>OpenInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
@@ -15395,7 +16440,34 @@ impl Lightsail for LightsailClient {
         }
     }
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates or updates an alarm, and associates it with the specified metric.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p> <p>When this action creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm. The alarm is then evaluated with the updated configuration.</p>
+    async fn put_alarm(
+        &self,
+        input: PutAlarmRequest,
+    ) -> Result<PutAlarmResult, RusotoError<PutAlarmError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.PutAlarm");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<PutAlarmResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutAlarmError::from_response(response))
+        }
+    }
+
+    /// <p>Opens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol. This action also closes all currently open ports that are not included in the request. Include all of the ports and the protocols you want to open in your <code>PutInstancePublicPorts</code>request. Or use the <code>OpenInstancePublicPorts</code> action to open ports without closing currently open ports.</p> <p>The <code>PutInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
@@ -15505,6 +16577,38 @@ impl Lightsail for LightsailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ReleaseStaticIpError::from_response(response))
+        }
+    }
+
+    /// <p><p>Sends a verification request to an email contact method to ensure it&#39;s owned by the requester. SMS contact methods don&#39;t need to be verified.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p> <p>A verification request is sent to the contact method when you initially create it. Use this action to send another verification request if a previous verification request was deleted, or has expired.</p> <important> <p>Notifications are not sent to an email contact method until after it is verified, and confirmed as valid.</p> </important></p>
+    async fn send_contact_method_verification(
+        &self,
+        input: SendContactMethodVerificationRequest,
+    ) -> Result<SendContactMethodVerificationResult, RusotoError<SendContactMethodVerificationError>>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.SendContactMethodVerification",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<SendContactMethodVerificationResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(SendContactMethodVerificationError::from_response(response))
         }
     }
 
@@ -15642,6 +16746,33 @@ impl Lightsail for LightsailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Tests an alarm by displaying a banner on the Amazon Lightsail console. If a notification trigger is configured for the specified alarm, the test also sends a notification to the notification protocol (<code>Email</code> and/or <code>SMS</code>) configured for the alarm.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
+    async fn test_alarm(
+        &self,
+        input: TestAlarmRequest,
+    ) -> Result<TestAlarmResult, RusotoError<TestAlarmError>> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.TestAlarm");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TestAlarmResult, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TestAlarmError::from_response(response))
         }
     }
 

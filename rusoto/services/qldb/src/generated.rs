@@ -27,6 +27,26 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelJournalKinesisStreamRequest {
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "LedgerName")]
+    pub ledger_name: String,
+    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    #[serde(rename = "StreamId")]
+    pub stream_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelJournalKinesisStreamResponse {
+    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    #[serde(rename = "StreamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLedgerRequest {
     /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
     #[serde(rename = "DeletionProtection")]
@@ -75,6 +95,26 @@ pub struct DeleteLedgerRequest {
     /// <p>The name of the ledger that you want to delete.</p>
     #[serde(rename = "Name")]
     pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeJournalKinesisStreamRequest {
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "LedgerName")]
+    pub ledger_name: String,
+    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    #[serde(rename = "StreamId")]
+    pub stream_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeJournalKinesisStreamResponse {
+    /// <p>Information about the QLDB journal stream returned by a <code>DescribeJournalS3Export</code> request.</p>
+    #[serde(rename = "Stream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream: Option<JournalKinesisStreamDescription>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -238,6 +278,50 @@ pub struct GetRevisionResponse {
     pub revision: ValueHolder,
 }
 
+/// <p>The information about an Amazon QLDB journal stream, including the Amazon Resource Name (ARN), stream name, creation time, current status, and the parameters of your original stream creation request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct JournalKinesisStreamDescription {
+    /// <p>The Amazon Resource Name (ARN) of the QLDB journal stream.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time, in epoch time format, when the QLDB journal stream was created. (Epoch time format is the number of seconds elapsed since 12:00:00 AM January 1, 1970 UTC.)</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The error message that describes the reason that a stream has a status of <code>IMPAIRED</code> or <code>FAILED</code>. This is not applicable to streams that have other status values.</p>
+    #[serde(rename = "ErrorCause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_cause: Option<String>,
+    /// <p>The exclusive date and time that specifies when the stream ends. If this parameter is blank, the stream runs indefinitely until you cancel it.</p>
+    #[serde(rename = "ExclusiveEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusive_end_time: Option<f64>,
+    /// <p>The inclusive start date and time from which to start streaming journal data.</p>
+    #[serde(rename = "InclusiveStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inclusive_start_time: Option<f64>,
+    /// <p>The configuration settings of the Amazon Kinesis Data Streams destination for your QLDB journal stream.</p>
+    #[serde(rename = "KinesisConfiguration")]
+    pub kinesis_configuration: KinesisConfiguration,
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "LedgerName")]
+    pub ledger_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that grants QLDB permissions for a journal stream to write data records to a Kinesis Data Streams resource.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>The current state of the QLDB journal stream.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
+    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    #[serde(rename = "StreamId")]
+    pub stream_id: String,
+    /// <p>The user-defined name of the QLDB journal stream.</p>
+    #[serde(rename = "StreamName")]
+    pub stream_name: String,
+}
+
 /// <p>The information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -267,6 +351,18 @@ pub struct JournalS3ExportDescription {
     pub status: String,
 }
 
+/// <p>The configuration settings of the Amazon Kinesis Data Streams destination for your Amazon QLDB journal stream.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct KinesisConfiguration {
+    /// <p>Enables QLDB to publish multiple stream records in a single Kinesis Data Streams record. To learn more, see <a href="https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html">KPL Key Concepts</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
+    #[serde(rename = "AggregationEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_enabled: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream resource.</p>
+    #[serde(rename = "StreamArn")]
+    pub stream_arn: String,
+}
+
 /// <p>Information about a ledger, including its name, state, and when it was created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -283,6 +379,35 @@ pub struct LedgerSummary {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListJournalKinesisStreamsForLedgerRequest {
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "LedgerName")]
+    pub ledger_name: String,
+    /// <p>The maximum number of results to return in a single <code>ListJournalKinesisStreamsForLedger</code> request. (The actual number of results returned might be fewer.)</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A pagination token, indicating that you want to retrieve the next page of results. If you received a value for <code>NextToken</code> in the response from a previous <code>ListJournalKinesisStreamsForLedger</code> call, you should use that value as input here.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListJournalKinesisStreamsForLedgerResponse {
+    /// <ul> <li> <p>If <code>NextToken</code> is empty, the last page of results has been processed and there are no more results to be retrieved.</p> </li> <li> <p>If <code>NextToken</code> is <i>not</i> empty, more results are available. To retrieve the next page of results, use the value of <code>NextToken</code> in a subsequent <code>ListJournalKinesisStreamsForLedger</code> call.</p> </li> </ul>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The array of QLDB journal stream descriptors that are associated with the given ledger.</p>
+    #[serde(rename = "Streams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub streams: Option<Vec<JournalKinesisStreamDescription>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -386,7 +511,7 @@ pub struct ListTagsForResourceResponse {
 /// <p>The encryption settings that are used by a journal export job to write data in an Amazon Simple Storage Service (Amazon S3) bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3EncryptionConfiguration {
-    /// <p>The Amazon Resource Name (ARN) for a customer master key (CMK) in AWS Key Management Service (AWS KMS).</p> <p>You must provide a <code>KmsKeyArn</code> if you specify <code>SSE_KMS</code> as the <code>ObjectEncryptionType</code>.</p> <p> <code>KmsKeyArn</code> is not required if you specify <code>SSE_S3</code> as the <code>ObjectEncryptionType</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) for a symmetric customer master key (CMK) in AWS Key Management Service (AWS KMS). Amazon QLDB does not support asymmetric CMKs.</p> <p>You must provide a <code>KmsKeyArn</code> if you specify <code>SSE_KMS</code> as the <code>ObjectEncryptionType</code>.</p> <p> <code>KmsKeyArn</code> is not required if you specify <code>SSE_S3</code> as the <code>ObjectEncryptionType</code>.</p>
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
@@ -407,6 +532,43 @@ pub struct S3ExportConfiguration {
     /// <p><p>The prefix for the Amazon S3 bucket in which a journal export job writes the journal contents.</p> <p>The prefix must comply with Amazon S3 key naming rules and restrictions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html">Object Key and Metadata</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>The following are examples of valid <code>Prefix</code> values:</p> <ul> <li> <p> <code>JournalExports-ForMyLedger/Testing/</code> </p> </li> <li> <p> <code>JournalExports</code> </p> </li> <li> <p> <code>My:Tests/</code> </p> </li> </ul></p>
     #[serde(rename = "Prefix")]
     pub prefix: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StreamJournalToKinesisRequest {
+    /// <p>The exclusive date and time that specifies when the stream ends. If you keep this parameter blank, the stream runs indefinitely until you cancel it.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p>
+    #[serde(rename = "ExclusiveEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusive_end_time: Option<f64>,
+    /// <p>The inclusive start date and time from which to start streaming journal data. This parameter must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p> <p>The <code>InclusiveStartTime</code> cannot be in the future and must be before <code>ExclusiveEndTime</code>.</p> <p>If you provide an <code>InclusiveStartTime</code> that is before the ledger's <code>CreationDateTime</code>, QLDB effectively defaults it to the ledger's <code>CreationDateTime</code>.</p>
+    #[serde(rename = "InclusiveStartTime")]
+    pub inclusive_start_time: f64,
+    /// <p>The configuration settings of the Kinesis Data Streams destination for your stream request.</p>
+    #[serde(rename = "KinesisConfiguration")]
+    pub kinesis_configuration: KinesisConfiguration,
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "LedgerName")]
+    pub ledger_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that grants QLDB permissions for a journal stream to write data records to a Kinesis Data Streams resource.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>The name that you want to assign to the QLDB journal stream. User-defined names can help identify and indicate the purpose of a stream.</p> <p>Your stream name must be unique among other <i>active</i> streams for a given ledger. If you try to create a stream with the same name and configuration of an active, existing stream for the same ledger, QLDB simply returns the existing stream. Stream names have the same naming constraints as ledger names, as defined in <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming">Quotas in Amazon QLDB</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    #[serde(rename = "StreamName")]
+    pub stream_name: String,
+    /// <p>The key-value pairs to add as tags to the stream that you want to create. Tag keys are case sensitive. Tag values are case sensitive and can be null.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StreamJournalToKinesisResponse {
+    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    #[serde(rename = "StreamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -485,6 +647,58 @@ pub struct ValueHolder {
     pub ion_text: Option<String>,
 }
 
+/// Errors returned by CancelJournalKinesisStream
+#[derive(Debug, PartialEq)]
+pub enum CancelJournalKinesisStreamError {
+    /// <p>One or more parameters in the request aren't valid.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The operation failed because a condition wasn't satisfied in advance.</p>
+    ResourcePreconditionNotMet(String),
+}
+
+impl CancelJournalKinesisStreamError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CancelJournalKinesisStreamError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CancelJournalKinesisStreamError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CancelJournalKinesisStreamError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourcePreconditionNotMetException" => {
+                    return RusotoError::Service(
+                        CancelJournalKinesisStreamError::ResourcePreconditionNotMet(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelJournalKinesisStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelJournalKinesisStreamError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CancelJournalKinesisStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelJournalKinesisStreamError::ResourcePreconditionNotMet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CancelJournalKinesisStreamError {}
 /// Errors returned by CreateLedger
 #[derive(Debug, PartialEq)]
 pub enum CreateLedgerError {
@@ -583,6 +797,62 @@ impl fmt::Display for DeleteLedgerError {
     }
 }
 impl Error for DeleteLedgerError {}
+/// Errors returned by DescribeJournalKinesisStream
+#[derive(Debug, PartialEq)]
+pub enum DescribeJournalKinesisStreamError {
+    /// <p>One or more parameters in the request aren't valid.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The operation failed because a condition wasn't satisfied in advance.</p>
+    ResourcePreconditionNotMet(String),
+}
+
+impl DescribeJournalKinesisStreamError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeJournalKinesisStreamError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DescribeJournalKinesisStreamError::InvalidParameter(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeJournalKinesisStreamError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ResourcePreconditionNotMetException" => {
+                    return RusotoError::Service(
+                        DescribeJournalKinesisStreamError::ResourcePreconditionNotMet(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeJournalKinesisStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeJournalKinesisStreamError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeJournalKinesisStreamError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeJournalKinesisStreamError::ResourcePreconditionNotMet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeJournalKinesisStreamError {}
 /// Errors returned by DescribeJournalS3Export
 #[derive(Debug, PartialEq)]
 pub enum DescribeJournalS3ExportError {
@@ -819,6 +1089,64 @@ impl fmt::Display for GetRevisionError {
     }
 }
 impl Error for GetRevisionError {}
+/// Errors returned by ListJournalKinesisStreamsForLedger
+#[derive(Debug, PartialEq)]
+pub enum ListJournalKinesisStreamsForLedgerError {
+    /// <p>One or more parameters in the request aren't valid.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The operation failed because a condition wasn't satisfied in advance.</p>
+    ResourcePreconditionNotMet(String),
+}
+
+impl ListJournalKinesisStreamsForLedgerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListJournalKinesisStreamsForLedgerError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        ListJournalKinesisStreamsForLedgerError::InvalidParameter(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListJournalKinesisStreamsForLedgerError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ResourcePreconditionNotMetException" => {
+                    return RusotoError::Service(
+                        ListJournalKinesisStreamsForLedgerError::ResourcePreconditionNotMet(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListJournalKinesisStreamsForLedgerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListJournalKinesisStreamsForLedgerError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListJournalKinesisStreamsForLedgerError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListJournalKinesisStreamsForLedgerError::ResourcePreconditionNotMet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListJournalKinesisStreamsForLedgerError {}
 /// Errors returned by ListJournalS3Exports
 #[derive(Debug, PartialEq)]
 pub enum ListJournalS3ExportsError {}
@@ -927,6 +1255,56 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by StreamJournalToKinesis
+#[derive(Debug, PartialEq)]
+pub enum StreamJournalToKinesisError {
+    /// <p>One or more parameters in the request aren't valid.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The operation failed because a condition wasn't satisfied in advance.</p>
+    ResourcePreconditionNotMet(String),
+}
+
+impl StreamJournalToKinesisError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StreamJournalToKinesisError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StreamJournalToKinesisError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StreamJournalToKinesisError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourcePreconditionNotMetException" => {
+                    return RusotoError::Service(
+                        StreamJournalToKinesisError::ResourcePreconditionNotMet(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StreamJournalToKinesisError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StreamJournalToKinesisError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StreamJournalToKinesisError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            StreamJournalToKinesisError::ResourcePreconditionNotMet(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for StreamJournalToKinesisError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1038,6 +1416,12 @@ impl Error for UpdateLedgerError {}
 /// Trait representing the capabilities of the QLDB API. QLDB clients implement this trait.
 #[async_trait]
 pub trait Qldb {
+    /// <p>Ends a given Amazon QLDB journal stream. Before a stream can be canceled, its current status must be <code>ACTIVE</code>.</p> <p>You can't restart a stream after you cancel it. Canceled QLDB stream resources are subject to a 7-day retention period, so they are automatically deleted after this limit expires.</p>
+    async fn cancel_journal_kinesis_stream(
+        &self,
+        input: CancelJournalKinesisStreamRequest,
+    ) -> Result<CancelJournalKinesisStreamResponse, RusotoError<CancelJournalKinesisStreamError>>;
+
     /// <p>Creates a new ledger in your AWS account.</p>
     async fn create_ledger(
         &self,
@@ -1050,7 +1434,13 @@ pub trait Qldb {
         input: DeleteLedgerRequest,
     ) -> Result<(), RusotoError<DeleteLedgerError>>;
 
-    /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
+    /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of your original stream creation request.</p>
+    async fn describe_journal_kinesis_stream(
+        &self,
+        input: DescribeJournalKinesisStreamRequest,
+    ) -> Result<DescribeJournalKinesisStreamResponse, RusotoError<DescribeJournalKinesisStreamError>>;
+
+    /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
     async fn describe_journal_s3_export(
         &self,
         input: DescribeJournalS3ExportRequest,
@@ -1086,13 +1476,22 @@ pub trait Qldb {
         input: GetRevisionRequest,
     ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>>;
 
-    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p>
+    /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
+    async fn list_journal_kinesis_streams_for_ledger(
+        &self,
+        input: ListJournalKinesisStreamsForLedgerRequest,
+    ) -> Result<
+        ListJournalKinesisStreamsForLedgerResponse,
+        RusotoError<ListJournalKinesisStreamsForLedgerError>,
+    >;
+
+    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn list_journal_s3_exports(
         &self,
         input: ListJournalS3ExportsRequest,
     ) -> Result<ListJournalS3ExportsResponse, RusotoError<ListJournalS3ExportsError>>;
 
-    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p>
+    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn list_journal_s3_exports_for_ledger(
         &self,
         input: ListJournalS3ExportsForLedgerRequest,
@@ -1112,6 +1511,12 @@ pub trait Qldb {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Creates a stream for a given Amazon QLDB ledger that delivers the journal data to a specified Amazon Kinesis Data Streams resource. The stream captures every document revision that is committed to your journal and sends it to the Kinesis data stream.</p>
+    async fn stream_journal_to_kinesis(
+        &self,
+        input: StreamJournalToKinesisRequest,
+    ) -> Result<StreamJournalToKinesisResponse, RusotoError<StreamJournalToKinesisError>>;
 
     /// <p>Adds one or more tags to a specified Amazon QLDB resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, your request fails and returns an error.</p>
     async fn tag_resource(
@@ -1171,6 +1576,38 @@ impl QldbClient {
 
 #[async_trait]
 impl Qldb for QldbClient {
+    /// <p>Ends a given Amazon QLDB journal stream. Before a stream can be canceled, its current status must be <code>ACTIVE</code>.</p> <p>You can't restart a stream after you cancel it. Canceled QLDB stream resources are subject to a 7-day retention period, so they are automatically deleted after this limit expires.</p>
+    async fn cancel_journal_kinesis_stream(
+        &self,
+        input: CancelJournalKinesisStreamRequest,
+    ) -> Result<CancelJournalKinesisStreamResponse, RusotoError<CancelJournalKinesisStreamError>>
+    {
+        let request_uri = format!(
+            "/ledgers/{name}/journal-kinesis-streams/{stream_id}",
+            name = input.ledger_name,
+            stream_id = input.stream_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "qldb", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelJournalKinesisStreamResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelJournalKinesisStreamError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new ledger in your AWS account.</p>
     async fn create_ledger(
         &self,
@@ -1227,7 +1664,39 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
+    /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of your original stream creation request.</p>
+    async fn describe_journal_kinesis_stream(
+        &self,
+        input: DescribeJournalKinesisStreamRequest,
+    ) -> Result<DescribeJournalKinesisStreamResponse, RusotoError<DescribeJournalKinesisStreamError>>
+    {
+        let request_uri = format!(
+            "/ledgers/{name}/journal-kinesis-streams/{stream_id}",
+            name = input.ledger_name,
+            stream_id = input.stream_id
+        );
+
+        let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJournalKinesisStreamResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJournalKinesisStreamError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
     async fn describe_journal_s3_export(
         &self,
         input: DescribeJournalS3ExportRequest,
@@ -1402,7 +1871,51 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p>
+    /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
+    async fn list_journal_kinesis_streams_for_ledger(
+        &self,
+        input: ListJournalKinesisStreamsForLedgerRequest,
+    ) -> Result<
+        ListJournalKinesisStreamsForLedgerResponse,
+        RusotoError<ListJournalKinesisStreamsForLedgerError>,
+    > {
+        let request_uri = format!(
+            "/ledgers/{name}/journal-kinesis-streams",
+            name = input.ledger_name
+        );
+
+        let mut request = SignedRequest::new("GET", "qldb", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max_results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next_token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJournalKinesisStreamsForLedgerResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJournalKinesisStreamsForLedgerError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn list_journal_s3_exports(
         &self,
         input: ListJournalS3ExportsRequest,
@@ -1438,7 +1951,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p>
+    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn list_journal_s3_exports_for_ledger(
         &self,
         input: ListJournalS3ExportsForLedgerRequest,
@@ -1537,6 +2050,39 @@ impl Qldb for QldbClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a stream for a given Amazon QLDB ledger that delivers the journal data to a specified Amazon Kinesis Data Streams resource. The stream captures every document revision that is committed to your journal and sends it to the Kinesis data stream.</p>
+    async fn stream_journal_to_kinesis(
+        &self,
+        input: StreamJournalToKinesisRequest,
+    ) -> Result<StreamJournalToKinesisResponse, RusotoError<StreamJournalToKinesisError>> {
+        let request_uri = format!(
+            "/ledgers/{name}/journal-kinesis-streams",
+            name = input.ledger_name
+        );
+
+        let mut request = SignedRequest::new("POST", "qldb", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StreamJournalToKinesisResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StreamJournalToKinesisError::from_response(response))
         }
     }
 

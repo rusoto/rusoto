@@ -28,7 +28,7 @@ use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortDocumentVersionUploadRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -43,7 +43,7 @@ pub struct AbortDocumentVersionUploadRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActivateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -106,7 +106,7 @@ pub struct Activity {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddResourcePermissionsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -201,7 +201,7 @@ pub struct CommentMetadata {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommentRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -244,7 +244,7 @@ pub struct CreateCommentResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomMetadataRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -267,7 +267,7 @@ pub struct CreateCustomMetadataResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -292,7 +292,7 @@ pub struct CreateFolderResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLabelsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -337,7 +337,7 @@ pub struct CreateNotificationSubscriptionResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -383,7 +383,7 @@ pub struct CreateUserResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeactivateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -395,7 +395,7 @@ pub struct DeactivateUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -413,7 +413,7 @@ pub struct DeleteCommentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomMetadataRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -441,7 +441,7 @@ pub struct DeleteCustomMetadataResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -453,7 +453,7 @@ pub struct DeleteDocumentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFolderContentsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -465,7 +465,7 @@ pub struct DeleteFolderContentsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -477,7 +477,7 @@ pub struct DeleteFolderRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLabelsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -528,7 +528,7 @@ pub struct DescribeActivitiesRequest {
     #[serde(rename = "ActivityTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_types: Option<String>,
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -582,7 +582,7 @@ pub struct DescribeActivitiesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommentsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -618,7 +618,7 @@ pub struct DescribeCommentsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentVersionsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -659,7 +659,7 @@ pub struct DescribeDocumentVersionsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFolderContentsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -712,7 +712,7 @@ pub struct DescribeFolderContentsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -778,7 +778,7 @@ pub struct DescribeNotificationSubscriptionsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourcePermissionsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -815,7 +815,7 @@ pub struct DescribeResourcePermissionsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRootFoldersRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token.</p>
     #[serde(rename = "AuthenticationToken")]
     pub authentication_token: String,
     /// <p>The maximum number of items to return.</p>
@@ -844,7 +844,7 @@ pub struct DescribeRootFoldersResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsersRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1048,7 +1048,7 @@ pub struct FolderMetadata {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentUserRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token.</p>
     #[serde(rename = "AuthenticationToken")]
     pub authentication_token: String,
 }
@@ -1065,7 +1065,7 @@ pub struct GetCurrentUserResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentPathRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1098,7 +1098,7 @@ pub struct GetDocumentPathResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1127,7 +1127,7 @@ pub struct GetDocumentResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentVersionRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1163,7 +1163,7 @@ pub struct GetDocumentVersionResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderPathRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1196,7 +1196,7 @@ pub struct GetFolderPathResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1225,7 +1225,7 @@ pub struct GetFolderResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesRequest {
-    /// <p>The Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API operation using AWS credentials.</p>
+    /// <p>The Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1281,7 +1281,7 @@ pub struct GroupMetadata {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateDocumentVersionUploadRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1390,7 +1390,7 @@ pub struct Principal {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAllResourcePermissionsRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1402,7 +1402,7 @@ pub struct RemoveAllResourcePermissionsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveResourcePermissionRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1555,7 +1555,7 @@ pub struct Subscription {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1579,7 +1579,7 @@ pub struct UpdateDocumentRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentVersionRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1598,7 +1598,7 @@ pub struct UpdateDocumentVersionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1622,7 +1622,7 @@ pub struct UpdateFolderRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Not required when using AWS administrator credentials to access the API.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -4815,7 +4815,7 @@ pub trait Workdocs {
         input: DescribeUsersRequest,
     ) -> Result<DescribeUsersResponse, RusotoError<DescribeUsersError>>;
 
-    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
+    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     async fn get_current_user(
         &self,
         input: GetCurrentUserRequest,
@@ -6018,7 +6018,7 @@ impl Workdocs for WorkdocsClient {
         }
     }
 
-    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
+    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     async fn get_current_user(
         &self,
         input: GetCurrentUserRequest,

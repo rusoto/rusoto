@@ -522,7 +522,7 @@ pub struct ListPrincipalsRequest {
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_share_arns: Option<Vec<String>>,
-    /// <p>The resource type.</p> <p>Valid values: <code>ec2:CapacityReservation</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>license-manager:LicenseConfiguration</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverRule</code> I <code>resource-groups:Group</code> </p>
+    /// <p>The resource type.</p> <p>Valid values: <code>codebuild:Project</code> | <code>codebuild:ReportGroup</code> | <code>ec2:CapacityReservation</code> | <code>ec2:DedicatedHost</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>imagebuilder:Component</code> | <code>imagebuilder:Image</code> | <code>imagebuilder:ImageRecipe</code> | <code>license-manager:LicenseConfiguration</code> I <code>resource-groups:Group</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverRule</code> </p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -572,6 +572,32 @@ pub struct ListResourceSharePermissionsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListResourceTypesRequest {
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListResourceTypesResponse {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The shareable resource types supported by AWS RAM.</p>
+    #[serde(rename = "resourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_types: Option<Vec<ServiceNameAndResourceType>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "maxResults")]
@@ -596,7 +622,7 @@ pub struct ListResourcesRequest {
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_share_arns: Option<Vec<String>>,
-    /// <p>The resource type.</p> <p>Valid values: <code>ec2:CapacityReservation</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>license-manager:LicenseConfiguration</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverRule</code> | <code>resource-groups:Group</code> </p>
+    /// <p>The resource type.</p> <p>Valid values: <code>codebuild:Project</code> | <code>codebuild:ReportGroup</code> | <code>ec2:CapacityReservation</code> | <code>ec2:DedicatedHost</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>imagebuilder:Component</code> | <code>imagebuilder:Image</code> | <code>imagebuilder:ImageRecipe</code> | <code>license-manager:LicenseConfiguration</code> I <code>resource-groups:Group</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverRule</code> </p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -917,6 +943,20 @@ pub struct ResourceSharePermissionSummary {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Information about the shareable resource types and the AWS services to which they belong.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ServiceNameAndResourceType {
+    /// <p>The shareable resource types.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The name of the AWS services to which the resources belong.</p>
+    #[serde(rename = "serviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_name: Option<String>,
 }
 
 /// <p>Information about a tag.</p>
@@ -1876,6 +1916,8 @@ pub enum GetResourcePoliciesError {
     InvalidParameter(String),
     /// <p>The format of an Amazon Resource Name (ARN) is not valid.</p>
     MalformedArn(String),
+    /// <p>An Amazon Resource Name (ARN) was not found.</p>
+    ResourceArnNotFound(String),
     /// <p>The service could not respond to the request due to an internal problem.</p>
     ServerInternal(String),
     /// <p>The service is not available.</p>
@@ -1899,6 +1941,11 @@ impl GetResourcePoliciesError {
                 "MalformedArnException" => {
                     return RusotoError::Service(GetResourcePoliciesError::MalformedArn(err.msg))
                 }
+                "ResourceArnNotFoundException" => {
+                    return RusotoError::Service(GetResourcePoliciesError::ResourceArnNotFound(
+                        err.msg,
+                    ))
+                }
                 "ServerInternalException" => {
                     return RusotoError::Service(GetResourcePoliciesError::ServerInternal(err.msg))
                 }
@@ -1921,6 +1968,7 @@ impl fmt::Display for GetResourcePoliciesError {
             GetResourcePoliciesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
             GetResourcePoliciesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             GetResourcePoliciesError::MalformedArn(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::ResourceArnNotFound(ref cause) => write!(f, "{}", cause),
             GetResourcePoliciesError::ServerInternal(ref cause) => write!(f, "{}", cause),
             GetResourcePoliciesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
@@ -2034,6 +2082,8 @@ pub enum GetResourceShareInvitationsError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
+    /// <p>A specified resource was not found.</p>
+    UnknownResource(String),
 }
 
 impl GetResourceShareInvitationsError {
@@ -2079,6 +2129,11 @@ impl GetResourceShareInvitationsError {
                         GetResourceShareInvitationsError::ServiceUnavailable(err.msg),
                     )
                 }
+                "UnknownResourceException" => {
+                    return RusotoError::Service(GetResourceShareInvitationsError::UnknownResource(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2103,6 +2158,7 @@ impl fmt::Display for GetResourceShareInvitationsError {
             GetResourceShareInvitationsError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            GetResourceShareInvitationsError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -2495,6 +2551,56 @@ impl fmt::Display for ListResourceSharePermissionsError {
     }
 }
 impl Error for ListResourceSharePermissionsError {}
+/// Errors returned by ListResourceTypes
+#[derive(Debug, PartialEq)]
+pub enum ListResourceTypesError {
+    /// <p>The specified value for NextToken is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>A parameter is not valid.</p>
+    InvalidParameter(String),
+    /// <p>The service could not respond to the request due to an internal problem.</p>
+    ServerInternal(String),
+    /// <p>The service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListResourceTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceTypesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListResourceTypesError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListResourceTypesError::InvalidParameter(err.msg))
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(ListResourceTypesError::ServerInternal(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListResourceTypesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListResourceTypesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListResourceTypesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListResourceTypesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListResourceTypesError::ServerInternal(ref cause) => write!(f, "{}", cause),
+            ListResourceTypesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListResourceTypesError {}
 /// Errors returned by ListResources
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesError {
@@ -2576,6 +2682,8 @@ pub enum PromoteResourceShareCreatedFromPolicyError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
+    /// <p>A specified resource was not found.</p>
+    UnknownResource(String),
 }
 
 impl PromoteResourceShareCreatedFromPolicyError {
@@ -2616,6 +2724,11 @@ impl PromoteResourceShareCreatedFromPolicyError {
                         PromoteResourceShareCreatedFromPolicyError::ServiceUnavailable(err.msg),
                     )
                 }
+                "UnknownResourceException" => {
+                    return RusotoError::Service(
+                        PromoteResourceShareCreatedFromPolicyError::UnknownResource(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2643,6 +2756,9 @@ impl fmt::Display for PromoteResourceShareCreatedFromPolicyError {
                 write!(f, "{}", cause)
             }
             PromoteResourceShareCreatedFromPolicyError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PromoteResourceShareCreatedFromPolicyError::UnknownResource(ref cause) => {
                 write!(f, "{}", cause)
             }
         }
@@ -3095,6 +3211,12 @@ pub trait Ram {
         &self,
         input: ListResourceSharePermissionsRequest,
     ) -> Result<ListResourceSharePermissionsResponse, RusotoError<ListResourceSharePermissionsError>>;
+
+    /// <p>Lists the shareable resource types supported by AWS RAM.</p>
+    async fn list_resource_types(
+        &self,
+        input: ListResourceTypesRequest,
+    ) -> Result<ListResourceTypesResponse, RusotoError<ListResourceTypesError>>;
 
     /// <p>Lists the resources that you added to a resource shares or the resources that are shared with you.</p>
     async fn list_resources(
@@ -3710,6 +3832,36 @@ impl Ram for RamClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListResourceSharePermissionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the shareable resource types supported by AWS RAM.</p>
+    async fn list_resource_types(
+        &self,
+        input: ListResourceTypesRequest,
+    ) -> Result<ListResourceTypesResponse, RusotoError<ListResourceTypesError>> {
+        let request_uri = "/listresourcetypes";
+
+        let mut request = SignedRequest::new("POST", "ram", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListResourceTypesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListResourceTypesError::from_response(response))
         }
     }
 

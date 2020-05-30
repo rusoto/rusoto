@@ -196,6 +196,10 @@ pub struct BatchInferenceJobSummary {
     #[serde(rename = "lastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date_time: Option<f64>,
+    /// <p>The ARN of the solution version used by the batch inference job.</p>
+    #[serde(rename = "solutionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub solution_version_arn: Option<String>,
     /// <p><p>The status of the batch inference job. The status is one of the following values:</p> <ul> <li> <p>PENDING</p> </li> <li> <p>IN PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1311,7 +1315,7 @@ pub struct HPOObjective {
     #[serde(rename = "metricRegex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_regex: Option<String>,
-    /// <p>The data type of the metric.</p>
+    /// <p>The type of the metric. Valid values are <code>Maximize</code> and <code>Minimize</code>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1905,6 +1909,10 @@ pub struct SolutionVersion {
     #[serde(rename = "trainingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_mode: Option<String>,
+    /// <p>If hyperparameter optimization was performed, contains the hyperparameter values of the best performing model.</p>
+    #[serde(rename = "tunedHPOParams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tuned_hpo_params: Option<TunedHPOParams>,
 }
 
 /// <p>Provides a summary of the properties of a solution version. For a complete listing, call the <a>DescribeSolutionVersion</a> API.</p>
@@ -1931,6 +1939,16 @@ pub struct SolutionVersionSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>If hyperparameter optimization (HPO) was performed, contains the hyperparameter values of the best performing model.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TunedHPOParams {
+    /// <p>A list of the hyperparameter values of the best performing model.</p>
+    #[serde(rename = "algorithmHyperParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub algorithm_hyper_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

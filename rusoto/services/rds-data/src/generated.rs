@@ -57,7 +57,7 @@ pub struct BatchExecuteStatementRequest {
     #[serde(rename = "database")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<String>,
-    /// <p>The parameter set for the batch operation.</p> <p>The maximum number of parameters in a parameter set is 1,000.</p>
+    /// <p><p>The parameter set for the batch operation.</p> <p>The SQL statement is executed as many times as the number of parameter sets provided. To execute a SQL statement with no parameters, use one of the following options:</p> <ul> <li> <p>Specify one or more empty parameter sets.</p> </li> <li> <p>Use the <code>ExecuteStatement</code> operation instead of the <code>BatchExecuteStatement</code> operation.</p> </li> </ul> <note> <p>Array parameters are not supported.</p> </note></p>
     #[serde(rename = "parameterSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_sets: Option<Vec<Vec<SqlParameter>>>,
@@ -256,7 +256,7 @@ pub struct ExecuteStatementRequest {
     #[serde(rename = "includeResultMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_result_metadata: Option<bool>,
-    /// <p>The parameters for the SQL statement.</p>
+    /// <p><p>The parameters for the SQL statement.</p> <note> <p>Array parameters are not supported.</p> </note></p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<SqlParameter>>,
@@ -902,7 +902,7 @@ pub trait RdsData {
         input: ExecuteSqlRequest,
     ) -> Result<ExecuteSqlResponse, RusotoError<ExecuteSqlError>>;
 
-    /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.</p>
+    /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB. If the call returns more than 1 MB of response data, the call is terminated.</p>
     async fn execute_statement(
         &self,
         input: ExecuteStatementRequest,
@@ -1074,7 +1074,7 @@ impl RdsData for RdsDataClient {
         }
     }
 
-    /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB or 1,000 records. If the call returns more than 1 MB of response data or over 1,000 records, the call is terminated.</p>
+    /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB. If the call returns more than 1 MB of response data, the call is terminated.</p>
     async fn execute_statement(
         &self,
         input: ExecuteStatementRequest,

@@ -25,220 +25,263 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>The configuration for the agent to use.</p>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentConfiguration {
-    /// <p>Specifies the period to follow the configuration (to profile or not) and call back to get a new configuration.</p>
+    /// <p><p/></p>
     #[serde(rename = "periodInSeconds")]
     pub period_in_seconds: i64,
-    /// <p>Specifies if the profiling should be enabled by the agent.</p>
+    /// <p><p/></p>
     #[serde(rename = "shouldProfile")]
     pub should_profile: bool,
 }
 
-/// <p>Configuration to orchestrate agents to create and report agent profiles of the profiling group. Agents are orchestrated if they follow the agent orchestration protocol.</p>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AgentOrchestrationConfig {
-    /// <p>If the agents should be enabled to create and report profiles.</p>
+    /// <p><p/></p>
     #[serde(rename = "profilingEnabled")]
     pub profiling_enabled: bool,
 }
 
-/// <p>The time range of an aggregated profile.</p>
+/// <p>Information about the time range of the latest available aggregated profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregatedProfileTime {
-    /// <p>The aggregation period of the aggregated profile.</p>
+    /// <p>The time period.</p>
     #[serde(rename = "period")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period: Option<String>,
-    /// <p>The start time of the aggregated profile.</p>
+    /// <p>The start time.</p>
     #[serde(rename = "start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
 }
 
-/// <p>Request for ConfigureAgent operation.</p>
+/// <p>The structure representing the configureAgentRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureAgentRequest {
+    /// <p><p/></p>
     #[serde(rename = "fleetInstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_instance_id: Option<String>,
+    /// <p><p/></p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
 }
 
-/// <p>Response for ConfigureAgent operation.</p>
+/// <p>The structure representing the configureAgentResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigureAgentResponse {
-    /// <p>The configuration for the agent to use.</p>
+    /// <p><p/></p>
     #[serde(rename = "configuration")]
     pub configuration: AgentConfiguration,
 }
 
-/// <p>Request for CreateProfilingGroup operation.</p>
+/// <p>The structure representing the createProfiliingGroupRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProfilingGroupRequest {
+    /// <p>The agent orchestration configuration.</p>
     #[serde(rename = "agentOrchestrationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_orchestration_config: Option<AgentOrchestrationConfig>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p> <p>This parameter specifies a unique identifier for the new profiling group that helps ensure idempotency.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
+    /// <p>The name of the profiling group.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
 }
 
-/// <p>Response for CreateProfilingGroup operation.</p>
+/// <p>The structure representing the createProfilingGroupResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProfilingGroupResponse {
+    /// <p>Information about the new profiling group</p>
     #[serde(rename = "profilingGroup")]
     pub profiling_group: ProfilingGroupDescription,
 }
 
-/// <p>Request for DeleteProfilingGroup operation.</p>
+/// <p>The structure representing the deleteProfilingGroupRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProfilingGroupRequest {
+    /// <p>The profiling group name to delete.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
 }
 
-/// <p>Response for DeleteProfilingGroup operation.</p>
+/// <p>The structure representing the deleteProfilingGroupResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProfilingGroupResponse {}
 
-/// <p>Request for DescribeProfilingGroup operation.</p>
+/// <p>The structure representing the describeProfilingGroupRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProfilingGroupRequest {
+    /// <p>The profiling group name.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
 }
 
-/// <p>Response for DescribeProfilingGroup operation.</p>
+/// <p>The structure representing the describeProfilingGroupResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProfilingGroupResponse {
+    /// <p>Information about a profiling group.</p>
     #[serde(rename = "profilingGroup")]
     pub profiling_group: ProfilingGroupDescription,
 }
 
-/// <p>Request for GetProfile operation.</p>
+/// <p>The structure representing the getPolicyRequest.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPolicyRequest {
+    /// <p>The name of the profiling group.</p>
+    #[serde(rename = "profilingGroupName")]
+    pub profiling_group_name: String,
+}
+
+/// <p>The structure representing the getPolicyResponse.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPolicyResponse {
+    /// <p>The resource-based policy attached to the <code>ProfilingGroup</code>.</p>
+    #[serde(rename = "policy")]
+    pub policy: String,
+    /// <p>A unique identifier for the current revision of the policy.</p>
+    #[serde(rename = "revisionId")]
+    pub revision_id: String,
+}
+
+/// <p>The structure representing the getProfileRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProfileRequest {
-    /// <p>The format of the profile to return. Supports application/json or application/x-amzn-ion. Defaults to application/x-amzn-ion.</p>
+    /// <p>The format of the profile to return. You can choose <code>application/json</code> or the default <code>application/x-amzn-ion</code>. </p>
     #[serde(rename = "accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept: Option<String>,
-    /// <p>The end time of the profile to get. Either period or endTime must be specified. Must be greater than start and the overall time range to be in the past and not larger than a week.</p>
+    /// <p><p/> <p>You must specify exactly two of the following parameters: <code>startTime</code>, <code>period</code>, and <code>endTime</code>. </p></p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p>The maximum depth of the graph.</p>
     #[serde(rename = "maxDepth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_depth: Option<i64>,
-    /// <p>The period of the profile to get. Exactly two of <code>startTime</code>, <code>period</code> and <code>endTime</code> must be specified. Must be positive and the overall time range to be in the past and not larger than a week.</p>
+    /// <p>The period of the profile to get. The time range must be in the past and not longer than one week. </p> <p>You must specify exactly two of the following parameters: <code>startTime</code>, <code>period</code>, and <code>endTime</code>. </p>
     #[serde(rename = "period")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub period: Option<String>,
+    /// <p>The name of the profiling group to get.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
-    /// <p>The start time of the profile to get.</p>
+    /// <p>The start time of the profile to get.</p> <p>You must specify exactly two of the following parameters: <code>startTime</code>, <code>period</code>, and <code>endTime</code>. </p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-/// <p>Response for GetProfile operation.</p>
+/// <p>The structure representing the getProfileResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetProfileResponse {
-    /// <p>The content encoding of the profile in the payload.</p>
+    /// <p>The content encoding of the profile.</p>
     pub content_encoding: Option<String>,
-    /// <p>The content type of the profile in the payload. Will be application/json or application/x-amzn-ion based on Accept header in the request.</p>
+    /// <p>The content type of the profile in the payload. It is either <code>application/json</code> or the default <code>application/x-amzn-ion</code>.</p>
     pub content_type: String,
+    /// <p>Information about the profile.</p>
     pub profile: bytes::Bytes,
 }
 
-/// <p>Request for ListProfileTimes operation.</p>
+/// <p>The structure representing the listProfileTimesRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfileTimesRequest {
-    /// <p>The end time of the time range to list profiles until.</p>
+    /// <p>The end time of the time range from which to list the profiles.</p>
     #[serde(rename = "endTime")]
     pub end_time: f64,
+    /// <p>The maximum number of profile time results returned by <code>ListProfileTimes</code> in paginated output. When this parameter is used, <code>ListProfileTimes</code> only returns <code>maxResults</code> results in a single page with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListProfileTimes</code> request with the returned <code>nextToken</code> value. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListProfileTimes</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The order (ascending or descending by start time of the profile) to list the profiles by. Defaults to TIMESTAMP_DESCENDING.</p>
+    /// <p>The order (ascending or descending by start time of the profile) to use when listing profiles. Defaults to <code>TIMESTAMP_DESCENDING</code>. </p>
     #[serde(rename = "orderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<String>,
-    /// <p>The aggregation period to list the profiles for.</p>
+    /// <p>The aggregation period.</p>
     #[serde(rename = "period")]
     pub period: String,
+    /// <p>The name of the profiling group.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
-    /// <p>The start time of the time range to list the profiles from.</p>
+    /// <p>The start time of the time range from which to list the profiles.</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
 }
 
-/// <p>Response for ListProfileTimes operation.</p>
+/// <p>The structure representing the listProfileTimesResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfileTimesResponse {
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListProfileTimes</code> request. When the results of a <code>ListProfileTimes</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>List of start times of the available profiles for the aggregation period in the specified time range.</p>
+    /// <p>The list of start times of the available profiles for the aggregation period in the specified time range. </p>
     #[serde(rename = "profileTimes")]
     pub profile_times: Vec<ProfileTime>,
 }
 
-/// <p>Request for ListProfilingGroups operation.</p>
+/// <p>The structure representing the listProfilingGroupsRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfilingGroupsRequest {
-    /// <p>If set to true, returns the full description of the profiling groups instead of the names. Defaults to false.</p>
+    /// <p>A Boolean value indicating whether to include a description.</p>
     #[serde(rename = "includeDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_description: Option<bool>,
+    /// <p>The maximum number of profiling groups results returned by <code>ListProfilingGroups</code> in paginated output. When this parameter is used, <code>ListProfilingGroups</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListProfilingGroups</code> request with the returned <code>nextToken</code> value. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListProfilingGroups</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Response for ListProfilingGroups operation.</p>
+/// <p>The structure representing the listProfilingGroupsResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfilingGroupsResponse {
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListProfilingGroups</code> request. When the results of a <code>ListProfilingGroups</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>Information about profiling group names.</p>
     #[serde(rename = "profilingGroupNames")]
     pub profiling_group_names: Vec<String>,
+    /// <p>Information about profiling groups.</p>
     #[serde(rename = "profilingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profiling_groups: Option<Vec<ProfilingGroupDescription>>,
 }
 
-/// <p>Request for PostAgentProfile operation.</p>
+/// <p>The structure representing the postAgentProfileRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostAgentProfileRequest {
+    /// <p><p/></p>
     #[serde(rename = "agentProfile")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -246,23 +289,24 @@ pub struct PostAgentProfileRequest {
         default
     )]
     pub agent_profile: bytes::Bytes,
-    /// <p>The content type of the agent profile in the payload. Recommended to send the profile gzipped with content-type application/octet-stream. Other accepted values are application/x-amzn-ion and application/json for unzipped Ion and JSON respectively.</p>
+    /// <p><p/></p>
     #[serde(rename = "contentType")]
     pub content_type: String,
-    /// <p>Client generated token to deduplicate the agent profile during aggregation.</p>
+    /// <p><p/></p>
     #[serde(rename = "profileToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profile_token: Option<String>,
+    /// <p><p/></p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
 }
 
-/// <p>Response for PostAgentProfile operation.</p>
+/// <p>The structure representing the postAgentProfileResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostAgentProfileResponse {}
 
-/// <p>Periods of time used for aggregation of profiles, represented using ISO 8601 format.</p>
+/// <p>Information about the profile time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProfileTime {
@@ -276,61 +320,125 @@ pub struct ProfileTime {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProfilingGroupDescription {
+    /// <p><p/></p>
     #[serde(rename = "agentOrchestrationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_orchestration_config: Option<AgentOrchestrationConfig>,
+    /// <p>The Amazon Resource Name (ARN) identifying the profiling group.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The timestamp of when the profiling group was created.</p>
+    /// <p>The time, in milliseconds since the epoch, when the profiling group was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    /// <p>The name of the profiling group.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The status of the profiling group.</p>
     #[serde(rename = "profilingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profiling_status: Option<ProfilingStatus>,
-    /// <p>The timestamp of when the profiling group was last updated.</p>
+    /// <p>The time, in milliseconds since the epoch, when the profiling group was last updated.</p>
     #[serde(rename = "updatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<f64>,
 }
 
-/// <p>The status of profiling of a profiling group.</p>
+/// <p>Information about the profiling status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProfilingStatus {
-    /// <p>Timestamp of when the last interaction of the agent with configureAgent API for orchestration.</p>
+    /// <p>The time, in milliseconds since the epoch, when the latest agent was orchestrated.</p>
     #[serde(rename = "latestAgentOrchestratedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_agent_orchestrated_at: Option<f64>,
-    /// <p>Timestamp of when the latest agent profile was successfully reported.</p>
+    /// <p>The time, in milliseconds since the epoch, when the latest agent was reported..</p>
     #[serde(rename = "latestAgentProfileReportedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_agent_profile_reported_at: Option<f64>,
-    /// <p>The time range of latest aggregated profile available.</p>
+    /// <p>The latest aggregated profile</p>
     #[serde(rename = "latestAggregatedProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_aggregated_profile: Option<AggregatedProfileTime>,
 }
 
-/// <p>Request for UpdateProfilingGroup operation.</p>
+/// <p>The structure representing the putPermissionRequest.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutPermissionRequest {
+    /// <p>The list of actions that the users and roles can perform on the profiling group.</p>
+    #[serde(rename = "actionGroup")]
+    pub action_group: String,
+    /// <p>The list of role and user ARNs or the accountId that needs access (wildcards are not allowed).</p>
+    #[serde(rename = "principals")]
+    pub principals: Vec<String>,
+    /// <p>The name of the profiling group.</p>
+    #[serde(rename = "profilingGroupName")]
+    pub profiling_group_name: String,
+    /// <p>A unique identifier for the current revision of the policy. This is required, if a policy exists for the profiling group. This is not required when creating the policy for the first time.</p>
+    #[serde(rename = "revisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
+}
+
+/// <p>The structure representing the putPermissionResponse.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutPermissionResponse {
+    /// <p>The resource-based policy.</p>
+    #[serde(rename = "policy")]
+    pub policy: String,
+    /// <p>A unique identifier for the current revision of the policy.</p>
+    #[serde(rename = "revisionId")]
+    pub revision_id: String,
+}
+
+/// <p>The structure representing the removePermissionRequest.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemovePermissionRequest {
+    /// <p>The list of actions that the users and roles can perform on the profiling group.</p>
+    #[serde(rename = "actionGroup")]
+    pub action_group: String,
+    /// <p>The name of the profiling group.</p>
+    #[serde(rename = "profilingGroupName")]
+    pub profiling_group_name: String,
+    /// <p>A unique identifier for the current revision of the policy.</p>
+    #[serde(rename = "revisionId")]
+    pub revision_id: String,
+}
+
+/// <p>The structure representing the removePermissionResponse.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemovePermissionResponse {
+    /// <p>The resource-based policy.</p>
+    #[serde(rename = "policy")]
+    pub policy: String,
+    /// <p>A unique identifier for the current revision of the policy.</p>
+    #[serde(rename = "revisionId")]
+    pub revision_id: String,
+}
+
+/// <p>The structure representing the updateProfilingGroupRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProfilingGroupRequest {
-    /// <p>Remote configuration to configure the agents of the profiling group.</p>
+    /// <p><p/></p>
     #[serde(rename = "agentOrchestrationConfig")]
     pub agent_orchestration_config: AgentOrchestrationConfig,
+    /// <p>The name of the profiling group to update.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
 }
 
-/// <p>Response for UpdateProfilingGroup operation.</p>
+/// <p>The structure representing the updateProfilingGroupResponse.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProfilingGroupResponse {
+    /// <p>Updated information about the profiling group.</p>
     #[serde(rename = "profilingGroup")]
     pub profiling_group: ProfilingGroupDescription,
 }
@@ -338,11 +446,11 @@ pub struct UpdateProfilingGroupResponse {
 /// Errors returned by ConfigureAgent
 #[derive(Debug, PartialEq)]
 pub enum ConfigureAgentError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -380,13 +488,13 @@ impl Error for ConfigureAgentError {}
 /// Errors returned by CreateProfilingGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateProfilingGroupError {
-    /// <p>Request can can cause an inconsistent state for the resource.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. </p>
     Conflict(String),
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request would cause a service quota to be exceeded.</p>
+    /// <p>You have exceeded your service quota. To perform the requested action, remove some of the relevant resources, or use <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html">Service Quotas</a> to request a service quota increase. </p>
     ServiceQuotaExceeded(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -430,11 +538,11 @@ impl Error for CreateProfilingGroupError {}
 /// Errors returned by DeleteProfilingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteProfilingGroupError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -474,11 +582,11 @@ impl Error for DeleteProfilingGroupError {}
 /// Errors returned by DescribeProfilingGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeProfilingGroupError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -517,14 +625,56 @@ impl fmt::Display for DescribeProfilingGroupError {
     }
 }
 impl Error for DescribeProfilingGroupError {}
+/// Errors returned by GetPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetPolicyError {
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
+    InternalServer(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl GetPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetPolicyError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetPolicyError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetPolicyError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPolicyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPolicyError {}
 /// Errors returned by GetProfile
 #[derive(Debug, PartialEq)]
 pub enum GetProfileError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -562,11 +712,11 @@ impl Error for GetProfileError {}
 /// Errors returned by ListProfileTimes
 #[derive(Debug, PartialEq)]
 pub enum ListProfileTimesError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -604,9 +754,9 @@ impl Error for ListProfileTimesError {}
 /// Errors returned by ListProfilingGroups
 #[derive(Debug, PartialEq)]
 pub enum ListProfilingGroupsError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -640,11 +790,11 @@ impl Error for ListProfilingGroupsError {}
 /// Errors returned by PostAgentProfile
 #[derive(Debug, PartialEq)]
 pub enum PostAgentProfileError {
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -679,16 +829,112 @@ impl fmt::Display for PostAgentProfileError {
     }
 }
 impl Error for PostAgentProfileError {}
+/// Errors returned by PutPermission
+#[derive(Debug, PartialEq)]
+pub enum PutPermissionError {
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. </p>
+    Conflict(String),
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
+    InternalServer(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl PutPermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(PutPermissionError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(PutPermissionError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutPermissionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(PutPermissionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutPermissionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutPermissionError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutPermissionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            PutPermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutPermissionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutPermissionError {}
+/// Errors returned by RemovePermission
+#[derive(Debug, PartialEq)]
+pub enum RemovePermissionError {
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. </p>
+    Conflict(String),
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
+    InternalServer(String),
+    /// <p>The resource specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl RemovePermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(RemovePermissionError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(RemovePermissionError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RemovePermissionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(RemovePermissionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemovePermissionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemovePermissionError::Conflict(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RemovePermissionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemovePermissionError {}
 /// Errors returned by UpdateProfilingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateProfilingGroupError {
-    /// <p>Request can can cause an inconsistent state for the resource.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. </p>
     Conflict(String),
-    /// <p>Unexpected error during processing of request.</p>
+    /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
-    /// <p>Request references a resource which does not exist.</p>
+    /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
-    /// <p>Request was denied due to request throttling.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -732,31 +978,37 @@ impl Error for UpdateProfilingGroupError {}
 /// Trait representing the capabilities of the Amazon CodeGuru Profiler API. Amazon CodeGuru Profiler clients implement this trait.
 #[async_trait]
 pub trait CodeGuruProfiler {
-    /// <p>Provides the configuration to use for an agent of the profiling group.</p>
+    /// <p><p/></p>
     async fn configure_agent(
         &self,
         input: ConfigureAgentRequest,
     ) -> Result<ConfigureAgentResponse, RusotoError<ConfigureAgentError>>;
 
-    /// <p>Create a profiling group.</p>
+    /// <p>Creates a profiling group.</p>
     async fn create_profiling_group(
         &self,
         input: CreateProfilingGroupRequest,
     ) -> Result<CreateProfilingGroupResponse, RusotoError<CreateProfilingGroupError>>;
 
-    /// <p>Delete a profiling group.</p>
+    /// <p>Deletes a profiling group.</p>
     async fn delete_profiling_group(
         &self,
         input: DeleteProfilingGroupRequest,
     ) -> Result<DeleteProfilingGroupResponse, RusotoError<DeleteProfilingGroupError>>;
 
-    /// <p>Describe a profiling group.</p>
+    /// <p>Describes a profiling group.</p>
     async fn describe_profiling_group(
         &self,
         input: DescribeProfilingGroupRequest,
     ) -> Result<DescribeProfilingGroupResponse, RusotoError<DescribeProfilingGroupError>>;
 
-    /// <p>Get the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it will be expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. For instance, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, then the returned profile will be from 00:15 to 00:20.</p>
+    /// <p>Gets the profiling group policy.</p>
+    async fn get_policy(
+        &self,
+        input: GetPolicyRequest,
+    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>>;
+
+    /// <p>Gets the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it is expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. </p> <p>For example, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, the returned profile will be from 00:15 to 00:20. </p> <p>You must specify exactly two of the following parameters: <code>startTime</code>, <code>period</code>, and <code>endTime</code>. </p>
     async fn get_profile(
         &self,
         input: GetProfileRequest,
@@ -768,19 +1020,31 @@ pub trait CodeGuruProfiler {
         input: ListProfileTimesRequest,
     ) -> Result<ListProfileTimesResponse, RusotoError<ListProfileTimesError>>;
 
-    /// <p>List profiling groups in the account.</p>
+    /// <p>Lists profiling groups.</p>
     async fn list_profiling_groups(
         &self,
         input: ListProfilingGroupsRequest,
     ) -> Result<ListProfilingGroupsResponse, RusotoError<ListProfilingGroupsError>>;
 
-    /// <p>Submit profile collected by an agent belonging to a profiling group for aggregation.</p>
+    /// <p><p/></p>
     async fn post_agent_profile(
         &self,
         input: PostAgentProfileRequest,
     ) -> Result<PostAgentProfileResponse, RusotoError<PostAgentProfileError>>;
 
-    /// <p>Update a profiling group.</p>
+    /// <p>Provides permission to the principals. This overwrites the existing permissions, and is not additive.</p>
+    async fn put_permission(
+        &self,
+        input: PutPermissionRequest,
+    ) -> Result<PutPermissionResponse, RusotoError<PutPermissionError>>;
+
+    /// <p>Removes statement for the provided action group from the policy.</p>
+    async fn remove_permission(
+        &self,
+        input: RemovePermissionRequest,
+    ) -> Result<RemovePermissionResponse, RusotoError<RemovePermissionError>>;
+
+    /// <p>Updates a profiling group.</p>
     async fn update_profiling_group(
         &self,
         input: UpdateProfilingGroupRequest,
@@ -826,7 +1090,7 @@ impl CodeGuruProfilerClient {
 
 #[async_trait]
 impl CodeGuruProfiler for CodeGuruProfilerClient {
-    /// <p>Provides the configuration to use for an agent of the profiling group.</p>
+    /// <p><p/></p>
     async fn configure_agent(
         &self,
         input: ConfigureAgentRequest,
@@ -860,7 +1124,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>Create a profiling group.</p>
+    /// <p>Creates a profiling group.</p>
     async fn create_profiling_group(
         &self,
         input: CreateProfilingGroupRequest,
@@ -895,7 +1159,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>Delete a profiling group.</p>
+    /// <p>Deletes a profiling group.</p>
     async fn delete_profiling_group(
         &self,
         input: DeleteProfilingGroupRequest,
@@ -926,7 +1190,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>Describe a profiling group.</p>
+    /// <p>Describes a profiling group.</p>
     async fn describe_profiling_group(
         &self,
         input: DescribeProfilingGroupRequest,
@@ -957,7 +1221,38 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>Get the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it will be expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. For instance, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, then the returned profile will be from 00:15 to 00:20.</p>
+    /// <p>Gets the profiling group policy.</p>
+    async fn get_policy(
+        &self,
+        input: GetPolicyRequest,
+    ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
+        let request_uri = format!(
+            "/profilingGroups/{profiling_group_name}/policy",
+            profiling_group_name = input.profiling_group_name
+        );
+
+        let mut request =
+            SignedRequest::new("GET", "codeguru-profiler", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPolicyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPolicyError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it is expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. </p> <p>For example, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, the returned profile will be from 00:15 to 00:20. </p> <p>You must specify exactly two of the following parameters: <code>startTime</code>, <code>period</code>, and <code>endTime</code>. </p>
     async fn get_profile(
         &self,
         input: GetProfileRequest,
@@ -1060,7 +1355,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>List profiling groups in the account.</p>
+    /// <p>Lists profiling groups.</p>
     async fn list_profiling_groups(
         &self,
         input: ListProfilingGroupsRequest,
@@ -1100,7 +1395,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>Submit profile collected by an agent belonging to a profiling group for aggregation.</p>
+    /// <p><p/></p>
     async fn post_agent_profile(
         &self,
         input: PostAgentProfileRequest,
@@ -1140,7 +1435,78 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p>Update a profiling group.</p>
+    /// <p>Provides permission to the principals. This overwrites the existing permissions, and is not additive.</p>
+    async fn put_permission(
+        &self,
+        input: PutPermissionRequest,
+    ) -> Result<PutPermissionResponse, RusotoError<PutPermissionError>> {
+        let request_uri = format!(
+            "/profilingGroups/{profiling_group_name}/policy/{action_group}",
+            action_group = input.action_group,
+            profiling_group_name = input.profiling_group_name
+        );
+
+        let mut request =
+            SignedRequest::new("PUT", "codeguru-profiler", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutPermissionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutPermissionError::from_response(response))
+        }
+    }
+
+    /// <p>Removes statement for the provided action group from the policy.</p>
+    async fn remove_permission(
+        &self,
+        input: RemovePermissionRequest,
+    ) -> Result<RemovePermissionResponse, RusotoError<RemovePermissionError>> {
+        let request_uri = format!(
+            "/profilingGroups/{profiling_group_name}/policy/{action_group}",
+            action_group = input.action_group,
+            profiling_group_name = input.profiling_group_name
+        );
+
+        let mut request =
+            SignedRequest::new("DELETE", "codeguru-profiler", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("revisionId", &input.revision_id);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemovePermissionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemovePermissionError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a profiling group.</p>
     async fn update_profiling_group(
         &self,
         input: UpdateProfilingGroupRequest,

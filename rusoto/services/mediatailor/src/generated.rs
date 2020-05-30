@@ -25,6 +25,19 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The configuration for Avail Suppression. Ad suppression can be used to turn off ad personalization in a long manifest, or if a viewer joins mid-break.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AvailSuppression {
+    /// <p>Sets the mode for avail suppression, also known as ad suppression. By default, ad suppression is off and all ad breaks are filled by MediaTailor with ads or slate.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>The avail suppression value is a live edge offset time in HH:MM:SS. MediaTailor won&#39;t fill ad breaks on or behind this time in the manifest lookback window. </p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CdnConfiguration {
@@ -97,6 +110,10 @@ pub struct GetPlaybackConfigurationResponse {
     #[serde(rename = "AdDecisionServerUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_decision_server_url: Option<String>,
+    /// <p>The configuration for Avail Suppression. Ad suppression can be used to turn off ad personalization in a long manifest, or if a viewer joins mid-break.</p>
+    #[serde(rename = "AvailSuppression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avail_suppression: Option<AvailSuppression>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,6 +134,10 @@ pub struct GetPlaybackConfigurationResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The maximum duration of underfilled ad time (in seconds) allowed in an ad break.</p>
+    #[serde(rename = "PersonalizationThresholdSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub personalization_threshold_seconds: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. </p>
     #[serde(rename = "PlaybackConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -226,6 +247,10 @@ pub struct PlaybackConfiguration {
     #[serde(rename = "AdDecisionServerUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_decision_server_url: Option<String>,
+    /// <p>The configuration for Avail Suppression. Ad suppression can be used to turn off ad personalization in a long manifest, or if a viewer joins mid-break.</p>
+    #[serde(rename = "AvailSuppression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avail_suppression: Option<AvailSuppression>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -242,6 +267,10 @@ pub struct PlaybackConfiguration {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The maximum duration of underfilled ad time (in seconds) allowed in an ad break.</p>
+    #[serde(rename = "PersonalizationThresholdSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub personalization_threshold_seconds: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. </p>
     #[serde(rename = "PlaybackConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -279,6 +308,10 @@ pub struct PutPlaybackConfigurationRequest {
     #[serde(rename = "AdDecisionServerUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_decision_server_url: Option<String>,
+    /// <p>The configuration for Avail Suppression. Ad suppression can be used to turn off ad personalization in a long manifest, or if a viewer joins mid-break.</p>
+    #[serde(rename = "AvailSuppression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avail_suppression: Option<AvailSuppression>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -295,6 +328,10 @@ pub struct PutPlaybackConfigurationRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The maximum duration of underfilled ad time (in seconds) allowed in an ad break.</p>
+    #[serde(rename = "PersonalizationThresholdSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub personalization_threshold_seconds: Option<i64>,
     /// <p>The URL for a high-quality video asset to transcode and use to fill in time that's not used by ads. AWS Elemental MediaTailor shows the slate to fill in gaps in media content. Configuring the slate is optional for non-VPAID configurations. For VPAID, the slate is required because MediaTailor provides it in the slots that are designated for dynamic ad content. The slate must be a high-quality asset that contains both audio and video. </p>
     #[serde(rename = "SlateAdUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -320,6 +357,10 @@ pub struct PutPlaybackConfigurationResponse {
     #[serde(rename = "AdDecisionServerUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_decision_server_url: Option<String>,
+    /// <p>The configuration for Avail Suppression. Ad suppression can be used to turn off ad personalization in a long manifest, or if a viewer joins mid-break.</p>
+    #[serde(rename = "AvailSuppression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avail_suppression: Option<AvailSuppression>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,6 +381,10 @@ pub struct PutPlaybackConfigurationResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The maximum duration of underfilled ad time (in seconds) allowed in an ad break.</p>
+    #[serde(rename = "PersonalizationThresholdSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub personalization_threshold_seconds: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. </p>
     #[serde(rename = "PlaybackConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]

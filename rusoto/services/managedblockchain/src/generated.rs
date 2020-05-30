@@ -516,6 +516,24 @@ pub struct ListProposalsOutput {
     pub proposals: Option<Vec<ProposalSummary>>,
 }
 
+/// <p>A configuration for logging events.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LogConfiguration {
+    /// <p>Indicates whether logging is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// <p>A collection of log configurations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LogConfigurations {
+    /// <p>Parameters for publishing logs to Amazon CloudWatch Logs.</p>
+    #[serde(rename = "Cloudwatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloudwatch: Option<LogConfiguration>,
+}
+
 /// <p>Member configuration properties.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -536,6 +554,10 @@ pub struct Member {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>Configuration properties for logging events associated with a member.</p>
+    #[serde(rename = "LogPublishingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_publishing_configuration: Option<MemberLogPublishingConfiguration>,
     /// <p>The name of the member.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -561,6 +583,10 @@ pub struct MemberConfiguration {
     /// <p>Configuration properties of the blockchain framework relevant to the member.</p>
     #[serde(rename = "FrameworkConfiguration")]
     pub framework_configuration: MemberFrameworkConfiguration,
+    /// <p><p/></p>
+    #[serde(rename = "LogPublishingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_publishing_configuration: Option<MemberLogPublishingConfiguration>,
     /// <p>The name of the member.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -592,6 +618,15 @@ pub struct MemberFabricConfiguration {
     pub admin_username: String,
 }
 
+/// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MemberFabricLogPublishingConfiguration {
+    /// <p>Configuration properties for logging events associated with a member's Certificate Authority (CA). CA logs help you determine when a member in your account joins the network, or when new peers register with a member CA.</p>
+    #[serde(rename = "CaLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ca_logs: Option<LogConfigurations>,
+}
+
 /// <p>Attributes relevant to a member for the blockchain framework that the Managed Blockchain network uses.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -610,6 +645,15 @@ pub struct MemberFrameworkConfiguration {
     #[serde(rename = "Fabric")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fabric: Option<MemberFabricConfiguration>,
+}
+
+/// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MemberLogPublishingConfiguration {
+    /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
+    #[serde(rename = "Fabric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fabric: Option<MemberFabricLogPublishingConfiguration>,
 }
 
 /// <p>A summary of configuration properties for a member.</p>
@@ -692,7 +736,7 @@ pub struct Network {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkFabricAttributes {
-    /// <p>The edition of Amazon Managed Blockchain that Hyperledger Fabric uses. For more information, see <a href="https://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
+    /// <p>The edition of Amazon Managed Blockchain that Hyperledger Fabric uses. For more information, see <a href="http://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edition: Option<String>,
@@ -706,7 +750,7 @@ pub struct NetworkFabricAttributes {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NetworkFabricConfiguration {
-    /// <p>The edition of Amazon Managed Blockchain that the network uses. For more information, see <a href="https://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
+    /// <p>The edition of Amazon Managed Blockchain that the network uses. For more information, see <a href="http://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
     #[serde(rename = "Edition")]
     pub edition: String,
 }
@@ -789,6 +833,10 @@ pub struct Node {
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "LogPublishingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
     /// <p>The unique identifier of the member to which the node belongs.</p>
     #[serde(rename = "MemberId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -813,6 +861,10 @@ pub struct NodeConfiguration {
     /// <p>The Amazon Managed Blockchain instance type for the node.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
+    /// <p><p/></p>
+    #[serde(rename = "LogPublishingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
 }
 
 /// <p>Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain network that uses Hyperledger Fabric.</p>
@@ -829,6 +881,19 @@ pub struct NodeFabricAttributes {
     pub peer_event_endpoint: Option<String>,
 }
 
+/// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NodeFabricLogPublishingConfiguration {
+    /// <p>Configuration properties for logging events associated with chaincode execution on a peer node. Chaincode logs contain the results of instantiating, invoking, and querying the chaincode. A peer can run multiple instances of chaincode. When enabled, a log stream is created for all chaincodes, with an individual log stream for each chaincode.</p>
+    #[serde(rename = "ChaincodeLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chaincode_logs: Option<LogConfigurations>,
+    /// <p>Configuration properties for a peer node log. Peer node logs contain messages generated when your client submits transaction proposals to peer nodes, requests to join channels, enrolls an admin peer, and lists the chaincode instances on a peer node. </p>
+    #[serde(rename = "PeerLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_logs: Option<LogConfigurations>,
+}
+
 /// <p>Attributes relevant to a peer node on a Managed Blockchain network for the blockchain framework that the network uses.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -837,6 +902,15 @@ pub struct NodeFrameworkAttributes {
     #[serde(rename = "Fabric")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fabric: Option<NodeFabricAttributes>,
+}
+
+/// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NodeLogPublishingConfiguration {
+    /// <p>Configuration properties for logging events associated with a node that is owned by a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
+    #[serde(rename = "Fabric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fabric: Option<NodeFabricLogPublishingConfiguration>,
 }
 
 /// <p>A summary of configuration properties for a peer node.</p>
@@ -909,7 +983,7 @@ pub struct Proposal {
     #[serde(rename = "ProposedByMemberName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proposed_by_member_name: Option<String>,
-    /// <p><p>The status of the proposal. Values are as follows:</p> <ul> <li> <p> <code>IN<em>PROGRESS</code> - The proposal is active and open for member voting.</p> </li> <li> <p> <code>APPROVED</code> - The proposal was approved with sufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified proposal actions are carried out.</p> </li> <li> <p> <code>REJECTED</code> - The proposal was rejected with insufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>EXPIRED</code> - Members did not cast the number of votes required to determine the proposal outcome before the proposal expired. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>ACTION</em>FAILED</code> - One or more of the specified <code>ProposalActions</code> in a proposal that was approved could not be completed because of an error.</p> </li> </ul></p>
+    /// <p><p>The status of the proposal. Values are as follows:</p> <ul> <li> <p> <code>IN<em>PROGRESS</code> - The proposal is active and open for member voting.</p> </li> <li> <p> <code>APPROVED</code> - The proposal was approved with sufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified proposal actions are carried out.</p> </li> <li> <p> <code>REJECTED</code> - The proposal was rejected with insufficient <code>YES</code> votes among members according to the <code>VotingPolicy</code> specified for the <code>Network</code>. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>EXPIRED</code> - Members did not cast the number of votes required to determine the proposal outcome before the proposal expired. The specified <code>ProposalActions</code> are not carried out.</p> </li> <li> <p> <code>ACTION</em>FAILED</code> - One or more of the specified <code>ProposalActions</code> in a proposal that was approved could not be completed because of an error. The <code>ACTION_FAILED</code> status occurs even if only one ProposalAction fails and other actions are successful.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -985,6 +1059,47 @@ pub struct RemoveAction {
     #[serde(rename = "MemberId")]
     pub member_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateMemberInput {
+    /// <p>Configuration properties for publishing to Amazon CloudWatch Logs.</p>
+    #[serde(rename = "LogPublishingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_publishing_configuration: Option<MemberLogPublishingConfiguration>,
+    /// <p>The unique ID of the member.</p>
+    #[serde(rename = "MemberId")]
+    pub member_id: String,
+    /// <p>The unique ID of the Managed Blockchain network to which the member belongs.</p>
+    #[serde(rename = "NetworkId")]
+    pub network_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateMemberOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateNodeInput {
+    /// <p>Configuration properties for publishing to Amazon CloudWatch Logs.</p>
+    #[serde(rename = "LogPublishingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
+    /// <p>The unique ID of the member that owns the node.</p>
+    #[serde(rename = "MemberId")]
+    pub member_id: String,
+    /// <p>The unique ID of the Managed Blockchain network to which the node belongs.</p>
+    #[serde(rename = "NetworkId")]
+    pub network_id: String,
+    /// <p>The unique ID of the node.</p>
+    #[serde(rename = "NodeId")]
+    pub node_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateNodeOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2008,6 +2123,114 @@ impl fmt::Display for RejectInvitationError {
     }
 }
 impl Error for RejectInvitationError {}
+/// Errors returned by UpdateMember
+#[derive(Debug, PartialEq)]
+pub enum UpdateMemberError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    InternalServiceError(String),
+    /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
+    InvalidRequest(String),
+    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    ResourceNotFound(String),
+    /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
+    Throttling(String),
+}
+
+impl UpdateMemberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMemberError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateMemberError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UpdateMemberError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateMemberError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateMemberError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateMemberError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateMemberError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateMemberError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateMemberError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateMemberError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateMemberError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMemberError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateMemberError {}
+/// Errors returned by UpdateNode
+#[derive(Debug, PartialEq)]
+pub enum UpdateNodeError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    InternalServiceError(String),
+    /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
+    InvalidRequest(String),
+    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    ResourceNotFound(String),
+    /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
+    Throttling(String),
+}
+
+impl UpdateNodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNodeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateNodeError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UpdateNodeError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateNodeError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateNodeError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateNodeError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateNodeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateNodeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateNodeError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateNodeError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateNodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateNodeError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateNodeError {}
 /// Errors returned by VoteOnProposal
 #[derive(Debug, PartialEq)]
 pub enum VoteOnProposalError {
@@ -2172,6 +2395,18 @@ pub trait ManagedBlockchain {
         &self,
         input: RejectInvitationInput,
     ) -> Result<RejectInvitationOutput, RusotoError<RejectInvitationError>>;
+
+    /// <p>Updates a member configuration with new parameters.</p>
+    async fn update_member(
+        &self,
+        input: UpdateMemberInput,
+    ) -> Result<UpdateMemberOutput, RusotoError<UpdateMemberError>>;
+
+    /// <p>Updates a node configuration with new parameters.</p>
+    async fn update_node(
+        &self,
+        input: UpdateNodeInput,
+    ) -> Result<UpdateNodeOutput, RusotoError<UpdateNodeError>>;
 
     /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
     async fn vote_on_proposal(
@@ -2828,6 +3063,77 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RejectInvitationError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a member configuration with new parameters.</p>
+    async fn update_member(
+        &self,
+        input: UpdateMemberInput,
+    ) -> Result<UpdateMemberOutput, RusotoError<UpdateMemberError>> {
+        let request_uri = format!(
+            "/networks/{network_id}/members/{member_id}",
+            member_id = input.member_id,
+            network_id = input.network_id
+        );
+
+        let mut request =
+            SignedRequest::new("PATCH", "managedblockchain", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateMemberOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateMemberError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a node configuration with new parameters.</p>
+    async fn update_node(
+        &self,
+        input: UpdateNodeInput,
+    ) -> Result<UpdateNodeOutput, RusotoError<UpdateNodeError>> {
+        let request_uri = format!(
+            "/networks/{network_id}/members/{member_id}/nodes/{node_id}",
+            member_id = input.member_id,
+            network_id = input.network_id,
+            node_id = input.node_id
+        );
+
+        let mut request =
+            SignedRequest::new("PATCH", "managedblockchain", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateNodeOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateNodeError::from_response(response))
         }
     }
 

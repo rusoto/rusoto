@@ -65,6 +65,10 @@ pub struct Cluster {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    /// <p>The encryption configuration for the cluster.</p>
+    #[serde(rename = "encryptionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_config: Option<Vec<EncryptionConfig>>,
     /// <p>The endpoint for your Kubernetes API server.</p>
     #[serde(rename = "endpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -114,6 +118,10 @@ pub struct CreateClusterRequest {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>The encryption configuration for the cluster.</p>
+    #[serde(rename = "encryptionConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_config: Option<Vec<EncryptionConfig>>,
     /// <p><p>Enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren&#39;t exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note></p>
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,7 +219,7 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The IAM role associated with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch worker nodes and register them into a cluster, you must create an IAM role for those worker nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS Worker Node IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch worker nodes and register them into a cluster, you must create an IAM role for those worker nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS Worker Node IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "nodeRole")]
     pub node_role: String,
     /// <p>The unique name to give your node group.</p>
@@ -387,6 +395,19 @@ pub struct DescribeUpdateResponse {
     #[serde(rename = "update")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update: Option<Update>,
+}
+
+/// <p>The encryption configuration for the cluster.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EncryptionConfig {
+    /// <p>AWS Key Management Service (AWS KMS) customer master key (CMK). Either the ARN or the alias can be used.</p>
+    #[serde(rename = "provider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider: Option<Provider>,
+    /// <p>Specifies the resources to be encrypted. The only supported value is "secrets".</p>
+    #[serde(rename = "resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resources: Option<Vec<String>>,
 }
 
 /// <p>An object representing an error when an asynchronous operation fails.</p>
@@ -777,6 +798,15 @@ pub struct OIDC {
     #[serde(rename = "issuer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issuer: Option<String>,
+}
+
+/// <p>Identifies the AWS Key Management Service (AWS KMS) customer master key (CMK) used to encrypt the secrets.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Provider {
+    /// <p>Amazon Resource Name (ARN) or alias of the customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html">Allowing Users in Other Accounts to Use a CMK</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    #[serde(rename = "keyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_arn: Option<String>,
 }
 
 /// <p>An object representing the remote access configuration for the managed node group.</p>
@@ -2224,7 +2254,7 @@ pub trait Eks {
         input: CreateNodegroupRequest,
     ) -> Result<CreateNodegroupResponse, RusotoError<CreateNodegroupError>>;
 
-    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and<a>DeleteFargateProfile</a>.</p>
+    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and <a>DeleteFargateProfile</a>.</p>
     async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
@@ -2278,7 +2308,7 @@ pub trait Eks {
         input: ListFargateProfilesRequest,
     ) -> Result<ListFargateProfilesResponse, RusotoError<ListFargateProfilesError>>;
 
-    /// <p>Lists the Amazon EKS node groups associated with the specified cluster in your AWS account in the specified Region.</p>
+    /// <p>Lists the Amazon EKS managed node groups associated with the specified cluster in your AWS account in the specified Region. Self-managed node groups are not listed.</p>
     async fn list_nodegroups(
         &self,
         input: ListNodegroupsRequest,
@@ -2465,7 +2495,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and<a>DeleteFargateProfile</a>.</p>
+    /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and <a>DeleteFargateProfile</a>.</p>
     async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
@@ -2755,7 +2785,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Lists the Amazon EKS node groups associated with the specified cluster in your AWS account in the specified Region.</p>
+    /// <p>Lists the Amazon EKS managed node groups associated with the specified cluster in your AWS account in the specified Region. Self-managed node groups are not listed.</p>
     async fn list_nodegroups(
         &self,
         input: ListNodegroupsRequest,

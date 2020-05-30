@@ -146,6 +146,8 @@ pub enum CreateHomeRegionControlError {
     InvalidInput(String),
     /// <p>Exception raised when a request fails due to temporary unavailability of the service.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl CreateHomeRegionControlError {
@@ -177,6 +179,9 @@ impl CreateHomeRegionControlError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateHomeRegionControlError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -193,6 +198,7 @@ impl fmt::Display for CreateHomeRegionControlError {
             CreateHomeRegionControlError::InternalServerError(ref cause) => write!(f, "{}", cause),
             CreateHomeRegionControlError::InvalidInput(ref cause) => write!(f, "{}", cause),
             CreateHomeRegionControlError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateHomeRegionControlError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -208,6 +214,8 @@ pub enum DescribeHomeRegionControlsError {
     InvalidInput(String),
     /// <p>Exception raised when a request fails due to temporary unavailability of the service.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl DescribeHomeRegionControlsError {
@@ -236,6 +244,11 @@ impl DescribeHomeRegionControlsError {
                         DescribeHomeRegionControlsError::ServiceUnavailable(err.msg),
                     )
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeHomeRegionControlsError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -255,6 +268,7 @@ impl fmt::Display for DescribeHomeRegionControlsError {
             DescribeHomeRegionControlsError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DescribeHomeRegionControlsError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -270,6 +284,8 @@ pub enum GetHomeRegionError {
     InvalidInput(String),
     /// <p>Exception raised when a request fails due to temporary unavailability of the service.</p>
     ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
 }
 
 impl GetHomeRegionError {
@@ -288,6 +304,9 @@ impl GetHomeRegionError {
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetHomeRegionError::ServiceUnavailable(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetHomeRegionError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -303,6 +322,7 @@ impl fmt::Display for GetHomeRegionError {
             GetHomeRegionError::InternalServerError(ref cause) => write!(f, "{}", cause),
             GetHomeRegionError::InvalidInput(ref cause) => write!(f, "{}", cause),
             GetHomeRegionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetHomeRegionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -316,7 +336,7 @@ pub trait MigrationHubConfig {
         input: CreateHomeRegionControlRequest,
     ) -> Result<CreateHomeRegionControlResult, RusotoError<CreateHomeRegionControlError>>;
 
-    /// <p>This API permits filtering on the <code>ControlId</code>, <code>HomeRegion</code>, and <code>RegionControlScope</code> fields.</p>
+    /// <p>This API permits filtering on the <code>ControlId</code> and <code>HomeRegion</code> fields.</p>
     async fn describe_home_region_controls(
         &self,
         input: DescribeHomeRegionControlsRequest,
@@ -397,7 +417,7 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         }
     }
 
-    /// <p>This API permits filtering on the <code>ControlId</code>, <code>HomeRegion</code>, and <code>RegionControlScope</code> fields.</p>
+    /// <p>This API permits filtering on the <code>ControlId</code> and <code>HomeRegion</code> fields.</p>
     async fn describe_home_region_controls(
         &self,
         input: DescribeHomeRegionControlsRequest,

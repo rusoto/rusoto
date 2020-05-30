@@ -76,7 +76,7 @@ pub struct DescribeSigningJobResponse {
     #[serde(rename = "signedObject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signed_object: Option<SignedObject>,
-    /// <p>Amazon Resource Name (ARN) of your code signing certificate.</p>
+    /// <p>The Amazon Resource Name (ARN) of your code signing certificate.</p>
     #[serde(rename = "signingMaterial")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signing_material: Option<SigningMaterial>,
@@ -352,7 +352,7 @@ pub struct PutSigningProfileRequest {
     #[serde(rename = "overrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub overrides: Option<SigningPlatformOverrides>,
-    /// <p>The ID of the signing profile to be created.</p>
+    /// <p>The ID of the signing platform to be created.</p>
     #[serde(rename = "platformId")]
     pub platform_id: String,
     /// <p>The name of the signing profile to be created.</p>
@@ -365,7 +365,7 @@ pub struct PutSigningProfileRequest {
     #[serde(rename = "signingParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signing_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Tags to be associated with the signing profile being created.</p>
+    /// <p>Tags to be associated with the signing profile that is being created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -439,7 +439,7 @@ pub struct SigningConfiguration {
     /// <p>The encryption algorithm options that are available for a code signing job.</p>
     #[serde(rename = "encryptionAlgorithmOptions")]
     pub encryption_algorithm_options: EncryptionAlgorithmOptions,
-    /// <p>The hash algorithm options that are available for a a code signing job.</p>
+    /// <p>The hash algorithm options that are available for a code signing job.</p>
     #[serde(rename = "hashAlgorithmOptions")]
     pub hash_algorithm_options: HashAlgorithmOptions,
 }
@@ -461,10 +461,10 @@ pub struct SigningConfigurationOverrides {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningImageFormat {
-    /// <p>The default format of a code signing signing image.</p>
+    /// <p>The default format of a code signing image.</p>
     #[serde(rename = "defaultFormat")]
     pub default_format: String,
-    /// <p>The supported formats of a code signing signing image.</p>
+    /// <p>The supported formats of a code signing image.</p>
     #[serde(rename = "supportedFormats")]
     pub supported_formats: Vec<String>,
 }
@@ -507,7 +507,7 @@ pub struct SigningMaterial {
     pub certificate_arn: String,
 }
 
-/// <p>Contains information about the signing configurations and parameters that is used to perform a code signing job.</p>
+/// <p>Contains information about the signing configurations and parameters that are used to perform a code signing job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningPlatform {
@@ -551,13 +551,17 @@ pub struct SigningPlatformOverrides {
     #[serde(rename = "signingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signing_configuration: Option<SigningConfigurationOverrides>,
+    /// <p>A signed image is a JSON object. When overriding the default signing platform configuration, a customer can select either of two signing formats, <code>JSONEmbedded</code> or <code>JSONDetached</code>. (A third format value, <code>JSON</code>, is reserved for future use.) With <code>JSONEmbedded</code>, the signing image has the payload embedded in it. With <code>JSONDetached</code>, the payload is not be embedded in the signing image.</p>
+    #[serde(rename = "signingImageFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_image_format: Option<String>,
 }
 
 /// <p>Contains information about the ACM certificates and code signing configuration parameters that can be used by a given code signing user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningProfile {
-    /// <p>Amazon Resource Name (ARN) for the signing profile.</p>
+    /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -626,7 +630,7 @@ pub struct StartSigningJobResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p>Amazon Resource Name (ARN) for the signing profile.</p>
+    /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>One or more tags to be associated with the signing profile.</p>
@@ -641,10 +645,10 @@ pub struct TagResourceResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>Amazon Resource Name (ARN) for the signing profile .</p>
+    /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>A list of tag keys to be removed from the signing profile .</p>
+    /// <p>A list of tag keys to be removed from the signing profile.</p>
     #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -1266,13 +1270,13 @@ pub trait Signer {
         input: StartSigningJobRequest,
     ) -> Result<StartSigningJobResponse, RusotoError<StartSigningJobError>>;
 
-    /// <p>Adds one or more tags to a signing profile. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. You specify the signing profile using its Amazon Resource Name (ARN). You specify the tag by using a key-value pair.</p>
+    /// <p>Adds one or more tags to a signing profile. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. To specify the signing profile, use its Amazon Resource Name (ARN). To specify the tag, use a key-value pair.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
-    /// <p>Remove one or more tags from a signing profile. Specify a list of tag keys to remove the tags.</p>
+    /// <p>Removes one or more tags from a signing profile. To remove the tags, specify a list of tag keys.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1653,7 +1657,7 @@ impl Signer for SignerClient {
         }
     }
 
-    /// <p>Adds one or more tags to a signing profile. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. You specify the signing profile using its Amazon Resource Name (ARN). You specify the tag by using a key-value pair.</p>
+    /// <p>Adds one or more tags to a signing profile. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. To specify the signing profile, use its Amazon Resource Name (ARN). To specify the tag, use a key-value pair.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1683,7 +1687,7 @@ impl Signer for SignerClient {
         }
     }
 
-    /// <p>Remove one or more tags from a signing profile. Specify a list of tag keys to remove the tags.</p>
+    /// <p>Removes one or more tags from a signing profile. To remove the tags, specify a list of tag keys.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,

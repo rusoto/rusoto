@@ -70,6 +70,10 @@ pub struct Action {
     #[serde(rename = "cloudwatchAlarm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloudwatch_alarm: Option<CloudwatchAlarmAction>,
+    /// <p>Send data to CloudWatch Logs.</p>
+    #[serde(rename = "cloudwatchLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloudwatch_logs: Option<CloudwatchLogsAction>,
     /// <p>Capture a CloudWatch metric.</p>
     #[serde(rename = "cloudwatchMetric")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -615,8 +619,7 @@ pub struct AuthInfo {
     pub action_type: Option<String>,
     /// <p>The resources for which the principal is being authorized to perform the specified action.</p>
     #[serde(rename = "resources")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub resources: Option<Vec<String>>,
+    pub resources: Vec<String>,
 }
 
 /// <p>The authorizer result.</p>
@@ -743,6 +746,10 @@ pub struct Behavior {
     #[serde(rename = "metric")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric: Option<String>,
+    /// <p>The dimension for a metric in your behavior. For example, using a <code>TOPIC_FILTER</code> dimension, you can narrow down the scope of the metric only to MQTT topics whose name match the pattern specified in the dimension.</p>
+    #[serde(rename = "metricDimension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_dimension: Option<MetricDimension>,
     /// <p>The name you have given to the behavior.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -973,6 +980,10 @@ pub struct Certificate {
     #[serde(rename = "certificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
+    /// <p>The mode of the certificate.</p>
+    #[serde(rename = "certificateMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_mode: Option<String>,
     /// <p>The date and time the certificate was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -999,6 +1010,10 @@ pub struct CertificateDescription {
     #[serde(rename = "certificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_id: Option<String>,
+    /// <p>The mode of the certificate.</p>
+    #[serde(rename = "certificateMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_mode: Option<String>,
     /// <p>The certificate data, in PEM format.</p>
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1078,6 +1093,17 @@ pub struct CloudwatchAlarmAction {
     /// <p>The value of the alarm state. Acceptable values are: OK, ALARM, INSUFFICIENT_DATA.</p>
     #[serde(rename = "stateValue")]
     pub state_value: String,
+}
+
+/// <p>Describes an action that sends data to CloudWatch Logs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CloudwatchLogsAction {
+    /// <p>The CloudWatch log group to which the action sends data.</p>
+    #[serde(rename = "logGroupName")]
+    pub log_group_name: String,
+    /// <p>The IAM role that allows access to the CloudWatch log.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
 }
 
 /// <p>Describes an action that captures a CloudWatch metric.</p>
@@ -1186,6 +1212,10 @@ pub struct CreateAuthorizerRequest {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p><p>Metadata which can be used to manage the custom authorizer.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the token key used to extract the token from the HTTP headers.</p>
     #[serde(rename = "tokenKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1275,6 +1305,40 @@ pub struct CreateCertificateFromCsrResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDimensionRequest {
+    /// <p>Each dimension must have a unique client request token. If you try to create a new dimension with the same token as a dimension that already exists, an exception occurs. If you omit this value, AWS SDKs will automatically generate a unique client request.</p>
+    #[serde(rename = "clientRequestToken")]
+    pub client_request_token: String,
+    /// <p>A unique identifier for the dimension. Choose something that describes the type and value to make it easy to remember what it does.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>Specifies the value or list of values for the dimension. For <code>TOPIC_FILTER</code> dimensions, this is a pattern used to match the MQTT topic (for example, "admin/#").</p>
+    #[serde(rename = "stringValues")]
+    pub string_values: Vec<String>,
+    /// <p>Metadata that can be used to manage the dimension.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Specifies the type of dimension. Supported types: <code>TOPIC_FILTER.</code> </p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDimensionResponse {
+    /// <p>The ARN (Amazon resource name) of the created dimension.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A unique identifier for the dimension.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainConfigurationRequest {
     /// <p>An object that specifies the authorization service for a domain.</p>
     #[serde(rename = "authorizerConfig")]
@@ -1291,10 +1355,14 @@ pub struct CreateDomainConfigurationRequest {
     #[serde(rename = "serverCertificateArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_certificate_arns: Option<Vec<String>>,
-    /// <p>The type of service delivered by the endpoint.</p>
+    /// <p><p>The type of service delivered by the endpoint.</p> <note> <p>AWS IoT Core currently supports only the <code>DATA</code> service type.</p> </note></p>
     #[serde(rename = "serviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_type: Option<String>,
+    /// <p><p>Metadata which can be used to manage the domain configuration.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The certificate used to validate the server certificate and prove domain name ownership. This certificate must be signed by a public certificate authority. This value is not required for AWS-managed domains.</p>
     #[serde(rename = "validationCertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1577,6 +1645,10 @@ pub struct CreatePolicyRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
     pub policy_name: String,
+    /// <p><p>Metadata which can be used to manage the policy.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>The output from the CreatePolicy operation.</p>
@@ -1679,6 +1751,10 @@ pub struct CreateProvisioningTemplateRequest {
     #[serde(rename = "enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+    /// <p>Creates a pre-provisioning hook template.</p>
+    #[serde(rename = "preProvisioningHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pre_provisioning_hook: Option<ProvisioningHook>,
     /// <p>The role ARN for the role associated with the fleet provisioning template. This IoT role grants permission to provision a device.</p>
     #[serde(rename = "provisioningRoleArn")]
     pub provisioning_role_arn: String,
@@ -1760,6 +1836,10 @@ pub struct CreateRoleAliasRequest {
     /// <p>The role ARN.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
+    /// <p><p>Metadata which can be used to manage the role alias.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1814,9 +1894,9 @@ pub struct CreateScheduledAuditResponse {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityProfileRequest {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
-    #[serde(rename = "additionalMetricsToRetain")]
+    #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_metrics_to_retain: Option<Vec<String>>,
+    pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
     /// <p>Specifies the destinations to which alerts are sent. (Alerts are always sent to the console.) Alerts are generated when a device (thing) violates a behavior.</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1943,7 +2023,7 @@ pub struct CreateThingRequest {
     #[serde(rename = "billingGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_group_name: Option<String>,
-    /// <p>The name of the thing to create.</p>
+    /// <p>The name of the thing to create.</p> <p>You can't change a thing's name after you create it. To change a thing's name, you must create a new thing, give it the new name, and then delete the old thing.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
     /// <p>The name of the thing type associated with the new thing.</p>
@@ -2126,6 +2206,18 @@ pub struct DeleteCertificateRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete: Option<bool>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDimensionRequest {
+    /// <p>The unique identifier for the dimension that you want to delete.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteDimensionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2667,6 +2759,43 @@ pub struct DescribeDefaultAuthorizerResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDimensionRequest {
+    /// <p>The unique identifier for the dimension.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDimensionResponse {
+    /// <p>The ARN (Amazon resource name) for the dimension.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date the dimension was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The date the dimension was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The unique identifier for the dimension.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The value or list of values used to scope the dimension. For example, for topic filters, this is the pattern used to match the MQTT topic name.</p>
+    #[serde(rename = "stringValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_values: Option<Vec<String>>,
+    /// <p>The type of the dimension.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainConfigurationRequest {
     /// <p>The name of the domain configuration.</p>
     #[serde(rename = "domainConfigurationName")]
@@ -2714,7 +2843,7 @@ pub struct DescribeDomainConfigurationResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
-    /// <p><p>The endpoint type. Valid endpoint types include:</p> <ul> <li> <p> <code>iot:Data</code> - Returns a VeriSign signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Data-ATS</code> - Returns an ATS signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:CredentialProvider</code> - Returns an AWS IoT credentials provider API endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Jobs</code> - Returns an AWS IoT device management Jobs API endpoint.</p> </li> </ul></p>
+    /// <p>The endpoint type. Valid endpoint types include:</p> <ul> <li> <p> <code>iot:Data</code> - Returns a VeriSign signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Data-ATS</code> - Returns an ATS signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:CredentialProvider</code> - Returns an AWS IoT credentials provider API endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Jobs</code> - Returns an AWS IoT device management Jobs API endpoint.</p> </li> </ul> <p>We strongly recommend that customers use the newer <code>iot:Data-ATS</code> endpoint type to avoid issues related to the widespread distrust of Symantec certificate authorities.</p>
     #[serde(rename = "endpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -2897,6 +3026,10 @@ pub struct DescribeProvisioningTemplateResponse {
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
+    /// <p>Gets information about a pre-provisioned hook.</p>
+    #[serde(rename = "preProvisioningHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pre_provisioning_hook: Option<ProvisioningHook>,
     /// <p>The ARN of the role associated with the provisioning template. This IoT role grants permission to provision a device.</p>
     #[serde(rename = "provisioningRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3012,10 +3145,10 @@ pub struct DescribeSecurityProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
-    #[serde(rename = "additionalMetricsToRetain")]
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_metrics_to_retain: Option<Vec<String>>,
+    pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
     /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3202,7 +3335,7 @@ pub struct DescribeThingResponse {
     #[serde(rename = "billingGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_group_name: Option<String>,
-    /// <p>The default client ID.</p>
+    /// <p>The default MQTT client ID. For a typical device, the thing name is also used as the default MQTT client ID. Although we don’t require a mapping between a thing's registry name and its use of MQTT client IDs, certificates, or shadow state, we recommend that you choose a thing name and use it as the MQTT client ID for the registry and the Device Shadow service.</p> <p>This lets you better organize your AWS IoT fleet without removing the flexibility of the underlying device certificate model or shadows.</p>
     #[serde(rename = "defaultClientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_client_id: Option<String>,
@@ -3920,7 +4053,7 @@ pub struct HttpAction {
     #[serde(rename = "auth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth: Option<HttpAuthorization>,
-    /// <p>The URL to which AWS IoT sends a confirmation message. The value of the confirmation URL must be a prefix of the endpoint URL. If you do not specify a confirmation URL AWS IoT uses the endpoint URL as the confirmation URL. If you use substitution templates in the confirmationUrl, you must create and enable topic rule destinations that match each possible value of the substituion template before traffic is allowed to your endpoint URL.</p>
+    /// <p>The URL to which AWS IoT sends a confirmation message. The value of the confirmation URL must be a prefix of the endpoint URL. If you do not specify a confirmation URL AWS IoT uses the endpoint URL as the confirmation URL. If you use substitution templates in the confirmationUrl, you must create and enable topic rule destinations that match each possible value of the substitution template before traffic is allowed to your endpoint URL.</p>
     #[serde(rename = "confirmationUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_url: Option<String>,
@@ -4765,6 +4898,32 @@ pub struct ListCertificatesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDimensionsRequest {
+    /// <p>The maximum number of results to retrieve at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDimensionsResponse {
+    /// <p>A list of the names of the defined dimensions. Use <code>DescribeDimension</code> to get details for a dimension.</p>
+    #[serde(rename = "dimensionNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_names: Option<Vec<String>>,
+    /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainConfigurationsRequest {
     /// <p>The marker for the next set of results.</p>
     #[serde(rename = "marker")]
@@ -5318,6 +5477,10 @@ pub struct ListSecurityProfilesForTargetResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
+    /// <p>A filter to limit results to the security profiles that use the defined dimension.</p>
+    #[serde(rename = "dimensionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_name: Option<String>,
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5911,6 +6074,30 @@ pub struct LoggingOptionsPayload {
     pub role_arn: String,
 }
 
+/// <p>The dimension of a metric.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MetricDimension {
+    /// <p>A unique identifier for the dimension.</p>
+    #[serde(rename = "dimensionName")]
+    pub dimension_name: String,
+    /// <p>Defines how the <code>dimensionValues</code> of a dimension are interpreted. For example, for dimension type TOPIC_FILTER, the <code>IN</code> operator, a message will be counted only if its topic matches one of the topic filters. With <code>NOT_IN</code> operator, a message will be counted only if it doesn't match any of the topic filters. The operator is optional: if it's not provided (is <code>null</code>), it will be interpreted as <code>IN</code>.</p>
+    #[serde(rename = "operator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operator: Option<String>,
+}
+
+/// <p>The metric you want to retain. Dimensions are optional.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MetricToRetain {
+    /// <p>What is measured by the behavior.</p>
+    #[serde(rename = "metric")]
+    pub metric: String,
+    /// <p>The dimension of a metric.</p>
+    #[serde(rename = "metricDimension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_dimension: Option<MetricDimension>,
+}
+
 /// <p>The value to be compared with the <code>metric</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MetricValue {
@@ -6253,6 +6440,18 @@ pub struct PresignedUrlConfig {
     pub role_arn: Option<String>,
 }
 
+/// <p>Structure that contains <code>payloadVersion</code> and <code>targetArn</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProvisioningHook {
+    /// <p>The payload that was sent to the target function.</p> <p> <i>Note:</i> Only Lambda functions are currently supported.</p>
+    #[serde(rename = "payloadVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_version: Option<String>,
+    /// <p>The ARN of the target function.</p> <p> <i>Note:</i> Only Lambda functions are currently supported.</p>
+    #[serde(rename = "targetArn")]
+    pub target_arn: String,
+}
+
 /// <p>A summary of information about a fleet provisioning template.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6373,6 +6572,10 @@ pub struct RegisterCACertificateRequest {
     #[serde(rename = "setAsActive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_active: Option<bool>,
+    /// <p><p>Metadata which can be used to manage the CA certificate.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: &amp;&amp;tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The private key verification certificate.</p>
     #[serde(rename = "verificationCertificate")]
     pub verification_certificate: String,
@@ -6425,12 +6628,37 @@ pub struct RegisterCertificateResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RegisterCertificateWithoutCARequest {
+    /// <p>The certificate data, in PEM format.</p>
+    #[serde(rename = "certificatePem")]
+    pub certificate_pem: String,
+    /// <p>The status of the register certificate request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RegisterCertificateWithoutCAResponse {
+    /// <p>The Amazon Resource Name (ARN) of the registered certificate.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>The ID of the registered certificate. (The last part of the certificate ARN contains the certificate ID.</p>
+    #[serde(rename = "certificateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterThingRequest {
-    /// <p>The parameters for provisioning a thing. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
+    /// <p>The parameters for provisioning a thing. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-template.html">Provisioning Templates</a> for more information.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The provisioning template. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
+    /// <p>The provisioning template. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-w-cert.html">Provisioning Devices That Have Device Certificates</a> for more information.</p>
     #[serde(rename = "templateBody")]
     pub template_body: String,
 }
@@ -6438,7 +6666,7 @@ pub struct RegisterThingRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterThingResponse {
-    /// <p>.</p>
+    /// <p>The certificate data, in PEM format.</p>
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
@@ -7209,8 +7437,7 @@ pub struct StreamSummary {
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "Key")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: String,
     /// <p>The tag's value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7351,7 +7578,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[serde(rename = "token")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
-    /// <p>The signature made with the token and your custom authentication service's private key.</p>
+    /// <p>The signature made with the token and your custom authentication service's private key. This value must be Base-64-encoded.</p>
     #[serde(rename = "tokenSignature")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token_signature: Option<String>,
@@ -7958,7 +8185,7 @@ pub struct UpdateCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
-    /// <p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
+    /// <p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER or PENDING_ACTIVATION will result in an exception being thrown. PENDING_TRANSFER and PENDING_ACTIVATION are statuses used internally by AWS IoT. They are not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>
     #[serde(rename = "newStatus")]
     pub new_status: String,
 }
@@ -7969,6 +8196,46 @@ pub struct UpdateDeviceCertificateParams {
     /// <p>The action that you want to apply to the device cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
     #[serde(rename = "action")]
     pub action: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDimensionRequest {
+    /// <p>A unique identifier for the dimension. Choose something that describes the type and value to make it easy to remember what it does.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>Specifies the value or list of values for the dimension. For <code>TOPIC_FILTER</code> dimensions, this is a pattern used to match the MQTT topic (for example, "admin/#").</p>
+    #[serde(rename = "stringValues")]
+    pub string_values: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateDimensionResponse {
+    /// <p>The ARN (Amazon resource name) of the created dimension.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time, in milliseconds since epoch, when the dimension was initially created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The date and time, in milliseconds since epoch, when the dimension was most recently updated.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>A unique identifier for the dimension.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The value or list of values used to scope the dimension. For example, for topic filters, this is the pattern used to match the MQTT topic name.</p>
+    #[serde(rename = "stringValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_values: Option<Vec<String>>,
+    /// <p>The type of the dimension.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -8142,10 +8409,18 @@ pub struct UpdateProvisioningTemplateRequest {
     #[serde(rename = "enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+    /// <p>Updates the pre-provisioning hook template.</p>
+    #[serde(rename = "preProvisioningHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pre_provisioning_hook: Option<ProvisioningHook>,
     /// <p>The ARN of the role associated with the provisioning template. This IoT role grants permission to provision a device.</p>
     #[serde(rename = "provisioningRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_role_arn: Option<String>,
+    /// <p>Removes pre-provisioning hook template.</p>
+    #[serde(rename = "removePreProvisioningHook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_pre_provisioning_hook: Option<bool>,
     /// <p>The name of the fleet provisioning template.</p>
     #[serde(rename = "templateName")]
     pub template_name: String,
@@ -8220,10 +8495,10 @@ pub struct UpdateScheduledAuditResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityProfileRequest {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
-    #[serde(rename = "additionalMetricsToRetain")]
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_metrics_to_retain: Option<Vec<String>>,
+    pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
     /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8260,10 +8535,10 @@ pub struct UpdateSecurityProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
-    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the security profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
-    #[serde(rename = "additionalMetricsToRetain")]
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetainV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_metrics_to_retain: Option<Vec<String>>,
+    pub additional_metrics_to_retain_v2: Option<Vec<MetricToRetain>>,
     /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8404,7 +8679,7 @@ pub struct UpdateThingRequest {
     #[serde(rename = "removeThingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_thing_type: Option<bool>,
-    /// <p>The name of the thing to update.</p>
+    /// <p>The name of the thing to update.</p> <p>You can't change a thing's name. To change a thing's name, you must create a new thing, give it the new name, and then delete the old thing.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
     /// <p>The name of the thing type.</p>
@@ -9646,6 +9921,62 @@ impl fmt::Display for CreateCertificateFromCsrError {
     }
 }
 impl Error for CreateCertificateFromCsrError {}
+/// Errors returned by CreateDimension
+#[derive(Debug, PartialEq)]
+pub enum CreateDimensionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CreateDimensionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDimensionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateDimensionError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateDimensionError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateDimensionError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateDimensionError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateDimensionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateDimensionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDimensionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateDimensionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateDimensionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDimensionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDimensionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateDimensionError {}
 /// Errors returned by CreateDomainConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainConfigurationError {
@@ -11348,6 +11679,48 @@ impl fmt::Display for DeleteCertificateError {
     }
 }
 impl Error for DeleteCertificateError {}
+/// Errors returned by DeleteDimension
+#[derive(Debug, PartialEq)]
+pub enum DeleteDimensionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DeleteDimensionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDimensionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteDimensionError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteDimensionError::InvalidRequest(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteDimensionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDimensionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDimensionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDimensionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteDimensionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDimensionError {}
 /// Errors returned by DeleteDomainConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainConfigurationError {
@@ -13228,11 +13601,61 @@ impl fmt::Display for DescribeDefaultAuthorizerError {
     }
 }
 impl Error for DescribeDefaultAuthorizerError {}
+/// Errors returned by DescribeDimension
+#[derive(Debug, PartialEq)]
+pub enum DescribeDimensionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeDimensionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDimensionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeDimensionError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeDimensionError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeDimensionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeDimensionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDimensionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDimensionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeDimensionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeDimensionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeDimensionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeDimensionError {}
 /// Errors returned by DescribeDomainConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainConfigurationError {
     /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
@@ -13251,6 +13674,11 @@ impl DescribeDomainConfigurationError {
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(DescribeDomainConfigurationError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeDomainConfigurationError::InvalidRequest(
                         err.msg,
                     ))
                 }
@@ -13286,6 +13714,7 @@ impl fmt::Display for DescribeDomainConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeDomainConfigurationError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeDomainConfigurationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             DescribeDomainConfigurationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DescribeDomainConfigurationError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
@@ -16004,6 +16433,48 @@ impl fmt::Display for ListCertificatesByCAError {
     }
 }
 impl Error for ListCertificatesByCAError {}
+/// Errors returned by ListDimensions
+#[derive(Debug, PartialEq)]
+pub enum ListDimensionsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListDimensionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDimensionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListDimensionsError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListDimensionsError::InvalidRequest(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListDimensionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDimensionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDimensionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListDimensionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDimensionsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDimensionsError {}
 /// Errors returned by ListDomainConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListDomainConfigurationsError {
@@ -16987,6 +17458,8 @@ pub enum ListSecurityProfilesError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
 }
@@ -17002,6 +17475,11 @@ impl ListSecurityProfilesError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListSecurityProfilesError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListSecurityProfilesError::ResourceNotFound(
+                        err.msg,
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListSecurityProfilesError::Throttling(err.msg))
@@ -17019,6 +17497,7 @@ impl fmt::Display for ListSecurityProfilesError {
         match *self {
             ListSecurityProfilesError::InternalFailure(ref cause) => write!(f, "{}", cause),
             ListSecurityProfilesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListSecurityProfilesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListSecurityProfilesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -18178,6 +18657,104 @@ impl fmt::Display for RegisterCertificateError {
     }
 }
 impl Error for RegisterCertificateError {}
+/// Errors returned by RegisterCertificateWithoutCA
+#[derive(Debug, PartialEq)]
+pub enum RegisterCertificateWithoutCAError {
+    /// <p>The certificate operation is not allowed.</p>
+    CertificateState(String),
+    /// <p>The certificate is invalid.</p>
+    CertificateValidation(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl RegisterCertificateWithoutCAError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RegisterCertificateWithoutCAError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CertificateStateException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateWithoutCAError::CertificateState(err.msg),
+                    )
+                }
+                "CertificateValidationException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateWithoutCAError::CertificateValidation(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateWithoutCAError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(RegisterCertificateWithoutCAError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateWithoutCAError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        RegisterCertificateWithoutCAError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(RegisterCertificateWithoutCAError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(RegisterCertificateWithoutCAError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RegisterCertificateWithoutCAError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RegisterCertificateWithoutCAError::CertificateState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterCertificateWithoutCAError::CertificateValidation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterCertificateWithoutCAError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateWithoutCAError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateWithoutCAError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterCertificateWithoutCAError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RegisterCertificateWithoutCAError::Throttling(ref cause) => write!(f, "{}", cause),
+            RegisterCertificateWithoutCAError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RegisterCertificateWithoutCAError {}
 /// Errors returned by RegisterThing
 #[derive(Debug, PartialEq)]
 pub enum RegisterThingError {
@@ -19740,6 +20317,54 @@ impl fmt::Display for UpdateCertificateError {
     }
 }
 impl Error for UpdateCertificateError {}
+/// Errors returned by UpdateDimension
+#[derive(Debug, PartialEq)]
+pub enum UpdateDimensionError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl UpdateDimensionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDimensionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateDimensionError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateDimensionError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateDimensionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateDimensionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDimensionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDimensionError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDimensionError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateDimensionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDimensionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateDimensionError {}
 /// Errors returned by UpdateDomainConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainConfigurationError {
@@ -20823,6 +21448,12 @@ pub trait Iot {
         input: CreateCertificateFromCsrRequest,
     ) -> Result<CreateCertificateFromCsrResponse, RusotoError<CreateCertificateFromCsrError>>;
 
+    /// <p>Create a dimension that you can use to limit the scope of a metric used in a security profile for AWS IoT Device Defender. For example, using a <code>TOPIC_FILTER</code> dimension, you can narrow down the scope of the metric only to MQTT topics whose name match the pattern specified in the dimension.</p>
+    async fn create_dimension(
+        &self,
+        input: CreateDimensionRequest,
+    ) -> Result<CreateDimensionResponse, RusotoError<CreateDimensionError>>;
+
     /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn create_domain_configuration(
         &self,
@@ -20916,13 +21547,13 @@ pub trait Iot {
         input: CreateStreamRequest,
     ) -> Result<CreateStreamResponse, RusotoError<CreateStreamError>>;
 
-    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     async fn create_thing(
         &self,
         input: CreateThingRequest,
     ) -> Result<CreateThingResponse, RusotoError<CreateThingError>>;
 
-    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     async fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
@@ -20978,6 +21609,12 @@ pub trait Iot {
         &self,
         input: DeleteCertificateRequest,
     ) -> Result<(), RusotoError<DeleteCertificateError>>;
+
+    /// <p>Removes the specified dimension from your AWS account.</p>
+    async fn delete_dimension(
+        &self,
+        input: DeleteDimensionRequest,
+    ) -> Result<DeleteDimensionResponse, RusotoError<DeleteDimensionError>>;
 
     /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn delete_domain_configuration(
@@ -21167,6 +21804,12 @@ pub trait Iot {
     async fn describe_default_authorizer(
         &self,
     ) -> Result<DescribeDefaultAuthorizerResponse, RusotoError<DescribeDefaultAuthorizerError>>;
+
+    /// <p>Provides details about a dimension that is defined in your AWS account.</p>
+    async fn describe_dimension(
+        &self,
+        input: DescribeDimensionRequest,
+    ) -> Result<DescribeDimensionResponse, RusotoError<DescribeDimensionError>>;
 
     /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn describe_domain_configuration(
@@ -21463,6 +22106,12 @@ pub trait Iot {
         input: ListCertificatesByCARequest,
     ) -> Result<ListCertificatesByCAResponse, RusotoError<ListCertificatesByCAError>>;
 
+    /// <p>List the set of dimensions that are defined for your AWS account.</p>
+    async fn list_dimensions(
+        &self,
+        input: ListDimensionsRequest,
+    ) -> Result<ListDimensionsResponse, RusotoError<ListDimensionsError>>;
+
     /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn list_domain_configurations(
         &self,
@@ -21703,6 +22352,12 @@ pub trait Iot {
         input: RegisterCertificateRequest,
     ) -> Result<RegisterCertificateResponse, RusotoError<RegisterCertificateError>>;
 
+    /// <p>Register a certificate that does not have a certificate authority (CA).</p>
+    async fn register_certificate_without_ca(
+        &self,
+        input: RegisterCertificateWithoutCARequest,
+    ) -> Result<RegisterCertificateWithoutCAResponse, RusotoError<RegisterCertificateWithoutCAError>>;
+
     /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
     async fn register_thing(
         &self,
@@ -21858,6 +22513,12 @@ pub trait Iot {
         &self,
         input: UpdateCertificateRequest,
     ) -> Result<(), RusotoError<UpdateCertificateError>>;
+
+    /// <p>Updates the definition for a dimension. You cannot change the type of a dimension after it is created (you can delete it and re-create it).</p>
+    async fn update_dimension(
+        &self,
+        input: UpdateDimensionRequest,
+    ) -> Result<UpdateDimensionResponse, RusotoError<UpdateDimensionError>>;
 
     /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn update_domain_configuration(
@@ -22604,6 +23265,37 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p>Create a dimension that you can use to limit the scope of a metric used in a security profile for AWS IoT Device Defender. For example, using a <code>TOPIC_FILTER</code> dimension, you can narrow down the scope of the metric only to MQTT topics whose name match the pattern specified in the dimension.</p>
+    async fn create_dimension(
+        &self,
+        input: CreateDimensionRequest,
+    ) -> Result<CreateDimensionResponse, RusotoError<CreateDimensionError>> {
+        let request_uri = format!("/dimensions/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateDimensionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDimensionError::from_response(response))
+        }
+    }
+
     /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn create_domain_configuration(
         &self,
@@ -23117,7 +23809,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     async fn create_thing(
         &self,
         input: CreateThingRequest,
@@ -23148,7 +23840,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     async fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
@@ -23458,6 +24150,35 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteCertificateError::from_response(response))
+        }
+    }
+
+    /// <p>Removes the specified dimension from your AWS account.</p>
+    async fn delete_dimension(
+        &self,
+        input: DeleteDimensionRequest,
+    ) -> Result<DeleteDimensionResponse, RusotoError<DeleteDimensionError>> {
+        let request_uri = format!("/dimensions/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteDimensionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDimensionError::from_response(response))
         }
     }
 
@@ -24477,6 +25198,35 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeDefaultAuthorizerError::from_response(response))
+        }
+    }
+
+    /// <p>Provides details about a dimension that is defined in your AWS account.</p>
+    async fn describe_dimension(
+        &self,
+        input: DescribeDimensionRequest,
+    ) -> Result<DescribeDimensionResponse, RusotoError<DescribeDimensionError>> {
+        let request_uri = format!("/dimensions/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDimensionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDimensionError::from_response(response))
         }
     }
 
@@ -26120,6 +26870,44 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p>List the set of dimensions that are defined for your AWS account.</p>
+    async fn list_dimensions(
+        &self,
+        input: ListDimensionsRequest,
+    ) -> Result<ListDimensionsResponse, RusotoError<ListDimensionsError>> {
+        let request_uri = "/dimensions";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListDimensionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDimensionsError::from_response(response))
+        }
+    }
+
     /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
     async fn list_domain_configurations(
         &self,
@@ -26828,6 +27616,9 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.dimension_name {
+            params.put("dimensionName", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -27686,6 +28477,38 @@ impl Iot for IotClient {
         }
     }
 
+    /// <p>Register a certificate that does not have a certificate authority (CA).</p>
+    async fn register_certificate_without_ca(
+        &self,
+        input: RegisterCertificateWithoutCARequest,
+    ) -> Result<RegisterCertificateWithoutCAResponse, RusotoError<RegisterCertificateWithoutCAError>>
+    {
+        let request_uri = "/certificate/register-no-ca";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RegisterCertificateWithoutCAResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RegisterCertificateWithoutCAError::from_response(response))
+        }
+    }
+
     /// <p>Provisions a thing in the device registry. RegisterThing calls other AWS IoT control plane APIs. These calls might exceed your account level <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_iot"> AWS IoT Throttling Limits</a> and cause throttle errors. Please contact <a href="https://console.aws.amazon.com/support/home">AWS Customer Support</a> to raise your throttling limits if necessary.</p>
     async fn register_thing(
         &self,
@@ -28512,6 +29335,37 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateCertificateError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the definition for a dimension. You cannot change the type of a dimension after it is created (you can delete it and re-create it).</p>
+    async fn update_dimension(
+        &self,
+        input: UpdateDimensionRequest,
+    ) -> Result<UpdateDimensionResponse, RusotoError<UpdateDimensionError>> {
+        let request_uri = format!("/dimensions/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateDimensionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDimensionError::from_response(response))
         }
     }
 

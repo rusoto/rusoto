@@ -61,8 +61,7 @@ pub struct Beard {
 }
 
 /// <p><p>Identifies the bounding box around the label, face, or text. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BoundingBox {
     /// <p>Height of the bounding box as a ratio of the overall image height.</p>
     #[serde(rename = "Height")]
@@ -421,6 +420,40 @@ pub struct DeleteFacesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProjectRequest {
+    /// <p>The Amazon Resource Name (ARN) of the project that you want to delete.</p>
+    #[serde(rename = "ProjectArn")]
+    pub project_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteProjectResponse {
+    /// <p>The current status of the delete project operation.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProjectVersionRequest {
+    /// <p>The Amazon Resource Name (ARN) of the model version that you want to delete.</p>
+    #[serde(rename = "ProjectVersionArn")]
+    pub project_version_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteProjectVersionResponse {
+    /// <p>The status of the deletion operation.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamProcessorRequest {
     /// <p>The name of the stream processor you want to delete.</p>
     #[serde(rename = "Name")]
@@ -690,9 +723,26 @@ pub struct DetectModerationLabelsResponse {
     pub moderation_model_version: Option<String>,
 }
 
+/// <p>A set of optional parameters that you can use to set the criteria that the text must meet to be included in your response. <code>WordFilter</code> looks at a word’s height, width, and minimum confidence. <code>RegionOfInterest</code> lets you set a specific region of the image to look for text in. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DetectTextFilters {
+    /// <p> A Filter focusing on a certain area of the image. Uses a <code>BoundingBox</code> object to set the region of the image.</p>
+    #[serde(rename = "RegionsOfInterest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions_of_interest: Option<Vec<RegionOfInterest>>,
+    #[serde(rename = "WordFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub word_filter: Option<DetectionFilter>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectTextRequest {
+    /// <p>Optional parameters that let you set the criteria that the text must meet to be included in your response.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<DetectTextFilters>,
     /// <p>The input image as base64-encoded bytes or an Amazon S3 object. If you use the AWS CLI to call Amazon Rekognition operations, you can't pass image bytes. </p> <p>If you are using an AWS SDK to call Amazon Rekognition, you might not need to base64-encode image bytes passed using the <code>Bytes</code> field. For more information, see Images in the Amazon Rekognition developer guide.</p>
     #[serde(rename = "Image")]
     pub image: Image,
@@ -705,6 +755,28 @@ pub struct DetectTextResponse {
     #[serde(rename = "TextDetections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_detections: Option<Vec<TextDetection>>,
+    /// <p>The model version used to detect text.</p>
+    #[serde(rename = "TextModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_model_version: Option<String>,
+}
+
+/// <p>A set of parameters that allow you to filter out certain results from your returned results.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DetectionFilter {
+    /// <p>Sets the minimum height of the word bounding box. Words with bounding box heights lesser than this value will be excluded from the result. Value is relative to the video frame height.</p>
+    #[serde(rename = "MinBoundingBoxHeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_bounding_box_height: Option<f32>,
+    /// <p>Sets the minimum width of the word bounding box. Words with bounding boxes widths lesser than this value will be excluded from the result. Value is relative to the video frame width.</p>
+    #[serde(rename = "MinBoundingBoxWidth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_bounding_box_width: Option<f32>,
+    /// <p>Sets confidence of word detection. Words with detection confidence below this will be excluded from the result. Values should be between 0.5 and 1 as Text in Video will not return any result below 0.5.</p>
+    #[serde(rename = "MinConfidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_confidence: Option<f32>,
 }
 
 /// <p>The emotions that appear to be expressed on the face, and the confidence level in the determination. The API is only making a determination of the physical appearance of a person's face. It is not a determination of the person’s internal emotional state and should not be used in such a way. For example, a person pretending to have a sad face might not be sad emotionally.</p>
@@ -904,7 +976,7 @@ pub struct FaceSearchSettings {
     #[serde(rename = "CollectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub collection_id: Option<String>,
-    /// <p>Minimum face match confidence score that must be met to return a result for a recognized face. Default is 70. 0 is the lowest confidence. 100 is the highest confidence.</p>
+    /// <p>Minimum face match confidence score that must be met to return a result for a recognized face. Default is 80. 0 is the lowest confidence. 100 is the highest confidence.</p>
     #[serde(rename = "FaceMatchThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub face_match_threshold: Option<f32>,
@@ -1228,6 +1300,50 @@ pub struct GetPersonTrackingResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
     /// <p>Information about a video that Amazon Rekognition Video analyzed. <code>Videometadata</code> is returned in every page of paginated responses from a Amazon Rekognition Video operation.</p>
+    #[serde(rename = "VideoMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_metadata: Option<VideoMetadata>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetTextDetectionRequest {
+    /// <p>Job identifier for the label detection operation for which you want results returned. You get the job identifer from an initial call to <code>StartTextDetection</code>.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+    /// <p>Maximum number of results to return per paginated call. The largest value you can specify is 1000.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was incomplete (because there are more labels to retrieve), Amazon Rekognition Video returns a pagination token in the response. You can use this pagination token to retrieve the next set of text.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetTextDetectionResponse {
+    /// <p>Current status of the text detection job.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of text.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>If the job fails, <code>StatusMessage</code> provides a descriptive error message.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>An array of text detected in the video. Each element contains the detected text, the time in milliseconds from the start of the video that the text was detected, and where it was detected on the screen.</p>
+    #[serde(rename = "TextDetections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_detections: Option<Vec<TextDetectionResult>>,
+    /// <p>Version number of the text detection model that was used to detect text.</p>
+    #[serde(rename = "TextModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_model_version: Option<String>,
     #[serde(rename = "VideoMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_metadata: Option<VideoMetadata>,
@@ -1797,6 +1913,16 @@ pub struct RecognizeCelebritiesResponse {
     pub unrecognized_faces: Option<Vec<ComparedFace>>,
 }
 
+/// <p>Specifies a location within the frame that Rekognition checks for text. Uses a <code>BoundingBox</code> object to set a region of the screen.</p> <p>A word is included in the region if the word is more than half in that region. If there is more than one region, the word will be compared with all regions of the screen. Any word more than half in a region is kept in the results.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RegionOfInterest {
+    /// <p>The box representing a region of interest on screen.</p>
+    #[serde(rename = "BoundingBox")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bounding_box: Option<BoundingBox>,
+}
+
 /// <p>Provides the S3 bucket name and object name.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see Resource-Based Policies in the Amazon Rekognition Developer Guide. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Object {
@@ -2133,6 +2259,51 @@ pub struct StartStreamProcessorRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartStreamProcessorResponse {}
 
+/// <p>Set of optional parameters that let you set the criteria text must meet to be included in your response. <code>WordFilter</code> looks at a word's height, width and minimum confidence. <code>RegionOfInterest</code> lets you set a specific region of the screen to look for text in.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartTextDetectionFilters {
+    /// <p>Filter focusing on a certain area of the frame. Uses a <code>BoundingBox</code> object to set the region of the screen.</p>
+    #[serde(rename = "RegionsOfInterest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions_of_interest: Option<Vec<RegionOfInterest>>,
+    /// <p>Filters focusing on qualities of the text, such as confidence or size.</p>
+    #[serde(rename = "WordFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub word_filter: Option<DetectionFilter>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartTextDetectionRequest {
+    /// <p>Idempotent token used to identify the start request. If you use the same token with multiple <code>StartTextDetection</code> requests, the same <code>JobId</code> is returned. Use <code>ClientRequestToken</code> to prevent the same job from being accidentaly started more than once.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>Optional parameters that let you set criteria the text must meet to be included in your response.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<StartTextDetectionFilters>,
+    /// <p>An identifier returned in the completion status published by your Amazon Simple Notification Service topic. For example, you can use <code>JobTag</code> to group related jobs and identify them in the completion notification.</p>
+    #[serde(rename = "JobTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_tag: Option<String>,
+    #[serde(rename = "NotificationChannel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_channel: Option<NotificationChannel>,
+    #[serde(rename = "Video")]
+    pub video: Video,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartTextDetectionResponse {
+    /// <p>Identifier for the text detection job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetTextDetection</code>.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopProjectVersionRequest {
@@ -2281,6 +2452,20 @@ pub struct TextDetection {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Information about text detected in a video. Incudes the detected text, the time in milliseconds from the start of the video that the text was detected, and where it was detected on the screen.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TextDetectionResult {
+    /// <p>Details about text detected in a video.</p>
+    #[serde(rename = "TextDetection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_detection: Option<TextDetection>,
+    /// <p>The time, in milliseconds from the start of the video, that the text was detected.</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<i64>,
 }
 
 /// <p>The dataset used for training.</p>
@@ -2854,6 +3039,150 @@ impl fmt::Display for DeleteFacesError {
     }
 }
 impl Error for DeleteFacesError {}
+/// Errors returned by DeleteProject
+#[derive(Debug, PartialEq)]
+pub enum DeleteProjectError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteProjectError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteProjectError::InternalServerError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteProjectError::InvalidParameter(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(DeleteProjectError::ProvisionedThroughputExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteProjectError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteProjectError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteProjectError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteProjectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProjectError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProjectError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteProjectError {}
+/// Errors returned by DeleteProjectVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteProjectVersionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p><p/></p>
+    ResourceInUse(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DeleteProjectVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteProjectVersionError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteProjectVersionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteProjectVersionError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DeleteProjectVersionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteProjectVersionError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteProjectVersionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteProjectVersionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteProjectVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProjectVersionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteProjectVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteProjectVersionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteProjectVersionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteProjectVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteProjectVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteProjectVersionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteProjectVersionError {}
 /// Errors returned by DeleteStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamProcessorError {
@@ -4152,6 +4481,80 @@ impl fmt::Display for GetPersonTrackingError {
     }
 }
 impl Error for GetPersonTrackingError {}
+/// Errors returned by GetTextDetection
+#[derive(Debug, PartialEq)]
+pub enum GetTextDetectionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Pagination token in the request is not valid.</p>
+    InvalidPaginationToken(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl GetTextDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTextDetectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetTextDetectionError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(GetTextDetectionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(GetTextDetectionError::InvalidPaginationToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetTextDetectionError::InvalidParameter(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetTextDetectionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetTextDetectionError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetTextDetectionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetTextDetectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetTextDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetTextDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetTextDetectionError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetTextDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetTextDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetTextDetectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetTextDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetTextDetectionError {}
 /// Errors returned by IndexFaces
 #[derive(Debug, PartialEq)]
 pub enum IndexFacesError {
@@ -4693,7 +5096,7 @@ pub enum StartCelebrityRecognitionError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
     VideoTooLarge(String),
 }
 
@@ -4795,7 +5198,7 @@ pub enum StartContentModerationError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
     VideoTooLarge(String),
 }
 
@@ -4891,7 +5294,7 @@ pub enum StartFaceDetectionError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
     VideoTooLarge(String),
 }
 
@@ -4981,7 +5384,7 @@ pub enum StartFaceSearchError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
     VideoTooLarge(String),
 }
 
@@ -5069,7 +5472,7 @@ pub enum StartLabelDetectionError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
     VideoTooLarge(String),
 }
 
@@ -5159,7 +5562,7 @@ pub enum StartPersonTrackingError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
     VideoTooLarge(String),
 }
 
@@ -5388,6 +5791,94 @@ impl fmt::Display for StartStreamProcessorError {
     }
 }
 impl Error for StartStreamProcessorError {}
+/// Errors returned by StartTextDetection
+#[derive(Debug, PartialEq)]
+pub enum StartTextDetectionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>A <code>ClientRequestToken</code> input parameter was reused with an operation, but at least one of the other input parameters is different from the previous call to the operation.</p>
+    IdempotentParameterMismatch(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    InvalidS3Object(String),
+    /// <p>An Amazon Rekognition service limit was exceeded. For example, if you start too many Amazon Rekognition Video jobs concurrently, calls to start operations (<code>StartLabelDetection</code>, for example) will raise a <code>LimitExceededException</code> exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Rekognition service limit. </p>
+    LimitExceeded(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
+    VideoTooLarge(String),
+}
+
+impl StartTextDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTextDetectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(StartTextDetectionError::AccessDenied(err.msg))
+                }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        StartTextDetectionError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(StartTextDetectionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartTextDetectionError::InvalidParameter(err.msg))
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(StartTextDetectionError::InvalidS3Object(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartTextDetectionError::LimitExceeded(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartTextDetectionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartTextDetectionError::Throttling(err.msg))
+                }
+                "VideoTooLargeException" => {
+                    return RusotoError::Service(StartTextDetectionError::VideoTooLarge(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartTextDetectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartTextDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartTextDetectionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartTextDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartTextDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartTextDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartTextDetectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartTextDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartTextDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartTextDetectionError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartTextDetectionError {}
 /// Errors returned by StopProjectVersion
 #[derive(Debug, PartialEq)]
 pub enum StopProjectVersionError {
@@ -5581,6 +6072,18 @@ pub trait Rekognition {
         input: DeleteFacesRequest,
     ) -> Result<DeleteFacesResponse, RusotoError<DeleteFacesError>>;
 
+    /// <p>Deletes an Amazon Rekognition Custom Labels project. To delete a project you must first delete all versions of the model associated with the project. To delete a version of a model, see <a>DeleteProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProject</code> action. </p>
+    async fn delete_project(
+        &self,
+        input: DeleteProjectRequest,
+    ) -> Result<DeleteProjectResponse, RusotoError<DeleteProjectError>>;
+
+    /// <p>Deletes a version of a model. </p> <p>You must first stop the model before you can delete it. To check if a model is running, use the <code>Status</code> field returned from <a>DescribeProjectVersions</a>. To stop a running model call <a>StopProjectVersion</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProjectVersion</code> action. </p>
+    async fn delete_project_version(
+        &self,
+        input: DeleteProjectVersionRequest,
+    ) -> Result<DeleteProjectVersionResponse, RusotoError<DeleteProjectVersionError>>;
+
     /// <p>Deletes the stream processor identified by <code>Name</code>. You assign the value for <code>Name</code> when you create the stream processor with <a>CreateStreamProcessor</a>. You might not be able to use the same name for a stream processor for a few seconds after calling <code>DeleteStreamProcessor</code>.</p>
     async fn delete_stream_processor(
         &self,
@@ -5617,7 +6120,7 @@ pub trait Rekognition {
         input: DetectCustomLabelsRequest,
     ) -> Result<DetectCustomLabelsResponse, RusotoError<DetectCustomLabelsError>>;
 
-    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
+    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
     async fn detect_faces(
         &self,
         input: DetectFacesRequest,
@@ -5682,6 +6185,12 @@ pub trait Rekognition {
         &self,
         input: GetPersonTrackingRequest,
     ) -> Result<GetPersonTrackingResponse, RusotoError<GetPersonTrackingError>>;
+
+    /// <p>Gets the text detection results of a Amazon Rekognition Video analysis started by <a>StartTextDetection</a>.</p> <p>Text detection with Amazon Rekognition Video is an asynchronous operation. You start text detection by calling <a>StartTextDetection</a> which returns a job identifier (<code>JobId</code>) When the text detection operation finishes, Amazon Rekognition publishes a completion status to the Amazon Simple Notification Service topic registered in the initial call to <code>StartTextDetection</code>. To get the results of the text detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <code>GetTextDetection</code> and pass the job identifier (<code>JobId</code>) from the initial call of <code>StartLabelDetection</code>.</p> <p> <code>GetTextDetection</code> returns an array of detected text (<code>TextDetections</code>) sorted by the time the text was detected, up to 50 words per frame of video.</p> <p>Each element of the array includes the detected text, the precentage confidence in the acuracy of the detected text, the time the text was detected, bounding box information for where the text was located, and unique identifiers for words and their lines.</p> <p>Use MaxResults parameter to limit the number of text detections returned. If there are more results than specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation response contains a pagination token for getting the next set of results. To get the next page of results, call <code>GetTextDetection</code> and populate the <code>NextToken</code> request parameter with the token value returned from the previous call to <code>GetTextDetection</code>.</p>
+    async fn get_text_detection(
+        &self,
+        input: GetTextDetectionRequest,
+    ) -> Result<GetTextDetectionResponse, RusotoError<GetTextDetectionError>>;
 
     /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     async fn index_faces(
@@ -5772,6 +6281,12 @@ pub trait Rekognition {
         &self,
         input: StartStreamProcessorRequest,
     ) -> Result<StartStreamProcessorResponse, RusotoError<StartStreamProcessorError>>;
+
+    /// <p>Starts asynchronous detection of text in a stored video.</p> <p>Amazon Rekognition Video can detect text in a video stored in an Amazon S3 bucket. Use <a>Video</a> to specify the bucket name and the filename of the video. <code>StartTextDetection</code> returns a job identifier (<code>JobId</code>) which you use to get the results of the operation. When text detection is finished, Amazon Rekognition Video publishes a completion status to the Amazon Simple Notification Service topic that you specify in <code>NotificationChannel</code>.</p> <p>To get the results of the text detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <a>GetTextDetection</a> and pass the job identifier (<code>JobId</code>) from the initial call to <code>StartTextDetection</code>. </p>
+    async fn start_text_detection(
+        &self,
+        input: StartTextDetectionRequest,
+    ) -> Result<StartTextDetectionResponse, RusotoError<StartTextDetectionError>>;
 
     /// <p>Stops a running model. The operation might take a while to complete. To check the current status, call <a>DescribeProjectVersions</a>. </p>
     async fn stop_project_version(
@@ -6018,6 +6533,61 @@ impl Rekognition for RekognitionClient {
         }
     }
 
+    /// <p>Deletes an Amazon Rekognition Custom Labels project. To delete a project you must first delete all versions of the model associated with the project. To delete a version of a model, see <a>DeleteProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProject</code> action. </p>
+    async fn delete_project(
+        &self,
+        input: DeleteProjectRequest,
+    ) -> Result<DeleteProjectResponse, RusotoError<DeleteProjectError>> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.DeleteProject");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProjectError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a version of a model. </p> <p>You must first stop the model before you can delete it. To check if a model is running, use the <code>Status</code> field returned from <a>DescribeProjectVersions</a>. To stop a running model call <a>StopProjectVersion</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProjectVersion</code> action. </p>
+    async fn delete_project_version(
+        &self,
+        input: DeleteProjectVersionRequest,
+    ) -> Result<DeleteProjectVersionResponse, RusotoError<DeleteProjectVersionError>> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.DeleteProjectVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteProjectVersionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteProjectVersionError::from_response(response))
+        }
+    }
+
     /// <p>Deletes the stream processor identified by <code>Name</code>. You assign the value for <code>Name</code> when you create the stream processor with <a>CreateStreamProcessor</a>. You might not be able to use the same name for a stream processor for a few seconds after calling <code>DeleteStreamProcessor</code>.</p>
     async fn delete_stream_processor(
         &self,
@@ -6186,7 +6756,7 @@ impl Rekognition for RekognitionClient {
         }
     }
 
-    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
+    /// <p>Detects faces within an image that is provided as input.</p> <p> <code>DetectFaces</code> detects the 100 largest faces in the image. For each face detected, the operation returns face details. These details include a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), presence of beard, sunglasses, and so on. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm might not detect the faces or might detect faces with lower confidence. </p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>
     async fn detect_faces(
         &self,
         input: DetectFacesRequest,
@@ -6487,6 +7057,34 @@ impl Rekognition for RekognitionClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetPersonTrackingError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the text detection results of a Amazon Rekognition Video analysis started by <a>StartTextDetection</a>.</p> <p>Text detection with Amazon Rekognition Video is an asynchronous operation. You start text detection by calling <a>StartTextDetection</a> which returns a job identifier (<code>JobId</code>) When the text detection operation finishes, Amazon Rekognition publishes a completion status to the Amazon Simple Notification Service topic registered in the initial call to <code>StartTextDetection</code>. To get the results of the text detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <code>GetTextDetection</code> and pass the job identifier (<code>JobId</code>) from the initial call of <code>StartLabelDetection</code>.</p> <p> <code>GetTextDetection</code> returns an array of detected text (<code>TextDetections</code>) sorted by the time the text was detected, up to 50 words per frame of video.</p> <p>Each element of the array includes the detected text, the precentage confidence in the acuracy of the detected text, the time the text was detected, bounding box information for where the text was located, and unique identifiers for words and their lines.</p> <p>Use MaxResults parameter to limit the number of text detections returned. If there are more results than specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation response contains a pagination token for getting the next set of results. To get the next page of results, call <code>GetTextDetection</code> and populate the <code>NextToken</code> request parameter with the token value returned from the previous call to <code>GetTextDetection</code>.</p>
+    async fn get_text_detection(
+        &self,
+        input: GetTextDetectionRequest,
+    ) -> Result<GetTextDetectionResponse, RusotoError<GetTextDetectionError>> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.GetTextDetection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetTextDetectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTextDetectionError::from_response(response))
         }
     }
 
@@ -6906,6 +7504,34 @@ impl Rekognition for RekognitionClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StartStreamProcessorError::from_response(response))
+        }
+    }
+
+    /// <p>Starts asynchronous detection of text in a stored video.</p> <p>Amazon Rekognition Video can detect text in a video stored in an Amazon S3 bucket. Use <a>Video</a> to specify the bucket name and the filename of the video. <code>StartTextDetection</code> returns a job identifier (<code>JobId</code>) which you use to get the results of the operation. When text detection is finished, Amazon Rekognition Video publishes a completion status to the Amazon Simple Notification Service topic that you specify in <code>NotificationChannel</code>.</p> <p>To get the results of the text detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <a>GetTextDetection</a> and pass the job identifier (<code>JobId</code>) from the initial call to <code>StartTextDetection</code>. </p>
+    async fn start_text_detection(
+        &self,
+        input: StartTextDetectionRequest,
+    ) -> Result<StartTextDetectionResponse, RusotoError<StartTextDetectionError>> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.StartTextDetection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartTextDetectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartTextDetectionError::from_response(response))
         }
     }
 

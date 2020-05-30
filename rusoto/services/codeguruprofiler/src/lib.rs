@@ -12,7 +12,7 @@
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
-//! <p>Example service documentation.</p>
+//! <p>This section provides documentation for the Amazon CodeGuru Profiler API operations.</p>
 //!
 //! If you're using the service, you're probably looking for [CodeGuruProfilerClient](struct.CodeGuruProfilerClient.html) and [CodeGuruProfiler](trait.CodeGuruProfiler.html).
 

@@ -36,7 +36,7 @@ pub struct Accelerator {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The Domain Name System (DNS) name that Global Accelerator creates that points to your accelerator's static IP addresses. </p> <p>The naming convention for the DNS name is: a lower case letter a, followed by a 16-bit random hex string, followed by .awsglobalaccelerator.com. For example: a1234567890abcdef.awsglobalaccelerator.com.</p> <p>For more information about the default DNS name, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-accelerators.html#about-accelerators.dns-addressing">Support for DNS Addressing in Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>The Domain Name System (DNS) name that Global Accelerator creates that points to your accelerator's static IP addresses. </p> <p>The naming convention for the DNS name is the following: A lowercase letter a, followed by a 16-bit random hex string, followed by .awsglobalaccelerator.com. For example: a1234567890abcdef.awsglobalaccelerator.com.</p> <p>For more information about the default DNS name, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-accelerators.html#about-accelerators.dns-addressing"> Support for DNS Addressing in Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     #[serde(rename = "DnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_name: Option<String>,
@@ -78,10 +78,71 @@ pub struct AcceleratorAttributes {
     #[serde(rename = "FlowLogsS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_logs_s3_bucket: Option<String>,
-    /// <p>The prefix for the location in the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>. If you don’t specify a prefix, the flow logs are stored in the root of the bucket.</p>
+    /// <p>The prefix for the location in the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>.</p> <p>If you don’t specify a prefix, the flow logs are stored in the root of the bucket. If you specify slash (/) for the S3 bucket prefix, the log file bucket folder structure will include a double slash (//), like the following:</p> <p>s3-bucket_name//AWSLogs/aws_account_id</p>
     #[serde(rename = "FlowLogsS3Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_logs_s3_prefix: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AdvertiseByoipCidrRequest {
+    /// <p>The address range, in CIDR notation. This must be the exact range that you provisioned. You can't advertise only a portion of the provisioned range.</p>
+    #[serde(rename = "Cidr")]
+    pub cidr: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AdvertiseByoipCidrResponse {
+    /// <p>Information about the address range.</p>
+    #[serde(rename = "ByoipCidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub byoip_cidr: Option<ByoipCidr>,
+}
+
+/// <p><p>Information about an IP address range that is provisioned for use with your AWS resources through bring your own IP address (BYOIP).</p> <p>The following describes each BYOIP <code>State</code> that your IP address range can be in.</p> <ul> <li> <p> <b>PENDING<em>PROVISIONING</b> — You’ve submitted a request to provision an IP address range but it is not yet provisioned with AWS Global Accelerator.</p> </li> <li> <p> <b>READY</b> — The address range is provisioned with AWS Global Accelerator and can be advertised.</p> </li> <li> <p> <b>PENDING</em>ADVERTISING</b> — You’ve submitted a request for AWS Global Accelerator to advertise an address range but it is not yet being advertised.</p> </li> <li> <p> <b>ADVERTISING</b> — The address range is being advertised by AWS Global Accelerator.</p> </li> <li> <p> <b>PENDING<em>WITHDRAWING</b> — You’ve submitted a request to withdraw an address range from being advertised but it is still being advertised by AWS Global Accelerator.</p> </li> <li> <p> <b>PENDING</em>DEPROVISIONING</b> — You’ve submitted a request to deprovision an address range from AWS Global Accelerator but it is still provisioned.</p> </li> <li> <p> <b>DEPROVISIONED</b> — The address range is deprovisioned from AWS Global Accelerator.</p> </li> <li> <p> <b>FAILED<em>PROVISION </b> — The request to provision the address range from AWS Global Accelerator was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> <li> <p> <b>FAILED</em>ADVERTISING</b> — The request for AWS Global Accelerator to advertise the address range was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> <li> <p> <b>FAILED<em>WITHDRAW</b> — The request to withdraw the address range from advertising by AWS Global Accelerator was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> <li> <p> <b>FAILED</em>DEPROVISION </b> — The request to deprovision the address range from AWS Global Accelerator was not successful. Please make sure that you provide all of the correct information, and try again. If the request fails a second time, contact AWS support.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ByoipCidr {
+    /// <p>The address range, in CIDR notation.</p>
+    #[serde(rename = "Cidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr: Option<String>,
+    /// <p>A history of status changes for an IP address range that that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
+    #[serde(rename = "Events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub events: Option<Vec<ByoipCidrEvent>>,
+    /// <p>The state of the address pool.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p>A complex type that contains a <code>Message</code> and a <code>Timestamp</code> value for changes that you make in the status an IP address range that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ByoipCidrEvent {
+    /// <p>A string that contains an <code>Event</code> message describing changes that you make in the status of an IP address range that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>A timestamp when you make a status change for an IP address range that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+}
+
+/// <p>Provides authorization for Amazon to bring a specific IP address range to a specific AWS account using bring your own IP addresses (BYOIP). </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CidrAuthorizationContext {
+    /// <p>The plain-text authorization message for the prefix and account.</p>
+    #[serde(rename = "Message")]
+    pub message: String,
+    /// <p>The signed authorization message for the prefix and account.</p>
+    #[serde(rename = "Signature")]
+    pub signature: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -98,9 +159,17 @@ pub struct CreateAcceleratorRequest {
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_type: Option<String>,
+    /// <p>Optionally, if you've added your own IP address pool to Global Accelerator, you can choose IP addresses from your own pool to use for the accelerator's static IP addresses. You can specify one or two addresses, separated by a comma. Do not include the /32 suffix.</p> <p>If you specify only one IP address from your IP address range, Global Accelerator assigns a second static IP address for the accelerator from the AWS IP address pool.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "IpAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_addresses: Option<Vec<String>>,
     /// <p>The name of an accelerator. The name can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Create tags for an accelerator.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -219,6 +288,23 @@ pub struct DeleteListenerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeprovisionByoipCidrRequest {
+    /// <p>The address range, in CIDR notation. The prefix must be the same prefix that you specified when you provisioned the address range.</p>
+    #[serde(rename = "Cidr")]
+    pub cidr: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeprovisionByoipCidrResponse {
+    /// <p>Information about the address range.</p>
+    #[serde(rename = "ByoipCidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub byoip_cidr: Option<ByoipCidr>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorAttributesRequest {
     /// <p>The Amazon Resource Name (ARN) of the accelerator with the attributes that you want to describe.</p>
     #[serde(rename = "AcceleratorArn")]
@@ -289,11 +375,11 @@ pub struct DescribeListenerResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointConfiguration {
-    /// <p>Indicates whether client IP address preservation is enabled for an Application Load Balancer endpoint. The value is true or false. The default value is true for new accelerators. </p> <p>If the value is set to true, the client's IP address is preserved in the <code>X-Forwarded-For</code> request header as traffic travels to applications on the Application Load Balancer endpoint fronted by the accelerator.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works-client-ip.html"> Viewing Client IP Addresses in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Indicates whether client IP address preservation is enabled for an Application Load Balancer endpoint. The value is true or false. The default value is true for new accelerators. </p> <p>If the value is set to true, the client's IP address is preserved in the <code>X-Forwarded-For</code> request header as traffic travels to applications on the Application Load Balancer endpoint fronted by the accelerator.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/preserve-client-ip-address.html"> Preserve Client IP Addresses in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     #[serde(rename = "ClientIPPreservationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_ip_preservation_enabled: Option<bool>,
-    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID.</p>
+    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For EC2 instances, this is the EC2 instance ID. </p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
     #[serde(rename = "EndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_id: Option<String>,
@@ -311,7 +397,7 @@ pub struct EndpointDescription {
     #[serde(rename = "ClientIPPreservationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_ip_preservation_enabled: Option<bool>,
-    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. An Application Load Balancer can be either internal or internet-facing.</p>
+    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For EC2 instances, this is the EC2 instance ID. </p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
     #[serde(rename = "EndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_id: Option<String>,
@@ -413,6 +499,32 @@ pub struct ListAcceleratorsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListByoipCidrsRequest {
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListByoipCidrsResponse {
+    /// <p>Information about your address ranges.</p>
+    #[serde(rename = "ByoipCidrs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub byoip_cidrs: Option<Vec<ByoipCidr>>,
+    /// <p>The token for the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointGroupsRequest {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     #[serde(rename = "ListenerArn")]
@@ -469,6 +581,23 @@ pub struct ListListenersResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the accelerator to list tags for. An ARN uniquely identifies an accelerator.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>Root level tag for the Tags parameters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>A complex type for a listener.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -506,6 +635,67 @@ pub struct PortRange {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ProvisionByoipCidrRequest {
+    /// <p>The public IPv4 address range, in CIDR notation. The most specific IP prefix that you can specify is /24. The address range cannot overlap with another address range that you've brought to this or another Region.</p>
+    #[serde(rename = "Cidr")]
+    pub cidr: String,
+    /// <p>A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. </p>
+    #[serde(rename = "CidrAuthorizationContext")]
+    pub cidr_authorization_context: CidrAuthorizationContext,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProvisionByoipCidrResponse {
+    /// <p>Information about the address range.</p>
+    #[serde(rename = "ByoipCidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub byoip_cidr: Option<ByoipCidr>,
+}
+
+/// <p>A complex type that contains a <code>Tag</code> key and <code>Tag</code> value.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>A string that contains a <code>Tag</code> key.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>A string that contains a <code>Tag</code> value.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the Global Accelerator resource to add tags to. An ARN uniquely identifies a resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to add to a resource. A tag consists of a key and a value that you define.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the Global Accelerator resource to remove tags from. An ARN uniquely identifies a resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tag key pairs that you want to remove from the specified resources.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAcceleratorAttributesRequest {
     /// <p>The Amazon Resource Name (ARN) of the accelerator that you want to update.</p>
     #[serde(rename = "AcceleratorArn")]
@@ -518,7 +708,7 @@ pub struct UpdateAcceleratorAttributesRequest {
     #[serde(rename = "FlowLogsS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_logs_s3_bucket: Option<String>,
-    /// <p>Update the prefix for the location in the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>. If you don’t specify a prefix, the flow logs are stored in the root of the bucket.</p>
+    /// <p>Update the prefix for the location in the Amazon S3 bucket for the flow logs. Attribute is required if <code>FlowLogsEnabled</code> is <code>true</code>. </p> <p>If you don’t specify a prefix, the flow logs are stored in the root of the bucket. If you specify slash (/) for the S3 bucket prefix, the log file bucket folder structure will include a double slash (//), like the following:</p> <p>s3-bucket_name//AWSLogs/aws_account_id</p>
     #[serde(rename = "FlowLogsS3Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_logs_s3_prefix: Option<String>,
@@ -636,6 +826,83 @@ pub struct UpdateListenerResponse {
     pub listener: Option<Listener>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct WithdrawByoipCidrRequest {
+    /// <p>The address range, in CIDR notation.</p>
+    #[serde(rename = "Cidr")]
+    pub cidr: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct WithdrawByoipCidrResponse {
+    /// <p>Information about the address pool.</p>
+    #[serde(rename = "ByoipCidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub byoip_cidr: Option<ByoipCidr>,
+}
+
+/// Errors returned by AdvertiseByoipCidr
+#[derive(Debug, PartialEq)]
+pub enum AdvertiseByoipCidrError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>The CIDR that you specified was not found or is incorrect.</p>
+    ByoipCidrNotFound(String),
+    /// <p>The CIDR that you specified is not valid for this action. For example, the state of the CIDR might be incorrect for this action.</p>
+    IncorrectCidrState(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl AdvertiseByoipCidrError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdvertiseByoipCidrError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(AdvertiseByoipCidrError::AccessDenied(err.msg))
+                }
+                "ByoipCidrNotFoundException" => {
+                    return RusotoError::Service(AdvertiseByoipCidrError::ByoipCidrNotFound(
+                        err.msg,
+                    ))
+                }
+                "IncorrectCidrStateException" => {
+                    return RusotoError::Service(AdvertiseByoipCidrError::IncorrectCidrState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(AdvertiseByoipCidrError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(AdvertiseByoipCidrError::InvalidArgument(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AdvertiseByoipCidrError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AdvertiseByoipCidrError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AdvertiseByoipCidrError::ByoipCidrNotFound(ref cause) => write!(f, "{}", cause),
+            AdvertiseByoipCidrError::IncorrectCidrState(ref cause) => write!(f, "{}", cause),
+            AdvertiseByoipCidrError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            AdvertiseByoipCidrError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AdvertiseByoipCidrError {}
 /// Errors returned by CreateAccelerator
 #[derive(Debug, PartialEq)]
 pub enum CreateAcceleratorError {
@@ -968,6 +1235,68 @@ impl fmt::Display for DeleteListenerError {
     }
 }
 impl Error for DeleteListenerError {}
+/// Errors returned by DeprovisionByoipCidr
+#[derive(Debug, PartialEq)]
+pub enum DeprovisionByoipCidrError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>The CIDR that you specified was not found or is incorrect.</p>
+    ByoipCidrNotFound(String),
+    /// <p>The CIDR that you specified is not valid for this action. For example, the state of the CIDR might be incorrect for this action.</p>
+    IncorrectCidrState(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl DeprovisionByoipCidrError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprovisionByoipCidrError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeprovisionByoipCidrError::AccessDenied(err.msg))
+                }
+                "ByoipCidrNotFoundException" => {
+                    return RusotoError::Service(DeprovisionByoipCidrError::ByoipCidrNotFound(
+                        err.msg,
+                    ))
+                }
+                "IncorrectCidrStateException" => {
+                    return RusotoError::Service(DeprovisionByoipCidrError::IncorrectCidrState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(DeprovisionByoipCidrError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(DeprovisionByoipCidrError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeprovisionByoipCidrError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeprovisionByoipCidrError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeprovisionByoipCidrError::ByoipCidrNotFound(ref cause) => write!(f, "{}", cause),
+            DeprovisionByoipCidrError::IncorrectCidrState(ref cause) => write!(f, "{}", cause),
+            DeprovisionByoipCidrError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeprovisionByoipCidrError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeprovisionByoipCidrError {}
 /// Errors returned by DescribeAccelerator
 #[derive(Debug, PartialEq)]
 pub enum DescribeAcceleratorError {
@@ -1206,6 +1535,54 @@ impl fmt::Display for ListAcceleratorsError {
     }
 }
 impl Error for ListAcceleratorsError {}
+/// Errors returned by ListByoipCidrs
+#[derive(Debug, PartialEq)]
+pub enum ListByoipCidrsError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>There isn't another item to return.</p>
+    InvalidNextToken(String),
+}
+
+impl ListByoipCidrsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListByoipCidrsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListByoipCidrsError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListByoipCidrsError::InternalServiceError(err.msg))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ListByoipCidrsError::InvalidArgument(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListByoipCidrsError::InvalidNextToken(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListByoipCidrsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListByoipCidrsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListByoipCidrsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListByoipCidrsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListByoipCidrsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListByoipCidrsError {}
 /// Errors returned by ListEndpointGroups
 #[derive(Debug, PartialEq)]
 pub enum ListEndpointGroupsError {
@@ -1304,6 +1681,194 @@ impl fmt::Display for ListListenersError {
     }
 }
 impl Error for ListListenersError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::AcceleratorNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArgument(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::AcceleratorNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
+/// Errors returned by ProvisionByoipCidr
+#[derive(Debug, PartialEq)]
+pub enum ProvisionByoipCidrError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>The CIDR that you specified is not valid for this action. For example, the state of the CIDR might be incorrect for this action.</p>
+    IncorrectCidrState(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Processing your request would cause you to exceed an AWS Global Accelerator limit.</p>
+    LimitExceeded(String),
+}
+
+impl ProvisionByoipCidrError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ProvisionByoipCidrError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ProvisionByoipCidrError::AccessDenied(err.msg))
+                }
+                "IncorrectCidrStateException" => {
+                    return RusotoError::Service(ProvisionByoipCidrError::IncorrectCidrState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ProvisionByoipCidrError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ProvisionByoipCidrError::InvalidArgument(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ProvisionByoipCidrError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ProvisionByoipCidrError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ProvisionByoipCidrError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ProvisionByoipCidrError::IncorrectCidrState(ref cause) => write!(f, "{}", cause),
+            ProvisionByoipCidrError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ProvisionByoipCidrError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ProvisionByoipCidrError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ProvisionByoipCidrError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::AcceleratorNotFound(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(TagResourceError::InternalServiceError(err.msg))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(TagResourceError::InvalidArgument(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::AcceleratorNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The accelerator that you specified doesn't exist.</p>
+    AcceleratorNotFound(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AcceleratorNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::AcceleratorNotFound(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServiceError(err.msg))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidArgument(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::AcceleratorNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAccelerator
 #[derive(Debug, PartialEq)]
 pub enum UpdateAcceleratorError {
@@ -1524,10 +2089,74 @@ impl fmt::Display for UpdateListenerError {
     }
 }
 impl Error for UpdateListenerError {}
+/// Errors returned by WithdrawByoipCidr
+#[derive(Debug, PartialEq)]
+pub enum WithdrawByoipCidrError {
+    /// <p>You don't have access permission.</p>
+    AccessDenied(String),
+    /// <p>The CIDR that you specified was not found or is incorrect.</p>
+    ByoipCidrNotFound(String),
+    /// <p>The CIDR that you specified is not valid for this action. For example, the state of the CIDR might be incorrect for this action.</p>
+    IncorrectCidrState(String),
+    /// <p>There was an internal error for AWS Global Accelerator.</p>
+    InternalServiceError(String),
+    /// <p>An argument that you specified is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl WithdrawByoipCidrError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<WithdrawByoipCidrError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(WithdrawByoipCidrError::AccessDenied(err.msg))
+                }
+                "ByoipCidrNotFoundException" => {
+                    return RusotoError::Service(WithdrawByoipCidrError::ByoipCidrNotFound(err.msg))
+                }
+                "IncorrectCidrStateException" => {
+                    return RusotoError::Service(WithdrawByoipCidrError::IncorrectCidrState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(WithdrawByoipCidrError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(WithdrawByoipCidrError::InvalidArgument(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for WithdrawByoipCidrError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            WithdrawByoipCidrError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            WithdrawByoipCidrError::ByoipCidrNotFound(ref cause) => write!(f, "{}", cause),
+            WithdrawByoipCidrError::IncorrectCidrState(ref cause) => write!(f, "{}", cause),
+            WithdrawByoipCidrError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            WithdrawByoipCidrError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for WithdrawByoipCidrError {}
 /// Trait representing the capabilities of the AWS Global Accelerator API. AWS Global Accelerator clients implement this trait.
 #[async_trait]
 pub trait GlobalAccelerator {
-    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP). It can take a few minutes before traffic to the specified addresses starts routing to AWS because of propagation delays. To see an AWS CLI example of advertising an address range, scroll down to <b>Example</b>.</p> <p>To stop advertising the BYOIP address range, use <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html"> WithdrawByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn advertise_byoip_cidr(
+        &self,
+        input: AdvertiseByoipCidrRequest,
+    ) -> Result<AdvertiseByoipCidrResponse, RusotoError<AdvertiseByoipCidrError>>;
+
+    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
@@ -1545,7 +2174,7 @@ pub trait GlobalAccelerator {
         input: CreateListenerRequest,
     ) -> Result<CreateListenerResponse, RusotoError<CreateListenerError>>;
 
-    /// <p>Delete an accelerator. Note: before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups).</p>
+    /// <p><p>Delete an accelerator. Before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups). To disable the accelerator, update the accelerator to set <code>Enabled</code> to false.</p> <important> <p>When you create an accelerator, by default, Global Accelerator provides you with a set of two static IP addresses. Alternatively, you can bring your own IP address ranges to Global Accelerator and assign IP addresses from those ranges. </p> <p>The IP addresses are assigned to your accelerator for as long as it exists, even if you disable the accelerator and it no longer accepts or routes traffic. However, when you <i>delete</i> an accelerator, you lose the static IP addresses that are assigned to the accelerator, so you can no longer route traffic by using them. As a best practice, ensure that you have permissions in place to avoid inadvertently deleting accelerators. You can use IAM policies with Global Accelerator to limit the users who have permissions to delete an accelerator. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/auth-and-access-control.html">Authentication and Access Control</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p> </important></p>
     async fn delete_accelerator(
         &self,
         input: DeleteAcceleratorRequest,
@@ -1563,13 +2192,19 @@ pub trait GlobalAccelerator {
         input: DeleteListenerRequest,
     ) -> Result<(), RusotoError<DeleteListenerError>>;
 
+    /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. To see an AWS CLI example of deprovisioning an address range, scroll down to <b>Example</b>.</p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn deprovision_byoip_cidr(
+        &self,
+        input: DeprovisionByoipCidrRequest,
+    ) -> Result<DeprovisionByoipCidrResponse, RusotoError<DeprovisionByoipCidrError>>;
+
     /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
     async fn describe_accelerator(
         &self,
         input: DescribeAcceleratorRequest,
     ) -> Result<DescribeAcceleratorResponse, RusotoError<DescribeAcceleratorError>>;
 
-    /// <p>Describe the attributes of an accelerator.</p>
+    /// <p>Describe the attributes of an accelerator. To see an AWS CLI example of describing the attributes of an accelerator, scroll down to <b>Example</b>.</p>
     async fn describe_accelerator_attributes(
         &self,
         input: DescribeAcceleratorAttributesRequest,
@@ -1578,37 +2213,67 @@ pub trait GlobalAccelerator {
         RusotoError<DescribeAcceleratorAttributesError>,
     >;
 
-    /// <p>Describe an endpoint group.</p>
+    /// <p>Describe an endpoint group. To see an AWS CLI example of describing an endpoint group, scroll down to <b>Example</b>.</p>
     async fn describe_endpoint_group(
         &self,
         input: DescribeEndpointGroupRequest,
     ) -> Result<DescribeEndpointGroupResponse, RusotoError<DescribeEndpointGroupError>>;
 
-    /// <p>Describe a listener.</p>
+    /// <p>Describe a listener. To see an AWS CLI example of describing a listener, scroll down to <b>Example</b>.</p>
     async fn describe_listener(
         &self,
         input: DescribeListenerRequest,
     ) -> Result<DescribeListenerResponse, RusotoError<DescribeListenerError>>;
 
-    /// <p>List the accelerators for an AWS account.</p>
+    /// <p>List the accelerators for an AWS account. To see an AWS CLI example of listing the accelerators for an AWS account, scroll down to <b>Example</b>.</p>
     async fn list_accelerators(
         &self,
         input: ListAcceleratorsRequest,
     ) -> Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>>;
 
-    /// <p>List the endpoint groups that are associated with a listener.</p>
+    /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p> <p>To see an AWS CLI example of listing BYOIP CIDR addresses, scroll down to <b>Example</b>.</p>
+    async fn list_byoip_cidrs(
+        &self,
+        input: ListByoipCidrsRequest,
+    ) -> Result<ListByoipCidrsResponse, RusotoError<ListByoipCidrsError>>;
+
+    /// <p>List the endpoint groups that are associated with a listener. To see an AWS CLI example of listing the endpoint groups for listener, scroll down to <b>Example</b>.</p>
     async fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
     ) -> Result<ListEndpointGroupsResponse, RusotoError<ListEndpointGroupsError>>;
 
-    /// <p>List the listeners for an accelerator.</p>
+    /// <p>List the listeners for an accelerator. To see an AWS CLI example of listing the listeners for an accelerator, scroll down to <b>Example</b>.</p>
     async fn list_listeners(
         &self,
         input: ListListenersRequest,
     ) -> Result<ListListenersResponse, RusotoError<ListListenersError>>;
 
-    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p>List all tags for an accelerator. To see an AWS CLI example of listing tags for an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>To see an AWS CLI example of provisioning an address range for BYOIP, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn provision_byoip_cidr(
+        &self,
+        input: ProvisionByoipCidrRequest,
+    ) -> Result<ProvisionByoipCidrResponse, RusotoError<ProvisionByoipCidrError>>;
+
+    /// <p>Add tags to an accelerator resource. To see an AWS CLI example of adding tags to an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. To see an AWS CLI example of removing tags from an accelerator, scroll down to <b>Example</b>. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
@@ -1626,11 +2291,17 @@ pub trait GlobalAccelerator {
         input: UpdateEndpointGroupRequest,
     ) -> Result<UpdateEndpointGroupResponse, RusotoError<UpdateEndpointGroupError>>;
 
-    /// <p>Update a listener.</p>
+    /// <p>Update a listener. To see an AWS CLI example of updating listener, scroll down to <b>Example</b>.</p>
     async fn update_listener(
         &self,
         input: UpdateListenerRequest,
     ) -> Result<UpdateListenerResponse, RusotoError<UpdateListenerError>>;
+
+    /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time. To see an AWS CLI example of withdrawing an address range for BYOIP so it will no longer be advertised by AWS, scroll down to <b>Example</b>.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn withdraw_byoip_cidr(
+        &self,
+        input: WithdrawByoipCidrRequest,
+    ) -> Result<WithdrawByoipCidrResponse, RusotoError<WithdrawByoipCidrError>>;
 }
 /// A client for the AWS Global Accelerator API.
 #[derive(Clone)]
@@ -1672,7 +2343,38 @@ impl GlobalAcceleratorClient {
 
 #[async_trait]
 impl GlobalAccelerator for GlobalAcceleratorClient {
-    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP). It can take a few minutes before traffic to the specified addresses starts routing to AWS because of propagation delays. To see an AWS CLI example of advertising an address range, scroll down to <b>Example</b>.</p> <p>To stop advertising the BYOIP address range, use <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html"> WithdrawByoipCidr</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn advertise_byoip_cidr(
+        &self,
+        input: AdvertiseByoipCidrRequest,
+    ) -> Result<AdvertiseByoipCidrResponse, RusotoError<AdvertiseByoipCidrError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.AdvertiseByoipCidr",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<AdvertiseByoipCidrResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(AdvertiseByoipCidrError::from_response(response))
+        }
+    }
+
+    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
@@ -1761,7 +2463,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>Delete an accelerator. Note: before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups).</p>
+    /// <p><p>Delete an accelerator. Before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups). To disable the accelerator, update the accelerator to set <code>Enabled</code> to false.</p> <important> <p>When you create an accelerator, by default, Global Accelerator provides you with a set of two static IP addresses. Alternatively, you can bring your own IP address ranges to Global Accelerator and assign IP addresses from those ranges. </p> <p>The IP addresses are assigned to your accelerator for as long as it exists, even if you disable the accelerator and it no longer accepts or routes traffic. However, when you <i>delete</i> an accelerator, you lose the static IP addresses that are assigned to the accelerator, so you can no longer route traffic by using them. As a best practice, ensure that you have permissions in place to avoid inadvertently deleting accelerators. You can use IAM policies with Global Accelerator to limit the users who have permissions to delete an accelerator. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/auth-and-access-control.html">Authentication and Access Control</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p> </important></p>
     async fn delete_accelerator(
         &self,
         input: DeleteAcceleratorRequest,
@@ -1848,6 +2550,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
+    /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. To see an AWS CLI example of deprovisioning an address range, scroll down to <b>Example</b>.</p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn deprovision_byoip_cidr(
+        &self,
+        input: DeprovisionByoipCidrRequest,
+    ) -> Result<DeprovisionByoipCidrResponse, RusotoError<DeprovisionByoipCidrError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.DeprovisionByoipCidr",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeprovisionByoipCidrResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeprovisionByoipCidrError::from_response(response))
+        }
+    }
+
     /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
     async fn describe_accelerator(
         &self,
@@ -1879,7 +2612,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>Describe the attributes of an accelerator.</p>
+    /// <p>Describe the attributes of an accelerator. To see an AWS CLI example of describing the attributes of an accelerator, scroll down to <b>Example</b>.</p>
     async fn describe_accelerator_attributes(
         &self,
         input: DescribeAcceleratorAttributesRequest,
@@ -1913,7 +2646,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>Describe an endpoint group.</p>
+    /// <p>Describe an endpoint group. To see an AWS CLI example of describing an endpoint group, scroll down to <b>Example</b>.</p>
     async fn describe_endpoint_group(
         &self,
         input: DescribeEndpointGroupRequest,
@@ -1944,7 +2677,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>Describe a listener.</p>
+    /// <p>Describe a listener. To see an AWS CLI example of describing a listener, scroll down to <b>Example</b>.</p>
     async fn describe_listener(
         &self,
         input: DescribeListenerRequest,
@@ -1975,7 +2708,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>List the accelerators for an AWS account.</p>
+    /// <p>List the accelerators for an AWS account. To see an AWS CLI example of listing the accelerators for an AWS account, scroll down to <b>Example</b>.</p>
     async fn list_accelerators(
         &self,
         input: ListAcceleratorsRequest,
@@ -2006,7 +2739,34 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>List the endpoint groups that are associated with a listener.</p>
+    /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p> <p>To see an AWS CLI example of listing BYOIP CIDR addresses, scroll down to <b>Example</b>.</p>
+    async fn list_byoip_cidrs(
+        &self,
+        input: ListByoipCidrsRequest,
+    ) -> Result<ListByoipCidrsResponse, RusotoError<ListByoipCidrsError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GlobalAccelerator_V20180706.ListByoipCidrs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListByoipCidrsResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListByoipCidrsError::from_response(response))
+        }
+    }
+
+    /// <p>List the endpoint groups that are associated with a listener. To see an AWS CLI example of listing the endpoint groups for listener, scroll down to <b>Example</b>.</p>
     async fn list_endpoint_groups(
         &self,
         input: ListEndpointGroupsRequest,
@@ -2037,7 +2797,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>List the listeners for an accelerator.</p>
+    /// <p>List the listeners for an accelerator. To see an AWS CLI example of listing the listeners for an accelerator, scroll down to <b>Example</b>.</p>
     async fn list_listeners(
         &self,
         input: ListListenersRequest,
@@ -2064,7 +2824,123 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US-West-2 (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p>List all tags for an accelerator. To see an AWS CLI example of listing tags for an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>To see an AWS CLI example of provisioning an address range for BYOIP, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn provision_byoip_cidr(
+        &self,
+        input: ProvisionByoipCidrRequest,
+    ) -> Result<ProvisionByoipCidrResponse, RusotoError<ProvisionByoipCidrError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.ProvisionByoipCidr",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ProvisionByoipCidrResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ProvisionByoipCidrError::from_response(response))
+        }
+    }
+
+    /// <p>Add tags to an accelerator resource. To see an AWS CLI example of adding tags to an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GlobalAccelerator_V20180706.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. To see an AWS CLI example of removing tags from an accelerator, scroll down to <b>Example</b>. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GlobalAccelerator_V20180706.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
@@ -2158,7 +3034,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         }
     }
 
-    /// <p>Update a listener.</p>
+    /// <p>Update a listener. To see an AWS CLI example of updating listener, scroll down to <b>Example</b>.</p>
     async fn update_listener(
         &self,
         input: UpdateListenerRequest,
@@ -2182,6 +3058,37 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateListenerError::from_response(response))
+        }
+    }
+
+    /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time. To see an AWS CLI example of withdrawing an address range for BYOIP so it will no longer be advertised by AWS, scroll down to <b>Example</b>.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    async fn withdraw_byoip_cidr(
+        &self,
+        input: WithdrawByoipCidrRequest,
+    ) -> Result<WithdrawByoipCidrResponse, RusotoError<WithdrawByoipCidrError>> {
+        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "GlobalAccelerator_V20180706.WithdrawByoipCidr",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<WithdrawByoipCidrResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(WithdrawByoipCidrError::from_response(response))
         }
     }
 }

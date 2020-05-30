@@ -76,7 +76,7 @@ impl AllowedNodeGroupIdDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AllowedNodeTypeModificationsMessage {
-    /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling down on a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
+    /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group. When scaling down a Redis cluster or replication group using ModifyCacheCluster or ModifyReplicationGroup, use a value from this list for the CacheNodeType parameter. </p>
     pub scale_down_modifications: Option<Vec<String>>,
     /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
     pub scale_up_modifications: Option<Vec<String>>,
@@ -386,7 +386,7 @@ pub struct CacheCluster {
     pub cache_cluster_id: Option<String>,
     /// <p>The current state of this cluster, one of the following values: <code>available</code>, <code>creating</code>, <code>deleted</code>, <code>deleting</code>, <code>incompatible-network</code>, <code>modifying</code>, <code>rebooting cluster nodes</code>, <code>restore-failed</code>, or <code>snapshotting</code>.</p>
     pub cache_cluster_status: Option<String>,
-    /// <p><p>The name of the compute and memory capacity node type for the cluster.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The name of the compute and memory capacity node type for the cluster.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>A list of cache nodes that are members of the cluster.</p>
     pub cache_nodes: Option<Vec<CacheNode>>,
@@ -778,7 +778,7 @@ impl CacheEngineVersionMessageDeserializer {
         )
     }
 }
-/// <p><p>Represents an individual cache node within a cluster. Each cache node runs its own instance of the cluster&#39;s protocol-compliant caching software - either Memcached or Redis.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+/// <p><p>Represents an individual cache node within a cluster. Each cache node runs its own instance of the cluster&#39;s protocol-compliant caching software - either Memcached or Redis.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheNode {
@@ -786,7 +786,7 @@ pub struct CacheNode {
     pub cache_node_create_time: Option<String>,
     /// <p>The cache node identifier. A node ID is a numeric identifier (0001, 0002, etc.). The combination of cluster ID and node ID uniquely identifies every cache node used in a customer's AWS account.</p>
     pub cache_node_id: Option<String>,
-    /// <p>The current state of this cache node.</p>
+    /// <p>The current state of this cache node, one of the following values: <code>available</code>, <code>creating</code>, <code>rebooting</code>, or <code>deleting</code>.</p>
     pub cache_node_status: Option<String>,
     /// <p>The Availability Zone where this node was created and now resides.</p>
     pub customer_availability_zone: Option<String>,
@@ -1170,6 +1170,8 @@ pub struct CacheParameterGroup {
     pub cache_parameter_group_name: Option<String>,
     /// <p>The description for this cache parameter group.</p>
     pub description: Option<String>,
+    /// <p>Indicates whether the parameter group is associated with a Global Datastore</p>
+    pub is_global: Option<bool>,
 }
 
 #[allow(dead_code)]
@@ -1196,6 +1198,9 @@ impl CacheParameterGroupDeserializer {
                 }
                 "Description" => {
                     obj.description = Some(StringDeserializer::deserialize("Description", stack)?);
+                }
+                "IsGlobal" => {
+                    obj.is_global = Some(BooleanDeserializer::deserialize("IsGlobal", stack)?);
                 }
                 _ => skip_tree(stack),
             }
@@ -1894,7 +1899,7 @@ pub struct CreateCacheClusterMessage {
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p><p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 50 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cache_cluster_id: String,
-    /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>The name of the parameter group to associate with this cluster. If this argument is omitted, the default parameter group for the specified engine is used. You cannot use any parameter group which has <code>cluster-enabled='yes'</code> when creating a cluster.</p>
     pub cache_parameter_group_name: Option<String>,
@@ -2280,6 +2285,76 @@ impl CreateCacheSubnetGroupResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateGlobalReplicationGroupMessage {
+    /// <p>Provides details of the Global Datastore</p>
+    pub global_replication_group_description: Option<String>,
+    /// <p>The suffix name of a Global Datastore. The suffix guarantees uniqueness of the Global Datastore name across multiple regions.</p>
+    pub global_replication_group_id_suffix: String,
+    /// <p>The name of the primary cluster that accepts writes and will replicate updates to the secondary cluster.</p>
+    pub primary_replication_group_id: String,
+}
+
+/// Serialize `CreateGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct CreateGlobalReplicationGroupMessageSerializer;
+impl CreateGlobalReplicationGroupMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateGlobalReplicationGroupMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.global_replication_group_description {
+            params.put(
+                &format!("{}{}", prefix, "GlobalReplicationGroupDescription"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupIdSuffix"),
+            &obj.global_replication_group_id_suffix,
+        );
+        params.put(
+            &format!("{}{}", prefix, "PrimaryReplicationGroupId"),
+            &obj.primary_replication_group_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct CreateGlobalReplicationGroupResultDeserializer;
+impl CreateGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, CreateGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2292,7 +2367,7 @@ pub struct CreateReplicationGroupMessage {
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p><p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p>If <code>true</code>, Multi-AZ is enabled for this replication group. If <code>false</code>, Multi-AZ is disabled for this replication group.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
     pub automatic_failover_enabled: Option<bool>,
-    /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p><p>The name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the specified engine is used.</p> <note> <p>If you are restoring to an engine version that is different than the original, you must specify the default version of that version. For example, <code>CacheParameterGroupName=default.redis4.0</code>.</p> </note> <p>If you are running Redis version 3.2.4 or later, only one node group (shard), and want to use a default parameter group, we recommend that you specify the parameter group by name. </p> <ul> <li> <p>To create a Redis (cluster mode disabled) replication group, use <code>CacheParameterGroupName=default.redis3.2</code>.</p> </li> <li> <p>To create a Redis (cluster mode enabled) replication group, use <code>CacheParameterGroupName=default.redis3.2.cluster.on</code>.</p> </li> </ul></p>
     pub cache_parameter_group_name: Option<String>,
@@ -2304,9 +2379,11 @@ pub struct CreateReplicationGroupMessage {
     pub engine: Option<String>,
     /// <p>The version number of the cache engine to be used for the clusters in this replication group. To view the supported cache engine versions, use the <code>DescribeCacheEngineVersions</code> operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>) in the <i>ElastiCache User Guide</i>, but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster or replication group and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
-    /// <p>The ID of the KMS key used to encrypt the disk on the cluster.</p>
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: Option<String>,
+    /// <p>The ID of the KMS key used to encrypt the disk in the cluster.</p>
     pub kms_key_id: Option<String>,
-    /// <p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following members: <code>PrimaryAvailabilityZone</code>, <code>ReplicaAvailabilityZones</code>, <code>ReplicaCount</code>, and <code>Slots</code>.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter. However, when seeding a Redis (cluster mode enabled) cluster from a S3 rdb file, you must configure each node group (shard) using this parameter because you must specify the slots for each node group.</p>
+    /// <p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following members: <code>PrimaryAvailabilityZone</code>, <code>ReplicaAvailabilityZones</code>, <code>ReplicaCount</code>, and <code>Slots</code>.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter. However, it is required when seeding a Redis (cluster mode enabled) cluster from a S3 rdb file. You must configure each node group (shard) using this parameter because you must specify the slots for each node group.</p>
     pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cluster owner.</p> </note></p>
     pub notification_topic_arn: Option<String>,
@@ -2401,6 +2478,12 @@ impl CreateReplicationGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+        }
+        if let Some(ref field_value) = obj.global_replication_group_id {
+            params.put(
+                &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
@@ -2629,6 +2712,96 @@ impl CustomerNodeEndpointListSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DecreaseNodeGroupsInGlobalReplicationGroupMessage {
+    /// <p>Indicates that the shard reconfiguration process begins immediately. At present, the only permitted value for this parameter is true. </p>
+    pub apply_immediately: bool,
+    /// <p>If the value of NodeGroupCount is less than the current number of node groups (shards), then either NodeGroupsToRemove or NodeGroupsToRetain is required. NodeGroupsToRemove is a list of NodeGroupIds to remove from the cluster. ElastiCache for Redis will attempt to remove all node groups listed by NodeGroupsToRemove from the cluster. </p>
+    pub global_node_groups_to_remove: Option<Vec<String>>,
+    /// <p>If the value of NodeGroupCount is less than the current number of node groups (shards), then either NodeGroupsToRemove or NodeGroupsToRetain is required. NodeGroupsToRemove is a list of NodeGroupIds to remove from the cluster. ElastiCache for Redis will attempt to remove all node groups listed by NodeGroupsToRemove from the cluster. </p>
+    pub global_node_groups_to_retain: Option<Vec<String>>,
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+    /// <p>The number of node groups (shards) that results from the modification of the shard configuration</p>
+    pub node_group_count: i64,
+}
+
+/// Serialize `DecreaseNodeGroupsInGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer;
+impl DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DecreaseNodeGroupsInGlobalReplicationGroupMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ApplyImmediately"),
+            &obj.apply_immediately,
+        );
+        if let Some(ref field_value) = obj.global_node_groups_to_remove {
+            GlobalNodeGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "GlobalNodeGroupId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.global_node_groups_to_retain {
+            GlobalNodeGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "GlobalNodeGroupId"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "NodeGroupCount"),
+            &obj.node_group_count,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DecreaseNodeGroupsInGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer;
+impl DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DecreaseNodeGroupsInGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, DecreaseNodeGroupsInGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseReplicaCountMessage {
     /// <p>If <code>True</code>, the number of replica nodes is decreased immediately. <code>ApplyImmediately=False</code> is not currently supported.</p>
     pub apply_immediately: bool,
@@ -2847,6 +3020,68 @@ impl DeleteCacheSubnetGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteGlobalReplicationGroupMessage {
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+    /// <p>The primary replication group is retained as a standalone replication group. </p>
+    pub retain_primary_replication_group: bool,
+}
+
+/// Serialize `DeleteGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct DeleteGlobalReplicationGroupMessageSerializer;
+impl DeleteGlobalReplicationGroupMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteGlobalReplicationGroupMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "RetainPrimaryReplicationGroup"),
+            &obj.retain_primary_replication_group,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct DeleteGlobalReplicationGroupResultDeserializer;
+impl DeleteGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, DeleteGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DeleteReplicationGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3328,6 +3563,86 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeGlobalReplicationGroupsMessage {
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: Option<String>,
+    /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified MaxRecords value, a marker is included in the response so that the remaining results can be retrieved. </p>
+    pub max_records: Option<i64>,
+    /// <p>Returns the list of members that comprise the Global Datastore.</p>
+    pub show_member_info: Option<bool>,
+}
+
+/// Serialize `DescribeGlobalReplicationGroupsMessage` contents to a `SignedRequest`.
+struct DescribeGlobalReplicationGroupsMessageSerializer;
+impl DescribeGlobalReplicationGroupsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeGlobalReplicationGroupsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.global_replication_group_id {
+            params.put(
+                &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.show_member_info {
+            params.put(&format!("{}{}", prefix, "ShowMemberInfo"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DescribeGlobalReplicationGroupsResult {
+    /// <p>Indicates the slot configuration and global identifier for each slice group.</p>
+    pub global_replication_groups: Option<Vec<GlobalReplicationGroup>>,
+    /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by MaxRecords. &gt;</p>
+    pub marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct DescribeGlobalReplicationGroupsResultDeserializer;
+impl DescribeGlobalReplicationGroupsResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeGlobalReplicationGroupsResult, XmlParseError> {
+        deserialize_elements::<_, DescribeGlobalReplicationGroupsResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroups" => {
+                        obj.global_replication_groups.get_or_insert(vec![]).extend(
+                            GlobalReplicationGroupListDeserializer::deserialize(
+                                "GlobalReplicationGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeReplicationGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3365,7 +3680,7 @@ impl DescribeReplicationGroupsMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedCacheNodesMessage {
-    /// <p><p>The cache node type filter value. Use this parameter to show only those reservations matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The cache node type filter value. Use this parameter to show only those reservations matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>The duration filter value, specified in years or seconds. Use this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
     pub duration: Option<String>,
@@ -3429,7 +3744,7 @@ impl DescribeReservedCacheNodesMessageSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedCacheNodesOfferingsMessage {
-    /// <p><p>The cache node type filter value. Use this parameter to show only the available offerings matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The cache node type filter value. Use this parameter to show only the available offerings matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>Duration filter value, specified in years or seconds. Use this parameter to show only reservations for a given duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
     pub duration: Option<String>,
@@ -3710,6 +4025,74 @@ impl DescribeUpdateActionsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateGlobalReplicationGroupMessage {
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+    /// <p>The name of the secondary cluster you wish to remove from the Global Datastore</p>
+    pub replication_group_id: String,
+    /// <p>The AWS region of secondary cluster you wish to remove from the Global Datastore</p>
+    pub replication_group_region: String,
+}
+
+/// Serialize `DisassociateGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct DisassociateGlobalReplicationGroupMessageSerializer;
+impl DisassociateGlobalReplicationGroupMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisassociateGlobalReplicationGroupMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ReplicationGroupId"),
+            &obj.replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ReplicationGroupRegion"),
+            &obj.replication_group_region,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DisassociateGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct DisassociateGlobalReplicationGroupResultDeserializer;
+impl DisassociateGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisassociateGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, DisassociateGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[allow(dead_code)]
 struct DoubleDeserializer;
 impl DoubleDeserializer {
@@ -3963,6 +4346,476 @@ impl EventsMessageDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct FailoverGlobalReplicationGroupMessage {
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+    /// <p>The AWS region of the primary cluster of the Global Datastore</p>
+    pub primary_region: String,
+    /// <p>The name of the primary replication group</p>
+    pub primary_replication_group_id: String,
+}
+
+/// Serialize `FailoverGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct FailoverGlobalReplicationGroupMessageSerializer;
+impl FailoverGlobalReplicationGroupMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &FailoverGlobalReplicationGroupMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "PrimaryRegion"),
+            &obj.primary_region,
+        );
+        params.put(
+            &format!("{}{}", prefix, "PrimaryReplicationGroupId"),
+            &obj.primary_replication_group_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct FailoverGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct FailoverGlobalReplicationGroupResultDeserializer;
+impl FailoverGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FailoverGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, FailoverGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Indicates the slot configuration and global identifier for a slice group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalNodeGroup {
+    /// <p>The name of the global node group</p>
+    pub global_node_group_id: Option<String>,
+    /// <p>The keyspace for this node group</p>
+    pub slots: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GlobalNodeGroupDeserializer;
+impl GlobalNodeGroupDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalNodeGroup, XmlParseError> {
+        deserialize_elements::<_, GlobalNodeGroup, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "GlobalNodeGroupId" => {
+                    obj.global_node_group_id =
+                        Some(StringDeserializer::deserialize("GlobalNodeGroupId", stack)?);
+                }
+                "Slots" => {
+                    obj.slots = Some(StringDeserializer::deserialize("Slots", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `GlobalNodeGroupIdList` contents to a `SignedRequest`.
+struct GlobalNodeGroupIdListSerializer;
+impl GlobalNodeGroupIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct GlobalNodeGroupListDeserializer;
+impl GlobalNodeGroupListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<GlobalNodeGroup>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "GlobalNodeGroup" {
+                obj.push(GlobalNodeGroupDeserializer::deserialize(
+                    "GlobalNodeGroup",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p><p>Consists of a primary cluster that accepts writes and an associated secondary cluster that resides in a different AWS region. The secondary cluster accepts only reads. The primary cluster automatically replicates updates to the secondary cluster.</p> <ul> <li> <p>The <b>GlobalReplicationGroupIdSuffix</b> represents the name of the Global Datastore, which is what you use to associate a secondary cluster.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalReplicationGroup {
+    /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p>
+    pub at_rest_encryption_enabled: Option<bool>,
+    /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
+    pub auth_token_enabled: Option<bool>,
+    /// <p>The cache node type of the Global Datastore</p>
+    pub cache_node_type: Option<String>,
+    /// <p>A flag that indicates whether the Global Datastore is cluster enabled.</p>
+    pub cluster_enabled: Option<bool>,
+    /// <p>The Elasticache engine. For Redis only.</p>
+    pub engine: Option<String>,
+    /// <p>The Elasticache Redis engine version. For preview, it is Redis version 5.0.5 only.</p>
+    pub engine_version: Option<String>,
+    /// <p>Indicates the slot configuration and global identifier for each slice group.</p>
+    pub global_node_groups: Option<Vec<GlobalNodeGroup>>,
+    /// <p>The optional description of the Global Datastore</p>
+    pub global_replication_group_description: Option<String>,
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: Option<String>,
+    /// <p>The replication groups that comprise the Global Datastore.</p>
+    pub members: Option<Vec<GlobalReplicationGroupMember>>,
+    /// <p>The status of the Global Datastore</p>
+    pub status: Option<String>,
+    /// <p>A flag that enables in-transit encryption when set to true. You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to true when you create a cluster. </p>
+    pub transit_encryption_enabled: Option<bool>,
+}
+
+#[allow(dead_code)]
+struct GlobalReplicationGroupDeserializer;
+impl GlobalReplicationGroupDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalReplicationGroup, XmlParseError> {
+        deserialize_elements::<_, GlobalReplicationGroup, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AtRestEncryptionEnabled" => {
+                    obj.at_rest_encryption_enabled = Some(
+                        BooleanOptionalDeserializer::deserialize("AtRestEncryptionEnabled", stack)?,
+                    );
+                }
+                "AuthTokenEnabled" => {
+                    obj.auth_token_enabled = Some(BooleanOptionalDeserializer::deserialize(
+                        "AuthTokenEnabled",
+                        stack,
+                    )?);
+                }
+                "CacheNodeType" => {
+                    obj.cache_node_type =
+                        Some(StringDeserializer::deserialize("CacheNodeType", stack)?);
+                }
+                "ClusterEnabled" => {
+                    obj.cluster_enabled = Some(BooleanOptionalDeserializer::deserialize(
+                        "ClusterEnabled",
+                        stack,
+                    )?);
+                }
+                "Engine" => {
+                    obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
+                }
+                "EngineVersion" => {
+                    obj.engine_version =
+                        Some(StringDeserializer::deserialize("EngineVersion", stack)?);
+                }
+                "GlobalNodeGroups" => {
+                    obj.global_node_groups.get_or_insert(vec![]).extend(
+                        GlobalNodeGroupListDeserializer::deserialize("GlobalNodeGroups", stack)?,
+                    );
+                }
+                "GlobalReplicationGroupDescription" => {
+                    obj.global_replication_group_description =
+                        Some(StringDeserializer::deserialize(
+                            "GlobalReplicationGroupDescription",
+                            stack,
+                        )?);
+                }
+                "GlobalReplicationGroupId" => {
+                    obj.global_replication_group_id = Some(StringDeserializer::deserialize(
+                        "GlobalReplicationGroupId",
+                        stack,
+                    )?);
+                }
+                "Members" => {
+                    obj.members.get_or_insert(vec![]).extend(
+                        GlobalReplicationGroupMemberListDeserializer::deserialize(
+                            "Members", stack,
+                        )?,
+                    );
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                "TransitEncryptionEnabled" => {
+                    obj.transit_encryption_enabled =
+                        Some(BooleanOptionalDeserializer::deserialize(
+                            "TransitEncryptionEnabled",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>The name of the Global Datastore and role of this replication group in the Global Datastore.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalReplicationGroupInfo {
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: Option<String>,
+    /// <p>The role of the replication group in a Global Datastore. Can be primary or secondary.</p>
+    pub global_replication_group_member_role: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GlobalReplicationGroupInfoDeserializer;
+impl GlobalReplicationGroupInfoDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalReplicationGroupInfo, XmlParseError> {
+        deserialize_elements::<_, GlobalReplicationGroupInfo, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroupId" => {
+                        obj.global_replication_group_id = Some(StringDeserializer::deserialize(
+                            "GlobalReplicationGroupId",
+                            stack,
+                        )?);
+                    }
+                    "GlobalReplicationGroupMemberRole" => {
+                        obj.global_replication_group_member_role =
+                            Some(StringDeserializer::deserialize(
+                                "GlobalReplicationGroupMemberRole",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct GlobalReplicationGroupListDeserializer;
+impl GlobalReplicationGroupListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<GlobalReplicationGroup>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "GlobalReplicationGroup" {
+                obj.push(GlobalReplicationGroupDeserializer::deserialize(
+                    "GlobalReplicationGroup",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A member of a Global Datastore. It contains the Replication Group Id, the AWS region and the role of the replication group. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalReplicationGroupMember {
+    /// <p>Indicates whether automatic failover is enabled for the replication group.</p>
+    pub automatic_failover: Option<String>,
+    /// <p>The replication group id of the Global Datastore member.</p>
+    pub replication_group_id: Option<String>,
+    /// <p>The AWS region of the Global Datastore member.</p>
+    pub replication_group_region: Option<String>,
+    /// <p>Indicates the role of the replication group, primary or secondary.</p>
+    pub role: Option<String>,
+    /// <p>The status of the membership of the replication group.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GlobalReplicationGroupMemberDeserializer;
+impl GlobalReplicationGroupMemberDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalReplicationGroupMember, XmlParseError> {
+        deserialize_elements::<_, GlobalReplicationGroupMember, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AutomaticFailover" => {
+                        obj.automatic_failover =
+                            Some(AutomaticFailoverStatusDeserializer::deserialize(
+                                "AutomaticFailover",
+                                stack,
+                            )?);
+                    }
+                    "ReplicationGroupId" => {
+                        obj.replication_group_id = Some(StringDeserializer::deserialize(
+                            "ReplicationGroupId",
+                            stack,
+                        )?);
+                    }
+                    "ReplicationGroupRegion" => {
+                        obj.replication_group_region = Some(StringDeserializer::deserialize(
+                            "ReplicationGroupRegion",
+                            stack,
+                        )?);
+                    }
+                    "Role" => {
+                        obj.role = Some(StringDeserializer::deserialize("Role", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct GlobalReplicationGroupMemberListDeserializer;
+impl GlobalReplicationGroupMemberListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<GlobalReplicationGroupMember>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "GlobalReplicationGroupMember" {
+                obj.push(GlobalReplicationGroupMemberDeserializer::deserialize(
+                    "GlobalReplicationGroupMember",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct IncreaseNodeGroupsInGlobalReplicationGroupMessage {
+    /// <p>Indicates that the process begins immediately. At present, the only permitted value for this parameter is true.</p>
+    pub apply_immediately: bool,
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+    /// <p>The number of node groups you wish to add</p>
+    pub node_group_count: i64,
+    /// <p>Describes the replication group IDs, the AWS regions where they are stored and the shard configuration for each that comprise the Global Datastore</p>
+    pub regional_configurations: Option<Vec<RegionalConfiguration>>,
+}
+
+/// Serialize `IncreaseNodeGroupsInGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer;
+impl IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &IncreaseNodeGroupsInGlobalReplicationGroupMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ApplyImmediately"),
+            &obj.apply_immediately,
+        );
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "NodeGroupCount"),
+            &obj.node_group_count,
+        );
+        if let Some(ref field_value) = obj.regional_configurations {
+            RegionalConfigurationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RegionalConfiguration"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct IncreaseNodeGroupsInGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer;
+impl IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IncreaseNodeGroupsInGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, IncreaseNodeGroupsInGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4404,6 +5257,94 @@ impl ModifyCacheSubnetGroupResultDeserializer {
                             "CacheSubnetGroup",
                             stack,
                         )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyGlobalReplicationGroupMessage {
+    /// <p>This parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible. Modifications to Global Replication Groups cannot be requested to be applied in PreferredMaintenceWindow. </p>
+    pub apply_immediately: bool,
+    /// <p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure. </p>
+    pub automatic_failover_enabled: Option<bool>,
+    /// <p>A valid cache node type that you want to scale this Global Datastore to.</p>
+    pub cache_node_type: Option<String>,
+    /// <p>The upgraded version of the cache engine to be run on the clusters in the Global Datastore. </p>
+    pub engine_version: Option<String>,
+    /// <p>A description of the Global Datastore</p>
+    pub global_replication_group_description: Option<String>,
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+}
+
+/// Serialize `ModifyGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct ModifyGlobalReplicationGroupMessageSerializer;
+impl ModifyGlobalReplicationGroupMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyGlobalReplicationGroupMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ApplyImmediately"),
+            &obj.apply_immediately,
+        );
+        if let Some(ref field_value) = obj.automatic_failover_enabled {
+            params.put(
+                &format!("{}{}", prefix, "AutomaticFailoverEnabled"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.cache_node_type {
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.engine_version {
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+        }
+        if let Some(ref field_value) = obj.global_replication_group_description {
+            params.put(
+                &format!("{}{}", prefix, "GlobalReplicationGroupDescription"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ModifyGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct ModifyGlobalReplicationGroupResultDeserializer;
+impl ModifyGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, ModifyGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -5669,6 +6610,72 @@ impl PurchaseReservedCacheNodesOfferingResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RebalanceSlotsInGlobalReplicationGroupMessage {
+    /// <p>If <code>True</code>, redistribution is applied immediately.</p>
+    pub apply_immediately: bool,
+    /// <p>The name of the Global Datastore</p>
+    pub global_replication_group_id: String,
+}
+
+/// Serialize `RebalanceSlotsInGlobalReplicationGroupMessage` contents to a `SignedRequest`.
+struct RebalanceSlotsInGlobalReplicationGroupMessageSerializer;
+impl RebalanceSlotsInGlobalReplicationGroupMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &RebalanceSlotsInGlobalReplicationGroupMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ApplyImmediately"),
+            &obj.apply_immediately,
+        );
+        params.put(
+            &format!("{}{}", prefix, "GlobalReplicationGroupId"),
+            &obj.global_replication_group_id,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct RebalanceSlotsInGlobalReplicationGroupResult {
+    pub global_replication_group: Option<GlobalReplicationGroup>,
+}
+
+#[allow(dead_code)]
+struct RebalanceSlotsInGlobalReplicationGroupResultDeserializer;
+impl RebalanceSlotsInGlobalReplicationGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RebalanceSlotsInGlobalReplicationGroupResult, XmlParseError> {
+        deserialize_elements::<_, RebalanceSlotsInGlobalReplicationGroupResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalReplicationGroup" => {
+                        obj.global_replication_group =
+                            Some(GlobalReplicationGroupDeserializer::deserialize(
+                                "GlobalReplicationGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>RebootCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5791,6 +6798,53 @@ impl RecurringChargeListDeserializer {
         })
     }
 }
+/// <p>A list of the replication groups </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RegionalConfiguration {
+    /// <p>The name of the secondary cluster</p>
+    pub replication_group_id: String,
+    /// <p>The AWS region where the cluster is stored</p>
+    pub replication_group_region: String,
+    /// <p>A list of <code>PreferredAvailabilityZones</code> objects that specifies the configuration of a node group in the resharded cluster. </p>
+    pub resharding_configuration: Vec<ReshardingConfiguration>,
+}
+
+/// Serialize `RegionalConfiguration` contents to a `SignedRequest`.
+struct RegionalConfigurationSerializer;
+impl RegionalConfigurationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RegionalConfiguration) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ReplicationGroupId"),
+            &obj.replication_group_id,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ReplicationGroupRegion"),
+            &obj.replication_group_region,
+        );
+        ReshardingConfigurationListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ReshardingConfiguration"),
+            &obj.resharding_configuration,
+        );
+    }
+}
+
+/// Serialize `RegionalConfigurationList` contents to a `SignedRequest`.
+struct RegionalConfigurationListSerializer;
+impl RegionalConfigurationListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<RegionalConfiguration>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            RegionalConfigurationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
 
 /// Serialize `RemoveReplicasList` contents to a `SignedRequest`.
 struct RemoveReplicasListSerializer;
@@ -5858,6 +6912,8 @@ pub struct ReplicationGroup {
     pub configuration_endpoint: Option<Endpoint>,
     /// <p>The user supplied description of the replication group.</p>
     pub description: Option<String>,
+    /// <p>The name of the Global Datastore and role of this replication group in the Global Datastore.</p>
+    pub global_replication_group_info: Option<GlobalReplicationGroupInfo>,
     /// <p>The ID of the KMS key used to encrypt the disk in the cluster.</p>
     pub kms_key_id: Option<String>,
     /// <p>The names of all the cache clusters that are part of this replication group.</p>
@@ -5932,6 +6988,13 @@ impl ReplicationGroupDeserializer {
                 }
                 "Description" => {
                     obj.description = Some(StringDeserializer::deserialize("Description", stack)?);
+                }
+                "GlobalReplicationGroupInfo" => {
+                    obj.global_replication_group_info =
+                        Some(GlobalReplicationGroupInfoDeserializer::deserialize(
+                            "GlobalReplicationGroupInfo",
+                            stack,
+                        )?);
                 }
                 "KmsKeyId" => {
                     obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
@@ -6130,7 +7193,7 @@ impl ReplicationGroupPendingModifiedValuesDeserializer {
 pub struct ReservedCacheNode {
     /// <p>The number of cache nodes that have been reserved.</p>
     pub cache_node_count: Option<i64>,
-    /// <p><p>The cache node type for the reserved cache nodes.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The cache node type for the reserved cache nodes.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>The duration of the reservation in seconds.</p>
     pub duration: Option<i64>,
@@ -6292,7 +7355,7 @@ impl ReservedCacheNodeMessageDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedCacheNodesOffering {
-    /// <p><p>The cache node type for the reserved cache node.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The cache node type for the reserved cache node.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>The duration of the offering. in seconds.</p>
     pub duration: Option<i64>,
@@ -6949,7 +8012,7 @@ pub struct Snapshot {
     pub cache_cluster_create_time: Option<String>,
     /// <p>The user-supplied identifier of the source cluster.</p>
     pub cache_cluster_id: Option<String>,
-    /// <p><p>The name of the compute and memory capacity node type for the source cluster.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
+    /// <p><p>The name of the compute and memory capacity node type for the source cluster.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>The cache parameter group that is associated with the source cluster.</p>
     pub cache_parameter_group_name: Option<String>,
@@ -8725,6 +9788,102 @@ impl fmt::Display for CreateCacheSubnetGroupError {
     }
 }
 impl Error for CreateCacheSubnetGroupError {}
+/// Errors returned by CreateGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateGlobalReplicationGroupError {
+    /// <p>The Global Datastore name already exists.</p>
+    GlobalReplicationGroupAlreadyExistsFault(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The requested replication group is not in the <code>available</code> state.</p>
+    InvalidReplicationGroupStateFault(String),
+    /// <p>The specified replication group does not exist.</p>
+    ReplicationGroupNotFoundFault(String),
+    /// <p>The specified service linked role (SLR) was not found.</p>
+    ServiceLinkedRoleNotFoundFault(String),
+}
+
+impl CreateGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalReplicationGroupAlreadyExistsFault" => return RusotoError::Service(
+                        CreateGlobalReplicationGroupError::GlobalReplicationGroupAlreadyExistsFault(
+                            parsed_error.message,
+                        ),
+                    ),
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            CreateGlobalReplicationGroupError::InvalidParameterValue(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return RusotoError::Service(
+                            CreateGlobalReplicationGroupError::InvalidReplicationGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateGlobalReplicationGroupError::ReplicationGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ServiceLinkedRoleNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateGlobalReplicationGroupError::ServiceLinkedRoleNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateGlobalReplicationGroupError::GlobalReplicationGroupAlreadyExistsFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            CreateGlobalReplicationGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGlobalReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGlobalReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGlobalReplicationGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateGlobalReplicationGroupError {}
 /// Errors returned by CreateReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationGroupError {
@@ -8738,10 +9897,14 @@ pub enum CreateReplicationGroupError {
     CacheSubnetGroupNotFoundFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of clusters per customer.</p>
     ClusterQuotaForCustomerExceededFault(String),
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
     /// <p>The requested cache node type is not available in the specified Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ErrorMessages.html#ErrorMessages.INSUFFICIENT_CACHE_CLUSTER_CAPACITY">InsufficientCacheClusterCapacity</a> in the ElastiCache User Guide.</p>
     InsufficientCacheClusterCapacityFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -8768,7 +9931,7 @@ impl CreateReplicationGroupError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CacheClusterNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheClusterNotFoundFault(parsed_error.message)),"CacheParameterGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheParameterGroupNotFoundFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(parsed_error.message)),"ClusterQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(CreateReplicationGroupError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterValue(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(CreateReplicationGroupError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForClusterExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForClusterExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupAlreadyExists" => return RusotoError::Service(CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(parsed_error.message)),"TagQuotaPerResourceExceeded" => return RusotoError::Service(CreateReplicationGroupError::TagQuotaPerResourceExceeded(parsed_error.message)),_ => {}
+                                    "CacheClusterNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheClusterNotFoundFault(parsed_error.message)),"CacheParameterGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheParameterGroupNotFoundFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(parsed_error.message)),"ClusterQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(CreateReplicationGroupError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(CreateReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterValue(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(CreateReplicationGroupError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForClusterExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForClusterExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupAlreadyExists" => return RusotoError::Service(CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(parsed_error.message)),"TagQuotaPerResourceExceeded" => return RusotoError::Service(CreateReplicationGroupError::TagQuotaPerResourceExceeded(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8802,10 +9965,16 @@ impl fmt::Display for CreateReplicationGroupError {
             CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(ref cause) => {
                 write!(f, "{}", cause)
             }
+            CreateReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             CreateReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReplicationGroupError::InvalidGlobalReplicationGroupStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             CreateReplicationGroupError::InvalidParameterCombination(ref cause) => {
@@ -8954,6 +10123,56 @@ impl fmt::Display for CreateSnapshotError {
     }
 }
 impl Error for CreateSnapshotError {}
+/// Errors returned by DecreaseNodeGroupsInGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum DecreaseNodeGroupsInGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>Two or more incompatible parameters were specified.</p>
+    InvalidParameterCombination(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl DecreaseNodeGroupsInGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DecreaseNodeGroupsInGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DecreaseNodeGroupsInGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+                            DecreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(ref cause) => write!(f, "{}", cause),
+DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+DecreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause)
+                        }
+    }
+}
+impl Error for DecreaseNodeGroupsInGlobalReplicationGroupError {}
 /// Errors returned by DecreaseReplicaCount
 #[derive(Debug, PartialEq)]
 pub enum DecreaseReplicaCountError {
@@ -9464,6 +10683,78 @@ impl fmt::Display for DeleteCacheSubnetGroupError {
     }
 }
 impl Error for DeleteCacheSubnetGroupError {}
+/// Errors returned by DeleteGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl DeleteGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalReplicationGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            DeleteGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalReplicationGroupState" => return RusotoError::Service(
+                        DeleteGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
+                            parsed_error.message,
+                        ),
+                    ),
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DeleteGlobalReplicationGroupError::InvalidParameterValue(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DeleteGlobalReplicationGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteGlobalReplicationGroupError {}
 /// Errors returned by DeleteReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationGroupError {
@@ -10136,6 +11427,78 @@ impl fmt::Display for DescribeEventsError {
     }
 }
 impl Error for DescribeEventsError {}
+/// Errors returned by DescribeGlobalReplicationGroups
+#[derive(Debug, PartialEq)]
+pub enum DescribeGlobalReplicationGroupsError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>Two or more incompatible parameters were specified.</p>
+    InvalidParameterCombination(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl DescribeGlobalReplicationGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeGlobalReplicationGroupsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(
+                        DescribeGlobalReplicationGroupsError::GlobalReplicationGroupNotFoundFault(
+                            parsed_error.message,
+                        ),
+                    ),
+                    "InvalidParameterCombination" => {
+                        return RusotoError::Service(
+                            DescribeGlobalReplicationGroupsError::InvalidParameterCombination(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DescribeGlobalReplicationGroupsError::InvalidParameterValue(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeGlobalReplicationGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeGlobalReplicationGroupsError::GlobalReplicationGroupNotFoundFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DescribeGlobalReplicationGroupsError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeGlobalReplicationGroupsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeGlobalReplicationGroupsError {}
 /// Errors returned by DescribeReplicationGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationGroupsError {
@@ -10533,6 +11896,169 @@ impl fmt::Display for DescribeUpdateActionsError {
     }
 }
 impl Error for DescribeUpdateActionsError {}
+/// Errors returned by DisassociateGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum DisassociateGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>Two or more incompatible parameters were specified.</p>
+    InvalidParameterCombination(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl DisassociateGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DisassociateGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisassociateGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DisassociateGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DisassociateGlobalReplicationGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateGlobalReplicationGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisassociateGlobalReplicationGroupError {}
+/// Errors returned by FailoverGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum FailoverGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>Two or more incompatible parameters were specified.</p>
+    InvalidParameterCombination(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl FailoverGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<FailoverGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(FailoverGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(FailoverGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for FailoverGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            FailoverGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            FailoverGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            FailoverGlobalReplicationGroupError::InvalidParameterCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            FailoverGlobalReplicationGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for FailoverGlobalReplicationGroupError {}
+/// Errors returned by IncreaseNodeGroupsInGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum IncreaseNodeGroupsInGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl IncreaseNodeGroupsInGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<IncreaseNodeGroupsInGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for IncreaseNodeGroupsInGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+                            IncreaseNodeGroupsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(ref cause) => write!(f, "{}", cause),
+IncreaseNodeGroupsInGlobalReplicationGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause)
+                        }
+    }
+}
+impl Error for IncreaseNodeGroupsInGlobalReplicationGroupError {}
 /// Errors returned by IncreaseReplicaCount
 #[derive(Debug, PartialEq)]
 pub enum IncreaseReplicaCountError {
@@ -11018,6 +12544,8 @@ pub enum ModifyCacheParameterGroupError {
     CacheParameterGroupNotFoundFault(String),
     /// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
     InvalidCacheParameterGroupStateFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -11042,6 +12570,13 @@ impl ModifyCacheParameterGroupError {
                     "InvalidCacheParameterGroupState" => {
                         return RusotoError::Service(
                             ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalReplicationGroupState" => {
+                        return RusotoError::Service(
+                            ModifyCacheParameterGroupError::InvalidGlobalReplicationGroupStateFault(
                                 parsed_error.message,
                             ),
                         )
@@ -11083,6 +12618,9 @@ impl fmt::Display for ModifyCacheParameterGroupError {
                 write!(f, "{}", cause)
             }
             ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyCacheParameterGroupError::InvalidGlobalReplicationGroupStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             ModifyCacheParameterGroupError::InvalidParameterCombination(ref cause) => {
@@ -11171,6 +12709,78 @@ impl fmt::Display for ModifyCacheSubnetGroupError {
     }
 }
 impl Error for ModifyCacheSubnetGroupError {}
+/// Errors returned by ModifyGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum ModifyGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl ModifyGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalReplicationGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            ModifyGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalReplicationGroupState" => return RusotoError::Service(
+                        ModifyGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
+                            parsed_error.message,
+                        ),
+                    ),
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            ModifyGlobalReplicationGroupError::InvalidParameterValue(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            ModifyGlobalReplicationGroupError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ModifyGlobalReplicationGroupError {}
 /// Errors returned by ModifyReplicationGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationGroupError {
@@ -11500,6 +13110,53 @@ impl fmt::Display for PurchaseReservedCacheNodesOfferingError {
     }
 }
 impl Error for PurchaseReservedCacheNodesOfferingError {}
+/// Errors returned by RebalanceSlotsInGlobalReplicationGroup
+#[derive(Debug, PartialEq)]
+pub enum RebalanceSlotsInGlobalReplicationGroupError {
+    /// <p>The Global Datastore does not exist</p>
+    GlobalReplicationGroupNotFoundFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+}
+
+impl RebalanceSlotsInGlobalReplicationGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RebalanceSlotsInGlobalReplicationGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "GlobalReplicationGroupNotFoundFault" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(parsed_error.message)),"InvalidGlobalReplicationGroupState" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(RebalanceSlotsInGlobalReplicationGroupError::InvalidParameterValue(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for RebalanceSlotsInGlobalReplicationGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+                            RebalanceSlotsInGlobalReplicationGroupError::GlobalReplicationGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+RebalanceSlotsInGlobalReplicationGroupError::InvalidGlobalReplicationGroupStateFault(ref cause) => write!(f, "{}", cause),
+RebalanceSlotsInGlobalReplicationGroupError::InvalidParameterValue(ref cause) => write!(f, "{}", cause)
+                        }
+    }
+}
+impl Error for RebalanceSlotsInGlobalReplicationGroupError {}
 /// Errors returned by RebootCacheCluster
 #[derive(Debug, PartialEq)]
 pub enum RebootCacheClusterError {
@@ -11639,6 +13296,8 @@ pub enum ResetCacheParameterGroupError {
     CacheParameterGroupNotFoundFault(String),
     /// <p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
     InvalidCacheParameterGroupStateFault(String),
+    /// <p>The Global Datastore is not available or in primary-only state.</p>
+    InvalidGlobalReplicationGroupStateFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -11663,6 +13322,13 @@ impl ResetCacheParameterGroupError {
                     "InvalidCacheParameterGroupState" => {
                         return RusotoError::Service(
                             ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalReplicationGroupState" => {
+                        return RusotoError::Service(
+                            ResetCacheParameterGroupError::InvalidGlobalReplicationGroupStateFault(
                                 parsed_error.message,
                             ),
                         )
@@ -11704,6 +13370,9 @@ impl fmt::Display for ResetCacheParameterGroupError {
                 write!(f, "{}", cause)
             }
             ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ResetCacheParameterGroupError::InvalidGlobalReplicationGroupStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             ResetCacheParameterGroupError::InvalidParameterCombination(ref cause) => {
@@ -12072,7 +13741,13 @@ pub trait ElastiCache {
         input: CreateCacheSubnetGroupMessage,
     ) -> Result<CreateCacheSubnetGroupResult, RusotoError<CreateCacheSubnetGroupError>>;
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p><p>Global Datastore for Redis offers fully managed, fast, reliable and secure cross-region replication. Using Global Datastore for Redis, you can create cross-region read replica clusters for ElastiCache for Redis to enable low-latency reads and disaster recovery across regions. For more information, see <a href="/AmazonElastiCache/latest/red-ug/Redis-Global-Clusters.html">Replication Across Regions Using Global Datastore</a>. </p> <ul> <li> <p>The <b>GlobalReplicationGroupIdSuffix</b> is the name of the Global Datastore.</p> </li> <li> <p>The <b>PrimaryReplicationGroupId</b> represents the name of the primary cluster that accepts writes and will replicate updates to the secondary cluster.</p> </li> </ul></p>
+    async fn create_global_replication_group(
+        &self,
+        input: CreateGlobalReplicationGroupMessage,
+    ) -> Result<CreateGlobalReplicationGroupResult, RusotoError<CreateGlobalReplicationGroupError>>;
+
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global Datastore.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
@@ -12084,7 +13759,16 @@ pub trait ElastiCache {
         input: CreateSnapshotMessage,
     ) -> Result<CreateSnapshotResult, RusotoError<CreateSnapshotError>>;
 
-    /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
+    /// <p>Decreases the number of node groups in a Global Datastore</p>
+    async fn decrease_node_groups_in_global_replication_group(
+        &self,
+        input: DecreaseNodeGroupsInGlobalReplicationGroupMessage,
+    ) -> Result<
+        DecreaseNodeGroupsInGlobalReplicationGroupResult,
+        RusotoError<DecreaseNodeGroupsInGlobalReplicationGroupError>,
+    >;
+
+    /// <p>Dynamically decreases the number of replicas in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
     async fn decrease_replica_count(
         &self,
         input: DecreaseReplicaCountMessage,
@@ -12113,6 +13797,12 @@ pub trait ElastiCache {
         &self,
         input: DeleteCacheSubnetGroupMessage,
     ) -> Result<(), RusotoError<DeleteCacheSubnetGroupError>>;
+
+    /// <p>Deleting a Global Datastore is a two-step process: </p> <ul> <li> <p>First, you must <a>DisassociateGlobalReplicationGroup</a> to remove the secondary clusters in the Global Datastore.</p> </li> <li> <p>Once the Global Datastore contains only the primary cluster, you can use DeleteGlobalReplicationGroup API to delete the Global Datastore while retainining the primary cluster using Retain…= true.</p> </li> </ul> <p>Since the Global Datastore has only a primary cluster, you can delete the Global Datastore while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p>
+    async fn delete_global_replication_group(
+        &self,
+        input: DeleteGlobalReplicationGroupMessage,
+    ) -> Result<DeleteGlobalReplicationGroupResult, RusotoError<DeleteGlobalReplicationGroupError>>;
 
     /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn delete_replication_group(
@@ -12177,6 +13867,15 @@ pub trait ElastiCache {
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
 
+    /// <p>Returns information about a particular global replication group. If no identifier is specified, returns information about all Global Datastores. </p>
+    async fn describe_global_replication_groups(
+        &self,
+        input: DescribeGlobalReplicationGroupsMessage,
+    ) -> Result<
+        DescribeGlobalReplicationGroupsResult,
+        RusotoError<DescribeGlobalReplicationGroupsError>,
+    >;
+
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn describe_replication_groups(
         &self,
@@ -12215,6 +13914,33 @@ pub trait ElastiCache {
         &self,
         input: DescribeUpdateActionsMessage,
     ) -> Result<UpdateActionsMessage, RusotoError<DescribeUpdateActionsError>>;
+
+    /// <p>Remove a secondary cluster from the Global Datastore using the Global Datastore name. The secondary cluster will no longer receive updates from the primary cluster, but will remain as a standalone cluster in that AWS region.</p>
+    async fn disassociate_global_replication_group(
+        &self,
+        input: DisassociateGlobalReplicationGroupMessage,
+    ) -> Result<
+        DisassociateGlobalReplicationGroupResult,
+        RusotoError<DisassociateGlobalReplicationGroupError>,
+    >;
+
+    /// <p>Used to failover the primary region to a selected secondary region. The selected secondary region will be come primary, and all other clusters will become secondary.</p>
+    async fn failover_global_replication_group(
+        &self,
+        input: FailoverGlobalReplicationGroupMessage,
+    ) -> Result<
+        FailoverGlobalReplicationGroupResult,
+        RusotoError<FailoverGlobalReplicationGroupError>,
+    >;
+
+    /// <p>Increase the number of node groups in the Global Datastore</p>
+    async fn increase_node_groups_in_global_replication_group(
+        &self,
+        input: IncreaseNodeGroupsInGlobalReplicationGroupMessage,
+    ) -> Result<
+        IncreaseNodeGroupsInGlobalReplicationGroupResult,
+        RusotoError<IncreaseNodeGroupsInGlobalReplicationGroupError>,
+    >;
 
     /// <p>Dynamically increases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
     async fn increase_replica_count(
@@ -12255,7 +13981,13 @@ pub trait ElastiCache {
         input: ModifyCacheSubnetGroupMessage,
     ) -> Result<ModifyCacheSubnetGroupResult, RusotoError<ModifyCacheSubnetGroupError>>;
 
-    /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p>Modifies the settings for a Global Datastore.</p>
+    async fn modify_global_replication_group(
+        &self,
+        input: ModifyGlobalReplicationGroupMessage,
+    ) -> Result<ModifyGlobalReplicationGroupResult, RusotoError<ModifyGlobalReplicationGroupError>>;
+
+    /// <p><p>Modifies the settings for a replication group.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn modify_replication_group(
         &self,
         input: ModifyReplicationGroupMessage,
@@ -12277,6 +14009,15 @@ pub trait ElastiCache {
     ) -> Result<
         PurchaseReservedCacheNodesOfferingResult,
         RusotoError<PurchaseReservedCacheNodesOfferingError>,
+    >;
+
+    /// <p>Redistribute slots to ensure uniform distribution across existing shards in the cluster.</p>
+    async fn rebalance_slots_in_global_replication_group(
+        &self,
+        input: RebalanceSlotsInGlobalReplicationGroupMessage,
+    ) -> Result<
+        RebalanceSlotsInGlobalReplicationGroupResult,
+        RusotoError<RebalanceSlotsInGlobalReplicationGroupError>,
     >;
 
     /// <p>Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cluster event is created.</p> <p>Rebooting a cluster is currently supported on Memcached and Redis (cluster mode disabled) clusters. Rebooting is not supported on Redis (cluster mode enabled) clusters.</p> <p>If you make changes to parameters that require a Redis (cluster mode enabled) cluster reboot for the changes to be applied, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a> for an alternate process.</p>
@@ -12838,7 +14579,56 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p><p>Global Datastore for Redis offers fully managed, fast, reliable and secure cross-region replication. Using Global Datastore for Redis, you can create cross-region read replica clusters for ElastiCache for Redis to enable low-latency reads and disaster recovery across regions. For more information, see <a href="/AmazonElastiCache/latest/red-ug/Redis-Global-Clusters.html">Replication Across Regions Using Global Datastore</a>. </p> <ul> <li> <p>The <b>GlobalReplicationGroupIdSuffix</b> is the name of the Global Datastore.</p> </li> <li> <p>The <b>PrimaryReplicationGroupId</b> represents the name of the primary cluster that accepts writes and will replicate updates to the secondary cluster.</p> </li> </ul></p>
+    async fn create_global_replication_group(
+        &self,
+        input: CreateGlobalReplicationGroupMessage,
+    ) -> Result<CreateGlobalReplicationGroupResult, RusotoError<CreateGlobalReplicationGroupError>>
+    {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        CreateGlobalReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(CreateGlobalReplicationGroupError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = CreateGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = CreateGlobalReplicationGroupResultDeserializer::deserialize(
+                "CreateGlobalReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global Datastore.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
@@ -12932,7 +14722,62 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
-    /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
+    /// <p>Decreases the number of node groups in a Global Datastore</p>
+    async fn decrease_node_groups_in_global_replication_group(
+        &self,
+        input: DecreaseNodeGroupsInGlobalReplicationGroupMessage,
+    ) -> Result<
+        DecreaseNodeGroupsInGlobalReplicationGroupResult,
+        RusotoError<DecreaseNodeGroupsInGlobalReplicationGroupError>,
+    > {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DecreaseNodeGroupsInGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        DecreaseNodeGroupsInGlobalReplicationGroupMessageSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DecreaseNodeGroupsInGlobalReplicationGroupError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = DecreaseNodeGroupsInGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
+                "DecreaseNodeGroupsInGlobalReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Dynamically decreases the number of replicas in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
     async fn decrease_replica_count(
         &self,
         input: DecreaseReplicaCountMessage,
@@ -13110,6 +14955,55 @@ impl ElastiCache for ElastiCacheClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Deleting a Global Datastore is a two-step process: </p> <ul> <li> <p>First, you must <a>DisassociateGlobalReplicationGroup</a> to remove the secondary clusters in the Global Datastore.</p> </li> <li> <p>Once the Global Datastore contains only the primary cluster, you can use DeleteGlobalReplicationGroup API to delete the Global Datastore while retainining the primary cluster using Retain…= true.</p> </li> </ul> <p>Since the Global Datastore has only a primary cluster, you can delete the Global Datastore while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p>
+    async fn delete_global_replication_group(
+        &self,
+        input: DeleteGlobalReplicationGroupMessage,
+    ) -> Result<DeleteGlobalReplicationGroupResult, RusotoError<DeleteGlobalReplicationGroupError>>
+    {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        DeleteGlobalReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DeleteGlobalReplicationGroupError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = DeleteGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DeleteGlobalReplicationGroupResultDeserializer::deserialize(
+                "DeleteGlobalReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
@@ -13592,6 +15486,59 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
+    /// <p>Returns information about a particular global replication group. If no identifier is specified, returns information about all Global Datastores. </p>
+    async fn describe_global_replication_groups(
+        &self,
+        input: DescribeGlobalReplicationGroupsMessage,
+    ) -> Result<
+        DescribeGlobalReplicationGroupsResult,
+        RusotoError<DescribeGlobalReplicationGroupsError>,
+    > {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeGlobalReplicationGroups");
+        params.put("Version", "2015-02-02");
+        DescribeGlobalReplicationGroupsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DescribeGlobalReplicationGroupsError::from_response(
+                response,
+            ));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = DescribeGlobalReplicationGroupsResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DescribeGlobalReplicationGroupsResultDeserializer::deserialize(
+                "DescribeGlobalReplicationGroupsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn describe_replication_groups(
         &self,
@@ -13876,6 +15823,165 @@ impl ElastiCache for ElastiCacheClient {
             start_element(&actual_tag_name, &mut stack)?;
             result = UpdateActionsMessageDeserializer::deserialize(
                 "DescribeUpdateActionsResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Remove a secondary cluster from the Global Datastore using the Global Datastore name. The secondary cluster will no longer receive updates from the primary cluster, but will remain as a standalone cluster in that AWS region.</p>
+    async fn disassociate_global_replication_group(
+        &self,
+        input: DisassociateGlobalReplicationGroupMessage,
+    ) -> Result<
+        DisassociateGlobalReplicationGroupResult,
+        RusotoError<DisassociateGlobalReplicationGroupError>,
+    > {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DisassociateGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        DisassociateGlobalReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DisassociateGlobalReplicationGroupError::from_response(
+                response,
+            ));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = DisassociateGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = DisassociateGlobalReplicationGroupResultDeserializer::deserialize(
+                "DisassociateGlobalReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Used to failover the primary region to a selected secondary region. The selected secondary region will be come primary, and all other clusters will become secondary.</p>
+    async fn failover_global_replication_group(
+        &self,
+        input: FailoverGlobalReplicationGroupMessage,
+    ) -> Result<
+        FailoverGlobalReplicationGroupResult,
+        RusotoError<FailoverGlobalReplicationGroupError>,
+    > {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "FailoverGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        FailoverGlobalReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(FailoverGlobalReplicationGroupError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = FailoverGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = FailoverGlobalReplicationGroupResultDeserializer::deserialize(
+                "FailoverGlobalReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Increase the number of node groups in the Global Datastore</p>
+    async fn increase_node_groups_in_global_replication_group(
+        &self,
+        input: IncreaseNodeGroupsInGlobalReplicationGroupMessage,
+    ) -> Result<
+        IncreaseNodeGroupsInGlobalReplicationGroupResult,
+        RusotoError<IncreaseNodeGroupsInGlobalReplicationGroupError>,
+    > {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "IncreaseNodeGroupsInGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        IncreaseNodeGroupsInGlobalReplicationGroupMessageSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(IncreaseNodeGroupsInGlobalReplicationGroupError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = IncreaseNodeGroupsInGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = IncreaseNodeGroupsInGlobalReplicationGroupResultDeserializer::deserialize(
+                "IncreaseNodeGroupsInGlobalReplicationGroupResult",
                 &mut stack,
             )?;
             skip_tree(&mut stack);
@@ -14176,7 +16282,56 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
-    /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p>Modifies the settings for a Global Datastore.</p>
+    async fn modify_global_replication_group(
+        &self,
+        input: ModifyGlobalReplicationGroupMessage,
+    ) -> Result<ModifyGlobalReplicationGroupResult, RusotoError<ModifyGlobalReplicationGroupError>>
+    {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        ModifyGlobalReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(ModifyGlobalReplicationGroupError::from_response(response));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = ModifyGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = ModifyGlobalReplicationGroupResultDeserializer::deserialize(
+                "ModifyGlobalReplicationGroupResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Modifies the settings for a replication group.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn modify_replication_group(
         &self,
         input: ModifyReplicationGroupMessage,
@@ -14323,6 +16478,59 @@ impl ElastiCache for ElastiCacheClient {
             start_element(&actual_tag_name, &mut stack)?;
             result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
                 "PurchaseReservedCacheNodesOfferingResult",
+                &mut stack,
+            )?;
+            skip_tree(&mut stack);
+            end_element(&actual_tag_name, &mut stack)?;
+        }
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Redistribute slots to ensure uniform distribution across existing shards in the cluster.</p>
+    async fn rebalance_slots_in_global_replication_group(
+        &self,
+        input: RebalanceSlotsInGlobalReplicationGroupMessage,
+    ) -> Result<
+        RebalanceSlotsInGlobalReplicationGroupResult,
+        RusotoError<RebalanceSlotsInGlobalReplicationGroupError>,
+    > {
+        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "RebalanceSlotsInGlobalReplicationGroup");
+        params.put("Version", "2015-02-02");
+        RebalanceSlotsInGlobalReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(RebalanceSlotsInGlobalReplicationGroupError::from_response(
+                response,
+            ));
+        }
+
+        let result;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        if xml_response.body.is_empty() {
+            result = RebalanceSlotsInGlobalReplicationGroupResult::default();
+        } else {
+            let reader = EventReader::new_with_config(
+                xml_response.body.as_ref(),
+                ParserConfig::new().trim_whitespace(false),
+            );
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
+            let actual_tag_name = peek_at_name(&mut stack)?;
+            start_element(&actual_tag_name, &mut stack)?;
+            result = RebalanceSlotsInGlobalReplicationGroupResultDeserializer::deserialize(
+                "RebalanceSlotsInGlobalReplicationGroupResult",
                 &mut stack,
             )?;
             skip_tree(&mut stack);

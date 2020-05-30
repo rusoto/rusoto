@@ -437,7 +437,7 @@ pub struct DescribeRepositoriesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizationTokenRequest {
-    /// <p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>
+    /// <p>A list of AWS account IDs that are associated with the registries for which to get AuthorizationData objects. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_ids: Option<Vec<String>>,
@@ -615,6 +615,10 @@ pub struct Image {
     #[serde(rename = "imageManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest: Option<String>,
+    /// <p>The media type associated with the image manifest.</p>
+    #[serde(rename = "imageManifestMediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_manifest_media_type: Option<String>,
     /// <p>The AWS account ID associated with the registry containing the image.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -645,7 +649,7 @@ pub struct ImageDetail {
     #[serde(rename = "imageScanStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_scan_status: Option<ImageScanStatus>,
-    /// <p><p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
+    /// <p><p>The size, in bytes, of the image in the repository.</p> <p>If the image is a manifest list, this will be the max size of all manifests in the list.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     #[serde(rename = "imageSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_size_in_bytes: Option<i64>,
@@ -974,6 +978,10 @@ pub struct PutImageRequest {
     /// <p>The image manifest corresponding to the image to be uploaded.</p>
     #[serde(rename = "imageManifest")]
     pub image_manifest: String,
+    /// <p>The media type of the image manifest. If you push an image manifest that does not contain the <code>mediaType</code> field, you must specify the <code>imageManifestMediaType</code> in the request.</p>
+    #[serde(rename = "imageManifestMediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_manifest_media_type: Option<String>,
     /// <p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or OCI formats.</p>
     #[serde(rename = "imageTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1132,7 +1140,7 @@ pub struct SetRepositoryPolicyRequest {
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
-    /// <p>The JSON repository policy text to apply to the repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicyExamples.html">Amazon ECR Repository Policy Examples</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>The JSON repository policy text to apply to the repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policy-examples.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     #[serde(rename = "policyText")]
     pub policy_text: String,
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
@@ -1286,10 +1294,10 @@ pub struct UploadLayerPartRequest {
         default
     )]
     pub layer_part_blob: bytes::Bytes,
-    /// <p>The integer value of the first byte of the layer part.</p>
+    /// <p>The position of the first byte of the layer part witin the overall image layer.</p>
     #[serde(rename = "partFirstByte")]
     pub part_first_byte: i64,
-    /// <p>The integer value of the last byte of the layer part.</p>
+    /// <p>The position of the last byte of the layer part within the overall image layer.</p>
     #[serde(rename = "partLastByte")]
     pub part_last_byte: i64,
     /// <p>The AWS account ID associated with the registry to which you are uploading layer parts. If you do not specify a registry, the default registry is assumed.</p>
@@ -1546,7 +1554,7 @@ pub enum CreateRepositoryError {
     InvalidParameter(String),
     /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     InvalidTagParameter(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository already exists in the specified registry.</p>
     RepositoryAlreadyExists(String),
@@ -2324,8 +2332,10 @@ pub enum PutImageError {
     InvalidParameter(String),
     /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
+    /// <p>The manifest list is referencing an image that does not exist.</p>
+    ReferencedImagesNotFound(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
@@ -2351,6 +2361,9 @@ impl PutImageError {
                 "LimitExceededException" => {
                     return RusotoError::Service(PutImageError::LimitExceeded(err.msg))
                 }
+                "ReferencedImagesNotFoundException" => {
+                    return RusotoError::Service(PutImageError::ReferencedImagesNotFound(err.msg))
+                }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(PutImageError::RepositoryNotFound(err.msg))
                 }
@@ -2371,6 +2384,7 @@ impl fmt::Display for PutImageError {
             PutImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             PutImageError::LayersNotFound(ref cause) => write!(f, "{}", cause),
             PutImageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutImageError::ReferencedImagesNotFound(ref cause) => write!(f, "{}", cause),
             PutImageError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             PutImageError::Server(ref cause) => write!(f, "{}", cause),
         }
@@ -2574,10 +2588,14 @@ pub enum StartImageScanError {
     ImageNotFound(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
+    LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
+    /// <p>The image is of a type that cannot be scanned.</p>
+    UnsupportedImageType(String),
 }
 
 impl StartImageScanError {
@@ -2590,11 +2608,17 @@ impl StartImageScanError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartImageScanError::InvalidParameter(err.msg))
                 }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartImageScanError::LimitExceeded(err.msg))
+                }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(StartImageScanError::RepositoryNotFound(err.msg))
                 }
                 "ServerException" => {
                     return RusotoError::Service(StartImageScanError::Server(err.msg))
+                }
+                "UnsupportedImageTypeException" => {
+                    return RusotoError::Service(StartImageScanError::UnsupportedImageType(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2609,8 +2633,10 @@ impl fmt::Display for StartImageScanError {
         match *self {
             StartImageScanError::ImageNotFound(ref cause) => write!(f, "{}", cause),
             StartImageScanError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartImageScanError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             StartImageScanError::RepositoryNotFound(ref cause) => write!(f, "{}", cause),
             StartImageScanError::Server(ref cause) => write!(f, "{}", cause),
+            StartImageScanError::UnsupportedImageType(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -2800,7 +2826,7 @@ pub enum UploadLayerPartError {
     InvalidLayerPart(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html">Amazon ECR Service Quotas</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -2856,61 +2882,61 @@ impl Error for UploadLayerPartError {}
 /// Trait representing the capabilities of the Amazon ECR API. Amazon ECR clients implement this trait.
 #[async_trait]
 pub trait Ecr {
-    /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Checks the availability of one or more image layers in a repository.</p> <p>When an image is pushed to a repository, each image layer is checked to verify if it has been uploaded before. If it has been uploaded, then the image layer is skipped.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn batch_check_layer_availability(
         &self,
         input: BatchCheckLayerAvailabilityRequest,
     ) -> Result<BatchCheckLayerAvailabilityResponse, RusotoError<BatchCheckLayerAvailabilityError>>;
 
-    /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
+    /// <p>Deletes a list of specified images within a repository. Images are specified with either an <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     async fn batch_delete_image(
         &self,
         input: BatchDeleteImageRequest,
     ) -> Result<BatchDeleteImageResponse, RusotoError<BatchDeleteImageError>>;
 
-    /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
+    /// <p>Gets detailed information for an image. Images are specified with either an <code>imageTag</code> or <code>imageDigest</code>.</p> <p>When an image is pulled, the BatchGetImage API is called once to retrieve the image manifest.</p>
     async fn batch_get_image(
         &self,
         input: BatchGetImageRequest,
     ) -> Result<BatchGetImageResponse, RusotoError<BatchGetImageError>>;
 
-    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <p>When an image is pushed, the CompleteLayerUpload API is called once per each new image layer to verify that the upload has completed.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn complete_layer_upload(
         &self,
         input: CompleteLayerUploadRequest,
     ) -> Result<CompleteLayerUploadResponse, RusotoError<CompleteLayerUploadError>>;
 
-    /// <p>Creates an Amazon Elastic Container Registry (Amazon ECR) repository, where users can push and pull Docker images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>Creates a repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn create_repository(
         &self,
         input: CreateRepositoryRequest,
     ) -> Result<CreateRepositoryResponse, RusotoError<CreateRepositoryError>>;
 
-    /// <p>Deletes the specified lifecycle policy.</p>
+    /// <p>Deletes the lifecycle policy associated with the specified repository.</p>
     async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyRequest,
     ) -> Result<DeleteLifecyclePolicyResponse, RusotoError<DeleteLifecyclePolicyError>>;
 
-    /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
+    /// <p>Deletes a repository. If the repository contains images, you must either delete all images in the repository or use the <code>force</code> option to delete the repository.</p>
     async fn delete_repository(
         &self,
         input: DeleteRepositoryRequest,
     ) -> Result<DeleteRepositoryResponse, RusotoError<DeleteRepositoryError>>;
 
-    /// <p>Deletes the repository policy from a specified repository.</p>
+    /// <p>Deletes the repository policy associated with the specified repository.</p>
     async fn delete_repository_policy(
         &self,
         input: DeleteRepositoryPolicyRequest,
     ) -> Result<DeleteRepositoryPolicyResponse, RusotoError<DeleteRepositoryPolicyError>>;
 
-    /// <p>Describes the image scan findings for the specified image.</p>
+    /// <p>Returns the scan findings for the specified image.</p>
     async fn describe_image_scan_findings(
         &self,
         input: DescribeImageScanFindingsRequest,
     ) -> Result<DescribeImageScanFindingsResponse, RusotoError<DescribeImageScanFindingsError>>;
 
-    /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
+    /// <p><p>Returns metadata about the images in a repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     async fn describe_images(
         &self,
         input: DescribeImagesRequest,
@@ -2922,43 +2948,43 @@ pub trait Ecr {
         input: DescribeRepositoriesRequest,
     ) -> Result<DescribeRepositoriesResponse, RusotoError<DescribeRepositoriesError>>;
 
-    /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
+    /// <p>Retrieves an authorization token. An authorization token represents your IAM authentication credentials and can be used to access any Amazon ECR registry that your IAM principal has access to. The authorization token is valid for 12 hours.</p> <p>The <code>authorizationToken</code> returned is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>get-login-password</code> command that simplifies the login process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth">Registry Authentication</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn get_authorization_token(
         &self,
         input: GetAuthorizationTokenRequest,
     ) -> Result<GetAuthorizationTokenResponse, RusotoError<GetAuthorizationTokenError>>;
 
-    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <p>When an image is pulled, the GetDownloadUrlForLayer API is called once per image layer that is not already cached.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn get_download_url_for_layer(
         &self,
         input: GetDownloadUrlForLayerRequest,
     ) -> Result<GetDownloadUrlForLayerResponse, RusotoError<GetDownloadUrlForLayerError>>;
 
-    /// <p>Retrieves the specified lifecycle policy.</p>
+    /// <p>Retrieves the lifecycle policy for the specified repository.</p>
     async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyRequest,
     ) -> Result<GetLifecyclePolicyResponse, RusotoError<GetLifecyclePolicyError>>;
 
-    /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
+    /// <p>Retrieves the results of the lifecycle policy preview request for the specified repository.</p>
     async fn get_lifecycle_policy_preview(
         &self,
         input: GetLifecyclePolicyPreviewRequest,
     ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>;
 
-    /// <p>Retrieves the repository policy for a specified repository.</p>
+    /// <p>Retrieves the repository policy for the specified repository.</p>
     async fn get_repository_policy(
         &self,
         input: GetRepositoryPolicyRequest,
     ) -> Result<GetRepositoryPolicyResponse, RusotoError<GetRepositoryPolicyError>>;
 
-    /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Notifies Amazon ECR that you intend to upload an image layer.</p> <p>When an image is pushed, the InitiateLayerUpload API is called once per image layer that has not already been uploaded. Whether or not an image layer has been uploaded is determined by the BatchCheckLayerAvailability API action.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn initiate_layer_upload(
         &self,
         input: InitiateLayerUploadRequest,
     ) -> Result<InitiateLayerUploadResponse, RusotoError<InitiateLayerUploadError>>;
 
-    /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
+    /// <p>Lists all the image IDs for the specified repository.</p> <p>You can filter images based on whether or not they are tagged by using the <code>tagStatus</code> filter and specifying either <code>TAGGED</code>, <code>UNTAGGED</code> or <code>ANY</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     async fn list_images(
         &self,
         input: ListImagesRequest,
@@ -2970,13 +2996,13 @@ pub trait Ecr {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <p>When an image is pushed and all new image layers have been uploaded, the PutImage API is called once to create or update the image manifest and the tags associated with the image.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn put_image(
         &self,
         input: PutImageRequest,
     ) -> Result<PutImageResponse, RusotoError<PutImageError>>;
 
-    /// <p>Updates the image scanning configuration for a repository.</p>
+    /// <p>Updates the image scanning configuration for the specified repository.</p>
     async fn put_image_scanning_configuration(
         &self,
         input: PutImageScanningConfigurationRequest,
@@ -2985,19 +3011,19 @@ pub trait Ecr {
         RusotoError<PutImageScanningConfigurationError>,
     >;
 
-    /// <p>Updates the image tag mutability settings for a repository. When a repository is configured with tag immutability, all image tags within the repository will be prevented them from being overwritten. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>Updates the image tag mutability settings for the specified repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn put_image_tag_mutability(
         &self,
         input: PutImageTagMutabilityRequest,
     ) -> Result<PutImageTagMutabilityResponse, RusotoError<PutImageTagMutabilityError>>;
 
-    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
+    /// <p>Creates or updates the lifecycle policy for the specified repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
     async fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyRequest,
     ) -> Result<PutLifecyclePolicyResponse, RusotoError<PutLifecyclePolicyError>>;
 
-    /// <p>Applies a repository policy on a specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>Applies a repository policy to the specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn set_repository_policy(
         &self,
         input: SetRepositoryPolicyRequest,
@@ -3009,7 +3035,7 @@ pub trait Ecr {
         input: StartImageScanRequest,
     ) -> Result<StartImageScanResponse, RusotoError<StartImageScanError>>;
 
-    /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
+    /// <p>Starts a preview of a lifecycle policy for the specified repository. This allows you to see the results before associating the lifecycle policy with the repository.</p>
     async fn start_lifecycle_policy_preview(
         &self,
         input: StartLifecyclePolicyPreviewRequest,
@@ -3027,7 +3053,7 @@ pub trait Ecr {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <p>When an image is pushed, each new image layer is uploaded in parts. The maximum size of each image layer part can be 20971520 bytes (or about 20MB). The UploadLayerPart API is called once per each new image layer part.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn upload_layer_part(
         &self,
         input: UploadLayerPartRequest,
@@ -3073,7 +3099,7 @@ impl EcrClient {
 
 #[async_trait]
 impl Ecr for EcrClient {
-    /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Checks the availability of one or more image layers in a repository.</p> <p>When an image is pushed to a repository, each image layer is checked to verify if it has been uploaded before. If it has been uploaded, then the image layer is skipped.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn batch_check_layer_availability(
         &self,
         input: BatchCheckLayerAvailabilityRequest,
@@ -3105,7 +3131,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
+    /// <p>Deletes a list of specified images within a repository. Images are specified with either an <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     async fn batch_delete_image(
         &self,
         input: BatchDeleteImageRequest,
@@ -3136,7 +3162,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
+    /// <p>Gets detailed information for an image. Images are specified with either an <code>imageTag</code> or <code>imageDigest</code>.</p> <p>When an image is pulled, the BatchGetImage API is called once to retrieve the image manifest.</p>
     async fn batch_get_image(
         &self,
         input: BatchGetImageRequest,
@@ -3166,7 +3192,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <p>When an image is pushed, the CompleteLayerUpload API is called once per each new image layer to verify that the upload has completed.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn complete_layer_upload(
         &self,
         input: CompleteLayerUploadRequest,
@@ -3197,7 +3223,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Creates an Amazon Elastic Container Registry (Amazon ECR) repository, where users can push and pull Docker images. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>Creates a repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn create_repository(
         &self,
         input: CreateRepositoryRequest,
@@ -3228,7 +3254,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Deletes the specified lifecycle policy.</p>
+    /// <p>Deletes the lifecycle policy associated with the specified repository.</p>
     async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyRequest,
@@ -3259,7 +3285,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
+    /// <p>Deletes a repository. If the repository contains images, you must either delete all images in the repository or use the <code>force</code> option to delete the repository.</p>
     async fn delete_repository(
         &self,
         input: DeleteRepositoryRequest,
@@ -3290,7 +3316,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Deletes the repository policy from a specified repository.</p>
+    /// <p>Deletes the repository policy associated with the specified repository.</p>
     async fn delete_repository_policy(
         &self,
         input: DeleteRepositoryPolicyRequest,
@@ -3321,7 +3347,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Describes the image scan findings for the specified image.</p>
+    /// <p>Returns the scan findings for the specified image.</p>
     async fn describe_image_scan_findings(
         &self,
         input: DescribeImageScanFindingsRequest,
@@ -3353,7 +3379,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
+    /// <p><p>Returns metadata about the images in a repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     async fn describe_images(
         &self,
         input: DescribeImagesRequest,
@@ -3414,7 +3440,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
+    /// <p>Retrieves an authorization token. An authorization token represents your IAM authentication credentials and can be used to access any Amazon ECR registry that your IAM principal has access to. The authorization token is valid for 12 hours.</p> <p>The <code>authorizationToken</code> returned is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>get-login-password</code> command that simplifies the login process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth">Registry Authentication</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn get_authorization_token(
         &self,
         input: GetAuthorizationTokenRequest,
@@ -3445,7 +3471,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <p>When an image is pulled, the GetDownloadUrlForLayer API is called once per image layer that is not already cached.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn get_download_url_for_layer(
         &self,
         input: GetDownloadUrlForLayerRequest,
@@ -3476,7 +3502,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Retrieves the specified lifecycle policy.</p>
+    /// <p>Retrieves the lifecycle policy for the specified repository.</p>
     async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyRequest,
@@ -3507,7 +3533,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
+    /// <p>Retrieves the results of the lifecycle policy preview request for the specified repository.</p>
     async fn get_lifecycle_policy_preview(
         &self,
         input: GetLifecyclePolicyPreviewRequest,
@@ -3539,7 +3565,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Retrieves the repository policy for a specified repository.</p>
+    /// <p>Retrieves the repository policy for the specified repository.</p>
     async fn get_repository_policy(
         &self,
         input: GetRepositoryPolicyRequest,
@@ -3570,7 +3596,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Notifies Amazon ECR that you intend to upload an image layer.</p> <p>When an image is pushed, the InitiateLayerUpload API is called once per image layer that has not already been uploaded. Whether or not an image layer has been uploaded is determined by the BatchCheckLayerAvailability API action.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn initiate_layer_upload(
         &self,
         input: InitiateLayerUploadRequest,
@@ -3601,7 +3627,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
+    /// <p>Lists all the image IDs for the specified repository.</p> <p>You can filter images based on whether or not they are tagged by using the <code>tagStatus</code> filter and specifying either <code>TAGGED</code>, <code>UNTAGGED</code> or <code>ANY</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     async fn list_images(
         &self,
         input: ListImagesRequest,
@@ -3662,7 +3688,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <p>When an image is pushed and all new image layers have been uploaded, the PutImage API is called once to create or update the image manifest and the tags associated with the image.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn put_image(
         &self,
         input: PutImageRequest,
@@ -3692,7 +3718,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Updates the image scanning configuration for a repository.</p>
+    /// <p>Updates the image scanning configuration for the specified repository.</p>
     async fn put_image_scanning_configuration(
         &self,
         input: PutImageScanningConfigurationRequest,
@@ -3726,7 +3752,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Updates the image tag mutability settings for a repository. When a repository is configured with tag immutability, all image tags within the repository will be prevented them from being overwritten. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>Updates the image tag mutability settings for the specified repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn put_image_tag_mutability(
         &self,
         input: PutImageTagMutabilityRequest,
@@ -3757,7 +3783,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
+    /// <p>Creates or updates the lifecycle policy for the specified repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
     async fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyRequest,
@@ -3788,7 +3814,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Applies a repository policy on a specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
+    /// <p>Applies a repository policy to the specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
     async fn set_repository_policy(
         &self,
         input: SetRepositoryPolicyRequest,
@@ -3849,7 +3875,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
+    /// <p>Starts a preview of a lifecycle policy for the specified repository. This allows you to see the results before associating the lifecycle policy with the repository.</p>
     async fn start_lifecycle_policy_preview(
         &self,
         input: StartLifecyclePolicyPreviewRequest,
@@ -3941,7 +3967,7 @@ impl Ecr for EcrClient {
         }
     }
 
-    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <p>When an image is pushed, each new image layer is uploaded in parts. The maximum size of each image layer part can be 20971520 bytes (or about 20MB). The UploadLayerPart API is called once per each new image layer part.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     async fn upload_layer_part(
         &self,
         input: UploadLayerPartRequest,

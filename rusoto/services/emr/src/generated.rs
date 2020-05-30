@@ -542,6 +542,24 @@ pub struct Command {
     pub script_path: Option<String>,
 }
 
+/// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster can not be above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ComputeLimits {
+    /// <p> The upper boundary of EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    #[serde(rename = "MaximumCapacityUnits")]
+    pub maximum_capacity_units: i64,
+    /// <p> The upper boundary of on-demand EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The on-demand units are not allowed to scale beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    #[serde(rename = "MaximumOnDemandCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_on_demand_capacity_units: Option<i64>,
+    /// <p> The lower boundary of EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    #[serde(rename = "MinimumCapacityUnits")]
+    pub minimum_capacity_units: i64,
+    /// <p> The unit type used for specifying a managed scaling policy. </p>
+    #[serde(rename = "UnitType")]
+    pub unit_type: String,
+}
+
 /// <p><note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>An optional configuration specification to be used when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR. A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Configuration {
@@ -821,12 +839,29 @@ pub struct GetBlockPublicAccessConfigurationInput {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlockPublicAccessConfigurationOutput {
-    /// <p>A configuration for Amazon EMR block public access. The configuration applies to all clusters created in your account for the current Region. The configuration specifies whether block public access is enabled. If block public access is enabled, security groups associated with the cluster cannot have rules that allow inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code> in the <code>BlockPublicAccessConfiguration</code>. By default, Port 22 (SSH) is an exception, and public access is allowed on this port. You can change this by updating the block public access configuration to remove the exception.</p>
+    /// <p><p>A configuration for Amazon EMR block public access. The configuration applies to all clusters created in your account for the current Region. The configuration specifies whether block public access is enabled. If block public access is enabled, security groups associated with the cluster cannot have rules that allow inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code> in the <code>BlockPublicAccessConfiguration</code>. By default, Port 22 (SSH) is an exception, and public access is allowed on this port. You can change this by updating the block public access configuration to remove the exception.</p> <note> <p>For accounts that created clusters in a Region before November 25, 2019, block public access is disabled by default in that Region. To use this feature, you must manually enable and configure it. For accounts that did not create an EMR cluster in a Region before this date, block public access is enabled by default in that Region.</p> </note></p>
     #[serde(rename = "BlockPublicAccessConfiguration")]
     pub block_public_access_configuration: BlockPublicAccessConfiguration,
     /// <p>Properties that describe the AWS principal that created the <code>BlockPublicAccessConfiguration</code> using the <code>PutBlockPublicAccessConfiguration</code> action as well as the date and time that the configuration was created. Each time a configuration for block public access is updated, Amazon EMR updates this metadata.</p>
     #[serde(rename = "BlockPublicAccessConfigurationMetadata")]
     pub block_public_access_configuration_metadata: BlockPublicAccessConfigurationMetadata,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetManagedScalingPolicyInput {
+    /// <p> Specifies the ID of the cluster for which the managed scaling policy will be fetched. </p>
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetManagedScalingPolicyOutput {
+    /// <p> Specifies the managed scaling policy that is attached to an Amazon EMR cluster. </p>
+    #[serde(rename = "ManagedScalingPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_scaling_policy: Option<ManagedScalingPolicy>,
 }
 
 /// <p>A job flow step consisting of a JAR file whose main function will be executed. The main function submits a job for Hadoop to execute and waits for the job to finish or fail.</p>
@@ -1918,6 +1953,15 @@ pub struct ListStepsOutput {
     pub steps: Option<Vec<StepSummary>>,
 }
 
+/// <p> Managed scaling policy for an Amazon EMR cluster. The policy specifies the limits for resources that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ManagedScalingPolicy {
+    /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    #[serde(rename = "ComputeLimits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_limits: Option<ComputeLimits>,
+}
+
 /// <p>A CloudWatch dimension, which is specified using a <code>Key</code> (known as a <code>Name</code> in CloudWatch), <code>Value</code> pair. By default, Amazon EMR uses one dimension whose <code>Key</code> is <code>JobFlowID</code> and <code>Value</code> is a variable representing the cluster ID, which is <code>${emr.clusterId}</code>. This enables the rule to bootstrap when the cluster ID becomes available.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MetricDimension {
@@ -2040,7 +2084,7 @@ pub struct PutAutoScalingPolicyOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBlockPublicAccessConfigurationInput {
-    /// <p>A configuration for Amazon EMR block public access. The configuration applies to all clusters created in your account for the current Region. The configuration specifies whether block public access is enabled. If block public access is enabled, security groups associated with the cluster cannot have rules that allow inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code> in the <code>BlockPublicAccessConfiguration</code>. By default, Port 22 (SSH) is an exception, and public access is allowed on this port. You can change this by updating <code>BlockPublicSecurityGroupRules</code> to remove the exception.</p>
+    /// <p><p>A configuration for Amazon EMR block public access. The configuration applies to all clusters created in your account for the current Region. The configuration specifies whether block public access is enabled. If block public access is enabled, security groups associated with the cluster cannot have rules that allow inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code> in the <code>BlockPublicAccessConfiguration</code>. By default, Port 22 (SSH) is an exception, and public access is allowed on this port. You can change this by updating <code>BlockPublicSecurityGroupRules</code> to remove the exception.</p> <note> <p>For accounts that created clusters in a Region before November 25, 2019, block public access is disabled by default in that Region. To use this feature, you must manually enable and configure it. For accounts that did not create an EMR cluster in a Region before this date, block public access is enabled by default in that Region.</p> </note></p>
     #[serde(rename = "BlockPublicAccessConfiguration")]
     pub block_public_access_configuration: BlockPublicAccessConfiguration,
 }
@@ -2048,6 +2092,21 @@ pub struct PutBlockPublicAccessConfigurationInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBlockPublicAccessConfigurationOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutManagedScalingPolicyInput {
+    /// <p> Specifies the ID of an EMR cluster where the managed scaling policy is attached. </p>
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+    /// <p> Specifies the constraints for the managed scaling policy. </p>
+    #[serde(rename = "ManagedScalingPolicy")]
+    pub managed_scaling_policy: ManagedScalingPolicy,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutManagedScalingPolicyOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2063,6 +2122,18 @@ pub struct RemoveAutoScalingPolicyInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveAutoScalingPolicyOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveManagedScalingPolicyInput {
+    /// <p> Specifies the ID of the cluster from which the managed scaling policy will be removed. </p>
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemoveManagedScalingPolicyOutput {}
 
 /// <p>This input identifies a cluster and a list of tags to remove.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2132,6 +2203,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
+    /// <p> The specified managed scaling policy for an Amazon EMR cluster. </p>
+    #[serde(rename = "ManagedScalingPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_scaling_policy: Option<ManagedScalingPolicy>,
     /// <p>The name of the job flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -2992,6 +3067,28 @@ impl fmt::Display for GetBlockPublicAccessConfigurationError {
     }
 }
 impl Error for GetBlockPublicAccessConfigurationError {}
+/// Errors returned by GetManagedScalingPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetManagedScalingPolicyError {}
+
+impl GetManagedScalingPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetManagedScalingPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetManagedScalingPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for GetManagedScalingPolicyError {}
 /// Errors returned by ListBootstrapActions
 #[derive(Debug, PartialEq)]
 pub enum ListBootstrapActionsError {
@@ -3422,6 +3519,28 @@ impl fmt::Display for PutBlockPublicAccessConfigurationError {
     }
 }
 impl Error for PutBlockPublicAccessConfigurationError {}
+/// Errors returned by PutManagedScalingPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutManagedScalingPolicyError {}
+
+impl PutManagedScalingPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutManagedScalingPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutManagedScalingPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for PutManagedScalingPolicyError {}
 /// Errors returned by RemoveAutoScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum RemoveAutoScalingPolicyError {}
@@ -3444,6 +3563,30 @@ impl fmt::Display for RemoveAutoScalingPolicyError {
     }
 }
 impl Error for RemoveAutoScalingPolicyError {}
+/// Errors returned by RemoveManagedScalingPolicy
+#[derive(Debug, PartialEq)]
+pub enum RemoveManagedScalingPolicyError {}
+
+impl RemoveManagedScalingPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveManagedScalingPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveManagedScalingPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for RemoveManagedScalingPolicyError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -3683,6 +3826,12 @@ pub trait Emr {
         RusotoError<GetBlockPublicAccessConfigurationError>,
     >;
 
+    /// <p> Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
+    async fn get_managed_scaling_policy(
+        &self,
+        input: GetManagedScalingPolicyInput,
+    ) -> Result<GetManagedScalingPolicyOutput, RusotoError<GetManagedScalingPolicyError>>;
+
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
     async fn list_bootstrap_actions(
         &self,
@@ -3758,11 +3907,23 @@ pub trait Emr {
         RusotoError<PutBlockPublicAccessConfigurationError>,
     >;
 
+    /// <p> Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    async fn put_managed_scaling_policy(
+        &self,
+        input: PutManagedScalingPolicyInput,
+    ) -> Result<PutManagedScalingPolicyOutput, RusotoError<PutManagedScalingPolicyError>>;
+
     /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
     async fn remove_auto_scaling_policy(
         &self,
         input: RemoveAutoScalingPolicyInput,
     ) -> Result<RemoveAutoScalingPolicyOutput, RusotoError<RemoveAutoScalingPolicyError>>;
+
+    /// <p> Removes a managed scaling policy from a specified EMR cluster. </p>
+    async fn remove_managed_scaling_policy(
+        &self,
+        input: RemoveManagedScalingPolicyInput,
+    ) -> Result<RemoveManagedScalingPolicyOutput, RusotoError<RemoveManagedScalingPolicyError>>;
 
     /// <p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>
     async fn remove_tags(
@@ -4180,6 +4341,34 @@ impl Emr for EmrClient {
         }
     }
 
+    /// <p> Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
+    async fn get_managed_scaling_policy(
+        &self,
+        input: GetManagedScalingPolicyInput,
+    ) -> Result<GetManagedScalingPolicyOutput, RusotoError<GetManagedScalingPolicyError>> {
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ElasticMapReduce.GetManagedScalingPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetManagedScalingPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetManagedScalingPolicyError::from_response(response))
+        }
+    }
+
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
     async fn list_bootstrap_actions(
         &self,
@@ -4522,6 +4711,34 @@ impl Emr for EmrClient {
         }
     }
 
+    /// <p> Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    async fn put_managed_scaling_policy(
+        &self,
+        input: PutManagedScalingPolicyInput,
+    ) -> Result<PutManagedScalingPolicyOutput, RusotoError<PutManagedScalingPolicyError>> {
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ElasticMapReduce.PutManagedScalingPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutManagedScalingPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutManagedScalingPolicyError::from_response(response))
+        }
+    }
+
     /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
     async fn remove_auto_scaling_policy(
         &self,
@@ -4547,6 +4764,38 @@ impl Emr for EmrClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(RemoveAutoScalingPolicyError::from_response(response))
+        }
+    }
+
+    /// <p> Removes a managed scaling policy from a specified EMR cluster. </p>
+    async fn remove_managed_scaling_policy(
+        &self,
+        input: RemoveManagedScalingPolicyInput,
+    ) -> Result<RemoveManagedScalingPolicyOutput, RusotoError<RemoveManagedScalingPolicyError>>
+    {
+        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "ElasticMapReduce.RemoveManagedScalingPolicy",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveManagedScalingPolicyOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveManagedScalingPolicyError::from_response(response))
         }
     }
 

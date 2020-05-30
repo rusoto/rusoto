@@ -28,7 +28,7 @@ use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelInfo {
-    /// <p>The ARN of the signaling channel.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signaling channel.</p>
     #[serde(rename = "ChannelARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
@@ -75,7 +75,7 @@ pub struct ChannelNameCondition {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSignalingChannelInput {
-    /// <p>A name for the signaling channel that you are creating. It must be unique for each account and region.</p>
+    /// <p>A name for the signaling channel that you are creating. It must be unique for each AWS account and AWS Region.</p>
     #[serde(rename = "ChannelName")]
     pub channel_name: String,
     /// <p>A type of the signaling channel that you are creating. Currently, <code>SINGLE_MASTER</code> is the only supported channel type. </p>
@@ -86,7 +86,7 @@ pub struct CreateSignalingChannelInput {
     #[serde(rename = "SingleMasterConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub single_master_configuration: Option<SingleMasterConfiguration>,
-    /// <p>A set of tags (key/value pairs) that you want to associate with this channel.</p>
+    /// <p>A set of tags (key-value pairs) that you want to associate with this channel.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -95,7 +95,7 @@ pub struct CreateSignalingChannelInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSignalingChannelOutput {
-    /// <p>The ARN of the created channel.</p>
+    /// <p>The Amazon Resource Name (ARN) of the created channel.</p>
     #[serde(rename = "ChannelARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
@@ -141,10 +141,10 @@ pub struct CreateStreamOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSignalingChannelInput {
-    /// <p>The ARN of the signaling channel that you want to delete.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signaling channel that you want to delete.</p>
     #[serde(rename = "ChannelARN")]
     pub channel_arn: String,
-    /// <p>The current version of the signaling channel that you want to delete. You can obtain the current version by invoking the <code>DescribeSignalingChannel</code> or <code>ListSignalingChannels</code> APIs.</p>
+    /// <p>The current version of the signaling channel that you want to delete. You can obtain the current version by invoking the <code>DescribeSignalingChannel</code> or <code>ListSignalingChannels</code> API operations.</p>
     #[serde(rename = "CurrentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_version: Option<String>,
@@ -242,7 +242,7 @@ pub struct GetDataEndpointOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSignalingChannelEndpointInput {
-    /// <p>The ARN of the signalling channel for which you want to get an endpoint.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signalling channel for which you want to get an endpoint.</p>
     #[serde(rename = "ChannelARN")]
     pub channel_arn: String,
     /// <p>A structure containing the endpoint configuration for the <code>SINGLE_MASTER</code> channel type.</p>
@@ -324,11 +324,11 @@ pub struct ListStreamsOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
-    /// <p>If you specify this parameter and the result of a ListTagsForResource call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags. </p>
+    /// <p>If you specify this parameter and the result of a <code>ListTagsForResource</code> call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ARN of the signaling channel for which you want to list tags.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signaling channel for which you want to list tags.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
 }
@@ -336,7 +336,7 @@ pub struct ListTagsForResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
-    /// <p>If you specify this parameter and the result of a ListTagsForResource call is truncated, the response includes a token that you can use in the next request to fetch the next set of tags. </p>
+    /// <p>If you specify this parameter and the result of a <code>ListTagsForResource</code> call is truncated, the response includes a token that you can use in the next request to fetch the next set of tags. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -484,7 +484,7 @@ pub struct Tag {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
-    /// <p>The ARN of the signaling channel to which you want to add tags.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signaling channel to which you want to add tags.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
     /// <p>A list of tags to associate with the specified signaling channel. Each tag is a key-value pair.</p>
@@ -519,7 +519,7 @@ pub struct TagStreamOutput {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
-    /// <p>The ARN of the signaling channel from which you want to remove tags.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signaling channel from which you want to remove tags.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
     /// <p>A list of the keys of the tags that you want to remove.</p>
@@ -580,7 +580,7 @@ pub struct UpdateDataRetentionOutput {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSignalingChannelInput {
-    /// <p>The ARN of the signaling channel that you want to update.</p>
+    /// <p>The Amazon Resource Name (ARN) of the signaling channel that you want to update.</p>
     #[serde(rename = "ChannelARN")]
     pub channel_arn: String,
     /// <p>The current version of the signaling channel that you want to update.</p>
@@ -635,7 +635,7 @@ pub enum CreateSignalingChannelError {
     ClientLimitExceeded(String),
     /// <p>The value for this input parameter is invalid.</p>
     InvalidArgument(String),
-    /// <p>The stream is currently not available for this operation.</p>
+    /// <p>The signaling channel is currently not available for this operation.</p>
     ResourceInUse(String),
     /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
     TagsPerResourceExceededLimit(String),
@@ -711,7 +711,7 @@ pub enum CreateStreamError {
     InvalidArgument(String),
     /// <p>Not implemented.</p>
     InvalidDevice(String),
-    /// <p>The stream is currently not available for this operation.</p>
+    /// <p>The signaling channel is currently not available for this operation.</p>
     ResourceInUse(String),
     /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
     TagsPerResourceExceededLimit(String),
@@ -779,6 +779,8 @@ pub enum DeleteSignalingChannelError {
     ClientLimitExceeded(String),
     /// <p>The value for this input parameter is invalid.</p>
     InvalidArgument(String),
+    /// <p>The signaling channel is currently not available for this operation.</p>
+    ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
     /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
@@ -799,6 +801,11 @@ impl DeleteSignalingChannelError {
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DeleteSignalingChannelError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteSignalingChannelError::ResourceInUse(
                         err.msg,
                     ))
                 }
@@ -826,6 +833,7 @@ impl fmt::Display for DeleteSignalingChannelError {
             DeleteSignalingChannelError::AccessDenied(ref cause) => write!(f, "{}", cause),
             DeleteSignalingChannelError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
             DeleteSignalingChannelError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteSignalingChannelError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             DeleteSignalingChannelError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteSignalingChannelError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
@@ -841,6 +849,8 @@ pub enum DeleteStreamError {
     InvalidArgument(String),
     /// <p>The caller is not authorized to perform this operation.</p>
     NotAuthorized(String),
+    /// <p>The signaling channel is currently not available for this operation.</p>
+    ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
     /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
@@ -859,6 +869,9 @@ impl DeleteStreamError {
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteStreamError::NotAuthorized(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteStreamError::ResourceInUse(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStreamError::ResourceNotFound(err.msg))
@@ -880,6 +893,7 @@ impl fmt::Display for DeleteStreamError {
             DeleteStreamError::ClientLimitExceeded(ref cause) => write!(f, "{}", cause),
             DeleteStreamError::InvalidArgument(ref cause) => write!(f, "{}", cause),
             DeleteStreamError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            DeleteStreamError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             DeleteStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteStreamError::VersionMismatch(ref cause) => write!(f, "{}", cause),
         }
@@ -1047,7 +1061,7 @@ pub enum GetSignalingChannelEndpointError {
     ClientLimitExceeded(String),
     /// <p>The value for this input parameter is invalid.</p>
     InvalidArgument(String),
-    /// <p>The stream is currently not available for this operation.</p>
+    /// <p>The signaling channel is currently not available for this operation.</p>
     ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
@@ -1527,7 +1541,7 @@ pub enum UpdateDataRetentionError {
     InvalidArgument(String),
     /// <p>The caller is not authorized to perform this operation.</p>
     NotAuthorized(String),
-    /// <p>The stream is currently not available for this operation.</p>
+    /// <p>The signaling channel is currently not available for this operation.</p>
     ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
@@ -1591,7 +1605,7 @@ pub enum UpdateSignalingChannelError {
     ClientLimitExceeded(String),
     /// <p>The value for this input parameter is invalid.</p>
     InvalidArgument(String),
-    /// <p>The stream is currently not available for this operation.</p>
+    /// <p>The signaling channel is currently not available for this operation.</p>
     ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
@@ -1661,7 +1675,7 @@ pub enum UpdateStreamError {
     InvalidArgument(String),
     /// <p>The caller is not authorized to perform this operation.</p>
     NotAuthorized(String),
-    /// <p>The stream is currently not available for this operation.</p>
+    /// <p>The signaling channel is currently not available for this operation.</p>
     ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
@@ -1739,7 +1753,7 @@ pub trait KinesisVideo {
         input: DeleteStreamInput,
     ) -> Result<DeleteStreamOutput, RusotoError<DeleteStreamError>>;
 
-    /// <p>Returns the most current information about the signaling channel. You must specify either the name or the ARN of the channel that you want to describe.</p>
+    /// <p>Returns the most current information about the signaling channel. You must specify either the name or the Amazon Resource Name (ARN) of the channel that you want to describe.</p>
     async fn describe_signaling_channel(
         &self,
         input: DescribeSignalingChannelInput,
@@ -1757,7 +1771,7 @@ pub trait KinesisVideo {
         input: GetDataEndpointInput,
     ) -> Result<GetDataEndpointOutput, RusotoError<GetDataEndpointError>>;
 
-    /// <p>Provides an endpoint for the specified signaling channel to send and receive messages. This API uses the <code>SingleMasterChannelEndpointConfiguration</code> input parameter, which consists of the <code>Protocols</code> and <code>Role</code> properties.</p> <p> <code>Protocols</code> is used to determine the communication mechanism. For example, specifying <code>WSS</code> as the protocol, results in this API producing a secure websocket endpoint, and specifying <code>HTTPS</code> as the protocol, results in this API generating an HTTPS endpoint. </p> <p> <code>Role</code> determines the messaging permissions. A <code>MASTER</code> role results in this API generating an endpoint that a client can use to communicate with any of the viewers on the channel. A <code>VIEWER</code> role results in this API generating an endpoint that a client can use to communicate only with a <code>MASTER</code>. </p>
+    /// <p>Provides an endpoint for the specified signaling channel to send and receive messages. This API uses the <code>SingleMasterChannelEndpointConfiguration</code> input parameter, which consists of the <code>Protocols</code> and <code>Role</code> properties.</p> <p> <code>Protocols</code> is used to determine the communication mechanism. For example, if you specify <code>WSS</code> as the protocol, this API produces a secure websocket endpoint. If you specify <code>HTTPS</code> as the protocol, this API generates an HTTPS endpoint. </p> <p> <code>Role</code> determines the messaging permissions. A <code>MASTER</code> role results in this API generating an endpoint that a client can use to communicate with any of the viewers on the channel. A <code>VIEWER</code> role results in this API generating an endpoint that a client can use to communicate only with a <code>MASTER</code>. </p>
     async fn get_signaling_channel_endpoint(
         &self,
         input: GetSignalingChannelEndpointInput,
@@ -1817,7 +1831,7 @@ pub trait KinesisVideo {
         input: UpdateDataRetentionInput,
     ) -> Result<UpdateDataRetentionOutput, RusotoError<UpdateDataRetentionError>>;
 
-    /// <p>Updates the existing signaling channel. This is an asynchronous operation and takes time to complete. </p> <p>If the <code>MessageTtlSeconds</code> value is updated (either increased or reduced), then it only applies to new messages sent via this channel after it's been updated. Existing messages are still expire as per the previous <code>MessageTtlSeconds</code> value.</p>
+    /// <p>Updates the existing signaling channel. This is an asynchronous operation and takes time to complete. </p> <p>If the <code>MessageTtlSeconds</code> value is updated (either increased or reduced), it only applies to new messages sent via this channel after it's been updated. Existing messages are still expired as per the previous <code>MessageTtlSeconds</code> value.</p>
     async fn update_signaling_channel(
         &self,
         input: UpdateSignalingChannelInput,
@@ -1989,7 +2003,7 @@ impl KinesisVideo for KinesisVideoClient {
         }
     }
 
-    /// <p>Returns the most current information about the signaling channel. You must specify either the name or the ARN of the channel that you want to describe.</p>
+    /// <p>Returns the most current information about the signaling channel. You must specify either the name or the Amazon Resource Name (ARN) of the channel that you want to describe.</p>
     async fn describe_signaling_channel(
         &self,
         input: DescribeSignalingChannelInput,
@@ -2079,7 +2093,7 @@ impl KinesisVideo for KinesisVideoClient {
         }
     }
 
-    /// <p>Provides an endpoint for the specified signaling channel to send and receive messages. This API uses the <code>SingleMasterChannelEndpointConfiguration</code> input parameter, which consists of the <code>Protocols</code> and <code>Role</code> properties.</p> <p> <code>Protocols</code> is used to determine the communication mechanism. For example, specifying <code>WSS</code> as the protocol, results in this API producing a secure websocket endpoint, and specifying <code>HTTPS</code> as the protocol, results in this API generating an HTTPS endpoint. </p> <p> <code>Role</code> determines the messaging permissions. A <code>MASTER</code> role results in this API generating an endpoint that a client can use to communicate with any of the viewers on the channel. A <code>VIEWER</code> role results in this API generating an endpoint that a client can use to communicate only with a <code>MASTER</code>. </p>
+    /// <p>Provides an endpoint for the specified signaling channel to send and receive messages. This API uses the <code>SingleMasterChannelEndpointConfiguration</code> input parameter, which consists of the <code>Protocols</code> and <code>Role</code> properties.</p> <p> <code>Protocols</code> is used to determine the communication mechanism. For example, if you specify <code>WSS</code> as the protocol, this API produces a secure websocket endpoint. If you specify <code>HTTPS</code> as the protocol, this API generates an HTTPS endpoint. </p> <p> <code>Role</code> determines the messaging permissions. A <code>MASTER</code> role results in this API generating an endpoint that a client can use to communicate with any of the viewers on the channel. A <code>VIEWER</code> role results in this API generating an endpoint that a client can use to communicate only with a <code>MASTER</code>. </p>
     async fn get_signaling_channel_endpoint(
         &self,
         input: GetSignalingChannelEndpointInput,
@@ -2380,7 +2394,7 @@ impl KinesisVideo for KinesisVideoClient {
         }
     }
 
-    /// <p>Updates the existing signaling channel. This is an asynchronous operation and takes time to complete. </p> <p>If the <code>MessageTtlSeconds</code> value is updated (either increased or reduced), then it only applies to new messages sent via this channel after it's been updated. Existing messages are still expire as per the previous <code>MessageTtlSeconds</code> value.</p>
+    /// <p>Updates the existing signaling channel. This is an asynchronous operation and takes time to complete. </p> <p>If the <code>MessageTtlSeconds</code> value is updated (either increased or reduced), it only applies to new messages sent via this channel after it's been updated. Existing messages are still expired as per the previous <code>MessageTtlSeconds</code> value.</p>
     async fn update_signaling_channel(
         &self,
         input: UpdateSignalingChannelInput,

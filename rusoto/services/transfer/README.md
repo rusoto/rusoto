@@ -1,6 +1,6 @@
 
 # Rusoto Transfer
-Rust SDK for AWS Transfer for SFTP
+Rust SDK for AWS Transfer Family
 
 You may be looking for:
 
