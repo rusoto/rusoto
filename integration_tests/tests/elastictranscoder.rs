@@ -42,7 +42,7 @@ impl TestEtsClient {
     }
 
     async fn create_bucket(&mut self, s3_client: &S3Client) -> String {
-        let bucket_name = generate_unique_name("ets-bucket-1").await;
+        let bucket_name = generate_unique_name("ets-bucket-1");
 
         let create_bucket_req = CreateBucketRequest {
             bucket: bucket_name.to_owned(),
@@ -95,7 +95,7 @@ async fn create_client() -> TestEtsClient {
 /// Generates a random name for an AWS service by appending a random sequence of
 /// ASCII characters to the specified prefix.
 /// Keeps it lower case to work with S3 requirements as of 3/1/2018.
-async fn generate_unique_name(prefix: &str) -> String {
+fn generate_unique_name(prefix: &str) -> String {
     let mut rng = rand::thread_rng();
     format!(
         "{}-{}",
@@ -141,7 +141,7 @@ async fn create_preset() {
 
     let client = create_client().await;
 
-    let name = generate_unique_name("ets-preset-1").await;
+    let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
         audio: Some(AudioParameters {
             channels: Some("2".to_owned()),
@@ -210,7 +210,7 @@ async fn delete_preset() {
         }),
         container: "flac".to_owned(),
         description: Some("This is an example FLAC preset".to_owned()),
-        name: name.await.clone(),
+        name: name.clone(),
         ..CreatePresetRequest::default()
     };
     let response = client.create_preset(request).await.unwrap();
