@@ -23,7 +23,7 @@ To use `rusoto_networkmanager` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_networkmanager = "0.43.0"
+rusoto_networkmanager = "0.44.0"
 ```
 
 ## Crate Features

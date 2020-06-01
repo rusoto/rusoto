@@ -7,6 +7,8 @@ use std::str;
 use std::time::Duration;
 
 use bytes::Bytes;
+use rand::distributions::Alphanumeric;
+use rand::Rng;
 use time::OffsetDateTime;
 use tokio::fs;
 use tokio::io::AsyncReadExt;
@@ -23,6 +25,18 @@ use rusoto_s3::{
     ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
     StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
 };
+
+fn generate_unique_name() -> String {
+    let mut rng = rand::thread_rng();
+    format!(
+        "test-{}",
+        std::iter::repeat(())
+            .map(|()| rng.sample(Alphanumeric))
+            .take(20)
+            .collect::<String>()
+    )
+    .to_lowercase()
+}
 
 struct TestS3Client {
     region: Region,
@@ -154,7 +168,7 @@ fn init_logging() {
 async fn test_bucket_creation_deletion() {
     init_logging();
 
-    let bucket_name = format!("s3-test-bucket-{}", OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let mut test_client = TestS3Client::new(bucket_name.clone());
 
     let create_bucket_req = CreateBucketRequest {
@@ -203,7 +217,7 @@ async fn test_bucket_creation_deletion() {
 async fn test_puts_gets_deletes() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket_with_acl(bucket_name.clone(), Some("public-read".to_owned())).await;
 
@@ -288,7 +302,7 @@ async fn test_puts_gets_deletes() {
 async fn test_puts_gets_deletes_utf8() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "utf-8".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
@@ -312,7 +326,7 @@ async fn test_puts_gets_deletes_utf8() {
 async fn test_puts_gets_deletes_binary() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "binary".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
@@ -337,7 +351,7 @@ async fn test_puts_gets_deletes_binary() {
 async fn test_puts_gets_deletes_metadata() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "metadata".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
@@ -383,7 +397,7 @@ async fn test_puts_gets_deletes_metadata() {
 async fn test_puts_gets_deletes_presigned_url() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "presigned".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
@@ -469,7 +483,7 @@ async fn test_puts_gets_deletes_presigned_url() {
 async fn test_multipart_stream_uploads() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "multipart".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
@@ -517,7 +531,7 @@ async fn test_multipart_stream_uploads() {
 async fn test_list_objects_encoding() {
     init_logging();
 
-    let bucket_name = format!("test-bucket-{}-{}", "encoding".to_owned(), OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
@@ -594,7 +608,7 @@ async fn test_list_objects_encoding() {
 async fn test_name_space_truncate() {
     init_logging();
 
-    let bucket_name = format!("test-name-space-{}", OffsetDateTime::now().second());
+    let bucket_name = generate_unique_name();
     let test_client = TestS3Client::new(bucket_name.clone());
 
     test_client.create_test_bucket(bucket_name.clone()).await;

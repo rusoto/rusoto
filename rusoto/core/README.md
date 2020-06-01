@@ -38,16 +38,16 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto_core = "0.43.0"
-rusoto_sqs = "0.43.0"
-rusoto_s3 = "0.43.0"
+rusoto_core = "0.44.0"
+rusoto_sqs = "0.44.0"
+rusoto_s3 = "0.44.0"
 ```
 
 ## Migration notes
 
 Breaking changes and migration details are documented at [https://rusoto.org/migrations.html](https://rusoto.org/migrations.html).
 
-Note that from v0.43.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem.
+Note that from v0.44.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem.
 
 ## Usage
 
@@ -91,9 +91,9 @@ If you do not want to use OpenSSL, you can replace it with rustls by editing you
 
 ``` toml
 [dependencies]
-rusoto_core = { version="0.43.0", default_features=false, features=["rustls"] }
-rusoto_sqs = { version="0.43.0", default_features=false, features=["rustls"] }
-rusoto_s3 = { version="0.43.0", default_features=false, features=["rustls"] }
+rusoto_core = { version="0.44.0", default_features=false, features=["rustls"] }
+rusoto_sqs = { version="0.44.0", default_features=false, features=["rustls"] }
+rusoto_s3 = { version="0.44.0", default_features=false, features=["rustls"] }
 ```
 
 ### Credentials

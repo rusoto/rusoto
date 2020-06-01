@@ -23,7 +23,7 @@ To use `rusoto_codestar_notifications` in your application, add it as a dependen
 
 ```toml
 [dependencies]
-rusoto_codestar_notifications = "0.43.0"
+rusoto_codestar_notifications = "0.44.0"
 ```
 
 ## Crate Features

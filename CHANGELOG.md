@@ -5,18 +5,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Always encode + in query strings
+(Please put changes here)
+
+## [0.44.0] - 2020-06-01
+
+- Add support for af-south-1, Africa (Cape Town), and eu-south-1, Europe (Milan)
+- Update to botocore 1.16.14
+- Fix `Time::now()` and `OffsetDateTime::now()` deprecation warnings
+- Fix minimum version of `time` crate
+- Always encode `+` in query strings
 - Added a Cognito credential provider
 - Add `MultipleMockRequestDispatcher` to permit mocking multiple requests using the same client
 - Fix `rusoto_sts::WebIdentityProvider::from_k8s_env` always requiring `AWS_ROLE_SESSION_NAME` env var which should be optional
+- Added support to optionally define a session policy when using `rusoto_sts::WebIdentityProvider`
 - Omit generating XML-deseralization code for actions without a response body
-- Fix OffsetDateTime::now() deprecation warning
 - Add `region_from_profile()` function to ProfileProvider
+- Fix applying `Content-Encoding`
 - Added `new_with_size()` function to ByteStream
+- Add defualt help text to Makefile
 
 ## [0.43.0] - 2020-03-15
 
-- Fix `Time::now()` deprecation warning
 - Fix minimum version of hyper
 - Fix `PrimitiveDateTime` deprecation error
 - Update to dirs 2.0
@@ -361,7 +370,8 @@ such as an S3 key returned in `list_objects_v2`
 - Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
 
-[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0...HEAD
+[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.44.0...HEAD
+[0.44.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0...rusoto-v0.44.0
 [0.43.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0-beta.1...rusoto-v0.43.0
 [0.43.0-beta.1]: https://github.com/rusoto/rusoto/compare/rusoto-v0.42.0...rusoto-v0.43.0-beta.1
 [0.42.0]: https://github.com/rusoto/rusoto/compare/credentials-v0.41.1...rusoto-v0.42.0

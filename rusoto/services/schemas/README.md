@@ -23,7 +23,7 @@ To use `rusoto_schemas` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_schemas = "0.43.0"
+rusoto_schemas = "0.44.0"
 ```
 
 ## Crate Features

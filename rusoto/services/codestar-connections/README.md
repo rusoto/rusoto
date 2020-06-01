@@ -23,7 +23,7 @@ To use `rusoto_codestar_connections` in your application, add it as a dependency
 
 ```toml
 [dependencies]
-rusoto_codestar_connections = "0.43.0"
+rusoto_codestar_connections = "0.44.0"
 ```
 
 ## Crate Features

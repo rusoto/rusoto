@@ -23,7 +23,7 @@ To use `rusoto_lakeformation` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_lakeformation = "0.43.0"
+rusoto_lakeformation = "0.44.0"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_kinesis_video_archived_media` in your application, add it as a de
 
 ```toml
 [dependencies]
-rusoto_kinesis_video_archived_media = "0.43.0"
+rusoto_kinesis_video_archived_media = "0.44.0"
 ```
 
 ## Crate Features
