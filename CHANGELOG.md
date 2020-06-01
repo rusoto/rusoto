@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Omit generating XML-deseralization code for actions without a response body
 - Fix OffsetDateTime::now() deprecation warning
 - Add `region_from_profile()` function to ProfileProvider
+- Added `new_with_size()` function to ByteStream
 
 ## [0.43.0] - 2020-03-15
 

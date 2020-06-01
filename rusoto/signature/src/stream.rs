@@ -28,6 +28,18 @@ impl ByteStream {
         }
     }
 
+    /// Creates a new `ByteStream` by wrapping a `futures` stream. Allows for the addition of a
+    /// size_hint to satisy S3's `PutObject` API.
+    pub fn new_with_size<S>(stream: S, size_hint: usize) -> ByteStream
+    where
+        S: Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static,
+    {
+        ByteStream {
+            size_hint: Some(size_hint),
+            inner: Box::pin(stream),
+        }
+    }
+
     pub(crate) fn size_hint(&self) -> Option<usize> {
         self.size_hint
     }
@@ -176,4 +188,31 @@ fn test_blocking_read() {
     assert_eq!(async_read.read(&mut buf).unwrap(), 1);
     assert_eq!(&buf[..1], b"8");
     assert_eq!(async_read.read(&mut buf).unwrap(), 0);
+}
+
+#[tokio::test]
+async fn test_new_with_size_read() {
+    use bytes::Bytes;
+    use tokio::io::AsyncReadExt;
+
+    let chunks = vec![
+        Ok(Bytes::from_static(b"1234")),
+        Ok(Bytes::from_static(b"5678")),
+    ];
+    let stream = ByteStream::new_with_size(stream::iter(chunks), 8);
+
+    assert_eq!(stream.size_hint, Some(8));
+
+    let mut async_read = stream.into_async_read();
+
+    let mut buf = [0u8; 3];
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 3);
+    assert_eq!(&buf[..3], b"123");
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 1);
+    assert_eq!(&buf[..1], b"4");
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 3);
+    assert_eq!(&buf[..3], b"567");
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 1);
+    assert_eq!(&buf[..1], b"8");
+    assert_eq!(async_read.read(&mut buf).await.unwrap(), 0);
 }
