@@ -23,7 +23,7 @@ To use `rusoto_sms_voice` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_sms_voice = "0.43.0"
+rusoto_sms_voice = "0.44.0"
 ```
 
 ## Crate Features

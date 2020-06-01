@@ -23,7 +23,7 @@ To use `rusoto_emr` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_emr = "0.43.0"
+rusoto_emr = "0.44.0"
 ```
 
 ## Crate Features

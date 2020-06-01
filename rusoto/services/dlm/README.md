@@ -23,7 +23,7 @@ To use `rusoto_dlm` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_dlm = "0.43.0"
+rusoto_dlm = "0.44.0"
 ```
 
 ## Crate Features

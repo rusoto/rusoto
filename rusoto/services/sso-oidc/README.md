@@ -23,7 +23,7 @@ To use `rusoto_sso_oidc` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_sso_oidc = "0.43.0"
+rusoto_sso_oidc = "0.44.0"
 ```
 
 ## Crate Features

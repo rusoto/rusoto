@@ -23,7 +23,7 @@ To use `rusoto_connect` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_connect = "0.43.0"
+rusoto_connect = "0.44.0"
 ```
 
 ## Crate Features

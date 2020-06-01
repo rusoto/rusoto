@@ -23,7 +23,7 @@ To use `rusoto_sesv2` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_sesv2 = "0.43.0"
+rusoto_sesv2 = "0.44.0"
 ```
 
 ## Crate Features

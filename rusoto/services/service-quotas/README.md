@@ -23,7 +23,7 @@ To use `rusoto_service_quotas` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_service_quotas = "0.43.0"
+rusoto_service_quotas = "0.44.0"
 ```
 
 ## Crate Features
