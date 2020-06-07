@@ -357,7 +357,7 @@ impl<T: DeserializeEvent + Unpin> futures::Stream for EventStream<T> {
 
                 if !projection.buf.is_empty() {
                     Poll::Ready(Some(Err(RusotoError::ParseError(
-                        "Event stream closed with imcomplete data remaining".to_string(),
+                        "Event stream closed with incomplete data remaining".to_string(),
                     ))))
                 } else {
                     Poll::Ready(None)
@@ -440,7 +440,7 @@ mod tests {
             \r:message-type\x07\0\x05event{}\xac\xaek}";
 
         let event_msg = EventStreamMessage::parse(&mut &data[..]);
-        assert_eq!(event_msg, Err(EventStreamParseError::InvalidCrc),);
+        assert_eq!(event_msg, Err(EventStreamParseError::InvalidCrc));
     }
 
     #[test]
@@ -450,7 +450,7 @@ mod tests {
             \r:message-type\x07\0\x05event{}\xad\xaek}";
 
         let event_msg = EventStreamMessage::parse(&mut &data[..]);
-        assert_eq!(event_msg, Err(EventStreamParseError::InvalidCrc),);
+        assert_eq!(event_msg, Err(EventStreamParseError::InvalidCrc));
     }
 
     #[test]
@@ -460,7 +460,7 @@ mod tests {
             \r:message-type\x07\0\x05event{}\xac";
 
         let event_msg = EventStreamMessage::parse(&mut &data[..]);
-        assert_eq!(event_msg, Err(EventStreamParseError::UnexpectedEof),);
+        assert_eq!(event_msg, Err(EventStreamParseError::UnexpectedEof));
     }
 
     #[test]
@@ -468,7 +468,7 @@ mod tests {
         let data = b"";
 
         let event_msg = EventStreamMessage::parse(&mut &data[..]);
-        assert_eq!(event_msg, Err(EventStreamParseError::UnexpectedEof),);
+        assert_eq!(event_msg, Err(EventStreamParseError::UnexpectedEof));
     }
 
     #[test]
